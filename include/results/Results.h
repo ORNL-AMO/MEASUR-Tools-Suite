@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef AMO_LIBRARY_RESULTS_H
-#define AMO_LIBRARY_RESULTS_H
+#ifndef TOOLS_SUITE_RESULTS_H
+#define TOOLS_SUITE_RESULTS_H
 
 #include <calculator/motor/MotorShaftPower.h>
 #include <fans/OptimalFanEfficiency.h>
@@ -180,4 +180,4 @@ private:
   double operatingHours, unitCost;
 };
 
-#endif //AMO_LIBRARY_RESULTS_H
+#endif //TOOLS_SUITE_RESULTS_H

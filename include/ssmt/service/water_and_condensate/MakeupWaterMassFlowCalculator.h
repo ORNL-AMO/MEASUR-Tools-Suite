@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_MAKEUPWATERMASSFLOWCALCULATOR_H
-#define AMO_TOOLS_SUITE_MAKEUPWATERMASSFLOWCALCULATOR_H
+#ifndef TOOLS_SUITE_MAKEUPWATERMASSFLOWCALCULATOR_H
+#define TOOLS_SUITE_MAKEUPWATERMASSFLOWCALCULATOR_H
 
 #include <ssmt/Boiler.h>
 #include <ssmt/PRV.h>
@@ -64,4 +64,4 @@ private:
     calcMakeupWaterEnergyFlow(double massFlow, const SteamSystemModelerTool::SteamPropertiesOutput &makeupWater) const;
 };
 
-#endif //AMO_TOOLS_SUITE_MAKEUPWATERMASSFLOWCALCULATOR_H
+#endif //TOOLS_SUITE_MAKEUPWATERMASSFLOWCALCULATOR_H

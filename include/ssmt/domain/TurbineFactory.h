@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_TURBINEFACTORY_H
-#define AMO_TOOLS_SUITE_TURBINEFACTORY_H
+#ifndef TOOLS_SUITE_TURBINEFACTORY_H
+#define TOOLS_SUITE_TURBINEFACTORY_H
 
 #include <ssmt/Header.h>
 #include <ssmt/Turbine.h>
@@ -65,4 +65,4 @@ private:
     convertCondensingTurbineOperationToTurbineProperty(const CondensingTurbineOperation &operationType) const;
 };
 
-#endif //AMO_TOOLS_SUITE_TURBINEFACTORY_H
+#endif //TOOLS_SUITE_TURBINEFACTORY_H

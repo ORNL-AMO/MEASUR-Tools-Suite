@@ -1,5 +1,5 @@
-#ifndef AMO_LIBRARY_COMPRESSEDAIRREDUCTION_H
-#define AMO_LIBRARY_COMPRESSEDAIRREDUCTION_H
+#ifndef TOOLS_SUITE_COMPRESSEDAIRREDUCTION_H
+#define TOOLS_SUITE_COMPRESSEDAIRREDUCTION_H
 
 #include <exception>
 #include <stdexcept>
@@ -144,4 +144,4 @@ class CompressedAirReduction
     CompressedAirReduction::Output output;
 };
 
-#endif // AMO_LIBRARY_COMPRESSEDAIRREDUCTION_H
+#endif // TOOLS_SUITE_COMPRESSEDAIRREDUCTION_H

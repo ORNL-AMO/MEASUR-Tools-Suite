@@ -10,8 +10,8 @@
  *
  */
 
-#ifndef AMO_SUITE_LIQUIDLOADCHARGEMATERIAL_H
-#define AMO_SUITE_LIQUIDLOADCHARGEMATERIAL_H
+#ifndef TOOLS_SUITE_LIQUIDLOADCHARGEMATERIAL_H
+#define TOOLS_SUITE_LIQUIDLOADCHARGEMATERIAL_H
 
 #include <string>
 #include "LoadChargeMaterial.h"
@@ -384,4 +384,4 @@ private:
               substance(std::move(substance))
     {}
 };
-#endif //AMO_SUITE_LIQUIDLOADCHARGEMATERIAL_H
+#endif //TOOLS_SUITE_LIQUIDLOADCHARGEMATERIAL_H

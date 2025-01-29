@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_ENERGYFLOWCALCULATOR_H
-#define AMO_TOOLS_SUITE_ENERGYFLOWCALCULATOR_H
+#ifndef TOOLS_SUITE_ENERGYFLOWCALCULATOR_H
+#define TOOLS_SUITE_ENERGYFLOWCALCULATOR_H
 
 #include <ssmt/Boiler.h>
 #include <ssmt/SteamSystemModelerTool.h>
@@ -14,4 +14,4 @@ public:
     double calc(const double massFlow, const double specificEnthalpy) const;
 };
 
-#endif //AMO_TOOLS_SUITE_ENERGYFLOWCALCULATOR_H
+#endif //TOOLS_SUITE_ENERGYFLOWCALCULATOR_H

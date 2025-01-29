@@ -8,8 +8,8 @@
  * @bug No known bugs.
  *
  */
-#ifndef AMO_TOOLS_SUITE_ENERGYINPUTEXHAUSTGASLOSSES_H
-#define AMO_TOOLS_SUITE_ENERGYINPUTEXHAUSTGASLOSSES_H
+#ifndef TOOLS_SUITE_ENERGYINPUTEXHAUSTGASLOSSES_H
+#define TOOLS_SUITE_ENERGYINPUTEXHAUSTGASLOSSES_H
 
 /**
  * Energy Input Exhaust Gas Losses
@@ -48,4 +48,4 @@ private:
 	const double combustionAirCorrection, availableHeat, heatDelivered, exhaustGasLosses;
 };
 
-#endif //AMO_TOOLS_SUITE_ENERGYINPUTEXHAUSTGASLOSSES_H
+#endif //TOOLS_SUITE_ENERGYINPUTEXHAUSTGASLOSSES_H

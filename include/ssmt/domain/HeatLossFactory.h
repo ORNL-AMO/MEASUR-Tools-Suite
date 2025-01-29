@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_HEATLOSSFACTORY_H
-#define AMO_TOOLS_SUITE_HEATLOSSFACTORY_H
+#ifndef TOOLS_SUITE_HEATLOSSFACTORY_H
+#define TOOLS_SUITE_HEATLOSSFACTORY_H
 
 #include <ssmt/api/HeaderInput.h>
 #include "ssmt/Header.h"
@@ -17,4 +17,4 @@ public:
     make(const SteamSystemModelerTool::FluidProperties &headerOutput, const double percentHeatLoss) const;
 };
 
-#endif //AMO_TOOLS_SUITE_HEATLOSSFACTORY_H
+#endif //TOOLS_SUITE_HEATLOSSFACTORY_H

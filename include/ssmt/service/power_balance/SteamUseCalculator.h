@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_STEAMUSECALCULATOR_H
-#define AMO_TOOLS_SUITE_STEAMUSECALCULATOR_H
+#ifndef TOOLS_SUITE_STEAMUSECALCULATOR_H
+#define TOOLS_SUITE_STEAMUSECALCULATOR_H
 
 #include <ssmt/Turbine.h>
 #include <ssmt/api/HeaderInput.h>
@@ -20,4 +20,4 @@ private:
                                  const std::shared_ptr<HeaderNotHighestPressure> &mediumPressureHeaderInput) const;
 };
 
-#endif //AMO_TOOLS_SUITE_STEAMUSECALCULATOR_H
+#endif //TOOLS_SUITE_STEAMUSECALCULATOR_H

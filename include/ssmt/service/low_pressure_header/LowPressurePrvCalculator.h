@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_LOWPRESSUREPRVCALCULATOR_H
-#define AMO_TOOLS_SUITE_LOWPRESSUREPRVCALCULATOR_H
+#ifndef TOOLS_SUITE_LOWPRESSUREPRVCALCULATOR_H
+#define TOOLS_SUITE_LOWPRESSUREPRVCALCULATOR_H
 
 #include <ssmt/Turbine.h>
 #include <ssmt/api/TurbineInput.h>
@@ -44,4 +44,4 @@ private:
             const SteamSystemModelerTool::FluidProperties &headerOutput, double prvMassFlow) const;
 };
 
-#endif //AMO_TOOLS_SUITE_LOWPRESSUREPRVCALCULATOR_H
+#endif //TOOLS_SUITE_LOWPRESSUREPRVCALCULATOR_H

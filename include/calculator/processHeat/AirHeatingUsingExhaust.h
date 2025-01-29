@@ -9,8 +9,8 @@
  *
  */
 
-#ifndef AMO_TOOLS_SUITE_AIRHEATINGUSINGEXHAUST_H
-#define AMO_TOOLS_SUITE_AIRHEATINGUSINGEXHAUST_H
+#ifndef TOOLS_SUITE_AIRHEATINGUSINGEXHAUST_H
+#define TOOLS_SUITE_AIRHEATINGUSINGEXHAUST_H
 
 #include "../losses/GasFlueGasMaterial.h"
 #include "../losses/SolidLiquidFlueGasMaterial.h"
@@ -99,4 +99,4 @@ private:
     double stoichAir = 0;
 };
 
-#endif //AMO_TOOLS_SUITE_AIRHEATINGUSINGEXHAUST_H
+#endif //TOOLS_SUITE_AIRHEATINGUSINGEXHAUST_H

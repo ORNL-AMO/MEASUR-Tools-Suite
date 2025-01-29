@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
-project(amo_tools_suite)
+project(measur_tools_suite)
 
 set(CMAKE_MACOSX_RPATH 1)
 
@@ -7,7 +7,7 @@ set(CMAKE_VERSION_MAJOR 0)
 set(CMAKE_VERSION_MINOR 3)
 set(CMAKE_VERSION_PATCH 1)
 
-set(AMO_SUITE_VERSION "${CMAKE_VERSION_MAJOR}.${CMAKE_VERSION_MINOR}.${CMAKE_VERSION_PATCH}")
+set(TOOLS_SUITE_VERSION "${CMAKE_VERSION_MAJOR}.${CMAKE_VERSION_MINOR}.${CMAKE_VERSION_PATCH}")
 
 option(BUILD_PACKAGE "Build package" OFF)
 option(BUILD_TESTING "Build testing targets" ON)
@@ -63,32 +63,32 @@ endif()
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
-# Create amo_tools_suite static library
-add_library(amo_tools_suite STATIC ${SOURCE_FILES} ${SOURCE_FILES_WASM} ${INCLUDE_FILES})
+# Create measur_tools_suite static library
+add_library(measur_tools_suite STATIC ${SOURCE_FILES} ${SOURCE_FILES_WASM} ${INCLUDE_FILES})
 
 if(UNIX AND NOT APPLE)
-  target_link_libraries(amo_tools_suite dl)
+  target_link_libraries(measur_tools_suite dl)
 endif()
 
 # Add SQLite project
 include_directories(${CMAKE_SOURCE_DIR}/third_party/sqlite/ SYSTEM)
 add_subdirectory(third_party/sqlite)
 
-# Create command line amo_tools_suite program
-add_executable(amo_tools_suite_main main.cpp)
-set_target_properties(amo_tools_suite_main PROPERTIES OUTPUT_NAME "amo_tools_suite")
-target_link_libraries(amo_tools_suite_main amo_tools_suite)
+# Create command line measur_tools_suite program
+add_executable(TOOLS_SUITE_main main.cpp)
+set_target_properties(TOOLS_SUITE_main PROPERTIES OUTPUT_NAME "measur_tools_suite")
+target_link_libraries(TOOLS_SUITE_main measur_tools_suite)
 
 if(BUILD_TESTING)
     add_library(Catch INTERFACE)
     target_include_directories(Catch INTERFACE third_party/catch/)
     add_executable(cpp_tests tests/cpp/main.unit.cpp ${TEST_FILES})
-    target_link_libraries(cpp_tests Catch amo_tools_suite)
+    target_link_libraries(cpp_tests Catch measur_tools_suite)
 elseif(BUILD_WASM)
     add_executable(client ${SOURCE_FILES} ${SOURCE_FILES_WASM})
 endif()
 
 if(BUILD_PACKAGE)
-  set(CPACK_INSTALL_CMAKE_PROJECTS "${CMAKE_BINARY_DIR};amo_tools_suite;ALL;/")
+  set(CPACK_INSTALL_CMAKE_PROJECTS "${CMAKE_BINARY_DIR};measur_tools_suite;ALL;/")
   include(cmake/Install.cmake)
 endif()

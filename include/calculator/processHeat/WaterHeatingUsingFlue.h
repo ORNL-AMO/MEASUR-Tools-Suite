@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef AMO_TOOLS_SUITE_WATERHEATINGUSINGFLUE_H
-#define AMO_TOOLS_SUITE_WATERHEATINGUSINGFLUE_H
+#ifndef TOOLS_SUITE_WATERHEATINGUSINGFLUE_H
+#define TOOLS_SUITE_WATERHEATINGUSINGFLUE_H
 
 #include "../losses/GasFlueGasMaterial.h"
 
@@ -110,4 +110,4 @@ private:
     inline double TempFtoK(double tempF) const { return ((tempF - 32) / 1.8) + 273.15; }
 };
 
-#endif //AMO_TOOLS_SUITE_WATERHEATINGUSINGFLUE_H
+#endif //TOOLS_SUITE_WATERHEATINGUSINGFLUE_H

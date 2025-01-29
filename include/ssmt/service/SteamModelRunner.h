@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_STEAMMODELRUNNER_H
-#define AMO_TOOLS_SUITE_STEAMMODELRUNNER_H
+#ifndef TOOLS_SUITE_STEAMMODELRUNNER_H
+#define TOOLS_SUITE_STEAMMODELRUNNER_H
 
 #include <ssmt/api/BoilerInput.h>
 #include <ssmt/api/HeaderInput.h>
@@ -39,4 +39,4 @@ private:
     void logSection(const std::string &message) const;
 };
 
-#endif //AMO_TOOLS_SUITE_STEAMMODELRUNNER_H
+#endif //TOOLS_SUITE_STEAMMODELRUNNER_H

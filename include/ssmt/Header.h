@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_HEADER_H
-#define AMO_TOOLS_SUITE_HEADER_H
+#ifndef TOOLS_SUITE_HEADER_H
+#define TOOLS_SUITE_HEADER_H
 
 #include <iostream>
 #include <string>
@@ -99,4 +99,4 @@ private:
 	SteamSystemModelerTool::SteamPropertiesOutput headerProperties;
 };
 
-#endif //AMO_TOOLS_SUITE_HEADER_H
+#endif //TOOLS_SUITE_HEADER_H

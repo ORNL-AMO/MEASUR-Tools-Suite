@@ -11,8 +11,8 @@
  */
 
 
-#ifndef AMO_SUITE_LEAKAGELOSSES_H
-#define AMO_SUITE_LEAKAGELOSSES_H
+#ifndef TOOLS_SUITE_LEAKAGELOSSES_H
+#define TOOLS_SUITE_LEAKAGELOSSES_H
 
 /**
  * Leakage Losses class
@@ -183,4 +183,4 @@ private:
     // Out value
     double exfiltratedGasesHeatContent;
 };
-#endif //AMO_SUITE_LEAKAGELOSSES_H
+#endif //TOOLS_SUITE_LEAKAGELOSSES_H

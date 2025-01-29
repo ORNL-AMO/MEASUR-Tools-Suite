@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_HIGHPRESSUREHEADERMODELER_H
-#define AMO_TOOLS_SUITE_HIGHPRESSUREHEADERMODELER_H
+#ifndef TOOLS_SUITE_HIGHPRESSUREHEADERMODELER_H
+#define TOOLS_SUITE_HIGHPRESSUREHEADERMODELER_H
 
 #include "CondensingTurbineCalculator.h"
 #include "HighPressureCondensateCalculator.h"
@@ -48,4 +48,4 @@ private:
     const HighToMediumSteamTurbineCalculator highToMediumSteamTurbineCalculator = HighToMediumSteamTurbineCalculator();
 };
 
-#endif //AMO_TOOLS_SUITE_HIGHPRESSUREHEADERMODELER_H
+#endif //TOOLS_SUITE_HIGHPRESSUREHEADERMODELER_H

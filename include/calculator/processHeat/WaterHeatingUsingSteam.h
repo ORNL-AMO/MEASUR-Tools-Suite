@@ -9,8 +9,8 @@
  *
  */
 
-#ifndef AMO_TOOLS_SUITE_WATERHEATINGUSINGSTEAM_H
-#define AMO_TOOLS_SUITE_WATERHEATINGUSINGSTEAM_H
+#ifndef TOOLS_SUITE_WATERHEATINGUSINGSTEAM_H
+#define TOOLS_SUITE_WATERHEATINGUSINGSTEAM_H
 
 class WaterHeatingUsingSteam {
 public:
@@ -70,4 +70,4 @@ public:
                      const double effWaterHeater, const double effBoiler, const double  operatingHours);
 };
 
-#endif //AMO_TOOLS_SUITE_WATERHEATINGUSINGSTEAM_H
+#endif //TOOLS_SUITE_WATERHEATINGUSINGSTEAM_H

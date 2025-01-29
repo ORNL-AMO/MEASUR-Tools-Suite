@@ -9,8 +9,8 @@
  *
  */
 
-#ifndef AMO_TOOLS_SUITE_HUMIDITYRATIO_H
-#define AMO_TOOLS_SUITE_HUMIDITYRATIO_H
+#ifndef TOOLS_SUITE_HUMIDITYRATIO_H
+#define TOOLS_SUITE_HUMIDITYRATIO_H
 
 class HumidityRatio {
 public:
@@ -157,4 +157,4 @@ private:
     double humidityRatioUsingRH_;
     double humidityRatioUsingWBT_;
 };
-#endif //AMO_TOOLS_SUITE_HUMIDITYRATIO_H
+#endif //TOOLS_SUITE_HUMIDITYRATIO_H

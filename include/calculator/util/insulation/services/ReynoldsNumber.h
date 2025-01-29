@@ -1,5 +1,5 @@
-#ifndef AMO_LIBRARY_REYNOLDSNUMBER_H
-#define AMO_LIBRARY_REYNOLDSNUMBER_H
+#ifndef TOOLS_SUITE_REYNOLDSNUMBER_H
+#define TOOLS_SUITE_REYNOLDSNUMBER_H
 
 class ReynoldsNumber
 {
@@ -15,4 +15,4 @@ private:
     double _kinematicViscosity;
 };
 
-#endif //AMO_LIBRARY_REYNOLDSNUMBER_H
+#endif //TOOLS_SUITE_REYNOLDSNUMBER_H

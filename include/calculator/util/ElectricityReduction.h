@@ -1,5 +1,5 @@
-#ifndef AMO_LIBRARY_ELECTRICITYREDUCTION_H
-#define AMO_LIBRARY_ELECTRICITYREDUCTION_H
+#ifndef TOOLS_SUITE_ELECTRICITYREDUCTION_H
+#define TOOLS_SUITE_ELECTRICITYREDUCTION_H
 
 #include <exception>
 #include <stdexcept>
@@ -173,4 +173,4 @@ private:
     ElectricityReduction::Output output;
 };
 
-#endif // AMO_LIBRARY_ELECTRICITYREDUCTION_H
+#endif // TOOLS_SUITE_ELECTRICITYREDUCTION_H

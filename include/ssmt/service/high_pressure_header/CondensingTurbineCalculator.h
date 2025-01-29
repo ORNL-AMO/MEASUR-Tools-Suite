@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_CONDENSINGTURBINECALCULATOR_H
-#define AMO_TOOLS_SUITE_CONDENSINGTURBINECALCULATOR_H
+#ifndef TOOLS_SUITE_CONDENSINGTURBINECALCULATOR_H
+#define TOOLS_SUITE_CONDENSINGTURBINECALCULATOR_H
 
 #include <ssmt/SteamSystemModelerTool.h>
 #include <ssmt/Turbine.h>
@@ -20,4 +20,4 @@ private:
                                         const bool isCalcIdeal) const;
 };
 
-#endif //AMO_TOOLS_SUITE_CONDENSINGTURBINECALCULATOR_H
+#endif //TOOLS_SUITE_CONDENSINGTURBINECALCULATOR_H

@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_BOILERINPUT_H
-#define AMO_TOOLS_SUITE_BOILERINPUT_H
+#ifndef TOOLS_SUITE_BOILERINPUT_H
+#define TOOLS_SUITE_BOILERINPUT_H
 
 #include <iostream>
 
@@ -47,4 +47,4 @@ private:
     double approachTemperature;
 };
 
-#endif //AMO_TOOLS_SUITE_BOILERINPUT_H
+#endif //TOOLS_SUITE_BOILERINPUT_H

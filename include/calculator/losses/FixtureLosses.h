@@ -11,8 +11,8 @@
  *
  */
 
-#ifndef AMO_SUITE_FIXTURELOSSES_H
-#define AMO_SUITE_FIXTURELOSSES_H
+#ifndef TOOLS_SUITE_FIXTURELOSSES_H
+#define TOOLS_SUITE_FIXTURELOSSES_H
 
 /**
  * Fixture Losses class
@@ -136,4 +136,4 @@ private:
     double heatLoss;
 };
 
-#endif //AMO_SUITE_FIXTURELOSSES_H
+#endif //TOOLS_SUITE_FIXTURELOSSES_H

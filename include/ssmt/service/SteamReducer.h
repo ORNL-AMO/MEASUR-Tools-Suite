@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_STEAMREDUCER_H
-#define AMO_TOOLS_SUITE_STEAMREDUCER_H
+#ifndef TOOLS_SUITE_STEAMREDUCER_H
+#define TOOLS_SUITE_STEAMREDUCER_H
 
 #include <ssmt/Turbine.h>
 #include <ssmt/api/TurbineInput.h>
@@ -67,4 +67,4 @@ private:
 
 };
 
-#endif //AMO_TOOLS_SUITE_STEAMREDUCER_H
+#endif //TOOLS_SUITE_STEAMREDUCER_H

@@ -5,8 +5,8 @@
  *
  * 
  */
-#ifndef AMO_TOOLS_SUITE_CHP_H
-#define AMO_TOOLS_SUITE_CHP_H
+#ifndef TOOLS_SUITE_CHP_H
+#define TOOLS_SUITE_CHP_H
 
 #include <array>
 #include <string>
@@ -238,4 +238,4 @@ private:
 
 };
 
-#endif //AMO_TOOLS_SUITE_CHP_H
+#endif //TOOLS_SUITE_CHP_H

@@ -12,8 +12,8 @@
 
 #include <string>
 
-#ifndef AMO_SUITE_ATMOSPHERE_H
-#define AMO_SUITE_ATMOSPHERE_H
+#ifndef TOOLS_SUITE_ATMOSPHERE_H
+#define TOOLS_SUITE_ATMOSPHERE_H
 
 /** Reference Temperature is 60°F */
 #define REFERENCE_TEMPERATURE 60.0
@@ -217,4 +217,4 @@ private:
 };
 
 
-#endif //AMO_SUITE_ATMOSPHERE_H
+#endif //TOOLS_SUITE_ATMOSPHERE_H

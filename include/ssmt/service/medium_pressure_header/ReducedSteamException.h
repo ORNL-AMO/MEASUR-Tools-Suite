@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_REDUCEDSTEAMEXCEPTION_H
-#define AMO_TOOLS_SUITE_REDUCEDSTEAMEXCEPTION_H
+#ifndef TOOLS_SUITE_REDUCEDSTEAMEXCEPTION_H
+#define TOOLS_SUITE_REDUCEDSTEAMEXCEPTION_H
 
 #include <exception>
 #include <iostream>
@@ -29,4 +29,4 @@ private:
     std::shared_ptr<Turbine> highToLowPressureTurbineIdealUpdated;
 };
 
-#endif //AMO_TOOLS_SUITE_REDUCEDSTEAMEXCEPTION_H
+#endif //TOOLS_SUITE_REDUCEDSTEAMEXCEPTION_H

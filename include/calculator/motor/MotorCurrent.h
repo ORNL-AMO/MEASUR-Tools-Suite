@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef AMO_LIBRARY_MOTORCURRENT_H
-#define AMO_LIBRARY_MOTORCURRENT_H
+#ifndef TOOLS_SUITE_MOTORCURRENT_H
+#define TOOLS_SUITE_MOTORCURRENT_H
 
 #include <results/InputData.h>
 
@@ -66,4 +66,4 @@ private:
     double estimatedFLA = 0.0;
 };
 
-#endif //AMO_LIBRARY_MOTORCURRENT_H
+#endif //TOOLS_SUITE_MOTORCURRENT_H

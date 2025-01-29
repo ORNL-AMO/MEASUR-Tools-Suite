@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef AMO_LIBRARY_FLUIDPOWER_H
-#define AMO_LIBRARY_FLUIDPOWER_H
+#ifndef TOOLS_SUITE_FLUIDPOWER_H
+#define TOOLS_SUITE_FLUIDPOWER_H
 
 class FluidPower {
 public:
@@ -57,4 +57,4 @@ private:
     const double velocityPressure = 0;
 };
 
-#endif //AMO_LIBRARY_FLUIDPOWER_H
+#endif //TOOLS_SUITE_FLUIDPOWER_H

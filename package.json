@@ -1,5 +1,5 @@
 {
-  "name": "amo-tools-suite",
+  "name": "measur-tools-suite",
   "version": "1.0.8",
   "engines": {
     "node": "20.16.0",
@@ -9,17 +9,17 @@
     "test-wasm": "node tests/wasm/wasm-express.js",
     "test-wasm-stop": "node tests/wasm/wasm-express-stop.js"
   },
-  "description": "Calculation library for the Department of Energy Advanced Manufacturing Office (DOE AMO) suite of tools",
+  "description": "Calculation library for the Department of Energy Advanced Manufacturing and Materials Technologies Office and the Industrial Efficiency & Decarbonization Office (DOE AMMTO IEDO)  suite of tools",
   "author": "Gina Accawi <accawigk@ornl.gov>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ORNL-AMO/AMO-Tools-Suite.git#node-addon"
+    "url": "git+https://github.com/ORNL-AMO/MEASUR-Tools-Suite.git#node-addon"
   },
   "bugs": {
-    "url": "https://github.com/ORNL-AMO/AMO-Tools-Suite/issues"
+    "url": "https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues"
   },
-  "homepage": "https://github.com/ORNL-AMO/AMO-Tools-Suite#readme",
+  "homepage": "https://github.com/ORNL-AMO/MEASUR-Tools-Suite#readme",
   "devDependencies": {
     "express": "^4.17.1",
     "jquery": "^3.4.1"

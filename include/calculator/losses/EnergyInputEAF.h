@@ -10,8 +10,8 @@
  *
  */
 
-#ifndef AMO_TOOLS_SUITE_ENERGYINPUTEAF_H
-#define AMO_TOOLS_SUITE_ENERGYINPUTEAF_H
+#ifndef TOOLS_SUITE_ENERGYINPUTEAF_H
+#define TOOLS_SUITE_ENERGYINPUTEAF_H
 
 /**
  * Energy Input for an Electric Arc Furnace class
@@ -59,4 +59,4 @@ private:
     const double naturalGasHeatInput, coalCarbonInjection, coalHeatingValue, electrodeUse;
     const double electrodeHeatingValue, otherFuels, electricityInput;
 };
-#endif //AMO_TOOLS_SUITE_ENERGYINPUTEAF_H
+#endif //TOOLS_SUITE_ENERGYINPUTEAF_H

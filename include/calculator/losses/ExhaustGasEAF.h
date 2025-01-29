@@ -10,8 +10,8 @@
  *
  */
 
-#ifndef AMO_TOOLS_SUITE_EXHAUSTGASEAF_H
-#define AMO_TOOLS_SUITE_EXHAUSTGASEAF_H
+#ifndef TOOLS_SUITE_EXHAUSTGASEAF_H
+#define TOOLS_SUITE_EXHAUSTGASEAF_H
 
 /**
  * Exhaust Gas for an Electric Arc Furnace class
@@ -41,4 +41,4 @@ private:
     const double offGasTemp, CO, H2, combustibleGases, vfr, dustLoading;
 };
 
-#endif //AMO_TOOLS_SUITE_EXHAUSTGASEAF_H
+#endif //TOOLS_SUITE_EXHAUSTGASEAF_H

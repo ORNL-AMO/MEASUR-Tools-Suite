@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_STEAMMODELER_H
-#define AMO_TOOLS_SUITE_STEAMMODELER_H
+#ifndef TOOLS_SUITE_STEAMMODELER_H
+#define TOOLS_SUITE_STEAMMODELER_H
 
 #include "SteamModelerInput.h"
 #include "SteamModelerOutput.h"
@@ -54,4 +54,4 @@ private:
                       const OperationsInput &operationsInput);
 };
 
-#endif //AMO_TOOLS_SUITE_STEAMMODELER_H
+#endif //TOOLS_SUITE_STEAMMODELER_H

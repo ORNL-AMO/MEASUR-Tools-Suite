@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_INLETFACTORY_H
-#define AMO_TOOLS_SUITE_INLETFACTORY_H
+#ifndef TOOLS_SUITE_INLETFACTORY_H
+#define TOOLS_SUITE_INLETFACTORY_H
 
 #include <memory>
 #include <vector>
@@ -30,4 +30,4 @@ public:
     Inlet makeWithTemperature(const std::shared_ptr<HeatExchanger::Output> &output) const;
 };
 
-#endif //AMO_TOOLS_SUITE_INLETFACTORY_H
+#endif //TOOLS_SUITE_INLETFACTORY_H

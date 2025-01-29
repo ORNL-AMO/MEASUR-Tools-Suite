@@ -5,8 +5,8 @@
  * @bug No Known Bugs.
  * 
  */
-#ifndef AMO_TOOLS_SUITE_PLANAR_H
-#define AMO_TOOLS_SUITE_PLANAR_H
+#ifndef TOOLS_SUITE_PLANAR_H
+#define TOOLS_SUITE_PLANAR_H
 #include <vector>
 #include <cmath>
 
@@ -104,4 +104,4 @@ public:
 			: Planar(area, tdx, pbx, psx) {}
 };
 
-#endif //AMO_TOOLS_SUITE_PLANAR_H
+#endif //TOOLS_SUITE_PLANAR_H

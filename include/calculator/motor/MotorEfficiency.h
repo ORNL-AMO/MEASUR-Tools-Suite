@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef AMO_LIBRARY_MOTOREFFICIENCY_H
-#define AMO_LIBRARY_MOTOREFFICIENCY_H
+#ifndef TOOLS_SUITE_MOTOREFFICIENCY_H
+#define TOOLS_SUITE_MOTOREFFICIENCY_H
 
 #include <array>
 #include <results/InputData.h>
@@ -187,4 +187,4 @@ private:
 };
 
 
-#endif //AMO_LIBRARY_MOTOREFFICIENCY_H
+#endif //TOOLS_SUITE_MOTOREFFICIENCY_H

@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef AMO_LIBRARY_MOTORPOWER_H
-#define AMO_LIBRARY_MOTORPOWER_H
+#ifndef TOOLS_SUITE_MOTORPOWER_H
+#define TOOLS_SUITE_MOTORPOWER_H
 
 class MotorPower {
 public:
@@ -51,4 +51,4 @@ private:
 };
 
 
-#endif //AMO_LIBRARY_MOTORPOWER_H
+#endif //TOOLS_SUITE_MOTORPOWER_H

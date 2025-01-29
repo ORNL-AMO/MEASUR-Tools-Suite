@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_FANCURVE_H
-#define AMO_TOOLS_SUITE_FANCURVE_H
+#ifndef TOOLS_SUITE_FANCURVE_H
+#define TOOLS_SUITE_FANCURVE_H
 /**
  * @file 
  * @author Preston Shires (pshires) & Allie Ledbetter (aeledbetter)
@@ -153,4 +153,4 @@ private:
 	FanCurveData curveData;
 };
 
-#endif //AMO_TOOLS_SUITE_FANCURVE_H
+#endif //TOOLS_SUITE_FANCURVE_H

@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_PUMPDATADB_H
-#define AMO_TOOLS_SUITE_PUMPDATADB_H
+#ifndef TOOLS_SUITE_PUMPDATADB_H
+#define TOOLS_SUITE_PUMPDATADB_H
 
 class PumpData;
 std::vector<PumpData> SQLite::get_default_pump_data() {
@@ -65,4 +65,4 @@ std::vector<PumpData> SQLite::get_default_pump_data() {
 }
 
 
-#endif //AMO_TOOLS_SUITE_PUMPDATADB_H
+#endif //TOOLS_SUITE_PUMPDATADB_H

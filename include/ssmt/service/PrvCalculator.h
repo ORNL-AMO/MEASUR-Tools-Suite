@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_PRVCALCULATOR_H
-#define AMO_TOOLS_SUITE_PRVCALCULATOR_H
+#ifndef TOOLS_SUITE_PRVCALCULATOR_H
+#define TOOLS_SUITE_PRVCALCULATOR_H
 
 #include <ssmt/SteamSystemModelerTool.h>
 #include <ssmt/Turbine.h>
@@ -51,4 +51,4 @@ private:
     double getTurbineMassFlow(const std::shared_ptr<Turbine> &turbine, const std::string &turbineName) const;
 };
 
-#endif //AMO_TOOLS_SUITE_PRVCALCULATOR_H
+#endif //TOOLS_SUITE_PRVCALCULATOR_H

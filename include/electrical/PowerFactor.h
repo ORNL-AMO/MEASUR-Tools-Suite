@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef AMO_TOOLS_SUITE_POWERFACTOR_H
-#define AMO_TOOLS_SUITE_POWERFACTOR_H
+#ifndef TOOLS_SUITE_POWERFACTOR_H
+#define TOOLS_SUITE_POWERFACTOR_H
 
 #include <cmath>
 
@@ -89,4 +89,4 @@ private:
     double realPower = 0, reactivePower = 0, apparentPower = 0, powerFactor = 0, phaseAngle = 0;
 };
 
-#endif //AMO_TOOLS_SUITE_POWERFACTOR_H
+#endif //TOOLS_SUITE_POWERFACTOR_H

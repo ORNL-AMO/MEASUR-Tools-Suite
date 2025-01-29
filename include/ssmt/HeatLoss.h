@@ -13,8 +13,8 @@
 #include "SteamProperties.h"
 #include "SteamSystemModelerTool.h"
 
-#ifndef AMO_TOOLS_SUITE_HEATLOSS_H
-#define AMO_TOOLS_SUITE_HEATLOSS_H
+#ifndef TOOLS_SUITE_HEATLOSS_H
+#define TOOLS_SUITE_HEATLOSS_H
 
 /**
  * Heat Loss calculator class
@@ -126,4 +126,4 @@ private:
     SteamProperties::ThermodynamicQuantity quantityType;
 };
 
-#endif //AMO_TOOLS_SUITE_HEATLOSS_H
+#endif //TOOLS_SUITE_HEATLOSS_H

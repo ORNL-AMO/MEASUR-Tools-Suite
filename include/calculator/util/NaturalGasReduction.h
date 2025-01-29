@@ -1,5 +1,5 @@
-#ifndef AMO_LIBRARY_NATURALGASREDUCTION_H
-#define AMO_LIBRARY_NATURALGASREDUCTION_H
+#ifndef TOOLS_SUITE_NATURALGASREDUCTION_H
+#define TOOLS_SUITE_NATURALGASREDUCTION_H
 
 #include <exception>
 #include <stdexcept>
@@ -161,4 +161,4 @@ private:
   NaturalGasReduction::Output output;
 };
 
-#endif // AMO_LIBRARY_NATURALGASREDUCTION_H
+#endif // TOOLS_SUITE_NATURALGASREDUCTION_H

@@ -10,8 +10,8 @@
  *
  */
 
-#ifndef AMO_LIBRARY_CURVEFITVAL_H
-#define AMO_LIBRARY_CURVEFITVAL_H
+#ifndef TOOLS_SUITE_CURVEFITVAL_H
+#define TOOLS_SUITE_CURVEFITVAL_H
 
 #include <vector>
 #include <exception>
@@ -75,4 +75,4 @@ private:
     std::vector<double> Fit_Coefficients();
 };
 
-#endif // AMO_LIBRARY_CURVEFITVAL_H
+#endif // TOOLS_SUITE_CURVEFITVAL_H

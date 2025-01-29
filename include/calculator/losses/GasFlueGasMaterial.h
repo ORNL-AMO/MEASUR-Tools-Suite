@@ -9,8 +9,8 @@
  *
  */
 
-#ifndef AMO_SUITE_GASFLUEGASMATERIAL_H
-#define AMO_SUITE_GASFLUEGASMATERIAL_H
+#ifndef TOOLS_SUITE_GASFLUEGASMATERIAL_H
+#define TOOLS_SUITE_GASFLUEGASMATERIAL_H
 
 #include <unordered_map>
 #include <functional>
@@ -335,4 +335,4 @@ private:
     const double flueGasTemperature, excessAirPercentage, combustionAirTemperature, fuelTemperature;
 	GasCompositions compositions;
 };
-#endif //AMO_SUITE_GASFLUEGASMATERIAL_H
+#endif //TOOLS_SUITE_GASFLUEGASMATERIAL_H

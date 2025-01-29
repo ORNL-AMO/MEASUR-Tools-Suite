@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_MEDIUMPRESSUREHEADERMODELER_H
-#define AMO_TOOLS_SUITE_MEDIUMPRESSUREHEADERMODELER_H
+#ifndef TOOLS_SUITE_MEDIUMPRESSUREHEADERMODELER_H
+#define TOOLS_SUITE_MEDIUMPRESSUREHEADERMODELER_H
 
 #include <memory>
 #include "HighToMediumPrvCalculator.h"
@@ -46,4 +46,4 @@ private:
                    const HighPressureHeaderCalculationsDomain &highPressureHeaderCalculationsDomain) const;
 };
 
-#endif //AMO_TOOLS_SUITE_MEDIUMPRESSUREHEADERMODELER_H
+#endif //TOOLS_SUITE_MEDIUMPRESSUREHEADERMODELER_H

@@ -8,8 +8,8 @@
  * 
  */
 
-#ifndef AMO_TOOLS_SUITE_FAN_H
-#define AMO_TOOLS_SUITE_FAN_H
+#ifndef TOOLS_SUITE_FAN_H
+#define TOOLS_SUITE_FAN_H
 
 #include <string>
 #include <unordered_map>
@@ -745,4 +745,4 @@ private:
 	FanShaftPower const fanShaftPower;
 };
 
-#endif //AMO_TOOLS_SUITE_FAN_H
+#endif //TOOLS_SUITE_FAN_H

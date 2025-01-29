@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_DEAERATORMODELER_H
-#define AMO_TOOLS_SUITE_DEAERATORMODELER_H
+#ifndef TOOLS_SUITE_DEAERATORMODELER_H
+#define TOOLS_SUITE_DEAERATORMODELER_H
 
 #include <ssmt/Boiler.h>
 #include <ssmt/PRV.h>
@@ -34,4 +34,4 @@ private:
                             const double feedwaterMassFlow) const;
 };
 
-#endif //AMO_TOOLS_SUITE_DEAERATORMODELER_H
+#endif //TOOLS_SUITE_DEAERATORMODELER_H

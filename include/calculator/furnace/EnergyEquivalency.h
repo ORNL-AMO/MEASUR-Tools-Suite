@@ -9,8 +9,8 @@
  *
  */
 
-#ifndef AMO_TOOLS_SUITE_ENERGYEQUIVALENCY_H
-#define AMO_TOOLS_SUITE_ENERGYEQUIVALENCY_H
+#ifndef TOOLS_SUITE_ENERGYEQUIVALENCY_H
+#define TOOLS_SUITE_ENERGYEQUIVALENCY_H
 
 /**
  * Electrical Energy Equivalency calculator class
@@ -224,4 +224,4 @@ private:
     /// natural gas heat
     double fuelFiredHeatInput_;
 };
-#endif //AMO_TOOLS_SUITE_ENERGYEQUIVALENCY_H
+#endif //TOOLS_SUITE_ENERGYEQUIVALENCY_H

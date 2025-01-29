@@ -9,8 +9,8 @@
  *
  */
 
-#ifndef AMO_TOOLS_SUITE_O2ENRICHMENT_H
-#define AMO_TOOLS_SUITE_O2ENRICHMENT_H
+#ifndef TOOLS_SUITE_O2ENRICHMENT_H
+#define TOOLS_SUITE_O2ENRICHMENT_H
 
 /**
  * O2 Enrichment calculator class
@@ -293,4 +293,4 @@ private:
     double fuelConsumptionEnriched, fuelSavingsEnriched;
 };
 
-#endif //AMO_TOOLS_SUITE_O2ENRICHMENT_H
+#endif //TOOLS_SUITE_O2ENRICHMENT_H

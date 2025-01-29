@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_HEATEXCHANGERCALCULATOR_H
-#define AMO_TOOLS_SUITE_HEATEXCHANGERCALCULATOR_H
+#ifndef TOOLS_SUITE_HEATEXCHANGERCALCULATOR_H
+#define TOOLS_SUITE_HEATEXCHANGERCALCULATOR_H
 
 #include <memory>
 #include <ssmt/FlashTank.h>
@@ -17,4 +17,4 @@ private:
     const FluidPropertiesFactory fluidPropertiesFactory = FluidPropertiesFactory();
 };
 
-#endif //AMO_TOOLS_SUITE_HEATEXCHANGERCALCULATOR_H
+#endif //TOOLS_SUITE_HEATEXCHANGERCALCULATOR_H

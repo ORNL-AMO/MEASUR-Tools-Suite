@@ -9,8 +9,8 @@
  *
  */
 
-#ifndef AMO_TOOLS_SUITE_CASCADEHEATHIGHTOLOW_H
-#define AMO_TOOLS_SUITE_CASCADEHEATHIGHTOLOW_H
+#ifndef TOOLS_SUITE_CASCADEHEATHIGHTOLOW_H
+#define TOOLS_SUITE_CASCADEHEATHIGHTOLOW_H
 
 #include "../losses/GasFlueGasMaterial.h"
 #include "../losses/SolidLiquidFlueGasMaterial.h"
@@ -112,4 +112,4 @@ private:
     double secFiringRate = 0, secExhaustTemperature = 0, secExhaustO2 = 0, secCombAirTemperature = 0, secOpHours = 0;
 };
 
-#endif //AMO_TOOLS_SUITE_CASCADEHEATHIGHTOLOW_H
+#endif //TOOLS_SUITE_CASCADEHEATHIGHTOLOW_H

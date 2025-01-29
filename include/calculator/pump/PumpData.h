@@ -3,8 +3,8 @@
 // Re-implemented by causeyc on 1/27/2020
 // Changes made nbintertech 4/21/2022
 
-#ifndef AMO_TOOLS_SUITE_PUMPDATA_H
-#define AMO_TOOLS_SUITE_PUMPDATA_H
+#ifndef TOOLS_SUITE_PUMPDATA_H
+#define TOOLS_SUITE_PUMPDATA_H
 
 #include <string>
 
@@ -279,4 +279,4 @@ private:
     friend class SQLite;
 };
 
-#endif //AMO_TOOLS_SUITE_PUMPDATA_H
+#endif //TOOLS_SUITE_PUMPDATA_H

@@ -9,8 +9,8 @@
  *
  */
 
-#ifndef AMO_LIBRARY_ANNUALENERGY_H
-#define AMO_LIBRARY_ANNUALENERGY_H
+#ifndef TOOLS_SUITE_ANNUALENERGY_H
+#define TOOLS_SUITE_ANNUALENERGY_H
 
 
 class AnnualEnergy {
@@ -84,4 +84,4 @@ private:
 };
 
 
-#endif //AMO_LIBRARY_ANNUALENERGY_H
+#endif //TOOLS_SUITE_ANNUALENERGY_H

@@ -10,8 +10,8 @@
  *
  */
 
-#ifndef AMO_SUITE_GASCOOLINGLOSSES_H
-#define AMO_SUITE_GASCOOLINGLOSSES_H
+#ifndef TOOLS_SUITE_GASCOOLINGLOSSES_H
+#define TOOLS_SUITE_GASCOOLINGLOSSES_H
 
 /**
  * Gas Cooling Losses class
@@ -50,4 +50,4 @@ public:
 private:
     const double flowRate, initialTemperature, finalTemperature, specificHeat, correctionFactor, gasDensity;
 };
-#endif //AMO_SUITE_GASCOOLINGLOSSES_H
+#endif //TOOLS_SUITE_GASCOOLINGLOSSES_H

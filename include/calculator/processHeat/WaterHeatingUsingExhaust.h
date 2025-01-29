@@ -9,8 +9,8 @@
  *
  */
 
-#ifndef AMO_TOOLS_SUITE_WATERHEATINGUSINGEXHAUST_H
-#define AMO_TOOLS_SUITE_WATERHEATINGUSINGEXHAUST_H
+#ifndef TOOLS_SUITE_WATERHEATINGUSINGEXHAUST_H
+#define TOOLS_SUITE_WATERHEATINGUSINGEXHAUST_H
 
 class WaterHeatingUsingExhaust {
 public:
@@ -51,4 +51,4 @@ public:
                                                const double copChiller, const double chillerEfficiency, const double copCompressor);
 };
 
-#endif //AMO_TOOLS_SUITE_WATERHEATINGUSINGEXHAUST_H
+#endif //TOOLS_SUITE_WATERHEATINGUSINGEXHAUST_H

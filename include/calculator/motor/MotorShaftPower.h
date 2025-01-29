@@ -15,8 +15,8 @@
  *
  */
 
-#ifndef AMO_LIBRARY_MOTORSHAFTPOWER_H
-#define AMO_LIBRARY_MOTORSHAFTPOWER_H
+#ifndef TOOLS_SUITE_MOTORSHAFTPOWER_H
+#define TOOLS_SUITE_MOTORSHAFTPOWER_H
 
 #include <results/InputData.h>
 
@@ -106,4 +106,4 @@ private:
     Motor::LoadEstimationMethod loadEstimationMethod;
 };
 
-#endif //AMO_LIBRARY_MOTORSHAFTPOWER_H
+#endif //TOOLS_SUITE_MOTORSHAFTPOWER_H
