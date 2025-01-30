@@ -9,8 +9,8 @@
  *
  */
 
-#ifndef AMO_TOOLS_SUITE_EFFICIENCYIMPROVEMENT_H
-#define AMO_TOOLS_SUITE_EFFICIENCYIMPROVEMENT_H
+#ifndef TOOLS_SUITE_EFFICIENCYIMPROVEMENT_H
+#define TOOLS_SUITE_EFFICIENCYIMPROVEMENT_H
 
 /**
  * Efficiency Improvement calculator class
@@ -338,4 +338,4 @@ private:
     double newFuelSavings_;
     double newEnergyInput_;
 };
-#endif //AMO_TOOLS_SUITE_EFFICIENCYIMPROVEMENT_H
+#endif //TOOLS_SUITE_EFFICIENCYIMPROVEMENT_H

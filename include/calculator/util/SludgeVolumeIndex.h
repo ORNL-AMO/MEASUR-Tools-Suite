@@ -9,8 +9,8 @@
  *
  */
 
-#ifndef AMO_TOOLS_SUITE_SLUDGEVOLUMEINDEX_H
-#define AMO_TOOLS_SUITE_SLUDGEVOLUMEINDEX_H
+#ifndef TOOLS_SUITE_SLUDGEVOLUMEINDEX_H
+#define TOOLS_SUITE_SLUDGEVOLUMEINDEX_H
 
 class SludgeVolumeIndex {
 public:
@@ -93,4 +93,4 @@ private:
 
     static double Round(double value) { return (float)((int)(value * 100 + .5)) / 100; }
 };
-#endif //AMO_TOOLS_SUITE_SLUDGEVOLUMEINDEX_H
+#endif //TOOLS_SUITE_SLUDGEVOLUMEINDEX_H

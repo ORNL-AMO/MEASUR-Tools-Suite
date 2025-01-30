@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_FLASHTANKFACTORY_H
-#define AMO_TOOLS_SUITE_FLASHTANKFACTORY_H
+#ifndef TOOLS_SUITE_FLASHTANKFACTORY_H
+#define TOOLS_SUITE_FLASHTANKFACTORY_H
 
 #include <ssmt/Boiler.h>
 #include <ssmt/FlashTank.h>
@@ -23,4 +23,4 @@ public:
     make(const SteamSystemModelerTool::FluidProperties &properties) const;
 };
 
-#endif //AMO_TOOLS_SUITE_FLASHTANKFACTORY_H
+#endif //TOOLS_SUITE_FLASHTANKFACTORY_H

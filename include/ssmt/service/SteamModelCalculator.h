@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_STEAMMODELCALCULATOR_H
-#define AMO_TOOLS_SUITE_STEAMMODELCALCULATOR_H
+#ifndef TOOLS_SUITE_STEAMMODELCALCULATOR_H
+#define TOOLS_SUITE_STEAMMODELCALCULATOR_H
 
 #include <ssmt/api/BoilerInput.h>
 #include <ssmt/api/HeaderInput.h>
@@ -40,4 +40,4 @@ private:
     const ProcessSteamUsageModeler processSteamUsageModeler = ProcessSteamUsageModeler();
 };
 
-#endif //AMO_TOOLS_SUITE_STEAMMODELCALCULATOR_H
+#endif //TOOLS_SUITE_STEAMMODELCALCULATOR_H

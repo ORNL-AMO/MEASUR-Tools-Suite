@@ -600,10 +600,10 @@ TEST_CASE( "SQLite - deleteMaterials", "[sqlite]" ) {
 //// commented because it writes to HDD
 //TEST_CASE( "SQLite - test db init", "[sqlite]" ) {
 //    {
-//        std::ifstream ifs("amo_tools_suite.db");
+//        std::ifstream ifs("measur_tools_suite.db");
 //        auto const isOpen = ifs.is_open();
 //        ifs.close();
-//        auto sqlite = SQLite("amo_tools_suite.db", ! isOpen);
+//        auto sqlite = SQLite("measur_tools_suite.db", ! isOpen);
 //
 //        auto res = sqlite.getSolidLoadChargeMaterials();
 //        auto const resSize = res.size() + 1;
@@ -627,10 +627,10 @@ TEST_CASE( "SQLite - deleteMaterials", "[sqlite]" ) {
 //    }
 //
 //    {
-//        std::ifstream ifs("amo_tools_suite.db");
+//        std::ifstream ifs("measur_tools_suite.db");
 //        auto const isOpen = ! ifs.is_open();
 //        ifs.close();
-//        auto sqlite = SQLite("amo_tools_suite.db", isOpen);
+//        auto sqlite = SQLite("measur_tools_suite.db", isOpen);
 //
 //        auto res = sqlite.getSolidLoadChargeMaterials();
 //        auto const resSize = res.size() + 1;
@@ -1479,7 +1479,7 @@ TEST_CASE( "SQLite - Pump Data inserts and updates and selects", "[sqlite][pump]
     };
 
     auto sqlite = SQLite(":memory:", true);
-    //auto sqlite = SQLite("cpp_amo_tools_suite.db", true);
+    //auto sqlite = SQLite("cpp_measur_tools_suite.db", true);
     //auto sqlite = SQLite("test.db", true);
 
     {

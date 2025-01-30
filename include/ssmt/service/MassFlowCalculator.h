@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_MASSFLOWCALCULATOR_H
-#define AMO_TOOLS_SUITE_MASSFLOWCALCULATOR_H
+#ifndef TOOLS_SUITE_MASSFLOWCALCULATOR_H
+#define TOOLS_SUITE_MASSFLOWCALCULATOR_H
 
 #include <ssmt/api/HeaderInput.h>
 
@@ -16,4 +16,4 @@ public:
     double addToMassFlow(const std::string &objectName, double massFlow, const double mediumProcessSteamUsage) const;
 };
 
-#endif //AMO_TOOLS_SUITE_MASSFLOWCALCULATOR_H
+#endif //TOOLS_SUITE_MASSFLOWCALCULATOR_H

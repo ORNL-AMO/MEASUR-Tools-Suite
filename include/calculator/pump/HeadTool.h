@@ -6,8 +6,8 @@
  * @bug No known bugs.
  */
 
-#ifndef AMO_TOOLS_SUITE_HEADTOOL_H
-#define AMO_TOOLS_SUITE_HEADTOOL_H
+#ifndef TOOLS_SUITE_HEADTOOL_H
+#define TOOLS_SUITE_HEADTOOL_H
 
 #include <string>
 #include <unordered_map>
@@ -224,4 +224,4 @@ class HeadTool : private HeadToolBase
 	HeadToolBase::Output output;
 };
 
-#endif //AMO_TOOLS_SUITE_HEADTOOL_H
+#endif //TOOLS_SUITE_HEADTOOL_H

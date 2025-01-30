@@ -10,14 +10,14 @@ set(CPACK_PACKAGE_VERSION_MINOR "${CMAKE_VERSION_MINOR}" )
 set(CPACK_PACKAGE_VERSION_PATCH "${CMAKE_VERSION_PATCH}" )
 set(FULL_VERSION_STRING "${CMAKE_VERSION_MAJOR}.${CMAKE_VERSION_MINOR}.${CMAKE_VERSION_PATCH}")
 
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "AMO Suite is a cross-platform collection of calculations and tools to support industrial equipment modeling.")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "MEASUR Suite is a cross-platform collection of calculations and tools to support industrial equipment modeling.")
 
 # set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/CPack.Description.txt")
 # set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/CPack.Description.txt")
 # set(CPACK_RESOURCE_FILE_WELCOME "${CMAKE_SOURCE_DIR}/CPack.Welcome.txt")
 
-set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "AMO Suite\n ${CPACK_PACKAGE_DESCRIPTION_SUMMARY}")
-set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://code.ornl.gov/g9a/amo-library")
+set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "MEASUR Suite\n ${CPACK_PACKAGE_DESCRIPTION_SUMMARY}")
+set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://code.ornl.gov/g9a/MEASUR-library")
 set(CPACK_DEBIAN_PACKAGE_SECTION "science")
 set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_SOURCE_DIR}/cmake/debian/postinst")
 
@@ -43,7 +43,7 @@ endif()
 install(FILES "${CMAKE_SOURCE_DIR}/LICENSE.txt" DESTINATION "./")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE.txt")
 
-install(TARGETS amo_tools_suite
+install(TARGETS measur_tools_suite
         ARCHIVE
         DESTINATION lib
         COMPONENT libraries)
@@ -60,16 +60,16 @@ INSTALL(FILES third_party/sqlite/sqlite3.h
         COMPONENT headers
         )
 
-#install(FILES "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db" DESTINATION "./db/")
+#install(FILES "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/measur_tools_suite.db" DESTINATION "./db/")
 
 set(CPACK_COMPONENTS_ALL libraries headers)
 set(CPACK_COMPONENT_LIBRARIES_DISPLAY_NAME "Libraries")
 set(CPACK_COMPONENT_HEADERS_DISPLAY_NAME "C++ Headers")
 
 set(CPACK_COMPONENT_LIBRARIES_DESCRIPTION
-        "Static libraries used to build programs with AMO Suite")
+        "Static libraries used to build programs with Tool Suite")
 set(CPACK_COMPONENT_HEADERS_DESCRIPTION
-        "C/C++ header files for use with AMO Suite")
+        "C/C++ header files for use with Tool Suite")
 
 set(CPACK_COMPONENT_HEADERS_DEPENDS libraries)
 

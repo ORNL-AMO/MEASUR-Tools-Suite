@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_STEAMBALANCECALCULATOR_H
-#define AMO_TOOLS_SUITE_STEAMBALANCECALCULATOR_H
+#ifndef TOOLS_SUITE_STEAMBALANCECALCULATOR_H
+#define TOOLS_SUITE_STEAMBALANCECALCULATOR_H
 
 #include <ssmt/Boiler.h>
 #include <ssmt/FlashTank.h>
@@ -31,4 +31,4 @@ private:
     const SteamProductionCalculator steamProductionCalculator = SteamProductionCalculator();
 };
 
-#endif //AMO_TOOLS_SUITE_STEAMBALANCECALCULATOR_H
+#endif //TOOLS_SUITE_STEAMBALANCECALCULATOR_H

@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_HEATEXCHANGER_H
-#define AMO_TOOLS_SUITE_HEATEXCHANGER_H
+#ifndef TOOLS_SUITE_HEATEXCHANGER_H
+#define TOOLS_SUITE_HEATEXCHANGER_H
 
 #include <stdexcept>
 #include "SteamProperties.h"
@@ -92,4 +92,4 @@ private:
     const double approachTemp;
 };
 
-#endif //AMO_TOOLS_SUITE_HEATEXCHANGER_H
+#endif //TOOLS_SUITE_HEATEXCHANGER_H

@@ -8,8 +8,8 @@
  * @bug No known bugs.
  *
  */
-#ifndef AMO_TOOLS_SUITE_TURBINE_H
-#define AMO_TOOLS_SUITE_TURBINE_H
+#ifndef TOOLS_SUITE_TURBINE_H
+#define TOOLS_SUITE_TURBINE_H
 
 #include <iostream>
 #include "SteamProperties.h"
@@ -290,4 +290,4 @@ private:
 	double inletEnergyFlow, outletEnergyFlow = 0, energyOut, powerOut, massFlow;
 };
 
-#endif //AMO_TOOLS_SUITE_TURBINE_H
+#endif //TOOLS_SUITE_TURBINE_H

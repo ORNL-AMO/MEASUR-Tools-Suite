@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_PROCESSSTEAMUSAGEMODELER_H
-#define AMO_TOOLS_SUITE_PROCESSSTEAMUSAGEMODELER_H
+#ifndef TOOLS_SUITE_PROCESSSTEAMUSAGEMODELER_H
+#define TOOLS_SUITE_PROCESSSTEAMUSAGEMODELER_H
 
 #include <memory>
 #include <ssmt/api/HeaderInput.h>
@@ -30,4 +30,4 @@ private:
          const SteamSystemModelerTool::FluidProperties &pressureCondensate) const;
 };
 
-#endif //AMO_TOOLS_SUITE_PROCESSSTEAMUSAGEMODELER_H
+#endif //TOOLS_SUITE_PROCESSSTEAMUSAGEMODELER_H

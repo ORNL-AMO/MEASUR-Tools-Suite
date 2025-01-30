@@ -8,8 +8,8 @@
  * @bug No known bugs.
  *
  */
-#ifndef AMO_SUITE_WATERCOOLINGLOSSES_H
-#define AMO_SUITE_WATERCOOLINGLOSSES_H
+#ifndef TOOLS_SUITE_WATERCOOLINGLOSSES_H
+#define TOOLS_SUITE_WATERCOOLINGLOSSES_H
 
 /**
  * Water Cooling Losses class
@@ -104,4 +104,4 @@ private:
     // Out value
     double heatLoss;
 };
-#endif //AMO_SUITE_WATERCOOLINGLOSSES_H
+#endif //TOOLS_SUITE_WATERCOOLINGLOSSES_H

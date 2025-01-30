@@ -6,8 +6,8 @@
  *
  */
 
-#ifndef AMO_LIBRARY_MOTORPERFORMANCE_H
-#define AMO_LIBRARY_MOTORPERFORMANCE_H
+#ifndef TOOLS_SUITE_MOTORPERFORMANCE_H
+#define TOOLS_SUITE_MOTORPERFORMANCE_H
 
 #include <array>
 #include <results/InputData.h>
@@ -76,4 +76,4 @@ private:
 };
 
 
-#endif //AMO_LIBRARY_MOTORPERFORMANCE_H
+#endif //TOOLS_SUITE_MOTORPERFORMANCE_H

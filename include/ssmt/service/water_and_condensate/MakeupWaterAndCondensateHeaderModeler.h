@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_WATERANDCONDENSATEMODELER_H
-#define AMO_TOOLS_SUITE_WATERANDCONDENSATEMODELER_H
+#ifndef TOOLS_SUITE_WATERANDCONDENSATEMODELER_H
+#define TOOLS_SUITE_WATERANDCONDENSATEMODELER_H
 
 #include "CombinedCondensateCalculator.h"
 #include "MakeupWaterCalculator.h"
@@ -45,4 +45,4 @@ private:
     ReturnCondensateCalculator returnCondensateCalculator = ReturnCondensateCalculator();
 };
 
-#endif //AMO_TOOLS_SUITE_WATERANDCONDENSATEMODELER_H
+#endif //TOOLS_SUITE_WATERANDCONDENSATEMODELER_H

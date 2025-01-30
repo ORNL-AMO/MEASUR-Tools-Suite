@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_GASFLUEGASMATERIAL_H
-#define AMO_TOOLS_SUITE_GASFLUEGASMATERIAL_H
+#ifndef TOOLS_SUITE_GASFLUEGASMATERIAL_SQL_H
+#define TOOLS_SUITE_GASFLUEGASMATERIAL_SQL_H
 
 class GasCompositions;
 
@@ -18,4 +18,4 @@ std::vector<GasCompositions> SQLite::get_default_gas_flue_gas_materials() {
     };
 }
 
-#endif //AMO_TOOLS_SUITE_GASFLUEGASMATERIAL_H
+#endif //TOOLS_SUITE_GASFLUEGASMATERIAL_SQL_H

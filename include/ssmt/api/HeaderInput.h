@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_HEADERINPUT_H
-#define AMO_TOOLS_SUITE_HEADERINPUT_H
+#ifndef TOOLS_SUITE_HEADERINPUT_H
+#define TOOLS_SUITE_HEADERINPUT_H
 
 #include <iostream>
 #include <list>
@@ -98,4 +98,4 @@ private:
     std::shared_ptr<HeaderNotHighestPressure> lowPressureHeader;
 };
 
-#endif //AMO_TOOLS_SUITE_HEADERINPUT_H
+#endif //TOOLS_SUITE_HEADERINPUT_H

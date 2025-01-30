@@ -6,8 +6,8 @@
  *
  */
 
-#ifndef AMO_LIBRARY_PUMPEFFICIENCY_H
-#define AMO_LIBRARY_PUMPEFFICIENCY_H
+#ifndef TOOLS_SUITE_PUMPEFFICIENCY_H
+#define TOOLS_SUITE_PUMPEFFICIENCY_H
 
 #include <results/InputData.h>
 
@@ -48,4 +48,4 @@ private:
 };
 
 
-#endif //AMO_LIBRARY_PUMPEFFICIENCY_H
+#endif //TOOLS_SUITE_PUMPEFFICIENCY_H

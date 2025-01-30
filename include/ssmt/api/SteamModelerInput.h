@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_STEAMMODELERINPUT_H
-#define AMO_TOOLS_SUITE_STEAMMODELERINPUT_H
+#ifndef TOOLS_SUITE_STEAMMODELERINPUT_H
+#define TOOLS_SUITE_STEAMMODELERINPUT_H
 
 #include "BoilerInput.h"
 #include "HeaderInput.h"
@@ -36,4 +36,4 @@ private:
     TurbineInput turbineInput;
 };
 
-#endif //AMO_TOOLS_SUITE_STEAMMODELERINPUT_H
+#endif //TOOLS_SUITE_STEAMMODELERINPUT_H

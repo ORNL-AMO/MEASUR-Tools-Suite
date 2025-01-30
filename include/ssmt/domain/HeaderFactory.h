@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_HEADERFACTORY_H
-#define AMO_TOOLS_SUITE_HEADERFACTORY_H
+#ifndef TOOLS_SUITE_HEADERFACTORY_H
+#define TOOLS_SUITE_HEADERFACTORY_H
 
 #include <memory>
 #include <ssmt/Boiler.h>
@@ -77,4 +77,4 @@ private:
             const std::shared_ptr<LowPressureHeaderCalculationsDomain> &lowPressureHeaderCalculationsDomain) const;
 };
 
-#endif //AMO_TOOLS_SUITE_HEADERFACTORY_H
+#endif //TOOLS_SUITE_HEADERFACTORY_H

@@ -9,8 +9,8 @@
  *
  */
 
-#ifndef AMO_SUITE_LIQUIDCOOLINGLOSSES_H
-#define AMO_SUITE_LIQUIDCOOLINGLOSSES_H
+#ifndef TOOLS_SUITE_LIQUIDCOOLINGLOSSES_H
+#define TOOLS_SUITE_LIQUIDCOOLINGLOSSES_H
 
 /**
  * Liquid Cooling Losses class
@@ -145,4 +145,4 @@ private:
     // Out value
     double heatLoss;
 };
-#endif //AMO_SUITE_LIQUIDCOOLINGLOSSES_H
+#endif //TOOLS_SUITE_LIQUIDCOOLINGLOSSES_H

@@ -1,5 +1,5 @@
-#ifndef AMO_LIBRARY_INSULATEDTANKCALCULATOR_H
-#define AMO_LIBRARY_INSULATEDTANKCALCULATOR_H
+#ifndef TOOLS_SUITE_INSULATEDTANKCALCULATOR_H
+#define TOOLS_SUITE_INSULATEDTANKCALCULATOR_H
 
 #include "calculator/util/insulation/tanks/InsulatedTankInput.h"
 #include "calculator/util/insulation/tanks/InsulatedTankOutput.h"

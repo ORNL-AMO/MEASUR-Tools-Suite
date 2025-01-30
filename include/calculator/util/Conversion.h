@@ -1,5 +1,5 @@
-#ifndef AMO_LIBRARY_CONVERSION_H
-#define AMO_LIBRARY_CONVERSION_H
+#ifndef TOOLS_SUITE_CONVERSION_H
+#define TOOLS_SUITE_CONVERSION_H
 
 class Conversion
 {
@@ -16,4 +16,4 @@ class Conversion
     double x;
 };
 
-#endif //AMO_LIBRARY_CONVERSION_H
+#endif //TOOLS_SUITE_CONVERSION_H

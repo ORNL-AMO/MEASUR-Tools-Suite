@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_ENERGYANDCOSTCALCULATOR_H
-#define AMO_TOOLS_SUITE_ENERGYANDCOSTCALCULATOR_H
+#ifndef TOOLS_SUITE_ENERGYANDCOSTCALCULATOR_H
+#define TOOLS_SUITE_ENERGYANDCOSTCALCULATOR_H
 
 #include <memory>
 #include <ssmt/Boiler.h>
@@ -51,4 +51,4 @@ public:
     calcBoilerFuelUsage(const double fuelEnergyInput, const double operatingHoursPerYearInput) const;
 };
 
-#endif //AMO_TOOLS_SUITE_ENERGYANDCOSTCALCULATOR_H
+#endif //TOOLS_SUITE_ENERGYANDCOSTCALCULATOR_H

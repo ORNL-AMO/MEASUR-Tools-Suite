@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_STEAMPRODUCTIONCALCULATOR_H
-#define AMO_TOOLS_SUITE_STEAMPRODUCTIONCALCULATOR_H
+#ifndef TOOLS_SUITE_STEAMPRODUCTIONCALCULATOR_H
+#define TOOLS_SUITE_STEAMPRODUCTIONCALCULATOR_H
 
 #include <memory>
 #include <ssmt/Boiler.h>
@@ -41,4 +41,4 @@ private:
     addPrvMassFlow(double prvAdditionalSteam, const std::shared_ptr<PrvWithoutDesuperheating> &prv) const;
 };
 
-#endif //AMO_TOOLS_SUITE_STEAMPRODUCTIONCALCULATOR_H
+#endif //TOOLS_SUITE_STEAMPRODUCTIONCALCULATOR_H

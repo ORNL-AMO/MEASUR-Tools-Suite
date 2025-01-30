@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_BOILERFACTORY_H
-#define AMO_TOOLS_SUITE_BOILERFACTORY_H
+#ifndef TOOLS_SUITE_BOILERFACTORY_H
+#define TOOLS_SUITE_BOILERFACTORY_H
 
 #include <ssmt/Boiler.h>
 #include <ssmt/api/BoilerInput.h>
@@ -11,4 +11,4 @@ public:
 };
 
 
-#endif //AMO_TOOLS_SUITE_BOILERFACTORY_H
+#endif //TOOLS_SUITE_BOILERFACTORY_H

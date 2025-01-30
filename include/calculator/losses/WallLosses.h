@@ -9,8 +9,8 @@
  *
  */
 
-#ifndef AMO_SUITE_WALLLOSSES_H
-#define AMO_SUITE_WALLLOSSES_H
+#ifndef TOOLS_SUITE_WALLLOSSES_H
+#define TOOLS_SUITE_WALLLOSSES_H
 
 /** Rad constant is 460.0 */
 #define RAD_CONSTANT 460.0
@@ -242,4 +242,4 @@ private:
     {}
 };
 
-#endif //AMO_SUITE_WALLLOSSES_H
+#endif //TOOLS_SUITE_WALLLOSSES_H

@@ -1,5 +1,5 @@
-#ifndef AMO_LIBRARY_RAYLEIGHNUMBER_H
-#define AMO_LIBRARY_RAYLEIGHNUMBER_H
+#ifndef TOOLS_SUITE_RAYLEIGHNUMBER_H
+#define TOOLS_SUITE_RAYLEIGHNUMBER_H
 
 class RayleighNumber
 {
@@ -21,4 +21,4 @@ private:
     double _alpha;
 };
 
-#endif //AMO_LIBRARY_RAYLEIGHNUMBER_H
+#endif //TOOLS_SUITE_RAYLEIGHNUMBER_H

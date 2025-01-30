@@ -1,6 +1,6 @@
 Copyright 2018, UT-Battelle, LLC
 All rights reserved
- AMO Tools Suite
+ MEASUR Tools Suite
 OPEN SOURCE LICENSE (Permissive)
 
 Subject to the conditions of this License, UT-Battelle, LLC (the “Licensor”) hereby grants, free of charge, to any person 

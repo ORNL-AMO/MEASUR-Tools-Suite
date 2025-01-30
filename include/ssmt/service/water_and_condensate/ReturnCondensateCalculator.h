@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_RETURNCONDENSATECALCULATOR_H
-#define AMO_TOOLS_SUITE_RETURNCONDENSATECALCULATOR_H
+#ifndef TOOLS_SUITE_RETURNCONDENSATECALCULATOR_H
+#define TOOLS_SUITE_RETURNCONDENSATECALCULATOR_H
 
 #include <ssmt/Header.h>
 #include <ssmt/SteamSystemModelerTool.h>
@@ -23,4 +23,4 @@ private:
     FluidPropertiesFactory fluidPropertiesFactory = FluidPropertiesFactory();
 };
 
-#endif //AMO_TOOLS_SUITE_RETURNCONDENSATECALCULATOR_H
+#endif //TOOLS_SUITE_RETURNCONDENSATECALCULATOR_H

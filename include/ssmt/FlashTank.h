@@ -13,8 +13,8 @@
 #include "SaturatedProperties.h"
 #include "SteamSystemModelerTool.h"
 
-#ifndef AMO_TOOLS_SUITE_FLASHTANK_H
-#define AMO_TOOLS_SUITE_FLASHTANK_H
+#ifndef TOOLS_SUITE_FLASHTANK_H
+#define TOOLS_SUITE_FLASHTANK_H
 
 /**
  * Heat Loss calculator class
@@ -122,4 +122,4 @@ private:
 
 
 
-#endif //AMO_TOOLS_SUITE_FLASHTANK_H
+#endif //TOOLS_SUITE_FLASHTANK_H

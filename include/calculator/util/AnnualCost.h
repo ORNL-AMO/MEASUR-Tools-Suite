@@ -10,8 +10,8 @@
  */
 
 
-#ifndef AMO_LIBRARY_ANNUALCOST_H
-#define AMO_LIBRARY_ANNUALCOST_H
+#ifndef TOOLS_SUITE_ANNUALCOST_H
+#define TOOLS_SUITE_ANNUALCOST_H
 
 class AnnualCost {
 public:
@@ -81,4 +81,4 @@ private:
     double annualEnergyCost; // in $
 };
 
-#endif //AMO_LIBRARY_ANNUALCOST_H
+#endif //TOOLS_SUITE_ANNUALCOST_H

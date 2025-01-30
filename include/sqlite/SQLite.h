@@ -1,5 +1,5 @@
-#ifndef AMO_LIBRARY_SQLITEWRAPPER_H
-#define AMO_LIBRARY_SQLITEWRAPPER_H
+#ifndef TOOLS_SUITE_SQLITEWRAPPER_H
+#define TOOLS_SUITE_SQLITEWRAPPER_H
 
 #include <sqlite3.h>
 #include <memory>
@@ -291,4 +291,4 @@ private:
     std::vector<PumpData> get_default_pump_data();
 };
 
-#endif //AMO_LIBRARY_SQLITEWRAPPER_H
+#endif //TOOLS_SUITE_SQLITEWRAPPER_H

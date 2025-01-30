@@ -5,8 +5,8 @@
  * @bug No Known Bugs.
  * 
  */
-#ifndef AMO_TOOLS_SUITE_FANSHAFTPOWER_H
-#define AMO_TOOLS_SUITE_FANSHAFTPOWER_H
+#ifndef TOOLS_SUITE_FANSHAFTPOWER_H
+#define TOOLS_SUITE_FANSHAFTPOWER_H
 
 #include <cmath>
 /**
@@ -80,4 +80,4 @@ private:
 };
 
 
-#endif //AMO_TOOLS_SUITE_FANSHAFTPOWER_H
+#endif //TOOLS_SUITE_FANSHAFTPOWER_H

@@ -9,8 +9,8 @@
  *
  */
 
-#ifndef AMO_TOOLS_SUITE_FLOWCALCULATIONSENERGYUSE_H
-#define AMO_TOOLS_SUITE_FLOWCALCULATIONSENERGYUSE_H
+#ifndef TOOLS_SUITE_FLOWCALCULATIONSENERGYUSE_H
+#define TOOLS_SUITE_FLOWCALCULATIONSENERGYUSE_H
 /**
  * Flow Calculations Energy Use calculator class
  * Used to find the flow and the heat input of a fuel-fired furnace.
@@ -433,4 +433,4 @@ private:
 
 
 
-#endif //AMO_TOOLS_SUITE_FLOWCALCULATIONSENERGYUSE_H
+#endif //TOOLS_SUITE_FLOWCALCULATIONSENERGYUSE_H

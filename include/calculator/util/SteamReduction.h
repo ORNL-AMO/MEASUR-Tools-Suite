@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef AMO_LIBRARY_STEAMREDUCTION_H
-#define AMO_LIBRARY_STEAMREDUCTION_H
+#ifndef TOOLS_SUITE_STEAMREDUCTION_H
+#define TOOLS_SUITE_STEAMREDUCTION_H
 
 #include <exception>
 #include <stdexcept>
@@ -206,4 +206,4 @@ private:
   SteamReduction::Output output;
 };
 
-#endif // AMO_LIBRARY_STEAMREDUCTION_H
+#endif // TOOLS_SUITE_STEAMREDUCTION_H

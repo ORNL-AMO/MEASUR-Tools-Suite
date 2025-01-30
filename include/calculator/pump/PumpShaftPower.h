@@ -9,8 +9,8 @@
  *
  */
 
-#ifndef AMO_LIBRARY_PUMPSHAFTPOWER_H
-#define AMO_LIBRARY_PUMPSHAFTPOWER_H
+#ifndef TOOLS_SUITE_PUMPSHAFTPOWER_H
+#define TOOLS_SUITE_PUMPSHAFTPOWER_H
 
 #include <results/InputData.h>
 
@@ -104,4 +104,4 @@ private:
     double specifiedEfficiency;
 };
 
-#endif //AMO_LIBRARY_PUMPSHAFTPOWER_H
+#endif //TOOLS_SUITE_PUMPSHAFTPOWER_H

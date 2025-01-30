@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_TURBINEINPUT_H
-#define AMO_TOOLS_SUITE_TURBINEINPUT_H
+#ifndef TOOLS_SUITE_TURBINEINPUT_H
+#define TOOLS_SUITE_TURBINEINPUT_H
 
 #include <iostream>
 #include <type_traits>
@@ -116,4 +116,4 @@ private:
     PressureTurbine mediumToLowTurbine;
 };
 
-#endif //AMO_TOOLS_SUITE_TURBINEINPUT_H
+#endif //TOOLS_SUITE_TURBINEINPUT_H

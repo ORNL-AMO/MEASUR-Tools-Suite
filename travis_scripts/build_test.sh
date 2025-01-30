@@ -12,9 +12,9 @@ cmake -D BUILD_TESTING:BOOL=ON -D BUILD_PACKAGE:BOOL=$PACKAGE ./
 cmake --build . --config Release
 
 if [[ $TRAVIS_OS_NAME == "windows" ]]; then
-  ./Release/amo_tools_suite_tests;
+  ./Release/TOOLS_SUITE_tests;
 else
-  ./bin/amo_tools_suite_tests;
+  ./bin/TOOLS_SUITE_tests;
 fi
  
 if [[ $TRAVIS_OS_NAME == "windows" ]]; then

@@ -13,8 +13,8 @@
 #include "SteamProperties.h"
 #include "SaturatedProperties.h"
 
-#ifndef AMO_TOOLS_SUITE_DEAERATOR_H
-#define AMO_TOOLS_SUITE_DEAERATOR_H
+#ifndef TOOLS_SUITE_DEAERATOR_H
+#define TOOLS_SUITE_DEAERATOR_H
 
 /**
  * Deaerator calculator class
@@ -190,4 +190,4 @@ private:
 	SteamSystemModelerTool::FluidProperties inletSteamProperties;
 };
 
-#endif //AMO_TOOLS_SUITE_DEAERATOR_H
+#endif //TOOLS_SUITE_DEAERATOR_H

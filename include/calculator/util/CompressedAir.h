@@ -6,8 +6,8 @@
  * @bug No known bugs.
  *
  */
-#ifndef AMO_TOOLS_SUITE_COMPRESSEDAIR_H
-#define AMO_TOOLS_SUITE_COMPRESSEDAIR_H
+#ifndef TOOLS_SUITE_COMPRESSEDAIR_H
+#define TOOLS_SUITE_COMPRESSEDAIR_H
 
 #include <vector>
 #include <cmath>
@@ -518,4 +518,4 @@ class AirLeakSurvey {
 	*/
 };
 
-#endif //AMO_TOOLS_SUITE_COMPRESSEDAIR_H
+#endif //TOOLS_SUITE_COMPRESSEDAIR_H

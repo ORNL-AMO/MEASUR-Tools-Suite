@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_FANENERGYINDEX_H
-#define AMO_TOOLS_SUITE_FANENERGYINDEX_H
+#ifndef TOOLS_SUITE_FANENERGYINDEX_H
+#define TOOLS_SUITE_FANENERGYINDEX_H
 /**
  * @file FanEnergyIndex.h
  * @author Preston Shires (pshires) & Allie Ledbetter (aeledbetter)
@@ -67,4 +67,4 @@ private:
 	const double flowRate, inletPressure, outletPressure, airDensity, motorPower;
 };
 
-#endif //AMO_TOOLS_SUITE_FANENERGYINDEX_H
+#endif //TOOLS_SUITE_FANENERGYINDEX_H

@@ -18,4 +18,4 @@ SET(SQLITE_SRC
 #  ADD_DEFINITIONS( " -fPIC " )
 #endif()
 
-target_sources( amo_tools_suite PUBLIC ${SQLITE_SRC})
+target_sources( measur_tools_suite PUBLIC ${SQLITE_SRC})

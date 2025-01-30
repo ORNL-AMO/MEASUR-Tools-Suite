@@ -6,8 +6,8 @@
  *
  */
 
-#ifndef AMO_TOOLS_SUITE_INPUT_DATA_H
-#define AMO_TOOLS_SUITE_INPUT_DATA_H
+#ifndef TOOLS_SUITE_INPUT_DATA_H
+#define TOOLS_SUITE_INPUT_DATA_H
 
 #include <cmath>
 #include "calculator/util/Conversion.h"
@@ -197,4 +197,4 @@ namespace Pump {
 	};
 }
 
-#endif //AMO_TOOLS_SUITE_INPUT_DATA_H
+#endif //TOOLS_SUITE_INPUT_DATA_H

@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_TURBINCALCULATOR_H
-#define AMO_TOOLS_SUITE_TURBINCALCULATOR_H
+#ifndef TOOLS_SUITE_TURBINCALCULATOR_H
+#define TOOLS_SUITE_TURBINCALCULATOR_H
 
 #include <ssmt/Header.h>
 #include <ssmt/SteamSystemModelerTool.h>
@@ -36,4 +36,4 @@ private:
                                   const SteamSystemModelerTool::FluidProperties &mediumPressureHeaderOutput) const;
 };
 
-#endif //AMO_TOOLS_SUITE_TURBINCALCULATOR_H
+#endif //TOOLS_SUITE_TURBINCALCULATOR_H

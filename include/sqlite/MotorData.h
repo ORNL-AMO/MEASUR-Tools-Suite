@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_MOTORDATADB_H
-#define AMO_TOOLS_SUITE_MOTORDATADB_H
+#ifndef TOOLS_SUITE_MOTORDATADB_H
+#define TOOLS_SUITE_MOTORDATADB_H
 
 #include <fast-cpp-csv-parser/csv.h>
 #include <tuple>
@@ -713,4 +713,4 @@ std::vector<MotorData> SQLite::get_default_motor_data()
 	defaultMotorData.insert(defaultMotorData.end(), standardEffMotorData.begin(), standardEffMotorData.end());
 	return defaultMotorData;
 }
-#endif //AMO_TOOLS_SUITE_MOTORDATADB_H
+#endif //TOOLS_SUITE_MOTORDATADB_H

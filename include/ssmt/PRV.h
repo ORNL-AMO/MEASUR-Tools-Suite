@@ -11,8 +11,8 @@
 
 #include "SteamProperties.h"
 
-#ifndef AMO_TOOLS_SUITE_PRV_H
-#define AMO_TOOLS_SUITE_PRV_H
+#ifndef TOOLS_SUITE_PRV_H
+#define TOOLS_SUITE_PRV_H
 
 /**
 * PRV without Desuperheating calculator class
@@ -357,4 +357,4 @@ public :
     }
 };
 
-#endif //AMO_TOOLS_SUITE_PRV_H
+#endif //TOOLS_SUITE_PRV_H

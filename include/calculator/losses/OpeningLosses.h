@@ -8,8 +8,8 @@
  * @bug No known bugs.
  *
  */
-#ifndef AMO_SUITE_OPENINGLOSSES_H
-#define AMO_SUITE_OPENINGLOSSES_H
+#ifndef TOOLS_SUITE_OPENINGLOSSES_H
+#define TOOLS_SUITE_OPENINGLOSSES_H
 
 #include <functional>
 #include <array>
@@ -361,4 +361,4 @@ private:
             }
     };
 };
-#endif //AMO_SUITE_OPENINGLOSSES_H
+#endif //TOOLS_SUITE_OPENINGLOSSES_H

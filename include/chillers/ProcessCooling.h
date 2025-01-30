@@ -25,8 +25,8 @@
  *
  */
 
-#ifndef AMO_TOOLS_SUITE_PROCESSCOOLING_H
-#define AMO_TOOLS_SUITE_PROCESSCOOLING_H
+#ifndef TOOLS_SUITE_PROCESSCOOLING_H
+#define TOOLS_SUITE_PROCESSCOOLING_H
 
 #include <iostream>
 #include <utility>
@@ -567,4 +567,4 @@ private:
     static double getPumpHP(double power);
 };
 
-#endif //AMO_TOOLS_SUITE_PROCESSCOOLING_H
+#endif //TOOLS_SUITE_PROCESSCOOLING_H

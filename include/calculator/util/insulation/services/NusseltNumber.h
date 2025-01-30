@@ -1,5 +1,5 @@
-#ifndef AMO_LIBRARY_NUSSELTNUMBER_H
-#define AMO_LIBRARY_NUSSELTNUMBER_H
+#ifndef TOOLS_SUITE_NUSSELTNUMBER_H
+#define TOOLS_SUITE_NUSSELTNUMBER_H
 
 class NusseltNumber
 {
@@ -16,4 +16,4 @@ private:
     double _b;
 };
 
-#endif //AMO_LIBRARY_NUSSELTNUMBER_H
+#endif //TOOLS_SUITE_NUSSELTNUMBER_H

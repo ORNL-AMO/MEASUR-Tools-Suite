@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_LOWPRESSUREHEADERMODELER_H
-#define AMO_TOOLS_SUITE_LOWPRESSUREHEADERMODELER_H
+#ifndef TOOLS_SUITE_LOWPRESSUREHEADERMODELER_H
+#define TOOLS_SUITE_LOWPRESSUREHEADERMODELER_H
 
 #include "LowPressureCondensateCalculator.h"
 #include "LowPressureFlashedSteamIntoHeaderCalculator.h"
@@ -43,4 +43,4 @@ private:
     const LowPressureFlashedSteamIntoHeaderCalculator lowPressureFlashedSteamIntoHeaderCalculator = LowPressureFlashedSteamIntoHeaderCalculator();
 };
 
-#endif //AMO_TOOLS_SUITE_LOWPRESSUREHEADERMODELER_H
+#endif //TOOLS_SUITE_LOWPRESSUREHEADERMODELER_H

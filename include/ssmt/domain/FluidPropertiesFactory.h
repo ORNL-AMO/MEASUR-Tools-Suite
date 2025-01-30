@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_FLUIDPROPERTIESFACTORY_H
-#define AMO_TOOLS_SUITE_FLUIDPROPERTIESFACTORY_H
+#ifndef TOOLS_SUITE_FLUIDPROPERTIESFACTORY_H
+#define TOOLS_SUITE_FLUIDPROPERTIESFACTORY_H
 
 #include <ssmt/Boiler.h>
 #include <ssmt/Header.h>
@@ -48,4 +48,4 @@ private:
             const std::shared_ptr<HeaderNotHighestPressure> &notHighestPressureHeaderInput) const;
 };
 
-#endif //AMO_TOOLS_SUITE_FLUIDPROPERTIESFACTORY_H
+#endif //TOOLS_SUITE_FLUIDPROPERTIESFACTORY_H

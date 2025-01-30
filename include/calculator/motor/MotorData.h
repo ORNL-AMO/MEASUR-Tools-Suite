@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_MOTORDATA_H
-#define AMO_TOOLS_SUITE_MOTORDATA_H
+#ifndef TOOLS_SUITE_MOTORDATA_H
+#define TOOLS_SUITE_MOTORDATA_H
 
 #include <results/InputData.h>
 #include <string>
@@ -64,4 +64,4 @@ private:
 	friend class SQLite;
 };
 
-#endif //AMO_TOOLS_SUITE_MOTORDATA_H
+#endif //TOOLS_SUITE_MOTORDATA_H

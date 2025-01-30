@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_RESTARTERSERVICE_H
-#define AMO_TOOLS_SUITE_RESTARTERSERVICE_H
+#ifndef TOOLS_SUITE_RESTARTERSERVICE_H
+#define TOOLS_SUITE_RESTARTERSERVICE_H
 
 #include <memory>
 #include <ssmt/Boiler.h>
@@ -19,4 +19,4 @@ private:
     void logMessage(const std::string &message) const;
 };
 
-#endif //AMO_TOOLS_SUITE_RESTARTERSERVICE_H
+#endif //TOOLS_SUITE_RESTARTERSERVICE_H

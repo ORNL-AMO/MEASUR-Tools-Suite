@@ -1,5 +1,5 @@
-#ifndef AMO_LIBRARY_INSULATEDPIPECALCULATOR_H
-#define AMO_LIBRARY_INSULATEDPIPECALCULATOR_H
+#ifndef TOOLS_SUITE_INSULATEDPIPECALCULATOR_H
+#define TOOLS_SUITE_INSULATEDPIPECALCULATOR_H
 
 #include "calculator/util/insulation/pipes/InsulatedPipeInput.h"
 #include "calculator/util/insulation/pipes/InsulatedPipeOutput.h"

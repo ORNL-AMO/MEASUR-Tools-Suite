@@ -32,8 +32,8 @@
  *
  */
 
-#ifndef AMO_TOOLS_SUITE_COMPRESSORS_H
-#define AMO_TOOLS_SUITE_COMPRESSORS_H
+#ifndef TOOLS_SUITE_COMPRESSORS_H
+#define TOOLS_SUITE_COMPRESSORS_H
 
 #include <math.h>
 #include <stdexcept>
@@ -1305,4 +1305,4 @@ public:
         return kW_fl_rated * ((pow((P_discharge + P_alt) / P_alt, 0.283) - 1) / (pow((P_fl_rated + P_atm) / P_atm, 0.283) - 1));
     }
 };
-#endif // AMO_TOOLS_SUITE_COMPRESSORS_H
+#endif // TOOLS_SUITE_COMPRESSORS_H

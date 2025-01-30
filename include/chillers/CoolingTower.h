@@ -13,8 +13,8 @@
  *
  */
 
-#ifndef AMO_TOOLS_SUITE_COOLING_TOWER_H
-#define AMO_TOOLS_SUITE_COOLING_TOWER_H
+#ifndef TOOLS_SUITE_COOLING_TOWER_H
+#define TOOLS_SUITE_COOLING_TOWER_H
 
 #include <math.h>
 #include <vector>
@@ -535,4 +535,4 @@ private:
     }
 };
 
-#endif //AMO_TOOLS_SUITE_COOLING_TOWER_H
+#endif //TOOLS_SUITE_COOLING_TOWER_H

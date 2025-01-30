@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_STEAMMODELEROUTPUTFACTORY_H
-#define AMO_TOOLS_SUITE_STEAMMODELEROUTPUTFACTORY_H
+#ifndef TOOLS_SUITE_STEAMMODELEROUTPUTFACTORY_H
+#define TOOLS_SUITE_STEAMMODELEROUTPUTFACTORY_H
 
 #include <ssmt/api/SteamModelerOutput.h>
 #include <ssmt/domain/SteamModelCalculationsDomain.h>
@@ -10,4 +10,4 @@ public:
     SteamModelerOutput make(const SteamModelCalculationsDomain &domain) const;
 };
 
-#endif //AMO_TOOLS_SUITE_STEAMMODELEROUTPUTFACTORY_H
+#endif //TOOLS_SUITE_STEAMMODELEROUTPUTFACTORY_H

@@ -1,5 +1,5 @@
-#ifndef AMO_LIBRARY_WATERREDUCTION_H
-#define AMO_LIBRARY_WATERREDUCTION_H
+#ifndef TOOLS_SUITE_WATERREDUCTION_H
+#define TOOLS_SUITE_WATERREDUCTION_H
 
 #include <exception>
 #include <stdexcept>
@@ -143,4 +143,4 @@ private:
     WaterReduction::Output output;
 };
 
-#endif // AMO_LIBRARY_WATERREDUCTION_H
+#endif // TOOLS_SUITE_WATERREDUCTION_H

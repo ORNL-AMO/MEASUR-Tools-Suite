@@ -8,8 +8,8 @@
  * @bug No known bugs.
  *
  */
-#ifndef AMO_LIBRARY_OPTIMALPREPUMPEFF_H
-#define AMO_LIBRARY_OPTIMALPREPUMPEFF_H
+#ifndef TOOLS_SUITE_OPTIMALPREPUMPEFF_H
+#define TOOLS_SUITE_OPTIMALPREPUMPEFF_H
 
 #include <results/InputData.h>
 
@@ -40,4 +40,4 @@ private:
 };
 
 
-#endif //AMO_LIBRARY_OPTIMALPREPUMPEFF_H
+#endif //TOOLS_SUITE_OPTIMALPREPUMPEFF_H

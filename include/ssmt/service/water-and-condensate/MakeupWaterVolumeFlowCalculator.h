@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_MAKEUPWATERVOLUMEFLOWCALCULATOR_H
-#define AMO_TOOLS_SUITE_MAKEUPWATERVOLUMEFLOWCALCULATOR_H
+#ifndef TOOLS_SUITE_MAKEUPWATERVOLUMEFLOWCALCULATOR_H
+#define TOOLS_SUITE_MAKEUPWATERVOLUMEFLOWCALCULATOR_H
 
 #include <ssmt/SteamSystemModelerTool.h>
 #include <ssmt/api/OperationsInput.h>
@@ -18,4 +18,4 @@ private:
     calcMakeupWaterVolumeFlowAnnual(const double makeupWaterVolumeFlow, const double operatingHoursPerYear) const;
 };
 
-#endif //AMO_TOOLS_SUITE_MAKEUPWATERVOLUMEFLOWCALCULATOR_H
+#endif //TOOLS_SUITE_MAKEUPWATERVOLUMEFLOWCALCULATOR_H

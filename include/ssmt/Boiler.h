@@ -13,8 +13,8 @@
 #include "SteamProperties.h"
 #include "SteamSystemModelerTool.h"
 
-#ifndef AMO_TOOLS_SUITE_BOILER_H
-#define AMO_TOOLS_SUITE_BOILER_H
+#ifndef TOOLS_SUITE_BOILER_H
+#define TOOLS_SUITE_BOILER_H
 
 /**
  * Boiler calculator class
@@ -156,4 +156,4 @@ private:
 };
 
 
-#endif //AMO_TOOLS_SUITE_BOILER_H
+#endif //TOOLS_SUITE_BOILER_H

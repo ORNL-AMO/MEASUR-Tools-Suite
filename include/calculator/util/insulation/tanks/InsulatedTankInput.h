@@ -1,5 +1,5 @@
-#ifndef AMO_LIBRARY_INSULATEDTANKINPUT_H
-#define AMO_LIBRARY_INSULATEDTANKINPUT_H
+#ifndef TOOLS_SUITE_INSULATEDTANKINPUT_H
+#define TOOLS_SUITE_INSULATEDTANKINPUT_H
 
 #include "calculator/util/insulation/objects/AirProperties.h"
 

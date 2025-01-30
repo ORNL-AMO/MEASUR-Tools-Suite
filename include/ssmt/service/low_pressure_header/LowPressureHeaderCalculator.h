@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_LOWPRESSUREHEADERCALCULATOR_H
-#define AMO_TOOLS_SUITE_LOWPRESSUREHEADERCALCULATOR_H
+#ifndef TOOLS_SUITE_LOWPRESSUREHEADERCALCULATOR_H
+#define TOOLS_SUITE_LOWPRESSUREHEADERCALCULATOR_H
 
 #include <ssmt/SteamSystemModelerTool.h>
 #include <ssmt/domain/FluidPropertiesFactory.h>
@@ -22,4 +22,4 @@ private:
     const HeaderFactory headerFactory = HeaderFactory();
 };
 
-#endif //AMO_TOOLS_SUITE_LOWPRESSUREHEADERCALCULATOR_H
+#endif //TOOLS_SUITE_LOWPRESSUREHEADERCALCULATOR_H
