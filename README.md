@@ -2,7 +2,7 @@ MEASUR Tools Suite
 ---------------
 
 MEASUR Tools Suite is a cross-platform collection of calculations and tools to support industrial equipment modeling.
-See our hosted documentation for the latest release at [ornl-MEASUR.github.io](https://ornl-MEASUR.github.io/)
+See our hosted documentation for the latest release at [ornl-MEASUR.github.io](https://ornl-AMO.github.io/)
 
 The npm packages can be downloaded and install from [registry](https://www.npmjs.com/package/measur-tools-suite)
 
