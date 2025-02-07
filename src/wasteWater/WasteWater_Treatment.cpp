@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief contains logic to calculate wast water treatment results
+ * @brief contains logic to calculateThermalResistance wast water treatment results
  * 
  * @author Mark Root (mroot)
  * @author Mohsen Maniat

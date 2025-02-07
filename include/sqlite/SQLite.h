@@ -1,14 +1,14 @@
 #ifndef TOOLS_SUITE_SQLITEWRAPPER_H
 #define TOOLS_SUITE_SQLITEWRAPPER_H
 
-#include <sqlite3.h>
+#include "sqlite3.h"
 #include <memory>
 #include <string>
 #include <vector>
 #include <functional>
-#include <calculator/losses/GasFlueGasMaterial.h>
-#include <calculator/motor/MotorData.h>
-#include <calculator/pump/PumpData.h>
+#include "processHeat/losses/GasFlueGasMaterial.h"
+#include "motorDriven/motor/MotorData.h"
+#include "motorDriven/pump/PumpData.h"
 
 class SolidLoadChargeMaterial;
 class LiquidLoadChargeMaterial;

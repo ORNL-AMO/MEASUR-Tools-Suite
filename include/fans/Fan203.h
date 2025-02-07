@@ -18,21 +18,45 @@
 #include <stdexcept>
 #include <functional>
 #include "Planar.h"
-#include "FanShaftPower.h"
+#include "motorDriven/pumpFan/FanShaftPower.h"
 
 #include <fstream>
 #include <iostream>
 
-class FanRatedInfo;
 class Planar;
 class FlangePlane;
 class TraversePlane;
 class MstPlane;
+
+/**
+ * Constructor for Fan Rated Info
+ * Calculates Ratings for Fans
+ *
+ */
+class FanRatedInfo {
+public:
+/**
+ * @param fanSpeed double, const, fan speed in RPM
+ * @param motorSpeed double, const, motor speed in RPM
+ * @param fanSpeedCorrected double, const, fan speed corrected in RPM
+ * @param densityCorrected double const, pounds per sqft, or lb/scf
+ * @param pressureBarometricCorrected double const, pressure in hp
+ */
+    FanRatedInfo(double const fanSpeed, double const motorSpeed, double const fanSpeedCorrected,
+                 double const densityCorrected, double const pressureBarometricCorrected)
+            : fanSpeed(fanSpeed), motorSpeed(motorSpeed), fanSpeedCorrected(fanSpeedCorrected),
+              densityCorrected(densityCorrected), pressureBarometricCorrected(pressureBarometricCorrected)
+    {}
+
+private:
+    double const fanSpeed, motorSpeed, fanSpeedCorrected, densityCorrected, pressureBarometricCorrected;
+    friend class Fan203;
+};
+
 /**
  * Base Gas Density Class
  * Calculates base gas density
  */
-
 class BaseGasDensity
 {
 public:
@@ -305,27 +329,15 @@ private:
 		double const nMol = 0.62198;
 		double const local_pIn = pbo + (pso / 13.608703);
 		//double const pAtm = 29.9213 / pbo, nMol = 18.02 / (g * 28.98);
-		double const psatDb = calculateSaturationPressure(dryBulbTemp);
-		//	double const wSat = nMol * psatDb / (pAtm - psatDb);
-		double const psatWb = calculateSaturationPressure(wetBulbTemp);
-		double const wStar = nMol * psatWb / (local_pIn - psatWb);
+		double const pumpDb = calculateSaturationPressure(dryBulbTemp);
+		//	double const wSat = nMol * pumpDb / (pAtm - pumpDb);
+		double const pumpWb = calculateSaturationPressure(wetBulbTemp);
+		double const wStar = nMol * pumpWb / (local_pIn - pumpWb);
 		double const w = ((1093 - (1 - 0.444) * wetBulbTemp) * wStar - cpGas * (dryBulbTemp - wetBulbTemp)) / (1093 + (0.444 * dryBulbTemp) - wetBulbTemp);
 
 		double const pV = local_pIn * w / (nMol + w);
 
-		/*
-		std::ofstream fout;
-    	fout.open("debug.txt", std::ios::app);
-		fout << "calculateRelativeHumidityFromWetBulb" << std::endl;
-		fout << "psatDb: " << psatDb << std::endl;
-		fout << "psatWb: " << psatWb << std::endl;
-		fout << "wStar:  " << wStar << std::endl;
-		fout << "w:      " << w << std::endl;
-		fout << "------------------------------" << std::endl << std::endl;
-		fout.close();
-		*/
-
-		return pV / psatDb;
+		return pV / pumpDb;
 	}
 	/**
  * @brief Calculates Relative Humidity Ratio from Wet Bulb Temperature
@@ -340,8 +352,8 @@ private:
 		double const nMol = 0.62198;
 		double const local_pIn = pbo + (pso / 13.608703);
 
-		double const psatWb = calculateSaturationPressure(wetBulbTemp);
-		double const wStar = nMol * psatWb / (local_pIn - psatWb);
+		double const pumpWb = calculateSaturationPressure(wetBulbTemp);
+		double const wStar = nMol * pumpWb / (local_pIn - pumpWb);
 		double const w = ((1093 - (1 - 0.444) * wetBulbTemp) * wStar - cpGas * (dryBulbTemp - wetBulbTemp)) / (1093 + (0.444 * dryBulbTemp) - wetBulbTemp);
 
 		return w;
@@ -383,7 +395,7 @@ private:
 			dewPoint = relativeHumidityOrDewPoint;
 		}
 
-		if (inputType != InputType::WetBulbTemp) // If not given as an input, calculate wet bulb temperature
+		if (inputType != InputType::WetBulbTemp) // If not given as an input, calculateThermalResistance wet bulb temperature
 		{
 			wetBulbTemp = calculateWetBulbTemperature(tdo, relativeHumidity, absolutePressure);
 		}
