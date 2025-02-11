@@ -36,7 +36,7 @@ public:
 };
 /**
  * Fan Curve Data class
- * Used to calculate the Fan Curve Data
+ * Used to calculateThermalResistance the Fan Curve Data
  * 
  */
 class FanCurveData {

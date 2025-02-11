@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Wasm Testing</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="/jquery/jquery.js"></script>
+    <script>
+        var Module = {
+            onRuntimeInitialized: async function () {
+                let scripts = [];
+                $.get('/scriptsList').then(function(scriptsList) {
+                    for (const script of scriptsList) scripts.push(script);
+                });
+
+                await $.getScript('tests/wasm-express/wasm-express-test-value.js');
+                for (const script of scripts) {
+                    await $.getScript('tests/' + script);
+                }
+                await $.getScript('tests/wasm-express/wasm-express-finish-testing.js');
+            }
+        }
+    </script>
+    <script src="assets/client.js"></script>
+    <style>
+        .invalid {
+            color: red;
+            padding-top: 3px;
+        }
+
+        .valid {
+            color: green;
+            padding-top: 3px;
+        }
+
+        label {
+            font-size: larger;
+            font-weight: bold;
+        }
+
+        .expected-div {
+            border-bottom: solid 2px;
+            padding-bottom: 3px;
+        }
+
+        .header-div {
+            font-weight: bold;
+            font-style: italic;
+            border-bottom: solid 2px;
+            padding-bottom: 3px;
+        }
+
+        .data-dump-div {
+            color: lightgray;
+            font-size: small;
+            font-style: italic;
+            border-bottom: solid 2px;
+            padding-bottom: 3px;
+        }
+    </style>
+</head>
+
+<body>
+    <label>Wasm Tests</label>
+</body>
+
+</html>
