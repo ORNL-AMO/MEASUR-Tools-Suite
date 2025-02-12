@@ -42,10 +42,10 @@ public:
     struct Output
     {
 
-        Output(double pumpEfficiency, double motorRatedPower, double motorShaftPower, double pumpShaftPower,
+        Output(double pumpEfficiency, double motorRatedPower, double motorShaftPower, double moverShaftPower,
                double motorEfficiency, double motorPowerFactor, double motorCurrent, double motorPower,
                double annualEnergy, double annualCost, double loadFactor, double driveEfficiency, double estimatedFLA = 0)
-                : pumpEfficiency(pumpEfficiency), motorRatedPower(motorRatedPower), motorShaftPower(motorShaftPower), pumpShaftPower(pumpShaftPower),
+                : pumpEfficiency(pumpEfficiency), motorRatedPower(motorRatedPower), motorShaftPower(motorShaftPower), moverShaftPower(moverShaftPower),
                   motorEfficiency(motorEfficiency), motorPowerFactor(motorPowerFactor), motorCurrent(motorCurrent), motorPower(motorPower),
                   annualEnergy(annualEnergy), annualCost(annualCost), loadFactor(loadFactor), driveEfficiency(driveEfficiency), estimatedFLA(estimatedFLA)
         {
@@ -58,7 +58,7 @@ public:
         ///< Optimal: This is the nameplate motor rated power for an optimally sized pump.
         double motorShaftPower; ///< Existing: This is the estimated motor shaft power for the existing motor. The estimate is based on measured electrical data and Pump's efficiency estimate for the specified motor size, speed, and class.
         ///< Optimal: This is the motor shaft power requirements for the optimal pump, based on the specified flow rate, head, and specific gravity values, along with the HI 1.3 achievable efficiency algorithms. If a belt drive is specified, associated losses are added to the pump shaft power to determine required motor power. For direct-driven pumps, the pump and motor shaft powers are the same.
-        double pumpShaftPower; ///< Existing: This is the estimated pump shaft power for the existing motor. The estimate is the same as the motor shaft power (above) for direct-driven applications. For belt-driven applications, belt losses are deducted from the motor shaft power to determine pump shaft power.
+        double moverShaftPower; ///< Existing: This is the estimated pump shaft power for the existing motor. The estimate is the same as the motor shaft power (above) for direct-driven applications. For belt-driven applications, belt losses are deducted from the motor shaft power to determine pump shaft power.
         ///< Optimal: This is the shaft power requirements for the optimal pump, based on the specified flow rate, head, and specific gravity values, along with the HI 1.3 achievable efficiency algorithms.
         double motorEfficiency; ///< Existing: This is the estimated efficiency of the existing motor at the existing load.
         ///< Optimal: This is the estimated efficiency for an energy-efficient motor of the size indicated in the optimal motor rated power entry above when operating at the optimal motor shaft power.

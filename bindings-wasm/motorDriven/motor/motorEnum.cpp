@@ -1,5 +1,5 @@
 #include "motorDriven/motor/MotorEfficiency.h"
-#include "motorDriven/pumpFan/PumpShaftPower.h"
+#include "motorDriven/pumpFan/MoverShaftPower.h"
 #include <emscripten/bind.h>
 using namespace emscripten;
 

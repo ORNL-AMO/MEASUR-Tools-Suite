@@ -21,13 +21,13 @@ public:
      * @param specificGravity double, specific gravity - unitless
      * @param flowRate double, measured or required flow rate in gpm
      * @param head double, measured or required pump head in feet
-     * @param pumpShaftPower double, pump power as defined in hp
+     * @param moverShaftPower double, pump power as defined in hp
      */
-    MoverEfficiency(double const specificGravity, double const flowRate, double const head, double const pumpShaftPower)
+    MoverEfficiency(double const specificGravity, double const flowRate, double const head, double const moverShaftPower)
             : specificGravity(specificGravity),
               head(head),
               flowRate(flowRate),
-              moverShaftPower(pumpShaftPower),
+              moverShaftPower(moverShaftPower),
               isPump(true)
     {}
 
@@ -105,16 +105,16 @@ public:
      * Get pump shaft power
      * @return double, pump shaft power in hp
      */
-    double getPumpShaftPower() const {
+    double getMoverShaftPower() const {
         return moverShaftPower;
     }
 
     /**
      * Set the pump shaft power
-     * @param pumpShaftPower double, pump shaft power in hp
+     * @param moverShaftPower double, pump shaft power in hp
      */
-    void setPumpShaftPower(double pumpShaftPower) {
-        this->moverShaftPower = pumpShaftPower;
+    void setMoverShaftPower(double moverShaftPower) {
+        this->moverShaftPower = moverShaftPower;
     }
 
 private:
