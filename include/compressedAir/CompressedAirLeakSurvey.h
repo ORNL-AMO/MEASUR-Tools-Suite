@@ -6,13 +6,18 @@
 #include <vector>
 #include "treasureHunt/CompressedAirReduction.h"
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
+// BagMethodData implemented in CompressedAirReduction.h
+
 class EstimateMethodData
 {
   public:
     EstimateMethodData(const double leakRateEstimate) : leakRateEstimate(leakRateEstimate) {}
 
     double getLeakRateEstimate() const {return leakRateEstimate; }
-    void setLeakRateEstimate(double leakRateEstimate);
 
   private:
     double leakRateEstimate;
@@ -28,29 +33,13 @@ class DecibelsMethodData
 		    pressureA(pressureA), firstFlowA(firstFlowA), secondFlowA(secondFlowA), decibelRatingB(decibelRatingB),
 		    pressureB(pressureB), firstFlowB(firstFlowB), secondFlowB(secondFlowB) {}
 
-    double getLinePressure() const { return linePressure; }
-    double getDecibels() const { return decibels; }
-    double getDecibelRatingA() const { return decibelRatingA; }
-    double getPressureA() const { return pressureA; }
-    double getFirstFlowA() const { return firstFlowA; }
-    double getSecondFlowA() const { return secondFlowA; }
-    double getDecibelRatingB() const { return decibelRatingB; }
-    double getPressureB() const { return pressureB; }
-    double getFirstFlowB() const { return firstFlowB; }
-    double getSecondFlowB() const { return secondFlowB; }
+    double calculate()
+    {
+        const double denominator = (pressureB - pressureA) * (decibelRatingB - decibelRatingA);
+        const double leakRateEstimate = ((pressureB - linePressure) * (decibelRatingB - decibels)) / denominator * firstFlowA + ((linePressure - pressureA) * (decibelRatingB - decibels)) / denominator * secondFlowA + ((pressureB - linePressure) * (decibels - decibelRatingA)) / denominator * firstFlowB + ((linePressure - pressureA) * (decibels - decibelRatingA)) / denominator * secondFlowB;
 
-    void setLinePressure(double linePressure);
-    void setDecibels(double decibels);
-    void setDecibelRatingA(double decibelRatingA);
-    void setPressureA(double pressureA);
-    void setFirstFlowA(double firstFlowA);
-    void setSecondFlowA(double secondFlowA);
-    void setDecibelRatingB(double decibelRatingB);
-    void setPressureB(double pressureB);
-    void setFirstFlowB(double firstFlowB);
-    void setSecondFlowB(double secondFlowB);
-
-    double calculate();
+        return leakRateEstimate;
+    }
 
   private:
     double linePressure; // X
@@ -65,8 +54,6 @@ class DecibelsMethodData
     double secondFlowB; // Q22
 };
 
-// BagMethodData implemented in CompressedAirReduction.h
-
 class OrificeMethodData
 {
   public:
@@ -75,21 +62,23 @@ class OrificeMethodData
 			: airTemp(airTemp), atmPressure(atmPressure), dischargeCoef(dischargeCoef), diameter(diameter),
 			  supplyPressure(supplyPressure), numOrifices(numOrifices) {}
 
-    double getAirTemp() const { return airTemp; }
-    double getAtmPressure() const { return atmPressure; }
-    double getDischargeCoef() const { return dischargeCoef; }
-    double getDiameter() const { return diameter; }
-    double getSupplyPressure() const { return supplyPressure; }
-    int getNumOrifices() const { return numOrifices; }
+    double calculate()
+    {
+        const double caPressurePSIA = atmPressure + supplyPressure;
 
-    void setAirTemp(double airTemp);
-    void setAtmPressure(double atmPressure);
-    void setDischargeCoef(double dischargeCoef);
-    void setDiameter(double diameter);
-    void setSupplyPressure(double supplyPressure);
-    void setNumOrifices(int numOrifices);
+        //convert to rankine for density calcs
+        const double airTempRankine = airTemp + 459.67;
 
-    double calculate();
+        const double caDensity = caPressurePSIA * 144 / (53.34 * airTempRankine);
+        const double standardDensity = atmPressure * 144 / (53.34 * airTempRankine);
+        const double sonicDensity = caDensity * std::pow((2 / 2.4), (1 / .4));
+
+        const double leakVelocity = std::pow(((2 * 1.4) / (1.4 + 1)) * 53.34 * airTempRankine * 32.2, 0.5);
+        const double leakRateLBMmin = sonicDensity * (diameter * diameter) * (M_PI / (4 * 144)) * leakVelocity * 60 * dischargeCoef;
+        const double leakRateScfm = leakRateLBMmin / standardDensity;
+        const double leakRateEstimate = leakRateScfm * numOrifices;
+        return leakRateEstimate;
+    }
 
   private:
     double airTemp, atmPressure, dischargeCoef, diameter, supplyPressure;
@@ -147,7 +136,64 @@ class CompressedAirLeakSurvey
     {
     }
 
-    CompressedAirLeakSurvey::Output calculate();
+    CompressedAirLeakSurvey::Output calculate()
+    {
+        double annualTotalElectricity = 0, annualTotalElectricityCost = 0, totalFlowRate = 0, annualTotalFlowRate = 0;
+
+        for (auto &compressedAirLeakSurveyInput : compressedAirLeakSurveyInputVec)
+        {
+            double tmpAnnualTotalElectricity = 0, tmpAnnualTotalElectricityCost = 0, tmpTotalFlowRate = 0, tmpAnnualTotalFlowRate = 0;
+
+            // estimate method
+            if (compressedAirLeakSurveyInput.getMeasurementMethod() == 0)
+            {
+                EstimateMethodData estimateMethodData = compressedAirLeakSurveyInput.getEstimateMethodData();
+                tmpTotalFlowRate = estimateMethodData.getLeakRateEstimate() * compressedAirLeakSurveyInput.getUnits();
+                tmpAnnualTotalFlowRate = (compressedAirLeakSurveyInput.getHoursPerYear() * tmpTotalFlowRate * 60);
+            }
+                // decibels method
+            else if (compressedAirLeakSurveyInput.getMeasurementMethod() == 1)
+            {
+                DecibelsMethodData decibelsMethodData = compressedAirLeakSurveyInput.getDecibelsMethodData();
+                tmpTotalFlowRate = decibelsMethodData.calculate() * compressedAirLeakSurveyInput.getUnits();
+                tmpAnnualTotalFlowRate = (compressedAirLeakSurveyInput.getHoursPerYear() * tmpTotalFlowRate * 60);
+            }
+                // bag method
+            else if (compressedAirLeakSurveyInput.getMeasurementMethod() == 2)
+            {
+                BagMethodData bagMethodData = compressedAirLeakSurveyInput.getBagMethodData();
+                tmpTotalFlowRate = ((60.0 / bagMethodData.getFillTime()) * M_PI * bagMethodData.getHeight() * pow((bagMethodData.getDiameter() / 2.0), 2.0) * (1.0 / pow(12.0, 3.0))) * compressedAirLeakSurveyInput.getUnits();
+                tmpAnnualTotalFlowRate = tmpTotalFlowRate * 60.0 * compressedAirLeakSurveyInput.getHoursPerYear();
+            }
+                // orifice method
+            else if (compressedAirLeakSurveyInput.getMeasurementMethod() == 3)
+            {
+                OrificeMethodData orificeMethodData = compressedAirLeakSurveyInput.getOrificeMethodData();
+                tmpTotalFlowRate = orificeMethodData.calculate() * compressedAirLeakSurveyInput.getUnits();
+                tmpAnnualTotalFlowRate = (compressedAirLeakSurveyInput.getHoursPerYear() * tmpTotalFlowRate * 60);
+            }
+
+            // compressed air
+            if (compressedAirLeakSurveyInput.getUtilityType() == 0)
+            {
+                tmpAnnualTotalElectricityCost = compressedAirLeakSurveyInput.getUtilityCost() * tmpAnnualTotalFlowRate;
+            }
+                // electricity
+            else if (compressedAirLeakSurveyInput.getUtilityType() == 1)
+            {
+                CompressorElectricityData compressorElectricityData = compressedAirLeakSurveyInput.getCompressorElectricityData();
+                double electricityCalculation = compressorElectricityData.calculate();
+                tmpAnnualTotalElectricity = electricityCalculation * tmpAnnualTotalFlowRate;
+                tmpAnnualTotalElectricityCost = tmpAnnualTotalElectricity * compressedAirLeakSurveyInput.getUtilityCost();
+            }
+            annualTotalElectricity += tmpAnnualTotalElectricity;
+            annualTotalElectricityCost += tmpAnnualTotalElectricityCost;
+            totalFlowRate += tmpTotalFlowRate;
+            annualTotalFlowRate += tmpAnnualTotalFlowRate;
+        }
+
+        return CompressedAirLeakSurvey::Output(annualTotalElectricity, annualTotalElectricityCost, totalFlowRate, annualTotalFlowRate);
+    }
     std::vector<CompressedAirLeakSurveyInput> const &getCompressedAirLeakSurveyInputVec() const
     {
         return compressedAirLeakSurveyInputVec;
@@ -159,4 +205,4 @@ class CompressedAirLeakSurvey
     CompressedAirLeakSurvey::Output output;
 };
 
-#endif // TOOLS_SUITE_COMPRESSEDAIRLEAKSURVEY_H
+#endif

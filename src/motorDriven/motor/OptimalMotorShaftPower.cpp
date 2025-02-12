@@ -21,7 +21,7 @@ OptimalMotorShaftPower::Output OptimalMotorShaftPower::calculate()
     }
     else if (drive == Motor::Drive::N_V_BELT_DRIVE)
     {
-        //Case of notched Belt Drive - see pumpshaftpower.cpp for more info
+        //Case of notched Belt Drive - see moverShaftPower.cpp for more info
         double BLPinPercentage = (0.7489574 * exp((pumpShaftPower) * -0.02067997) +
                                   4.136368 * exp((pumpShaftPower) * -0.226025) + 4.162707) *
                                  (0.05 / 0.07) / 100;
@@ -32,7 +32,7 @@ OptimalMotorShaftPower::Output OptimalMotorShaftPower::calculate()
     }
     else if (drive == Motor::Drive::S_BELT_DRIVE)
     {
-        //Case of Synchronous Belt Drive - see pumpshaftpower.cpp for more info
+        //Case of Synchronous Belt Drive - see moverShaftPower.cpp for more info
         double BLPinPercentage = (0.7489574 * exp((pumpShaftPower) * -0.02067997) +
                                   4.136368 * exp((pumpShaftPower) * -0.226025) + 4.162707) *
                                  (0.02 / 0.07) / 100;

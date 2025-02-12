@@ -1,8 +1,8 @@
-function pumpShaftPowerTest() {
-    let instance = new Module.PumpShaftPower(50, Module.Drive.N_V_BELT_DRIVE, 0);
-    let pumpShaftPower = instance.calculate().pumpShaftPower;
+function moverShaftPowerTest() {
+    let instance = new Module.MoverShaftPower(50, Module.Drive.N_V_BELT_DRIVE, 0);
+    let moverShaftPower = instance.calculate().moverShaftPower;
     instance.delete();
-    testNumberValue(pumpShaftPower, 48.4814329723, 'Pump Shaft Power');
+    testNumberValue(moverShaftPower, 48.4814329723, 'Mover Shaft Power');
 }
 
 function achievableEfficiency() {
@@ -25,6 +25,6 @@ function pumpEfficiency(){
 }
 
 //execute tests
-pumpShaftPowerTest();
+moverShaftPowerTest();
 achievableEfficiency();
 pumpEfficiency();

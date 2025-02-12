@@ -12,7 +12,6 @@ class CompressedAirFlowMeterMethodData
         : meterReading(meterReading) {}
 
     double getMeterReading() const { return meterReading; }
-    void setMeterReading(double meterReading);
 
   private:
     double meterReading;
@@ -27,9 +26,6 @@ class BagMethodData
     double getHeight() const { return height; }
     double getDiameter() const { return diameter; }
     double getFillTime() const { return fillTime; }
-    void setHeight(double height);
-    void setDiameter(double diameter);
-    void setFillTime(double fillTime);
 
   private:
     double height, diameter, fillTime;
@@ -41,12 +37,7 @@ class PressureMethodData
     PressureMethodData(const int nozzleType, const int numberOfNozzles, const double supplyPressure)
         : nozzleType(nozzleType), numberOfNozzles(numberOfNozzles), supplyPressure(supplyPressure) {}
 
-    int getNozzleType() const { return nozzleType; }
     int getNumberOfNozzles() const { return numberOfNozzles; }
-    double getSupplyPressure() const { return supplyPressure; }
-    void setNozzleType(int nozzleType);
-    void setNumberOfNozzles(int numberOfNozzles);
-    void setSupplyPressure(double supplyPressure);
 
     double calculate();
 
@@ -62,7 +53,6 @@ class CompressedAirOtherMethodData
         : consumption(consumption) {}
 
     double getConsumption() const { return consumption; }
-    void setConsumption(double consumption);
 
   private:
     double consumption;
@@ -125,7 +115,7 @@ class CompressedAirReduction
             : energyUse(energyUse), energyCost(energyCost), flowRate(flowRate), singleNozzleFlowRate(singleNozzleFlowRate), consumption(consumption) {}
 
         Output() = default;
-        double energyUse = 0, energyCost = 0, flowRate = 0, singleNozzleFlowRate, consumption = 0;
+        double energyUse = 0, energyCost = 0, flowRate = 0, singleNozzleFlowRate = 0, consumption = 0;
     };
 
     CompressedAirReduction(std::vector<CompressedAirReductionInput> compressedAirReductionInputVec) : compressedAirReductionInputVec(compressedAirReductionInputVec)
@@ -133,11 +123,6 @@ class CompressedAirReduction
     }
 
     CompressedAirReduction::Output calculate();
-    std::vector<CompressedAirReductionInput> const &getCompressedAirReductionInputVec() const
-    {
-        return compressedAirReductionInputVec;
-    }
-    void setCompressedAirReductionInputVec(std::vector<CompressedAirReductionInput> &compressedAirReductionInputVec);
 
   private:
     std::vector<CompressedAirReductionInput> compressedAirReductionInputVec;

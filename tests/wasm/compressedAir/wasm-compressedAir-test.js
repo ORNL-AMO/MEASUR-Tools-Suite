@@ -23,6 +23,7 @@ function pneumaticAirRequirement() {
     testNumberValue(result.airRequirementPneumaticCylinder, 5.562868, "CHPneumatic Air RequirementP (airRequirementPneumaticCylinder-2)");
     pneumaticAirRequirement.delete();
 }
+
 // usableAirCapacity
 function usableAirCapacity() {
     var inp = { tankSize: 660, airPressureIn: 110, airPressureOut: 100 };
@@ -113,6 +114,7 @@ function receiverTankSize() {
 
     receiverTank.delete();
 }
+
 // Operating Cost
 function operatingCost() {
     var inp = {
@@ -140,6 +142,7 @@ function operatingCost() {
 
     operatingCost.delete();
 }
+
 function returnDoubleVector(doublesArray) {
     let doubleVector = new Module.DoubleVector();
 
@@ -149,7 +152,6 @@ function returnDoubleVector(doublesArray) {
 
     return doubleVector;
 }
-
 //airSystemCapacity
 function airSystemCapacity() {
     var inp = {
@@ -259,9 +261,10 @@ function pneumaticValve() {
     testNumberValue(result, 4.671398, "Pneumatic Valve (calculate-4)");
     pneumaticValve.delete();
 }
+
 // Bag Method
 function bagMethod() {
-    var inp = { operatingTime: 115200 / 60.0, bagFillTime: 25, heightOfBag: 10, diameterOfBag: 10, numberOfUnits: 1 }
+    var inp = { operatingTime: 115200 / 60.0, bagFillTime: 25, heightOfBag: 10, diameterOfBag: 10, numberOfUnits: 1 };
 
     let bagMethod = new Module.BagMethod(inp.operatingTime, inp.bagFillTime, inp.heightOfBag, inp.diameterOfBag, inp.numberOfUnits);
     let result = bagMethod.calculate();
@@ -275,13 +278,62 @@ function bagMethod() {
     testNumberValue(result.annualConsumption, 136.5, "Bag Method (annualConsumption-2)");
     bagMethod.delete();
 }
+// Estimate Method
+function estimateMethod() {
+    var inp = { operatingTime: 1280, leakRateEstimate: 0.1};
+
+    let estimateMethod = new Module.EstimateMethod(inp.operatingTime, inp.leakRateEstimate);
+    let result = estimateMethod.calculate();
+    testNumberValue(result.annualConsumption, 7.68, "Estimate Method (annualConsumption-1)");
+
+    inp = { operatingTime: 1280, leakRateEstimate: 1.429};
+    estimateMethod = new Module.EstimateMethod(inp.operatingTime, inp.leakRateEstimate);
+    result = estimateMethod.calculate();
+    testNumberValue(result.annualConsumption, 109.7472, "Estimate Method (annualConsumption-2)");
+    estimateMethod.delete();
+}
+// Decibels Method
+function decibelsMethod() {
+    var inp = { operatingTime: 1280, linePressure: 130, decibels: 25,
+        decibelRatingA: 20, pressureA: 150, firstFlowA: 1.04, secondFlowA: 1.2,
+        decibelRatingB: 30, pressureB: 125, firstFlowB:1.85, secondFlowB:1.65 };
+
+    let decibelsMethod = new Module.DecibelsMethod(inp.operatingTime, inp.linePressure, inp.decibels,
+        inp.decibelRatingA, inp.pressureA, inp.firstFlowA, inp.secondFlowA,
+        inp.decibelRatingB, inp.pressureB, inp.firstFlowB, inp.secondFlowB);
+    let result = decibelsMethod.calculate();
+    testNumberValue(result.leakRateEstimate, 1.429, "Decibels Method (leakRateEstimate-1)");
+    testNumberValue(result.annualConsumption, 109.7472, "Decibels Method (annualConsumption-1)");
+    decibelsMethod.delete();
+}
+// Orifice Method
+function orificeMethod() {
+    var inp = { operatingTime: 115200 / 60.0, airTemp: 250, atmPressure: 14.7, dischargeCoef: 1, diameter: 6, supplyPressure: 6.2, numOrifices: 4 };
+
+    let orificeMethod = new Module.OrificeMethod(inp.operatingTime, inp.airTemp, inp.atmPressure, inp.dischargeCoef, inp.diameter, inp.supplyPressure, inp.numOrifices);
+    let result = orificeMethod.calculate();
+    testNumberValue(result.standardDensity, 0.2256917885, "Orifice Method (standardDensity-1)");
+    testNumberValue(result.sonicDensity, 0.0153403857, "Orifice Method (sonicDensity-1)");
+    testNumberValue(result.leakVelocity, 707.7792735027, "Orifice Method (leakVelocity-1)");
+    testNumberValue(result.leakRateLBMmin, 127.9131698485, "Orifice Method (leakRateLBMmin-1)");
+    testNumberValue(result.leakRateScfm, 566.7604066752, "Orifice Method (leakRateScfm-1)");
+    testNumberValue(result.leakRateEstimate, 2267.0416267007, "Orifice Method (leakRateEstimate-1)");
+    testNumberValue(result.annualConsumption, 261163.1953959255, "Orifice Method (annualConsumption-1)");
+    orificeMethod.delete();
+}
 
 pneumaticAirRequirement();
+
 usableAirCapacity();
 receiverTankSize();
+
 operatingCost();
 airSystemCapacity();
 airVelocity();
 pipeSizing();
 pneumaticValve();
+
 bagMethod();
+estimateMethod();
+decibelsMethod();
+orificeMethod();

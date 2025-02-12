@@ -29,7 +29,7 @@ TEST_CASE( "PumpResults Premium existing", "[PumpResults]" ) {
 	CHECK(ex.pumpEfficiency * 100 == Approx(78.555319445));
 	CHECK(ex.motorRatedPower == Approx(200));
 	CHECK(ex.motorShaftPower == Approx(103.385910304));
-	CHECK(ex.pumpShaftPower == Approx(103.385910304));
+	CHECK(ex.moverShaftPower == Approx(103.385910304));
 	CHECK(ex.motorEfficiency * 100 == Approx(96.4073613585));
 	CHECK(ex.motorPowerFactor * 100 == Approx(75.3340317395));
 	CHECK(ex.motorCurrent == Approx(127.7311762599));
@@ -66,7 +66,7 @@ TEST_CASE( "PumpResults existing and modified", "[PumpResults]" ) {
 	CHECK(ex.pumpEfficiency * 100 == Approx(80.2620381));
 	CHECK(ex.motorRatedPower == Approx(200));
 	CHECK(ex.motorShaftPower == Approx(101.18747791246317));
-	CHECK(ex.pumpShaftPower == Approx(101.18747791246317));
+	CHECK(ex.moverShaftPower == Approx(101.18747791246317));
 	CHECK(ex.motorEfficiency * 100 == Approx(94.35732315337191));
 	CHECK(ex.motorPowerFactor * 100 == Approx(76.45602656178534));
 	CHECK(ex.motorCurrent == Approx(125.85671685040634));
@@ -77,7 +77,7 @@ TEST_CASE( "PumpResults existing and modified", "[PumpResults]" ) {
 	CHECK(mod.pumpEfficiency * 100 == Approx(80));
 	CHECK(mod.motorRatedPower == Approx(200));
 	CHECK(mod.motorShaftPower == Approx(101.5189151255));
-	CHECK(mod.pumpShaftPower == Approx(101.5189151255));
+	CHECK(mod.moverShaftPower == Approx(101.5189151255));
 	CHECK(mod.motorEfficiency * 100 == Approx(94.3652462131));
 	CHECK(mod.motorPowerFactor * 100 == Approx(76.2584456388));
 	CHECK(mod.motorCurrent == Approx(126.5852583329));
@@ -109,7 +109,7 @@ TEST_CASE( "PumpResults - existing changed voltage", "[PumpResults]" ) {
 	CHECK(ex.pumpEfficiency * 100 == Approx(21.4684857877));
 	CHECK(ex.motorRatedPower == Approx(350));
 	CHECK(ex.motorShaftPower == Approx(338.9835681041));
-	CHECK(ex.pumpShaftPower == Approx(338.9835681041));
+	CHECK(ex.moverShaftPower == Approx(338.9835681041));
 	CHECK(ex.motorEfficiency * 100 == Approx(94.518008321));
 	CHECK(ex.motorPowerFactor * 100 == Approx(83.4292940632));
 	CHECK(ex.motorCurrent == Approx(80.5));
@@ -138,14 +138,14 @@ TEST_CASE( "PumpResults - mod changed voltage", "[PumpResults]" ) {
 	auto const & mod = pumpResult.calculateModified();
 	CHECK(ex.pumpEfficiency * 100 == Approx(20.4308309532));
 	CHECK(ex.motorShaftPower == Approx(37.06710939));
-	CHECK(ex.pumpShaftPower == Approx(37.06710939));
+	CHECK(ex.moverShaftPower == Approx(37.06710939));
 	CHECK(ex.motorEfficiency * 100 == Approx(92.1735453498));
 	CHECK(ex.motorPowerFactor * 100 == Approx(86.9792780871));
 	CHECK(ex.motorCurrent == Approx(84.3786991404));
 	CHECK(ex.motorPower == Approx(30.0));
 	CHECK(mod.pumpEfficiency * 100 == Approx(20.4));
 	CHECK(mod.motorShaftPower == Approx(37.1231296996));
-	CHECK(mod.pumpShaftPower == Approx(37.1231296996));
+	CHECK(mod.moverShaftPower == Approx(37.1231296996));
 	CHECK(mod.motorEfficiency * 100 == Approx(92.164816187));
 	CHECK(mod.motorPowerFactor * 100 == Approx(86.4617844857));
 	CHECK(mod.motorCurrent == Approx(85.0201337882));
@@ -172,7 +172,7 @@ TEST_CASE( "PumpResults - specified drive", "[PumpResults]" ) {
 	CHECK(ex.pumpEfficiency * 100 == Approx(22.5984060923));
 	CHECK(ex.motorRatedPower == Approx(350));
 	CHECK(ex.motorShaftPower == Approx(338.9835681041));
-	CHECK(ex.pumpShaftPower == Approx(322.0343896989));
+	CHECK(ex.moverShaftPower == Approx(322.0343896989));
 	CHECK(ex.motorEfficiency * 100 == Approx(94.518008321));
 	CHECK(ex.motorPowerFactor * 100 == Approx(83.4292940632));
 	CHECK(ex.motorCurrent == Approx(80.5));
@@ -202,7 +202,7 @@ TEST_CASE( "PumpResults - existing and modified", "[PumpResults]" ) {
 	CHECK(ex.pumpEfficiency * 100 == Approx(38.1094253534));
 	CHECK(ex.motorRatedPower == Approx(200));
 	CHECK(ex.motorShaftPower == Approx(191.1541214642));
-	CHECK(ex.pumpShaftPower == Approx(183.4851259332));
+	CHECK(ex.moverShaftPower == Approx(183.4851259332));
 	CHECK(ex.motorEfficiency * 100 == Approx(95.0673164082));
 	CHECK(ex.motorPowerFactor * 100 == Approx(86.3561411197));
 	CHECK(ex.motorCurrent == Approx(208.9277690995));
@@ -212,7 +212,7 @@ TEST_CASE( "PumpResults - existing and modified", "[PumpResults]" ) {
 	CHECK(mod.pumpEfficiency * 100 == Approx(38.2));
 	CHECK(mod.motorRatedPower == Approx(200));
 	CHECK(mod.motorShaftPower == Approx(190.7010275392));
-	CHECK(mod.pumpShaftPower == Approx(183.0500709481));
+	CHECK(mod.moverShaftPower == Approx(183.0500709481));
 	CHECK(mod.motorEfficiency * 100 == Approx(95.0700964487));
 	CHECK(mod.motorPowerFactor * 100 == Approx(86.8975146434));
 	CHECK(mod.motorCurrent == Approx(207.128014213));
@@ -246,7 +246,7 @@ TEST_CASE( "PumpResults2 v-belt type", "[PumpResults]" ) {
 	CHECK(mod.pumpEfficiency * 100 == Approx(62.3));
 	CHECK(mod.motorRatedPower == Approx(200));
 	CHECK(mod.motorShaftPower == Approx(200.507050278));
-	CHECK(mod.pumpShaftPower == Approx(192.468232632));
+	CHECK(mod.moverShaftPower == Approx(192.468232632));
 	CHECK(mod.motorEfficiency * 100 == Approx(95.6211069257));
 	CHECK(mod.motorPowerFactor * 100 == Approx(86.7354953183));
 	CHECK(mod.motorCurrent == Approx(226.3599309627));
@@ -283,7 +283,7 @@ TEST_CASE( "PumpResults notched v belt", "[PumpResults]" ) {
 	CHECK(mod.pumpEfficiency * 100 == Approx(62.3));
 	CHECK(mod.motorRatedPower == Approx(200));
 	CHECK(mod.motorShaftPower == Approx(198.2102452363));
-	CHECK(mod.pumpShaftPower == Approx(192.468232632));
+	CHECK(mod.moverShaftPower == Approx(192.468232632));
 	CHECK(mod.motorEfficiency * 100 == Approx(95.6417064886));
 	CHECK(mod.motorPowerFactor * 100 == Approx(86.6915209945));
 	CHECK(mod.motorCurrent == Approx(223.8322217984));
@@ -318,7 +318,7 @@ TEST_CASE( "PumpResults sync belt", "[PumpResults]" ) {
 	auto const & mod = pumpResult.calculateModified();
 
 	CHECK(mod.motorShaftPower == Approx(194.767));
-	CHECK(mod.pumpShaftPower == Approx(192.468232632));
+	CHECK(mod.moverShaftPower == Approx(192.468232632));
 	CHECK(mod.motorPower == Approx(151.8722277599));
 }
 

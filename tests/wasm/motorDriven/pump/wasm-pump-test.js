@@ -84,7 +84,7 @@ function resultsExisting() {
     pumpInput.delete();
     testNumberValue(calculatedResults.pump_efficiency * 100, 71.5541741283, "Pump Results Existing (pump_efficiency)");
     testNumberValue(calculatedResults.motor_shaft_power, 189.2746748003, "Pump Results Existing (motor_shaft_power)");
-    testNumberValue(calculatedResults.pump_shaft_power, 179.8109410603, "Pump Results Existing (pump_shaft_power)");
+    testNumberValue(calculatedResults.mover_shaft_power, 179.8109410603, "Pump Results Existing (mover_shaft_power)");
     testNumberValue(calculatedResults.motor_efficiency * 100, 94.132604934, "Pump Results Existing (motor_efficiency)");
 }
 
@@ -128,7 +128,7 @@ function resultsModified() {
     testNumberValue(calculatedResults.pump_efficiency * 100, 80, "Pump Results Modified (pump_efficiency)");
     testNumberValue(calculatedResults.motor_rated_power, 100, "Pump Results Modified (motor_rated_power)");
     testNumberValue(calculatedResults.motor_shaft_power, 101.51891512553706, "Pump Results Modified (motor_shaft_power)");
-    testNumberValue(calculatedResults.pump_shaft_power, 101.51891512553706, "Pump Results Modified (pump_shaft_power)");
+    testNumberValue(calculatedResults.mover_shaft_power, 101.51891512553706, "Pump Results Modified (mover_shaft_power)");
     testNumberValue(calculatedResults.motor_efficiency * 100, 94.973283, "Pump Results Modified (motor_efficiency)");
     testNumberValue(calculatedResults.motor_power_factor * 100, 86.926875, "Pump Results Modified (motor_power_factor)");
     testNumberValue(calculatedResults.motor_current, 110.338892, "Pump Results Modified (motor_current)");

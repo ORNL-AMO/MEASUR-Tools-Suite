@@ -1,6 +1,6 @@
-#include <iostream>
 #include <cmath>
 #include "treasureHunt/CompressedAirReduction.h"
+
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
@@ -93,49 +93,4 @@ double CompressorElectricityData::calculate()
 {
     const double c = 1.0 / 60;
     return c * this->compressorSpecificPower;
-}
-
-void CompressedAirReduction::setCompressedAirReductionInputVec(std::vector<CompressedAirReductionInput> &compressedAirReductionInputVec)
-{
-    this->compressedAirReductionInputVec = std::move(compressedAirReductionInputVec);
-}
-
-void CompressedAirOtherMethodData::setConsumption(const double consumption)
-{
-    this->consumption = consumption;
-}
-
-void PressureMethodData::setNozzleType(const int nozzleType)
-{
-    this->nozzleType = nozzleType;
-}
-
-void PressureMethodData::setNumberOfNozzles(const int numberOfNozzles)
-{
-    this->numberOfNozzles = numberOfNozzles;
-}
-
-void PressureMethodData::setSupplyPressure(const double supplyPressure)
-{
-    this->supplyPressure = supplyPressure;
-}
-
-void BagMethodData::setHeight(const double height)
-{
-    this->height = height;
-}
-
-void BagMethodData::setDiameter(const double diameter)
-{
-    this->diameter = diameter;
-}
-
-void BagMethodData::setFillTime(const double fillTime)
-{
-    this->fillTime = fillTime;
-}
-
-void CompressedAirFlowMeterMethodData::setMeterReading(const double meterReading)
-{
-    this->meterReading = meterReading;
 }
