@@ -6,8 +6,8 @@
     "npm": "10.8.1"
   },
   "scripts": {
-    "test-wasm": "node tests/wasm/wasm-express.js",
-    "test-wasm-stop": "node tests/wasm/wasm-express-stop.js"
+    "test-wasm": "node tests/wasm/wasm-express/wasm-express.js",
+    "test-wasm-stop": "node tests/wasm/wasm-express/wasm-express-stop.js"
   },
   "description": "Calculation library for the Department of Energy Advanced Manufacturing and Materials Technologies Office and the Industrial Efficiency & Decarbonization Office (DOE AMMTO IEDO)  suite of tools",
   "author": "Gina Accawi <accawigk@ornl.gov>",

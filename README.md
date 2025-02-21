@@ -2,7 +2,9 @@ MEASUR Tools Suite
 ---------------
 
 MEASUR Tools Suite is a cross-platform collection of calculations and tools to support industrial equipment modeling.
-See our hosted documentation for the latest release at [ornl-MEASUR.github.io](https://ornl-MEASUR.github.io/)
+See our hosted documentation for the latest release at [ornl-MEASUR.github.io](https://ornl-AMO.github.io/)
+
+The npm packages can be downloaded and install from [registry](https://www.npmjs.com/package/measur-tools-suite)
 
 ### Dependencies
 #### C++
@@ -57,7 +59,7 @@ To make it easy for developers local building and testing, it is dockerized. To 
 - To stop the running container run `docker compose down`
 - Running Unit Tests
   - WASM: in a browser, launch [http://localhost:3000/](http://localhost:3000/)
-  - C++: run `docker exec -it measur-tools-suite-build /bin/bash` and run the executable `/home/MEASUR-Tools-Suite/build-cpp/bin/cpp_tests`
+  - C++: run `docker exec -it measur-tools-suite-build /bin/bash` and run the executable `/home/MEASUR-Tools-Suite/build-cpp/cpp_tests`
     - Note: 
       - Every time the container is started it will rebuild the application, to check status run `docker compose logs --tail 5` 
       - **This is not a tutorial for docker, assumption is made the user is knowledgeable.**

@@ -1,26 +1,26 @@
-#include <sqlite/SQLite.h>
-#include <calculator/losses/SolidLoadChargeMaterial.h>
-#include <calculator/losses/GasLoadChargeMaterial.h>
-#include <calculator/losses/LiquidLoadChargeMaterial.h>
-#include <calculator/losses/Atmosphere.h>
-#include <calculator/losses/WallLosses.h>
-#include <sqlite/SolidLoadChargeMaterialData.h>
-#include <calculator/losses/GasFlueGasMaterial.h>
-#include <sqlite/GasLoadChargeMaterialData.h>
-#include <sqlite/LiquidLoadChargeMaterialData.h>
-#include <sqlite/GasFlueGasMaterialData.h>
-#include <sqlite/AtmosphereSpecificHeatData.h>
-#include <sqlite/WallLossesSurfaceData.h>
-#include <calculator/motor/MotorData.h>
-#include <calculator/pump/PumpData.h>
-
 #include <fstream>
 #include <iostream>
-#include <stdexcept>
-#include <calculator/losses/SolidLiquidFlueGasMaterial.h>
-#include <sqlite/SolidLiquidFlueGasMaterialData.h>
-#include <sqlite/MotorData.h>
-#include <sqlite/PumpData.h>
+#include <sqlite/SQLite.h>
+
+#include <processHeat/losses/SolidLoadChargeMaterial.h>
+#include <processHeat/losses/GasLoadChargeMaterial.h>
+#include <processHeat/losses/LiquidLoadChargeMaterial.h>
+#include <processHeat/losses/Atmosphere.h>
+#include <processHeat/losses/WallLosses.h>
+#include <processHeat/losses/GasFlueGasMaterial.h>
+#include <motorDriven/motor/MotorData.h>
+#include "motorDriven/pump/PumpData.h"
+#include <processHeat/losses/SolidLiquidFlueGasMaterial.h>
+
+#include <databases/SolidLiquidFlueGasMaterialData.h>
+#include <databases/MotorData.h>
+#include <databases/PumpData.h>
+#include <databases/SolidLoadChargeMaterialData.h>
+#include <databases/GasLoadChargeMaterialData.h>
+#include <databases/LiquidLoadChargeMaterialData.h>
+#include <databases/GasFlueGasMaterialData.h>
+#include <databases/AtmosphereSpecificHeatData.h>
+#include <databases/WallLossesSurfaceData.h>
 
 SQLite::SQLite(std::string const &db_name, bool init_db)
     : SQLiteWrapper(db_name, init_db)
