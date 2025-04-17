@@ -101,6 +101,8 @@ CPackConfig.cmake
 CPackSourceConfig.cmake
 install_manifest.txt
 CTestTestfile.cmake
+compile_commands.json
+
 ### TortoiseGit template
 # Project-level settings
 /.tgitconfig
@@ -398,6 +400,8 @@ paket-files/
 ### NetBeans template
 nbproject/private/
 build/
+build-cpp/
+build-wasm/
 nbbuild/
 dist/
 nbdist/
