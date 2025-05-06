@@ -7,14 +7,20 @@
  */
 
 #include "motorDriven/pumpFan/PumpEfficiency.h"
-#include "motorDriven/pumpFan/OptimalPrePumpEff.h"
+#include "motorDriven/pumpFan/OptimalPumpEfficiency.h"
 #include "motorDriven/pumpFan/OptimalDeviationFactor.h"
 
 PumpEfficiency::Output PumpEfficiency::calculate() {
 
-    OptimalPrePumpEff pef(style, flow);
+    OptimalPumpEfficiency pef(style,
+        pumpEfficiency,
+        rpm,
+        kinematicViscosity,
+        stageCount,
+        flowRate,
+        head);
     double average = pef.calculate();
-    double odf = OptimalDeviationFactor(flow).calculate();
+    double odf = OptimalDeviationFactor(flowRate).calculate();
     double max = average * odf;
 
     return {average, max};

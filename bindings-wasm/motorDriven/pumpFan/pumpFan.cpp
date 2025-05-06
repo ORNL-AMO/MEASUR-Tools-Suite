@@ -51,7 +51,7 @@ EMSCRIPTEN_BINDINGS(optimal_specified_speed_class)
 EMSCRIPTEN_BINDINGS(pump_efficiency)
 {
     class_<PumpEfficiency>("PumpEfficiency")
-        .constructor<Pump::Style, double>()
+        .constructor<Pump::Style, double, double, double, double, double, double>()
         .function("calculate", &PumpEfficiency::calculate);
 }
 

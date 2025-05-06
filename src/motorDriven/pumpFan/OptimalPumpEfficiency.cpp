@@ -35,15 +35,11 @@ double OptimalPumpEfficiency::calculate() {
     double specificSpeed = optimalSpecificSpeed.calculate();
     OptimalSpecificSpeedCorrection optimalSpecificSpeedCorrection(style, specificSpeed);
     double speedCorrection = optimalSpecificSpeedCorrection.calculate();
-    /*
-     * positiveDeviationFactor
-     */
-    OptimalDeviationFactor optimalDeviationFactor(flowRate);
-    double positiveDeviationFactor = optimalDeviationFactor.calculate();
+
     /*
      * Optimal Efficiency
      */
     prePumpEfficiency = prePumpEfficiency / 100;
-    optimalEfficiency = (prePumpEfficiency * viscosityCorrectionFactor - speedCorrection) * positiveDeviationFactor;
+    optimalEfficiency = prePumpEfficiency * viscosityCorrectionFactor - speedCorrection;
     return optimalEfficiency;
 }

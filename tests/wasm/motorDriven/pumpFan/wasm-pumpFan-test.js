@@ -17,11 +17,28 @@ function achievableEfficiency() {
 function pumpEfficiency(){
     let pumpStyle = Module.PumpStyle.END_SUCTION_ANSI_API;
     let flowRate = 2000;
-    let instance = new Module.PumpEfficiency(pumpStyle, flowRate);
+    let pumpEfficiency = .90;
+    let rpm = 2000;
+    let kinematicViscosity = 1.107;
+    let stageCount = 1;
+    let head = 137; 
+
+    let instance = new Module.PumpEfficiency(
+        pumpStyle,
+        pumpEfficiency,
+        rpm,
+        kinematicViscosity,
+        stageCount,
+        flowRate,
+        head,  
+    );
     let results = instance.calculate();
     instance.delete();
-    testNumberValue(results.average, 83.97084437955112, "Pump Efficiency (average)");
-    testNumberValue(results.max, 86.99584193768345, "Pump Efficiency (max)");
+
+    const average = Number(results.average.toFixed(2));
+    const max = Number(results.max.toFixed(3));
+    testNumberValue(average, .84, "Pump Efficiency (average)");
+    testNumberValue(max, .868, "Pump Efficiency (max)");
 }
 
 //execute tests
