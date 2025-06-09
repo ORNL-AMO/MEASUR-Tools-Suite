@@ -91,6 +91,13 @@ function receiverTankSize() {
     testNumberValue(result, 1566.873, "Receiver Tank (MeteredStorage-1)");
 
     input = {
+        method: Module.ReceiverTankMethod.MeteredStorage, lengthOfDemand: 0.333, airFlowRequirement: 640, atmosphericPressure: 14.7, initialTankPressure: 97, finalTankPressure: 90, meteredControl: 300
+    }
+    receiverTank = new Module.ReceiverTank(input.method, input.lengthOfDemand, input.airFlowRequirement, input.atmosphericPressure, input.initialTankPressure, input.finalTankPressure, input.meteredControl);
+    result = receiverTank.calculateRefillTime();
+    testNumberValue(result, 22.642, "Receiver Tank (MeteredStorage-1 Refill Time)");
+
+    input = {
         method: Module.ReceiverTankMethod.MeteredStorage, lengthOfDemand: 1.5, airFlowRequirement: 800, atmosphericPressure: 11.7, initialTankPressure: 120, finalTankPressure: 90, meteredControl: 75
     }
     receiverTank = new Module.ReceiverTank(input.method, input.lengthOfDemand, input.airFlowRequirement, input.atmosphericPressure, input.initialTankPressure, input.finalTankPressure, input.meteredControl);
