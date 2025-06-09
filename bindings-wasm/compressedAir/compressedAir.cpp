@@ -55,6 +55,7 @@ EMSCRIPTEN_BINDINGS(receiverTank)
         .constructor<ReceiverTank::Method, double, double, double, double, double>()
         .constructor<ReceiverTank::Method, double, double, double, double, double, double>()
         .function("calculateSize", &ReceiverTank::calculateSize)
+        .function("calculateRefillTime", &ReceiverTank::calculateRefillTime)
         .function("calculateUsableCapacity", &ReceiverTank::calculateUsableCapacity);
 }
 
