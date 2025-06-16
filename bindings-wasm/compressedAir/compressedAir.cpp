@@ -147,7 +147,7 @@ EMSCRIPTEN_BINDINGS(pneumaticValve)
 EMSCRIPTEN_BINDINGS(bagMethod)
 {
     class_<BagMethod>("BagMethod")
-        .constructor<double, double, double, double, double>()
+        .constructor<double, double, double, double>()
         .function("calculate", &BagMethod::calculate);
 
     class_<BagMethod::Output>("BagMethodOutput")

@@ -271,18 +271,15 @@ function pneumaticValve() {
 
 // Bag Method
 function bagMethod() {
-    var inp = { operatingTime: 115200 / 60.0, bagFillTime: 25, heightOfBag: 10, diameterOfBag: 10, numberOfUnits: 1 };
+    let bagVolumeGal = 45; 
+    let bagVolumeCuFt = bagVolumeGal * 0.133681; 
+    var inp = { operatingTime: 8760, bagFillTime: 50, bagVolume: bagVolumeCuFt, numberOfUnits: 1 };
 
-    let bagMethod = new Module.BagMethod(inp.operatingTime, inp.bagFillTime, inp.heightOfBag, inp.diameterOfBag, inp.numberOfUnits);
+    let bagMethod = new Module.BagMethod(inp.operatingTime, inp.bagFillTime, inp.bagVolume, inp.numberOfUnits);
     let result = bagMethod.calculate();
-    testNumberValue(result.flowRate, 1.092, "Bag Method (flowRate-1)");
-    testNumberValue(result.annualConsumption, 125.7984, "Bag Method (annualConsumption-1)");
 
-    inp = { operatingTime: 100000 / 60.0, bagFillTime: 20, heightOfBag: 10, diameterOfBag: 10, numberOfUnits: 1 };
-    bagMethod = new Module.BagMethod(inp.operatingTime, inp.bagFillTime, inp.heightOfBag, inp.diameterOfBag, inp.numberOfUnits);
-    result = bagMethod.calculate();
-    testNumberValue(result.flowRate, 1.365, "Bag Method (flowRate-2)");
-    testNumberValue(result.annualConsumption, 136.5, "Bag Method (annualConsumption-2)");
+    testNumberValue(result.flowRate, 7.219251337, "Bag Method (flowRate-1)");
+    testNumberValue(result.annualConsumption, 3794.187614, "Bag Method (annualConsumption-1)");
     bagMethod.delete();
 }
 // Estimate Method
