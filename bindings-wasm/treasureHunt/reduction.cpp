@@ -85,7 +85,7 @@ EMSCRIPTEN_BINDINGS(compressedAirReduction_class)
         .constructor<double>();
 
     class_<BagMethodData>("BagMethodData")
-        .constructor<double, double, double>();
+        .constructor<double, double, double>(); // legacy only
 
     class_<PressureMethodData>("PressureMethodData")
         .constructor<int, int, double>();
@@ -97,7 +97,7 @@ EMSCRIPTEN_BINDINGS(compressedAirReduction_class)
         .constructor<double, double>();
 
     class_<CompressedAirReductionInput>("CompressedAirReductionInput")
-        .constructor<int, int, double, int, CompressedAirFlowMeterMethodData, BagMethodData, PressureMethodData,
+        .constructor<int, int, double, int, CompressedAirFlowMeterMethodData, BagMethod, PressureMethodData,
             CompressedAirOtherMethodData, CompressorElectricityData, int>();
 
     register_vector<CompressedAirReductionInput>("CompressedAirReductionInputV");

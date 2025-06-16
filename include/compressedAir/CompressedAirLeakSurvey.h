@@ -11,6 +11,7 @@
 #endif
 
 // BagMethodData implemented in CompressedAirReduction.h
+// BagMethod is now used for all new logic and data flow
 
 class EstimateMethodData
 {
@@ -27,11 +28,11 @@ class DecibelsMethodData
 {
   public:
     DecibelsMethodData(const double linePressure, const double decibels, const double decibelRatingA, 
-		  const double pressureA, const double firstFlowA, const double secondFlowA, const double decibelRatingB, const double pressureB,
-		  const double firstFlowB, const double secondFlowB)
-		  : linePressure(linePressure), decibels(decibels), decibelRatingA(decibelRatingA), 
-		    pressureA(pressureA), firstFlowA(firstFlowA), secondFlowA(secondFlowA), decibelRatingB(decibelRatingB),
-		    pressureB(pressureB), firstFlowB(firstFlowB), secondFlowB(secondFlowB) {}
+      const double pressureA, const double firstFlowA, const double secondFlowA, const double decibelRatingB, const double pressureB,
+      const double firstFlowB, const double secondFlowB)
+      : linePressure(linePressure), decibels(decibels), decibelRatingA(decibelRatingA), 
+        pressureA(pressureA), firstFlowA(firstFlowA), secondFlowA(secondFlowA), decibelRatingB(decibelRatingB),
+        pressureB(pressureB), firstFlowB(firstFlowB), secondFlowB(secondFlowB) {}
 
     double calculate()
     {
@@ -59,8 +60,8 @@ class OrificeMethodData
   public:
     OrificeMethodData(const double airTemp, const double atmPressure, const double dischargeCoef, const double diameter, 
                       const double supplyPressure, const int numOrifices)
-			: airTemp(airTemp), atmPressure(atmPressure), dischargeCoef(dischargeCoef), diameter(diameter),
-			  supplyPressure(supplyPressure), numOrifices(numOrifices) {}
+      : airTemp(airTemp), atmPressure(atmPressure), dischargeCoef(dischargeCoef), diameter(diameter),
+        supplyPressure(supplyPressure), numOrifices(numOrifices) {}
 
     double calculate()
     {
@@ -90,10 +91,10 @@ class CompressedAirLeakSurveyInput
   public:
     CompressedAirLeakSurveyInput(const int hoursPerYear, const int utilityType, const double utilityCost, const int measurementMethod,
                                 const EstimateMethodData estimateMethodData, const DecibelsMethodData decibelsMethodData, 
-                                const BagMethodData bagMethodData, const OrificeMethodData orificeMethodData,  
+                                const BagMethod bagMethod, const OrificeMethodData orificeMethodData,  
                                 const CompressorElectricityData compressorElectricityData, const int units)
         : hoursPerYear(hoursPerYear), utilityType(utilityType), utilityCost(utilityCost), measurementMethod(measurementMethod),
-          estimateMethodData(estimateMethodData), decibelsMethodData(decibelsMethodData), bagMethodData(bagMethodData), 
+          estimateMethodData(estimateMethodData), decibelsMethodData(decibelsMethodData), bagMethod(bagMethod), 
           orificeMethodData(orificeMethodData), compressorElectricityData(compressorElectricityData), units(units) {}
 
     int getHoursPerYear() const { return hoursPerYear; } // operating time
@@ -103,7 +104,7 @@ class CompressedAirLeakSurveyInput
     double getUtilityCost() const { return utilityCost; }
     EstimateMethodData getEstimateMethodData() const { return estimateMethodData; }
     DecibelsMethodData getDecibelsMethodData() const { return decibelsMethodData; }
-    BagMethodData getBagMethodData() const { return bagMethodData; }
+    BagMethod getBagMethod() const { return bagMethod; }
     OrificeMethodData getOrificeMethodData() const { return orificeMethodData; }
     CompressorElectricityData getCompressorElectricityData() const { return compressorElectricityData; }
 
@@ -113,7 +114,7 @@ class CompressedAirLeakSurveyInput
     int measurementMethod;
     EstimateMethodData estimateMethodData;
     DecibelsMethodData decibelsMethodData;
-    BagMethodData bagMethodData;
+    BagMethod bagMethod;
     OrificeMethodData orificeMethodData;
     CompressorElectricityData compressorElectricityData;
     int units;
@@ -161,9 +162,11 @@ class CompressedAirLeakSurvey
                 // bag method
             else if (compressedAirLeakSurveyInput.getMeasurementMethod() == 2)
             {
-                BagMethodData bagMethodData = compressedAirLeakSurveyInput.getBagMethodData();
-                tmpTotalFlowRate = ((60.0 / bagMethodData.getFillTime()) * M_PI * bagMethodData.getHeight() * pow((bagMethodData.getDiameter() / 2.0), 2.0) * (1.0 / pow(12.0, 3.0))) * compressedAirLeakSurveyInput.getUnits();
-                tmpAnnualTotalFlowRate = tmpTotalFlowRate * 60.0 * compressedAirLeakSurveyInput.getHoursPerYear();
+                BagMethod bagMethod = compressedAirLeakSurveyInput.getBagMethod();
+                // Use BagMethod::calculate() for new logic
+                auto bagOutput = bagMethod.calculate();
+                tmpTotalFlowRate = bagOutput.flowRate * compressedAirLeakSurveyInput.getUnits();
+                tmpAnnualTotalFlowRate = bagOutput.annualConsumption * compressedAirLeakSurveyInput.getUnits();
             }
                 // orifice method
             else if (compressedAirLeakSurveyInput.getMeasurementMethod() == 3)

@@ -11,7 +11,7 @@ function validateCompressedAirLeakSurvey(testName, inp, expected){
     for (let i = 0; i < inp.compressedAirLeakSurveyInputVec.length; i++) {
         let inpElem = inp.compressedAirLeakSurveyInputVec[i];
         let estimateMethodData = new Module.EstimateMethodData(inpElem.estimateMethodData.leakRateEstimate);
-        let bagMethodData = new Module.BagMethodData(inpElem.bagMethodData.height, inpElem.bagMethodData.diameter, inpElem.bagMethodData.fillTime);
+        let bagMethod = new Module.BagMethod(inpElem.bagMethod.operatingTime, inpElem.bagMethod.bagFillTime, inpElem.bagMethod.bagVolume, inpElem.bagMethod.numberOfUnits);
         let decibelsMethodData = new Module.DecibelsMethodData(inpElem.decibelsMethodData.linePressure,
             inpElem.decibelsMethodData.decibels, inpElem.decibelsMethodData.decibelRatingA, inpElem.decibelsMethodData.pressureA,
             inpElem.decibelsMethodData.firstFlowA, inpElem.decibelsMethodData.secondFlowA, inpElem.decibelsMethodData.decibelRatingB,
@@ -23,14 +23,14 @@ function validateCompressedAirLeakSurvey(testName, inp, expected){
             inpElem.compressorElectricityData.compressorSpecificPower);
 
         let input = new Module.CompressedAirLeakSurveyInput(inpElem.hoursPerYear, inpElem.utilityType, inpElem.utilityCost, inpElem.measurementMethod,
-            estimateMethodData, decibelsMethodData, bagMethodData, orificeMethodData, compressorElectricityData, inpElem.units);
+            estimateMethodData, decibelsMethodData, bagMethod, orificeMethodData, compressorElectricityData, inpElem.units);
         inputList.push_back(input);
 
         input.delete();
         compressorElectricityData.delete();
         orificeMethodData.delete();
         decibelsMethodData.delete();
-        bagMethodData.delete();
+        bagMethod.delete();
         estimateMethodData.delete();
     }
 
@@ -64,10 +64,11 @@ function compressedAirLeakSurvey(){
                     firstFlowB: 1.85,
                     secondFlowB: 1.65
                 },
-                bagMethodData: {
-                    height: 15,
-                    diameter: 10,
-                    fillTime: 12
+                bagMethod: {
+                    operatingTime: 8640,
+                    bagFillTime: 12,
+                    bagVolume: 0.681769239,
+                    numberOfUnits: 1
                 },
                 orificeMethodData: {
                     compressorAirTemp: 250.0,
@@ -109,10 +110,11 @@ function compressedAirLeakSurvey(){
                     firstFlowB: 1.85,
                     secondFlowB: 1.65
                 },
-                bagMethodData: {
-                    height: 15,
-                    diameter: 10,
-                    fillTime: 12
+                bagMethod: {
+                    operatingTime: 8760,
+                    bagFillTime: 12,
+                    bagVolume: 0.681769239,
+                    numberOfUnits: 2
                 },
                 orificeMethodData: {
                     compressorAirTemp: 250.0,
@@ -148,10 +150,11 @@ function compressedAirLeakSurvey(){
                     firstFlowB: 1.85,
                     secondFlowB: 1.65
                 },
-                bagMethodData: {
-                    height: 15,
-                    diameter: 10,
-                    fillTime: 12
+                bagMethod: {
+                    operatingTime: 8760,
+                    bagFillTime: 12,
+                    bagVolume: 0.681769239,
+                    numberOfUnits: 1
                 },
                 orificeMethodData: {
                     compressorAirTemp: 250.0,
@@ -187,10 +190,11 @@ function compressedAirLeakSurvey(){
                     firstFlowB: 1.85,
                     secondFlowB: 1.65
                 },
-                bagMethodData: {
-                    height: 15,
-                    diameter: 10,
-                    fillTime: 12
+                bagMethod: {
+                    operatingTime: 8760,
+                    bagFillTime: 12,
+                    bagVolume: 0.681769239,
+                    numberOfUnits: 1
                 },
                 orificeMethodData: {
                     compressorAirTemp: 250.0,
@@ -226,10 +230,11 @@ function compressedAirLeakSurvey(){
                     firstFlowB: 1.85,
                     secondFlowB: 1.65
                 },
-                bagMethodData: {
-                    height: 15,
-                    diameter: 10,
-                    fillTime: 12
+                bagMethod: {
+                    operatingTime: 8760,
+                    bagFillTime: 12,
+                    bagVolume: 0.681769239,
+                    numberOfUnits: 1
                 },
                 orificeMethodData: {
                     compressorAirTemp: 250.0,
@@ -276,10 +281,11 @@ function compressedAirLeakSurvey(){
                     firstFlowB: 1.85,
                     secondFlowB: 1.65
                 },
-                bagMethodData: {
-                    height: 15,
-                    diameter: 10,
-                    fillTime: 12
+                bagMethod: {
+                    operatingTime: 8640,
+                    bagFillTime: 12,
+                    bagVolume: 0.681769239,
+                    numberOfUnits: 1
                 },
                 orificeMethodData: {
                     compressorAirTemp: 250.0,
@@ -320,10 +326,11 @@ function compressedAirLeakSurvey(){
                     firstFlowB: 1.85,
                     secondFlowB: 1.65
                 },
-                bagMethodData: {
-                    height: 15,
-                    diameter: 10,
-                    fillTime: 12
+                bagMethod: {
+                    operatingTime: 8640,
+                    bagFillTime: 12,
+                    bagVolume: 0.681769239,
+                    numberOfUnits: 2
                 },
                 orificeMethodData: {
                     compressorAirTemp: 250.0,
@@ -364,10 +371,11 @@ function compressedAirLeakSurvey(){
                     firstFlowB: 1.85,
                     secondFlowB: 1.65
                 },
-                bagMethodData: {
-                    height: 15,
-                    diameter: 10,
-                    fillTime: 12
+                bagMethod: {
+                    operatingTime: 8640,
+                    bagFillTime: 12,
+                    bagVolume: 0.681769239,
+                    numberOfUnits: 1
                 },
                 orificeMethodData: {
                     compressorAirTemp: 250.0,
@@ -408,10 +416,11 @@ function compressedAirLeakSurvey(){
                     firstFlowB: 1.85,
                     secondFlowB: 1.65
                 },
-                bagMethodData: {
-                    height: 15,
-                    diameter: 10,
-                    fillTime: 12
+                bagMethod: {
+                    operatingTime: 8640,
+                    bagFillTime: 12,
+                    bagVolume: 0.681769239,
+                    numberOfUnits: 1
                 },
                 orificeMethodData: {
                     compressorAirTemp: 250.0,

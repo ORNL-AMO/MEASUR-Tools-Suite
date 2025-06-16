@@ -23,9 +23,10 @@ CompressedAirReduction::Output CompressedAirReduction::calculate()
         // bag method
         else if (compressedAirReductionInput.getMeasurementMethod() == 1)
         {
-            BagMethodData bagMethodData = compressedAirReductionInput.getBagMethodData();
-            tmpFlowRate = (60.0 / bagMethodData.getFillTime()) * M_PI * bagMethodData.getHeight() * pow((bagMethodData.getDiameter() / 2.0), 2.0) * (1.0 / pow(12.0, 3.0));
-            tmpTotalConsumption = tmpFlowRate * 60.0 * compressedAirReductionInput.getHoursPerYear() * compressedAirReductionInput.getUnits();
+            BagMethod bagMethod = compressedAirReductionInput.getBagMethod();
+            auto bagOutput = bagMethod.calculate();
+            tmpFlowRate = bagOutput.flowRate;
+            tmpTotalConsumption = bagOutput.annualConsumption * compressedAirReductionInput.getUnits();
         }
         // orifice/pressure method
         else if (compressedAirReductionInput.getMeasurementMethod() == 2)
