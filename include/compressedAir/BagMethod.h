@@ -30,25 +30,25 @@ public:
      * takes to fill it. This is the second most accurate means of measuring compressed air consumption.
      * @param operatingTime double, operating time of the system per year - hours
      * @param bagFillTime double, time that it takes for the bag to fill with air - seconds
-     * @param heightOfBag double, height of the bag - inches
-     * @param diameterOfBag double, diameter of the bag - inches
+     * @param bagVolume double, volume of the bag filler - cubic feet
      * @param numberOfUnits int, number of trash bags
+     * @returns flowRate in ft3, annualConsumption in ?
      */
-    BagMethod(double operatingTime, double bagFillTime, double heightOfBag, double diameterOfBag, int numberOfUnits)
+    BagMethod(double operatingTime, double bagFillTime, double bagVolume, int numberOfUnits)
             : operatingTime(operatingTime), bagFillTime(bagFillTime),
-              heightOfBag(heightOfBag), diameterOfBag(diameterOfBag), numberOfUnits(numberOfUnits)
+              bagVolume(bagVolume), numberOfUnits(numberOfUnits)
     {}
 
     /**
      * @return BagMethod::Output, flowRate and annual consumption
      */
     Output calculate() {
-        auto const flowRate = (0.0273 * std::pow(diameterOfBag, 2) * heightOfBag) / bagFillTime;
+        auto const flowRate = bagVolume / (bagFillTime / 60);
         return {flowRate, (flowRate * operatingTime * numberOfUnits * 60) / 1000 };
     }
 
 private:
-    double operatingTime, bagFillTime, heightOfBag, diameterOfBag, numberOfUnits;
+    double operatingTime, bagFillTime, bagVolume, numberOfUnits;
 };
 
 #endif

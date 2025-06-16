@@ -200,9 +200,9 @@ TEST_CASE( "Bag Method", "[CompressedAir][BagMethod]") {
 		CHECK(expected.annualConsumption == Approx(results.annualConsumption));
 	};
 
-	compare(BagMethod(115200 / 60.0, 25, 10, 10, 1).calculate(), BagMethod::Output(1.092, 125.7984));
-	compare(BagMethod(115200 / 60.0, 20, 10, 10, 1).calculate(), BagMethod::Output(1.365, 157.248));
-	compare(BagMethod(100000 / 60.0, 20, 10, 10, 1).calculate(), BagMethod::Output(1.365, 136.5));
+	compare(BagMethod(8760, 50, 45, 1).calculate(), BagMethod::Output(7.218774, 3794.187614));
+	compare(BagMethod(8760, 60, 50, 1).calculate(), BagMethod::Output(6.68405, 3513.13668));
+	compare(BagMethod(8760, 120, 50, 1).calculate(), BagMethod::Output(3.342025, 1756.56834));
 }
 
 TEST_CASE( "Estimate Method", "[CompressedAir][EstimateMethod]") {
