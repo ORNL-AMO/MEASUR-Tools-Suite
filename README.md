@@ -1,8 +1,17 @@
 MEASUR Tools Suite  
 ---------------
 
-MEASUR Tools Suite is a cross-platform collection of calculations and tools to support industrial equipment modeling.
-See our hosted documentation for the latest release at [ornl-MEASUR.github.io](https://ornl-AMO.github.io/)
+## Documentation Update
+
+(6/20/25) The MEASUR Tools Suite is currently being updated for better usability by third parties. This includes a refactoring of the current code base to follow consistent practices, better organization and enhanced documentation around the engineering aspects of the calculations. Further details on timeline and implementation will be added shortly. Please check back for updates.
+
+## About
+
+The MEASUR Tools Suite is a collection of industrial efficiency calculations written in C++ and with bindings for compilation to WebAssembly. The tool suite web assembly module is used for calculations with the MEASUR application.
+
+For more information about the MEASUR ecosystem visit [https://industrialresources.ornl.gov/measur](https://industiralresources.ornl.gov/measur)
+
+Hosted documentation can be found at [https://industrialresources.ornl.gov/measur/suite/docs](https://industiralresources.ornl.gov/measur/suite/docs)
 
 The npm packages can be downloaded and install from [registry](https://www.npmjs.com/package/measur-tools-suite)
 
