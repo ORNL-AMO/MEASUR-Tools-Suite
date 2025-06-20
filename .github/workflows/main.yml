@@ -1,0 +1,13 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - 'master'
+      - 'develop'
+  workflow_dispatch:
+
+jobs:
+  docs:
+    if: github.ref_name == 'develop' || github.ref_name == 'master'
+    uses: ./.github/workflows/release_docs.yml

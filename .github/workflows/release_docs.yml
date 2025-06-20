@@ -1,0 +1,49 @@
+name: "Release: Docs"
+
+on:
+  workflow_call:
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Install dependencies
+        run: |
+          apt-get update -y
+          apt-get install -y doxygen
+      - name: Generate docs
+        run: doxygen Doxyfile
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs
+          path: ./docs/html
+          if-no-files-found: error
+          retention-days: 3
+
+  deploy:
+    needs: build
+    strategy:
+      matrix:
+        target:
+          - ['self-hosted', 'dev']
+          - ['self-hosted', 'prod']
+    runs-on: ${{ matrix.target }}
+    env:
+      APACHE_DIR: /var/www/html
+      BACKUP_DIR: /opt/actions-runner/backups
+    steps:
+      - name: Get artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: docs
+      - name: Deploy
+        run: |
+          if [[ ${{ github.ref_name }} == 'master' ]]; then
+            tar -czf $BACKUP_DIR/docs_$(printf '%(%Y-%m-%d)T\n' -1)_${GITHUB_SHA::7}.tar.gz $APACHE_DIR/docs/suite
+          fi
+          rsync -a --delete ./docs/html/* $APACHE_DIR/docs/suite/
