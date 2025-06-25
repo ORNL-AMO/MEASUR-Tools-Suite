@@ -359,6 +359,42 @@ function compressedAirReduction(){
     };
     validateCompressedAirReduction('1', inp, [276480000, 33177600, 200000, 0, 103680000000]);
 
+        let inp2 = {
+        compressedAirReductionInputVec: [
+            {
+                hoursPerYear: 8760,
+                utilityType: 1,
+                utilityCost: 0.066,
+                measurementMethod: 1,
+                flowMeterMethodData: {
+                    meterReading: 200000.0
+                },
+                bagMethod: {
+                    operatingTime: 8760,
+                    bagFillTime: 12,
+                    bagVolume: 6.68403122278085,
+                    numberOfUnits: 1
+                },
+                pressureMethodData: {
+                    nozzleType: 0,
+                    numberOfNozzles: 1,
+                    supplyPressure: 80
+                },
+                otherMethodData: {
+                    consumption: 200000
+                },
+                compressorElectricityData: {
+                    compressorControlAdjustment: 25,
+                    compressorSpecificPower: 0.16
+                },
+                units: 1
+            }
+        ]
+    };
+    // use , cose, rate, nozzle, consumption
+    validateCompressedAirReduction('bag method 2', inp2, [ 46_841.69, 3_091.55, 33.42245989, 0,  17_565_634.05]);
+
+
     inp = {
         compressedAirReductionInputVec: [
             // flow measurement with electricity
@@ -370,7 +406,7 @@ function compressedAirReduction(){
             {
                 hoursPerYear: 8640,
                 utilityType: 1,
-                utilityCost: 0.12,
+                utilityCost: 0.066,
                 measurementMethod: 0,
                 flowMeterMethodData: {
                     meterReading: 200000.0
@@ -495,7 +531,7 @@ function compressedAirReduction(){
             }
         ]
     };
-    validateCompressedAirReduction('2 - All', inp, [276480593.33, 33288308.63, 200045.18, 1.778508, 103681144477.11]);
+    validateCompressedAirReduction('2 - All', inp, [276540529.49, 18365580.96, 200045.18, 1.778508, 103703620538.55]);
 }
 
 function validateCompressedAirPressureReduction(testName, inp, expected){

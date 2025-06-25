@@ -32,7 +32,7 @@ public:
      * @param bagFillTime double, time that it takes for the bag to fill with air - seconds
      * @param bagVolume double, volume of the bag filler - cubic feet
      * @param numberOfUnits int, number of trash bags
-     * @returns flowRate in ft3, annualConsumption in ?
+     * @returns flowRate in scfm, annualConsumption in kscfm
      */
     BagMethod(double operatingTime, double bagFillTime, double bagVolume, int numberOfUnits)
             : operatingTime(operatingTime), bagFillTime(bagFillTime),
@@ -40,7 +40,9 @@ public:
     {}
 
     /**
-     * @return BagMethod::Output, flowRate and annual consumption
+     * @return BagMethod::Output, 
+     * @param flowRate in scfm 
+     * @param annualConsumption in kscf
      */
     Output calculate() {
         auto const flowRate = bagVolume / (bagFillTime / 60);

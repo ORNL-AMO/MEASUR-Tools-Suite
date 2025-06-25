@@ -26,7 +26,8 @@ CompressedAirReduction::Output CompressedAirReduction::calculate()
             BagMethod bagMethod = compressedAirReductionInput.getBagMethod();
             auto bagOutput = bagMethod.calculate();
             tmpFlowRate = bagOutput.flowRate;
-            tmpTotalConsumption = bagOutput.annualConsumption * compressedAirReductionInput.getUnits();
+            // convert kscf consumption to scf
+            tmpTotalConsumption = (bagOutput.annualConsumption * 1000) * compressedAirReductionInput.getUnits();
         }
         // orifice/pressure method
         else if (compressedAirReductionInput.getMeasurementMethod() == 2)
