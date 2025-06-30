@@ -31,7 +31,7 @@ The npm packages can be downloaded and install from [registry](https://www.npmjs
 
 ### Building
 - `cd` into the emsdk directory: 
-    - run `emsdk install latest` followed by `emsdk activate latest`
+    - run `./emsdk install latest` followed by `./emsdk activate latest`
     - Activate PATH and other environment variables by running `source emsdk_env.sh` or on Windows run `emsdk_env.bat`
 - `cd` into MEASUR-Tools-Suite directory:  
     - create directory `build-wasm` and cd into it 
