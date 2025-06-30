@@ -35,7 +35,7 @@ The npm packages can be downloaded and install from [registry](https://www.npmjs
     - Activate PATH and other environment variables by running `source ./emsdk_env.sh` or on Windows run `emsdk_env.bat`
 - `cd` into MEASUR-Tools-Suite directory:  
     - create directory `build-wasm` and cd into it 
-    - run `'emcmake cmake -DBUILD_WASM=ON ..'` 
+    - run `emcmake cmake -DBUILD_WASM=ON ..` 
         -   Note: If multiple compilers are present and default environment is not used, use -G "XXX Makefiles",
         example for windows using MinGW => `emcmake cmake -D BUILD_WASM=ON .. -G "MinGW Makefiles"`  
     - run `emmake make`
