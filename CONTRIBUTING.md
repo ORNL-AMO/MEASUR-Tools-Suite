@@ -594,7 +594,6 @@ Use a **single Doxygen block** at the very top of every header file.
  * @file <filename>.hpp
  * @author <First Last>, <First Last>
  * @ingroup <GroupName>
- *
  * @brief <Short purpose of the file>
  *
  * @details 
@@ -615,7 +614,6 @@ Use a **single Doxygen block** at the very top of every header file.
  * @file polygon_area.hpp
  * @author Alice Brown, Carlos Diaz
  * @ingroup Geometry
- *
  * @brief Implements Shoelace-based area calculations for simple polygons.
  *
  * @details
@@ -693,11 +691,12 @@ Use a **Doxygen block** above each public `class` or `struct` declaration in hea
 | Tag                       | Description          |
 | ------------------------- | -------------------- |
 | `@class` **or** `@struct` | Class or struct name |
+| `@ingroup`                | Module or package    |
 | `@brief`                  | One-sentence purpose |
 
 ### Optional tags
 
-`@ingroup`, `@details`, `@tparam`, `@note`, `@deprecated`, `@bug`, `@see`
+`@details`, `@tparam`, `@note`, `@deprecated`, `@bug`, `@see`
 
 ### Template
 
@@ -705,7 +704,6 @@ Use a **Doxygen block** above each public `class` or `struct` declaration in hea
 /**
  * @class <ClassName>
  * @ingroup <GroupName>
- *
  * @brief <Short description of the class>
  *
  * @details
@@ -734,7 +732,6 @@ struct Vec2 {
 /**
  * @class Polygon
  * @ingroup Geometry
- *
  * @brief Simple, non-self-intersecting polygon.
  *
  * @details
@@ -757,6 +754,7 @@ public:
 
     /**
      * @brief Computes the signed area using the Shoelace formula.
+     *
      * @return The signed area of the polygon.
      *
      * @note The area is positive if vertices are in counter-clockwise order.
@@ -793,14 +791,15 @@ Document the **enum type** with a block comment; document each **enumerator** wi
 
 #### Required tags
 
-| Tag      | Description          |
-| -------- | -------------------- |
-| `@enum`  | Enum name            |
-| `@brief` | One-sentence purpose |
+| Tag        | Description          |
+| ---------- | -------------------- |
+| `@enum`    | Enum name            |
+| `@ingroup` | Module or package    |
+| `@brief`   | One-sentence purpose |
 
 #### Optional tags
 
-`@ingroup`, `@details`, `@note`, `@deprecated`, `@bug`, `@see`
+`@details`, `@note`, `@deprecated`, `@bug`, `@see`
 
 #### Template
 
@@ -850,6 +849,7 @@ Define a **module** with `@defgroup`, then add other symbols to it with `@ingrou
 | Tag          | Description          |
 | ------------ | -------------------- |
 | `@namespace` | Fully-qualified name |
+| `@defgroup`  | Module or package    |
 | `@brief`     | One-sentence purpose |
 
 #### Optional tags
@@ -861,8 +861,8 @@ Define a **module** with `@defgroup`, then add other symbols to it with `@ingrou
 ```cpp
 /**
  * @namespace <namespace_name>
+ * @defgroup <GroupName> <Display Title>
  * @ingroup <GroupName>
- *
  * @brief <Short purpose of the namespace>
  *
  * @details
@@ -880,8 +880,7 @@ Define a **module** with `@defgroup`, then add other symbols to it with `@ingrou
 ```cpp
 /**
  * @namespace geom
- * @ingroup Geometry
- *
+ * @defgroup Geometry Geometry
  * @brief Core 2-D geometry primitives and algorithms.
  */
 namespace geom { /* ... */ }
@@ -907,7 +906,6 @@ Use **one** block in a central header (e.g., `geometry.hpp`) to define a module 
 ```cpp
 /**
  * @defgroup <GroupName> <Display Title>
- *
  * @brief <Short description of the module>
  *
  * @details
@@ -925,7 +923,6 @@ Use **one** block in a central header (e.g., `geometry.hpp`) to define a module 
 ```cpp
 /**
  * @defgroup Geometry Geometry
- *
  * @brief 2-D geometry toolkit: vectors, polygons, intersections.
  *
  * @details

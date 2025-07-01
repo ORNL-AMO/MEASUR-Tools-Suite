@@ -1,0 +1,88 @@
+/**
+ * @mainpage MEASUR Tools Suite
+ *
+ * MEASUR is a suite that includes a set of key software platforms and more than 70 calculators. Together, these tools
+ * can help manufacturers improve industrial system efficiency and identify potential savings opportunities.
+ *
+ * The software platforms in MEASUR are major updates to the system assessment tools developed by the department in the
+ * 1990s. The new tools are more user-friendly and compatible with newer operating systems. By combining the system
+ * assessment tools with calculators in one platform, MEASUR allows for an increased level of interoperability between
+ * different tools. MEASUR is free to use and accessible in an open-source environment.
+ *
+ * @section ToolsSummary Tools Summary
+ *
+ * MEASUR's software tools include industrial system assessment tools capable of performing investment grade energy
+ * analysis alongside simple equipment and property calculators. Both the system assessment tools and the simple
+ * calculators can be used as stand-alone tools for more focused analysis.
+ *
+ * - @ref PumpingSystemAssessments
+ * - @ref ProcessHeatingAssessments
+ * - @ref FanSystemAssessments
+ * - @ref SteamSystemAssessments
+ * - @ref CompressedAirAssessments
+ * - @ref EnergyTreasureHuntModule
+ * - @ref SimpleEquipmentAndPropertyCalculators
+ *
+ * @defgroup PumpingSystemAssessments Pumping System Assessments
+ *
+ * This portion of MEASUR includes tools such as the Pump System Assessment Tool (PSAT) and related calculators.
+ * MEASUR's pumping system tool helps evaluate the potential energy savings opportunities of pumping systems based on
+ * field-measured data. The tool enables users to save and retrieve log files, default values, and system curves for
+ * sharing analyses with other users. They are intended to help industrial users assess different system modifications
+ * to determine which would be the most energetically beneficial. They test "what-if" scenarios for various options to
+ * reduce energy use. This portion of MEASUR includes legacy tools developed by the department over the preceding
+ * decades, including PSAT.
+ *
+ * @defgroup ProcessHeatingAssessments Process Heating Assessments
+ *
+ * This portion of MEASUR includes tools such as the Process Heating Assessment and Survey Tool (PHAST) and related
+ * calculators. This tool introduces methods to improve thermal and electrical efficiency of process heating equipment.
+ * Industrial users can survey process heating equipment consuming fuel or electricity, and identify the most
+ * energy-intensive equipment. This tool can be used to perform a heat balance that identifies major areas of energy use
+ * under various operating conditions and test "what-if" scenarios for various options to reduce energy use. This
+ * portion of MEASUR includes legacy tools developed by the department over the preceding decades, including PHAST.
+ *
+ * @defgroup FanSystemAssessments Fan System Assessments
+ *
+ * This portion of MEASUR includes tools such as the Fan System Assessment Tool (FSAT) and related calculators. This
+ * tool helps users identify and evaluate the potential energy savings opportunities in fan systems. Industrial users
+ * can assess various system modifications to determine optimal system configurations and allows users to test
+ * customized "what-if" operating scenarios to minimize energy consumption. Alternatively, users can utilize the
+ * automatic optimizer functionality which is built upon published fan efficiency data and motor performance data. This
+ * portion of MEASUR includes legacy tools developed by the department over the preceding decades, including FSAT.
+ *
+ * @defgroup SteamSystemAssessments Steam System Assessments
+ *
+ * This portion of MEASUR includes tools such as the SSAT/SSMT and related calculators. This tool helps users identify
+ * and evaluate the potential energy savings opportunities in steam systems. Industrial users can better understand the
+ * current operating conditions of the components of a steam system, including boilers, turbines and flash tanks. The
+ * tool helps estimate the various steam flows throughout the system and test "what-if" scenarios for various
+ * opportunities to reduce energy use. This portion of MEASUR includes legacy tools developed by the department over the
+ * preceding decades, including SSAT/SSMT.
+ *
+ * @defgroup CompressedAirAssessments Compressed Air Assessments
+ *
+ * This portion of MEASUR includes tools such as AirMaster+ and related calculators. MEASUR includes a series of tools
+ * that help users analyze energy use and savings opportunities in industrial compressed air systems. They can baseline
+ * existing and model future system operations improvements, and evaluate energy and dollar savings from many energy
+ * efficiency measures. This portion of MEASUR includes legacy tools developed by the department over the preceding
+ * decades, including the AirMaster+.
+ *
+ * @defgroup EnergyTreasureHuntModule Energy Treasure Hunt Module
+ *
+ * MEASUR's Treasure Hunt is a collection of calculators that can be used in an energy Treasure Hunt or Energy Sweep
+ * type event. It pairs with the DOE Better Plants Treasure Hunt Toolkit. This tool helps industrial users quantify
+ * savings for low/no cost energy opportunities such as turning off unused equipment, reducing compressed air pressure,
+ * upgrading lighting fixtures, and many more. There are calculators relating to motors (replacing vs rewinding,
+ * upgrading motor drive), electricity use (modifying electricity use, upgrading lighting), compressed air, natural gas,
+ * steam and water/wastewater. The tool helps users organize the opportunities found during the event in their "Treasure
+ * Chest", share them between users, and roll them together in a comprehensive report.
+ *
+ * @defgroup SimpleEquipmentAndPropertyCalculators Simple Equipment and Property Calculators
+ *
+ * The MEASUR software contains over 70 equipment and property calculators for simple energy-related calculations and
+ * analyses. These calculators can aid users in identifying, assessing, and quantifying simple energy-saving
+ * opportunities within a variety of systems, including: pump, fan, process heating, steam, motors, compressed air, and
+ * lighting systems. In addition, there are several general engineering calculators included to perform energy-related
+ * calculations and conversions.
+ */
