@@ -1,6 +1,38 @@
-This guide outlines the standards and best practices for contributing to this project. It covers coding style, documentation, formatting, and workflow expectations to help ensure code quality, maintainability, and a smooth collaboration process for all.
+# How to Contribute <!-- omit from toc -->
 
-**Table of Contents**
+This guide provides clear standards and best practices for contributing to this project. It covers coding style, documentation, formatting, and workflow expectations to help maintain high code quality, ensure long-term maintainability, and foster smooth collaboration among all contributors.
+
+**Start here**
+
+---
+
+[Style Guide](#style-guide)
+
+Follow this guide to make sure your contributions align with the project's coding standards. This will help ensure that your code is readable, maintainable, and consistent with the rest of the codebase.
+
+---
+
+[Clang-Format](#clang-format)
+
+Use Clang-Format to automatically format your code according to the project's style guide. This ensures consistent formatting across the codebase and reduces manual formatting effort.
+
+---
+
+[Doxygen Documentation](#doxygen-documentation)
+
+Follow these guidelines to document your code effectively using Doxygen. Proper documentation is crucial for understanding the codebase and facilitating collaboration.
+
+---
+
+[Conventional Commits](#conventional-commits)
+
+Use Conventional Commits to structure your commit messages. This helps maintain a clear project history and makes it easier to understand the purpose of each change.  
+
+---
+
+<details>
+<summary><b>Table of Contents</b></summary>
+
 - [Style Guide](#style-guide)
   - [Header Files](#header-files)
     - [Include What You Use](#include-what-you-use)
@@ -36,58 +68,56 @@ This guide outlines the standards and best practices for contributing to this pr
     - [Comment Style](#comment-style)
   - [Formatting](#formatting)
     - [Looping and Branching Statements](#looping-and-branching-statements)
-- [Doxygen Documentation](#doxygen-documentation)
-  - [How to Generate Doxygen Documentation](#how-to-generate-doxygen-documentation)
-  - [Common Doxygen Tags](#common-doxygen-tags)
-  - [File Documentation](#file-documentation)
-      - [Required tags](#required-tags)
-    - [Optional tags](#optional-tags)
-    - [Template](#template)
-    - [Example](#example)
-  - [Function \& Method Documentation](#function--method-documentation)
-    - [Required tags](#required-tags-1)
-    - [Optional tags](#optional-tags-1)
-    - [Template](#template-1)
-    - [Example](#example-1)
-  - [Class \& Struct Documentation](#class--struct-documentation)
-    - [Required tags](#required-tags-2)
-    - [Optional tags](#optional-tags-2)
-    - [Template](#template-2)
-    - [Example](#example-2)
-  - [Data-Member \& Enumerator Documentation](#data-member--enumerator-documentation)
-    - [Data Member Documentation](#data-member-documentation)
-      - [Template](#template-3)
-      - [Example](#example-3)
-    - [Enumeration Documentation](#enumeration-documentation)
-      - [Required tags](#required-tags-3)
-      - [Optional tags](#optional-tags-3)
-      - [Template](#template-4)
-      - [Example](#example-4)
-  - [Namespace \& Module Documentation](#namespace--module-documentation)
-    - [Namespace Documentation](#namespace-documentation)
-      - [Required tags](#required-tags-4)
-      - [Optional tags](#optional-tags-4)
-      - [Template](#template-5)
-      - [Example](#example-5)
-    - [Module (Group) Documentation](#module-group-documentation)
-      - [Required tags](#required-tags-5)
-      - [Optional tags](#optional-tags-5)
-      - [Template](#template-6)
-      - [Example](#example-6)
-  - [Macro \& Constant Documentation](#macro--constant-documentation)
-    - [Macros (`#define`)](#macros-define)
-      - [Required tags](#required-tags-6)
-      - [Optional tags](#optional-tags-6)
-      - [Template](#template-7)
-      - [Example](#example-7)
-    - [Global Constants](#global-constants)
-      - [Template](#template-8)
-      - [Example](#example-8)
 - [Clang-Format](#clang-format)
   - [How to Format Code](#how-to-format-code)
   - [Configuration](#configuration)
     - [Updating the Style](#updating-the-style)
   - [Best Practices](#best-practices)
+- [Doxygen Documentation](#doxygen-documentation)
+  - [How to Generate Doxygen Documentation](#how-to-generate-doxygen-documentation)
+  - [Common Doxygen Tags](#common-doxygen-tags)
+  - [Documenting Units for Physical Quantities](#documenting-units-for-physical-quantities)
+    - [Template](#template)
+    - [Example](#example)
+  - [Documenting Formulas](#documenting-formulas)
+    - [Template](#template-1)
+    - [Example](#example-1)
+  - [File Documentation](#file-documentation)
+    - [Required tags](#required-tags)
+    - [Optional tags](#optional-tags)
+    - [Template](#template-2)
+    - [Example](#example-2)
+  - [Function \& Method Documentation](#function--method-documentation)
+    - [Required tags](#required-tags-1)
+    - [Optional tags](#optional-tags-1)
+    - [Template](#template-3)
+    - [Example](#example-3)
+  - [Class \& Struct Documentation](#class--struct-documentation)
+    - [Required tags](#required-tags-2)
+    - [Optional tags](#optional-tags-2)
+    - [Template](#template-4)
+    - [Example](#example-4)
+  - [Data-Member Documentation](#data-member-documentation)
+    - [Template](#template-5)
+    - [Example](#example-5)
+  - [Enumeration Documentation](#enumeration-documentation)
+    - [Required tags](#required-tags-3)
+    - [Optional tags](#optional-tags-3)
+    - [Template](#template-6)
+    - [Example](#example-6)
+  - [Constant Documentation](#constant-documentation)
+    - [Template](#template-7)
+    - [Example](#example-7)
+  - [Namespace Documentation](#namespace-documentation)
+    - [Required tags](#required-tags-4)
+    - [Optional tags](#optional-tags-4)
+    - [Template](#template-8)
+    - [Example](#example-8)
+  - [Module (Group) Documentation](#module-group-documentation)
+    - [Required tags](#required-tags-5)
+    - [Optional tags](#optional-tags-5)
+    - [Template](#template-9)
+    - [Example](#example-9)
 - [Conventional Commits](#conventional-commits)
   - [Commit Format](#commit-format)
   - [Commit Types](#commit-types)
@@ -95,6 +125,9 @@ This guide outlines the standards and best practices for contributing to this pr
     - [Using Multiple Scopes](#using-multiple-scopes)
   - [Breaking Changes](#breaking-changes)
 
+</details>
+
+<br><br>
 
 # Style Guide
 
@@ -165,6 +198,7 @@ v.push_back(2);  // Prefer initializing with braces.
 ```
 
 Variables needed for if, while, and for statements should normally be declared within those statements to confine their scope:
+
 ```cpp
 while (const char* p = strchr(str, '/')) str = p + 1;
 ```
@@ -498,6 +532,7 @@ if (condition)
 **Exception:**
 
 Braces may be omitted only if the entire statement fits on one line and there is no `else` or `do ... while` part:
+
 ```cpp
 if (x == kFoo) return new Foo(); // OK
 ```
@@ -505,6 +540,7 @@ if (x == kFoo) return new Foo(); // OK
 **Switch/case:**
 
 Braces in `case` blocks are optional, but if used, indent as shown:
+
 ```cpp
 switch (var) {
     case 0: {
@@ -516,11 +552,62 @@ switch (var) {
 
 **Empty loops:**
 
-Use `{}` or `continue`; for empty bodies, not a lone semicolon.
+Use `{}` or `continue`; for empty bodies, not a lone semicolon:
+
 ```cpp
 while (condition) {}
 while (condition) continue;
 ```
+
+<br><br>
+
+# Clang-Format
+
+This project uses [clang-format](https://clang.llvm.org/docs/ClangFormat.html) to ensure a consistent code style across all C++ files.
+
+## How to Format Code
+
+To automatically format your code, run the following command from the root directory of the project:
+
+```bash
+clang-format -i --style=file <file1> <file2> ...
+```
+
+- Replace `<file1> <file2> ...` with the files you want to format (e.g., `src/main.cpp include/util.h`).
+- The `-i` flag edits files in-place.
+- The `--style=file` flag tells clang-format to use the `.clang-format` configuration in the project root.
+
+To format **all** C++ source and header files in the project, you can use:
+```bash
+find . -name '*.cpp' -o -name '*.h' | xargs clang-format -i --style=file
+```
+
+You can also configure your editor (such as VS Code, CLion, or Vim) to automatically format code on save using clang-format. Refer to your editor’s documentation or extensions/plugins for setup instructions.
+
+## Configuration
+
+The formatting style is defined in the `.clang-format` file at the root of the repository. This file specifies rules for indentation, spacing, brace placement, include ordering, and more. The style is based on Google's C++ style guide with some customizations to fit the project's needs.
+
+### Updating the Style
+
+1. **Open** the `.clang-format` file in the root directory.
+2. **Experiment** with different settings using the [Clang-Format Configurator tool](https://clang-format-configurator.site/) or by editing the file directly.
+3. **Apply changes** by copying your updated configuration into the `.clang-format` file.
+4. **Reformat all code** to apply the new style. Use the following command to format every C++ source and header file in the project:
+   ```bash
+   find . -name '*.cpp' -o -name '*.h' | xargs clang-format -i --style=file
+   ```
+5. **Commit and review:** Commit only the style changes and immediately open a pull request. This keeps formatting changes separate from functional code changes, making reviews easier and reducing merge conflicts.
+
+## Best Practices
+
+- **Format before committing:** Always run clang-format on your changes before submitting a pull request.
+- **Editor integration:** Enable auto-format on save to avoid manual formatting.
+- **Consistency:** Do not manually adjust formatting—let clang-format handle it.
+
+If you have questions about the formatting rules or need help configuring your editor, ask in the project discussions or open an issue.
+
+<br><br>
 
 # Doxygen Documentation
 
@@ -533,7 +620,6 @@ Write documentation that serves **both** audiences.
 
 > **Doxygen usage instructions and tag conventions are detailed in the following sections.**  
 > **Note:** This project uses `@` (not `\`) for all Doxygen commands and tags.
-
 
 ## How to Generate Doxygen Documentation
 
@@ -570,11 +656,51 @@ For more details on configuring or customizing Doxygen output, see the official 
 | `@def`                                        | macro block           | Names the macro when the block is not directly above it.       |
 | `@copyright`                                  | file banner           | Legal notice or licence statement.                             |
 
+## Documenting Units for Physical Quantities
+
+When documenting variables that represent physical quantities, **always specify the unit** in the documentation. Use the `@unit` command, which is defined in the `Doxyfile` under `ALIASES`, to standardize unit notation across the codebase. The `@unit` command utilizes MathJax and the [siunitx](https://ctan.org/pkg/siunitx) library for typesetting units.
+
+### Template
+
+```cpp
+type variable_name; ///< Brief description @unit{unit}
+```
+
+### Example
+
+```cpp
+double fan_speed; ///< Fan speed @unit{rpm}
+double density_corrected; ///< Gas density corrected to reference conditions @unit{lb/ft^3}
+```
+
+## Documenting Formulas
+
+When documenting functions, algorithms, or concepts that involve mathematical formulas, use the `@formula` command to typeset equations. This command is defined in the Doxyfile under `ALIASES` and uses MathJax for rendering. The `@formula` command allows you to assign a label to each equation, making it easy to reference equations elsewhere in your documentation.
+
+### Template
+
+```cpp
+/**
+ * @formula{<equation_label>; <equation_expression>}
+ */
+```
+
+> The label entered in `equation_label` will be prefixed with `eq:` automatically. To reference the equation in your documentation, use `\eqref{eq:equation_label}`.
+
+### Example
+
+```cpp
+/**
+ * The shoelace formula is defined as:
+ * @formula{shoelace; A = \frac{1}{2} \sum_{i=1}^{n} (x_i y_{i+1} - x_{i+1} y_i)}
+ */
+```
+
 ## File Documentation
 
 Use a **single Doxygen block** at the very top of every header file.
 
-#### Required tags
+### Required tags
 
 | Tag        | Description                                          |
 | ---------- | ---------------------------------------------------- |
@@ -601,7 +727,7 @@ Use a **single Doxygen block** at the very top of every header file.
  *
  * @note <Optional notes>
  * @deprecated <Version X.Y — replacement API or file>
- * @bug <Known issues or “None”>
+ * @bug <Known issues>
  * @see <Related header/guide/issue URL>
  * @copyright <Copyright details>
  */
@@ -617,11 +743,11 @@ Use a **single Doxygen block** at the very top of every header file.
  * @brief Implements Shoelace-based area calculations for simple polygons.
  *
  * @details
- * Implements Shoelace-formula functions to compute signed or absolute area of 2-D polygons supplied as `std::span<const Vec2>` in counter-clockwise order.
+ * Implements Shoelace-formula functions to compute signed or absolute area of 2-D polygons supplied as `std::span<const Vec2>` in counter-clockwise order. The Shoelace formula is defined as:
+ * @formula{shoelace; A = \frac{1}{2} \sum_{i=1}^{n} (x_i y_{i+1} - x_{i+1} y_i)}
  *
  * @note Assumes polygons are simple (non-self-intersecting).
  * @deprecated Will be superseded by `polygon_metrics.hpp` in v2.0
- * @bug None
  * @see vector2.hpp
  * @copyright 2025 Geometry Toolkit
  */
@@ -660,7 +786,7 @@ Use a **Doxygen block** above each public function or method declaration in head
  * @throws <exception type> <When it is thrown>
  * @note <Caveats / units / thread safety>
  * @deprecated <Version X.Y — replacement API>
- * @bug <Known issues or “None”>
+ * @bug <Known issues>
  * @see <Related symbol or doc link>
  */
 ```
@@ -712,7 +838,7 @@ Use a **Doxygen block** above each public `class` or `struct` declaration in hea
  * @tparam <T>  <Template parameter description> 
  * @note <Thread-safety, units, etc.>
  * @deprecated <Version X.Y — replacement API>
- * @bug <Known issues or “None”>
+ * @bug <Known issues>
  * @see <Related type or doc link>
  */
 ```
@@ -755,7 +881,7 @@ public:
     /**
      * @brief Computes the signed area using the Shoelace formula.
      *
-     * @return The signed area of the polygon.
+     * @return The signed area of the polygon @unit{m^2}.
      *
      * @note The area is positive if vertices are in counter-clockwise order.
      */
@@ -766,30 +892,28 @@ private:
 };
 ```
 
-## Data-Member & Enumerator Documentation
+## Data-Member Documentation
 
-Use **inline-after comments with `///<`** for one-line descriptions of data members and individual enum values.
-
-### Data Member Documentation
-
-#### Template
+Use **inline-after comments with `///<`** for one-line descriptions of data members and individual enum values. This applies to both classes and structs.
+ 
+### Template
 
 ```cpp
-Type name_; ///< <Concise purpose> [<units or range>]
+Type name_; ///< <Concise purpose>
 ```
 
-#### Example
+### Example
 
 ```cpp
-size_t count_ {0};   ///< Current vertex count  [0, capacity_]
+size_t count_ {0};   ///< Current vertex count
 std::vector<Vec2> verts_; ///< Vertices in counter-clockwise order
 ```
 
-### Enumeration Documentation
+## Enumeration Documentation
 
-Document the **enum type** with a block comment; document each **enumerator** with `///<`.
+Document the **enum type** with a block comment; document each **enumerator** with `///<`. If an enum has only a few obvious values (e.g. `Clockwise`, `CounterClockwise`), the inline docs may be omitted.
 
-#### Required tags
+### Required tags
 
 | Tag        | Description          |
 | ---------- | -------------------- |
@@ -797,11 +921,11 @@ Document the **enum type** with a block comment; document each **enumerator** wi
 | `@ingroup` | Module or package    |
 | `@brief`   | One-sentence purpose |
 
-#### Optional tags
+### Optional tags
 
 `@details`, `@note`, `@deprecated`, `@bug`, `@see`
 
-#### Template
+### Template
 
 ```cpp
 /**
@@ -814,12 +938,12 @@ Document the **enum type** with a block comment; document each **enumerator** wi
  *
  * @note <Optional notes>
  * @deprecated <Version X.Y — replacement enum>
- * @bug <Known issues or “None”>
+ * @bug <Known issues>
  * @see <Related enum or doc link>
  */
 ```
 
-#### Example
+### Example
 
 ```cpp
 /**
@@ -834,34 +958,47 @@ enum class Axis {
 };
 ```
 
-If an enum has only a few obvious values (e.g. `Clockwise`, `CounterClockwise`), the inline docs may be omitted.
+## Constant Documentation
 
-## Namespace & Module Documentation
+Document global constants with an **inline-after** comment.
 
-Namespaces group related types and functions; modules (Doxygen *groups*) give those namespaces a page in the generated docs.
-Document each **namespace** once—in the header that first introduces it—using a Doxygen block **above** the `namespace` keyword.
-Define a **module** with `@defgroup`, then add other symbols to it with `@ingroup`.
+### Template
 
-### Namespace Documentation
+```cpp
+constexpr Type kConstName ///< <Concise purpose>
+```
 
-#### Required tags
+### Example
+
+```cpp
+constexpr double kPi = 3.141592653589793;    ///< Circle ratio @unit{radians}
+inline const Vec2 kOrigin {0.0, 0.0};        ///< Reference point (0,0)
+```
+
+<br><br>
+
+
+## Namespace Documentation
+
+Namespaces are used to organize code into logical groups and prevent name collisions. Each namespace should be documented with a **single Doxygen block** placed at the top of the header file where the namespace is defined. This block describes the purpose, scope, and any relevant notes about the namespace.
+
+### Required tags
 
 | Tag          | Description          |
 | ------------ | -------------------- |
 | `@namespace` | Fully-qualified name |
-| `@defgroup`  | Module or package    |
+| `@ingroup`   | Module or package    |
 | `@brief`     | One-sentence purpose |
 
-#### Optional tags
+### Optional tags
 
-`@ingroup`, `@details`, `@note`, `@deprecated`, `@bug`, `@see`
+`@details`, `@note`, `@deprecated`, `@bug`, `@see`
 
-#### Template
+### Template
 
 ```cpp
 /**
  * @namespace <namespace_name>
- * @defgroup <GroupName> <Display Title>
  * @ingroup <GroupName>
  * @brief <Short purpose of the namespace>
  *
@@ -870,38 +1007,40 @@ Define a **module** with `@defgroup`, then add other symbols to it with `@ingrou
  *
  * @note <Caveats / thread safety / units>
  * @deprecated <Version X.Y — replacement namespace>
- * @bug <Known issues or “None”>
+ * @bug <Known issues>
  * @see <Related namespace or guide>
  */
 ```
 
-#### Example
+### Example
 
 ```cpp
 /**
  * @namespace geom
- * @defgroup Geometry Geometry
+ * @ingroup Geometry
  * @brief Core 2-D geometry primitives and algorithms.
  */
 namespace geom { /* ... */ }
 ```
 
-### Module (Group) Documentation
+## Module (Group) Documentation
 
-Use **one** block in a central header (e.g., `geometry.hpp`) to define a module page.
+Modules (or groups) are collections of related namespaces, classes, and functions that together provide a high-level overview of a particular area of functionality in the codebase. Modules help organize documentation, making it easier for users and contributors to understand the structure and purpose of different parts of the project.
 
-#### Required tags
+Each module should be documented with a **single Doxygen block** placed in a central documentation file (such as `mainpage.dox`). This block defines the module and provides an overview of its contents, design philosophy, and any relevant notes or references. All related code elements (namespaces, classes, functions, etc.) should reference the module using the `@ingroup` tag in their own documentation blocks to associate them with the appropriate group.
+
+### Required tags
 
 | Tag         | Description                    |
 | ----------- | ------------------------------ |
 | `@defgroup` | `<GroupName>` and display text |
 | `@brief`    | One-sentence description       |
 
-#### Optional tags
+### Optional tags
 
 `@details`, `@note`, `@deprecated`, `@bug`, `@see`
 
-#### Template
+### Template
 
 ```cpp
 /**
@@ -913,12 +1052,12 @@ Use **one** block in a central header (e.g., `geometry.hpp`) to define a module 
  *
  * @note <Optional notes>
  * @deprecated <Version X.Y — replacement module>
- * @bug <Known issues or “None”>
+ * @bug <Known issues>
  * @see <Related module or guide>
  */
 ```
 
-#### Example
+### Example
 
 ```cpp
 /**
@@ -930,126 +1069,7 @@ Use **one** block in a central header (e.g., `geometry.hpp`) to define a module 
  */
 ```
 
-All classes, structs, enums, and functions that belong to this module should add
-`@ingroup Geometry` to their own documentation blocks.
-
-## Macro & Constant Documentation
-
-> **Avoid the pre-processor.**
-> Prefer `constexpr`, `inline const`, `enum class`, or templated helpers.
-> Only introduce a macro when **no standard-C++ alternative works** (platform
-> feature test, compiler pragma wrapper, etc.).
-
-### Macros (`#define`)
-
-Place a **block comment** immediately above the macro.
-
-#### Required tags
-
-| Tag      | Description          |
-| -------- | -------------------- |
-| `@def`   | Macro name           |
-| `@brief` | One-sentence purpose |
-
-#### Optional tags
-
-`@details`, `@param`, `@return`, `@note`, `@deprecated`, `@bug`, `@see`
-
-#### Template
-
-```cpp
-/**
- * @def <NAME_IN_CAPS>
- * @brief <Why this macro exists>
- *
- * @details
- * <Longer explanation—platform quirk, usage example…>
- *
- * @param <name> <Description of the parameter>
- * @return <Meaningful description of the return value>
- *
- * @note <Caveats, side-effects>
- * @deprecated <Version X.Y — replacement technique>
- * @bug <Known issues or “None”>
- * @see <Related symbol or doc link>
- */
-```
-
-#### Example
-
-```cpp
-/**
- * @def GEOM_FALLTHROUGH
- * @brief Marks a switch statement as intentionally falling through.
- *
- * @note Expands to [[fallthrough]] on C++17 or a compiler-specific pragma.
- * @see  https://en.cppreference.com/w/cpp/language/attributes/fallthrough
- */
-#define GEOM_FALLTHROUGH [[fallthrough]]
-```
-
-### Global Constants
-
-Use `constexpr` or `inline const` and document with an **inline-after** comment.
-
-#### Template
-
-```cpp
-///< <Concise purpose> [units]
-```
-
-#### Example
-
-```cpp
-constexpr double kPi = 3.141592653589793;    ///< Circle ratio [radians]
-inline const Vec2 kOrigin {0.0, 0.0};        ///< Reference point (0,0)
-```
-
-# Clang-Format
-
-This project uses [clang-format](https://clang.llvm.org/docs/ClangFormat.html) to ensure a consistent code style across all C++ files.
-
-## How to Format Code
-
-To automatically format your code, run the following command from the root directory of the project:
-
-```bash
-clang-format -i --style=file <file1> <file2> ...
-```
-
-- Replace `<file1> <file2> ...` with the files you want to format (e.g., `src/main.cpp include/util.h`).
-- The `-i` flag edits files in-place.
-- The `--style=file` flag tells clang-format to use the `.clang-format` configuration in the project root.
-
-To format **all** C++ source and header files in the project, you can use:
-```bash
-find . -name '*.cpp' -o -name '*.h' | xargs clang-format -i --style=file
-```
-
-You can also configure your editor (such as VS Code, CLion, or Vim) to automatically format code on save using clang-format. Refer to your editor’s documentation or extensions/plugins for setup instructions.
-
-## Configuration
-
-The formatting style is defined in the `.clang-format` file at the root of the repository. This file specifies rules for indentation, spacing, brace placement, include ordering, and more. The style is based on Google's C++ style guide with some customizations to fit the project's needs.
-
-### Updating the Style
-
-1. **Open** the `.clang-format` file in the root directory.
-2. **Experiment** with different settings using the [Clang-Format Configurator tool](https://clang-format-configurator.site/) or by editing the file directly.
-3. **Apply changes** by copying your updated configuration into the `.clang-format` file.
-4. **Reformat all code** to apply the new style. Use the following command to format every C++ source and header file in the project:
-   ```bash
-   find . -name '*.cpp' -o -name '*.h' | xargs clang-format -i --style=file
-   ```
-5. **Commit and review:** Commit only the style changes and immediately open a pull request. This keeps formatting changes separate from functional code changes, making reviews easier and reducing merge conflicts.
-
-## Best Practices
-
-- **Format before committing:** Always run clang-format on your changes before submitting a pull request.
-- **Editor integration:** Enable auto-format on save to avoid manual formatting.
-- **Consistency:** Do not manually adjust formatting—let clang-format handle it.
-
-If you have questions about the formatting rules or need help configuring your editor, ask in the project discussions or open an issue.
+<br><br>
 
 # Conventional Commits
 
@@ -1058,6 +1078,7 @@ All commits must adhere to the [Conventional-Commits](https://www.conventionalco
 ## Commit Format
 
 Conventional Commits provide a structured commit message format to improve readability and automation. The format follows:
+
 ```
 <type>(<optional scopes>): <description>
 
@@ -1117,12 +1138,15 @@ feat(cli, docs): add new command to generate reports
 
 If a commit introduces breaking changes, it must be indicated in the type/scope prefix of a commit, or as an entry in the footer.
 - If included as a footer, a breaking change MUST consist of the uppercase text **`BREAKING CHANGE`**, followed by a colon, space, and description:
+
   ```
   feat: allow provided config object to extend other configs
 
   BREAKING CHANGE: `extends` key in config file is now used for extending other config files
   ```
+
 - If included in the type/scope prefix, breaking changes **MUST** be indicated by a **`!`** immediately before the **`:`**. If **`!`** is used, **`BREAKING CHANGE:`** **MAY** be omitted from the footer section, and the commit description **SHALL** be used to describe the breaking change:
+
   ```
   feat!: send an email to the customer when a product is shipped
   ```

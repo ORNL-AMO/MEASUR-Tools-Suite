@@ -48,7 +48,7 @@ PROJECT_NAME           = MEASUR-Tools-Suite
 # could be handy for archiving the generated documentation or if some version
 # control system is used.
 
-PROJECT_NUMBER         = v1.0.9
+PROJECT_NUMBER         = v1.0.11
 
 # Using the PROJECT_BRIEF tag one can provide an optional one line description
 # for a project that appears at the top of each page and should give viewer a
@@ -283,7 +283,7 @@ TAB_SIZE               = 4
 # with the commands \{ and \} for these it is advised to use the version @{ and
 # @} or use a double escape (\\{ and \\})
 
-ALIASES                = "unit{1}=\f$[\unit{\1}]\f$"
+ALIASES                += "unit{1}=\f$[\unit{\1}]\f$" "formula{2;}=\f{equation}{\label{eq:\1}\2\f}" 
 
 # Set the OPTIMIZE_OUTPUT_FOR_C tag to YES if your project consists of C sources
 # only. Doxygen will then generate output that is more tailored for C. For

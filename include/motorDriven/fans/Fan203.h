@@ -1,11 +1,8 @@
 /**
- * @brief Contains some of the Fan related classes
- *
- * @author Preston Shires (pshires)
- * @author Allie Ledbetter (Aeledbetter)
- * @author Colin Causey (causeyc)
- * @bug No known bugs.
- *
+ * @file Fan203.h
+ * @authors Colin Causey, Allie Ledbetter, Preston Shires, Liam White
+ * @ingroup FanSystemAssessments
+ * @brief Implements AMCA 203 standard fan performance calculations.
  */
 
 #ifndef TOOLS_SUITE_FAN_H
@@ -25,27 +22,40 @@ class TraversePlane;
 class MstPlane;
 
 /**
- * Constructor for Fan Rated Info
- * Calculates Ratings for Fans
+ * @struct FanRatedInfo
+ * @ingroup FanSystemAssessments
  *
+ * @brief Stores measured and reference-corrected fan and motor operating data for AMCA 203 calculations.
+ *
+ * @details
+ * This class encapsulates both as-tested and reference-corrected values for fan speed, motor speed, gas density, and
+ * barometric pressure, as required by the AMCA 203 standard. These values are used to convert measured fan performance
+ * data to standardized reference conditions, enabling consistent comparison and evaluation of fan performance across
+ * different test environments.
  */
-class FanRatedInfo {
-  public:
-    /**
-     * @param fanSpeed double, const, fan speed in RPM
-     * @param motorSpeed double, const, motor speed in RPM
-     * @param fanSpeedCorrected double, const, fan speed corrected in RPM
-     * @param densityCorrected double const, pounds per sqft, or lb/scf
-     * @param pressureBarometricCorrected double const, pressure in hp
-     */
-    FanRatedInfo(double const fanSpeed, double const motorSpeed, double const fanSpeedCorrected,
-                 double const densityCorrected, double const pressureBarometricCorrected)
-        : fanSpeed(fanSpeed), motorSpeed(motorSpeed), fanSpeedCorrected(fanSpeedCorrected),
-          densityCorrected(densityCorrected), pressureBarometricCorrected(pressureBarometricCorrected) {}
+struct FanRatedInfo {
+    double fan_speed;                     ///< Fan speed @unit{rpm}
+    double motor_speed;                   ///< %Motor speed @unit{rpm}
+    double fan_speed_corrected;           ///< Fan speed corrected to reference conditions @unit{rpm}
+    double density_corrected;             ///< Gas density corrected to reference conditions @unit{lb/ft^3}
+    double pressure_barometric_corrected; ///< Barometric pressure corrected to reference conditions @unit{\inch\of{Hg}}
 
-  private:
-    double const fanSpeed, motorSpeed, fanSpeedCorrected, densityCorrected, pressureBarometricCorrected;
-    friend class Fan203;
+    /**
+     * @brief Constructor for FanRatedInfo
+     *
+     * @param[in] fan_speed Fan speed @unit{rpm}
+     * @param[in] motor_speed %Motor speed @unit{rpm}
+     * @param[in] fan_speed_corrected Fan speed corrected to reference conditions @unit{rpm}
+     * @param[in] density_corrected Gas density corrected to reference conditions @unit{lb/ft^3}
+     * @param[in] pressure_barometric_corrected Barometric pressure corrected to reference conditions
+     * @unit{\inch\of{Hg}}
+     */
+    FanRatedInfo(double fan_speed, double motor_speed, double fan_speed_corrected, double density_corrected,
+                 double pressure_barometric_corrected)
+        : fan_speed(fan_speed), motor_speed(motor_speed), fan_speed_corrected(fan_speed_corrected),
+          density_corrected(density_corrected), pressure_barometric_corrected(pressure_barometric_corrected) {
+        // NOP
+    }
 };
 
 /**
@@ -646,25 +656,44 @@ class Fan203 {
 
         double const kpFactorRatio = calculateCompressibilityFactor(x, z, isentropicExponent);
 
-        // corrected variables
+        // // corrected variables
+        // double const qc = planeData.fanInletFlange.gasVolumeFlowRate *
+        //                   (fanRatedInfo.fanSpeedCorrected / fanRatedInfo.fanSpeed) * kpFactorRatio;
+
+        // double const ptc = fanTotalPressure * kpFactorRatio *
+        //                    std::pow(fanRatedInfo.fanSpeedCorrected / fanRatedInfo.fanSpeed, 2) *
+        //                    (fanRatedInfo.densityCorrected / planeData.fanInletFlange.gasDensity);
+
+        // double const psc = fanStaticPressure * kpFactorRatio *
+        //                    std::pow(fanRatedInfo.fanSpeedCorrected / fanRatedInfo.fanSpeed, 2) *
+        //                    (fanRatedInfo.densityCorrected / planeData.fanInletFlange.gasDensity);
+
+        // double const sprc = staticPressureRise * kpFactorRatio *
+        //                     std::pow(fanRatedInfo.fanSpeedCorrected / fanRatedInfo.fanSpeed, 2) *
+        //                     (fanRatedInfo.densityCorrected / planeData.fanInletFlange.gasDensity);
+
+        // double const hc = fanShaftPower.getFanPowerInput() * kpFactorRatio *
+        //                   std::pow(fanRatedInfo.fanSpeedCorrected / fanRatedInfo.fanSpeed, 3) *
+        //                   (fanRatedInfo.densityCorrected / planeData.fanInletFlange.gasDensity);
+
         double const qc = planeData.fanInletFlange.gasVolumeFlowRate *
-                          (fanRatedInfo.fanSpeedCorrected / fanRatedInfo.fanSpeed) * kpFactorRatio;
+                          (fanRatedInfo.fan_speed_corrected / fanRatedInfo.fan_speed) * kpFactorRatio;
 
         double const ptc = fanTotalPressure * kpFactorRatio *
-                           std::pow(fanRatedInfo.fanSpeedCorrected / fanRatedInfo.fanSpeed, 2) *
-                           (fanRatedInfo.densityCorrected / planeData.fanInletFlange.gasDensity);
+                           std::pow(fanRatedInfo.fan_speed_corrected / fanRatedInfo.fan_speed, 2) *
+                           (fanRatedInfo.density_corrected / planeData.fanInletFlange.gasDensity);
 
         double const psc = fanStaticPressure * kpFactorRatio *
-                           std::pow(fanRatedInfo.fanSpeedCorrected / fanRatedInfo.fanSpeed, 2) *
-                           (fanRatedInfo.densityCorrected / planeData.fanInletFlange.gasDensity);
+                           std::pow(fanRatedInfo.fan_speed_corrected / fanRatedInfo.fan_speed, 2) *
+                           (fanRatedInfo.density_corrected / planeData.fanInletFlange.gasDensity);
 
         double const sprc = staticPressureRise * kpFactorRatio *
-                            std::pow(fanRatedInfo.fanSpeedCorrected / fanRatedInfo.fanSpeed, 2) *
-                            (fanRatedInfo.densityCorrected / planeData.fanInletFlange.gasDensity);
+                            std::pow(fanRatedInfo.fan_speed_corrected / fanRatedInfo.fan_speed, 2) *
+                            (fanRatedInfo.density_corrected / planeData.fanInletFlange.gasDensity);
 
         double const hc = fanShaftPower.getFanPowerInput() * kpFactorRatio *
-                          std::pow(fanRatedInfo.fanSpeedCorrected / fanRatedInfo.fanSpeed, 3) *
-                          (fanRatedInfo.densityCorrected / planeData.fanInletFlange.gasDensity);
+                          std::pow(fanRatedInfo.fan_speed_corrected / fanRatedInfo.fan_speed, 3) *
+                          (fanRatedInfo.density_corrected / planeData.fanInletFlange.gasDensity);
 
         double const kpc = kp / kpFactorRatio;
 
@@ -685,14 +714,14 @@ class Fan203 {
         auto const& p1 = planeData.fanInletFlange;
         for (auto i = 0; i < 50; i++) {
             double const pt1c = p1.gasTotalPressure *
-                                std::pow(fanRatedInfo.fanSpeedCorrected / fanRatedInfo.fanSpeed, 2) *
-                                (fanRatedInfo.densityCorrected / p1.gasDensity) * assumedKpOverKpc;
+                                std::pow(fanRatedInfo.fan_speed_corrected / fanRatedInfo.fan_speed, 2) *
+                                (fanRatedInfo.density_corrected / p1.gasDensity) * assumedKpOverKpc;
 
             // TODO how to get isentropic exponent for gas at converted conditions? section 9.4.1 step 2
-            double const zOverZc = ((pt1c + 13.63 * fanRatedInfo.pressureBarometricCorrected) /
+            double const zOverZc = ((pt1c + 13.63 * fanRatedInfo.pressure_barometric_corrected) /
                                     (p1.gasTotalPressure + 13.63 * p1.barometricPressure)) *
-                                   (p1.gasDensity / fanRatedInfo.densityCorrected) *
-                                   std::pow(fanRatedInfo.fanSpeed / fanRatedInfo.fanSpeedCorrected, 2) *
+                                   (p1.gasDensity / fanRatedInfo.density_corrected) *
+                                   std::pow(fanRatedInfo.fan_speed / fanRatedInfo.fan_speed_corrected, 2) *
                                    ((isentropic - 1) / isentropic) * (isentropic / (isentropic - 1));
 
             double const zc = z / zOverZc;
