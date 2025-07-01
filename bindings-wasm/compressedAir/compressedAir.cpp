@@ -55,6 +55,7 @@ EMSCRIPTEN_BINDINGS(receiverTank)
         .constructor<ReceiverTank::Method, double, double, double, double, double>()
         .constructor<ReceiverTank::Method, double, double, double, double, double, double>()
         .function("calculateSize", &ReceiverTank::calculateSize)
+        .function("calculateRefillTime", &ReceiverTank::calculateRefillTime)
         .function("calculateUsableCapacity", &ReceiverTank::calculateUsableCapacity);
 }
 
@@ -146,7 +147,7 @@ EMSCRIPTEN_BINDINGS(pneumaticValve)
 EMSCRIPTEN_BINDINGS(bagMethod)
 {
     class_<BagMethod>("BagMethod")
-        .constructor<double, double, double, double, double>()
+        .constructor<double, double, double, double>()
         .function("calculate", &BagMethod::calculate);
 
     class_<BagMethod::Output>("BagMethodOutput")

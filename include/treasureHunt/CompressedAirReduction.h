@@ -5,6 +5,9 @@
 #include <stdexcept>
 #include <vector>
 
+#include "compressedAir/BagMethod.h"
+
+
 class CompressedAirFlowMeterMethodData
 {
   public:
@@ -73,13 +76,14 @@ class CompressorElectricityData
 
 class CompressedAirReductionInput
 {
+
   public:
     CompressedAirReductionInput(const int hoursPerYear, const int utilityType, const double utilityCost, const int measurementMethod,
-                                const CompressedAirFlowMeterMethodData flowMeterMethodData, const BagMethodData bagMethodData,
+                                const CompressedAirFlowMeterMethodData flowMeterMethodData, const BagMethod bagMethod,
                                 const PressureMethodData pressureMethodData, const CompressedAirOtherMethodData otherMethodData,
                                 const CompressorElectricityData compressorElectricityData, const int units)
         : hoursPerYear(hoursPerYear), utilityType(utilityType), utilityCost(utilityCost), measurementMethod(measurementMethod),
-          flowMeterMethodData(flowMeterMethodData), bagMethodData(bagMethodData),
+          flowMeterMethodData(flowMeterMethodData), bagMethod(bagMethod),
           pressureMethodData(pressureMethodData), otherMethodData(otherMethodData),
           compressorElectricityData(compressorElectricityData), units(units) {}
 
@@ -89,7 +93,7 @@ class CompressedAirReductionInput
     int getUnits() const { return units; }
     double getUtilityCost() const { return utilityCost; }
     CompressedAirFlowMeterMethodData getFlowMeterMethodData() const { return flowMeterMethodData; }
-    BagMethodData getBagMethodData() const { return bagMethodData; }
+    BagMethod getBagMethod() const { return bagMethod; }
     PressureMethodData getPressureMethodData() const { return pressureMethodData; }
     CompressedAirOtherMethodData getOtherMethodData() const { return otherMethodData; }
     CompressorElectricityData getCompressorElectricityData() const { return compressorElectricityData; }
@@ -99,7 +103,7 @@ class CompressedAirReductionInput
     double utilityCost;
     int measurementMethod;
     CompressedAirFlowMeterMethodData flowMeterMethodData;
-    BagMethodData bagMethodData;
+    BagMethod bagMethod;
     PressureMethodData pressureMethodData;
     CompressedAirOtherMethodData otherMethodData;
     CompressorElectricityData compressorElectricityData;

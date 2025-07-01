@@ -124,6 +124,21 @@ public:
                * (atmosphericPressure / finalTankPressureOrAllowablePressureDrop) * 7.48;
     }
 
+    /**
+     * Calculates and returns refill time (seconds) for receiver tanks using metered stored method
+     // T = Vcf X (P1 - P2) / (R x Pa)
+     * @return double, refill size - seconds
+     */
+    double calculateRefillTime() {
+        double volumeGal = calculateSize();
+        // * convert gal to ft3
+        double volumeCf = volumeGal * 0.133681;
+        double T = (volumeCf * (initialTankPressureOrAirDemand - finalTankPressureOrAllowablePressureDrop)) /
+               (meteredFlowControl * atmosphericPressure);
+        return T * 60;
+            
+    }
+    
 private:
     Method method;
     double airDemand, allowablePressureDrop, atmosphericPressure;

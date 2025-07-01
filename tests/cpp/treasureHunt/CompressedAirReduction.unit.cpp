@@ -1,12 +1,13 @@
 #include <catch.hpp>
 #include "treasureHunt/CompressedAirReduction.h"
+#include "compressedAir/BagMethod.h"
 
 TEST_CASE("Compressed Air Reduction Flow Meter Method", "[CompressedAirReduction][Util]")
 {
     std::vector<CompressedAirReductionInput> compressedAirReductionInputVec = {
         CompressedAirReductionInput(8640, 0, 0.12, 0,
                                     CompressedAirFlowMeterMethodData(200),
-                                    BagMethodData(10, 5, 30),
+                                    BagMethod(8640, 30, 1.36, 1),
                                     PressureMethodData(0, 1, 80),
                                     CompressedAirOtherMethodData(200000),
                                     CompressorElectricityData(1.428, 1.38233),
@@ -26,7 +27,7 @@ TEST_CASE("Compressed Air Reduction Flow Meter Method and Electricity", "[Compre
     std::vector<CompressedAirReductionInput> compressedAirReductionInputVec = {
         CompressedAirReductionInput(8640, 1, 0.12, 0,
                                     CompressedAirFlowMeterMethodData(200000),
-                                    BagMethodData(10, 5, 30),
+                                    BagMethod(8640, 30, 1.36, 1),
                                     PressureMethodData(0, 1, 80),
                                     CompressedAirOtherMethodData(200000),
                                     CompressorElectricityData(0.8, 0.16),
@@ -46,7 +47,7 @@ TEST_CASE("Compressed Air Reduction Bag Method and Electricity", "[CompressedAir
     std::vector<CompressedAirReductionInput> compressedAirReductionInputVec = {
         CompressedAirReductionInput(8640, 1, 0.12, 1,
                                     CompressedAirFlowMeterMethodData(200000),
-                                    BagMethodData(15, 10, 12),
+                                    BagMethod(8640, 12, 8.68, 2),
                                     PressureMethodData(0, 1, 80),
                                     CompressedAirOtherMethodData(200000),
                                     CompressorElectricityData(0.40, 0.16),
@@ -66,7 +67,7 @@ TEST_CASE("Compressed Air Reduction Orifice Pressure Method and Electricity", "[
     std::vector<CompressedAirReductionInput> compressedAirReductionInputVec = {
         CompressedAirReductionInput(8640, 1, 0.12, 2,
                                     CompressedAirFlowMeterMethodData(200000),
-                                    BagMethodData(15, 10, 12),
+                                    BagMethod(8640, 12, 8.68, 2),
                                     PressureMethodData(0, 1, 80),
                                     CompressedAirOtherMethodData(200000),
                                     CompressorElectricityData(0.40, 0.16),
@@ -86,7 +87,7 @@ TEST_CASE("Compressed Air Reduction Orifice Pressure Method Multiple Nozzles", "
     std::vector<CompressedAirReductionInput> compressedAirReductionInputVec = {
         CompressedAirReductionInput(8640, 1, 0.12, 2,
                                     CompressedAirFlowMeterMethodData(200000),
-                                    BagMethodData(15, 10, 12),
+                                    BagMethod(8640, 12, 8.68, 2),
                                     PressureMethodData(2, 4, 50),
                                     CompressedAirOtherMethodData(200000),
                                     CompressorElectricityData(0.40, 0.16),
@@ -106,7 +107,7 @@ TEST_CASE("Compressed Air Reduction Other Method", "[CompressedAirReduction][Uti
     std::vector<CompressedAirReductionInput> compressedAirReductionInputVec = {
         CompressedAirReductionInput(8640, 1, 0.12, 3,
                                     CompressedAirFlowMeterMethodData(200000),
-                                    BagMethodData(15, 10, 12),
+                                    BagMethod(8640, 12, 8.68, 2),
                                     PressureMethodData(2, 4, 50),
                                     CompressedAirOtherMethodData(200000),
                                     CompressorElectricityData(0.40, 0.16),
