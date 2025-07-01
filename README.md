@@ -50,7 +50,7 @@ The npm packages can be downloaded and install from [registry](https://www.npmjs
     -   Note: If multiple compilers are present and default environment is not used, use -G "XXX Makefiles",
     example for windows using MinGW => `cmake .. -G "MinGW Makefiles"`
   - run `'cmake --build .'`
-  - execute `cpp_tests.exe`
+  - execute `./cpp_tests`
 - On MacOS or Linux, the test executable can be found under the `bin` directory. On Windows, the executable can be found under either the `Debug` or `Release` directories, depending on CMake configuration
 
 ### Packaging
