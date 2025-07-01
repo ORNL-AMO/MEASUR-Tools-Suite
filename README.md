@@ -9,9 +9,9 @@ MEASUR Tools Suite
 
 The MEASUR Tools Suite is a collection of industrial efficiency calculations written in C++ and with bindings for compilation to WebAssembly. The tool suite web assembly module is used for calculations with the MEASUR application.
 
-For more information about the MEASUR ecosystem visit [https://industrialresources.ornl.gov/measur](https://industiralresources.ornl.gov/measur)
+For more information about the MEASUR ecosystem visit [https://industrialresources.ornl.gov/measur](https://industrialresources.ornl.gov/measur)
 
-Hosted documentation can be found at [https://industrialresources.ornl.gov/measur/suite/docs](https://industiralresources.ornl.gov/measur/suite/docs)
+Hosted documentation can be found at [https://industrialresources.ornl.gov/measur/suite/docs](https://industrialresources.ornl.gov/measur/suite/docs)
 
 The npm packages can be downloaded and install from [registry](https://www.npmjs.com/package/measur-tools-suite)
 
