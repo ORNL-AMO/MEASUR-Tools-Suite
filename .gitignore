@@ -3,7 +3,8 @@
 doxygen_log.txt
 cmake-build-*
 *.db
-docs
+docs/html
+docs/latex
 
 .nyc_output
 
