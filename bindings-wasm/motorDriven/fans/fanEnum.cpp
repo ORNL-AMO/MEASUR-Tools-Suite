@@ -1,14 +1,13 @@
-#include "motorDriven/fans/Fan203.h"
-#include "motorDriven/pumpFan/OptimalFanEfficiency.h"
+#include "motorDriven/fans/fan203.h"
 #include "motorDriven/fans/FanCurve.h"
 #include "motorDriven/fans/Planar.h"
+#include "motorDriven/pumpFan/OptimalFanEfficiency.h"
 
 #include <emscripten/bind.h>
 
 using namespace emscripten;
 
-EMSCRIPTEN_BINDINGS(fan_enums)
-{
+EMSCRIPTEN_BINDINGS(fan_enums) {
     enum_<BaseGasDensity::GasType>("GasType")
         .value("AIR", BaseGasDensity::GasType::AIR)
         .value("STANDARDAIR", BaseGasDensity::GasType::STANDARDAIR)

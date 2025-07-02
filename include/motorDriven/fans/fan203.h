@@ -1,5 +1,5 @@
 /**
- * @file Fan203.h
+ * @file fan203.h
  * @authors Colin Causey, Allie Ledbetter, Preston Shires, Liam White
  * @ingroup FanSystemAssessments
  * @brief Implements AMCA 203 standard fan performance calculations.
