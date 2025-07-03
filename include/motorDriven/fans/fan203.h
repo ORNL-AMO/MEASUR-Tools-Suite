@@ -8,18 +8,13 @@
 #ifndef TOOLS_SUITE_FAN_H
 #define TOOLS_SUITE_FAN_H
 
-#include "motorDriven/pumpFan/FanShaftPower.h"
-#include "Planar.h"
-
 #include <cmath>
 #include <functional>
 #include <stdexcept>
 #include <vector>
 
-class Planar;
-class FlangePlane;
-class TraversePlane;
-class MstPlane;
+#include "motorDriven/fans/Planar.h"
+#include "motorDriven/pumpFan/FanShaftPower.h"
 
 /**
  * @struct FanRatedInfo

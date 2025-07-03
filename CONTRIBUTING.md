@@ -35,7 +35,16 @@ Use Conventional Commits to structure your commit messages. This helps maintain 
 
 - [Style Guide](#style-guide)
   - [Header Files](#header-files)
+    - [The #define Guard](#the-define-guard)
+      - [Format](#format)
+      - [Example](#example)
     - [Include What You Use](#include-what-you-use)
+    - [Forward Declarations](#forward-declarations)
+      - [Bad](#bad)
+      - [Good](#good)
+    - [Defining Functions in Header Files](#defining-functions-in-header-files)
+      - [Example](#example-1)
+    - [Names and Order of Includes](#names-and-order-of-includes)
   - [Scoping](#scoping)
     - [Namespaces](#namespaces)
     - [Local Variables](#local-variables)
@@ -78,46 +87,46 @@ Use Conventional Commits to structure your commit messages. This helps maintain 
   - [Common Doxygen Tags](#common-doxygen-tags)
   - [Documenting Units for Physical Quantities](#documenting-units-for-physical-quantities)
     - [Template](#template)
-    - [Example](#example)
+    - [Example](#example-2)
   - [Documenting Formulas](#documenting-formulas)
     - [Template](#template-1)
-    - [Example](#example-1)
+    - [Example](#example-3)
   - [File Documentation](#file-documentation)
     - [Required tags](#required-tags)
     - [Optional tags](#optional-tags)
     - [Template](#template-2)
-    - [Example](#example-2)
+    - [Example](#example-4)
   - [Function \& Method Documentation](#function--method-documentation)
     - [Required tags](#required-tags-1)
     - [Optional tags](#optional-tags-1)
     - [Template](#template-3)
-    - [Example](#example-3)
+    - [Example](#example-5)
   - [Class \& Struct Documentation](#class--struct-documentation)
     - [Required tags](#required-tags-2)
     - [Optional tags](#optional-tags-2)
     - [Template](#template-4)
-    - [Example](#example-4)
+    - [Example](#example-6)
   - [Data-Member Documentation](#data-member-documentation)
     - [Template](#template-5)
-    - [Example](#example-5)
+    - [Example](#example-7)
   - [Enumeration Documentation](#enumeration-documentation)
     - [Required tags](#required-tags-3)
     - [Optional tags](#optional-tags-3)
     - [Template](#template-6)
-    - [Example](#example-6)
+    - [Example](#example-8)
   - [Constant Documentation](#constant-documentation)
     - [Template](#template-7)
-    - [Example](#example-7)
+    - [Example](#example-9)
   - [Namespace Documentation](#namespace-documentation)
     - [Required tags](#required-tags-4)
     - [Optional tags](#optional-tags-4)
     - [Template](#template-8)
-    - [Example](#example-8)
+    - [Example](#example-10)
   - [Module (Group) Documentation](#module-group-documentation)
     - [Required tags](#required-tags-5)
     - [Optional tags](#optional-tags-5)
     - [Template](#template-9)
-    - [Example](#example-9)
+    - [Example](#example-11)
 - [Conventional Commits](#conventional-commits)
   - [Commit Format](#commit-format)
   - [Commit Types](#commit-types)
@@ -135,6 +144,34 @@ This section describes the coding style for this project. It is based on the [Go
 
 ## Header Files
 
+Every `.cpp` file should have an associated `.h` file. There are some common exceptions, such as unit tests and small `.cpp` files containing just a `main()` function.
+
+### The #define Guard
+
+All header files should have `#define` guards to prevent multiple inclusion.
+
+#### Format
+
+```cpp
+#ifndef <PROJECT>_<PATH>_<FILE>_H_
+#define <PROJECT>_<PATH>_<FILE>_H_
+
+...
+
+#endif  // <PROJECT>_<PATH>_<FILE>_H_
+```
+
+#### Example
+
+```cpp
+#ifndef GEOMETRY_POLYGON_AREA_H_
+#define GEOMETRY_POLYGON_AREA_H_
+
+...
+
+#endif  // GEOMETRY_POLYGON_AREA_H_
+```
+
 ### Include What You Use
 
 If a source or header file refers to a symbol defined elsewhere, it must directly include the header that provides the declaration or definition of that symbol. Do not include headers for any other reason.
@@ -142,6 +179,71 @@ If a source or header file refers to a symbol defined elsewhere, it must directl
 Do **not** rely on transitive inclusions (i.e., do not assume that a header is included indirectly via another header). This practice allows unnecessary `#include` statements to be safely removed from headers without breaking dependent code.
 
 This rule also applies to related headers: for example, if `foo.cpp` uses a symbol from `bar.h`, it should include `bar.h` directly, even if `foo.h` already includes `bar.h`.
+
+### Forward Declarations
+
+Avoid using forward declarations where possible. Instead, include the headers you need.
+
+#### Bad
+
+```cpp
+class B;  // Forward declaration without definition.
+void FuncInB();
+extern int variable_in_b;
+```
+
+#### Good
+
+```cpp
+#include "b.h"
+void f(B*);
+void f(void*);
+void test(D* x) { f(x); }  // Calls f(B*)
+```
+
+### Defining Functions in Header Files
+
+Only define a function at its public declaration if it is short (10 lines or fewer) or if it is a template function. Place longer function bodies in the `.cpp` file unless they must be in the header for performance or technical reasons.
+
+If a definition must be in the header, avoid placing it in the public section. Instead, put it in a private section, an `internal` namespace, or below a comment like `// Implementation details only below here`.
+
+All function definitions in header files must be ODR-safe by using the `inline` specifier, being a function template, or being defined in a class body at first declaration.
+
+#### Example
+
+```cpp
+template <typename T>
+class Foo {
+ public:
+  int bar() { return bar_; }
+
+  void MethodWithHugeBody();
+
+ private:
+  int bar_;
+};
+
+// Implementation details only below here
+
+template <typename T>
+void Foo<T>::MethodWithHugeBody() {
+  ...
+}
+```
+
+### Names and Order of Includes
+
+Project-specific and third-party library headers should be included using double quotes (`"myheader.h"`), while standard library headers should use angle brackets (`<vector>`).
+
+All of a project's header files should be listed as descendants of the project's source directory. For example, `myproject/include/module/header.h` should be included as `"module/header.h"`.
+
+The order of includes is handled automatically by Clang-Format using the `IncludeCategories` setting in the `.clang-format`. The general order is:
+1. Related header file for the current source file (e.g., `"foo.h"`).
+2. Standard library headers (e.g., `<string>` and `<vector>`).
+3. Third-party library headers (e.g., `<boost/some_header.h>`).
+4. Project-specific headers (e.g., `"project/some_header.h"`).
+
+All third-party libraries should be defined as separate categories in the `.clang-format` file. When adding a new third-party library, update the `IncludeCategories` section in the `.clang-format` file to include it.
 
 ## Scoping
 
@@ -319,7 +421,7 @@ Minimize the use of abbreviations that would likely be unknown to someone outsid
 
 Filenames are `snake_case` (all lowercase, with underscores between words). For instance: `my_class.cpp`, `polygon.cpp`.
 
-C++ files have a `.cpp` extension, and header files have a `.hpp` extension.
+C++ files have a `.cpp` extension, and header files have a `.h` extension.
 
 ### Type Names
 
@@ -717,7 +819,7 @@ Use a **single Doxygen block** at the very top of every header file.
 
 ```cpp
 /**
- * @file <filename>.hpp
+ * @file <filename>.h
  * @author <First Last>, <First Last>
  * @ingroup <GroupName>
  * @brief <Short purpose of the file>
@@ -737,7 +839,7 @@ Use a **single Doxygen block** at the very top of every header file.
 
 ```cpp
 /**
- * @file polygon_area.hpp
+ * @file polygon_area.h
  * @author Alice Brown, Carlos Diaz
  * @ingroup Geometry
  * @brief Implements Shoelace-based area calculations for simple polygons.
@@ -747,8 +849,8 @@ Use a **single Doxygen block** at the very top of every header file.
  * @formula{shoelace; A = \frac{1}{2} \sum_{i=1}^{n} (x_i y_{i+1} - x_{i+1} y_i)}
  *
  * @note Assumes polygons are simple (non-self-intersecting).
- * @deprecated Will be superseded by `polygon_metrics.hpp` in v2.0
- * @see vector2.hpp
+ * @deprecated Will be superseded by `polygon_metrics.h` in v2.0
+ * @see vector2.h
  * @copyright 2025 Geometry Toolkit
  */
 ```

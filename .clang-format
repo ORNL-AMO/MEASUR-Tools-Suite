@@ -137,16 +137,28 @@ FixNamespaceComments: true
 #   - KJ_IF_MAYBE
 IncludeBlocks: Regroup
 IncludeCategories:
-  - Regex: '^"[^"]+\.h"' # Project-local includes, e.g. "myheader.h"
+  - Regex: '^<[^/ >]+>$' # C++ standard library headers, e.g., <string>, <vector> 
     Priority: 1
     SortPriority: 0
     CaseSensitive: false
-  - Regex: '^<[^/ >]+>$' # C++ standard library headers, e.g. <vector>, <string>
+  - Regex: '^"catch/.*"$'  # Catch headers
     Priority: 2
     SortPriority: 0
     CaseSensitive: false
-  - Regex: '^<.*>$' # System or external library headers, e.g. <boost/asio.hpp>, <QtCore/QObject>
+  - Regex: '^"fast-cpp-csv-parser/.*"$'  # fast-cpp-csv-parser headers
+    Priority: 2
+    SortPriority: 0
+    CaseSensitive: false
+  - Regex: '^"sqlite/.*"$'  # SQLite headers
     Priority: 3
+    SortPriority: 0
+    CaseSensitive: false
+  - Regex: '^".*"$' # Catch all for all other third-party headers, e.g., "someheader.h"
+    Priority: 4
+    SortPriority: 0
+    CaseSensitive: false
+  - Regex: '^"[^"]+\.h"' # Project-local includes, e.g., "myheader.h"
+    Priority: 5
     SortPriority: 0
     CaseSensitive: false
   # - Regex: ^<ext/.*\.h>
