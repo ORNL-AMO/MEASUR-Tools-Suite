@@ -1,142 +1,24 @@
-# How to Contribute <!-- omit from toc -->
+# How to Contribute
 
 This guide provides clear standards and best practices for contributing to this project. It covers coding style, documentation, formatting, and workflow expectations to help maintain high code quality, ensure long-term maintainability, and foster smooth collaboration among all contributors.
 
-**Start here**
-
----
-
-[Style Guide](#style-guide)
+## [Style Guide](#style-guide)
 
 Follow this guide to make sure your contributions align with the project's coding standards. This will help ensure that your code is readable, maintainable, and consistent with the rest of the codebase.
 
----
-
-[Clang-Format](#clang-format)
+## [Clang-Format](#clang-format)
 
 Use Clang-Format to automatically format your code according to the project's style guide. This ensures consistent formatting across the codebase and reduces manual formatting effort.
 
----
-
-[Doxygen Documentation](#doxygen-documentation)
+## [Doxygen Documentation](#doxygen-documentation)
 
 Follow these guidelines to document your code effectively using Doxygen. Proper documentation is crucial for understanding the codebase and facilitating collaboration.
 
----
+## [Conventional Commits](#conventional-commits)
 
-[Conventional Commits](#conventional-commits)
+Use Conventional Commits to structure your commit messages. This helps maintain a clear project history and makes it easier to understand the purpose of each change. 
 
-Use Conventional Commits to structure your commit messages. This helps maintain a clear project history and makes it easier to understand the purpose of each change.  
-
----
-
-<details>
-<summary><b>Table of Contents</b></summary>
-
-- [Style Guide](#style-guide)
-  - [Header Files](#header-files)
-    - [The #define Guard](#the-define-guard)
-      - [Format](#format)
-      - [Example](#example)
-    - [Include What You Use](#include-what-you-use)
-    - [Forward Declarations](#forward-declarations)
-      - [Bad](#bad)
-      - [Good](#good)
-    - [Defining Functions in Header Files](#defining-functions-in-header-files)
-      - [Example](#example-1)
-    - [Names and Order of Includes](#names-and-order-of-includes)
-  - [Scoping](#scoping)
-    - [Namespaces](#namespaces)
-    - [Local Variables](#local-variables)
-  - [Classes](#classes)
-    - [Structs vs. Classes](#structs-vs-classes)
-    - [Structs vs. Pairs and Tuples](#structs-vs-pairs-and-tuples)
-    - [Access Control](#access-control)
-    - [Declaration Order](#declaration-order)
-  - [Other C++ Features](#other-c-features)
-    - [Preincrement and Predecrement](#preincrement-and-predecrement)
-    - [Use of `const`](#use-of-const)
-  - [Naming](#naming)
-    - [File Names](#file-names)
-    - [Type Names](#type-names)
-    - [Concept Names](#concept-names)
-    - [Variable Names](#variable-names)
-      - [Common Variable Names](#common-variable-names)
-      - [Class Data Members](#class-data-members)
-      - [Struct Data Members](#struct-data-members)
-    - [Constant Names](#constant-names)
-    - [Function Names](#function-names)
-    - [Namespace Names](#namespace-names)
-    - [Enumerator Names](#enumerator-names)
-    - [Template Parameter Names](#template-parameter-names)
-    - [Macro Names](#macro-names)
-    - [Aliases](#aliases)
-  - [Comments](#comments)
-    - [When to comment](#when-to-comment)
-    - [When *not* to comment](#when-not-to-comment)
-    - [Comment Style](#comment-style)
-  - [Formatting](#formatting)
-    - [Looping and Branching Statements](#looping-and-branching-statements)
-- [Clang-Format](#clang-format)
-  - [How to Format Code](#how-to-format-code)
-  - [Configuration](#configuration)
-    - [Updating the Style](#updating-the-style)
-  - [Best Practices](#best-practices)
-- [Doxygen Documentation](#doxygen-documentation)
-  - [How to Generate Doxygen Documentation](#how-to-generate-doxygen-documentation)
-  - [Common Doxygen Tags](#common-doxygen-tags)
-  - [Documenting Units for Physical Quantities](#documenting-units-for-physical-quantities)
-    - [Template](#template)
-    - [Example](#example-2)
-  - [Documenting Formulas](#documenting-formulas)
-    - [Template](#template-1)
-    - [Example](#example-3)
-  - [File Documentation](#file-documentation)
-    - [Required tags](#required-tags)
-    - [Optional tags](#optional-tags)
-    - [Template](#template-2)
-    - [Example](#example-4)
-  - [Function \& Method Documentation](#function--method-documentation)
-    - [Required tags](#required-tags-1)
-    - [Optional tags](#optional-tags-1)
-    - [Template](#template-3)
-    - [Example](#example-5)
-  - [Class \& Struct Documentation](#class--struct-documentation)
-    - [Required tags](#required-tags-2)
-    - [Optional tags](#optional-tags-2)
-    - [Template](#template-4)
-    - [Example](#example-6)
-  - [Data-Member Documentation](#data-member-documentation)
-    - [Template](#template-5)
-    - [Example](#example-7)
-  - [Enumeration Documentation](#enumeration-documentation)
-    - [Required tags](#required-tags-3)
-    - [Optional tags](#optional-tags-3)
-    - [Template](#template-6)
-    - [Example](#example-8)
-  - [Constant Documentation](#constant-documentation)
-    - [Template](#template-7)
-    - [Example](#example-9)
-  - [Namespace Documentation](#namespace-documentation)
-    - [Required tags](#required-tags-4)
-    - [Optional tags](#optional-tags-4)
-    - [Template](#template-8)
-    - [Example](#example-10)
-  - [Module (Group) Documentation](#module-group-documentation)
-    - [Required tags](#required-tags-5)
-    - [Optional tags](#optional-tags-5)
-    - [Template](#template-9)
-    - [Example](#example-11)
-- [Conventional Commits](#conventional-commits)
-  - [Commit Format](#commit-format)
-  - [Commit Types](#commit-types)
-  - [Commit Scopes](#commit-scopes)
-    - [Using Multiple Scopes](#using-multiple-scopes)
-  - [Breaking Changes](#breaking-changes)
-
-</details>
-
-<br><br>
+<br>
 
 # Style Guide
 
@@ -147,6 +29,8 @@ This section describes the coding style for this project. It is based on the [Go
 Every `.cpp` file should have an associated `.h` file. There are some common exceptions, such as unit tests and small `.cpp` files containing just a `main()` function.
 
 ### The #define Guard
+
+---
 
 All header files should have `#define` guards to prevent multiple inclusion.
 
@@ -174,6 +58,8 @@ All header files should have `#define` guards to prevent multiple inclusion.
 
 ### Include What You Use
 
+---
+
 If a source or header file refers to a symbol defined elsewhere, it must directly include the header that provides the declaration or definition of that symbol. Do not include headers for any other reason.
 
 Do **not** rely on transitive inclusions (i.e., do not assume that a header is included indirectly via another header). This practice allows unnecessary `#include` statements to be safely removed from headers without breaking dependent code.
@@ -182,15 +68,9 @@ This rule also applies to related headers: for example, if `foo.cpp` uses a symb
 
 ### Forward Declarations
 
+---
+
 Avoid using forward declarations where possible. Instead, include the headers you need.
-
-#### Bad
-
-```cpp
-class B;  // Forward declaration without definition.
-void FuncInB();
-extern int variable_in_b;
-```
 
 #### Good
 
@@ -201,7 +81,17 @@ void f(void*);
 void test(D* x) { f(x); }  // Calls f(B*)
 ```
 
+#### Bad
+
+```cpp
+class B;  // Forward declaration without definition.
+void FuncInB();
+extern int variable_in_b;
+```
+
 ### Defining Functions in Header Files
+
+---
 
 Only define a function at its public declaration if it is short (10 lines or fewer) or if it is a template function. Place longer function bodies in the `.cpp` file unless they must be in the header for performance or technical reasons.
 
@@ -233,6 +123,8 @@ void Foo<T>::MethodWithHugeBody() {
 
 ### Names and Order of Includes
 
+---
+
 Project-specific and third-party library headers should be included using double quotes (`"myheader.h"`), while standard library headers should use angle brackets (`<vector>`).
 
 All of a project's header files should be listed as descendants of the project's source directory. For example, `myproject/include/module/header.h` should be included as `"module/header.h"`.
@@ -248,6 +140,8 @@ All third-party libraries should be defined as separate categories in the `.clan
 ## Scoping
 
 ### Namespaces
+
+---
 
 With few exceptions, place all code in a namespace. Namespaces should have unique names based on the project name and, if appropriate, its path.
 
@@ -272,11 +166,13 @@ outer::foo();
 
 ### Local Variables
 
+---
+
 Place a function's variables in the narrowest scope possible, and initialize variables in the declaration.
 - Declare variables as close as possible to their first use, and within the smallest scope needed.
 - Always initialize variables at the point of declaration, rather than declaring and assigning separately.
 
-**Good:**
+#### Good
 
 ```cpp
 int i = f();  // Declaration and initialization together.
@@ -285,7 +181,7 @@ f(jobs);      // Declaration closely followed by use.
 std::vector<int> v = {1, 2};  // Prefer brace initialization.
 ```
 
-**Bad:**
+#### Bad
 
 ```cpp
 int i;
@@ -305,7 +201,8 @@ Variables needed for if, while, and for statements should normally be declared w
 while (const char* p = strchr(str, '/')) str = p + 1;
 ```
 
-**Caveat:**
+#### Caveat
+
 If a variable is an object, its constructor and destructor are called each time it enters and leaves scope. For objects used in a loop, it may be more efficient to declare the variable outside the loop:
 
 ```cpp
@@ -328,6 +225,8 @@ Classes are the fundamental unit of code in C++. Naturally, we use them extensiv
 
 ### Structs vs. Classes
 
+---
+
 Use a `struct` only for passive objects that carry data; use a `class` for everything else.
 
 - The `struct` and `class` keywords behave almost identically in C++, but we assign different semantic meanings:
@@ -338,6 +237,8 @@ For consistency with the STL, you may use `struct` for stateless types such as t
 
 ### Structs vs. Pairs and Tuples
 
+---
+
 Prefer to use a `struct` instead of a `std::pair` or `std::tuple` whenever the elements can have meaningful names.
 
 While pairs and tuples can save time by avoiding the need to define a custom type, meaningful field names are almost always clearer than using `.first`, `.second`, or `std::get<X>`.
@@ -346,9 +247,13 @@ Use pairs and tuples only in generic code where the elements do not have specifi
 
 ### Access Control
 
+---
+
 Make class data members `private`, unless they are constants. This helps maintain class invariants and encapsulation, even if it requires writing simple accessor methods (usually `const`).
 
 ### Declaration Order
+
+---
 
 Group similar declarations together, placing public parts earlier.
 
@@ -371,12 +276,14 @@ This order improves readability and makes it easier to find related declarations
 
 ### Preincrement and Predecrement
 
+---
+
 Use the prefix form (`++i`, `--i`) of the increment and decrement operators unless you specifically need the value before the increment or decrement (postfix semantics).
 
 - The prefix form is generally more readable and can be more efficient, as it does not require making a copy of the original value.
 - The postfix form (`i++`, `i--`) should only be used when the previous value is required in the same expression.
 
-**Good:**
+#### Good
 
 ```cpp
 for (int i = 0; i < n; ++i) {
@@ -384,7 +291,7 @@ for (int i = 0; i < n; ++i) {
 }
 ```
 
-**Bad:**
+#### Bad
 
 ```cpp
 for (int i = 0; i < n; i++) {
@@ -393,6 +300,8 @@ for (int i = 0; i < n; i++) {
 ```
 
 ### Use of `const`
+
+---
 
 Use `const` in APIs wherever it is meaningful and accurate. This includes function parameters, methods, and non-local variables. `constexpr` is preferred when a value is known at compile time.
 
@@ -419,11 +328,15 @@ Minimize the use of abbreviations that would likely be unknown to someone outsid
 
 ### File Names
 
+---
+
 Filenames are `snake_case` (all lowercase, with underscores between words). For instance: `my_class.cpp`, `polygon.cpp`.
 
 C++ files have a `.cpp` extension, and header files have a `.h` extension.
 
 ### Type Names
+
+---
 
 Type names start with a capital letter and have a capital letter for each new word, with no underscores: MyExcitingClass, MyExcitingEnum.
 
@@ -447,9 +360,13 @@ enum class MyClassError { ...
 
 ### Concept Names
 
+---
+
 Concept names follow the same rules as type names.
 
 ### Variable Names
+
+---
 
 The names of variables (including function parameters) and data members are `snake_case` (all lowercase, with underscores between words). Data members of classes (but not structs) additionally have trailing underscores. For instance: `a_local_variable`, `a_struct_data_member`, `a_class_data_member_`.
 
@@ -490,6 +407,8 @@ struct TableProperties {
 
 ### Constant Names
 
+---
+
 Variables declared `constexpr` or `const`, and whose value is fixed for the duration of the program, are named with a leading "k" followed by mixed case. Underscores can be used as separators in the rare cases where capitalization cannot be used for separation. For example:
 
 ```cpp
@@ -498,6 +417,8 @@ const int kAndroid8_0_0 - 24; // Android 8.0.0
 ```
 
 ### Function Names
+
+---
 
 Regular functions have mixed case; accessors and mutators are named like variables. Regular functions should be named with a verb or verb phrase, and should be descriptive of the action they perform. For example:
 
@@ -511,6 +432,8 @@ Accessors and mutators (get and set functions) may be named like variables. Thes
 
 ### Namespace Names
 
+---
+
 Namespace names are `snake_case` (all lowercase, with underscores between words).
 
 When choosing names for namespaces, note that names must be fully qualified when used in a header outside the namespace, because unqualified Aliases are generally banned.
@@ -520,6 +443,8 @@ Top-level namespaces must be globally unique and recognizable, so each one shoul
 Nested namespaces should avoid the names of well-known top-level namespaces, especially `std` and `absl`, because in C++, nested namespaces do not protect from collisions with names in other namespaces.
 
 ### Enumerator Names
+
+---
 
 Enumerators (for both scoped and unscoped enums) should be named like constants with a leading "k" followed by mixed case. For example:
 
@@ -533,11 +458,13 @@ enum class TableError {
 
 ### Template Parameter Names
 
+---
+
 Template parameters should follow the naming style for their category: type template parameters should follow the rules for [naming types](#type-names), and non-type template parameters should follow the rules for [naming variables](#variable-names) or [constants](#constant-names).
 
 ### Macro Names
 
-If you do, they're like this: MY_MACRO_THAT_SCARES_SMALL_CHILDREN_AND_ADULTS_ALIKE.
+---
 
 In general macros should not be used. However, if they are absolutely needed, then they should be named with all capitals and underscores, and with a project-specific prefix. For example:
 
@@ -546,6 +473,8 @@ In general macros should not be used. However, if they are absolutely needed, th
 ```
 
 ### Aliases
+
+---
 
 The name for an alias follows the same principles as any other new name, applied in the context where the alias is defined rather than where the original name appears. For example:
 
@@ -559,6 +488,8 @@ Clear, concise comments are essential for maintainable code. Use comments to cla
 
 ### When to comment
 
+---
+
 | Do comment when...                                 | Avoid when...                                 |
 | -------------------------------------------------- | --------------------------------------------- |
 | A non-obvious **algorithmic trick** needs context. | The code literally states the same thing.     |
@@ -566,13 +497,9 @@ Clear, concise comments are essential for maintainable code. Use comments to cla
 | There is a subtle **invariant / side-effect**.     | The function already documents the behaviour. |
 | You’re **explaining why**, not *what*.             | You’re restating the *what* (“increment i”).  |
 
-### When *not* to comment
-
-Do **not** add comments for:
-- Self-explanatory names (e.g., `count`, `begin()`), trivial getters/setters, or obvious constructors.
-- Code scheduled for removal—track this with a `TODO` in the issue tracker instead.
-
 ### Comment Style
+
+---
 
 1. **Place above** the line or block it explains—never to the right of long code.
 2. **Start with a capital letter** and **end with a period** if the sentence is complete.
@@ -581,7 +508,7 @@ Do **not** add comments for:
 5. Prefer present tense and active voice.
 6. Be specific and actionable—avoid vague or generic comments.
 
-**Good:**
+#### Good
 
 ```cpp
 // Compute signed area via Shoelace formula.
@@ -593,7 +520,7 @@ if (HasSelfIntersection(verts)) return Err::kInvalid;
 // TODO(alice, 2025-07-01): Replace O(n^2) intersection test with a sweep-line algorithm.
 ```
 
-**Bad:**
+#### Bad
 
 ```cpp
 // Increment i.           // (What, not why)
@@ -607,9 +534,11 @@ area = PolygonSignedArea(verts);
 
 ### Looping and Branching Statements
 
+---
+
 **Always use braces** for all control statements (`if`, `else`, `for`, `while`, `do`, `switch`), even for single-line bodies. This prevents bugs and improves readability.
 
-**Good:**
+#### Good
 
 ```cpp
 if (condition) {
@@ -624,14 +553,14 @@ for (int i = 0; i < 10; ++i) {
 }
 ```
 
-**Bad:**
+#### Bad
 
 ```cpp
 if (condition)
     DoSomething(); // Missing braces
 ```
 
-**Exception:**
+#### Exceptions
 
 Braces may be omitted only if the entire statement fits on one line and there is no `else` or `do ... while` part:
 
@@ -639,7 +568,7 @@ Braces may be omitted only if the entire statement fits on one line and there is
 if (x == kFoo) return new Foo(); // OK
 ```
 
-**Switch/case:**
+#### Switch/case
 
 Braces in `case` blocks are optional, but if used, indent as shown:
 
@@ -652,7 +581,7 @@ switch (var) {
 }
 ```
 
-**Empty loops:**
+#### Empty loops
 
 Use `{}` or `continue`; for empty bodies, not a lone semicolon:
 
@@ -661,15 +590,28 @@ while (condition) {}
 while (condition) continue;
 ```
 
-<br><br>
+<br>
 
 # Clang-Format
 
 This project uses [clang-format](https://clang.llvm.org/docs/ClangFormat.html) to ensure a consistent code style across all C++ files.
 
+## Configuration
+
+The formatting style is defined in the `.clang-format` file at the root of the repository. This file specifies rules for indentation, spacing, brace placement, include ordering, and more. The style is based on Google's C++ style guide with some customizations to fit the project's needs. To modify the formatting style, follow these steps:
+
+1. **Open** the `.clang-format` file in the root directory.
+2. **Experiment** with different settings using the [Clang-Format Configurator tool](https://clang-format-configurator.site/) or by editing the file directly.
+3. **Apply changes** by copying your updated configuration into the `.clang-format` file.
+4. **Reformat all code** to apply the new style. Use the following command to format every C++ source and header file in the project:
+   ```bash
+   find . -name '*.cpp' -o -name '*.h' | xargs clang-format -i --style=file
+   ```
+5. **Commit and review:** Commit only the style changes and immediately open a pull request. This keeps formatting changes separate from functional code changes, making reviews easier and reducing merge conflicts.
+
 ## How to Format Code
 
-To automatically format your code, run the following command from the root directory of the project:
+To format your code using clang-format, run the following command from the root directory of the project:
 
 ```bash
 clang-format -i --style=file <file1> <file2> ...
@@ -686,21 +628,6 @@ find . -name '*.cpp' -o -name '*.h' | xargs clang-format -i --style=file
 
 You can also configure your editor (such as VS Code, CLion, or Vim) to automatically format code on save using clang-format. Refer to your editor’s documentation or extensions/plugins for setup instructions.
 
-## Configuration
-
-The formatting style is defined in the `.clang-format` file at the root of the repository. This file specifies rules for indentation, spacing, brace placement, include ordering, and more. The style is based on Google's C++ style guide with some customizations to fit the project's needs.
-
-### Updating the Style
-
-1. **Open** the `.clang-format` file in the root directory.
-2. **Experiment** with different settings using the [Clang-Format Configurator tool](https://clang-format-configurator.site/) or by editing the file directly.
-3. **Apply changes** by copying your updated configuration into the `.clang-format` file.
-4. **Reformat all code** to apply the new style. Use the following command to format every C++ source and header file in the project:
-   ```bash
-   find . -name '*.cpp' -o -name '*.h' | xargs clang-format -i --style=file
-   ```
-5. **Commit and review:** Commit only the style changes and immediately open a pull request. This keeps formatting changes separate from functional code changes, making reviews easier and reducing merge conflicts.
-
 ## Best Practices
 
 - **Format before committing:** Always run clang-format on your changes before submitting a pull request.
@@ -709,7 +636,7 @@ The formatting style is defined in the `.clang-format` file at the root of the r
 
 If you have questions about the formatting rules or need help configuring your editor, ask in the project discussions or open an issue.
 
-<br><br>
+<br>
 
 # Doxygen Documentation
 
@@ -720,19 +647,7 @@ Effective documentation makes code **readable, maintainable, and teachable**. St
 
 Write documentation that serves **both** audiences.
 
-> **Doxygen usage instructions and tag conventions are detailed in the following sections.**  
 > **Note:** This project uses `@` (not `\`) for all Doxygen commands and tags.
-
-## How to Generate Doxygen Documentation
-
-1. Ensure [Doxygen](https://www.doxygen.nl/) is installed on your system.
-2. From the project root, run:
-   ```bash
-   doxygen Doxyfile
-   ```
-3. The generated HTML and/or LaTeX documentation will appear in the output directory specified in your `Doxyfile`.
-
-For more details on configuring or customizing Doxygen output, see the official [Doxygen manual](https://www.doxygen.nl/manual/index.html) or review the `Doxyfile` in the project root.
 
 ## Common Doxygen Tags
 
@@ -758,28 +673,47 @@ For more details on configuring or customizing Doxygen output, see the official 
 | `@def`                                        | macro block           | Names the macro when the block is not directly above it.       |
 | `@copyright`                                  | file banner           | Legal notice or licence statement.                             |
 
-## Documenting Units for Physical Quantities
+## How to Generate Doxygen Documentation
+
+1. Ensure [Doxygen](https://www.doxygen.nl/) is installed on your system.
+2. From the project root, run:
+   ```bash
+   doxygen Doxyfile
+   ```
+3. The generated HTML and/or LaTeX documentation will appear in the output directory specified in your `Doxyfile`.
+
+For more details on configuring or customizing Doxygen output, see the official [Doxygen manual](https://www.doxygen.nl/manual/index.html) or review the `Doxyfile` in the project root.
+
+## Documenting Code
+
+When documenting code, use Doxygen comments to describe the purpose and behavior of classes, functions, and other entities. Use the following guidelines to ensure clarity and consistency.
+
+### Documenting Units for Physical Quantities
+
+---
 
 When documenting variables that represent physical quantities, **always specify the unit** in the documentation. Use the `@unit` command, which is defined in the `Doxyfile` under `ALIASES`, to standardize unit notation across the codebase. The `@unit` command utilizes MathJax and the [siunitx](https://ctan.org/pkg/siunitx) library for typesetting units.
 
-### Template
+#### Template
 
 ```cpp
 type variable_name; ///< Brief description @unit{unit}
 ```
 
-### Example
+#### Example
 
 ```cpp
 double fan_speed; ///< Fan speed @unit{rpm}
 double density_corrected; ///< Gas density corrected to reference conditions @unit{lb/ft^3}
 ```
 
-## Documenting Formulas
+### Documenting Formulas
+
+---
 
 When documenting functions, algorithms, or concepts that involve mathematical formulas, use the `@formula` command to typeset equations. This command is defined in the Doxyfile under `ALIASES` and uses MathJax for rendering. The `@formula` command allows you to assign a label to each equation, making it easy to reference equations elsewhere in your documentation.
 
-### Template
+#### Template
 
 ```cpp
 /**
@@ -789,7 +723,7 @@ When documenting functions, algorithms, or concepts that involve mathematical fo
 
 > The label entered in `equation_label` will be prefixed with `eq:` automatically. To reference the equation in your documentation, use `\eqref{eq:equation_label}`.
 
-### Example
+#### Example
 
 ```cpp
 /**
@@ -798,11 +732,13 @@ When documenting functions, algorithms, or concepts that involve mathematical fo
  */
 ```
 
-## File Documentation
+### File Documentation
+
+---
 
 Use a **single Doxygen block** at the very top of every header file.
 
-### Required tags
+#### Required tags
 
 | Tag        | Description                                          |
 | ---------- | ---------------------------------------------------- |
@@ -811,11 +747,11 @@ Use a **single Doxygen block** at the very top of every header file.
 | `@ingroup` | Module or package this file belongs to               |
 | `@brief`   | One-sentence purpose                                 |
 
-### Optional tags
+#### Optional tags
 
 `@details`, `@note`, `@deprecated`, `@bug`, `@see`, `@copyright`
 
-### Template
+#### Template
 
 ```cpp
 /**
@@ -835,7 +771,7 @@ Use a **single Doxygen block** at the very top of every header file.
  */
 ```
 
-### Example
+#### Example
 
 ```cpp
 /**
@@ -855,11 +791,13 @@ Use a **single Doxygen block** at the very top of every header file.
  */
 ```
 
-## Function & Method Documentation
+### Function & Method Documentation
+
+---
 
 Use a **Doxygen block** above each public function or method declaration in header files. This applies to both free functions and member functions of classes or structs.
 
-### Required tags
+#### Required tags
 
 | Tag          | Description                                                  |
 | ------------ | ------------------------------------------------------------ |
@@ -867,11 +805,11 @@ Use a **Doxygen block** above each public function or method declaration in head
 | `@param[in]` | Input parameter (`@param[out]` / `@param[in,out]` as needed) |
 | `@return`    | Meaning of the return value (omit for `void`)                |
 
-### Optional tags
+#### Optional tags
 
 `@details`, `@tparam`, `@throws`, `@note`, `@deprecated`, `@bug`, `@see`
 
-### Template
+#### Template
 
 ```cpp
 /**
@@ -893,7 +831,7 @@ Use a **Doxygen block** above each public function or method declaration in head
  */
 ```
 
-### Example
+#### Example
 
 ```cpp
 /**
@@ -910,11 +848,13 @@ template <typename Point2D>
 std::size_t Polygon::AddVertex(const Point2D& p);
 ```
 
-## Class & Struct Documentation
+### Class & Struct Documentation
+
+---
 
 Use a **Doxygen block** above each public `class` or `struct` declaration in header files and use `///<` for member notes.
 
-### Required tags
+#### Required tags
 
 | Tag                       | Description          |
 | ------------------------- | -------------------- |
@@ -922,11 +862,11 @@ Use a **Doxygen block** above each public `class` or `struct` declaration in hea
 | `@ingroup`                | Module or package    |
 | `@brief`                  | One-sentence purpose |
 
-### Optional tags
+#### Optional tags
 
 `@details`, `@tparam`, `@note`, `@deprecated`, `@bug`, `@see`
 
-### Template
+#### Template
 
 ```cpp
 /**
@@ -945,7 +885,7 @@ Use a **Doxygen block** above each public `class` or `struct` declaration in hea
  */
 ```
 
-### Example
+#### Example
 
 ```cpp
 /**
@@ -994,28 +934,32 @@ private:
 };
 ```
 
-## Data-Member Documentation
+### Data-Member Documentation
+
+---
 
 Use **inline-after comments with `///<`** for one-line descriptions of data members and individual enum values. This applies to both classes and structs.
  
-### Template
+#### Template
 
 ```cpp
 Type name_; ///< <Concise purpose>
 ```
 
-### Example
+#### Example
 
 ```cpp
 size_t count_ {0};   ///< Current vertex count
 std::vector<Vec2> verts_; ///< Vertices in counter-clockwise order
 ```
 
-## Enumeration Documentation
+### Enumeration Documentation
+
+---
 
 Document the **enum type** with a block comment; document each **enumerator** with `///<`. If an enum has only a few obvious values (e.g. `Clockwise`, `CounterClockwise`), the inline docs may be omitted.
 
-### Required tags
+#### Required tags
 
 | Tag        | Description          |
 | ---------- | -------------------- |
@@ -1023,11 +967,11 @@ Document the **enum type** with a block comment; document each **enumerator** wi
 | `@ingroup` | Module or package    |
 | `@brief`   | One-sentence purpose |
 
-### Optional tags
+#### Optional tags
 
 `@details`, `@note`, `@deprecated`, `@bug`, `@see`
 
-### Template
+#### Template
 
 ```cpp
 /**
@@ -1045,7 +989,7 @@ Document the **enum type** with a block comment; document each **enumerator** wi
  */
 ```
 
-### Example
+#### Example
 
 ```cpp
 /**
@@ -1060,31 +1004,32 @@ enum class Axis {
 };
 ```
 
-## Constant Documentation
+### Constant Documentation
+
+---
 
 Document global constants with an **inline-after** comment.
 
-### Template
+#### Template
 
 ```cpp
 constexpr Type kConstName ///< <Concise purpose>
 ```
 
-### Example
+#### Example
 
 ```cpp
 constexpr double kPi = 3.141592653589793;    ///< Circle ratio @unit{radians}
 inline const Vec2 kOrigin {0.0, 0.0};        ///< Reference point (0,0)
 ```
 
-<br><br>
+### Namespace Documentation
 
-
-## Namespace Documentation
+---
 
 Namespaces are used to organize code into logical groups and prevent name collisions. Each namespace should be documented with a **single Doxygen block** placed at the top of the header file where the namespace is defined. This block describes the purpose, scope, and any relevant notes about the namespace.
 
-### Required tags
+#### Required tags
 
 | Tag          | Description          |
 | ------------ | -------------------- |
@@ -1092,11 +1037,11 @@ Namespaces are used to organize code into logical groups and prevent name collis
 | `@ingroup`   | Module or package    |
 | `@brief`     | One-sentence purpose |
 
-### Optional tags
+#### Optional tags
 
 `@details`, `@note`, `@deprecated`, `@bug`, `@see`
 
-### Template
+#### Template
 
 ```cpp
 /**
@@ -1114,7 +1059,7 @@ Namespaces are used to organize code into logical groups and prevent name collis
  */
 ```
 
-### Example
+#### Example
 
 ```cpp
 /**
@@ -1125,24 +1070,26 @@ Namespaces are used to organize code into logical groups and prevent name collis
 namespace geom { /* ... */ }
 ```
 
-## Module (Group) Documentation
+### Module (Group) Documentation
+
+---
 
 Modules (or groups) are collections of related namespaces, classes, and functions that together provide a high-level overview of a particular area of functionality in the codebase. Modules help organize documentation, making it easier for users and contributors to understand the structure and purpose of different parts of the project.
 
 Each module should be documented with a **single Doxygen block** placed in a central documentation file (such as `mainpage.dox`). This block defines the module and provides an overview of its contents, design philosophy, and any relevant notes or references. All related code elements (namespaces, classes, functions, etc.) should reference the module using the `@ingroup` tag in their own documentation blocks to associate them with the appropriate group.
 
-### Required tags
+#### Required tags
 
 | Tag         | Description                    |
 | ----------- | ------------------------------ |
 | `@defgroup` | `<GroupName>` and display text |
 | `@brief`    | One-sentence description       |
 
-### Optional tags
+#### Optional tags
 
 `@details`, `@note`, `@deprecated`, `@bug`, `@see`
 
-### Template
+#### Template
 
 ```cpp
 /**
@@ -1159,7 +1106,7 @@ Each module should be documented with a **single Doxygen block** placed in a cen
  */
 ```
 
-### Example
+#### Example
 
 ```cpp
 /**
@@ -1171,15 +1118,15 @@ Each module should be documented with a **single Doxygen block** placed in a cen
  */
 ```
 
-<br><br>
+<br>
 
 # Conventional Commits
 
-All commits must adhere to the [Conventional-Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification defined below.
+This project follows the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification for commit messages to ensure clarity, consistency, and automation in version control. This helps in generating changelogs, automating releases, and improving collaboration among contributors.
 
 ## Commit Format
 
-Conventional Commits provide a structured commit message format to improve readability and automation. The format follows:
+Each commit message should follow this format:
 
 ```
 <type>(<optional scopes>): <description>
@@ -1190,6 +1137,8 @@ Conventional Commits provide a structured commit message format to improve reada
 ```
 
 ## Commit Types
+
+Commit types indicate the nature of the changes made in the commit. They help categorize changes and provide context for reviewers and automated tools. The following types are used:
 
 - **`build`**: Changes that affect the build system or external dependencies.
 - **`chore`**: Other changes that don't modify src or tests (e.g., config updates).
@@ -1206,7 +1155,8 @@ Conventional Commits provide a structured commit message format to improve reada
 
 ## Commit Scopes
 
-Scopes indicate the specific module, component, or area affected by the commit. They help in understanding the reach of changes within the codebase.
+Scopes indicate the specific module, component, or area affected by the commit. They help in understanding the reach of changes within the codebase. The following scopes are used:
+
 - **`clang-format`**
 - **`cli`**
 - **`cmake`**
@@ -1229,26 +1179,26 @@ Scopes indicate the specific module, component, or area affected by the commit. 
 - **`wasteWater`**
 - **`vscode`**
 
-### Using Multiple Scopes
+When a commit affects multiple areas, you can specify multiple scopes separated by a comma and a space:
 
-When a commit affects multiple areas, separate scopes with a comma and a space:
 ```
 feat(cli, docs): add new command to generate reports
 ```
 
 ## Breaking Changes
 
-If a commit introduces breaking changes, it must be indicated in the type/scope prefix of a commit, or as an entry in the footer.
-- If included as a footer, a breaking change MUST consist of the uppercase text **`BREAKING CHANGE`**, followed by a colon, space, and description:
+If a commit introduces breaking changes, it must be indicated in the `type/scope` prefix of a commit, or as an entry in the footer.
 
-  ```
-  feat: allow provided config object to extend other configs
+If included as a footer, a breaking change **MUST** consist of the uppercase text **`BREAKING CHANGE`**, followed by a colon, space, and description:
 
-  BREAKING CHANGE: `extends` key in config file is now used for extending other config files
-  ```
+```
+feat: allow provided config object to extend other configs
 
-- If included in the type/scope prefix, breaking changes **MUST** be indicated by a **`!`** immediately before the **`:`**. If **`!`** is used, **`BREAKING CHANGE:`** **MAY** be omitted from the footer section, and the commit description **SHALL** be used to describe the breaking change:
+BREAKING CHANGE: `extends` key in config file is now used for extending other config files
+```
 
-  ```
-  feat!: send an email to the customer when a product is shipped
-  ```
+If included in the `type/scope` prefix, breaking changes **MUST** be indicated by a **`!`** immediately before the **`:`**. If **`!`** is used, **`BREAKING CHANGE:`** **MAY** be omitted from the footer section, and the commit description **SHALL** be used to describe the breaking change:
+
+```
+feat!: send an email to the customer when a product is shipped
+```
