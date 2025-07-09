@@ -5,11 +5,10 @@ This document provides an overview of the refactoring and documentation efforts 
 ## Tasks
 
 - [ ] Reorganize project directories to mirror the module structure
-  - [ ] `Pumping System Assessments`
+  - [ ] `Compressed Air Assessments`
     - [ ] Create directory and migrate relevant files
     - [ ] Create associated namespace
-    - [ ] Create `README.md` file to explain the purpose and functionality
-  - [ ] `Process Heating Assessments`
+  - [ ] `Fan System Assessments`
     - [ ] Create directory and migrate relevant files
     - [ ] Create associated namespace
     - [ ] Create `README.md` file to explain the purpose and functionality
@@ -17,7 +16,11 @@ This document provides an overview of the refactoring and documentation efforts 
     - [ ] Create directory and migrate relevant files
     - [ ] Create associated namespace
     - [ ] Create `README.md` file to explain the purpose and functionality
-  - [ ] `Fan System Assessments`
+  - [ ] `Process Heating Assessments`
+    - [ ] Create directory and migrate relevant files
+    - [ ] Create associated namespace
+    - [ ] Create `README.md` file to explain the purpose and functionality
+  - [ ] `Pumping System Assessments`
     - [ ] Create directory and migrate relevant files
     - [ ] Create associated namespace
     - [ ] Create `README.md` file to explain the purpose and functionality
@@ -25,18 +28,19 @@ This document provides an overview of the refactoring and documentation efforts 
     - [ ] Create directory and migrate relevant files
     - [ ] Create associated namespace
     - [ ] Create `README.md` file to explain the purpose and functionality
-  - [ ] `Compressed Air Assessments`
+  - [ ] `Water Assessments`
     - [ ] Create directory and migrate relevant files
     - [ ] Create associated namespace
+    - [ ] Create `README.md` file to explain the purpose and functionality
+  - [ ] `Waste Water Assessments`
+    - [ ] Create directory and migrate relevant files
+    - [ ] Create associated namespace
+    - [ ] Create `README.md` file to explain the purpose and functionality
   - [ ] `Energy Treasure Hunt Module`
     - [ ] Create directory and migrate relevant files
     - [ ] Create associated namespace
     - [ ] Create `README.md` file to explain the purpose and functionality
   - [ ] `Simple Equipment and Property Calculators`
-    - [ ] Create directory and migrate relevant files
-    - [ ] Create associated namespace
-    - [ ] Create `README.md` file to explain the purpose and functionality
-  - [ ] `Waste Water Assessments`
     - [ ] Create directory and migrate relevant files
     - [ ] Create associated namespace
     - [ ] Create `README.md` file to explain the purpose and functionality
@@ -46,9 +50,7 @@ This document provides an overview of the refactoring and documentation efforts 
   - [ ] Move existing constants from various modules into `constants.h`
   - [ ] Update all modules to include `constants.h` where necessary
   - [ ] Document the purpose and usage of each constant in `constants.h`
-- [ ] Refactor & document `Pump System Assessments` module
-- [ ] Refactor & document `Process Heating Assessments` module
-- [ ] Refactor & document `Process Cooling Assessments` module
+- [ ] Refactor & document `Compressed Air Assessments` module
 - [ ] Refactor & document `Fan System Assessments` module
   - [ ] Refactor & document `fan203.h`
     - [x] Rename header and associated source files to `fan203.h` and `fan203.cpp`
@@ -75,8 +77,11 @@ This document provides an overview of the refactoring and documentation efforts 
     - [ ] Refactor & document `FlangePlane` class
     - [ ] Refactor & document `TraversePlane` class
     - [ ] Refactor & document `MstPlane` class
+- [ ] Refactor & document `Process Cooling Assessments` module
+- [ ] Refactor & document `Process Heating Assessments` module
+- [ ] Refactor & document `Pumping System Assessments` module
 - [ ] Refactor & document `Steam System Assessments` module
-- [ ] Refactor & document `Compressed Air Assessments` module
+- [ ] Refactor & document `Water Assessments` module
+- [ ] Refactor & document `Waste Water Assessments` module
 - [ ] Refactor & document `Energy Treasure Hunt` module
 - [ ] Refactor & document `Simple Equipment and Property Calculators` module
-- [ ] Refactor & document `Waste Water Assessments` module
