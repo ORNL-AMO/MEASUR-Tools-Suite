@@ -1,9 +1,8 @@
-MEASUR Tools Suite  
----------------
+# MEASUR Tools Suite  
 
-## Documentation Update
+## Update (07/03/2025)
 
-(6/20/25) The MEASUR Tools Suite is currently being updated for better usability by third parties. This includes a refactoring of the current code base to follow consistent practices, better organization and enhanced documentation around the engineering aspects of the calculations. Further details on timeline and implementation will be added shortly. Please check back for updates.
+The MEASUR Tools Suite is currently undergoing a major update to improve usability and maintainability. This includes a refactoring of the codebase to follow consistent practices, better organization, and enhanced documentation around the engineering aspects of the calculations. To follow the progress of this update, please refer to the [Roadmap](ROADMAP.md).
 
 ## About
 
@@ -16,7 +15,9 @@ Hosted documentation can be found at [https://industrialresources.ornl.gov/measu
 The npm packages can be downloaded and install from [registry](https://www.npmjs.com/package/measur-tools-suite)
 
 ### Dependencies
+
 #### C++
+
 - make
 - CMake (cmake-curses to use the ccmake gui)
 - GCC 4.8.5 or later
@@ -24,12 +25,15 @@ The npm packages can be downloaded and install from [registry](https://www.npmjs
 - Doxygen (only for building documentation)
 
 #### Web Assembly Compilation SDK
+
 - Emscripten (emsdk) - Follow instructions for install https://emscripten.org/docs/getting_started/downloads.html
 
 #### Node
+
 - Node LTS [https://nodejs.org/en/](https://nodejs.org/en/) 
 
 ### Building
+
 - `cd` into the emsdk directory: 
     - run `./emsdk install latest` followed by `./emsdk activate latest`
     - Activate PATH and other environment variables by running `source ./emsdk_env.sh` or on Windows run `emsdk_env.bat`
@@ -41,6 +45,7 @@ The npm packages can be downloaded and install from [registry](https://www.npmjs
     - run `emmake make`
 
 ### Unit Tests
+
 - To run the WASM unit tests:
   - Install node_modules dependencies: `cd` into MEASUR-Tools-Suite directory and  
     run `npm install` followed by `npm run test-wasm`
@@ -54,15 +59,19 @@ The npm packages can be downloaded and install from [registry](https://www.npmjs
 - On MacOS or Linux, the test executable can be found under the `bin` directory. On Windows, the executable can be found under either the `Debug` or `Release` directories, depending on CMake configuration
 
 ### Packaging
+
 - Enable the `BUILD_PACKAGE` flag in the CMakeCache, then `cmake ./` then `make package`
 - Or use this directly for Windows: `cmake -D BUILD_TESTING:BOOL=OFF ./` and `cmake --build . --config Release --target PACKAGE`
 - To make package on Linux or Mac, run `ccmake.` and set BUILD_TESTING OFF, BUILD_PACKAGE ON, then configure and generate. Then `make package`.
 
 ### Documentation
+
 - To generate documentation: `doxygen Doxyfile`
 
 ### Dockerizing 
-To make it easy for developers local building and testing, it is dockerized. To run it in docker follow this steps.
+
+To make it easy for developers local building and testing, it is dockerized. To run it in docker follow these steps.
+
 - Download the repository
 - Open command line tool, change directory to the repository run `docker compose up -d`
 - To stop the running container run `docker compose down`
