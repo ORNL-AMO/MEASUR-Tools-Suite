@@ -1,494 +1,616 @@
-# How to Contribute
+# How to Contribute <!-- omit in toc -->
 
 This guide provides clear standards and best practices for contributing to this project. It covers coding style, documentation, formatting, and workflow expectations to help maintain high code quality, ensure long-term maintainability, and foster smooth collaboration among all contributors.
 
-## [Style Guide](#style-guide)
+[<h2> Style Guide </h2>](#style-guide)
 
 Follow this guide to make sure your contributions align with the project's coding standards. This will help ensure that your code is readable, maintainable, and consistent with the rest of the codebase.
 
-## [Clang-Format](#clang-format)
+[<h2> Formatting </h2>](#formatting)
 
-Use Clang-Format to automatically format your code according to the project's style guide. This ensures consistent formatting across the codebase and reduces manual formatting effort.
+Follow the formatting standards using clang-format to ensure a consistent code style across all C++ files. This helps maintain readability and reduces merge conflicts.
 
-## [Doxygen Documentation](#doxygen-documentation)
+[<h2> Documentation </h2>](#documentation)
 
 Follow these guidelines to document your code effectively using Doxygen. Proper documentation is crucial for understanding the codebase and facilitating collaboration.
 
-## [Conventional Commits](#conventional-commits)
+[<h2> Conventional Commits </h2>](#conventional-commits)
 
-Use Conventional Commits to structure your commit messages. This helps maintain a clear project history and makes it easier to understand the purpose of each change. 
+Use Conventional Commits to structure your commit messages. This helps maintain a clear project history and makes it easier to understand the purpose of each change.
 
-<br>
+<!-- START mdsplit-ignore -->
+<a id="index"></a>
+<details open>
+<summary><Strong>Index</Strong></summary>
+
+- [Style Guide](#style-guide)
+  - [Header Files](#header-files)
+    - [Include Guards](#include-guards)
+    - [Include What You Use](#include-what-you-use)
+    - [Include Order](#include-order)
+    - [Function Definitions in Headers](#function-definitions-in-headers)
+  - [Scoping](#scoping)
+    - [Namespaces](#namespaces)
+    - [Local Variables](#local-variables)
+  - [Classes](#classes)
+    - [Access Control](#access-control)
+    - [Declaration Order](#declaration-order)
+  - [Structs](#structs)
+  - [Looping and Branching Statements](#looping-and-branching-statements)
+  - [Preincrement and Predecrement](#preincrement-and-predecrement)
+  - [Use of `const`](#use-of-const)
+  - [Naming](#naming)
+    - [Files](#files)
+    - [Namespaces](#namespaces-1)
+    - [Classes and Structs](#classes-and-structs)
+    - [Functions and Methods](#functions-and-methods)
+    - [Variables](#variables)
+    - [Member Variables](#member-variables)
+    - [Constants and Enums](#constants-and-enums)
+    - [Aliases](#aliases)
+    - [Templates](#templates)
+    - [Macros](#macros)
+  - [Comments](#comments)
+    - [When to comment](#when-to-comment)
+    - [Comment Style](#comment-style)
+- [Formatting](#formatting)
+  - [Configuration](#configuration)
+  - [How to Format Code](#how-to-format-code)
+  - [Best Practices](#best-practices)
+- [Documentation](#documentation)
+  - [Common Doxygen Tags](#common-doxygen-tags)
+  - [How to Generate Doxygen Documentation](#how-to-generate-doxygen-documentation)
+  - [Documenting Code](#documenting-code)
+    - [Files](#files-1)
+    - [Namespaces](#namespaces-2)
+    - [Classes \& Structs](#classes--structs)
+    - [Functions \& Methods](#functions--methods)
+    - [Member Variables](#member-variables-1)
+    - [Constants](#constants)
+    - [Enums](#enums)
+    - [Formulas](#formulas)
+    - [Units](#units)
+    - [Modules](#modules)
+- [Conventional Commits](#conventional-commits)
+  - [Commit Format](#commit-format)
+  - [Commit Types](#commit-types)
+  - [Commit Scopes](#commit-scopes)
+  - [Breaking Changes](#breaking-changes)
+
+</details>
+<!-- END mdsplit-ignore -->
 
 # Style Guide
 
-This section describes the coding style for this project. It is based on the [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html) and the [C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines), with some modifications to suit this project's needs.
+Use this guide to ensure your contributions align with the project's coding standards. It is loosely based on the [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html) and the [C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines), with some modifications to suit this project's needs.
+
+<!-- START mdsplit-ignore -->
+<a id="style-guide-index"></a>
+<details open>
+<summary><Strong>Index</Strong></summary>
+
+- [Style Guide](#style-guide)
+  - [Header Files](#header-files)
+    - [Include Guards](#include-guards)
+    - [Include What You Use](#include-what-you-use)
+    - [Include Order](#include-order)
+    - [Function Definitions in Headers](#function-definitions-in-headers)
+  - [Scoping](#scoping)
+    - [Namespaces](#namespaces)
+    - [Local Variables](#local-variables)
+  - [Classes](#classes)
+    - [Access Control](#access-control)
+    - [Declaration Order](#declaration-order)
+  - [Structs](#structs)
+  - [Looping and Branching Statements](#looping-and-branching-statements)
+  - [Preincrement and Predecrement](#preincrement-and-predecrement)
+  - [Use of `const`](#use-of-const)
+  - [Naming](#naming)
+    - [Files](#files)
+    - [Namespaces](#namespaces-1)
+    - [Classes and Structs](#classes-and-structs)
+    - [Functions and Methods](#functions-and-methods)
+    - [Variables](#variables)
+    - [Member Variables](#member-variables)
+    - [Constants and Enums](#constants-and-enums)
+    - [Aliases](#aliases)
+    - [Templates](#templates)
+    - [Macros](#macros)
+  - [Comments](#comments)
+    - [When to comment](#when-to-comment)
+    - [Comment Style](#comment-style)
+
+</details>
+<!-- END mdsplit-ignore -->
 
 ## Header Files
 
-Every `.cpp` file should have an associated `.h` file. There are some common exceptions, such as unit tests and small `.cpp` files containing just a `main()` function.
+Every C++ source file (`.cpp`) should have a corresponding header file (`.h`). The header file contains declarations, while the source file contains definitions and implementations.
 
-### The #define Guard
+> [!NOTE]
+> A common exception is unit tests, which may not require a separate header file. Small `.cpp` files containing just a `main()` function may also not have a corresponding header.
 
----
+<!-- START mdsplit-ignore -->
+**[Return to Index](#style-guide-index)**
+<!-- END mdsplit-ignore -->
 
-All header files should have `#define` guards to prevent multiple inclusion.
+### Include Guards
 
-#### Format
-
-```cpp
-#ifndef <PROJECT>_<PATH>_<FILE>_H_
-#define <PROJECT>_<PATH>_<FILE>_H_
-
-...
-
-#endif  // <PROJECT>_<PATH>_<FILE>_H_
-```
-
-#### Example
+Every header file must have a `#pragma once` directive to prevent multiple inclusion of header files:
 
 ```cpp
-#ifndef GEOMETRY_POLYGON_AREA_H_
-#define GEOMETRY_POLYGON_AREA_H_
+#pragma once
 
-...
+// other includes or declarations
 
-#endif  // GEOMETRY_POLYGON_AREA_H_
+// file content
 ```
+
+<!-- START mdsplit-ignore -->
+**[Return to Index](#style-guide-index)**
+<!-- END mdsplit-ignore -->
 
 ### Include What You Use
 
----
+Always include the header file that directly defines any symbol you use. Do not rely on headers being included indirectly through other files. This ensures that removing unnecessary includes will not break your code.
 
-If a source or header file refers to a symbol defined elsewhere, it must directly include the header that provides the declaration or definition of that symbol. Do not include headers for any other reason.
+Avoid using forward declarations where possible. Instead, include the headers you need:
 
-Do **not** rely on transitive inclusions (i.e., do not assume that a header is included indirectly via another header). This practice allows unnecessary `#include` statements to be safely removed from headers without breaking dependent code.
+- Good:
 
-This rule also applies to related headers: for example, if `foo.cpp` uses a symbol from `bar.h`, it should include `bar.h` directly, even if `foo.h` already includes `bar.h`.
+  ```cpp
+  #include "a.h" // Include the header that defines A
 
-### Forward Declarations
+  class B {
+  public:
+      void interactWithA(A* a);
+  }
+  ```
 
----
+- Bad:
 
-Avoid using forward declarations where possible. Instead, include the headers you need.
+  ```cpp
+  class A; // Forward declaration without full definition
+  
+  class B {
+  public:
+      void interactWithA(A* a);
+  }
+  ```
 
-#### Good
+<!-- START mdsplit-ignore -->
+**[Return to Index](#style-guide-index)**
+<!-- END mdsplit-ignore -->
 
-```cpp
-#include "b.h"
-void f(B*);
-void f(void*);
-void test(D* x) { f(x); }  // Calls f(B*)
-```
+### Include Order
 
-#### Bad
+Use double quotes (`"header.h"`) for project and third-party headers, and angle brackets (`<vector>`) for standard library headers.
 
-```cpp
-class B;  // Forward declaration without definition.
-void FuncInB();
-extern int variable_in_b;
-```
+Include project headers relative to the source directory (e.g., `"module/header.h"`).
 
-### Defining Functions in Header Files
+Clang-Format manages include order via the `.clang-format` file. The typical order is:
+1. Related header for the current file
+2. Standard library headers
+3. Third-party library headers
+4. Project-specific headers
 
----
+List each third-party library as a separate category in `.clang-format`. Update `IncludeCategories` when adding new libraries.
 
-Only define a function at its public declaration if it is short (10 lines or fewer) or if it is a template function. Place longer function bodies in the `.cpp` file unless they must be in the header for performance or technical reasons.
+<!-- START mdsplit-ignore -->
+**[Return to Index](#style-guide-index)**
+<!-- END mdsplit-ignore -->
 
-If a definition must be in the header, avoid placing it in the public section. Instead, put it in a private section, an `internal` namespace, or below a comment like `// Implementation details only below here`.
+### Function Definitions in Headers
 
-All function definitions in header files must be ODR-safe by using the `inline` specifier, being a function template, or being defined in a class body at first declaration.
+Define functions in header files only if they are short (10 lines or fewer) or are templates. Longer functions should go in `.cpp` files unless required in the header for technical reasons.
 
-#### Example
+If a function must be defined in a header, keep its body out of the public section—use a private section, an `internal` namespace, or place it after a comment like `// Implementation details only below here`.
+
+All header-defined functions must be ODR-safe: use `inline`, make them templates, or define them inside the class body.
+
+Example:
 
 ```cpp
 template <typename T>
 class Foo {
- public:
-  int bar() { return bar_; }
+public:
+    // Short, ODR-safe function defined in header
+    int bar() const { return bar_; }
+  
+    // Long function declared only; implementation in .cpp or below
+    void doSomething();
 
-  void MethodWithHugeBody();
-
- private:
-  int bar_;
+private:
+    int bar_;
 };
 
 // Implementation details only below here
-
 template <typename T>
-void Foo<T>::MethodWithHugeBody() {
-  ...
+void Foo<T>::doSomething() {
+    // ... lengthy implementation ...
 }
 ```
 
-### Names and Order of Includes
-
----
-
-Project-specific and third-party library headers should be included using double quotes (`"myheader.h"`), while standard library headers should use angle brackets (`<vector>`).
-
-All of a project's header files should be listed as descendants of the project's source directory. For example, `myproject/include/module/header.h` should be included as `"module/header.h"`.
-
-The order of includes is handled automatically by Clang-Format using the `IncludeCategories` setting in the `.clang-format`. The general order is:
-1. Related header file for the current source file (e.g., `"foo.h"`).
-2. Standard library headers (e.g., `<string>` and `<vector>`).
-3. Third-party library headers (e.g., `<boost/some_header.h>`).
-4. Project-specific headers (e.g., `"project/some_header.h"`).
-
-All third-party libraries should be defined as separate categories in the `.clang-format` file. When adding a new third-party library, update the `IncludeCategories` section in the `.clang-format` file to include it.
+<!-- START mdsplit-ignore -->
+**[Return to Index](#style-guide-index)**
+<!-- END mdsplit-ignore -->
 
 ## Scoping
 
+Scoping helps organize code, prevent name collisions, and manage visibility.
+
+<!-- START mdsplit-ignore -->
+**[Return to Index](#style-guide-index)**
+<!-- END mdsplit-ignore -->
+
 ### Namespaces
 
----
-
-With few exceptions, place all code in a namespace. Namespaces should have unique names based on the project name and, if appropriate, its path.
-
-- **Do not** use using-directives (e.g., `using namespace foo;`).
-- **Do not** use inline namespaces.
-
-Namespaces subdivide the global scope into distinct, named scopes, preventing name collisions in large programs and allowing most code to use reasonably short names. For example, if two projects both define a class `Foo` in the global scope, these symbols may collide. By placing code in namespaces, `project1::Foo` and `project2::Foo` are distinct and do not conflict, while code within each namespace can refer to `Foo` without qualification.
-
-**Inline namespaces** automatically place their names in the enclosing scope. For example:
+Place all code in a namespace, named after the project or its path:
 
 ```cpp
-namespace outer {
-inline namespace inner {
-  void foo();
-}  // namespace inner
-}  // namespace outer
-
-// Both of these are valid:
-outer::inner::foo();
-outer::foo();
+namespace my_project {
+    // Code goes here
+}  // namespace my_project
 ```
+
+> [!NOTE]
+> Avoid `using namespace ...;` and inline namespaces.
+
+<!-- START mdsplit-ignore -->
+**[Return to Index](#style-guide-index)**
+<!-- END mdsplit-ignore -->
 
 ### Local Variables
 
----
-
-Place a function's variables in the narrowest scope possible, and initialize variables in the declaration.
-- Declare variables as close as possible to their first use, and within the smallest scope needed.
-- Always initialize variables at the point of declaration, rather than declaring and assigning separately.
-
-#### Good
+Declare variables in the narrowest scope possible, close to their first use and always initialize them at declaration:
 
 ```cpp
-int i = f();  // Declaration and initialization together.
-int jobs = NumJobs();
-f(jobs);      // Declaration closely followed by use.
-std::vector<int> v = {1, 2};  // Prefer brace initialization.
-```
-
-#### Bad
-
-```cpp
-int i;
-i = f();      // Initialization separate from declaration.
-int jobs;
-jobs = NumJobs();
-// ... more code ...
-f(jobs);      // Declaration far from use.
-std::vector<int> v;
-v.push_back(1);
-v.push_back(2);  // Prefer initializing with braces.
-```
-
-Variables needed for if, while, and for statements should normally be declared within those statements to confine their scope:
-
-```cpp
-while (const char* p = strchr(str, '/')) str = p + 1;
-```
-
-#### Caveat
-
-If a variable is an object, its constructor and destructor are called each time it enters and leaves scope. For objects used in a loop, it may be more efficient to declare the variable outside the loop:
-
-```cpp
-// Inefficient: constructor/destructor called every iteration
-for (int i = 0; i < 1000000; ++i) {
-  Foo f;
-  f.DoSomething(i);
+void foo() {
+    int x = 42; // Declaration and initialization together.
+    // Use x...
 }
+```
 
-// Efficient: constructor/destructor called once
+For objects used in loops, declare them outside the loop for efficiency:
+
+```cpp
 Foo f;
 for (int i = 0; i < 1000000; ++i) {
-  f.DoSomething(i);
+  f.doSomething(i);
 }
 ```
+
+<!-- START mdsplit-ignore -->
+**[Return to Index](#style-guide-index)**
+<!-- END mdsplit-ignore -->
 
 ## Classes
 
-Classes are the fundamental unit of code in C++. Naturally, we use them extensively. This section lists the main dos and don'ts you should follow when writing a class.
+Use `class` for types that encapsulate data and behavior. This section provides guidelines for writing classes in C++.
 
-### Structs vs. Classes
-
----
-
-Use a `struct` only for passive objects that carry data; use a `class` for everything else.
-
-- The `struct` and `class` keywords behave almost identically in C++, but we assign different semantic meanings:
-  - **struct:** Use for passive data objects with all fields public. Structs may have associated constants, constructors, destructors, and helper methods, but these methods must not require or enforce invariants between fields. There should be no invariants that could be broken by direct field access.
-  - **class:** Use when functionality, invariants, encapsulation, or future evolution is needed. If in doubt, prefer `class`.
-
-For consistency with the STL, you may use `struct` for stateless types such as traits, template metafunctions, and
-
-### Structs vs. Pairs and Tuples
-
----
-
-Prefer to use a `struct` instead of a `std::pair` or `std::tuple` whenever the elements can have meaningful names.
-
-While pairs and tuples can save time by avoiding the need to define a custom type, meaningful field names are almost always clearer than using `.first`, `.second`, or `std::get<X>`.
-
-Use pairs and tuples only in generic code where the elements do not have specific meanings, or when required for interoperability with existing code
+<!-- START mdsplit-ignore -->
+**[Return to Index](#style-guide-index)**
+<!-- END mdsplit-ignore -->
 
 ### Access Control
 
----
+Make data members `private` (except for constants) to protect invariants and encapsulation. Use accessor methods as needed.
 
-Make class data members `private`, unless they are constants. This helps maintain class invariants and encapsulation, even if it requires writing simple accessor methods (usually `const`).
+<!-- START mdsplit-ignore -->
+**[Return to Index](#style-guide-index)**
+<!-- END mdsplit-ignore -->
 
 ### Declaration Order
 
----
+Start with `public:` members, then `protected:`, then `private:`. Omit empty sections.
 
-Group similar declarations together, placing public parts earlier.
+Within each section, group declarations in this order:
 
-A class definition must start with a `public:` section, followed by `protected:`, then `private:`. Omit any section that would be empty.
-
-Within each section, group similar kinds of declarations together, in this preferred order:
-
-1. Types and type aliases (`typedef`, `using`, `enum`, nested structs/classes, friend types)
-2. (For structs only) Non-static data members
+1. Types and aliases (`using`, `enum`, nested structs/classes, friends)
+2. (For structs) Non-static data members
 3. Static constants
 4. Factory functions
 5. Constructors and assignment operators
 6. Destructor
-7. All other functions (static and non-static member functions, friend functions)
-8. All other data members (static and non-static)
+7. Other functions
+8. Other data members
 
-This order improves readability and makes it easier to find related declarations.
+This keeps related items together and improves readability.
 
-## Other C++ Features
+<!-- START mdsplit-ignore -->
+**[Return to Index](#style-guide-index)**
+<!-- END mdsplit-ignore -->
 
-### Preincrement and Predecrement
+## Structs
 
----
+Use `struct` for passive data objects that carry data; use `class` for everything else.
 
-Use the prefix form (`++i`, `--i`) of the increment and decrement operators unless you specifically need the value before the increment or decrement (postfix semantics).
+Prefer to use a `struct` instead of a `std::pair` or `std::tuple` whenever the elements can have meaningful names. 
 
-- The prefix form is generally more readable and can be more efficient, as it does not require making a copy of the original value.
-- The postfix form (`i++`, `i--`) should only be used when the previous value is required in the same expression.
+Use pairs and tuples only in generic code where the elements do not have specific meanings, or when required for interoperability with existing code or APIs.
 
-#### Good
+<!-- START mdsplit-ignore -->
+**[Return to Index](#style-guide-index)**
+<!-- END mdsplit-ignore -->
+
+## Looping and Branching Statements
+
+Use braces for all control statements (`if`, `else`, `for`, `while`, `do`, `switch`), even for single-line bodies:
 
 ```cpp
+if (condition) {
+    doSomething();
+} 
+else {
+    doSomethingElse();
+}
+
+while (condition) {
+    doSomething();
+}
+
+for (int i = 0; i < 10; ++i) {
+    doSomethingWith(i);
+}
+
+switch (var) {
+    case 0: {
+        foo();
+        break;
+    }
+}
+```
+
+<!-- START mdsplit-ignore -->
+**[Return to Index](#style-guide-index)**
+<!-- END mdsplit-ignore -->
+
+## Preincrement and Predecrement
+
+Prefer prefix increment/decrement (`++i`, `--i`) over postfix (`i++`, `i--`) unless you need the value before the change:
+
+```cpp
+// Good: preincrement
 for (int i = 0; i < n; ++i) {
-    // Use ++i unless you need the previous value
+    std::cout << i << std::endl;
+}
+
+// Necessary: postincrement
+std::vector<int> vec = {10, 20, 30};
+auto it = vec.begin();
+while (it != vec.end()) {
+    std::cout << *it++ << std::endl; // Value needed before increment
 }
 ```
 
-#### Bad
+<!-- START mdsplit-ignore -->
+**[Return to Index](#style-guide-index)**
+<!-- END mdsplit-ignore -->
+
+## Use of `const`
+
+Use `const` to indicate immutability and improve code safety. `constexpr` is preferred when a value is known at compile time.
 
 ```cpp
-for (int i = 0; i < n; i++) {
-    // Avoid i++ unless you need the previous value
+void processData(const std::vector<int>& data) {
+    constexpr int threshold = 10; // Compile-time constant
+    
+    // Use const to ensure data is not modified
+    for (const auto& item : data) {
+        if (item > threshold) {
+            // Do something with item
+        }
+    }
 }
 ```
 
-### Use of `const`
-
----
-
-Use `const` in APIs wherever it is meaningful and accurate. This includes function parameters, methods, and non-local variables. `constexpr` is preferred when a value is known at compile time.
-
-- **Function parameters:**  
-  If a function does not modify an argument passed by reference or pointer, declare the parameter as `const T&` or `const T*`.  
-  For parameters passed by value, `const` has no effect on the caller and is not recommended.
-- **Member functions:**  
-  Declare methods as `const` unless they alter the logical state of the object or allow the user to do so (e.g., by returning a non-const reference). All `const` operations of a class should be safe to invoke concurrently; if not, document the class as "thread-unsafe".
-- **Benefits:**  
-  Using `const` makes code easier to understand, enables better compiler checks, and helps document which objects can be mutated. This is especially important for thread safety and API clarity.
-- **Local variables:**  
-  Using `const` on local variables is optional; use your judgment.
-- **Placement:**  
-  Prefer placing `const` before the type (e.g., `const int* foo`), but consistency with surrounding code is more important than style.
-
-**Summary:**  
-Use `const` consistently in APIs to clearly communicate immutability and enable safer, more maintainable code.
+<!-- START mdsplit-ignore -->
+**[Return to Index](#style-guide-index)**
+<!-- END mdsplit-ignore -->
 
 ## Naming
 
-Give things names that make their purpose or intent understandable to a new reader, even someone on a different team than the owners. Do not worry about saving horizontal space as it is far more important to make your code immediately understandable by a new reader.
+Naming conventions are crucial for maintaining a consistent and readable codebase. This section outlines the naming conventions for various elements in the code.
 
-Minimize the use of abbreviations that would likely be unknown to someone outside your project (especially acronyms and initialisms). Do not abbreviate by deleting letters within a word. When an abbreviation is used, prefer to capitalize it as a single "word", e.g., StartRpc() rather than StartRPC(). As a rule of thumb, an abbreviation is probably OK if it's listed in Wikipedia. Note that certain universally-known abbreviations are OK, such as i for a loop index and T for a template parameter.
+<!-- START mdsplit-ignore -->
+**[Return to Index](#style-guide-index)**
+<!-- END mdsplit-ignore -->
 
-### File Names
+### Files
 
----
-
-Filenames are `snake_case` (all lowercase, with underscores between words). For instance: `my_class.cpp`, `polygon.cpp`.
-
-C++ files have a `.cpp` extension, and header files have a `.h` extension.
-
-### Type Names
-
----
-
-Type names start with a capital letter and have a capital letter for each new word, with no underscores: MyExcitingClass, MyExcitingEnum.
-
-The names of all types — classes, structs, type aliases, enums, and type template parameters — have the same naming convention. Type names should start with a capital letter and have a capital letter for each new word. No underscores. For example:
+Use `snake_case` suffixed with the appropriate file extension (`.h`, `.hpp`, or `.cpp`) for file names:
 
 ```cpp
-// classes and structs
-class MyClass { ...
-class MyClassTester { ...
-struct MyClassProperties { ...
-
-// typedefs
-typedef hash_map<MyClassProperties *, std::string> PropertiesMap;
-
-// using aliases
-using PropertiesMap = hash_map<MyClassProperties *, std::string>;
-
-// enums
-enum class MyClassError { ...
+my_class.h
+my_class.cpp
 ```
 
-### Concept Names
+> [!NOTE]
+> This project uses `.h` for header files and `.cpp` for source files. 
+> File names should be descriptive and reflect the content or purpose of the file.
 
----
+<!-- START mdsplit-ignore -->
+**[Return to Index](#style-guide-index)**
+<!-- END mdsplit-ignore -->
 
-Concept names follow the same rules as type names.
+### Namespaces
 
-### Variable Names
-
----
-
-The names of variables (including function parameters) and data members are `snake_case` (all lowercase, with underscores between words). Data members of classes (but not structs) additionally have trailing underscores. For instance: `a_local_variable`, `a_struct_data_member`, `a_class_data_member_`.
-
-#### Common Variable Names
+Namespaces names use `snake_case`:
 
 ```cpp
-std::string table_name;
+namespace my_project {
+namespace utils {
+
+// Utility functions go here.
+
+}  // namespace utils
+}  // namespace my_project
 ```
 
-#### Class Data Members
+> [!NOTE]
+> All code in the namespace should be under one or more directories with the same name as the namespace.
 
-Data members of classes, both static and non-static, are named like ordinary nonmember variables, but with a trailing underscore. The exception to this is static constant class members, which should follow the rules for [naming constants](#constant-names). For example:
+<!-- START mdsplit-ignore -->
+**[Return to Index](#style-guide-index)**
+<!-- END mdsplit-ignore -->
+
+### Classes and Structs
+
+Use `PascalCase` for class and struct names:
 
 ```cpp
-class TableInfo {
- public:
-  ...
-  static const int kTableVersion = 3;  // OK - constant naming.
-  ...
+class MyClass {
+    // Class members
+};
 
- private:
-  std::string table_name_;             // OK - underscore at end.
-  static Pool<TableInfo>* pool_;       // OK.
+struct MyStruct {
+    // Struct members
 };
 ```
 
-#### Struct Data Members
+<!-- START mdsplit-ignore -->
+**[Return to Index](#style-guide-index)**
+<!-- END mdsplit-ignore -->
 
-Data members of structs, both static and non-static, are named like ordinary nonmember variables. They do not have the trailing underscores that data members in classes have. For example:
+### Functions and Methods
+
+Use `camelCase` for function and method names:
 
 ```cpp
-struct TableProperties {
-  std::string name;
-  int num_entries;
-  static Pool<TableProperties>* pool;
+void myFunction();
+
+class MyClass {
+public:
+    void myMethod();
 };
 ```
 
-### Constant Names
+<!-- START mdsplit-ignore -->
+**[Return to Index](#style-guide-index)**
+<!-- END mdsplit-ignore -->
 
----
+### Variables
 
-Variables declared `constexpr` or `const`, and whose value is fixed for the duration of the program, are named with a leading "k" followed by mixed case. Underscores can be used as separators in the rare cases where capitalization cannot be used for separation. For example:
+Local variables and function parameters use `snake_case`:
 
 ```cpp
-constexpr int kDaysInWeek = 7;
-const int kAndroid8_0_0 - 24; // Android 8.0.0
+void processData(int input_value) {
+    int local_variable = input_value * 2;
+}
 ```
 
-### Function Names
+<!-- START mdsplit-ignore -->
+**[Return to Index](#style-guide-index)**
+<!-- END mdsplit-ignore -->
 
----
+### Member Variables
 
-Regular functions have mixed case; accessors and mutators are named like variables. Regular functions should be named with a verb or verb phrase, and should be descriptive of the action they perform. For example:
+There are two common conventions for member variables:
+
+1. Underscore suffix:
+
+   ```cpp
+   class MyClass {
+   private:
+       int value_;
+       std::string name_;
+   };
+   ```
+   
+2. `m_` prefix:
+   
+   ```cpp
+   class MyClass {
+   private:
+       int m_value;
+       std::string m_name;
+   };
+   ```
+
+> [!NOTE]
+> This project uses the underscore suffix convention for class member variables. 
+
+Struct member variables are named like ordinary nonmember variables, without the trailing underscore:
 
 ```cpp
-AddTableEntry()
-DeleteTableEntry()
-OpenFile()
-```
-
-Accessors and mutators (get and set functions) may be named like variables. These often correspond to actual member variables, but this is not required. For example, `int count()` and `void set_count(int count)`.
-
-### Namespace Names
-
----
-
-Namespace names are `snake_case` (all lowercase, with underscores between words).
-
-When choosing names for namespaces, note that names must be fully qualified when used in a header outside the namespace, because unqualified Aliases are generally banned.
-
-Top-level namespaces must be globally unique and recognizable, so each one should be owned by a single project or team, with a name based on the name of that project or team. Usually, all code in the namespace should be under one or more directories with the same name as the namespace.
-
-Nested namespaces should avoid the names of well-known top-level namespaces, especially `std` and `absl`, because in C++, nested namespaces do not protect from collisions with names in other namespaces.
-
-### Enumerator Names
-
----
-
-Enumerators (for both scoped and unscoped enums) should be named like constants with a leading "k" followed by mixed case. For example:
-
-```cpp
-enum class TableError {
-  kOk = 0,
-  kOutOfMemory,
-  kMalformedInput,
+struct MyStruct {
+    int value;
+    std::string name;
 };
 ```
 
-### Template Parameter Names
+<!-- START mdsplit-ignore -->
+**[Return to Index](#style-guide-index)**
+<!-- END mdsplit-ignore -->
 
----
+### Constants and Enums
 
-Template parameters should follow the naming style for their category: type template parameters should follow the rules for [naming types](#type-names), and non-type template parameters should follow the rules for [naming variables](#variable-names) or [constants](#constant-names).
-
-### Macro Names
-
----
-
-In general macros should not be used. However, if they are absolutely needed, then they should be named with all capitals and underscores, and with a project-specific prefix. For example:
+Use `PascalCase` for enum names and `PascalCase` prefixed with `k` for constants and enum values:
 
 ```cpp
-#define MYPROJECT_ROUND(x) ...
+enum class Color {
+    kRed,
+    kGreen,
+    kBlue
+};
+
+const int kMaxValue = 100;
+constexpr double kPi = 3.14159;
 ```
+
+<!-- START mdsplit-ignore -->
+**[Return to Index](#style-guide-index)**
+<!-- END mdsplit-ignore -->
 
 ### Aliases
 
----
-
-The name for an alias follows the same principles as any other new name, applied in the context where the alias is defined rather than where the original name appears. For example:
+Use `PascalCase` for type aliases defined with `using`:
 
 ```cpp
-using Bar = Foo;
+using StringList = std::vector<std::string>;
 ```
+
+<!-- START mdsplit-ignore -->
+**[Return to Index](#style-guide-index)**
+<!-- END mdsplit-ignore -->
+
+### Templates
+
+Use `PascalCase` for template parameters:
+
+```cpp
+template <typename InputType>
+InputType processInput(InputType input);
+```
+
+<!-- START mdsplit-ignore -->
+**[Return to Index](#style-guide-index)**
+<!-- END mdsplit-ignore -->
+
+### Macros
+
+Use `UPPER_CASE` with a project-specific prefix for macro names:
+
+```cpp
+#define MYPROJECT_MAX(a, b) ((a) > (b) ? (a) : (b))
+```
+
+> [!NOTE]
+> Try to avoid using macros whenever possible. Macros can lead to hard-to-debug issues and are generally discouraged in modern C++. Instead, prefer `inline` or `constexpr` functions.
+
+<!-- START mdsplit-ignore -->
+**[Return to Index](#style-guide-index)**
+<!-- END mdsplit-ignore -->
 
 ## Comments
 
-Clear, concise comments are essential for maintainable code. Use comments to clarify *why* code exists, explain non-obvious logic, and provide context for future maintainers. Avoid restating what the code does—focus on intent, rationale, and caveats.
+Comments are essential for understanding code. They help explain the intent behind code, document design decisions, and provide context for future maintainers. This section provides guidelines for writing effective comments.
+
+<!-- START mdsplit-ignore -->
+**[Return to Index](#style-guide-index)**
+<!-- END mdsplit-ignore -->
 
 ### When to comment
-
----
 
 | Do comment when...                                 | Avoid when...                                 |
 | -------------------------------------------------- | --------------------------------------------- |
@@ -497,104 +619,49 @@ Clear, concise comments are essential for maintainable code. Use comments to cla
 | There is a subtle **invariant / side-effect**.     | The function already documents the behaviour. |
 | You’re **explaining why**, not *what*.             | You’re restating the *what* (“increment i”).  |
 
+<!-- START mdsplit-ignore -->
+**[Return to Index](#style-guide-index)**
+<!-- END mdsplit-ignore -->
+
 ### Comment Style
 
----
-
-1. **Place above** the line or block it explains—never to the right of long code.
-2. **Start with a capital letter** and **end with a period** if the sentence is complete.
-3. Use the `TODO(user, yyyy-mm-dd):` format for tasks.
-4. Keep lines short; wrap with the same `//` prefix.
-5. Prefer present tense and active voice.
-6. Be specific and actionable—avoid vague or generic comments.
-
-#### Good
+- **Place above** the line or block it explains—never to the right of long code.
+- **Start with a capital letter** and **end with a period** if the sentence is complete.
+- Use the `TODO(user, yyyy-mm-dd):` format for tasks.
+- Keep lines short; wrap with the same `//` prefix.
+- Prefer present tense and active voice.
+- Be specific and actionable—avoid vague or generic comments.
 
 ```cpp
 // Compute signed area via Shoelace formula.
-double area = PolygonSignedArea(verts);
+double area = polygonSignedArea(verts);
 
 // Guard: polygon must be simple (no self-intersections).
-if (HasSelfIntersection(verts)) return Err::kInvalid;
+if (hasSelfIntersection(verts)) return Err::kInvalid;
 
 // TODO(alice, 2025-07-01): Replace O(n^2) intersection test with a sweep-line algorithm.
 ```
 
-#### Bad
+<!-- START mdsplit-ignore -->
+**[Return to Index](#style-guide-index)**
+<!-- END mdsplit-ignore -->
 
-```cpp
-// Increment i.           // (What, not why)
-i++; 
-
-// Set area.              // Redundant with code
-area = PolygonSignedArea(verts);
-```
-
-## Formatting
-
-### Looping and Branching Statements
-
----
-
-**Always use braces** for all control statements (`if`, `else`, `for`, `while`, `do`, `switch`), even for single-line bodies. This prevents bugs and improves readability.
-
-#### Good
-
-```cpp
-if (condition) {
-    DoSomething();
-} 
-else {
-    DoSomethingElse();
-}
-
-for (int i = 0; i < 10; ++i) {
-    LoopBody();
-}
-```
-
-#### Bad
-
-```cpp
-if (condition)
-    DoSomething(); // Missing braces
-```
-
-#### Exceptions
-
-Braces may be omitted only if the entire statement fits on one line and there is no `else` or `do ... while` part:
-
-```cpp
-if (x == kFoo) return new Foo(); // OK
-```
-
-#### Switch/case
-
-Braces in `case` blocks are optional, but if used, indent as shown:
-
-```cpp
-switch (var) {
-    case 0: {
-        Foo();
-        break;
-    }
-}
-```
-
-#### Empty loops
-
-Use `{}` or `continue`; for empty bodies, not a lone semicolon:
-
-```cpp
-while (condition) {}
-while (condition) continue;
-```
-
-<br>
-
-# Clang-Format
+# Formatting
 
 This project uses [clang-format](https://clang.llvm.org/docs/ClangFormat.html) to ensure a consistent code style across all C++ files.
+
+<!-- START mdsplit-ignore -->
+<a id="formatting-index"></a>
+<details open>
+<summary><Strong>Index</Strong></summary>
+
+- [Formatting](#formatting)
+  - [Configuration](#configuration)
+  - [How to Format Code](#how-to-format-code)
+  - [Best Practices](#best-practices)
+
+</details>
+<!-- END mdsplit-ignore -->
 
 ## Configuration
 
@@ -608,6 +675,10 @@ The formatting style is defined in the `.clang-format` file at the root of the r
    find . -name '*.cpp' -o -name '*.h' | xargs clang-format -i --style=file
    ```
 5. **Commit and review:** Commit only the style changes and immediately open a pull request. This keeps formatting changes separate from functional code changes, making reviews easier and reducing merge conflicts.
+
+<!-- START mdsplit-ignore -->
+**[Return to Index](#formatting-index)**
+<!-- END mdsplit-ignore -->
 
 ## How to Format Code
 
@@ -628,6 +699,10 @@ find . -name '*.cpp' -o -name '*.h' | xargs clang-format -i --style=file
 
 You can also configure your editor (such as VS Code, CLion, or Vim) to automatically format code on save using clang-format. Refer to your editor’s documentation or extensions/plugins for setup instructions.
 
+<!-- START mdsplit-ignore -->
+**[Return to Index](#formatting-index)**
+<!-- END mdsplit-ignore -->
+
 ## Best Practices
 
 - **Format before committing:** Always run clang-format on your changes before submitting a pull request.
@@ -636,18 +711,36 @@ You can also configure your editor (such as VS Code, CLion, or Vim) to automatic
 
 If you have questions about the formatting rules or need help configuring your editor, ask in the project discussions or open an issue.
 
-<br>
+<!-- START mdsplit-ignore -->
+**[Return to Index](#formatting-index)**
+<!-- END mdsplit-ignore -->
 
-# Doxygen Documentation
+# Documentation
 
-Effective documentation makes code **readable, maintainable, and teachable**. Strive for *self-documenting* design—use clear names and small, focused functions—then use comments and documentation to fill in any remaining gaps.
+This project uses [Doxygen](https://www.doxygen.nl/) to generate documentation from annotated source code. Doxygen comments are used to describe the purpose, behavior, and usage of classes, functions, and other entities in the codebase. Follow these guidelines to ensure your code is well-documented and easy to understand. Always use `@` for Doxygen commands and tags, as this is the standard convention in this project.
 
-- **Contributors** need to understand design intent, constraints, and rationale to safely extend or modify the code.
-- **API users** need clear guidance on usage, contracts, and limitations without reading the implementation.
+<!-- START mdsplit-ignore -->
+<a id="documentation-index"></a>
+<details open>
+<summary><Strong>Index</Strong></summary>
 
-Write documentation that serves **both** audiences.
+- [Documentation](#documentation)
+  - [Common Doxygen Tags](#common-doxygen-tags)
+  - [How to Generate Doxygen Documentation](#how-to-generate-doxygen-documentation)
+  - [Documenting Code](#documenting-code)
+    - [Files](#files-1)
+    - [Namespaces](#namespaces-2)
+    - [Classes \& Structs](#classes--structs)
+    - [Functions \& Methods](#functions--methods)
+    - [Member Variables](#member-variables-1)
+    - [Constants](#constants)
+    - [Enums](#enums)
+    - [Formulas](#formulas)
+    - [Units](#units)
+    - [Modules](#modules)
 
-> **Note:** This project uses `@` (not `\`) for all Doxygen commands and tags.
+</details>
+<!-- END mdsplit-ignore -->
 
 ## Common Doxygen Tags
 
@@ -673,6 +766,10 @@ Write documentation that serves **both** audiences.
 | `@def`                                        | macro block           | Names the macro when the block is not directly above it.       |
 | `@copyright`                                  | file banner           | Legal notice or licence statement.                             |
 
+<!-- START mdsplit-ignore -->
+**[Return to Index](#documentation-index)**
+<!-- END mdsplit-ignore -->
+
 ## How to Generate Doxygen Documentation
 
 1. Ensure [Doxygen](https://www.doxygen.nl/) is installed on your system.
@@ -684,57 +781,19 @@ Write documentation that serves **both** audiences.
 
 For more details on configuring or customizing Doxygen output, see the official [Doxygen manual](https://www.doxygen.nl/manual/index.html) or review the `Doxyfile` in the project root.
 
+<!-- START mdsplit-ignore -->
+**[Return to Index](#documentation-index)**
+<!-- END mdsplit-ignore -->
+
 ## Documenting Code
 
 When documenting code, use Doxygen comments to describe the purpose and behavior of classes, functions, and other entities. Use the following guidelines to ensure clarity and consistency.
 
-### Documenting Units for Physical Quantities
+<!-- START mdsplit-ignore -->
+**[Return to Index](#documentation-index)**
+<!-- END mdsplit-ignore -->
 
----
-
-When documenting variables that represent physical quantities, **always specify the unit** in the documentation. Use the `@unit` command, which is defined in the `Doxyfile` under `ALIASES`, to standardize unit notation across the codebase. The `@unit` command utilizes MathJax and the [siunitx](https://ctan.org/pkg/siunitx) library for typesetting units.
-
-#### Template
-
-```cpp
-type variable_name; ///< Brief description @unit{unit}
-```
-
-#### Example
-
-```cpp
-double fan_speed; ///< Fan speed @unit{rpm}
-double density_corrected; ///< Gas density corrected to reference conditions @unit{lb/ft^3}
-```
-
-### Documenting Formulas
-
----
-
-When documenting functions, algorithms, or concepts that involve mathematical formulas, use the `@formula` command to typeset equations. This command is defined in the Doxyfile under `ALIASES` and uses MathJax for rendering. The `@formula` command allows you to assign a label to each equation, making it easy to reference equations elsewhere in your documentation.
-
-#### Template
-
-```cpp
-/**
- * @formula{<equation_label>; <equation_expression>}
- */
-```
-
-> The label entered in `equation_label` will be prefixed with `eq:` automatically. To reference the equation in your documentation, use `\eqref{eq:equation_label}`.
-
-#### Example
-
-```cpp
-/**
- * The shoelace formula is defined as:
- * @formula{shoelace; A = \frac{1}{2} \sum_{i=1}^{n} (x_i y_{i+1} - x_{i+1} y_i)}
- */
-```
-
-### File Documentation
-
----
+### Files
 
 Use a **single Doxygen block** at the very top of every header file.
 
@@ -751,7 +810,7 @@ Use a **single Doxygen block** at the very top of every header file.
 
 `@details`, `@note`, `@deprecated`, `@bug`, `@see`, `@copyright`
 
-#### Template
+#### Template:
 
 ```cpp
 /**
@@ -771,7 +830,7 @@ Use a **single Doxygen block** at the very top of every header file.
  */
 ```
 
-#### Example
+#### Example:
 
 ```cpp
 /**
@@ -791,66 +850,60 @@ Use a **single Doxygen block** at the very top of every header file.
  */
 ```
 
-### Function & Method Documentation
+<!-- START mdsplit-ignore -->
+**[Return to Index](#documentation-index)**
+<!-- END mdsplit-ignore -->
 
----
+### Namespaces
 
-Use a **Doxygen block** above each public function or method declaration in header files. This applies to both free functions and member functions of classes or structs.
+Namespaces are used to organize code into logical groups and prevent name collisions. Each namespace should be documented with a **single Doxygen block** placed at the top of the header file where the namespace is defined. This block describes the purpose, scope, and any relevant notes about the namespace.
 
 #### Required tags
 
-| Tag          | Description                                                  |
-| ------------ | ------------------------------------------------------------ |
-| `@brief`     | One-sentence purpose                                         |
-| `@param[in]` | Input parameter (`@param[out]` / `@param[in,out]` as needed) |
-| `@return`    | Meaning of the return value (omit for `void`)                |
+| Tag          | Description          |
+| ------------ | -------------------- |
+| `@namespace` | Fully-qualified name |
+| `@ingroup`   | Module or package    |
+| `@brief`     | One-sentence purpose |
 
 #### Optional tags
 
-`@details`, `@tparam`, `@throws`, `@note`, `@deprecated`, `@bug`, `@see`
+`@details`, `@note`, `@deprecated`, `@bug`, `@see`
 
-#### Template
+#### Template:
 
 ```cpp
 /**
- * @brief <Short description of what the function does>
+ * @namespace <namespace_name>
+ * @ingroup <GroupName>
+ * @brief <Short purpose of the namespace>
  *
- * @details 
- * <Longer explanation—algorithm, pre-conditions…>
+ * @details
+ * <Longer explanation—scope, design notes, usage examples.>
  *
- * @tparam <T>  <Description of template parameter>
- * @param[in] <name>  <What this parameter represents>
- * @param[out] <name>  <How the caller receives data>
- * @return <Meaningful description of the result>
- *
- * @throws <exception type> <When it is thrown>
- * @note <Caveats / units / thread safety>
- * @deprecated <Version X.Y — replacement API>
+ * @note <Caveats / thread safety / units>
+ * @deprecated <Version X.Y — replacement namespace>
  * @bug <Known issues>
- * @see <Related symbol or doc link>
+ * @see <Related namespace or guide>
  */
 ```
 
-#### Example
+#### Example:
 
 ```cpp
 /**
- * @brief Adds a vertex to the polygon.
- *
- * @tparam Point2D Any 2-D point type convertible to Vec2.
- * @param[in] p  New vertex in world coordinates.
- * @return Index of the inserted vertex.
- *
- * @note Invalidates cached area; recompute via `area()`.
- * @throws std::length_error If vertex count exceeds `kMaxVertices`.
+ * @namespace geom
+ * @ingroup Geometry
+ * @brief Core 2-D geometry primitives and algorithms.
  */
-template <typename Point2D>
-std::size_t Polygon::AddVertex(const Point2D& p);
+namespace geom { /* ... */ }
 ```
 
-### Class & Struct Documentation
+<!-- START mdsplit-ignore -->
+**[Return to Index](#documentation-index)**
+<!-- END mdsplit-ignore -->
 
----
+### Classes & Structs
 
 Use a **Doxygen block** above each public `class` or `struct` declaration in header files and use `///<` for member notes.
 
@@ -866,7 +919,7 @@ Use a **Doxygen block** above each public `class` or `struct` declaration in hea
 
 `@details`, `@tparam`, `@note`, `@deprecated`, `@bug`, `@see`
 
-#### Template
+#### Template:
 
 ```cpp
 /**
@@ -885,7 +938,7 @@ Use a **Doxygen block** above each public `class` or `struct` declaration in hea
  */
 ```
 
-#### Example
+#### Example:
 
 ```cpp
 /**
@@ -918,7 +971,7 @@ public:
      * @param[in] p  Vertex to add.
      * @throws std::length_error  If max_vertices reached.
      */
-    void AddVertex(const Vec2& p);
+    void addVertex(const Vec2& p);
 
     /**
      * @brief Computes the signed area using the Shoelace formula.
@@ -934,28 +987,113 @@ private:
 };
 ```
 
-### Data-Member Documentation
+<!-- START mdsplit-ignore -->
+**[Return to Index](#documentation-index)**
+<!-- END mdsplit-ignore -->
 
----
+### Functions & Methods
+
+Use a **Doxygen block** above each public function or method declaration in header files. This applies to both free functions and member functions of classes or structs.
+
+#### Required tags
+
+| Tag          | Description                                                  |
+| ------------ | ------------------------------------------------------------ |
+| `@brief`     | One-sentence purpose                                         |
+| `@param[in]` | Input parameter (`@param[out]` / `@param[in,out]` as needed) |
+| `@return`    | Meaning of the return value (omit for `void`)                |
+
+#### Optional tags
+
+`@details`, `@tparam`, `@throws`, `@note`, `@deprecated`, `@bug`, `@see`
+
+#### Template:
+
+```cpp
+/**
+ * @brief <Short description of what the function does>
+ *
+ * @details 
+ * <Longer explanation—algorithm, pre-conditions…>
+ *
+ * @tparam <T>  <Description of template parameter>
+ * @param[in] <name>  <What this parameter represents>
+ * @param[out] <name>  <How the caller receives data>
+ * @return <Meaningful description of the result>
+ *
+ * @throws <exception type> <When it is thrown>
+ * @note <Caveats / units / thread safety>
+ * @deprecated <Version X.Y — replacement API>
+ * @bug <Known issues>
+ * @see <Related symbol or doc link>
+ */
+```
+
+#### Example:
+
+```cpp
+/**
+ * @brief Adds a vertex to the polygon.
+ *
+ * @tparam Point2D Any 2-D point type convertible to Vec2.
+ * @param[in] p  New vertex in world coordinates.
+ * @return Index of the inserted vertex.
+ *
+ * @note Invalidates cached area; recompute via `area()`.
+ * @throws std::length_error If vertex count exceeds `kMaxVertices`.
+ */
+template <typename Point2D>
+std::size_t Polygon::addVertex(const Point2D& p);
+```
+
+<!-- START mdsplit-ignore -->
+**[Return to Index](#documentation-index)**
+<!-- END mdsplit-ignore -->
+
+### Member Variables
 
 Use **inline-after comments with `///<`** for one-line descriptions of data members and individual enum values. This applies to both classes and structs.
  
-#### Template
+#### Template:
 
 ```cpp
 Type name_; ///< <Concise purpose>
 ```
 
-#### Example
+#### Example:
 
 ```cpp
 size_t count_ {0};   ///< Current vertex count
 std::vector<Vec2> verts_; ///< Vertices in counter-clockwise order
 ```
 
-### Enumeration Documentation
+<!-- START mdsplit-ignore -->
+**[Return to Index](#documentation-index)**
+<!-- END mdsplit-ignore -->
 
----
+### Constants
+
+Document global constants with an **inline-after** comment.
+
+#### Template:
+
+```cpp
+constexpr Type kConstName ///< <Concise purpose>
+```
+
+#### Example:
+
+```cpp
+constexpr double kPi = 3.141592653589793;    ///< Circle ratio @unit{radians}
+inline const Vec2 kOrigin {0.0, 0.0};        ///< Reference point (0,0)
+```
+
+<!-- START mdsplit-ignore -->
+**[Return to Index](#documentation-index)**
+<!-- END mdsplit-ignore -->
+
+
+### Enums
 
 Document the **enum type** with a block comment; document each **enumerator** with `///<`. If an enum has only a few obvious values (e.g. `Clockwise`, `CounterClockwise`), the inline docs may be omitted.
 
@@ -971,7 +1109,7 @@ Document the **enum type** with a block comment; document each **enumerator** wi
 
 `@details`, `@note`, `@deprecated`, `@bug`, `@see`
 
-#### Template
+#### Template:
 
 ```cpp
 /**
@@ -989,7 +1127,7 @@ Document the **enum type** with a block comment; document each **enumerator** wi
  */
 ```
 
-#### Example
+#### Example:
 
 ```cpp
 /**
@@ -1004,75 +1142,60 @@ enum class Axis {
 };
 ```
 
-### Constant Documentation
+<!-- START mdsplit-ignore -->
+**[Return to Index](#documentation-index)**
+<!-- END mdsplit-ignore -->
 
----
 
-Document global constants with an **inline-after** comment.
+### Formulas
 
-#### Template
+When documenting functions, algorithms, or concepts that involve mathematical formulas, use the `@formula` command to typeset equations. This command is defined in the Doxyfile under `ALIASES` and uses MathJax for rendering. The `@formula` command allows you to assign a label to each equation, making it easy to reference equations elsewhere in your documentation.
 
-```cpp
-constexpr Type kConstName ///< <Concise purpose>
-```
-
-#### Example
-
-```cpp
-constexpr double kPi = 3.141592653589793;    ///< Circle ratio @unit{radians}
-inline const Vec2 kOrigin {0.0, 0.0};        ///< Reference point (0,0)
-```
-
-### Namespace Documentation
-
----
-
-Namespaces are used to organize code into logical groups and prevent name collisions. Each namespace should be documented with a **single Doxygen block** placed at the top of the header file where the namespace is defined. This block describes the purpose, scope, and any relevant notes about the namespace.
-
-#### Required tags
-
-| Tag          | Description          |
-| ------------ | -------------------- |
-| `@namespace` | Fully-qualified name |
-| `@ingroup`   | Module or package    |
-| `@brief`     | One-sentence purpose |
-
-#### Optional tags
-
-`@details`, `@note`, `@deprecated`, `@bug`, `@see`
-
-#### Template
+#### Template:
 
 ```cpp
 /**
- * @namespace <namespace_name>
- * @ingroup <GroupName>
- * @brief <Short purpose of the namespace>
- *
- * @details
- * <Longer explanation—scope, design notes, usage examples.>
- *
- * @note <Caveats / thread safety / units>
- * @deprecated <Version X.Y — replacement namespace>
- * @bug <Known issues>
- * @see <Related namespace or guide>
+ * @formula{<equation_label>; <equation_expression>}
  */
 ```
 
-#### Example
+> The label entered in `equation_label` will be prefixed with `eq:` automatically. To reference the equation in your documentation, use `\eqref{eq:equation_label}`.
+
+#### Example:
 
 ```cpp
 /**
- * @namespace geom
- * @ingroup Geometry
- * @brief Core 2-D geometry primitives and algorithms.
+ * The shoelace formula is defined as:
+ * @formula{shoelace; A = \frac{1}{2} \sum_{i=1}^{n} (x_i y_{i+1} - x_{i+1} y_i)}
  */
-namespace geom { /* ... */ }
 ```
 
-### Module (Group) Documentation
+<!-- START mdsplit-ignore -->
+**[Return to Index](#documentation-index)**
+<!-- END mdsplit-ignore -->
 
----
+### Units
+
+When documenting variables that represent physical quantities, **always specify the unit** in the documentation. Use the `@unit` command, which is defined in the `Doxyfile` under `ALIASES`, to standardize unit notation across the codebase. The `@unit` command utilizes MathJax and the [siunitx](https://ctan.org/pkg/siunitx) library for typesetting units.
+
+#### Template:
+
+```cpp
+type variable_name; ///< Brief description @unit{unit}
+```
+
+#### Example:
+
+```cpp
+double fan_speed; ///< Fan speed @unit{rpm}
+double density_corrected; ///< Gas density corrected to reference conditions @unit{lb/ft^3}
+```
+
+<!-- START mdsplit-ignore -->
+**[Return to Index](#documentation-index)**
+<!-- END mdsplit-ignore -->
+
+### Modules
 
 Modules (or groups) are collections of related namespaces, classes, and functions that together provide a high-level overview of a particular area of functionality in the codebase. Modules help organize documentation, making it easier for users and contributors to understand the structure and purpose of different parts of the project.
 
@@ -1089,7 +1212,7 @@ Each module should be documented with a **single Doxygen block** placed in a cen
 
 `@details`, `@note`, `@deprecated`, `@bug`, `@see`
 
-#### Template
+#### Template:
 
 ```cpp
 /**
@@ -1106,7 +1229,7 @@ Each module should be documented with a **single Doxygen block** placed in a cen
  */
 ```
 
-#### Example
+#### Example:
 
 ```cpp
 /**
@@ -1118,11 +1241,27 @@ Each module should be documented with a **single Doxygen block** placed in a cen
  */
 ```
 
-<br>
+<!-- START mdsplit-ignore -->
+**[Return to Index](#documentation-index)**
+<!-- END mdsplit-ignore -->
 
 # Conventional Commits
 
 This project follows the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification for commit messages to ensure clarity, consistency, and automation in version control. This helps in generating changelogs, automating releases, and improving collaboration among contributors.
+
+<!-- START mdsplit-ignore -->
+<a id="conventional-commits-index"></a>
+<details open>
+<summary><Strong>Index</Strong></summary>
+
+- [Conventional Commits](#conventional-commits)
+  - [Commit Format](#commit-format)
+  - [Commit Types](#commit-types)
+  - [Commit Scopes](#commit-scopes)
+  - [Breaking Changes](#breaking-changes)
+
+</details>
+<!-- END mdsplit-ignore -->
 
 ## Commit Format
 
@@ -1135,6 +1274,10 @@ Each commit message should follow this format:
 
 <optional footer>
 ```
+
+<!-- START mdsplit-ignore -->
+**[Return to Index](#conventional-commits-index)**
+<!-- END mdsplit-ignore -->
 
 ## Commit Types
 
@@ -1152,6 +1295,10 @@ Commit types indicate the nature of the changes made in the commit. They help ca
 - **`style`**: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc).
 - **`test`**: Adding missing tests or correcting existing tests.
 - **`wip`**: Work in progress.
+
+<!-- START mdsplit-ignore -->
+**[Return to Index](#conventional-commits-index)**
+<!-- END mdsplit-ignore -->
 
 ## Commit Scopes
 
@@ -1184,6 +1331,10 @@ When a commit affects multiple areas, you can specify multiple scopes separated 
 feat(cli, docs): add new command to generate reports
 ```
 
+<!-- START mdsplit-ignore -->
+**[Return to Index](#conventional-commits-index)**
+<!-- END mdsplit-ignore -->
+
 ## Breaking Changes
 
 If a commit introduces breaking changes, it must be indicated in the `type/scope` prefix of a commit, or as an entry in the footer.
@@ -1201,3 +1352,7 @@ If included in the `type/scope` prefix, breaking changes **MUST** be indicated b
 ```
 feat!: send an email to the customer when a product is shipped
 ```
+
+<!-- START mdsplit-ignore -->
+**[Return to Index](#conventional-commits-index)**
+<!-- END mdsplit-ignore -->

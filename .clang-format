@@ -2,10 +2,42 @@
 Language:        Cpp
 # BasedOnStyle: Google
 # AccessModifierOffset: -1
+
+# --------------------------------------------------------------------------------
+# If true, horizontally aligns arguments after an open bracket. This applies to 
+# round brackets (parentheses), angle brackets and square brackets.
+# 
+# Possible values:
+# 
+# Align: Align parameters on the open bracket, e.g.:
+# 
+#     someLongFunction(argument1,
+#                      argument2);
+
+# DontAlign: Don't align, instead use ContinuationIndentWidth, e.g.:
+# 
+#     someLongFunction(argument1,
+#         argument2);
+
+# AlwaysBreak: Always break after an open bracket, if the parameters don't fit on 
+# a single line, e.g.:
+# 
+#     someLongFunction(
+#         argument1, argument2);
+# --------------------------------------------------------------------------------
 AlignAfterOpenBracket: Align
 # AlignArrayOfStructures: None
-# AlignConsecutiveAssignments:
-#   Enabled: false
+
+# --------------------------------------------------------------------------------
+# If true, aligns consecutive assignments. This will align the assignment 
+# operators of consecutive lines. This will result in formattings like
+#
+#     int aaaa = 12;
+#     int b    = 23;
+#     int ccc  = 23;
+# --------------------------------------------------------------------------------
+AlignConsecutiveAssignments:
+  Enabled: true
 #   AcrossEmptyLines: false
 #   AcrossComments: false
 #   AlignCompound: false
@@ -18,13 +50,33 @@ AlignAfterOpenBracket: Align
 #   AlignCompound: false
 #   AlignFunctionPointers: false
 #   PadOperators: false
-# AlignConsecutiveDeclarations:
-#   Enabled: false
+
+# --------------------------------------------------------------------------------
+# If true, aligns consecutive declarations. This will align the declaration names 
+# of consecutive lines. This will result in formattings like
+# 
+#     int         aaaa = 12;
+#     float       b = 23;
+#     std::string ccc = 23;
+# --------------------------------------------------------------------------------
+AlignConsecutiveDeclarations:
+  Enabled: true           
 #   AcrossEmptyLines: false
 #   AcrossComments: false
 #   AlignCompound: false
-#   AlignFunctionPointers: false
+#   AlignFunctionPointers: false 
 #   PadOperators: false
+
+# --------------------------------------------------------------------------------
+# If true, aligns consecutive C/C++ preprocessor macros. This will align the C/C++ 
+# preprocessor macros of consecutive lines. This will result in formattings like
+# 
+#     #define SHORT_NAME       42
+#     #define LONGER_NAME      0x007f
+#     #define EVEN_LONGER_NAME (2)
+#     #define foo(x)           (x * x)
+#     #define bar(y, z)        (y + z)
+# --------------------------------------------------------------------------------
 AlignConsecutiveMacros:
   Enabled: true
   # AcrossEmptyLines: false
@@ -60,7 +112,24 @@ AlignConsecutiveMacros:
 #   AlignFunctionPointers: false
 #   PadOperators: false
 # AlignEscapedNewlines: Left
-AlignOperands: Align
+
+# --------------------------------------------------------------------------------
+# If true, horizontally align operands of binary and ternary expressions. 
+# Specifically, this aligns operands of a single expression that needs to be split 
+# over multiple lines, e.g.:
+# 
+#     int aaa = bbbbbbbbbbbbbbb +
+#               ccccccccccccccc;
+# --------------------------------------------------------------------------------
+AlignOperands: true
+
+# --------------------------------------------------------------------------------
+# If true, aligns trailing comments.
+# 
+#     true:                                   false:
+#     int a;     // My comment a      vs.     int a; // My comment a
+#     int b = 2; // comment  b                int b = 2; // comment about b
+# --------------------------------------------------------------------------------
 AlignTrailingComments:
   Kind: Always
   OverEmptyLines: 0
@@ -80,7 +149,41 @@ AlignTrailingComments:
 # AlwaysBreakBeforeMultilineStrings: true
 # AttributeMacros:
 #   - __capability
+
+# --------------------------------------------------------------------------------
+# If false, a function call's arguments will either be all on the same line or 
+# will have one line each.
+# 
+# true:
+#
+#     void f() {
+#         f(aaaaaaaaaaaaaaaaaaaa, aaaaaaaaaaaaaaaaaaaa,
+#           aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa);
+#     }
+#
+# false:
+#     void f() {
+#         f(aaaaaaaaaaaaaaaaaaaa,
+#           aaaaaaaaaaaaaaaaaaaa,
+#           aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa);
+#     }
+# --------------------------------------------------------------------------------
 BinPackArguments: true
+
+# --------------------------------------------------------------------------------
+# If false, a function declaration's or function definition's parameters will either all be on the same line or will have one line each.
+# 
+# true:
+#
+#     void f(int aaaaaaaaaaaaaaaaaaaa, int aaaaaaaaaaaaaaaaaaaa,
+#            int aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa) {}
+#
+# false:
+#
+#     void f(int aaaaaaaaaaaaaaaaaaaa,
+#            int aaaaaaaaaaaaaaaaaaaa,
+#            int aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa) {}
+# --------------------------------------------------------------------------------
 BinPackParameters: true
 # BitFieldColonSpacing: Both
 BraceWrapping:
