@@ -267,13 +267,16 @@ public:
          * @param installVSD boolean, Install a VSD on each Centrifugal Compressor Motor
          * @param useARIMonthlyLoadSchedule boolean, if true monthlyLoads not needed and can be set to empty
          * @param monthlyLoads double, 12x11 array of 11 %load bins (0,10,20,30,40,50,60,70,80,90,100) for 12 calendar months
+         *                      In case of non varying monthly loads expects a 1X11 array of 11 %load bins
          */
         ChillerInput(ChillerCompressorType chillerType, double capacity, bool isFullLoadEffKnown, double fullLoadEff, double age,
                      bool installVSD, bool useARIMonthlyLoadSchedule, vector<vector<double>> monthlyLoads) :
                 chillerType(chillerType), capacity(capacity), isFullLoadEffKnown(isFullLoadEffKnown), fullLoadEff(fullLoadEff), age(age),
                 installVSD(installVSD), useARIMonthlyLoadSchedule(useARIMonthlyLoadSchedule), monthlyLoads(std::move(monthlyLoads)),
                 isCustomChiller(false), loadAtPercent({}), kwPerTonLoads({}) ,
-                changeRefrig(false), currentRefrig(RefrigerantType::R_11), proposedRefrig(RefrigerantType::R_11){}
+                changeRefrig(false), currentRefrig(RefrigerantType::R_11), proposedRefrig(RefrigerantType::R_11){
+            InitNonVaryingMonthlyLoad();
+        }
 
         /**
          *
@@ -287,6 +290,7 @@ public:
          * @param installVSD boolean, Install a VSD on each Centrifugal Compressor Motor
          * @param useARIMonthlyLoadSchedule boolean, if true monthlyLoads not needed and can be set to empty
          * @param monthlyLoads double, 12x11 array of 11 %load bins (0,10,20,30,40,50,60,70,80,90,100) for 12 calendar months
+         *                      In case of non varying monthly loads expects a 1X11 array of 11 %load bins
          *
          * @param currentRefrig Enumeration RefrigerantType
          * @param proposedRefrig Enumeration RefrigerantType
@@ -297,7 +301,9 @@ public:
                 chillerType(chillerType), capacity(capacity), isFullLoadEffKnown(isFullLoadEffKnown), fullLoadEff(fullLoadEff), age(age),
                 installVSD(installVSD), useARIMonthlyLoadSchedule(useARIMonthlyLoadSchedule), monthlyLoads(std::move(monthlyLoads)),
                 isCustomChiller(false), loadAtPercent({}), kwPerTonLoads({}) ,
-                changeRefrig(changeRefrig), currentRefrig(currentRefrig), proposedRefrig(proposedRefrig){}
+                changeRefrig(changeRefrig), currentRefrig(currentRefrig), proposedRefrig(proposedRefrig){
+            InitNonVaryingMonthlyLoad();
+        }
 
         /**
          *
@@ -311,6 +317,7 @@ public:
          * @param installVSD boolean, Install a VSD on each Centrifugal Compressor Motor
          * @param useARIMonthlyLoadSchedule boolean, if true monthlyLoads not needed and can be set to empty
          * @param monthlyLoads double, 12x11 array of 11 %load bins (0,10,20,30,40,50,60,70,80,90,100) for 12 calendar months
+         *                      In case of non varying monthly loads expects a 1X11 array of 11 %load bins
          *
          * @param currentRefrig Enumeration RefrigerantType
          * @param proposedRefrig Enumeration RefrigerantType
@@ -321,7 +328,9 @@ public:
                 chillerType(chillerType), capacity(capacity), isFullLoadEffKnown(isFullLoadEffKnown), fullLoadEff(fullLoadEff), age(age),
                 installVSD(installVSD), useARIMonthlyLoadSchedule(useARIMonthlyLoadSchedule), monthlyLoads(std::move(monthlyLoads)),
                 isCustomChiller(false), loadAtPercent({}), kwPerTonLoads({}) ,
-                changeRefrig(true), currentRefrig(currentRefrig), proposedRefrig(proposedRefrig){}
+                changeRefrig(true), currentRefrig(currentRefrig), proposedRefrig(proposedRefrig){
+            InitNonVaryingMonthlyLoad();
+        }
 
         /**
          *
@@ -335,6 +344,7 @@ public:
          * @param installVSD boolean, Install a VSD on each Centrifugal Compressor Motor
          * @param useARIMonthlyLoadSchedule boolean, if true monthlyLoads not needed and can be set to empty
          * @param monthlyLoads double, 12x11 array of 11 %load bins (0,10,20,30,40,50,60,70,80,90,100) for 12 calendar months
+         *                      In case of non varying monthly loads expects a 1X11 array of 11 %load bins
          *
          * @param loadAtPercent double array, % loading
          * @param kwPerTonLoads double array, kW/ton at the corresponding % loading
@@ -346,6 +356,7 @@ public:
                 installVSD(installVSD), useARIMonthlyLoadSchedule(useARIMonthlyLoadSchedule), monthlyLoads(std::move(monthlyLoads)),
                 isCustomChiller(true), loadAtPercent(std::move(loadAtPercent)), kwPerTonLoads(std::move(kwPerTonLoads)),
                 changeRefrig(false), currentRefrig(RefrigerantType::R_11), proposedRefrig(RefrigerantType::R_11){
+            InitNonVaryingMonthlyLoad();
             SetCustomCoefficient();
         }
 
@@ -361,6 +372,7 @@ public:
          * @param installVSD boolean, Install a VSD on each Centrifugal Compressor Motor
          * @param useARIMonthlyLoadSchedule boolean, if true monthlyLoads not needed and can be set to empty
          * @param monthlyLoads double, 12x11 array of 11 %load bins (0,10,20,30,40,50,60,70,80,90,100) for 12 calendar months
+         *                      In case of non varying monthly loads expects a 1X11 array of 11 %load bins
          *
          * @param loadAtPercent double array, % loading
          * @param kwPerTonLoads double array, kW/ton at the corresponding % loading
@@ -376,6 +388,7 @@ public:
                 installVSD(installVSD), useARIMonthlyLoadSchedule(useARIMonthlyLoadSchedule), monthlyLoads(std::move(monthlyLoads)),
                 isCustomChiller(true), loadAtPercent(std::move(loadAtPercent)), kwPerTonLoads(std::move(kwPerTonLoads)),
                 changeRefrig(true), currentRefrig(currentRefrig), proposedRefrig(proposedRefrig){
+            InitNonVaryingMonthlyLoad();
             SetCustomCoefficient();
         }
 
@@ -399,6 +412,16 @@ public:
         vector<double> customCoeffs;
 
     private:
+        void InitNonVaryingMonthlyLoad() {
+            if (monthlyLoads.size() == 1) {
+                auto monthlyLoad = monthlyLoads[0];
+
+                for (int i = 0; i < 11; i++) {
+                    monthlyLoads.push_back(monthlyLoad);
+                }
+            }
+        }
+
         void SetCustomCoefficient() {
             auto size = static_cast<int>(loadAtPercent.size());
             vector<double> x(size, 0);
