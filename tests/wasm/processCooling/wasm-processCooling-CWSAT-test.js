@@ -431,6 +431,6 @@ let _testNum = 1;
 _waterCooledSystemTest(_testNum++);
 _airCooledSystemTest(_testNum++);
 
-logMessage('MEASUR Process Cooling Tests END', true);
+logMessage('CWSAT Process Cooling Tests END', true);
 
 
