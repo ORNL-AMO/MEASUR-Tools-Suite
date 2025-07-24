@@ -1,0 +1,42 @@
+services:
+  measur-tools-suite:
+    build: .
+    container_name: measur-tools-suite-build-dev
+    restart: always
+    command:
+      - /bin/sh
+      - -c
+      - |
+        # Only rebuild WASM/CPP if does not exist
+        if [ ! -f "/MEASUR-Tools-Suite/build-cpp/built.flag" ]; then
+          echo "Building WASM C++ components..."
+          mkdir -p /MEASUR-Tools-Suite/build-cpp/
+          cd /MEASUR-Tools-Suite/build-cpp/
+          cmake ..
+          cmake --build . -j 8 
+          
+          mkdir -p /MEASUR-Tools-Suite/build-wasm/
+          cd /MEASUR-Tools-Suite/build-wasm/
+          source /home/emsdk/emsdk_env.sh
+          emcmake cmake -D BUILD_WASM=ON ..
+          emmake make -j 8
+          
+          # Create flag file in the source directory
+          touch /MEASUR-Tools-Suite/build-cpp/built.flag
+        else
+          echo "Using cached C++ build..."
+        fi
+        
+        cd /MEASUR-Tools-Suite/
+        npm install
+        npm run test-wasm
+    volumes:
+      - ../MEASUR-Tools-Suite:/MEASUR-Tools-Suite
+    ports:
+      - "3000:3000"
+    networks:
+      - ts-net
+
+networks:
+  ts-net:
+    name: ts-build-network
