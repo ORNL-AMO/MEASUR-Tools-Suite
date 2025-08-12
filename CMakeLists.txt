@@ -53,7 +53,7 @@ if(BUILD_TESTING)
     file(GLOB_RECURSE TEST_FILES "tests/cpp/**.cpp")
 elseif(BUILD_WASM)
 	file(GLOB_RECURSE WASM_FILES_SOURCE "bindings-wasm/**.cpp")
-    set(SOURCE_FILES_WASM ${CMAKE_SOURCE_DIR}/third_party/sqlite/sqlite3.c ${WASM_FILES_SOURCE})
+    set(SOURCE_FILES_WASM ${WASM_FILES_SOURCE})
 endif ()
 
 if(MINGW)
@@ -70,9 +70,7 @@ if(UNIX AND NOT APPLE)
   target_link_libraries(measur_tools_suite dl)
 endif()
 
-# Add SQLite project
-include_directories(${CMAKE_SOURCE_DIR}/third_party/sqlite/ SYSTEM)
-add_subdirectory(third_party/sqlite)
+include_directories(SYSTEM)
 
 # Create command line measur_tools_suite program
 add_executable(TOOLS_SUITE_main main.cpp)

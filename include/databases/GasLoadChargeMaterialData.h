@@ -1,9 +1,11 @@
 #ifndef TOOLS_SUITE_GASLOADCHARGEMATERIALDATA_H
 #define TOOLS_SUITE_GASLOADCHARGEMATERIALDATA_H
 
+#include "DB.h"
+
 class GasLoadChargeMaterial;
 
-std::vector<GasLoadChargeMaterial> SQLite::get_default_gas_load_charge_materials() {
+std::vector<GasLoadChargeMaterial> DefaultData::get_default_gas_load_charge_materials() {
     return {
         {"Water vapor - Near Atm. Pressure", 0.47},
         {"Steam - 50 PSIG, 400 degrees F", 0.4901},

@@ -432,7 +432,7 @@ private:
     // Out values
     double totalHeat = 0.0;
 
-    friend class SQLite;
+    friend class DefaultData;
 
     /**
     * Constructor for the solid load/charge material with subset of inputs specified.

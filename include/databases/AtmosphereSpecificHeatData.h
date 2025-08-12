@@ -1,9 +1,11 @@
 #ifndef TOOLS_SUITE_ATMOSPHERESPECIFICHEATDATA_H
 #define TOOLS_SUITE_ATMOSPHERESPECIFICHEATDATA_H
 
+#include "DB.h"
+
 class Atmosphere;
 
-std::vector<Atmosphere> SQLite::get_default_atmosphere_specific_heat() {
+std::vector<Atmosphere> DefaultData::get_default_atmosphere_specific_heat() {
     return {
             {"Nitrogen", 0.0185},
             {"Hydrogen", 0.0182},

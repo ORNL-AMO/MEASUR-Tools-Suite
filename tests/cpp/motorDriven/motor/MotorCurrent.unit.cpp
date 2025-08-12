@@ -1,9 +1,7 @@
 #include "catch.hpp"
-#include "sqlite/SQLite.h"
 #include "motorDriven/motor/MotorCurrent.h"
 
 TEST_CASE( "Motor Current", "[MotorCurrent]" ) {
-    // Added new unit tests by Kristina Armstrong
     auto const fq60 = Motor::LineFrequency::FREQ60;
     auto const ee = Motor::EfficiencyClass::ENERGY_EFFICIENT;
     CHECK(MotorCurrent(100, 1500, fq60, ee, 0, 0.25, 460).calculateCurrent(113.8) == Approx(42.72830));

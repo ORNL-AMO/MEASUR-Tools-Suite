@@ -1,11 +1,10 @@
 #ifndef TOOLS_SUITE_MOTORDATADB_H
 #define TOOLS_SUITE_MOTORDATADB_H
 
-#include "../third_party/fast-cpp-csv-parser/csv.h"
 #include <tuple>
 #include <fstream>
 #include "motorDriven/motor/MotorEfficiency.h"
-#include "sqlite/SQLite.h"
+#include "DB.h"
 
 std::vector<std::tuple<double, int, double, Motor::EfficiencyClass, std::string, Motor::LineFrequency, int>> getStandardEffCombinations(
 	const std::vector<double> &hpValues, const std::vector<int> &synchronousSpeedValues,
@@ -106,33 +105,24 @@ std::vector<MotorData> getStandardEfficiencyData()
 			4	  50 1500
 			6	  50 1000
 			*/
-			if (lineFrequency == Motor::LineFrequency::FREQ60 && synchronousSpeed == 3600)
+			if ((lineFrequency == Motor::LineFrequency::FREQ60 && synchronousSpeed == 3600) ||
+                (lineFrequency == Motor::LineFrequency::FREQ50 && synchronousSpeed == 3000))
 			{
 				poles = 2;
 			}
-			else if (lineFrequency == Motor::LineFrequency::FREQ60 && synchronousSpeed == 1800)
+			else if ((lineFrequency == Motor::LineFrequency::FREQ60 && synchronousSpeed == 1800) ||
+                     (lineFrequency == Motor::LineFrequency::FREQ50 && synchronousSpeed == 1500))
 			{
 				poles = 4;
 			}
-			else if (lineFrequency == Motor::LineFrequency::FREQ60 && synchronousSpeed == 1200)
+			else if ((lineFrequency == Motor::LineFrequency::FREQ60 && synchronousSpeed == 1200) ||
+                     (lineFrequency == Motor::LineFrequency::FREQ50 && synchronousSpeed == 1000))
 			{
 				poles = 6;
 			}
 			else if (lineFrequency == Motor::LineFrequency::FREQ60 && synchronousSpeed == 900)
 			{
 				poles = 8;
-			}
-			else if (lineFrequency == Motor::LineFrequency::FREQ50 && synchronousSpeed == 3000)
-			{
-				poles = 2;
-			}
-			else if (lineFrequency == Motor::LineFrequency::FREQ50 && synchronousSpeed == 1500)
-			{
-				poles = 4;
-			}
-			else if (lineFrequency == Motor::LineFrequency::FREQ50 && synchronousSpeed == 1000)
-			{
-				poles = 6;
 			}
 
 			MotorData motorData(hp, synchronousSpeed, poles, nominalEfficiency, efficiencyClass, nemaTable, enclosureType, lineFrequency, voltageLimit, catalog);
@@ -143,7 +133,7 @@ std::vector<MotorData> getStandardEfficiencyData()
 	return standardEffMotorData;
 }
 
-std::vector<MotorData> getDefaultCSVData()
+std::vector<MotorData> getDefaultMotorData()
 {
 	return {
 		{1, 900, 8, 74, Motor::EfficiencyClass::ENERGY_EFFICIENT, "Table 12-11", "ODP", Motor::LineFrequency::FREQ60, 600, "NEMA MG - 1-2018"},
@@ -696,10 +686,10 @@ std::vector<MotorData> getDefaultCSVData()
 		{500, 1800, 4, 96.2, Motor::EfficiencyClass::PREMIUM, "Table 12-12", "TEFC", Motor::LineFrequency::FREQ60, 600, "NEMA MG - 1-2018"}};
 }
 
-std::vector<MotorData> SQLite::get_default_motor_data()
+std::vector<MotorData> DefaultData::get_default_motor_data()
 {
 	std::vector<MotorData> csvMotorData;
-	std::vector<MotorData> defaultCSVMotorData = getDefaultCSVData();
+	std::vector<MotorData> defaultCSVMotorData = getDefaultMotorData();
 	for (auto const &defaultMotorDataItem : defaultCSVMotorData)
 	{
 		csvMotorData.push_back(defaultMotorDataItem);

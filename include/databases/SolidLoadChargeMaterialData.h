@@ -1,11 +1,11 @@
 #ifndef TOOLS_SUITE_SOLIDLOADCHARGEMATERIALDATA_H
 #define TOOLS_SUITE_SOLIDLOADCHARGEMATERIALDATA_H
 
-#include "sqlite/SQLite.h"
+#include "DB.h"
 
 class SolidLoadChargeMaterial;
 
-std::vector<SolidLoadChargeMaterial> SQLite::get_default_solid_load_charge_materials() {
+std::vector<SolidLoadChargeMaterial> DefaultData::get_default_solid_load_charge_materials() {
     return {
         {"Aluminum", 0.247910198232625, 169, 0.2601, 1215},
         {"Babbitt, Lead Base", 0.0389300214951039, 26.2, 0.038, 462},

@@ -1,9 +1,11 @@
 #ifndef TOOLS_SUITE_LIQUIDLOADCHARGEMATERIALDATA_H
 #define TOOLS_SUITE_LIQUIDLOADCHARGEMATERIALDATA_H
 
+#include "DB.h"
+
 class LiquidLoadChargeMaterial;
 
-std::vector<LiquidLoadChargeMaterial> SQLite::get_default_liquid_load_charge_materials() {
+std::vector<LiquidLoadChargeMaterial> DefaultData::get_default_liquid_load_charge_materials() {
     return {
             {"Crude", 0.6501, 105, 0.55, 900},
             {"Water - Std. Atms. Pressure", 1, 970.3, 0.47, 212},

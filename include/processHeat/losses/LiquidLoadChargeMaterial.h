@@ -361,7 +361,7 @@ private:
     // Out value
     double totalHeat = 0.0;
 
-    friend class SQLite;
+    friend class DefaultData;
 
     /**
      * Constructor for liquid load/charge material with subset of inputs specified.

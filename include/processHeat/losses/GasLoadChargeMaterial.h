@@ -302,7 +302,7 @@ private:
     // Out value
     double totalHeat = 0.0;
 
-    friend class SQLite;
+    friend class DefaultData;
 
     /**
      * Constructor for the gas load/charge material with subset of inputs specified.

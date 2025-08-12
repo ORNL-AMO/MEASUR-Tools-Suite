@@ -280,7 +280,7 @@ public:
     double getStoichAirFuel() const { return stoichometricAir; };
     double getHeatingValueFuel() const { return heatingValueFuel; };
 private:
-	friend class SQLite;
+	friend class DefaultData;
 
     int id = 0;
 	std::string substance = "UndefinedSubstance";

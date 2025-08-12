@@ -1,8 +1,11 @@
 #ifndef TOOLS_SUITE_PUMPDATADB_H
 #define TOOLS_SUITE_PUMPDATADB_H
 
+#include "DB.h"
+
 class PumpData;
-std::vector<PumpData> SQLite::get_default_pump_data() {
+
+std::vector<PumpData> DefaultData::get_default_pump_data() {
 	return {
 		     {"manufacturer", 
 				"model", 

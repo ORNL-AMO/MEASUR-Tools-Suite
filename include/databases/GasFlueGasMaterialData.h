@@ -1,9 +1,11 @@
-#ifndef TOOLS_SUITE_GASFLUEGASMATERIAL_SQL_H
-#define TOOLS_SUITE_GASFLUEGASMATERIAL_SQL_H
+#ifndef TOOLS_SUITE_GASFLUEGASMATERIAL_DATA_H
+#define TOOLS_SUITE_GASFLUEGASMATERIAL_DATA_H
+
+#include "DB.h"
 
 class GasCompositions;
 
-std::vector<GasCompositions> SQLite::get_default_gas_flue_gas_materials() {
+std::vector<GasCompositions> DefaultData::get_default_gas_flue_gas_materials() {
     return {
 		  /*  {"Natural Gas Pennsylvania", 83.4, 15.8, 0.8, 0, 0, 0, 0, 0, 0, 0, 0},
 		    {"Natural Gas South Carolina", 84.0, 14.8, 0.5, 0, 0, 0, 0, 0, 0.7, 0, 0},
@@ -18,4 +20,4 @@ std::vector<GasCompositions> SQLite::get_default_gas_flue_gas_materials() {
     };
 }
 
-#endif //TOOLS_SUITE_GASFLUEGASMATERIAL_SQL_H
+#endif //TOOLS_SUITE_GASFLUEGASMATERIAL_DATA_H

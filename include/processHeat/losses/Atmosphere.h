@@ -201,7 +201,7 @@ private:
     /// Total heat loss measured in btu/hr
     double totalHeat = 0;
 
-    friend class SQLite;
+    friend class DefaultData;
 
     /**
      * Constructor for the specific heat with subset of inputs specified.

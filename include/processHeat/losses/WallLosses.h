@@ -232,7 +232,7 @@ private:
 
     int id = 0;
 
-    friend class SQLite;
+    friend class DefaultData;
 
     WallLosses(
             std::string surface,
