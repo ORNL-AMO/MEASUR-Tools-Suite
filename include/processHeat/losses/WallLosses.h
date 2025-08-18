@@ -167,8 +167,38 @@ public:
     }
 
     /**
-     * Calculates the wall heat loss
-     * @return double, wall heat loss in btu/hr
+     * @brief Calculates the total wall heat loss due to convection and radiation.
+     *
+     * This function computes the heat loss from a wall surface to the environment, accounting for both
+     * convective and radiative losses. The calculation uses the wall's surface area, temperatures, wind velocity,
+     * surface emissivity, and correction/condition factors.
+     *
+     * @formula{wall_heat_loss;
+     *   Q = (Q_{conv} + Q_{rad}) \times correctionFactor
+     * }
+     * where:
+     *   - Q_{conv} is the convective heat loss @unit{BTU/hr}
+     *   - Q_{rad} is the radiative heat loss @unit{BTU/hr}
+     *
+     * @formula{wall_convective_loss;
+     *   Q_{conv} = conditionFactor \cdot (1/24)^{0.2} \cdot (1/T_{mean})^{0.181} \cdot (\Delta T)^{0.266} \cdot \sqrt{1 + 1.277 \cdot v_{wind}} \cdot A \cdot \Delta T
+     * }
+     * where:
+     *   - T_{mean} = (T_{surface} + T_{ambient}) / 2 @unit{\degree F}
+     *   - \Delta T = T_{surface} - T_{ambient} @unit{\degree F}
+     *   - v_{wind} is the wind velocity @unit{miles/hr}
+     *   - A is the surface area @unit{ft^2}
+     *
+     * @formula{wall_radiative_loss;
+     *   Q_{rad} = \epsilon \cdot \sigma \cdot \left[ (T_{surface} + 460)^4 - (T_{ambient} + 460)^4 \right] \cdot A
+     * }
+     * where:
+     *   - \epsilon is the surface emissivity
+     *   - \sigma = 0.1713 \times 10^{-8} @unit{BTU/(hr·ft^2·\degree R^4)} is the Stefan-Boltzmann constant
+     *   - T_{surface} and T_{ambient} are in @unit{\degree F}
+     *   - A is the surface area @unit{ft^2}
+     *
+     * @return double, wall heat loss @unit{BTU/hr}
      */
     double getHeatLoss();
 
