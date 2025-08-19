@@ -66,7 +66,6 @@ To make it easy for developers local building and testing, it is dockerized. To 
 - Download the repository
 - Open command line tool, change directory to the repository run `docker compose up -d`
 - To stop the running container run `docker compose down`
-- For quicker development with a cached WASM build (ex. when developing javascript tests), run `docker compose -f docker-compose.dev.yml up`
 - Running Unit Tests
   - WASM: in a browser, launch [http://localhost:3000/](http://localhost:3000/)
   - C++: run `docker exec -it measur-tools-suite-build /bin/bash` and run the executable `/home/MEASUR-Tools-Suite/build-cpp/cpp_tests`
