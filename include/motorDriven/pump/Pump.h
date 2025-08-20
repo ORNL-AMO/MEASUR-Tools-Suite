@@ -1,5 +1,5 @@
-#ifndef TOOLS_SUITE_PUMPDATA_H
-#define TOOLS_SUITE_PUMPDATA_H
+#ifndef TOOLS_SUITE_PUMP_H
+#define TOOLS_SUITE_PUMP_H
 
 #include <string>
 #include "motorDriven/motor/MotorData.h"
@@ -84,4 +84,4 @@ namespace Pump {
     };
 }
 
-#endif //TOOLS_SUITE_PUMPDATA_H
+#endif //TOOLS_SUITE_PUMP_H
