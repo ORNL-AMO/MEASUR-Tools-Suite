@@ -6,7 +6,6 @@
 #include <vector>
 #include <functional>
 #include "motorDriven/motor/MotorData.h"
-#include "motorDriven/pump/PumpData.h"
 #include "processHeat/losses/Atmosphere.h"
 #include "processHeat/losses/GasFlueGasMaterial.h"
 #include "processHeat/losses/GasLoadChargeMaterial.h"
@@ -23,7 +22,6 @@ class SolidLiquidFlueGasMaterial;
 class Atmosphere;
 class WallLosses;
 class MotorData;
-class PumpData;
 
 class DefaultData
 {
@@ -104,15 +102,6 @@ public:
         return motorData;
     }
 
-    std::vector<PumpData> getPumpData() {
-        std::vector<PumpData> pumpData = get_default_pump_data();
-        auto size = (int)pumpData.size();
-        for(auto i = 0; i < size; i++) {
-            pumpData.at(i).id = i + 1;
-        }
-        return pumpData;
-    }
-
 private:
     std::vector<SolidLoadChargeMaterial> get_default_solid_load_charge_materials();
     std::vector<GasLoadChargeMaterial> get_default_gas_load_charge_materials();
@@ -122,7 +111,6 @@ private:
     std::vector<Atmosphere> get_default_atmosphere_specific_heat();
     std::vector<WallLosses> get_default_wall_losses_surface();
     std::vector<MotorData> get_default_motor_data();
-    std::vector<PumpData> get_default_pump_data();
 };
 
 #endif //TOOLS_SUITE_DB_H
