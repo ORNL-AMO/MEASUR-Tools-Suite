@@ -5,7 +5,6 @@
 #include "databases/GasLoadChargeMaterialData.h"
 #include "databases/LiquidLoadChargeMaterialData.h"
 #include "databases/MotorData.h"
-#include "databases/PumpData.h"
 #include "databases/SolidLiquidFlueGasMaterialData.h"
 #include "databases/SolidLoadChargeMaterialData.h"
 #include "databases/WallLossesSurfaceData.h"
@@ -17,7 +16,6 @@
 #include <processHeat/losses/Atmosphere.h>
 #include <processHeat/losses/WallLosses.h>
 #include <motorDriven/motor/MotorData.h>
-#include "motorDriven/pump/PumpData.h"
 
 TEST_CASE( "DefaultData - getSolidLoadChargeMaterials", "[databases]" ) {
     auto defaultData = DefaultData();
@@ -512,125 +510,6 @@ TEST_CASE( "DefaultData - getWallLossesSurface", "[databases]" ) {
         expected.setID(1);
 
         CHECK( expected == output );
-    }
-}
-
-TEST_CASE( "DefaultData - getPumpData", "[databases][pump]" ) {
-    auto const compare = [](PumpData result, PumpData expected) {
-        CHECK(result.getManufacturer() == expected.getManufacturer());
-        CHECK(result.getModel() == expected.getModel());
-        CHECK(result.getSerialNumber() == expected.getSerialNumber());
-        CHECK(result.getStatus() == expected.getStatus());
-        CHECK(result.getPumpType() == expected.getPumpType());
-        CHECK(result.getShaftOrientation() == expected.getShaftOrientation());
-        CHECK(result.getShaftSealType() == expected.getShaftSealType());
-        CHECK(result.getFluidType() == expected.getFluidType());
-        CHECK(result.getPriority() == expected.getPriority());
-        CHECK(result.getDriveType() == expected.getDriveType());
-        CHECK(result.getFlangeConnectionClass() == expected.getFlangeConnectionClass());
-        CHECK(result.getFlangeConnectionSize() == expected.getFlangeConnectionSize());
-        CHECK(result.getComponentId() == expected.getComponentId());
-        CHECK(result.getSystem() == expected.getSystem());
-        CHECK(result.getLocation() == expected.getLocation());
-        CHECK(result.getMotorEfficiencyClass() == expected.getMotorEfficiencyClass());
-        CHECK(result.getSpeed() == expected.getSpeed());
-        CHECK(result.getNumStages() == expected.getNumStages());
-        CHECK(result.getYearlyOperatingHours() == expected.getYearlyOperatingHours());
-        CHECK(result.getYearInstalled() == expected.getYearInstalled());
-        CHECK(result.getFinalMotorRpm() == expected.getFinalMotorRpm());
-        CHECK(result.getMotorRatedVoltage() == expected.getMotorRatedVoltage());
-        CHECK(result.getInletDiameter() == expected.getInletDiameter());
-        CHECK(result.getOutletDiameter() == expected.getOutletDiameter());
-        CHECK(result.getStaticSuctionHead() == expected.getStaticSuctionHead());
-        CHECK(result.getStaticDischargeHead() == expected.getStaticDischargeHead());
-        CHECK(result.getFluidDensity() == expected.getFluidDensity());
-        CHECK(result.getMaxWorkingPressure() == expected.getMaxWorkingPressure());
-        CHECK(result.getMaxAmbientTemperature() == expected.getMaxAmbientTemperature());
-        CHECK(result.getMaxSuctionLift() == expected.getMaxSuctionLift());
-        CHECK(result.getDisplacement() == expected.getDisplacement());
-        CHECK(result.getStartingTorque() == expected.getStartingTorque());
-        CHECK(result.getRatedSpeed() == expected.getRatedSpeed());
-        CHECK(result.getImpellerDiameter() == expected.getImpellerDiameter());
-        CHECK(result.getEfficiency() == expected.getEfficiency());
-        CHECK(result.getLineFrequency() == expected.getLineFrequency());
-        CHECK(result.getMinFlowSize() == expected.getMinFlowSize());
-        CHECK(result.getPumpSize() == expected.getPumpSize());
-        CHECK(result.getDesignHead() == expected.getDesignHead());
-        CHECK(result.getDesignFlow() == expected.getDesignFlow());
-        CHECK(result.getDesignEfficiency() == expected.getDesignEfficiency());
-        CHECK(result.getMotorRatedPower() == expected.getMotorRatedPower());
-        CHECK(result.getMotorFullLoadAmps() == expected.getMotorFullLoadAmps());
-        CHECK(result.getOperatingFlowRate() == expected.getOperatingFlowRate());
-        CHECK(result.getOperatingHead() == expected.getOperatingHead());
-        CHECK(result.getMeasuredCurrent() == expected.getMeasuredCurrent());
-        CHECK(result.getMeasuredPower() == expected.getMeasuredPower());
-        CHECK(result.getMeasuredVoltage() == expected.getMeasuredVoltage());
-        CHECK(result.getMotorEfficiency() == expected.getMotorEfficiency());
-        CHECK(result.getId() == expected.getId());
-    };
-
-    auto defaultData = DefaultData();
-    //auto databases = DefaultData("cpp_measur_tools_suite.db", true);
-    //auto databases = DefaultData("test.db", true);
-
-    {
-        auto const pumps = defaultData.getPumpData();
-
-        auto expected = PumpData(
-                "manufacturer", 
-                "model", 
-                "serialNumber", 
-                "status", 
-                "pumpType", 
-                "shaftOrientation", 
-                "shaftSealType", 
-                "fluidType", 
-                "priority", 
-                "driveType",
-                "flangeConnectionClass", 
-                "flangeConnectionSize", 
-                "componentId", 
-                "system",
-                "location",
-			    "motorEfficiencyClass",
-			    2, 
-			    1, 
-			    9000, 
-			    2018, 
-			    1780, 
-			    33,
-			    5, 
-			    6,
-			    15, 
-			    11, 
-			    13, 
-			    250, 
-			    85, 
-			    1.5, 
-			    600, 
-			    400, 
-			    70, 
-			    20, 
-			    88, 
-			    15, 
-			    15, 
-			    15,
-			    33,
-			    33,
-			    33,
-			    33,
-			    33,
-			    33,
-			    33,
-			    33,
-                33,
-                33,
-                33
-                );
-                
-        expected.setId(1);
-
-        compare(pumps.at(0), expected);
     }
 }
 

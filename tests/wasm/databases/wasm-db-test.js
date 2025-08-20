@@ -145,70 +145,6 @@ function motorData(defaultData){
     motorDataLog(listItems.get(count-1));
 }
 
-function pumpDataLog(item){
-    logMessage(item.getId() + ', ' +
-        item.getManufacturer() + ', ' +
-        item.getModel() + ', ' +
-        item.getSerialNumber() + ', ' +
-        item.getStatus() + ', ' +
-        item.getShaftOrientation() + ', ' +
-        item.getShaftSealType() + ', ' +
-        item.getFluidType() + ', ' +
-        item.getPriority() + ', ' +
-        item.getDriveType() + ', ' +
-        item.getFlangeConnectionClass() + ', ' +
-        item.getFlangeConnectionSize() + ', ' +
-        item.getComponentId() + ', ' +
-        item.getSystem() + ', ' +
-        item.getLocation() + ', ' +
-        item.getMotorEfficiencyClass() + ', ' +
-        item.getSpeed() + ', ' +
-        item.getNumStages() + ', ' +
-        item.getYearlyOperatingHours() + ', ' +
-        item.getYearInstalled() + ', ' +
-        item.getPumpType() + ', ' +
-        item.getFinalMotorRpm() + ', ' +
-        item.getMotorRatedVoltage() + ', ' +
-        item.getInletDiameter() + ', ' +
-        item.getOutletDiameter() + ', ' +
-        item.getStaticSuctionHead() + ', ' +
-        item.getStaticDischargeHead() + ', ' +
-        item.getFluidDensity() + ', ' +
-        item.getMaxWorkingPressure() + ', ' +
-        item.getMaxAmbientTemperature() + ', ' +
-        item.getMaxSuctionLift() + ', ' +
-        item.getDisplacement() + ', ' +
-        item.getStartingTorque() + ', ' +
-        item.getRatedSpeed() + ', ' +
-        item.getImpellerDiameter() + ', ' +
-        item.getEfficiency() + ', ' +
-        item.getLineFrequency() + ', ' +
-        item.getMinFlowSize() + ', ' +
-        item.getPumpSize() + ', ' +
-        item.getDesignHead() + ', ' +
-        item.getDesignFlow() + ', ' +
-        item.getMotorRatedPower() + ', ' +
-        item.getMotorFullLoadAmps() + ', ' +
-        item.getOperatingFlowRate() + ', ' +
-        item.getOperatingHead() + ', ' +
-        item.getMeasuredCurrent() + ', ' +
-        item.getMeasuredPower() + ', ' +
-        item.getMeasuredVoltage() + ', ' +
-        item.getMotorEfficiency());
-}
-
-function pumpData(defaultData){
-    logMessage('Pump Data', true);
-
-    let listItems = defaultData.getPumpData();
-    let count = listItems.size();
-    testNumberValue(count, 1, "Select All Default Data");
-
-    logMessage('Default Data (start - end):');
-    pumpDataLog(listItems.get(0));
-    pumpDataLog(listItems.get(count-1));
-}
-
 function db(){
     logMessage('DB Default Data Test:', true);
 
@@ -222,7 +158,6 @@ function db(){
     wallLossesSurface(instance);
     atmosphereData(instance);
     motorData(instance);
-    pumpData(instance);
 
     instance.delete();
 

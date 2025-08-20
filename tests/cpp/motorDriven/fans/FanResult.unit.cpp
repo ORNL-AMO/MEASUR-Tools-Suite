@@ -1,6 +1,6 @@
 #include "catch.hpp"
 #include "motorDriven/fans/FanResult.h"
-#include "motorDriven/pump/PumpData.h"
+#include "motorDriven/pump/Pump.h"
 #include <unordered_map>
 #include <array>
 

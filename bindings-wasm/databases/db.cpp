@@ -1,5 +1,4 @@
 #include "databases/DB.h"
-#include "databases/PumpData.h"
 #include "databases/MotorData.h"
 #include "databases/AtmosphereSpecificHeatData.h"
 #include "databases/GasFlueGasMaterialData.h"
@@ -16,7 +15,6 @@
 #include <processHeat/losses/Atmosphere.h>
 #include <processHeat/losses/WallLosses.h>
 #include <motorDriven/motor/MotorData.h>
-#include "motorDriven/pump/PumpData.h"
 #include <emscripten/bind.h>
 
 using namespace emscripten;
@@ -33,6 +31,5 @@ EMSCRIPTEN_BINDINGS(db_class)
         .function("getGasFlueGasMaterials", &DefaultData::getGasFlueGasMaterials)
         .function("getAtmosphereSpecificHeat", &DefaultData::getAtmosphereSpecificHeat)
         .function("getWallLossesSurface", &DefaultData::getWallLossesSurface)
-        .function("getMotorData", &DefaultData::getMotorData)
-        .function("getPumpData", &DefaultData::getPumpData);
+        .function("getMotorData", &DefaultData::getMotorData);
 }
