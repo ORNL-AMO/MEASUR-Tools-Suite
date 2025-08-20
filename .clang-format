@@ -240,45 +240,22 @@ FixNamespaceComments: true
 #   - KJ_IF_MAYBE
 IncludeBlocks: Regroup
 IncludeCategories:
-  - Regex: '^<[^/ >]+>$' # C++ standard library headers, e.g., <string>, <vector> 
-    Priority: 1
-    SortPriority: 0
-    CaseSensitive: false
-  - Regex: '^"catch/.*"$'  # Catch headers
-    Priority: 2
-    SortPriority: 0
-    CaseSensitive: false
-  - Regex: '^"fast-cpp-csv-parser/.*"$'  # fast-cpp-csv-parser headers
-    Priority: 2
-    SortPriority: 0
-    CaseSensitive: false
-    Priority: 3
-    SortPriority: 0
-    CaseSensitive: false
-  - Regex: '^".*"$' # Catch all for all other third-party headers, e.g., "someheader.h"
-    Priority: 4
-    SortPriority: 0
-    CaseSensitive: false
-  - Regex: '^"[^"]+\.h"' # Project-local includes, e.g., "myheader.h"
-    Priority: 5
-    SortPriority: 0
-    CaseSensitive: false
-  # - Regex: ^<ext/.*\.h>
-  #   Priority: 2
-  #   SortPriority: 0
-  #   CaseSensitive: false
-  # - Regex: ^<.*\.h>
-  #   Priority: 1
-  #   SortPriority: 0
-  #   CaseSensitive: false
-  # - Regex: ^<.*
-  #   Priority: 2
-  #   SortPriority: 0
-  #   CaseSensitive: false
-  # - Regex: .*
-  #   Priority: 3
-  #   SortPriority: 0
-  #   CaseSensitive: false
+  - Regex:           '^<([a-zA-Z0-9_]+\.h)>' # C system headers, e.g., <stdio.h>, <stdlib.h>
+    Priority:        1
+    SortPriority:    0
+    CaseSensitive:   false
+  - Regex:           '^<([a-zA-Z0-9_]+)>' # C++ standard library headers, e.g., <string>, <vector>
+    Priority:        2
+    SortPriority:    0
+    CaseSensitive:   false
+  - Regex:           '^<.*>' # Other third-party headers, e.g., <boost/someheader.h>
+    Priority:        3
+    SortPriority:    0
+    CaseSensitive:   false
+  - Regex:           '^".*"' # Project-local includes, e.g., "my_header.h"
+    Priority:        4
+    SortPriority:    0
+    CaseSensitive:   false
 # IncludeIsMainRegex: ([-_](test|unittest))?$
 # IncludeIsMainSourceRegex: ""
 # IndentAccessModifiers: false

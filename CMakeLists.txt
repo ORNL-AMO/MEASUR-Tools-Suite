@@ -32,6 +32,8 @@ if(BUILD_WASM)
   set(CMAKE_EXE_LINKER_FLAGS "--no-entry --bind -s WASM=1 -s ASSERTIONS=1 -s ERROR_ON_UNDEFINED_SYMBOLS=0")
 else()
   include(cmake/CompilerFlags.cmake)
+  set(CMAKE_CXX_STANDARD 20)
+  set(CMAKE_CXX_STANDARD_REQUIRED ON)
 endif()
 
 # On Windows, things end up under Debug/ or Release/.

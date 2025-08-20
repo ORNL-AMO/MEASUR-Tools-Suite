@@ -27,18 +27,18 @@
  * different test environments.
  */
 struct FanRatedInfo {
-    double fan_speed;           ///< Fan speed @unit{\rpm}
-    double motor_speed;         ///< %Motor speed @unit{\rpm}
-    double fan_speed_corrected; ///< Fan speed corrected to reference conditions @unit{\rpm}
+    double fan_speed;           ///< Fan speed @unit{\revolutionsPerMinute}
+    double motor_speed;         ///< %Motor speed @unit{\revolutionsPerMinute}
+    double fan_speed_corrected; ///< Fan speed corrected to reference conditions @unit{\revolutionsPerMinute}
     double density_corrected;   ///< Gas density corrected to reference conditions @unit{\pound\per\foot\cubed}
     double pressure_barometric_corrected; ///< Barometric pressure corrected to reference conditions @unit{\inch\of{Hg}}
 
     /**
      * @brief Constructor for FanRatedInfo
      *
-     * @param[in] fan_speed Fan speed @unit{\rpm}
-     * @param[in] motor_speed %Motor speed @unit{\rpm}
-     * @param[in] fan_speed_corrected Fan speed corrected to reference conditions @unit{\rpm}
+     * @param[in] fan_speed Fan speed @unit{\revolutionsPerMinute}
+     * @param[in] motor_speed %Motor speed @unit{\revolutionsPerMinute}
+     * @param[in] fan_speed_corrected Fan speed corrected to reference conditions @unit{\revolutionsPerMinute}
      * @param[in] density_corrected Gas density corrected to reference conditions @unit{\pound\per\foot\cubed}
      * @param[in] pressure_barometric_corrected Barometric pressure corrected to reference conditions
      * @unit{\inch\of{Hg}}

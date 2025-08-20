@@ -742,35 +742,52 @@ This project uses [Doxygen](https://www.doxygen.nl/) to generate documentation f
 </details>
 <!-- END mdsplit-ignore -->
 
-## Common Doxygen Tags
+## Doxygen Commands
 
-| Tag                                           | Applies to            | What it conveys                                                |
-| --------------------------------------------- | --------------------- | -------------------------------------------------------------- |
-| `@file`                                       | file banner           | Exact file name (with extension).                              |
-| `@author`                                     | file banner           | Author list, comma-separated, alphabetical by first name.      |
-| `@ingroup`                                    | any entity            | Places the item in a previously defined group/module page.     |
-| `@defgroup`                                   | one “module” block    | Declares a new group (module) page.                            |
-| `@namespace`                                  | namespace block       | Purpose and scope of the namespace.                            |
-| `@class` / `@struct`                          | class or struct block | Identifies the type when the block isn’t immediately adjacent. |
-| `@enum`                                       | enumeration block     | Identifies the enum type.                                      |
-| `@brief`                                      | all blocks            | One-sentence summary (≤ 80 chars).                             |
-| `@details`                                    | any block             | Longer discussion: design notes, examples, algorithms.         |
-| `@param[in]`, `@param[out]`, `@param[in,out]` | functions / methods   | Describes parameters and their direction.                      |
-| `@tparam`                                     | templates             | Describes a template parameter.                                |
-| `@return`                                     | functions / methods   | Meaning of the return value (omit for `void`).                 |
-| `@throws`                                     | functions / methods   | Exception types that may be raised.                            |
-| `@note`                                       | any block             | Extra caveats, units, thread-safety, side-effects.             |
-| `@deprecated`                                 | any block             | Version and replacement when an API is being retired.          |
-| `@bug`                                        | any block             | Known issues still present in the code.                        |
-| `@see`                                        | any block             | Cross-reference to related symbols, headers, or guides.        |
-| `@def`                                        | macro block           | Names the macro when the block is not directly above it.       |
-| `@copyright`                                  | file banner           | Legal notice or licence statement.                             |
+All commands start with `@`. 
+
+Some commands have one or more arguments. Each argument has a certain range:
+- If `<sharp>` braces are used the argument is a single word.
+- If `(round)` braces are used the argument extends until the end of the line on which the command was found.
+- If `{curly}` braces are used the argument extends until the next paragraph. Paragraphs are delimited by a blank line or by a section indicator.
+
+Commands:
+- `@file <name>`
+- `@authors { list of authors }`
+- `@ingroup (<group-name>)`
+- `@defgroup <name> (group title)`
+- `@namespace <name>`
+- `@class <name>`
+- `@struct <name>`
+- `@enum <name>`
+- `@brief { brief description }`
+- `@details { detailed description }`
+- `@param[<dir>] <parameter-name> { parameter description }`
+- `@tparam <template-parameter-name> { description }`
+- `@return { description of the return value }`
+- `@throws <exception-object> { exception description }`
+- `@note { text }`
+- `@bug { bug description }`
+- `@see { references }`                                       
+- `@def <name>`                                      
+- `@copyright { copyright description }`
 
 <!-- START mdsplit-ignore -->
 **[Return to Index](#documentation-index)**
 <!-- END mdsplit-ignore -->
 
-## How to Generate Doxygen Documentation
+## Custom Commands
+
+- `@math{<math expression>}`
+- `@unit{<unit expression>}`
+- `@formula{<label>; <equation>}`
+- `symbol{<symbol>; <description>}`
+
+<!-- START mdsplit-ignore -->
+**[Return to Index](#documentation-index)**
+<!-- END mdsplit-ignore -->
+
+## Generating Doxygen Documentation
 
 1. Ensure [Doxygen](https://www.doxygen.nl/) is installed on your system.
 2. From the project root, run:
@@ -787,7 +804,86 @@ For more details on configuring or customizing Doxygen output, see the official 
 
 ## Documenting Code
 
-When documenting code, use Doxygen comments to describe the purpose and behavior of classes, functions, and other entities. Use the following guidelines to ensure clarity and consistency.
+When documenting code, use Doxygen comments to describe the purpose and behavior of classes, functions, and other entities. Follow these guidelines to ensure your documentation is clear, consistent, and useful.
+
+<!-- START mdsplit-ignore -->
+**[Return to Index](#documentation-index)**
+<!-- END mdsplit-ignore -->
+
+### Math
+
+Use the `@math{<math expression>}` command to to write LaTeX-style mathematical expressions in your documentation.
+
+#### Example
+
+```cpp
+/**
+ * The speed of light in water is often denoted as @math{C_w}.
+ */
+```
+
+<!-- START mdsplit-ignore -->
+**[Return to Index](#documentation-index)**
+<!-- END mdsplit-ignore -->
+
+### Units
+
+Use the `@unit{<unit expression>}` command to document units. The `@unit{}` command uses the siunitx package to format units in LaTeX.
+
+#### Example
+
+```cpp
+/**
+ * The speed of light in water is often denoted as @math{C_w} and is approximately 2.25 @unit{\meter\per\second}.
+ */
+```
+
+<!-- START mdsplit-ignore -->
+**[Return to Index](#documentation-index)**
+<!-- END mdsplit-ignore -->
+
+### Formulas
+
+Use the `@formula{<label>; <equation>}` command to document formulas. The command takes 2 arguments, separated by `;`:
+1. A label for the formula, which can be used to reference the formula in the documentation by using `\eqref{eq:formula-label}`.
+   - All labels are automatically prefixed with `eq:` to avoid conflicts.
+2. The formula itself, written in LaTeX syntax.
+
+#### Example
+
+```cpp
+/**
+ * The area of a circle can be computed using the formula:
+ * @formula{circle-area; A = \pi r^2}
+ */
+
+/**
+ * Remember to use \eqref{eq:circle-area} to calculate the area of a circle.
+ */
+```
+
+<!-- START mdsplit-ignore -->
+**[Return to Index](#documentation-index)**
+<!-- END mdsplit-ignore -->
+
+### Symbols
+
+Use the `symbol{<symbol>; <description>}` command to document mathematical symbols. This command takes two arguments, separated by `;`:
+1. The symbol itself, written in LaTeX syntax.
+2. A description of the symbol.
+
+#### Example
+
+```cpp
+/**
+ * The area of a circle can be computed using the formula:
+ * @formula{circle-area; A = \pi r^2}
+ * where:
+ * - @symbol{A; is the area of the circle}
+ * - @symbol{\pi; is the mathematical constant pi}
+ * - @symbol{r; is the radius of the circle}
+ */
+```
 
 <!-- START mdsplit-ignore -->
 **[Return to Index](#documentation-index)**
@@ -795,57 +891,28 @@ When documenting code, use Doxygen comments to describe the purpose and behavior
 
 ### Files
 
-Use a **single Doxygen block** at the very top of every header file.
+Use a **Doxygen block** at the very top of each header file to document the file's purpose, authors, and any relevant notes.
 
 #### Required tags
 
-| Tag        | Description                                          |
-| ---------- | ---------------------------------------------------- |
-| `@file`    | Exact file name with extension                       |
-| `@authors` | Author(s), comma-separated, alphabetic by first name |
-| `@ingroup` | Module or package this file belongs to               |
-| `@brief`   | One-sentence purpose                                 |
+`@file`, `@authors`, `@ingroup`, `@brief`
 
 #### Optional tags
 
-`@details`, `@note`, `@deprecated`, `@bug`, `@see`, `@copyright`
+`@details`, `@note`, `@bug`, `@see`, `@copyright`
 
-#### Template:
-
-```cpp
-/**
- * @file <filename>.h
- * @author <First Last>, <First Last>
- * @ingroup <GroupName>
- * @brief <Short purpose of the file>
- *
- * @details 
- * <Longer explanation—algorithms, design notes...>
- *
- * @note <Optional notes>
- * @deprecated <Version X.Y — replacement API or file>
- * @bug <Known issues>
- * @see <Related header/guide/issue URL>
- * @copyright <Copyright details>
- */
-```
-
-#### Example:
+#### Example
 
 ```cpp
 /**
- * @file polygon_area.h
- * @author Alice Brown, Carlos Diaz
- * @ingroup Geometry
- * @brief Implements Shoelace-based area calculations for simple polygons.
- *
- * @details
- * Implements Shoelace-formula functions to compute signed or absolute area of 2-D polygons supplied as `std::span<const Vec2>` in counter-clockwise order. The Shoelace formula is defined as:
- * @formula{shoelace; A = \frac{1}{2} \sum_{i=1}^{n} (x_i y_{i+1} - x_{i+1} y_i)}
- *
- * @note Assumes polygons are simple (non-self-intersecting).
- * @deprecated Will be superseded by `polygon_metrics.h` in v2.0
- * @see vector2.h
+ * @file polygon.h
+ * @authors Alice Brown, Carlos Diaz
+ * @ingroup geometry
+ * @brief Defines the Polygon class for representing simple 2-D polygons.
+ * @details This file contains the Polygon class, which provides methods for adding vertices, computing area, and checking point containment.
+ * @note The Polygon class assumes vertices are provided in counter-clockwise order.
+ * @bug Self-intersection checks are not implemented.
+ * @see https://en.wikipedia.org/wiki/Polygon
  * @copyright 2025 Geometry Toolkit
  */
 ```
@@ -856,47 +923,25 @@ Use a **single Doxygen block** at the very top of every header file.
 
 ### Namespaces
 
-Namespaces are used to organize code into logical groups and prevent name collisions. Each namespace should be documented with a **single Doxygen block** placed at the top of the header file where the namespace is defined. This block describes the purpose, scope, and any relevant notes about the namespace.
+Use a **Doxygen block** above each namespace declaration in header files to document the namespace's purpose and contents.
 
 #### Required tags
 
-| Tag          | Description          |
-| ------------ | -------------------- |
-| `@namespace` | Fully-qualified name |
-| `@ingroup`   | Module or package    |
-| `@brief`     | One-sentence purpose |
+`@namespace`, `@ingroup`, `@brief`
 
 #### Optional tags
 
-`@details`, `@note`, `@deprecated`, `@bug`, `@see`
+`@details`, `@note`, `@see`
 
-#### Template:
-
-```cpp
-/**
- * @namespace <namespace_name>
- * @ingroup <GroupName>
- * @brief <Short purpose of the namespace>
- *
- * @details
- * <Longer explanation—scope, design notes, usage examples.>
- *
- * @note <Caveats / thread safety / units>
- * @deprecated <Version X.Y — replacement namespace>
- * @bug <Known issues>
- * @see <Related namespace or guide>
- */
-```
-
-#### Example:
+#### Example
 
 ```cpp
 /**
- * @namespace geom
- * @ingroup Geometry
- * @brief Core 2-D geometry primitives and algorithms.
+ * @namespace constants
+ * @ingroup math
+ * @brief Defines mathematical constants used throughout the project.
  */
-namespace geom { /* ... */ }
+namespace constants {}
 ```
 
 <!-- START mdsplit-ignore -->
@@ -905,85 +950,69 @@ namespace geom { /* ... */ }
 
 ### Classes & Structs
 
-Use a **Doxygen block** above each public `class` or `struct` declaration in header files and use `///<` for member notes.
+Use a **Doxygen block** above each class or struct declaration in header files to document its purpose, behavior, and any important details. This applies to both classes and structs.
 
 #### Required tags
 
-| Tag                       | Description          |
-| ------------------------- | -------------------- |
-| `@class` **or** `@struct` | Class or struct name |
-| `@ingroup`                | Module or package    |
-| `@brief`                  | One-sentence purpose |
+`@class` **or** `@struct`, `@ingroup`, `@brief`
 
 #### Optional tags
 
-`@details`, `@tparam`, `@note`, `@deprecated`, `@bug`, `@see`
+`@details`, `@tparam`, `@note`, `@bug`, `@see`
 
-#### Template:
-
-```cpp
-/**
- * @class <ClassName>
- * @ingroup <GroupName>
- * @brief <Short description of the class>
- *
- * @details
- * <Longer explanation—design rationale, invariants, usage examples.>
- *
- * @tparam <T>  <Template parameter description> 
- * @note <Thread-safety, units, etc.>
- * @deprecated <Version X.Y — replacement API>
- * @bug <Known issues>
- * @see <Related type or doc link>
- */
-```
-
-#### Example:
+#### Example
 
 ```cpp
 /**
- * @struct Vec2
+ * @struct Point2
+ * @ingroup geometry
  * @brief Lightweight 2-D point with double precision.
  */
-struct Vec2 {
+struct Point2 {
     double x {0.0}; ///< X coordinate
     double y {0.0}; ///< Y coordinate
 };
 
 /**
  * @class Polygon
- * @ingroup Geometry
- * @brief Simple, non-self-intersecting polygon.
- *
- * @details
- * Stores vertices in counter-clockwise order and provides helpers for
- * area, centroid, and point-in-polygon tests. Not thread-safe.
- *
- * @note Capacity is fixed at construction; AddVertex throws when full.
+ * @ingroup geometry
+ * @brief Simple 2-D polygon representation.
+ * @details Stores vertices in counter-clockwise order.
+ * @note Capacity is fixed at construction.
  * @bug AddVertex does not check for self-intersection.
  */
 class Polygon {
 public:
-    explicit Polygon(std::size_t max_vertices);
+    /**
+     * @brief Constructs a Polygon with a maximum number of vertices.
+     * @param[in] max_vertices  Maximum number of vertices allowed.
+     * @throws std::length_error  If max_vertices is zero.
+     */
+    Polygon(std::size_t max_vertices);
 
     /**
-     * @brief Adds a new vertex in world coordinates.
-     * @param[in] p  Vertex to add.
-     * @throws std::length_error  If max_vertices reached.
+     * @brief Adds a vertex to the polygon.
+     * @param[in] p  New vertex in world coordinates.
+     * @return Index of the inserted vertex.
+     * @throws std::length_error If max_vertices reached.
      */
-    void addVertex(const Vec2& p);
+    std::size_t Polygon::addVertex(const Point2& p);
 
     /**
-     * @brief Computes the signed area using the Shoelace formula.
-     *
-     * @return The signed area of the polygon @unit{m^2}.
-     *
-     * @note The area is positive if vertices are in counter-clockwise order.
+     * @brief Computes the signed area of the polygon.
+     * @details Uses the Shoelace formula to compute the area:
+     * @formula{polygon-area; A = \frac{1}{2} \sum_{i=1}^{n} (x_i y_{i+1} - x_{i+1} y_i)}
+     * where:
+     * - @symbol{A; is the signed area}
+     * - @symbol{x_i \& y_i; are the coordinates of the i-th vertex}
+     * - @symbol{n; is the number of vertices}
+     * @note The area is positive if vertices are in counter-clockwise order. 
+     * @return The signed area of the polygon.
      */
-    double area() const noexcept; 
+    double area() const;
 
 private:
-    std::vector<Vec2> vertices_; ///< Vertices in CCW order
+    std::vector<Point2> vertices_; ///< Vertices in counter-clockwise order.
 };
 ```
 
@@ -997,53 +1026,22 @@ Use a **Doxygen block** above each public function or method declaration in head
 
 #### Required tags
 
-| Tag          | Description                                                  |
-| ------------ | ------------------------------------------------------------ |
-| `@brief`     | One-sentence purpose                                         |
-| `@param[in]` | Input parameter (`@param[out]` / `@param[in,out]` as needed) |
-| `@return`    | Meaning of the return value (omit for `void`)                |
+`@brief`, `@param[in]` **or** `param[out]` **or** `param[in,out]`, `@return` (if applicable)
 
 #### Optional tags
 
-`@details`, `@tparam`, `@throws`, `@note`, `@deprecated`, `@bug`, `@see`
+`@details`, `@tparam`, `@throws`, `@note`, `@bug`, `@see`
 
-#### Template:
-
-```cpp
-/**
- * @brief <Short description of what the function does>
- *
- * @details 
- * <Longer explanation—algorithm, pre-conditions…>
- *
- * @tparam <T>  <Description of template parameter>
- * @param[in] <name>  <What this parameter represents>
- * @param[out] <name>  <How the caller receives data>
- * @return <Meaningful description of the result>
- *
- * @throws <exception type> <When it is thrown>
- * @note <Caveats / units / thread safety>
- * @deprecated <Version X.Y — replacement API>
- * @bug <Known issues>
- * @see <Related symbol or doc link>
- */
-```
-
-#### Example:
+#### Example
 
 ```cpp
 /**
  * @brief Adds a vertex to the polygon.
- *
- * @tparam Point2D Any 2-D point type convertible to Vec2.
  * @param[in] p  New vertex in world coordinates.
  * @return Index of the inserted vertex.
- *
- * @note Invalidates cached area; recompute via `area()`.
- * @throws std::length_error If vertex count exceeds `kMaxVertices`.
+ * @throws std::length_error If max_vertices reached.
  */
-template <typename Point2D>
-std::size_t Polygon::addVertex(const Point2D& p);
+std::size_t Polygon::addVertex(const Point2& p);
 ```
 
 <!-- START mdsplit-ignore -->
@@ -1052,19 +1050,12 @@ std::size_t Polygon::addVertex(const Point2D& p);
 
 ### Member Variables
 
-Use **inline-after comments with `///<`** for one-line descriptions of data members and individual enum values. This applies to both classes and structs.
- 
-#### Template:
+Use inline comments with `///<` for one-line descriptions of data members. This applies to both classes and structs.
+
+#### Example
 
 ```cpp
-Type name_; ///< <Concise purpose>
-```
-
-#### Example:
-
-```cpp
-size_t count_ {0};   ///< Current vertex count
-std::vector<Vec2> verts_; ///< Vertices in counter-clockwise order
+std::vector<Point2> vertices_; ///< Vertices in counter-clockwise order.
 ```
 
 <!-- START mdsplit-ignore -->
@@ -1073,66 +1064,37 @@ std::vector<Vec2> verts_; ///< Vertices in counter-clockwise order
 
 ### Constants
 
-Document global constants with an **inline-after** comment.
+Use inline comments with `///<` to document constants and their purpose.
 
-#### Template:
-
-```cpp
-constexpr Type kConstName ///< <Concise purpose>
-```
-
-#### Example:
+#### Example
 
 ```cpp
-constexpr double kPi = 3.141592653589793;    ///< Circle ratio @unit{radians}
-inline const Vec2 kOrigin {0.0, 0.0};        ///< Reference point (0,0)
+constexpr double kPi = 3.141592653589793;    ///< Circle ratio @unit{radians}.
+inline constexpr Point2 kOrigin {0.0, 0.0};  ///< Reference point (0,0).
 ```
 
 <!-- START mdsplit-ignore -->
 **[Return to Index](#documentation-index)**
 <!-- END mdsplit-ignore -->
 
-
 ### Enums
 
-Document the **enum type** with a block comment; document each **enumerator** with `///<`. If an enum has only a few obvious values (e.g. `Clockwise`, `CounterClockwise`), the inline docs may be omitted.
+Use a **Doxygen block** above each enum declaration in header files to document the enum type and its enumerators. Each enumerator should have an inline comment describing its purpose.
 
 #### Required tags
 
-| Tag        | Description          |
-| ---------- | -------------------- |
-| `@enum`    | Enum name            |
-| `@ingroup` | Module or package    |
-| `@brief`   | One-sentence purpose |
+`@enum`, `@ingroup`, `@brief`
 
 #### Optional tags
 
-`@details`, `@note`, `@deprecated`, `@bug`, `@see`
+`@details`, `@note`, `@bug`, `@see`
 
-#### Template:
-
-```cpp
-/**
- * @enum <EnumName>
- * @ingroup <GroupName>
- * @brief <Short description of the enumeration>
- *
- * @details 
- * <Longer explanation—usage rules, algorithms…>
- *
- * @note <Optional notes>
- * @deprecated <Version X.Y — replacement enum>
- * @bug <Known issues>
- * @see <Related enum or doc link>
- */
-```
-
-#### Example:
+#### Example
 
 ```cpp
 /**
  * @enum Axis
- * @ingroup Geometry
+ * @ingroup geometry
  * @brief Principal 3-D axes.
  */
 enum class Axis {
@@ -1146,98 +1108,26 @@ enum class Axis {
 **[Return to Index](#documentation-index)**
 <!-- END mdsplit-ignore -->
 
+### Groups
 
-### Formulas
+Use **Doxygen groups** to organize related namespaces, classes, and functions into logical modules.
 
-When documenting functions, algorithms, or concepts that involve mathematical formulas, use the `@formula` command to typeset equations. This command is defined in the Doxyfile under `ALIASES` and uses MathJax for rendering. The `@formula` command allows you to assign a label to each equation, making it easy to reference equations elsewhere in your documentation.
-
-#### Template:
-
-```cpp
-/**
- * @formula{<equation_label>; <equation_expression>}
- */
-```
-
-> The label entered in `equation_label` will be prefixed with `eq:` automatically. To reference the equation in your documentation, use `\eqref{eq:equation_label}`.
-
-#### Example:
-
-```cpp
-/**
- * The shoelace formula is defined as:
- * @formula{shoelace; A = \frac{1}{2} \sum_{i=1}^{n} (x_i y_{i+1} - x_{i+1} y_i)}
- */
-```
-
-<!-- START mdsplit-ignore -->
-**[Return to Index](#documentation-index)**
-<!-- END mdsplit-ignore -->
-
-### Units
-
-When documenting variables that represent physical quantities, **always specify the unit** in the documentation. Use the `@unit` command, which is defined in the `Doxyfile` under `ALIASES`, to standardize unit notation across the codebase. The `@unit` command utilizes MathJax and the [siunitx](https://ctan.org/pkg/siunitx) library for typesetting units.
-
-#### Template:
-
-```cpp
-type variable_name; ///< Brief description @unit{unit}
-```
-
-#### Example:
-
-```cpp
-double fan_speed; ///< Fan speed @unit{rpm}
-double density_corrected; ///< Gas density corrected to reference conditions @unit{lb/ft^3}
-```
-
-<!-- START mdsplit-ignore -->
-**[Return to Index](#documentation-index)**
-<!-- END mdsplit-ignore -->
-
-### Modules
-
-Modules (or groups) are collections of related namespaces, classes, and functions that together provide a high-level overview of a particular area of functionality in the codebase. Modules help organize documentation, making it easier for users and contributors to understand the structure and purpose of different parts of the project.
-
-Each module should be documented with a **single Doxygen block** placed in a central documentation file (such as `mainpage.dox`). This block defines the module and provides an overview of its contents, design philosophy, and any relevant notes or references. All related code elements (namespaces, classes, functions, etc.) should reference the module using the `@ingroup` tag in their own documentation blocks to associate them with the appropriate group.
+Place a **Doxygen block** in a central location (e.g., `mainpage.dox`) to define the group and provide an overview. Each related code element should reference the group using the `@ingroup` command in its own documentation block.
 
 #### Required tags
 
-| Tag         | Description                    |
-| ----------- | ------------------------------ |
-| `@defgroup` | `<GroupName>` and display text |
-| `@brief`    | One-sentence description       |
+`@defgroup`, `@brief`
 
 #### Optional tags
 
-`@details`, `@note`, `@deprecated`, `@bug`, `@see`
+`@details`, `@note`, `@see`
 
-#### Template:
-
-```cpp
-/**
- * @defgroup <GroupName> <Display Title>
- * @brief <Short description of the module>
- *
- * @details
- * <Longer overview—contents, design philosophy, links.>
- *
- * @note <Optional notes>
- * @deprecated <Version X.Y — replacement module>
- * @bug <Known issues>
- * @see <Related module or guide>
- */
-```
-
-#### Example:
+#### Example
 
 ```cpp
 /**
- * @defgroup Geometry Geometry
- * @brief 2-D geometry toolkit: vectors, polygons, intersections.
- *
- * @details
- * Includes Vec2, Polygon, area/centroid helpers, and spatial predicates.
+ * @defgroup geometry Geometry
+ * @brief Geometry module for 2D and 3D shapes.
  */
 ```
 

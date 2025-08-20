@@ -51,7 +51,6 @@ Scopes indicate the specific module, component, or area affected by the commit. 
 - **`processCooling`**
 - **`processHeat`**
 - **`readme`**
-- **`sqlite`**
 - **`steamModeler`**
 - **`tests`**
 - **`thirdParty`**

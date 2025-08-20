@@ -43,6 +43,46 @@ window.MathJax = {
         // Enable automatic equation numbering
         tags: 'ams'
     },
+    // Define custom units for use with siunitx
+    startup: {
+        ready() {
+            MathJax.startup.defaultReady();
+            MathJax.tex2mml(String.raw`
+                \DeclareSIUnit{\britishThermalUnit}{Btu}
+                \DeclareSIUnit{\btu}{Btu}
+
+                \DeclareSIUnit{\degreeFahrenheit}{\degree F}
+                \DeclareSIUnit{\degreeF}{\degree F}
+                \DeclareSIUnit{\degreeKelvin}{\degree K}
+                \DeclareSIUnit{\degreeK}{\degree K}
+                \DeclareSIUnit{\degreeRankine}{\degree R}
+                \DeclareSIUnit{\degreeR}{\degree R}
+
+                \DeclareSIUnit{\inch}{in}
+                \DeclareSIUnit{\in}{in}
+                \DeclareSIUnit{\foot}{ft}
+                \DeclareSIUnit{\ft}{ft}
+                \DeclareSIUnit{\yard}{yd}
+                \DeclareSIUnit{\yd}{yd}
+                \DeclareSIUnit{\mile}{mi}
+                \DeclareSIUnit{\mi}{mi}
+
+                \DeclareSIUnit{\gallon}{gal}
+                \DeclareSIUnit{\gal}{gal}
+                \DeclareSIUnit{\gallonPerMinute}{gpm}
+                \DeclareSIUnit{\gpm}{gpm}
+
+                \DeclareSIUnit{\pound}{lb}
+                \DeclareSIUnit{\lb}{lb}
+
+                \DeclareSIUnit{\revolutionsPerMinute}{rpm}
+                \DeclareSIUnit{\rpm}{rpm}
+
+                \DeclareSIUnit{\percent}{\%}
+                \DeclareSIUnit{\unitless}{-}
+            `);
+        }
+    },
     options: {
         enableEnrichment: true,
         sre: {
