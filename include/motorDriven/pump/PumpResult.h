@@ -14,7 +14,7 @@
 #ifndef TOOLS_SUITE_PUMPRESULT_H
 #define TOOLS_SUITE_PUMPRESULT_H
 
-#include "motorDriven/pump/PumpData.h"
+#include "motorDriven/pump/Pump.h"
 
 /**
  * Pump Result class

@@ -224,7 +224,7 @@ public:
 
 private:
 	friend class GasFlueGasMaterial;
-	friend class SQLite;
+	friend class DefaultData;
 
 	double calculateSpecificGravity();
 	double calculateStoichometricAir();

@@ -156,7 +156,8 @@ EMSCRIPTEN_BINDINGS(flueGasLosses)
         .function("setMoisture", &SolidLiquidFlueGasMaterial::setMoisture)
         .function("setNitrogen", &SolidLiquidFlueGasMaterial::setNitrogen)
 		.function("getAmbientAirTempF", &SolidLiquidFlueGasMaterial::getAmbientAirTempF)
-		.function("setAmbientAirTempF", &SolidLiquidFlueGasMaterial::setAmbientAirTempF);
+		.function("setAmbientAirTempF", &SolidLiquidFlueGasMaterial::setAmbientAirTempF)
+        .function("getHeatingValueFuel", &SolidLiquidFlueGasMaterial::getHeatingValueFuel);
 
     register_vector<SolidLiquidFlueGasMaterial>("SolidLiquidFlueGasMaterialV");
 }

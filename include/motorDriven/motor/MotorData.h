@@ -172,7 +172,7 @@ private:
     std::string catalog;
     int id; // used for the database
 
-	friend class SQLite;
+	friend class DefaultData;
 };
 
 #endif //TOOLS_SUITE_MOTORDATA_H

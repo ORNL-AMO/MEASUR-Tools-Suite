@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include "motorDriven/pump/PumpData.h"
+#include "motorDriven/pump/Pump.h"
 #include "motorDriven/pump/PumpResult.h"
 #include "motorDriven/motor/EstimateFLA.h"
 #include <unordered_map>

@@ -149,7 +149,6 @@ IncludeCategories:
     Priority: 2
     SortPriority: 0
     CaseSensitive: false
-  - Regex: '^"sqlite/.*"$'  # SQLite headers
     Priority: 3
     SortPriority: 0
     CaseSensitive: false

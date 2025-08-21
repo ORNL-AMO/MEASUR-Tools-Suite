@@ -1,9 +1,11 @@
 #ifndef TOOLS_SUITE_WALLLOSSESSURFACEDATA_H
 #define TOOLS_SUITE_WALLLOSSESSURFACEDATA_H
 
+#include "DB.h"
+
 class WallLosses;
 
-std::vector<WallLosses> SQLite::get_default_wall_losses_surface() {
+std::vector<WallLosses> DefaultData::get_default_wall_losses_surface() {
     return {
             {"Horizontal cylinders", 1.016},
             {"Longer vertical cylinders", 1.235},
