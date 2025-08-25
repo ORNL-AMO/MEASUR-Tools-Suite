@@ -1,8 +1,8 @@
 # MEASUR Tools Suite  
 
-## Update (07/03/2025)
+## Update (08/25/2025)
 
-The MEASUR Tools Suite is currently undergoing a major update to improve usability and maintainability. This includes a refactoring of the codebase to follow consistent practices, better organization, and enhanced documentation around the engineering aspects of the calculations. To follow the progress of this update, please refer to the [Roadmap](ROADMAP.md).
+The MEASUR Tools Suite is currently undergoing a major update to improve usability and maintainability. This includes a refactoring of the codebase to follow consistent practices, better organization, and enhanced documentation around the engineering aspects of the calculations. To follow the progress of this update, please refer to the [Roadmap](ROADMAP.md). As the codebase is refactored, some Emscripten bindings will change. A summary of these changes can be found in the [Emscripten Bindings Changes](EMSCRIPTEN_BINDINGS_CHANGES.md) document.
 
 ## About
 
