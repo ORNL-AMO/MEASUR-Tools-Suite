@@ -8,8 +8,10 @@
  *
  */
 
-#include <cmath>
 #include "motorDriven/motor/MotorPowerFactor.h"
+
+#include <cmath>
+
 #include "motorDriven/motor/MotorEfficiency.h"
 
 double MotorPowerFactor::calculate() {
@@ -25,13 +27,13 @@ double MotorPowerFactor::calculate() {
         MotorEfficiency motorEfficiency(lineFrequency, motorRpm, efficiencyClass, motorRatedPower);
         motorEfficiency.calculate(0.25, specifiedEfficiency);
         motorKwInput = motorEfficiency.getKWloss0();
-        motorkVA = 460 * sqrt(3) * motorCurrent / 1000;
+        motorkVA     = 460 * sqrt(3) * motorCurrent / 1000;
         return motorKwInput / motorkVA;
     }
     /**
-	 *  Make sure the loadfactor comes not in %.
-	 *  pf (X) = [(X/100) * rated hp * 0.746] / [Amps (X) * Eff (X) * Rated Voltage * Square root (3) / 1000]
-	 */
+     *  Make sure the loadfactor comes not in %.
+     *  pf (X) = [(X/100) * rated hp * 0.746] / [Amps (X) * Eff (X) * Rated Voltage * Square root (3) / 1000]
+     */
     return (loadFactor * motorRatedPower * 0.746) /
            (motorCurrent * motorEfficiency * ratedVoltage * std::sqrt(3) / 1000);
 }

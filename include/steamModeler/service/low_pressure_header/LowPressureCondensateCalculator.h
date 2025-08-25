@@ -5,12 +5,12 @@
 #include <steamModeler/domain/FluidPropertiesFactory.h>
 
 class LowPressureCondensateCalculator {
-public:
+  public:
     SteamSystemModelerTool::FluidProperties
-    calc(const std::shared_ptr<HeaderNotHighestPressure> &lowPressureHeaderInput) const;
+    calc(const std::shared_ptr<HeaderNotHighestPressure>& lowPressureHeaderInput) const;
 
-private:
+  private:
     const FluidPropertiesFactory fluidPropertiesFactory = FluidPropertiesFactory();
 };
 
-#endif //TOOLS_SUITE_LOWPRESSURECONDENSATECALCULATOR_H
+#endif // TOOLS_SUITE_LOWPRESSURECONDENSATECALCULATOR_H

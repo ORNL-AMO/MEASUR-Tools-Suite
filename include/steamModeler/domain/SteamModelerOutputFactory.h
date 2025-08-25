@@ -6,8 +6,8 @@
 #include <steamModeler/service/SteamModelCalculator.h>
 
 class SteamModelerOutputFactory {
-public:
-    SteamModelerOutput make(const SteamModelCalculationsDomain &domain) const;
+  public:
+    SteamModelerOutput make(const SteamModelCalculationsDomain& domain) const;
 };
 
-#endif //TOOLS_SUITE_STEAMMODELEROUTPUTFACTORY_H
+#endif // TOOLS_SUITE_STEAMMODELEROUTPUTFACTORY_H

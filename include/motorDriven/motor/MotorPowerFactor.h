@@ -1,7 +1,6 @@
 /**
- * @brief Contains the declaration of MotorPowerFactor class including the getters and setters as well as the calculators.
- *          for motor efficiency.
- *      calculateThermalResistance(): Calculates the motor power factor
+ * @brief Contains the declaration of MotorPowerFactor class including the getters and setters as well as the
+ * calculators. for motor efficiency. calculateThermalResistance(): Calculates the motor power factor
  *
  * @author Subhankar Mishra (mishras)
  * @bug No known bugs.
@@ -14,7 +13,7 @@
 #include "MotorData.h"
 
 class MotorPowerFactor {
-public:
+  public:
     /**
      * Constructor
      * @param motorRatedPower double, Rated Power of motor in hp
@@ -23,23 +22,15 @@ public:
      * @param motorEfficiency double, motor efficiency as %
      * @param ratedVoltage double, rated voltage as V
      */
-    MotorPowerFactor(
-        double motorRatedPower,
-        double loadFactor,
-        double motorCurrent,
-        double motorEfficiency,
-        double ratedVoltage
-    ) :
-        motorRatedPower(motorRatedPower),
-        loadFactor(loadFactor),
-        motorCurrent(motorCurrent),
-        motorEfficiency(motorEfficiency),
-        ratedVoltage(ratedVoltage)
-    {}
+    MotorPowerFactor(double motorRatedPower, double loadFactor, double motorCurrent, double motorEfficiency,
+                     double ratedVoltage)
+        : motorRatedPower(motorRatedPower), loadFactor(loadFactor), motorCurrent(motorCurrent),
+          motorEfficiency(motorEfficiency), ratedVoltage(ratedVoltage) {}
 
     /**
      * Constructor when the load factor is 0.
-     * When the load factor is zero, you need to calculateThermalResistance the efficiency 0.25 load factor, hence the extra parameters.
+     * When the load factor is zero, you need to calculateThermalResistance the efficiency 0.25 load factor, hence the
+     * extra parameters.
      * @param lineFrequency Motor::LineFrequency, classification of line frequency in Hz
      * @param motorRpm double, RPM of motor
      * @param efficiencyClass Motor::EfficiencyClass, efficiency class of motor
@@ -51,27 +42,12 @@ public:
      * @param ratedVoltage double, rated voltage in V
      */
 
-    MotorPowerFactor(
-        Motor::LineFrequency lineFrequency,
-        double motorRpm,
-        Motor::EfficiencyClass efficiencyClass,
-        double specifiedEfficiency,
-        double motorRatedPower,
-        double loadFactor,
-        double motorCurrent,
-        double motorEfficiency,
-        double ratedVoltage
-    ) :
-        lineFrequency(lineFrequency),
-        motorRpm(motorRpm),
-        efficiencyClass(efficiencyClass),
-        specifiedEfficiency(specifiedEfficiency),
-        motorRatedPower(motorRatedPower),
-        loadFactor(loadFactor),
-        motorCurrent(motorCurrent),
-        motorEfficiency(motorEfficiency),
-        ratedVoltage(ratedVoltage)
-    {};
+    MotorPowerFactor(Motor::LineFrequency lineFrequency, double motorRpm, Motor::EfficiencyClass efficiencyClass,
+                     double specifiedEfficiency, double motorRatedPower, double loadFactor, double motorCurrent,
+                     double motorEfficiency, double ratedVoltage)
+        : lineFrequency(lineFrequency), motorRpm(motorRpm), efficiencyClass(efficiencyClass),
+          specifiedEfficiency(specifiedEfficiency), motorRatedPower(motorRatedPower), loadFactor(loadFactor),
+          motorCurrent(motorCurrent), motorEfficiency(motorEfficiency), ratedVoltage(ratedVoltage) {};
 
     /**
      * Calculates the motor power factor
@@ -83,57 +59,45 @@ public:
      * Gets the line frequency
      * @return Motor::LineFrequency, classification of line frequency in Hz
      */
-    Motor::LineFrequency getLineFrequency() const {
-        return lineFrequency;
-    }
+    Motor::LineFrequency getLineFrequency() const { return lineFrequency; }
 
     /**
      * Sets the line frequency
      * @param lineFrequency Motor::LineFrequency, classification of line frequency in Hz
      */
-    void setLineFrequency(Motor::LineFrequency lineFrequency) {
-        this->lineFrequency = lineFrequency;
-    }
+    void setLineFrequency(Motor::LineFrequency lineFrequency) { this->lineFrequency = lineFrequency; }
 
     /**
      * Gets the motor RPM
      * @return double, motor RPM
      */
-    double getMotorRpm() const {
-        return motorRpm;
-    }
+    double getMotorRpm() const { return motorRpm; }
 
     /**
      * Sets the motor RPM
      * @param motorRpm double, RPM of motor
      */
-    void setMotorRpm(double motorRpm) {
-        this->motorRpm = motorRpm;
-    }
+    void setMotorRpm(double motorRpm) { this->motorRpm = motorRpm; }
 
     /**
      * Gets the efficiency class
      * @return Motor::EfficiencyClass, efficiency class of motor
      */
-    Motor::EfficiencyClass getEfficiencyClass() const {
-        return efficiencyClass;
-    }
+    Motor::EfficiencyClass getEfficiencyClass() const { return efficiencyClass; }
 
     /**
      * Sets the efficiency class of motor
      * @param efficiencyClass Motor::EfficiencyClass, efficiency class of motor
      */
-    void setEfficiencyClass(Motor::EfficiencyClass efficiencyClass) {
-        this->efficiencyClass = efficiencyClass;
-    }
+    void setEfficiencyClass(Motor::EfficiencyClass efficiencyClass) { this->efficiencyClass = efficiencyClass; }
 
-private:
-    Motor::LineFrequency lineFrequency;
-    double motorRpm;
+  private:
+    Motor::LineFrequency   lineFrequency;
+    double                 motorRpm;
     Motor::EfficiencyClass efficiencyClass;
-    double specifiedEfficiency;
-    double motorKwInput =0.0;
-    double motorkVA = 0.0;
+    double                 specifiedEfficiency;
+    double                 motorKwInput = 0.0;
+    double                 motorkVA     = 0.0;
 
     double motorRatedPower;
     double loadFactor;
@@ -142,5 +106,4 @@ private:
     double ratedVoltage;
 };
 
-
-#endif //TOOLS_SUITE_MOTORPOWERFACTOR_H
+#endif // TOOLS_SUITE_MOTORPOWERFACTOR_H

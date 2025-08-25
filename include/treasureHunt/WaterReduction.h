@@ -5,24 +5,21 @@
 #include <stdexcept>
 #include <vector>
 
-
 class MeteredFlowMethodData {
-public:
-    MeteredFlowMethodData(const double meterReading)
-            : meterReading(meterReading) {}
+  public:
+    MeteredFlowMethodData(const double meterReading) : meterReading(meterReading) {}
     double getMeterReading() const { return meterReading; }
 
     void setMeterReading(double meterReading);
 
-private:
+  private:
     double meterReading;
 };
 
 class VolumeMeterMethodData {
-public:
+  public:
     VolumeMeterMethodData(const double finalMeterReading, const double initialMeterReading, const double elapsedTime)
-            : finalMeterReading(finalMeterReading), initialMeterReading(initialMeterReading),
-              elapsedTime(elapsedTime) {}
+        : finalMeterReading(finalMeterReading), initialMeterReading(initialMeterReading), elapsedTime(elapsedTime) {}
     double getFinalMeterReading() const { return finalMeterReading; }
 
     double getInitialMeterReading() const { return initialMeterReading; }
@@ -35,14 +32,14 @@ public:
 
     void setElapsedTime(double elapsedTime);
 
-private:
+  private:
     double finalMeterReading, initialMeterReading, elapsedTime;
 };
 
 class BucketMethodData {
-public:
+  public:
     BucketMethodData(const double bucketVolume, const double bucketFillTime)
-            : bucketVolume(bucketVolume), bucketFillTime(bucketFillTime) {}
+        : bucketVolume(bucketVolume), bucketFillTime(bucketFillTime) {}
 
     double getBucketVolume() const { return bucketVolume; }
 
@@ -52,34 +49,32 @@ public:
 
     void setBucketFillTime(double bucketFillTime);
 
-private:
+  private:
     double bucketVolume;
     double bucketFillTime;
 };
 
-
 class WaterOtherMethodData {
-public:
-    WaterOtherMethodData(const double consumption)
-            : consumption(consumption) {}
+  public:
+    WaterOtherMethodData(const double consumption) : consumption(consumption) {}
 
     double getConsumption() const { return consumption; }
 
     void setConsumption(double consumption);
 
-private:
+  private:
     double consumption;
 };
 
-
 class WaterReductionInput {
-public:
+  public:
     WaterReductionInput(const int operatingHours, const double waterCost, const int measurementMethod,
-                        const MeteredFlowMethodData meteredFlowMethodData, const VolumeMeterMethodData volumeMeterMethodData,
-                        const BucketMethodData bucketMethodData, const WaterOtherMethodData otherMethodData)
-            : operatingHours(operatingHours), waterCost(waterCost), measurementMethod(measurementMethod),
-              meteredFlowMethodData(meteredFlowMethodData), volumeMeterMethodData(volumeMeterMethodData),
-              bucketMethodData(bucketMethodData), otherMethodData(otherMethodData) {}
+                        const MeteredFlowMethodData meteredFlowMethodData,
+                        const VolumeMeterMethodData volumeMeterMethodData, const BucketMethodData bucketMethodData,
+                        const WaterOtherMethodData otherMethodData)
+        : operatingHours(operatingHours), waterCost(waterCost), measurementMethod(measurementMethod),
+          meteredFlowMethodData(meteredFlowMethodData), volumeMeterMethodData(volumeMeterMethodData),
+          bucketMethodData(bucketMethodData), otherMethodData(otherMethodData) {}
 
     int getOperatingHours() const { return operatingHours; }
 
@@ -103,44 +98,41 @@ public:
 
     void setOtherMethodData(WaterOtherMethodData otherMethodData);
 
-
-private:
-    int operatingHours;
-    double waterCost;
-    int measurementMethod;
+  private:
+    int                   operatingHours;
+    double                waterCost;
+    int                   measurementMethod;
     MeteredFlowMethodData meteredFlowMethodData;
     VolumeMeterMethodData volumeMeterMethodData;
-    BucketMethodData bucketMethodData;
-    WaterOtherMethodData otherMethodData;
+    BucketMethodData      bucketMethodData;
+    WaterOtherMethodData  otherMethodData;
 };
-
 
 class WaterReduction {
 
-public:
+  public:
     struct Output {
         Output(double waterUse, double waterCost, double annualWaterSavings, double costSavings)
-                : waterUse(waterUse), waterCost(waterCost), annualWaterSavings(annualWaterSavings),
-                  costSavings(costSavings) {}
+            : waterUse(waterUse), waterCost(waterCost), annualWaterSavings(annualWaterSavings),
+              costSavings(costSavings) {}
 
         Output() = default;
 
         double waterUse = 0, waterCost = 0, annualWaterSavings = 0, costSavings = 0;
     };
 
-    WaterReduction(std::vector<WaterReductionInput> waterReductionInputVec) : waterReductionInputVec(waterReductionInputVec) {}
+    WaterReduction(std::vector<WaterReductionInput> waterReductionInputVec)
+        : waterReductionInputVec(waterReductionInputVec) {}
 
     WaterReduction::Output calculate();
 
-    std::vector<WaterReductionInput> const &getWaterReductionInputVec() const {
-        return waterReductionInputVec;
-    }
+    std::vector<WaterReductionInput> const& getWaterReductionInputVec() const { return waterReductionInputVec; }
 
-    void setWaterReductionInputVec(std::vector<WaterReductionInput> &waterReductionInputVec);
+    void setWaterReductionInputVec(std::vector<WaterReductionInput>& waterReductionInputVec);
 
-private:
+  private:
     std::vector<WaterReductionInput> waterReductionInputVec;
-    WaterReduction::Output output;
+    WaterReduction::Output           output;
 };
 
 #endif // TOOLS_SUITE_WATERREDUCTION_H

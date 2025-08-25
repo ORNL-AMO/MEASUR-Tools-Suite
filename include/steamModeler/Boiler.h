@@ -10,11 +10,12 @@
  */
 
 #include <iostream>
+
 #include "SteamProperties.h"
 #include "SteamSystemModelerTool.h"
 
 #ifndef TOOLS_SUITE_BOILER_H
-#define TOOLS_SUITE_BOILER_H
+    #define TOOLS_SUITE_BOILER_H
 
 /**
  * Boiler calculator class
@@ -22,7 +23,7 @@
  *  specified properties at a given flow rate using general boiler operational characteristics
  */
 class Boiler {
-public:
+  public:
     /**
      *
      * Constructor for the boiler calculator
@@ -31,26 +32,28 @@ public:
      * @param combustionEfficiency double, combustion efficiency of the boiler as %
      * @param blowdownRate double, blowdown rate as a % of inlet mass flow
      * @param steamPressure double, pressure of steam in MPa
-     * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
-     * @param quantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy
+     * in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     * @param quantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in
+     * kJ/kg/K, or quality - unitless)
      * @param steamMassFlow double, steam mass flow in kg/hr
      *
      * */
     Boiler(double deaeratorPressure, double combustionEfficiency, double blowdownRate, double steamPressure,
            SteamProperties::ThermodynamicQuantity quantityType, double quantityValue, double steamMassFlow);
 
-    friend std::ostream &operator<<(std::ostream &stream, const Boiler &boiler);
+    friend std::ostream& operator<<(std::ostream& stream, const Boiler& boiler);
 
-    SteamSystemModelerTool::FluidProperties const & getSteamProperties() const { return steamProperties; }
+    SteamSystemModelerTool::FluidProperties const& getSteamProperties() const { return steamProperties; }
 
-    SteamSystemModelerTool::FluidProperties const & getBlowdownProperties() const { return blowdownProperties; }
+    SteamSystemModelerTool::FluidProperties const& getBlowdownProperties() const { return blowdownProperties; }
 
-    SteamSystemModelerTool::FluidProperties const & getFeedwaterProperties() const { return feedwaterProperties; }
+    SteamSystemModelerTool::FluidProperties const& getFeedwaterProperties() const { return feedwaterProperties; }
 
     /**
-	 * Gets the deaerator pressure
-	 * @return double, pressure of the deaerator in MPa
-	 */
+     * Gets the deaerator pressure
+     * @return double, pressure of the deaerator in MPa
+     */
     double getDeaeratorPressure() const;
 
     /**
@@ -60,9 +63,9 @@ public:
     double getCombustionEfficiency() const;
 
     /**
-	* Gets the blowdown rate
-	* @return double, blowdown rate as a % of inlet mass flow
-	*/
+     * Gets the blowdown rate
+     * @return double, blowdown rate as a % of inlet mass flow
+     */
     double getBlowdownRate() const;
 
     /**
@@ -72,51 +75,54 @@ public:
     double getSteamPressure() const;
 
     /**
-	 * Gets the quantity value
-	 * @return double, value of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
-	 */
+     * Gets the quantity value
+     * @return double, value of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality -
+     * unitless)
+     */
     double getQuantityValue() const;
 
     /**
-	 * Gets the steam mass flow
-	 * @return double, mass flow of steam in kg/hr
-	 */
+     * Gets the steam mass flow
+     * @return double, mass flow of steam in kg/hr
+     */
     double getSteamMassFlow() const;
 
     /**
-	 * Gets the quantity type
-	 * @return SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
-	 */
+     * Gets the quantity type
+     * @return SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg,
+     * entropy in kJ/kg/K, or quality - unitless)
+     */
     SteamProperties::ThermodynamicQuantity getQuantityType() const;
 
     /**
-    * Sets the deaerator pressure
-    * @param deaeratorPressure double, pressure of the deaerator in MPa
-    */
+     * Sets the deaerator pressure
+     * @param deaeratorPressure double, pressure of the deaerator in MPa
+     */
     void setDeaeratorPressure(double deaeratorPressure);
 
     /**
-    * Sets the combustion efficiency of the boiler
-    * @param combustionEfficiency double, combustion efficiency as %
-    */
+     * Sets the combustion efficiency of the boiler
+     * @param combustionEfficiency double, combustion efficiency as %
+     */
     void setCombustionEfficiency(double combustionEfficiency);
 
     /**
-	 * Sets the blowdown rate
-	 * @param blowdownRate double, blowdown rate as a % of inlet mass flow
-	 */
+     * Sets the blowdown rate
+     * @param blowdownRate double, blowdown rate as a % of inlet mass flow
+     */
     void setBlowdownRate(double blowdownRate);
 
     /**
-	 * Sets the steam pressure
-	 * @param steamPressure double, pressure of steam in MPa
-	 */
+     * Sets the steam pressure
+     * @param steamPressure double, pressure of steam in MPa
+     */
     void setSteamPressure(double steamPressure);
 
     /**
-	 * Sets the quantity value
-	 * @param quantityValue double, value of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
-	 */
+     * Sets the quantity value
+     * @param quantityValue double, value of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K,
+     * or quality - unitless)
+     */
     void setQuantityValue(double quantityValue);
 
     /**
@@ -126,9 +132,10 @@ public:
     void setSteamMassFlow(double steamMassFlow);
 
     /**
-    * Sets the quantity type
-    * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
-    */
+     * Sets the quantity type
+     * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy
+     * in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     */
     void setQuantityType(SteamProperties::ThermodynamicQuantity quantity);
 
     /**
@@ -143,17 +150,15 @@ public:
      */
     double getFuelEnergy() const { return fuelEnergy; };
 
-
-private:
+  private:
     void calculateProperties();
 
-    double deaeratorPressure, combustionEfficiency, blowdownRate, steamPressure;
+    double                                 deaeratorPressure, combustionEfficiency, blowdownRate, steamPressure;
     SteamProperties::ThermodynamicQuantity quantityType;
-    double quantityValue, steamMassFlow;
+    double                                 quantityValue, steamMassFlow;
 
     SteamSystemModelerTool::FluidProperties steamProperties, blowdownProperties, feedwaterProperties;
-    double boilerEnergy, fuelEnergy;
+    double                                  boilerEnergy, fuelEnergy;
 };
 
-
-#endif //TOOLS_SUITE_BOILER_H
+#endif // TOOLS_SUITE_BOILER_H

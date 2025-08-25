@@ -17,7 +17,7 @@
  * Used to calculateThermalResistance the electrical heat input that is equivalent to the fuel-fired heat input.
  */
 class ElectricalEnergyEquivalency {
-public:
+  public:
     /**
      *
      * Constructor for the electric energy equivalency calculator
@@ -28,17 +28,13 @@ public:
      *
      *
      * */
-    ElectricalEnergyEquivalency(
-            double fuelFiredEfficiency,
-            double electricallyHeatedEfficiency,
-            double fuelFiredHeatInput)
-            : fuelFiredEfficiency_(fuelFiredEfficiency),
-              electricallyHeatedEfficiency_(electricallyHeatedEfficiency),
-              fuelFiredHeatInput_(fuelFiredHeatInput)
+    ElectricalEnergyEquivalency(double fuelFiredEfficiency, double electricallyHeatedEfficiency,
+                                double fuelFiredHeatInput)
+        : fuelFiredEfficiency_(fuelFiredEfficiency), electricallyHeatedEfficiency_(electricallyHeatedEfficiency),
+          fuelFiredHeatInput_(fuelFiredHeatInput)
 
     {
         electricalHeatInput_ = 0.0;
-
     }
 
     ElectricalEnergyEquivalency() = default;
@@ -48,9 +44,7 @@ public:
      *
      * @return double, fuel-fired equipment efficiency as %
      */
-    double getFuelFiredEfficiency() const {
-        return fuelFiredEfficiency_;
-    }
+    double getFuelFiredEfficiency() const { return fuelFiredEfficiency_; }
 
     /**
      * Sets the fuel-fired equipment efficiency
@@ -58,18 +52,14 @@ public:
      * @param fuelFiredEfficiency double, fuel-fired equipment efficiency as %
      *
      */
-    void setFuelFiredEfficiency(double fuelFiredEfficiency) {
-        fuelFiredEfficiency_ = fuelFiredEfficiency;
-    }
+    void setFuelFiredEfficiency(double fuelFiredEfficiency) { fuelFiredEfficiency_ = fuelFiredEfficiency; }
 
     /**
      * Getter for the electrically heated equipment efficiency
      *
      * @return double, electrically heated equipment efficiency as %
      */
-    double getElectricallyHeatedEfficiency() const {
-        return electricallyHeatedEfficiency_;
-    }
+    double getElectricallyHeatedEfficiency() const { return electricallyHeatedEfficiency_; }
 
     /**
      * Sets the electrically heated equipment efficiency
@@ -86,9 +76,7 @@ public:
      *
      * @return double, heat input for fuel-fired equipment in MM Btu/hr
      */
-    double getFuelFiredHeatInput() const {
-        return fuelFiredHeatInput_;
-    }
+    double getFuelFiredHeatInput() const { return fuelFiredHeatInput_; }
 
     /**
      * Sets the heat input for fuel-fired equipment
@@ -96,9 +84,7 @@ public:
      * @param fuelFiredHeatInput double, heat input for fuel-fired equipment in MM Btu/hr
      *
      */
-    void setFuelFiredHeatInput(double fuelFiredHeatInput) {
-        fuelFiredHeatInput_ = fuelFiredHeatInput;
-    }
+    void setFuelFiredHeatInput(double fuelFiredHeatInput) { fuelFiredHeatInput_ = fuelFiredHeatInput; }
 
     /**
      * Gets the equivalent electrical heat input
@@ -106,12 +92,11 @@ public:
      */
     double getElectricalHeatInput();
 
-private:
+  private:
     // In values
-    double fuelFiredEfficiency_ = 0.0;
+    double fuelFiredEfficiency_          = 0.0;
     double electricallyHeatedEfficiency_ = 0.0;
-    double fuelFiredHeatInput_ = 0.0;
-
+    double fuelFiredHeatInput_           = 0.0;
 
     // Out values
     /// natural gas heat
@@ -123,7 +108,7 @@ private:
  * Used to calculateThermalResistance the fuel-fired heat input that is equivalent to the electric heat input.
  */
 class FuelFiredEnergyEquivalency {
-public:
+  public:
     /**
      *
      * Constructor for the fuel-fired equivalency calculator
@@ -134,30 +119,23 @@ public:
      *
      *
      * */
-    FuelFiredEnergyEquivalency(
-            double electricallyHeatedEfficiency,
-            double fuelFiredEfficiency,
-            double electricalHeatInput)
-            : electricallyHeatedEfficiency_(electricallyHeatedEfficiency),
-              fuelFiredEfficiency_(fuelFiredEfficiency),
-              electricalHeatInput_(electricalHeatInput)
+    FuelFiredEnergyEquivalency(double electricallyHeatedEfficiency, double fuelFiredEfficiency,
+                               double electricalHeatInput)
+        : electricallyHeatedEfficiency_(electricallyHeatedEfficiency), fuelFiredEfficiency_(fuelFiredEfficiency),
+          electricalHeatInput_(electricalHeatInput)
 
     {
         fuelFiredHeatInput_ = 0.0;
-
     }
 
     FuelFiredEnergyEquivalency() = default;
-
 
     /**
      * Getter for the electrically heated equipment efficiency
      *
      * @return double, electrically heated equipment efficiency as %
      */
-    double getElectricallyHeatedEfficiency() const {
-        return electricallyHeatedEfficiency_;
-    }
+    double getElectricallyHeatedEfficiency() const { return electricallyHeatedEfficiency_; }
 
     /**
      * Sets the electrically heated equipment efficiency
@@ -174,9 +152,7 @@ public:
      *
      * @return double, fuel-fired equipment efficiency as %
      */
-    double getFuelFiredEfficiency() const {
-        return fuelFiredEfficiency_;
-    }
+    double getFuelFiredEfficiency() const { return fuelFiredEfficiency_; }
 
     /**
      * Sets the fuel-fired equipment efficiency
@@ -184,18 +160,14 @@ public:
      * @param fuelFiredEfficiency double, fuel-fired equipment efficiency as %
      *
      */
-    void setFuelFiredEfficiency(double fuelFiredEfficiency) {
-        fuelFiredEfficiency_ = fuelFiredEfficiency;
-    }
+    void setFuelFiredEfficiency(double fuelFiredEfficiency) { fuelFiredEfficiency_ = fuelFiredEfficiency; }
 
     /**
      * Getter for the heat input for electrically heated equipment
      *
      * @return double, heat input for electrically heated equipment in kW
      */
-    double getElectricalHeatInput() const {
-        return electricalHeatInput_;
-    }
+    double getElectricalHeatInput() const { return electricalHeatInput_; }
 
     /**
      * Sets the heat input for electrically heated equipment
@@ -203,9 +175,7 @@ public:
      * @param electricalHeatInput double, heat input for electrically heated equipment in kW
      *
      */
-    void setElectricalHeatInput(double electricalHeatInput) {
-        electricalHeatInput_ = electricalHeatInput;
-    }
+    void setElectricalHeatInput(double electricalHeatInput) { electricalHeatInput_ = electricalHeatInput; }
 
     /**
      * Gets the equivalent fuel-fired heat input
@@ -213,15 +183,14 @@ public:
      */
     double getFuelFiredHeatInput();
 
-private:
+  private:
     // In values
     double electricallyHeatedEfficiency_ = 0.0;
-    double fuelFiredEfficiency_ = 0.0;
-    double electricalHeatInput_ = 0.0;
-
+    double fuelFiredEfficiency_          = 0.0;
+    double electricalHeatInput_          = 0.0;
 
     // Out values
     /// natural gas heat
     double fuelFiredHeatInput_;
 };
-#endif //TOOLS_SUITE_ENERGYEQUIVALENCY_H
+#endif // TOOLS_SUITE_ENERGYEQUIVALENCY_H

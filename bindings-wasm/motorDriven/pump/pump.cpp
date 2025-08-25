@@ -1,29 +1,26 @@
+#include <emscripten/bind.h>
+
 #include "motorDriven/motor/MotorData.h"
 #include "motorDriven/motor/MotorShaftPower.h"
-#include "motorDriven/pump/PumpResult.h"
 #include "motorDriven/pump/HeadTool.h"
-
-#include <emscripten/bind.h>
+#include "motorDriven/pump/PumpResult.h"
 
 using namespace emscripten;
 
-//headToolSuctionTank
-EMSCRIPTEN_BINDINGS(head_tool_suction_tank_class)
-{
+// headToolSuctionTank
+EMSCRIPTEN_BINDINGS(head_tool_suction_tank_class) {
     class_<HeadToolSuctionTank>("HeadToolSuctionTank")
         .constructor<double, double, double, double, double, double, double, double, double, double>()
         .function("calculate", &HeadToolSuctionTank::calculate);
 }
-//headTool
-EMSCRIPTEN_BINDINGS(head_tool_class)
-{
+// headTool
+EMSCRIPTEN_BINDINGS(head_tool_class) {
     class_<HeadTool>("HeadTool")
         .constructor<double, double, double, double, double, double, double, double, double, double>()
         .function("calculate", &HeadTool::calculate);
 }
-//headToolOutput
-EMSCRIPTEN_BINDINGS(head_tool_output)
-{
+// headToolOutput
+EMSCRIPTEN_BINDINGS(head_tool_output) {
     class_<HeadToolBase::Output>("HeadToolOutput")
         .constructor<double, double, double, double, double, double>()
         .property("differentialElevationHead", &HeadToolBase::Output::elevationHead)
@@ -34,9 +31,8 @@ EMSCRIPTEN_BINDINGS(head_tool_output)
         .property("pumpHead", &HeadToolBase::Output::pumpHead);
 }
 
-//resultsExisting & resultsModified
-EMSCRIPTEN_BINDINGS(pump_results)
-{
+// resultsExisting & resultsModified
+EMSCRIPTEN_BINDINGS(pump_results) {
     class_<Pump::Input>("PumpResultInput")
         .constructor<Pump::Style, double, double, Motor::Drive, double, double, int, Pump::SpecificSpeed, double>();
 
@@ -51,8 +47,7 @@ EMSCRIPTEN_BINDINGS(pump_results)
         .function("getOptimizationRating", &PumpResult::getOptimizationRating);
 }
 
-EMSCRIPTEN_BINDINGS(pump_results_output)
-{
+EMSCRIPTEN_BINDINGS(pump_results_output) {
     class_<PumpResult::Output>("PumpResults")
         .constructor<double, double, double, double, double, double, double, double, double, double, double, double>()
         .property("pump_efficiency", &PumpResult::Output::pumpEfficiency)

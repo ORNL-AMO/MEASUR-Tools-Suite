@@ -1,17 +1,19 @@
-#include "catch.hpp"
 #include <processHeat/losses/OpeningLosses.h>
 
-TEST_CASE( "Calculate Heat Loss for opening Losses", "[Heat Loss]" ) {
-    // Circular
-    REQUIRE( OpeningLosses(0.95, 12.0, 9.0, 1.33, 75.0, 1600.0, 100.0, 0.70).getHeatLoss() == Approx( 16038.269976979091 ) );
-    // Quadrilateral
-    REQUIRE( OpeningLosses(0.95, 48.0, 15.0, 9.0, 1.67, 75.0, 1600.0, 20.0, 0.64).getHeatLoss() == Approx( 18670.2258869289 ) );
+#include "catch.hpp"
 
+TEST_CASE("Calculate Heat Loss for opening Losses", "[Heat Loss]") {
+    // Circular
+    REQUIRE(OpeningLosses(0.95, 12.0, 9.0, 1.33, 75.0, 1600.0, 100.0, 0.70).getHeatLoss() ==
+            Approx(16038.269976979091));
+    // Quadrilateral
+    REQUIRE(OpeningLosses(0.95, 48.0, 15.0, 9.0, 1.67, 75.0, 1600.0, 20.0, 0.64).getHeatLoss() ==
+            Approx(18670.2258869289));
 }
 
-TEST_CASE( "Calculate viewFactor for Opening Losses", "[Heat Loss][viewFactor]" ) {
+TEST_CASE("Calculate viewFactor for Opening Losses", "[Heat Loss][viewFactor]") {
     auto opening = OpeningLosses();
-	// Circular view factor calculations
+    // Circular view factor calculations
     CHECK(opening.calculateViewFactor(3, 5) == Approx(0.624519890259));
     CHECK(opening.calculateViewFactor(1, 5) == Approx(0.83499999996));
     CHECK(opening.calculateViewFactor(0, 5) == Approx(0.86));

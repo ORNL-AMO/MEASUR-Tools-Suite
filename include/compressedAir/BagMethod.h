@@ -10,17 +10,16 @@
 #ifndef TOOLS_SUITE_BAGMETHOD_H
 #define TOOLS_SUITE_BAGMETHOD_H
 
-#include <vector>
 #include <cmath>
-#include <stdexcept>
 #include <functional>
+#include <stdexcept>
+#include <vector>
 
 class BagMethod {
-public:
+  public:
     struct Output {
         Output(const double flowRate, const double annualConsumption)
-                : flowRate(flowRate), annualConsumption(annualConsumption)
-        {}
+            : flowRate(flowRate), annualConsumption(annualConsumption) {}
 
         const double flowRate, annualConsumption;
     };
@@ -35,21 +34,19 @@ public:
      * @returns flowRate in scfm, annualConsumption in kscfm
      */
     BagMethod(double operatingTime, double bagFillTime, double bagVolume, int numberOfUnits)
-            : operatingTime(operatingTime), bagFillTime(bagFillTime),
-              bagVolume(bagVolume), numberOfUnits(numberOfUnits)
-    {}
+        : operatingTime(operatingTime), bagFillTime(bagFillTime), bagVolume(bagVolume), numberOfUnits(numberOfUnits) {}
 
     /**
-     * @return BagMethod::Output, 
-     * @param flowRate in scfm 
+     * @return BagMethod::Output,
+     * @param flowRate in scfm
      * @param annualConsumption in kscf
      */
     Output calculate() {
         auto const flowRate = bagVolume / (bagFillTime / 60);
-        return {flowRate, (flowRate * operatingTime * numberOfUnits * 60) / 1000 };
+        return {flowRate, (flowRate * operatingTime * numberOfUnits * 60) / 1000};
     }
 
-private:
+  private:
     double operatingTime, bagFillTime, bagVolume, numberOfUnits;
 };
 

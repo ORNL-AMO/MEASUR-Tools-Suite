@@ -11,18 +11,17 @@
  *
  */
 
-#include <cmath>
-#include <vector>
 #include "util/CurveFitVal.h"
+
+#include <cmath>
 #include <iostream>
+#include <vector>
 /**
  * Given a set of x and y coordinates and degree of polynomial curve to fit, it calculates the curve fit value
  * for a particular x coordinate value (read load factor here).
  * @return curve fit value.
  */
-double CurveFitVal::calculate() const {
-    return calculate(loadFactor);
-}
+double CurveFitVal::calculate() const { return calculate(loadFactor); }
 
 double CurveFitVal::calculate(double fitValue) const {
     double curveFitVal = 0;
@@ -32,7 +31,7 @@ double CurveFitVal::calculate(double fitValue) const {
     return curveFitVal;
 }
 
-std::vector<double> CurveFitVal::Fit_Coefficients() {// Array to store Sigma X values
+std::vector<double> CurveFitVal::Fit_Coefficients() { // Array to store Sigma X values
     std::vector<double> sigmaX(2 * pdegree + 1, 0);
     for (std::size_t i = 0; i < 2 * pdegree + 1; i++) {
         for (auto const val : xcoord) {
@@ -69,7 +68,7 @@ std::vector<double> CurveFitVal::Fit_Coefficients() {// Array to store Sigma X v
         for (std::size_t k = i + 1; k < pdegreeplus; k++) {
             if (augMatrix[i][i] < augMatrix[k][i]) {
                 for (std::size_t j = 0; j <= pdegreeplus; j++) {
-                    double temp = augMatrix[i][j];
+                    double temp     = augMatrix[i][j];
                     augMatrix[i][j] = augMatrix[k][j];
                     augMatrix[k][j] = temp;
                 }
@@ -93,7 +92,8 @@ std::vector<double> CurveFitVal::Fit_Coefficients() {// Array to store Sigma X v
         coeff[i] = augMatrix[i][pdegreeplus];
         for (std::size_t j = 0; j < pdegreeplus; j++) {
             int k = static_cast<int>(j);
-            if (k == i) continue;
+            if (k == i)
+                continue;
             coeff[i] = coeff[i] - augMatrix[i][j] * coeff[j];
         }
         coeff[i] = coeff[i] / augMatrix[i][i];

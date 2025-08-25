@@ -1,14 +1,15 @@
 #include "processHeat/losses/WaterAssessment.h"
+
 #include <emscripten/bind.h>
 
 using namespace emscripten;
 
-EMSCRIPTEN_BINDINGS(waterAssessment_class)
-{
+EMSCRIPTEN_BINDINGS(waterAssessment_class) {
     class_<WaterAssessment::ProcessWaterUseOutput>("ProcessWaterUseOutput")
         .property("recirculatedWater", &WaterAssessment::ProcessWaterUseOutput::recirculatedWater)
         .property("incomingWater", &WaterAssessment::ProcessWaterUseOutput::incomingWater)
-        .property("wasteDischargedAndRecycledOther", &WaterAssessment::ProcessWaterUseOutput::wasteDischargedAndRecycledOther);
+        .property("wasteDischargedAndRecycledOther",
+                  &WaterAssessment::ProcessWaterUseOutput::wasteDischargedAndRecycledOther);
 
     class_<WaterAssessment::CoolingTowerLossOutput>("CoolingTowerLossOutput")
         .property("grossWaterUse", &WaterAssessment::CoolingTowerLossOutput::grossWaterUse)

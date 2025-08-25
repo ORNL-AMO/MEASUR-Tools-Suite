@@ -1,32 +1,26 @@
-#include "vector"
+#include <emscripten/bind.h>
 
-#include "treasureHunt/ElectricityReduction.h"
-#include "treasureHunt/NaturalGasReduction.h"
-#include "treasureHunt/CompressedAirReduction.h"
+#include "steamModeler/SteamProperties.h"
 #include "treasureHunt/CompressedAirPressureReduction.h"
-#include "treasureHunt/WaterReduction.h"
-#include "treasureHunt/SteamReduction.h"
+#include "treasureHunt/CompressedAirReduction.h"
+#include "treasureHunt/ElectricityReduction.h"
 #include "treasureHunt/InsulatedPipeReduction.h"
 #include "treasureHunt/InsulatedTankReduction.h"
-#include "steamModeler/SteamProperties.h"
-
-#include <emscripten/bind.h>
+#include "treasureHunt/NaturalGasReduction.h"
+#include "treasureHunt/SteamReduction.h"
+#include "treasureHunt/WaterReduction.h"
+#include "vector"
 
 using namespace emscripten;
 
-EMSCRIPTEN_BINDINGS(electricityReduction_class)
-{
-    class_<MultimeterData>("MultimeterData")
-        .constructor<int, double, double, double>();
+EMSCRIPTEN_BINDINGS(electricityReduction_class) {
+    class_<MultimeterData>("MultimeterData").constructor<int, double, double, double>();
 
-    class_<NameplateData>("NameplateData")
-        .constructor<double, bool, double, double, double, double>();
+    class_<NameplateData>("NameplateData").constructor<double, bool, double, double, double, double>();
 
-    class_<PowerMeterData>("PowerMeterData")
-        .constructor<double>();
+    class_<PowerMeterData>("PowerMeterData").constructor<double>();
 
-    class_<OtherMethodData>("OtherMethodData")
-        .constructor<double>();
+    class_<OtherMethodData>("OtherMethodData").constructor<double>();
 
     class_<ElectricityReductionInput>("ElectricityReductionInput")
         .constructor<int, double, int, MultimeterData, NameplateData, PowerMeterData, OtherMethodData, int>();
@@ -43,28 +37,23 @@ EMSCRIPTEN_BINDINGS(electricityReduction_class)
         .function("calculate", &ElectricityReduction::calculate);
 }
 
-EMSCRIPTEN_BINDINGS(naturalGasReduction_class)
-{
-    class_<FlowMeterMethodData>("FlowMeterMethodData")
-        .constructor<double>();
+EMSCRIPTEN_BINDINGS(naturalGasReduction_class) {
+    class_<FlowMeterMethodData>("FlowMeterMethodData").constructor<double>();
 
-    class_<NaturalGasOtherMethodData>("NaturalGasOtherMethodData")
-        .constructor<double>();
+    class_<NaturalGasOtherMethodData>("NaturalGasOtherMethodData").constructor<double>();
 
-    class_<AirMassFlowMeasuredData>("AirMassFlowMeasuredData")
-        .constructor<double, double>();
+    class_<AirMassFlowMeasuredData>("AirMassFlowMeasuredData").constructor<double, double>();
 
-    class_<AirMassFlowNameplateData>("AirMassFlowNameplateData")
-        .constructor<double>();
+    class_<AirMassFlowNameplateData>("AirMassFlowNameplateData").constructor<double>();
 
     class_<AirMassFlowData>("AirMassFlowData")
         .constructor<bool, AirMassFlowMeasuredData, AirMassFlowNameplateData, double, double, double>();
 
-    class_<WaterMassFlowData>("WaterMassFlowData")
-        .constructor<double, double, double, double>();
+    class_<WaterMassFlowData>("WaterMassFlowData").constructor<double, double, double, double>();
 
     class_<NaturalGasReductionInput>("NaturalGasReductionInput")
-        .constructor<int, double, int, FlowMeterMethodData, NaturalGasOtherMethodData, AirMassFlowData, WaterMassFlowData, int>();
+        .constructor<int, double, int, FlowMeterMethodData, NaturalGasOtherMethodData, AirMassFlowData,
+                     WaterMassFlowData, int>();
 
     register_vector<NaturalGasReductionInput>("NaturalGasReductionInputV");
 
@@ -79,26 +68,20 @@ EMSCRIPTEN_BINDINGS(naturalGasReduction_class)
         .function("calculate", &NaturalGasReduction::calculate);
 }
 
-EMSCRIPTEN_BINDINGS(compressedAirReduction_class)
-{
-    class_<CompressedAirFlowMeterMethodData>("CompressedAirFlowMeterMethodData")
-        .constructor<double>();
+EMSCRIPTEN_BINDINGS(compressedAirReduction_class) {
+    class_<CompressedAirFlowMeterMethodData>("CompressedAirFlowMeterMethodData").constructor<double>();
 
-    class_<BagMethodData>("BagMethodData")
-        .constructor<double, double, double>(); // legacy only
+    class_<BagMethodData>("BagMethodData").constructor<double, double, double>(); // legacy only
 
-    class_<PressureMethodData>("PressureMethodData")
-        .constructor<int, int, double>();
+    class_<PressureMethodData>("PressureMethodData").constructor<int, int, double>();
 
-    class_<CompressedAirOtherMethodData>("CompressedAirOtherMethodData")
-        .constructor<double>();
+    class_<CompressedAirOtherMethodData>("CompressedAirOtherMethodData").constructor<double>();
 
-    class_<CompressorElectricityData>("CompressorElectricityData")
-        .constructor<double, double>();
+    class_<CompressorElectricityData>("CompressorElectricityData").constructor<double, double>();
 
     class_<CompressedAirReductionInput>("CompressedAirReductionInput")
         .constructor<int, int, double, int, CompressedAirFlowMeterMethodData, BagMethod, PressureMethodData,
-            CompressedAirOtherMethodData, CompressorElectricityData, int>();
+                     CompressedAirOtherMethodData, CompressorElectricityData, int>();
 
     register_vector<CompressedAirReductionInput>("CompressedAirReductionInputV");
 
@@ -114,8 +97,7 @@ EMSCRIPTEN_BINDINGS(compressedAirReduction_class)
         .function("calculate", &CompressedAirReduction::calculate);
 }
 
-EMSCRIPTEN_BINDINGS(compressedAirPressureReduction_class)
-{
+EMSCRIPTEN_BINDINGS(compressedAirPressureReduction_class) {
     class_<CompressedAirPressureReductionInput>("CompressedAirPressureReductionInput")
         .constructor<bool, int, double, double, double, double, double, double>();
 
@@ -130,22 +112,18 @@ EMSCRIPTEN_BINDINGS(compressedAirPressureReduction_class)
         .function("calculate", &CompressedAirPressureReduction::calculate);
 }
 
-EMSCRIPTEN_BINDINGS(waterReduction_class)
-{
-    class_<MeteredFlowMethodData>("MeteredFlowMethodData")
-        .constructor<double>();
+EMSCRIPTEN_BINDINGS(waterReduction_class) {
+    class_<MeteredFlowMethodData>("MeteredFlowMethodData").constructor<double>();
 
-    class_<VolumeMeterMethodData>("VolumeMeterMethodData")
-        .constructor<double, double, double>();
+    class_<VolumeMeterMethodData>("VolumeMeterMethodData").constructor<double, double, double>();
 
-    class_<BucketMethodData>("BucketMethodData")
-        .constructor<double, double>();
+    class_<BucketMethodData>("BucketMethodData").constructor<double, double>();
 
-    class_<WaterOtherMethodData>("WaterOtherMethodData")
-        .constructor<double>();
+    class_<WaterOtherMethodData>("WaterOtherMethodData").constructor<double>();
 
     class_<WaterReductionInput>("WaterReductionInput")
-        .constructor<int, double, int, MeteredFlowMethodData, VolumeMeterMethodData, BucketMethodData, WaterOtherMethodData>();
+        .constructor<int, double, int, MeteredFlowMethodData, VolumeMeterMethodData, BucketMethodData,
+                     WaterOtherMethodData>();
 
     register_vector<WaterReductionInput>("WaterReductionInputV");
 
@@ -160,27 +138,22 @@ EMSCRIPTEN_BINDINGS(waterReduction_class)
         .function("calculate", &WaterReduction::calculate);
 }
 
-EMSCRIPTEN_BINDINGS(steamReduction_class)
-{
-    class_<SteamFlowMeterMethodData>("SteamFlowMeterMethodData")
-        .constructor<double>();
+EMSCRIPTEN_BINDINGS(steamReduction_class) {
+    class_<SteamFlowMeterMethodData>("SteamFlowMeterMethodData").constructor<double>();
 
-    class_<SteamMassFlowNameplateData>("SteamMassFlowNameplateData")
-        .constructor<double>();
+    class_<SteamMassFlowNameplateData>("SteamMassFlowNameplateData").constructor<double>();
 
-    class_<SteamMassFlowMeasuredData>("SteamMassFlowMeasuredData")
-        .constructor<double, double>();
+    class_<SteamMassFlowMeasuredData>("SteamMassFlowMeasuredData").constructor<double, double>();
 
     class_<SteamMassFlowMethodData>("SteamMassFlowMethodData")
         .constructor<bool, SteamMassFlowMeasuredData, SteamMassFlowNameplateData, double, double>();
 
-    class_<SteamOffsheetMethodData>("SteamOffsheetMethodData")
-        .constructor<double>();
+    class_<SteamOffsheetMethodData>("SteamOffsheetMethodData").constructor<double>();
 
     class_<SteamReductionInput>("SteamReductionInput")
-        .constructor<int, int, double, int, double, double,
-        SteamFlowMeterMethodData, SteamMassFlowMethodData, SteamMassFlowMethodData, SteamOffsheetMethodData, int,
-        double, SteamProperties::ThermodynamicQuantity, double, double>();
+        .constructor<int, int, double, int, double, double, SteamFlowMeterMethodData, SteamMassFlowMethodData,
+                     SteamMassFlowMethodData, SteamOffsheetMethodData, int, double,
+                     SteamProperties::ThermodynamicQuantity, double, double>();
 
     register_vector<SteamReductionInput>("SteamReductionInputV");
 
@@ -194,10 +167,10 @@ EMSCRIPTEN_BINDINGS(steamReduction_class)
         .function("calculate", &SteamReduction::calculate);
 }
 
-EMSCRIPTEN_BINDINGS(insulatedPipeReduction_class)
-{
+EMSCRIPTEN_BINDINGS(insulatedPipeReduction_class) {
     class_<InsulatedPipeInput>("InsulatedPipeInput")
-        .constructor<int, double, double, double, double, double, double, double, double, double, double, std::vector<double>, std::vector<double>>();
+        .constructor<int, double, double, double, double, double, double, double, double, double, double,
+                     std::vector<double>, std::vector<double>>();
 
     class_<InsulatedPipeOutput>("InsulatedPipeOutput")
         .function("getHeatLength", &InsulatedPipeOutput::getHeatLength)
@@ -208,10 +181,10 @@ EMSCRIPTEN_BINDINGS(insulatedPipeReduction_class)
         .function("calculate", &InsulatedPipeReduction::calculate);
 }
 
-EMSCRIPTEN_BINDINGS(insulatedTankReduction_class)
-{
+EMSCRIPTEN_BINDINGS(insulatedTankReduction_class) {
     class_<InsulatedTankInput>("InsulatedTankInput")
-        .constructor<int, double, double, double, double, double, double, double, double, double, double, double, double>();
+        .constructor<int, double, double, double, double, double, double, double, double, double, double, double,
+                     double>();
 
     class_<InsulatedTankOutput>("InsulatedTankOutput")
         .function("getHeatLoss", &InsulatedTankOutput::getHeatLoss)

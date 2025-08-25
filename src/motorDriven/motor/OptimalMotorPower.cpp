@@ -8,13 +8,16 @@
  *
  */
 
+#include "motorDriven/motor/OptimalMotorPower.h"
+
+#include <complex>
+
 #include <motorDriven/motor/MotorCurrent.h>
 #include <motorDriven/motor/Poles.h>
-#include <complex>
-#include "motorDriven/motor/OptimalMotorPower.h"
+
 #include "motorDriven/motor/MotorEfficiency.h"
-#include "motorDriven/motor/MotorPowerFactor.h"
 #include "motorDriven/motor/MotorPower.h"
+#include "motorDriven/motor/MotorPowerFactor.h"
 
 OptimalMotorPower::Output OptimalMotorPower::calculate() {
     double tempLoadFraction = 0.00;
@@ -25,33 +28,34 @@ OptimalMotorPower::Output OptimalMotorPower::calculate() {
     double power, efficiency, current, powerFactor;
 
     while (true) {
-        MotorCurrent optimalMotorCurrent(motorRatedPower, motorRPM, lineFrequency, efficiencyClass,
-                                         specifiedEfficiency, tempLoadFraction, ratedVoltage);
+        MotorCurrent optimalMotorCurrent(motorRatedPower, motorRPM, lineFrequency, efficiencyClass, specifiedEfficiency,
+                                         tempLoadFraction, ratedVoltage);
         current = optimalMotorCurrent.calculateOptimalCurrent();
-        //Adjustment to current based on measured Voltage
+        // Adjustment to current based on measured Voltage
         current = current * ((((fieldVoltage / ratedVoltage) - 1) * (1 + (-2 * tempLoadFraction))) + 1);
         MotorEfficiency motorEfficiency(lineFrequency, motorRPM, efficiencyClass, motorRatedPower);
         efficiency = motorEfficiency.calculate(tempLoadFraction, specifiedEfficiency);
-        //Similar to motorpowerfactor in existing case instead of ratedVoltage
+        // Similar to motorpowerfactor in existing case instead of ratedVoltage
         MotorPowerFactor motorPowerFactor(lineFrequency, motorRPM, efficiencyClass, specifiedEfficiency,
                                           motorRatedPower, tempLoadFraction, current, efficiency, fieldVoltage);
         powerFactor = motorPowerFactor.calculate();
 
-        power = MotorPower(fieldVoltage, current, powerFactor).calculate();
+        power   = MotorPower(fieldVoltage, current, powerFactor).calculate();
         tempMsp = power * efficiency;
         // Converting to KW for matching purpose.
         mspkW = optimalMotorShaftPower * 0.746;
 
         if (tempMsp > mspkW || tempLoadFraction > 1.5) {
-            powerE2 = power;
-            eff2 = efficiency;
+            powerE2  = power;
+            eff2     = efficiency;
             current2 = current;
             tempMsp2 = tempMsp;
             break;
-        } else {
-            powerE1 = power;
-            lf = tempLoadFraction;
-            eff1 = efficiency;
+        }
+        else {
+            powerE1  = power;
+            lf       = tempLoadFraction;
+            eff1     = efficiency;
             current1 = current;
             tempMsp1 = tempMsp;
             tempLoadFraction += 0.01;
@@ -59,18 +63,18 @@ OptimalMotorPower::Output OptimalMotorPower::calculate() {
     }
 
     // Calculate Fractional Index
-    const double motorMspdiff = tempMsp2 - tempMsp1;
+    const double motorMspdiff    = tempMsp2 - tempMsp1;
     const double measuredMspdiff = mspkW - tempMsp1;
     const double fractionalIndex = lf + ((measuredMspdiff / motorMspdiff) / 100);
 
     // Linear Interpolation of values
-    //double adjCurrent1 = (((fieldVoltage / ratedVoltage) - 1) * (1 - (2 * lf)) + 1) * current1;
-    //double adjCurrent2 = (((fieldVoltage / ratedVoltage) - 1) * (1 - (2 * lf2)) + 1) * current2;
-    //current = adjCurrent1 + 100 * (fractionalIndex - lf) * (adjCurrent2 - adjCurrent1);
+    // double adjCurrent1 = (((fieldVoltage / ratedVoltage) - 1) * (1 - (2 * lf)) + 1) * current1;
+    // double adjCurrent2 = (((fieldVoltage / ratedVoltage) - 1) * (1 - (2 * lf2)) + 1) * current2;
+    // current = adjCurrent1 + 100 * (fractionalIndex - lf) * (adjCurrent2 - adjCurrent1);
     // current = current1 + 100 * (fractionalIndex - lf) * (current2 - current1);
-    current = (current1 + 100 * (fractionalIndex - lf) * (current2 - current1)) * 460 / ratedVoltage;
-    efficiency = eff1 + 100 * (fractionalIndex - lf) * (eff2 - eff1);
-    power = powerE1 + 100 * (fractionalIndex - lf) * (powerE2 - powerE1);
+    current     = (current1 + 100 * (fractionalIndex - lf) * (current2 - current1)) * 460 / ratedVoltage;
+    efficiency  = eff1 + 100 * (fractionalIndex - lf) * (eff2 - eff1);
+    power       = powerE1 + 100 * (fractionalIndex - lf) * (powerE2 - powerE1);
     powerFactor = power / (current * fieldVoltage * std::sqrt(3) / 1000);
 
     return {power, efficiency, current, powerFactor, fractionalIndex};

@@ -10,17 +10,16 @@
 #ifndef TOOLS_SUITE_PIPESIZING_H
 #define TOOLS_SUITE_PIPESIZING_H
 
-#include <vector>
 #include <cmath>
-#include <stdexcept>
 #include <functional>
+#include <stdexcept>
+#include <vector>
 
 class PipeSizing {
-public:
+  public:
     struct Output {
         Output(const double crossSectionalArea, const double pipeDiameter)
-                : crossSectionalArea(crossSectionalArea), pipeDiameter(pipeDiameter)
-        {}
+            : crossSectionalArea(crossSectionalArea), pipeDiameter(pipeDiameter) {}
         const double crossSectionalArea, pipeDiameter;
     };
 
@@ -34,20 +33,21 @@ public:
      * @param atmosphericPressure double, generally it will be 14.7 - psia
      */
     PipeSizing(double airflow, double airlinePressure, double designVelocity, double atmosphericPressure)
-            : airflow(airflow),  airlinePressure(airlinePressure),  designVelocity(designVelocity),
-              atmosphericPressure(atmosphericPressure)
-    {}
+        : airflow(airflow), airlinePressure(airlinePressure), designVelocity(designVelocity),
+          atmosphericPressure(atmosphericPressure) {}
 
     /**
-     * calculateReynoldsNumber() will calculateThermalResistance and return the cross sectional area and the pipe diameter.
+     * calculateReynoldsNumber() will calculateThermalResistance and return the cross sectional area and the pipe
+     * diameter.
      * @return PipeSizing::Output
      */
     Output calculate() {
-        auto const crossSectionalArea = (144 * airflow * atmosphericPressure) / (designVelocity * 60 * (airlinePressure + atmosphericPressure));
+        auto const crossSectionalArea =
+            (144 * airflow * atmosphericPressure) / (designVelocity * 60 * (airlinePressure + atmosphericPressure));
         return {crossSectionalArea, std::sqrt(crossSectionalArea / 0.78)};
     }
 
-private:
+  private:
     double airflow, airlinePressure, designVelocity, atmosphericPressure;
 };
 

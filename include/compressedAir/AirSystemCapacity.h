@@ -13,35 +13,33 @@
 #include "PipeData.h"
 
 class AirSystemCapacity {
-public:
+  public:
     struct Output {
-        Output(const double totalPipeVolume, std::vector<double> receiverCapacities,
-               const double totalReceiverVol, const double totalCapacityOfCompressedAirSystem,
-               PipeData pipeLengths)
-                : totalPipeVolume(totalPipeVolume), totalReceiverVol(totalReceiverVol),
-                  totalCapacityOfCompressedAirSystem(totalCapacityOfCompressedAirSystem),
-                  receiverCapacities(std::move(receiverCapacities)), pipeLengths(pipeLengths)
-        {}
+        Output(const double totalPipeVolume, std::vector<double> receiverCapacities, const double totalReceiverVol,
+               const double totalCapacityOfCompressedAirSystem, PipeData pipeLengths)
+            : totalPipeVolume(totalPipeVolume), totalReceiverVol(totalReceiverVol),
+              totalCapacityOfCompressedAirSystem(totalCapacityOfCompressedAirSystem),
+              receiverCapacities(std::move(receiverCapacities)), pipeLengths(pipeLengths) {}
 
-        const double totalPipeVolume, totalReceiverVol, totalCapacityOfCompressedAirSystem;
+        const double              totalPipeVolume, totalReceiverVol, totalCapacityOfCompressedAirSystem;
         const std::vector<double> receiverCapacities;
-        const PipeData pipeLengths;
+        const PipeData            pipeLengths;
     };
 
     /**
      * Constructor for AirSystemCapacity - This is used to find the total air quantity that the
      * compressed air system can contain at any instant of time, including the air in the pipes and receivers.
-     * @param pipeLengths AirSystemCapacity::PipeLengths, Object containing the lengths of the various pipe sizes in your system - ft
+     * @param pipeLengths AirSystemCapacity::PipeLengths, Object containing the lengths of the various pipe sizes in
+     * your system - ft
      * @param receivers std::vector<double>, a vector containing the number of gallons in each receiver
      */
     AirSystemCapacity(PipeData pipeLengths, std::vector<double> receivers)
-            : pipeLengths(pipeLengths), receivers(std::move(receivers))
-    {}
+        : pipeLengths(pipeLengths), receivers(std::move(receivers)) {}
 
     Output calculate() {
 
         auto totalReceiverVol = 0.0;
-        for (auto & gallons : receivers) {
+        for (auto& gallons : receivers) {
             gallons /= 7.480515625;
             totalReceiverVol += gallons;
         }
@@ -50,8 +48,8 @@ public:
                 pipeLengths.totalPipeVolume + totalReceiverVol, pipeLengths};
     }
 
-private:
-    PipeData pipeLengths;
+  private:
+    PipeData            pipeLengths;
     std::vector<double> receivers;
 };
 

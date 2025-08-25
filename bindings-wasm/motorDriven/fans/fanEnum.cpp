@@ -1,9 +1,9 @@
+#include <emscripten/bind.h>
+
 #include "motorDriven/fans/fan203.h"
 #include "motorDriven/fans/FanCurve.h"
 #include "motorDriven/fans/Planar.h"
 #include "motorDriven/pumpFan/OptimalFanEfficiency.h"
-
-#include <emscripten/bind.h>
 
 using namespace emscripten;
 

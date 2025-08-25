@@ -13,19 +13,14 @@
 #define TOOLS_SUITE_OPTIMALMOTORSIZE_H
 
 class OptimalMotorSize {
-public:
+  public:
     /**
      * Constructor
      * @param optimalMotorShaftPower double, optimal motor shaft power in hp
      * @param sizeMargin double, size margin as %
      */
-    OptimalMotorSize(
-        double optimalMotorShaftPower,
-        double sizeMargin
-    ) :
-        optimalMotorShaftPower(optimalMotorShaftPower),
-        sizeMargin(sizeMargin/100.0)
-    {};
+    OptimalMotorSize(double optimalMotorShaftPower, double sizeMargin)
+        : optimalMotorShaftPower(optimalMotorShaftPower), sizeMargin(sizeMargin / 100.0) {};
 
     /**
      * Calculates the optimal motor size
@@ -33,11 +28,10 @@ public:
      */
     double calculate();
 
-private:
+  private:
     double optimalMotorShaftPower;
     double sizeMargin;
     double optimalMotorRatedPower;
 };
 
-
-#endif //TOOLS_SUITE_OPTIMALMOTORSIZE_H
+#endif // TOOLS_SUITE_OPTIMALMOTORSIZE_H

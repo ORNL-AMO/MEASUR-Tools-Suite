@@ -1,12 +1,11 @@
-#include "vector"
-
-#include "wasteWater/WasteWater_Treatment.h"
 #include <emscripten/bind.h>
+
+#include "vector"
+#include "wasteWater/WasteWater_Treatment.h"
 
 using namespace emscripten;
 
-EMSCRIPTEN_BINDINGS(wasteWater_class)
-{
+EMSCRIPTEN_BINDINGS(wasteWater_class) {
     class_<WasteWater_Treatment::CalculationsTable>("CalculationsTable")
         .property("Se", &WasteWater_Treatment::CalculationsTable::Se)
         .property("HeterBio", &WasteWater_Treatment::CalculationsTable::HeterBio)
@@ -84,7 +83,8 @@ EMSCRIPTEN_BINDINGS(wasteWater_class)
         .property("MLSS", &WasteWater_Treatment::OutputWithoutTable::MLSS)
         .property("MLVSS", &WasteWater_Treatment::OutputWithoutTable::MLVSS)
         .property("TSSSludgeProduction", &WasteWater_Treatment::OutputWithoutTable::TSSSludgeProduction)
-        .property("TSSInActivatedSludgeEffluent", &WasteWater_Treatment::OutputWithoutTable::TSSInActivatedSludgeEffluent)
+        .property("TSSInActivatedSludgeEffluent",
+                  &WasteWater_Treatment::OutputWithoutTable::TSSInActivatedSludgeEffluent)
         .property("TotalOxygenRequirements", &WasteWater_Treatment::OutputWithoutTable::TotalOxygenRequirements)
         .property("TotalOxygenReqWDenit", &WasteWater_Treatment::OutputWithoutTable::TotalOxygenReqWDenit)
         .property("TotalOxygenSupplied", &WasteWater_Treatment::OutputWithoutTable::TotalOxygenSupplied)
@@ -106,8 +106,9 @@ EMSCRIPTEN_BINDINGS(wasteWater_class)
         .property("FieldOTR", &WasteWater_Treatment::OutputWithoutTable::FieldOTR);
 
     class_<WasteWater_Treatment>("WasteWater_Treatment")
-        .constructor<double, double, double, double, double, double, double, double, double, double, double, double, double, double, double,
-                double, double, double, double, double, double, double, double, double, double, double, int, double, double, double>()
+        .constructor<double, double, double, double, double, double, double, double, double, double, double, double,
+                     double, double, double, double, double, double, double, double, double, double, double, double,
+                     double, double, int, double, double, double>()
         .function("calculate", &WasteWater_Treatment::calculate)
         .function("calculateGivenSRT", &WasteWater_Treatment::calculateGivenSRT);
 }

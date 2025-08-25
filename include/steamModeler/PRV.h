@@ -12,27 +12,29 @@
 #include "SteamProperties.h"
 
 #ifndef TOOLS_SUITE_PRV_H
-#define TOOLS_SUITE_PRV_H
+    #define TOOLS_SUITE_PRV_H
 
 /**
-* PRV without Desuperheating calculator class
-* Used to calculateThermalResistance the heat steam properties
-*/
+ * PRV without Desuperheating calculator class
+ * Used to calculateThermalResistance the heat steam properties
+ */
 class PrvWithoutDesuperheating {
-public:
+  public:
     /**
      * Constructor for the PRV without desuperheating calculator
      * @param inletPressure double, inlet pressure in MPa
-     * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
-     * @param quantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy
+     * in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     * @param quantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in
+     * kJ/kg/K, or quality - unitless)
      * @param inletMassFlow double, inlet mass flow in kg/hr
      * @param outletPressure double, outlet pressure in MPa
      */
     PrvWithoutDesuperheating(double inletPressure, SteamProperties::ThermodynamicQuantity quantityType,
                              double quantityValue, double inletMassFlow, double outletPressure);
 
-    friend std::ostream &operator<<(std::ostream &stream, const PrvWithoutDesuperheating &prv);
-    friend std::ostream &operator<<(std::ostream &stream, const std::shared_ptr<PrvWithoutDesuperheating> &prv);
+    friend std::ostream& operator<<(std::ostream& stream, const PrvWithoutDesuperheating& prv);
+    friend std::ostream& operator<<(std::ostream& stream, const std::shared_ptr<PrvWithoutDesuperheating>& prv);
 
     virtual bool isWithDesuperheating() const { return false; }
 
@@ -41,57 +43,49 @@ public:
      *
      * @return double, pressure of the inlet steam in MPa
      */
-    double getInletPressure() const {
-        return inletPressure;
-    }
+    double getInletPressure() const { return inletPressure; }
 
     /**
      * Gets the quantity type
      *
-     * @return SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     * @return SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg,
+     * entropy in kJ/kg/K, or quality - unitless)
      */
-    SteamProperties::ThermodynamicQuantity getQuantityType() const {
-        return quantityType;
-    }
+    SteamProperties::ThermodynamicQuantity getQuantityType() const { return quantityType; }
 
     /**
      * Gets the quantity value
      *
-     * @return double, value of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     * @return double, value of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality -
+     * unitless)
      */
-    double getQuantityValue() const {
-        return quantityValue;
-    }
+    double getQuantityValue() const { return quantityValue; }
 
     /**
      * Gets the inlet mass flow
      *
      * @return double, mass flow of the inlet steam in kg/hr
      */
-    double getInletMassFlow() const {
-        return inletMassFlow;
-    }
+    double getInletMassFlow() const { return inletMassFlow; }
 
     /**
      * Gets the outlet pressure
      *
      * @return double, outlet pressure in MPa
      */
-    double getOutletPressure() const {
-        return outletPressure;
-    }
+    double getOutletPressure() const { return outletPressure; }
 
     /**
      * Gets all of the properties of the inlet steam
      * @return SteamSystemModelerTool::SteamPropertiesOutput , inlet steam properties
      */
-    SteamSystemModelerTool::SteamPropertiesOutput const &getInletProperties() const { return inletProperties; };
+    SteamSystemModelerTool::SteamPropertiesOutput const& getInletProperties() const { return inletProperties; };
 
     /**
      * Gets all of the properties of the outlet steam
      * @return SteamSystemModelerTool::SteamPropertiesOutput , outlet steam properties
      */
-    SteamSystemModelerTool::SteamPropertiesOutput const &getOutletProperties() const { return outletProperties; };
+    SteamSystemModelerTool::SteamPropertiesOutput const& getOutletProperties() const { return outletProperties; };
 
     /**
      * Gets the inlet energy flow
@@ -127,7 +121,8 @@ public:
     /**
      * Sets the quantity type
      *
-     * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy
+     * in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
      *
      */
     void setQuantityType(SteamProperties::ThermodynamicQuantity quantityType) {
@@ -137,7 +132,8 @@ public:
     /**
      * Sets the quantity value
      *
-     * @param quantityValue double, value of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     * @param quantityValue double, value of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K,
+     * or quality - unitless)
      *
      */
     void setQuantityValue(double quantityValue) {
@@ -167,34 +163,38 @@ public:
         calculateProperties();
     }
 
-protected:
+  protected:
     virtual void calculateProperties();
 
-    double inletPressure, quantityValue, inletMassFlow, outletPressure;
+    double                                        inletPressure, quantityValue, inletMassFlow, outletPressure;
     SteamSystemModelerTool::SteamPropertiesOutput inletProperties, outletProperties;
-    SteamProperties::ThermodynamicQuantity quantityType;
+    SteamProperties::ThermodynamicQuantity        quantityType;
 
-private:
+  private:
     double inletEnergyFlow;
 };
 
 /**
-* PRV with Desuperheating calculator class
-* Used to calculateThermalResistance the heat steam properties
-*/
+ * PRV with Desuperheating calculator class
+ * Used to calculateThermalResistance the heat steam properties
+ */
 class PrvWithDesuperheating : public PrvWithoutDesuperheating {
-public:
+  public:
     /**
      * Constructor for the PRV with desuperheating calculator
      *
      * @param inletPressure double, inlet pressure in MPa
-     * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
-     * @param quantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy
+     * in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     * @param quantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in
+     * kJ/kg/K, or quality - unitless)
      * @param inletMassFlow double, inlet mass flow in kg/hr
      * @param outletPressure double, outlet pressure in MPa
      * @param feedwaterPressure double, pressure of feedwater in MPa
-     * @param feedwaterQuantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
-     * @param feedwaterQuantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     * @param feedwaterQuantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K,
+     * enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     * @param feedwaterQuantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy
+     * in kJ/kg/K, or quality - unitless)
      * @param desuperheatingTemp double, desuperheating temperature in K
      */
     PrvWithDesuperheating(double inletPressure, SteamProperties::ThermodynamicQuantity quantityType,
@@ -202,8 +202,8 @@ public:
                           SteamProperties::ThermodynamicQuantity feedwaterQuantityType, double feedwaterQuantityValue,
                           double desuperheatingTemp);
 
-    friend std::ostream &operator<<(std::ostream &stream, const PrvWithDesuperheating &prv);
-    friend std::ostream &operator<<(std::ostream &stream, const std::shared_ptr<PrvWithDesuperheating> &prv);
+    friend std::ostream& operator<<(std::ostream& stream, const PrvWithDesuperheating& prv);
+    friend std::ostream& operator<<(std::ostream& stream, const std::shared_ptr<PrvWithDesuperheating>& prv);
 
     bool isWithDesuperheating() const override { return true; }
 
@@ -215,7 +215,7 @@ public:
      */
     void setFeedwaterPressure(double feedwaterPressure) {
         this->feedwaterPressure = feedwaterPressure;
-		calculateProperties();
+        calculateProperties();
     }
 
     /**
@@ -228,36 +228,40 @@ public:
     /**
      * Sets the feedwater quantity type
      *
-     * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy
+     * in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
      *
      */
     void setFeedwaterQuantityType(SteamProperties::ThermodynamicQuantity feedwaterQuantityType) {
         this->feedwaterQuantityType = feedwaterQuantityType;
-		calculateProperties();
+        calculateProperties();
     }
 
     /**
      * Gets the feedwater quantity type
      *
-     * @return SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     * @return SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg,
+     * entropy in kJ/kg/K, or quality - unitless)
      */
     SteamProperties::ThermodynamicQuantity getFeedwaterQuantityType() const { return feedwaterQuantityType; }
 
     /**
      * Sets the feedwater quantity value
      *
-     * @param quantityValue double, value of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     * @param quantityValue double, value of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K,
+     * or quality - unitless)
      *
      */
     void setFeedwaterQuantityValue(double feedwaterQuantityValue) {
         this->feedwaterQuantityValue = feedwaterQuantityValue;
-		calculateProperties();
+        calculateProperties();
     }
 
     /**
      * Gets the feedwater quantity value
      *
-     * @return double, value of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     * @return double, value of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality -
+     * unitless)
      */
     double getFeedwaterQuantityValue() const { return feedwaterQuantityValue; }
 
@@ -269,7 +273,7 @@ public:
      */
     void setDesuperheatingTemp(double desuperheatingTemp) {
         this->desuperheatingTemp = desuperheatingTemp;
-		calculateProperties();
+        calculateProperties();
     }
 
     /**
@@ -283,8 +287,7 @@ public:
      * Gets all of the properties of the feedwater steam
      * @return SteamSystemModelerTool::SteamPropertiesOutput, feedwater steam properties
      */
-    SteamSystemModelerTool::SteamPropertiesOutput const &getFeedwaterProperties() const { return feedwaterProperties; };
-
+    SteamSystemModelerTool::SteamPropertiesOutput const& getFeedwaterProperties() const { return feedwaterProperties; };
 
     /**
      * Gets the outlet mass flow
@@ -314,13 +317,13 @@ public:
      * Gets all of the properties of the inlet steam
      * @return SteamSystemModelerTool::SteamPropertiesOutput , inlet steam properties
      */
-    SteamSystemModelerTool::SteamPropertiesOutput const &getInletProperties() const { return inletProperties; };
+    SteamSystemModelerTool::SteamPropertiesOutput const& getInletProperties() const { return inletProperties; };
 
     /**
      * Gets all of the properties of the outlet steam
      * @return SteamSystemModelerTool::SteamPropertiesOutput , outlet steam properties
      */
-    SteamSystemModelerTool::SteamPropertiesOutput const &getOutletProperties() const { return outletProperties; };
+    SteamSystemModelerTool::SteamPropertiesOutput const& getOutletProperties() const { return outletProperties; };
 
     /**
      * Gets the inlet energy flow
@@ -328,19 +331,18 @@ public:
      */
     double getInletEnergyFlow() const { return inletEnergyFlow; }
 
-
     /**
      * Gets the inlet energy flow
      * @return double, inlet mass flow in kg/hr
      */
     double getInletMassFlow() const { return inletMassFlow; }
 
-protected:
+  protected:
     void calculateProperties() override;
 
-private:
+  private:
     // In values
-    double feedwaterPressure, feedwaterQuantityValue, desuperheatingTemp;
+    double                                 feedwaterPressure, feedwaterQuantityValue, desuperheatingTemp;
     SteamProperties::ThermodynamicQuantity feedwaterQuantityType;
 
     // Out values
@@ -348,13 +350,12 @@ private:
     double inletEnergyFlow, outletMassFlow, outletEnergyFlow, feedwaterMassFlow, feedwaterEnergyFlow;
 };
 
-class PrvCastDesuperheating
-{
-public :
-    PrvCastDesuperheating(){}
-    std::shared_ptr<PrvWithDesuperheating> Cast (std::shared_ptr<PrvWithoutDesuperheating> prvWithout){
+class PrvCastDesuperheating {
+  public:
+    PrvCastDesuperheating() {}
+    std::shared_ptr<PrvWithDesuperheating> Cast(std::shared_ptr<PrvWithoutDesuperheating> prvWithout) {
         return std::static_pointer_cast<PrvWithDesuperheating>(prvWithout);
     }
 };
 
-#endif //TOOLS_SUITE_PRV_H
+#endif // TOOLS_SUITE_PRV_H

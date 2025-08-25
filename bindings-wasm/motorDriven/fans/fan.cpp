@@ -1,4 +1,6 @@
 
+#include <emscripten/bind.h>
+
 #include "motorDriven/fans/fan203.h"
 #include "motorDriven/fans/FanCurve.h"
 #include "motorDriven/fans/FanResult.h"
@@ -7,8 +9,6 @@
 #include "motorDriven/pumpFan/CompressibilityFactor.h"
 #include "motorDriven/pumpFan/FanShaftPower.h"
 #include "motorDriven/pumpFan/OptimalFanEfficiency.h"
-
-#include <emscripten/bind.h>
 
 using namespace emscripten;
 

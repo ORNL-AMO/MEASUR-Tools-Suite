@@ -1,8 +1,9 @@
-#include "catch.hpp"
 #include "steamModeler/api/OperationsInput.h"
 
+#include "catch.hpp"
+
 TEST_CASE("operationsInputConstructor", "[operations input constructor]") {
-    auto actual = OperationsInput(1,1,1,1,1,1);
+    auto actual = OperationsInput(1, 1, 1, 1, 1, 1);
     CHECK(actual.getElectricityCosts() == 1);
     CHECK(actual.getFuelCosts() == 1);
     CHECK(actual.getMakeUpWaterCosts() == 1);
