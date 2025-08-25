@@ -1,0 +1,444 @@
+# Style Guide
+
+Use this guide to ensure your contributions align with the project's coding standards. It is loosely based on the [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html) and the [C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines), with some modifications to suit this project's needs.
+
+
+## Header Files
+
+Every C++ source file (`.cpp`) should have a corresponding header file (`.h`). The header file contains declarations, while the source file contains definitions and implementations.
+
+> [!NOTE]
+> A common exception is unit tests, which may not require a separate header file. Small `.cpp` files containing just a `main()` function may also not have a corresponding header.
+
+
+### Include Guards
+
+Every header file must have a `#pragma once` directive to prevent multiple inclusion of header files:
+
+```cpp
+#pragma once
+
+// other includes or declarations
+
+// file content
+```
+
+
+### Include What You Use
+
+Always include the header file that directly defines any symbol you use. Do not rely on headers being included indirectly through other files. This ensures that removing unnecessary includes will not break your code.
+
+Avoid using forward declarations where possible. Instead, include the headers you need:
+
+- Good:
+
+  ```cpp
+  #include "a.h" // Include the header that defines A
+
+  class B {
+  public:
+      void interactWithA(A* a);
+  }
+  ```
+
+- Bad:
+
+  ```cpp
+  class A; // Forward declaration without full definition
+  
+  class B {
+  public:
+      void interactWithA(A* a);
+  }
+  ```
+
+
+### Include Order
+
+Use double quotes (`"header.h"`) for project and third-party headers, and angle brackets (`<vector>`) for standard library headers.
+
+Include project headers relative to the source directory (e.g., `"module/header.h"`).
+
+Clang-Format manages include order via the `.clang-format` file. The typical order is:
+1. Related header for the current file
+2. Standard library headers
+3. Third-party library headers
+4. Project-specific headers
+
+List each third-party library as a separate category in `.clang-format`. Update `IncludeCategories` when adding new libraries.
+
+
+### Function Definitions in Headers
+
+Define functions in header files only if they are short (10 lines or fewer) or are templates. Longer functions should go in `.cpp` files unless required in the header for technical reasons.
+
+If a function must be defined in a header, keep its body out of the public section—use a private section, an `internal` namespace, or place it after a comment like `// Implementation details only below here`.
+
+All header-defined functions must be ODR-safe: use `inline`, make them templates, or define them inside the class body.
+
+Example:
+
+```cpp
+template <typename T>
+class Foo {
+public:
+    // Short, ODR-safe function defined in header
+    int bar() const { return bar_; }
+  
+    // Long function declared only; implementation in .cpp or below
+    void doSomething();
+
+private:
+    int bar_;
+};
+
+// Implementation details only below here
+template <typename T>
+void Foo<T>::doSomething() {
+    // ... lengthy implementation ...
+}
+```
+
+
+## Scoping
+
+Scoping helps organize code, prevent name collisions, and manage visibility.
+
+
+### Namespaces
+
+Place all code in a namespace, named after the project or its path:
+
+```cpp
+namespace my_project {
+    // Code goes here
+}  // namespace my_project
+```
+
+> [!NOTE]
+> Avoid `using namespace ...;` and inline namespaces.
+
+
+### Local Variables
+
+Declare variables in the narrowest scope possible, close to their first use and always initialize them at declaration:
+
+```cpp
+void foo() {
+    int x = 42; // Declaration and initialization together.
+    // Use x...
+}
+```
+
+For objects used in loops, declare them outside the loop for efficiency:
+
+```cpp
+Foo f;
+for (int i = 0; i < 1000000; ++i) {
+  f.doSomething(i);
+}
+```
+
+
+## Classes
+
+Use `class` for types that encapsulate data and behavior. This section provides guidelines for writing classes in C++.
+
+
+### Access Control
+
+Make data members `private` (except for constants) to protect invariants and encapsulation. Use accessor methods as needed.
+
+
+### Declaration Order
+
+Start with `public:` members, then `protected:`, then `private:`. Omit empty sections.
+
+Within each section, group declarations in this order:
+
+1. Types and aliases (`using`, `enum`, nested structs/classes, friends)
+2. (For structs) Non-static data members
+3. Static constants
+4. Factory functions
+5. Constructors and assignment operators
+6. Destructor
+7. Other functions
+8. Other data members
+
+This keeps related items together and improves readability.
+
+
+## Structs
+
+Use `struct` for passive data objects that carry data; use `class` for everything else.
+
+Prefer to use a `struct` instead of a `std::pair` or `std::tuple` whenever the elements can have meaningful names. 
+
+Use pairs and tuples only in generic code where the elements do not have specific meanings, or when required for interoperability with existing code or APIs.
+
+
+## Looping and Branching Statements
+
+Use braces for all control statements (`if`, `else`, `for`, `while`, `do`, `switch`), even for single-line bodies:
+
+```cpp
+if (condition) {
+    doSomething();
+} 
+else {
+    doSomethingElse();
+}
+
+while (condition) {
+    doSomething();
+}
+
+for (int i = 0; i < 10; ++i) {
+    doSomethingWith(i);
+}
+
+switch (var) {
+    case 0: {
+        foo();
+        break;
+    }
+}
+```
+
+
+## Preincrement and Predecrement
+
+Prefer prefix increment/decrement (`++i`, `--i`) over postfix (`i++`, `i--`) unless you need the value before the change:
+
+```cpp
+// Good: preincrement
+for (int i = 0; i < n; ++i) {
+    std::cout << i << std::endl;
+}
+
+// Necessary: postincrement
+std::vector<int> vec = {10, 20, 30};
+auto it = vec.begin();
+while (it != vec.end()) {
+    std::cout << *it++ << std::endl; // Value needed before increment
+}
+```
+
+
+## Use of `const`
+
+Use `const` to indicate immutability and improve code safety. `constexpr` is preferred when a value is known at compile time.
+
+```cpp
+void processData(const std::vector<int>& data) {
+    constexpr int threshold = 10; // Compile-time constant
+    
+    // Use const to ensure data is not modified
+    for (const auto& item : data) {
+        if (item > threshold) {
+            // Do something with item
+        }
+    }
+}
+```
+
+
+## Naming
+
+Naming conventions are crucial for maintaining a consistent and readable codebase. This section outlines the naming conventions for various elements in the code.
+
+
+### Files
+
+Use `snake_case` suffixed with the appropriate file extension (`.h`, `.hpp`, or `.cpp`) for file names:
+
+```cpp
+my_class.h
+my_class.cpp
+```
+
+> [!NOTE]
+> This project uses `.h` for header files and `.cpp` for source files. 
+> File names should be descriptive and reflect the content or purpose of the file.
+
+
+### Namespaces
+
+Namespaces names use `snake_case`:
+
+```cpp
+namespace my_project {
+namespace utils {
+
+// Utility functions go here.
+
+}  // namespace utils
+}  // namespace my_project
+```
+
+> [!NOTE]
+> All code in the namespace should be under one or more directories with the same name as the namespace.
+
+
+### Classes and Structs
+
+Use `PascalCase` for class and struct names:
+
+```cpp
+class MyClass {
+    // Class members
+};
+
+struct MyStruct {
+    // Struct members
+};
+```
+
+
+### Functions and Methods
+
+Use `camelCase` for function and method names:
+
+```cpp
+void myFunction();
+
+class MyClass {
+public:
+    void myMethod();
+};
+```
+
+
+### Variables
+
+Local variables and function parameters use `snake_case`:
+
+```cpp
+void processData(int input_value) {
+    int local_variable = input_value * 2;
+}
+```
+
+
+### Member Variables
+
+There are two common conventions for member variables:
+
+1. Underscore suffix:
+
+   ```cpp
+   class MyClass {
+   private:
+       int value_;
+       std::string name_;
+   };
+   ```
+   
+2. `m_` prefix:
+   
+   ```cpp
+   class MyClass {
+   private:
+       int m_value;
+       std::string m_name;
+   };
+   ```
+
+> [!NOTE]
+> This project uses the underscore suffix convention for class member variables. 
+
+Struct member variables are named like ordinary nonmember variables, without the trailing underscore:
+
+```cpp
+struct MyStruct {
+    int value;
+    std::string name;
+};
+```
+
+
+### Constants and Enums
+
+Use `PascalCase` for enum names and `PascalCase` prefixed with `k` for constants and enum values:
+
+```cpp
+enum class Color {
+    kRed,
+    kGreen,
+    kBlue
+};
+
+const int kMaxValue = 100;
+constexpr double kPi = 3.14159;
+```
+
+
+### Aliases
+
+Use `PascalCase` for type aliases defined with `using`:
+
+```cpp
+using StringList = std::vector<std::string>;
+```
+
+
+### Templates
+
+Use `PascalCase` for template parameters:
+
+```cpp
+template <typename InputType>
+InputType processInput(InputType input);
+```
+
+
+### Macros
+
+Use `UPPER_CASE` with a project-specific prefix for macro names:
+
+```cpp
+#define MYPROJECT_MAX(a, b) ((a) > (b) ? (a) : (b))
+```
+
+> [!NOTE]
+> Try to avoid using macros whenever possible. Macros can lead to hard-to-debug issues and are generally discouraged in modern C++. Instead, prefer `inline` or `constexpr` functions.
+
+
+## Comments
+
+Comments are essential for understanding code. They help explain the intent behind code, document design decisions, and provide context for future maintainers. This section provides guidelines for writing effective comments.
+
+
+### When to comment
+
+| Do comment when...                                 | Avoid when...                                 |
+| -------------------------------------------------- | --------------------------------------------- |
+| A non-obvious **algorithmic trick** needs context. | The code literally states the same thing.     |
+| A temporary **work-around or TODO** is present.    | You can instead rename a variable or helper.  |
+| There is a subtle **invariant / side-effect**.     | The function already documents the behaviour. |
+| You’re **explaining why**, not *what*.             | You’re restating the *what* (“increment i”).  |
+
+
+### Comment Style
+
+- **Place above** the line or block it explains—never to the right of long code.
+- **Start with a capital letter** and **end with a period** if the sentence is complete.
+- Use the `TODO(user, yyyy-mm-dd):` format for tasks.
+- Keep lines short; wrap with the same `//` prefix.
+- Prefer present tense and active voice.
+- Be specific and actionable—avoid vague or generic comments.
+
+```cpp
+// Compute signed area via Shoelace formula.
+double area = polygonSignedArea(verts);
+
+// Guard: polygon must be simple (no self-intersections).
+if (hasSelfIntersection(verts)) return Err::kInvalid;
+
+// TODO(alice, 2025-07-01): Replace O(n^2) intersection test with a sweep-line algorithm.
+```
+
+
+
+
+<!-- Generated with mdsplit: https://github.com/alandefreitas/mdsplit -->

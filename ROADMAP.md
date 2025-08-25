@@ -46,7 +46,7 @@ This document provides an overview of the refactoring and documentation efforts 
     - [ ] Create `README.md` file to explain the purpose and functionality
 - [ ] Update project `README.md` to reflect the new structure and provide an overview of each module
 - [ ] Create global constants header file and refactor existing code to use it
-  - [ ] Create `constants.h` file
+  - [x] Create `constants.h` file
   - [ ] Move existing constants from various modules into `constants.h`
   - [ ] Update all modules to include `constants.h` where necessary
   - [ ] Document the purpose and usage of each constant in `constants.h`
@@ -85,3 +85,23 @@ This document provides an overview of the refactoring and documentation efforts 
 - [ ] Refactor & document `Waste Water Assessments` module
 - [ ] Refactor & document `Energy Treasure Hunt` module
 - [ ] Refactor & document `Simple Equipment and Property Calculators` module
+- [ ] Refactor & document `processHeat/losses`
+  - [ ] Atmosphere
+  - [ ] AuxiliaryPower
+  - [ ] EnergyInputEAF
+  - [ ] EnergyInputExhaustGasLosses
+  - [ ] ExhaustGasEAF
+  - [ ] FixtureLosses
+  - [ ] GasCoolingLosses
+  - [ ] GasFlueGasMaterial
+  - [ ] GasLoadChargeMaterial
+  - [ ] LeakageLosses
+  - [ ] LiquidCoolingLosses
+  - [ ] LiquidLoadChargeMaterial
+  - [ ] OpeningLosses
+  - [ ] SlagOtherMaterialLosses
+  - [ ] SolidLiquidFlueGasMaterial
+  - [ ] SolidLoadChargeMaterial
+  - [x] WallLosses
+  - [ ] WaterAssessment
+  - [ ] WaterCoolingLosses
