@@ -1,7 +1,8 @@
 /**
  * @brief Header file for OptimalDeviationFactor class
  *
- * This contains the prototypes of OptimalDeviationFactor calculator including getters and setters for the important fields.
+ * This contains the prototypes of OptimalDeviationFactor calculator including getters and setters for the important
+ * fields.
  *
  * @author Subhankar Mishra (mishras)
  * @author Gina Accawi (accawigk)
@@ -13,16 +14,12 @@
 #define TOOLS_SUITE_OPTIMALDEVIATIONFACTOR_H
 
 class OptimalDeviationFactor {
-public:
-   /**
-    * Constructor
-    * @param flowRate double, rate of flow in gpm
-    */
-    explicit OptimalDeviationFactor(
-        double flowRate
-    ) :
-        flowRate(flowRate)
-    {}
+  public:
+    /**
+     * Constructor
+     * @param flowRate double, rate of flow in gpm
+     */
+    explicit OptimalDeviationFactor(double flowRate) : flowRate(flowRate) {}
 
     /**
      * Calculates the optimal deviation factor
@@ -30,9 +27,8 @@ public:
      */
     double calculate();
 
-private:
+  private:
     double flowRate;
 };
 
-
-#endif //TOOLS_SUITE_OPTIMALDEVIATIONFACTOR_H
+#endif // TOOLS_SUITE_OPTIMALDEVIATIONFACTOR_H

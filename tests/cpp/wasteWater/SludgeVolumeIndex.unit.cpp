@@ -1,8 +1,10 @@
-#include "catch.hpp"
-#include <iostream>
 #include "wasteWater/SludgeVolumeIndex.h"
 
-TEST_CASE( "State Point Analysis", "SVIXX/VoK" ) {
+#include <iostream>
+
+#include "catch.hpp"
+
+TEST_CASE("State Point Analysis", "SVIXX/VoK") {
     auto res = SludgeVolumeIndex(SludgeVolumeIndex::SVIGN, 0.150000, 1, 930, 0.0025, 1892705, 788627, 1).calculate();
     CHECK(res.TotalAreaClarifier == Approx(930));
     CHECK(res.SurfaceOverflow == Approx(2035.17));
@@ -20,7 +22,9 @@ TEST_CASE( "State Point Analysis", "SVIXX/VoK" ) {
     CHECK(res.GraphData[150].SolidsFlux == Approx(0.16));
 
     std::cout << "Begin Graph Data Points" << std::endl;
-    for(int i = 0; i < 151; i++) std::cout << i+1 << " : (" << res.GraphData[i].SolidsConcentration << ", " << res.GraphData[i].SolidsFlux << ")" << std::endl;
+    for (int i = 0; i < 151; i++)
+        std::cout << i + 1 << " : (" << res.GraphData[i].SolidsConcentration << ", " << res.GraphData[i].SolidsFlux
+                  << ")" << std::endl;
     std::cout << "End Graph Data Points" << std::endl;
 
     res = SludgeVolumeIndex(SludgeVolumeIndex::VoK, 0.6000, 2, 84.3486, 0.0025, 157725, 110408, 8.998).calculate();
@@ -40,6 +44,8 @@ TEST_CASE( "State Point Analysis", "SVIXX/VoK" ) {
     CHECK(res.GraphData[150].SolidsFlux == Approx(0.02));
 
     std::cout << "Begin Graph Data Points" << std::endl;
-    for(int i = 0; i < 151; i++) std::cout << i+1 << " : (" << res.GraphData[i].SolidsConcentration << ", " << res.GraphData[i].SolidsFlux << ")" << std::endl;
+    for (int i = 0; i < 151; i++)
+        std::cout << i + 1 << " : (" << res.GraphData[i].SolidsConcentration << ", " << res.GraphData[i].SolidsFlux
+                  << ")" << std::endl;
     std::cout << "End Graph Data Points" << std::endl;
 }

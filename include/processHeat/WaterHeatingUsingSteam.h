@@ -13,29 +13,27 @@
 #define TOOLS_SUITE_WATERHEATINGUSINGSTEAM_H
 
 class WaterHeatingUsingSteam {
-public:
-    struct Output
-    {
+  public:
+    struct Output {
         Output(double tempWaterOut, double bpTempWaterOut, bool bpTempWarningFlag, double flowByPassSteam,
-               double enthalpySteamIn, double enthalpySteamOut, double enthalpyMakeUpWater,
-               double energySavedDWH, double energySavedBoiler, double waterSaved, double heatGainRate) :
-                tempWaterOut(tempWaterOut), bpTempWaterOut(bpTempWaterOut), bpTempWarningFlag(bpTempWarningFlag), flowByPassSteam(flowByPassSteam),
-                enthalpySteamIn(enthalpySteamIn), enthalpySteamOut(enthalpySteamOut), enthalpyMakeUpWater(enthalpyMakeUpWater),
-                energySavedDWH(energySavedDWH), energySavedBoiler(energySavedBoiler), waterSaved(waterSaved), heatGainRate(heatGainRate){}
+               double enthalpySteamIn, double enthalpySteamOut, double enthalpyMakeUpWater, double energySavedDWH,
+               double energySavedBoiler, double waterSaved, double heatGainRate)
+            : tempWaterOut(tempWaterOut), bpTempWaterOut(bpTempWaterOut), bpTempWarningFlag(bpTempWarningFlag),
+              flowByPassSteam(flowByPassSteam), enthalpySteamIn(enthalpySteamIn), enthalpySteamOut(enthalpySteamOut),
+              enthalpyMakeUpWater(enthalpyMakeUpWater), energySavedDWH(energySavedDWH),
+              energySavedBoiler(energySavedBoiler), waterSaved(waterSaved), heatGainRate(heatGainRate) {}
 
-        Output() = default;
+        Output()            = default;
         double tempWaterOut = 0, bpTempWaterOut = 0;
-        bool bpTempWarningFlag = false;
-        double flowByPassSteam = 0,
-                enthalpySteamIn = 0, enthalpySteamOut = 0, enthalpyMakeUpWater = 0,
-                energySavedDWH = 0, energySavedBoiler = 0, waterSaved = 0, heatGainRate = 0;
-
+        bool   bpTempWarningFlag = false;
+        double flowByPassSteam = 0, enthalpySteamIn = 0, enthalpySteamOut = 0, enthalpyMakeUpWater = 0,
+               energySavedDWH = 0, energySavedBoiler = 0, waterSaved = 0, heatGainRate = 0;
     };
 
     /**
      * @param no arguments
      */
-    WaterHeatingUsingSteam(){}
+    WaterHeatingUsingSteam() {}
 
     /**
      *
@@ -64,10 +62,10 @@ public:
      * @param heatGainRate double, units kJ/hr
      *
      */
-    Output calculate(const double pressureSteamIn, const double flowSteamRate,
-                     const double temperatureWaterIn, const double pressureWaterOut, const double flowWaterRate,
-                     const double tempMakeupWater, const double presMakeupWater,
-                     const double effWaterHeater, const double effBoiler, const double  operatingHours);
+    Output calculate(const double pressureSteamIn, const double flowSteamRate, const double temperatureWaterIn,
+                     const double pressureWaterOut, const double flowWaterRate, const double tempMakeupWater,
+                     const double presMakeupWater, const double effWaterHeater, const double effBoiler,
+                     const double operatingHours);
 };
 
-#endif //TOOLS_SUITE_WATERHEATINGUSINGSTEAM_H
+#endif // TOOLS_SUITE_WATERHEATINGUSINGSTEAM_H

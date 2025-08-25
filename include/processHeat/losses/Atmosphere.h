@@ -13,10 +13,10 @@
 #include <string>
 
 #ifndef TOOLS_SUITE_ATMOSPHERE_H
-#define TOOLS_SUITE_ATMOSPHERE_H
+    #define TOOLS_SUITE_ATMOSPHERE_H
 
-/** Reference Temperature is 60°F */
-#define REFERENCE_TEMPERATURE 60.0
+    /** Reference Temperature is 60°F */
+    #define REFERENCE_TEMPERATURE 60.0
 
 /**
  * Atmosphere class
@@ -26,10 +26,11 @@
  *  The atmosphere composition does not change.
  *  There is not heat of reaction (endothermic or exothermic) between the atmosphere and materials inside the furnace.
  * WARNINGS:
- *  If the atmosphere reacts with the material being processed, then its composition changes, and it is necessary to use appropriate correction factors based on new and old composition properties.
+ *  If the atmosphere reacts with the material being processed, then its composition changes, and it is necessary to use
+ * appropriate correction factors based on new and old composition properties.
  */
 class Atmosphere {
-public:
+  public:
     /**
      *
      * Constructor for the atmospheric heat loss with all inputs specified
@@ -44,12 +45,8 @@ public:
      * */
     Atmosphere(const double inletTemperature, const double outletTemperature, const double flowRate,
                const double correctionFactor, const double specificHeat)
-            : inletTemperature(inletTemperature),
-              outletTemperature(outletTemperature),
-              flowRate(flowRate),
-              correctionFactor(correctionFactor),
-              specificHeat(specificHeat)
-    {
+        : inletTemperature(inletTemperature), outletTemperature(outletTemperature), flowRate(flowRate),
+          correctionFactor(correctionFactor), specificHeat(specificHeat) {
         totalHeat = 0.0;
     }
 
@@ -59,81 +56,61 @@ public:
      * Getter for the inlet/initial temperature
      * @return double, inlet/initial temperature in °F
      */
-    double getInletTemperature() const {
-        return inletTemperature;
-    }
+    double getInletTemperature() const { return inletTemperature; }
 
     /**
      * Sets the inlet/initial temperature
      * @param inletTemperature double, initial temperature in °F
      */
-    void setInletTemperature(const double inletTemperature) {
-        this->inletTemperature = inletTemperature;
-    }
+    void setInletTemperature(const double inletTemperature) { this->inletTemperature = inletTemperature; }
 
     /**
      * Getter for the outlet/final temperature
      * @return double, outlet/final temperature in °F
      */
-    double getOutletTemperature() const {
-        return outletTemperature;
-    }
+    double getOutletTemperature() const { return outletTemperature; }
 
     /**
      * Sets the outlet/final temperature
      * @param outletTemperature double, outlet/final temperature in °F
      */
-    void setOutletTemperature(const double outletTemperature) {
-        this->outletTemperature = outletTemperature;
-    }
+    void setOutletTemperature(const double outletTemperature) { this->outletTemperature = outletTemperature; }
 
     /**
      * Getter for the flow rate
      * @return double, flow rate in scfh
      */
-    double getFlowRate() const {
-        return flowRate;
-    }
+    double getFlowRate() const { return flowRate; }
 
     /**
      * Sets the flow rate
      * @param flowRate double, flow rate in scfh
      */
-    void setFlowRate(const double flowRate) {
-        this->flowRate = flowRate;
-    }
+    void setFlowRate(const double flowRate) { this->flowRate = flowRate; }
 
     /**
      * Getter for the correction factor
      * @return double, correction factor - unitless
      */
-    double getCorrectionFactor() const {
-        return correctionFactor;
-    }
+    double getCorrectionFactor() const { return correctionFactor; }
 
     /**
      * Sets the correction factor
      * @param correctionFactor double, correction factor - unitless
      */
-    void setCorrectionFactor(const double correctionFactor) {
-        this->correctionFactor = correctionFactor;
-    }
+    void setCorrectionFactor(const double correctionFactor) { this->correctionFactor = correctionFactor; }
 
     /**
      * Getter for the specific heat
      * @return double, specific heat in btu/(scf*°F)
      */
-    double getSpecificHeat() const {
-        return specificHeat;
-    }
+    double getSpecificHeat() const { return specificHeat; }
 
     /**
      * Sets the specific heat
      * @param specificHeat double, specific heat in btu/(scf*°F)
      */
-    void setSpecificHeat(const double specificHeat) {
-        this->specificHeat = specificHeat;
-    }
+    void setSpecificHeat(const double specificHeat) { this->specificHeat = specificHeat; }
 
     /**
      * Calculates the total heat loss
@@ -145,57 +122,44 @@ public:
      * Gets the name of substance
      * @return string, name of substance
      */
-    std::string getSubstance() const {
-        return substance;
-    }
+    std::string getSubstance() const { return substance; }
 
     /**
      * Sets the name of substance
      * @param substance string, name of substance
      */
-    void setSubstance(std::string substance) {
-        this->substance = std::move(substance);
-    }
+    void setSubstance(std::string substance) { this->substance = std::move(substance); }
 
     /**
      * Gets the ID of material
      * @return int, ID of material
      */
-    int getID() const {
-        return this->id;
-    }
+    int getID() const { return this->id; }
 
     /**
      * Sets the ID of material
      * @param id const int, ID of material
      */
-    void setID(const int id) {
-        this->id = id;
+    void setID(const int id) { this->id = id; }
+
+    /// bool operator
+    bool operator==(const Atmosphere& rhs) const {
+        return specificHeat == rhs.specificHeat && substance == rhs.substance && id == rhs.id;
     }
 
-    ///bool operator
-    bool operator == (const Atmosphere& rhs) const
-    {
-        return specificHeat == rhs.specificHeat &&
-               substance == rhs.substance && id == rhs.id;
-    }
+    /// bool operator
+    bool operator!=(const Atmosphere& rhs) const { return !(*this == rhs); }
 
-    ///bool operator
-    bool operator != (const Atmosphere& rhs) const
-    {
-        return !(*this == rhs);
-    }
-
-private:
+  private:
     // In values
-    double inletTemperature = 0;
+    double inletTemperature  = 0;
     double outletTemperature = 0;
-    double flowRate = 0;
-    double correctionFactor = 0;
-    double specificHeat = 0;
+    double flowRate          = 0;
+    double correctionFactor  = 0;
+    double specificHeat      = 0;
 
     std::string substance = "Unknown";
-    int id = 0;
+    int         id        = 0;
     // Out value
 
     /// Total heat loss measured in btu/hr
@@ -208,13 +172,8 @@ private:
      * @param substance Name of substance
      * @param specificHeat Specific Heat of  in Btu/(lb*°F)
      * */
-    Atmosphere(
-            std::string substance,
-            double specificHeat)
-            : specificHeat(specificHeat),
-              substance(std::move(substance))
-    {}
+    Atmosphere(std::string substance, double specificHeat)
+        : specificHeat(specificHeat), substance(std::move(substance)) {}
 };
 
-
-#endif //TOOLS_SUITE_ATMOSPHERE_H
+#endif // TOOLS_SUITE_ATMOSPHERE_H

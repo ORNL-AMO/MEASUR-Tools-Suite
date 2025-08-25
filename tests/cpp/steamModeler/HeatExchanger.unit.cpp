@@ -1,9 +1,12 @@
-#include "catch.hpp"
 #include "steamModeler/HeatExchanger.h"
 
-TEST_CASE( "Test HeatExchanger 1", "[HeatExchanger]" ) {
-    auto hotInlet = SteamSystemModelerTool::FluidProperties(3761, 4153, 527, 4.2382, 0, 0.001, 1 / 0.001, 1104.3, 2.828);
-    auto coldInlet = SteamSystemModelerTool::FluidProperties(83327, 3510, 283.2, 0.1013, 0, 0.001, 1 / 0.001, 42.1, 0.151);
+#include "catch.hpp"
+
+TEST_CASE("Test HeatExchanger 1", "[HeatExchanger]") {
+    auto hotInlet =
+        SteamSystemModelerTool::FluidProperties(3761, 4153, 527, 4.2382, 0, 0.001, 1 / 0.001, 1104.3, 2.828);
+    auto coldInlet =
+        SteamSystemModelerTool::FluidProperties(83327, 3510, 283.2, 0.1013, 0, 0.001, 1 / 0.001, 42.1, 0.151);
     auto he = HeatExchanger(hotInlet, coldInlet, 11.111111);
 
     auto output = he.calculate();
@@ -27,9 +30,11 @@ TEST_CASE( "Test HeatExchanger 1", "[HeatExchanger]" ) {
     CHECK(output.coldOutlet.energyFlow == Approx(-341142.8540839599));
 }
 
-TEST_CASE( "Test HeatExchanger 2", "[HeatExchanger]" ) {
-    auto hotInlet = SteamSystemModelerTool::FluidProperties(1768, 982, 405.2, 0.2875, 0, 0.001, 1 / 0.001, 555.3, 1.657);
-    auto coldInlet = SteamSystemModelerTool::FluidProperties(51922, 1581, 280.4, 0.1013, 0, 0.001, 1 / 0.001, 30.5, 0.110);
+TEST_CASE("Test HeatExchanger 2", "[HeatExchanger]") {
+    auto hotInlet =
+        SteamSystemModelerTool::FluidProperties(1768, 982, 405.2, 0.2875, 0, 0.001, 1 / 0.001, 555.3, 1.657);
+    auto coldInlet =
+        SteamSystemModelerTool::FluidProperties(51922, 1581, 280.4, 0.1013, 0, 0.001, 1 / 0.001, 30.5, 0.110);
     auto he = HeatExchanger(hotInlet, coldInlet, 27.77777777777778);
 
     auto output = he.calculate();

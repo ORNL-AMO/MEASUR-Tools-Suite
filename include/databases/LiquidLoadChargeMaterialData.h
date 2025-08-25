@@ -6,8 +6,7 @@
 class LiquidLoadChargeMaterial;
 
 std::vector<LiquidLoadChargeMaterial> DefaultData::get_default_liquid_load_charge_materials() {
-    return {
-            {"Crude", 0.6501, 105, 0.55, 900},
+    return {{"Crude", 0.6501, 105, 0.55, 900},
             {"Water - Std. Atms. Pressure", 1, 970.3, 0.47, 212},
             {"Water - 150 PSIG", 1.0499, 868, 0.54, 365},
             {"Acetic Acid", 0.5099, 174, 0.4, 244},
@@ -19,8 +18,7 @@ std::vector<LiquidLoadChargeMaterial> DefaultData::get_default_liquid_load_charg
             {"Carbon Tetrachloride", 0.215, 83.5, 0.2501, 170},
             {"Fuel Oil No. 2 (Average)", 0.5701, 105, 0.55, 375},
             {"Fuel Oil No. 6 (Average)", 0.5799, 108, 0.55, 600},
-            {"Kerosene", 0.5701, 260, 0.62, 260}
-    };
+            {"Kerosene", 0.5701, 260, 0.62, 260}};
 }
 
-#endif //TOOLS_SUITE_LIQUIDLOADCHARGEMATERIALDATA_H
+#endif // TOOLS_SUITE_LIQUIDLOADCHARGEMATERIALDATA_H

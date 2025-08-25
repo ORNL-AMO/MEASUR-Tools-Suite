@@ -1,23 +1,23 @@
 #include "steamModeler/service/water-and-condensate/MakeupWaterVolumeFlowCalculator.h"
 
 MakeupWaterVolumeFlowCalculationsDomain
-MakeupWaterVolumeFlowCalculator::calc(const SteamSystemModelerTool::FluidProperties &makeupWaterAndMassFlow,
-                                      const OperationsInput &operationsInput) const {
+MakeupWaterVolumeFlowCalculator::calc(const SteamSystemModelerTool::FluidProperties& makeupWaterAndMassFlow,
+                                      const OperationsInput&                         operationsInput) const {
     const double makeupWaterVolumeFlow = calcMakeupWaterVolumeFlow(makeupWaterAndMassFlow);
 
     const double operatingHoursPerYear = operationsInput.getOperatingHoursPerYear();
     const double makeupWaterVolumeFlowAnnual =
-            calcMakeupWaterVolumeFlowAnnual(makeupWaterVolumeFlow, operatingHoursPerYear);
+        calcMakeupWaterVolumeFlowAnnual(makeupWaterVolumeFlow, operatingHoursPerYear);
 
     return {makeupWaterVolumeFlow, makeupWaterVolumeFlowAnnual};
 }
 
 /** Calculate volume flow in kg/hr. */
 double MakeupWaterVolumeFlowCalculator::calcMakeupWaterVolumeFlow(
-        const SteamSystemModelerTool::FluidProperties &makeupWaterAndMassFlow) const {
+    const SteamSystemModelerTool::FluidProperties& makeupWaterAndMassFlow) const {
     const std::string methodName = std::string("MakeupWaterVolumeFlowCalculator::") + std::string(__func__) + ": ";
 
-    const double massFlow = makeupWaterAndMassFlow.massFlow;
+    const double massFlow       = makeupWaterAndMassFlow.massFlow;
     const double specificVolume = makeupWaterAndMassFlow.specificVolume;
 
     const double volumeFlow = specificVolume * massFlow;

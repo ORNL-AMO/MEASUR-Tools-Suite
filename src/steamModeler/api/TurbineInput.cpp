@@ -1,13 +1,14 @@
-#include <steamModeler/api/TurbineInput.h>
 #include <string>
 
-TurbineInput::TurbineInput(const CondensingTurbine &condensingTurbine, const PressureTurbine &highToLowTurbine,
-                           const PressureTurbine &highToMediumTurbine, const PressureTurbine &mediumToLowTurbine)
-        : condensingTurbine(condensingTurbine), highToLowTurbine(highToLowTurbine),
-          highToMediumTurbine(highToMediumTurbine), mediumToLowTurbine(mediumToLowTurbine) {}
+#include <steamModeler/api/TurbineInput.h>
 
-std::ostream &operator<<(std::ostream &stream, const CondensingTurbineOperation &operation) {
-    stream << static_cast< int >( operation );
+TurbineInput::TurbineInput(const CondensingTurbine& condensingTurbine, const PressureTurbine& highToLowTurbine,
+                           const PressureTurbine& highToMediumTurbine, const PressureTurbine& mediumToLowTurbine)
+    : condensingTurbine(condensingTurbine), highToLowTurbine(highToLowTurbine),
+      highToMediumTurbine(highToMediumTurbine), mediumToLowTurbine(mediumToLowTurbine) {}
+
+std::ostream& operator<<(std::ostream& stream, const CondensingTurbineOperation& operation) {
+    stream << static_cast<int>(operation);
 
     switch (operation) {
         case CondensingTurbineOperation::POWER_GENERATION:
@@ -25,18 +26,15 @@ std::ostream &operator<<(std::ostream &stream, const CondensingTurbineOperation 
     return stream;
 }
 
-std::ostream &operator<<(std::ostream &stream, const CondensingTurbine &ct) {
-    return stream << "CondensingTurbine["
-                  << "isentropicEfficiency=" << ct.isentropicEfficiency
+std::ostream& operator<<(std::ostream& stream, const CondensingTurbine& ct) {
+    return stream << "CondensingTurbine[" << "isentropicEfficiency=" << ct.isentropicEfficiency
                   << ", generationEfficiency=" << ct.generationEfficiency
-                  << ", condenserPressure=" << ct.condenserPressure
-                  << ", operationType=" << ct.operationType
-                  << ", operationValue=" << ct.operationValue
-                  << ", useTurbine=" << ct.useTurbine << "]";
+                  << ", condenserPressure=" << ct.condenserPressure << ", operationType=" << ct.operationType
+                  << ", operationValue=" << ct.operationValue << ", useTurbine=" << ct.useTurbine << "]";
 }
 
-std::ostream &operator<<(std::ostream &stream, const PressureTurbineOperation &operation) {
-    stream << static_cast< int >( operation );
+std::ostream& operator<<(std::ostream& stream, const PressureTurbineOperation& operation) {
+    stream << static_cast<int>(operation);
 
     switch (operation) {
         case PressureTurbineOperation::BALANCE_HEADER:
@@ -63,99 +61,61 @@ std::ostream &operator<<(std::ostream &stream, const PressureTurbineOperation &o
     return stream;
 }
 
-std::ostream &operator<<(std::ostream &stream, const PressureTurbine &pt) {
-    return stream << "PressureTurbine["
-                  << "isentropicEfficiency=" << pt.isentropicEfficiency
-                  << ", generationEfficiency=" << pt.generationEfficiency
-                  << ", operationType=" << pt.operationType
-                  << ", operationValue1=" << pt.operationValue1
-                  << ", operationValue2=" << pt.operationValue2
+std::ostream& operator<<(std::ostream& stream, const PressureTurbine& pt) {
+    return stream << "PressureTurbine[" << "isentropicEfficiency=" << pt.isentropicEfficiency
+                  << ", generationEfficiency=" << pt.generationEfficiency << ", operationType=" << pt.operationType
+                  << ", operationValue1=" << pt.operationValue1 << ", operationValue2=" << pt.operationValue2
                   << ", useTurbine=" << pt.useTurbine << "]";
 }
 
-std::ostream &operator<<(std::ostream &stream, const TurbineInput &turbineInput) {
-    return stream << "TurbineInput["
-                  << "condensingTurbine=" << turbineInput.condensingTurbine
+std::ostream& operator<<(std::ostream& stream, const TurbineInput& turbineInput) {
+    return stream << "TurbineInput[" << "condensingTurbine=" << turbineInput.condensingTurbine
                   << ", highToLowTurbine=" << turbineInput.highToLowTurbine
                   << ", highToMediumTurbine=" << turbineInput.highToMediumTurbine
                   << ", mediumToLowTurbine=" << turbineInput.mediumToLowTurbine << "]";
 }
 
-CondensingTurbine TurbineInput::getCondensingTurbine() const {
-    return condensingTurbine;
-}
+CondensingTurbine TurbineInput::getCondensingTurbine() const { return condensingTurbine; }
 
-PressureTurbine TurbineInput::getHighToLowTurbine() const {
-    return highToLowTurbine;
-}
+PressureTurbine TurbineInput::getHighToLowTurbine() const { return highToLowTurbine; }
 
-PressureTurbine TurbineInput::getHighToMediumTurbine() const {
-    return highToMediumTurbine;
-}
+PressureTurbine TurbineInput::getHighToMediumTurbine() const { return highToMediumTurbine; }
 
-PressureTurbine TurbineInput::getMediumToLowTurbine() const {
-    return mediumToLowTurbine;
-}
+PressureTurbine TurbineInput::getMediumToLowTurbine() const { return mediumToLowTurbine; }
 
 PressureTurbine::PressureTurbine(double isentropicEfficiency, double generationEfficiency,
                                  PressureTurbineOperation operationType, double operationValue1, double operationValue2,
                                  bool useTurbine)
-        : isentropicEfficiency(isentropicEfficiency), generationEfficiency(generationEfficiency),
-          operationType(operationType), operationValue1(operationValue1), operationValue2(operationValue2),
-          useTurbine(useTurbine) {
-}
+    : isentropicEfficiency(isentropicEfficiency), generationEfficiency(generationEfficiency),
+      operationType(operationType), operationValue1(operationValue1), operationValue2(operationValue2),
+      useTurbine(useTurbine) {}
 
-double PressureTurbine::getIsentropicEfficiency() const {
-    return isentropicEfficiency;
-}
+double PressureTurbine::getIsentropicEfficiency() const { return isentropicEfficiency; }
 
-double PressureTurbine::getGenerationEfficiency() const {
-    return generationEfficiency;
-}
+double PressureTurbine::getGenerationEfficiency() const { return generationEfficiency; }
 
-PressureTurbineOperation PressureTurbine::getOperationType() const {
-    return operationType;
-}
+PressureTurbineOperation PressureTurbine::getOperationType() const { return operationType; }
 
-double PressureTurbine::getOperationValue1() const {
-    return operationValue1;
-}
+double PressureTurbine::getOperationValue1() const { return operationValue1; }
 
-double PressureTurbine::getOperationValue2() const {
-    return operationValue2;
-}
+double PressureTurbine::getOperationValue2() const { return operationValue2; }
 
-bool PressureTurbine::isUseTurbine() const {
-    return useTurbine;
-}
+bool PressureTurbine::isUseTurbine() const { return useTurbine; }
 
 CondensingTurbine::CondensingTurbine(double isentropicEfficiency, double generationEfficiency, double condenserPressure,
                                      CondensingTurbineOperation operationType, double operationValue, bool useTurbine)
-        : isentropicEfficiency(isentropicEfficiency), generationEfficiency(generationEfficiency),
-          condenserPressure(condenserPressure), operationType(operationType), operationValue(operationValue),
-          useTurbine(useTurbine) {
-}
+    : isentropicEfficiency(isentropicEfficiency), generationEfficiency(generationEfficiency),
+      condenserPressure(condenserPressure), operationType(operationType), operationValue(operationValue),
+      useTurbine(useTurbine) {}
 
-double CondensingTurbine::getIsentropicEfficiency() const {
-    return isentropicEfficiency;
-}
+double CondensingTurbine::getIsentropicEfficiency() const { return isentropicEfficiency; }
 
-double CondensingTurbine::getGenerationEfficiency() const {
-    return generationEfficiency;
-}
+double CondensingTurbine::getGenerationEfficiency() const { return generationEfficiency; }
 
-double CondensingTurbine::getCondenserPressure() const {
-    return condenserPressure;
-}
+double CondensingTurbine::getCondenserPressure() const { return condenserPressure; }
 
-CondensingTurbineOperation CondensingTurbine::getOperationType() const {
-    return operationType;
-}
+CondensingTurbineOperation CondensingTurbine::getOperationType() const { return operationType; }
 
-double CondensingTurbine::getOperationValue() const {
-    return operationValue;
-}
+double CondensingTurbine::getOperationValue() const { return operationValue; }
 
-bool CondensingTurbine::isUseTurbine() const {
-    return useTurbine;
-}
+bool CondensingTurbine::isUseTurbine() const { return useTurbine; }

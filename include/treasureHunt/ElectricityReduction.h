@@ -5,13 +5,12 @@
 #include <stdexcept>
 #include <vector>
 
-class MultimeterData
-{
-public:
-    MultimeterData(const int numberOfPhases, const double supplyVoltage,
-                   const double averageCurrent, const double powerFactor)
-        : numberOfPhases(numberOfPhases), supplyVoltage(supplyVoltage),
-          averageCurrent(averageCurrent), powerFactor(powerFactor) {}
+class MultimeterData {
+  public:
+    MultimeterData(const int numberOfPhases, const double supplyVoltage, const double averageCurrent,
+                   const double powerFactor)
+        : numberOfPhases(numberOfPhases), supplyVoltage(supplyVoltage), averageCurrent(averageCurrent),
+          powerFactor(powerFactor) {}
 
     int getNumberOfPhases() const { return numberOfPhases; }
 
@@ -29,17 +28,15 @@ public:
 
     void setPowerFactor(double powerFactor);
 
-private:
-    int numberOfPhases;
+  private:
+    int    numberOfPhases;
     double supplyVoltage, averageCurrent, powerFactor;
 };
 
-class NameplateData
-{
-public:
-    NameplateData(const double ratedMotorPower, const bool variableSpeedMotor,
-                  const double operationalFrequency, const double lineFrequency,
-                  const double motorAndDriveEfficiency, const double loadFactor)
+class NameplateData {
+  public:
+    NameplateData(const double ratedMotorPower, const bool variableSpeedMotor, const double operationalFrequency,
+                  const double lineFrequency, const double motorAndDriveEfficiency, const double loadFactor)
         : ratedMotorPower(ratedMotorPower), variableSpeedMotor(variableSpeedMotor),
           operationalFrequency(operationalFrequency), lineFrequency(lineFrequency),
           motorAndDriveEfficiency(motorAndDriveEfficiency), loadFactor(loadFactor) {}
@@ -68,51 +65,45 @@ public:
 
     void setLoadFactor(double loadFactor);
 
-private:
+  private:
     double ratedMotorPower;
-    bool variableSpeedMotor;
+    bool   variableSpeedMotor;
     double operationalFrequency, lineFrequency, motorAndDriveEfficiency, loadFactor;
 };
 
-class PowerMeterData
-{
-public:
-    PowerMeterData(const double power)
-        : power(power) {}
+class PowerMeterData {
+  public:
+    PowerMeterData(const double power) : power(power) {}
 
     double getPower() const { return power; }
 
     void setPower(double power);
 
-private:
+  private:
     double power;
 };
 
-class OtherMethodData
-{
-public:
-    OtherMethodData(const double energy)
-        : energy(energy) {}
+class OtherMethodData {
+  public:
+    OtherMethodData(const double energy) : energy(energy) {}
 
     double getEnergy() const { return energy; }
 
     void setEnergy(double energy);
 
-private:
+  private:
     double energy;
 };
 
-class ElectricityReductionInput
-{
-public:
+class ElectricityReductionInput {
+  public:
     ElectricityReductionInput(const int operatingHours, const double electricityCost, const int measurementMethod,
                               const MultimeterData multimeterData, const NameplateData nameplateData,
                               const PowerMeterData powerMeterData, const OtherMethodData otherMethodData,
                               const int units)
         : operatingHours(operatingHours), electricityCost(electricityCost), measurementMethod(measurementMethod),
-          multimeterData(multimeterData), nameplateData(nameplateData),
-          powerMeterData(powerMeterData), otherMethodData(otherMethodData),
-          units(units) {}
+          multimeterData(multimeterData), nameplateData(nameplateData), powerMeterData(powerMeterData),
+          otherMethodData(otherMethodData), units(units) {}
 
     int getOperatingHours() const { return operatingHours; }
 
@@ -130,22 +121,20 @@ public:
 
     OtherMethodData getOtherMethodData() const { return otherMethodData; }
 
-private:
-    int operatingHours;
-    double electricityCost;
-    int measurementMethod;
-    MultimeterData multimeterData;
-    NameplateData nameplateData;
-    PowerMeterData powerMeterData;
+  private:
+    int             operatingHours;
+    double          electricityCost;
+    int             measurementMethod;
+    MultimeterData  multimeterData;
+    NameplateData   nameplateData;
+    PowerMeterData  powerMeterData;
     OtherMethodData otherMethodData;
-    int units;
+    int             units;
 };
 
-class ElectricityReduction
-{
-public:
-    struct Output
-    {
+class ElectricityReduction {
+  public:
+    struct Output {
         Output(double energyUse, double energyCost, double power)
             : energyUse(energyUse), energyCost(energyCost), power(power) {}
 
@@ -154,23 +143,22 @@ public:
         double energyUse = 0, energyCost = 0, power = 0;
     };
 
-    ElectricityReduction(
-        std::vector<ElectricityReductionInput> electricityReductionInputVec) : electricityReductionInputVec(electricityReductionInputVec) {}
+    ElectricityReduction(std::vector<ElectricityReductionInput> electricityReductionInputVec)
+        : electricityReductionInputVec(electricityReductionInputVec) {}
 
     ElectricityReduction::Output calculate();
 
     ElectricityReduction::Output getOutput() { return output; }
 
-    std::vector<ElectricityReductionInput> const &getElectricityReductionInputVec() const
-    {
+    std::vector<ElectricityReductionInput> const& getElectricityReductionInputVec() const {
         return electricityReductionInputVec;
     }
 
-    void setElectricityReductionInputVec(std::vector<ElectricityReductionInput> &electricityReductionInputVec);
+    void setElectricityReductionInputVec(std::vector<ElectricityReductionInput>& electricityReductionInputVec);
 
-private:
+  private:
     std::vector<ElectricityReductionInput> electricityReductionInputVec;
-    ElectricityReduction::Output output;
+    ElectricityReduction::Output           output;
 };
 
 #endif // TOOLS_SUITE_ELECTRICITYREDUCTION_H

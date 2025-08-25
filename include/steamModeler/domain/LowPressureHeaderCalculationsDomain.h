@@ -2,28 +2,31 @@
 #define TOOLS_SUITE_LOWPRESSUREHEADERCALCULATIONSDOMAIN_H
 
 #include <memory>
+
 #include <steamModeler/PRV.h>
 #include <steamModeler/SteamSystemModelerTool.h>
+
 #include "LowPressureFlashedSteamIntoHeaderCalculatorDomain.h"
 
 class LowPressureHeaderCalculationsDomain {
-public:
-    std::shared_ptr<PrvWithoutDesuperheating> lowPressurePrv;
-    SteamSystemModelerTool::FluidProperties lowPressureHeaderOutput;
-    HeatLoss lowPressureHeaderHeatLoss;
-    SteamSystemModelerTool::FluidProperties lowPressureCondensate;
+  public:
+    std::shared_ptr<PrvWithoutDesuperheating>         lowPressurePrv;
+    SteamSystemModelerTool::FluidProperties           lowPressureHeaderOutput;
+    HeatLoss                                          lowPressureHeaderHeatLoss;
+    SteamSystemModelerTool::FluidProperties           lowPressureCondensate;
     LowPressureFlashedSteamIntoHeaderCalculatorDomain lowPressureFlashedSteamIntoHeaderCalculatorDomain;
 
-    friend std::ostream &operator<<(std::ostream &stream, const LowPressureHeaderCalculationsDomain &domain) {
-        const std::shared_ptr<PrvWithoutDesuperheating> &prvWithoutPtr = domain.lowPressurePrv;
+    friend std::ostream& operator<<(std::ostream& stream, const LowPressureHeaderCalculationsDomain& domain) {
+        const std::shared_ptr<PrvWithoutDesuperheating>& prvWithoutPtr = domain.lowPressurePrv;
 
         stream << "LowPressureHeaderCalculationsDomain[";
 
         if (prvWithoutPtr->isWithDesuperheating()) {
             std::shared_ptr<PrvWithDesuperheating> prvWithPtr =
-                    std::static_pointer_cast<PrvWithDesuperheating>(prvWithoutPtr);
+                std::static_pointer_cast<PrvWithDesuperheating>(prvWithoutPtr);
             stream << "lowPressurePrv=" << prvWithPtr;
-        } else {
+        }
+        else {
             stream << "lowPressurePrv=" << prvWithoutPtr;
         }
 
@@ -31,21 +34,21 @@ public:
                << ", lowPressureHeaderHeatLoss=" << domain.lowPressureHeaderHeatLoss
                << ", lowPressureCondensate=" << domain.lowPressureCondensate
                << ", lowPressureFlashedSteamIntoHeaderCalculatorDomain="
-               << domain.lowPressureFlashedSteamIntoHeaderCalculatorDomain
-               << "]";
+               << domain.lowPressureFlashedSteamIntoHeaderCalculatorDomain << "]";
 
         return stream;
     }
 
-    friend std::ostream &
-    operator<<(std::ostream &stream, const std::shared_ptr<LowPressureHeaderCalculationsDomain> &domain) {
+    friend std::ostream& operator<<(std::ostream&                                               stream,
+                                    const std::shared_ptr<LowPressureHeaderCalculationsDomain>& domain) {
         if (domain == nullptr) {
             stream << "LowPressureHeaderCalculationsDomain[nullptr]";
-        } else {
+        }
+        else {
             stream << *domain;
         }
         return stream;
     }
 };
 
-#endif //TOOLS_SUITE_LOWPRESSUREHEADERCALCULATIONSDOMAIN_H
+#endif // TOOLS_SUITE_LOWPRESSUREHEADERCALCULATIONSDOMAIN_H

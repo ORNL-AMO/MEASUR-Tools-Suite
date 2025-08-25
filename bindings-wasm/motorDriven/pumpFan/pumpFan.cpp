@@ -1,13 +1,12 @@
-#include "motorDriven/pumpFan/PumpEfficiency.h"
+#include <emscripten/bind.h>
+
 #include "motorDriven/pumpFan/MoverShaftPower.h"
 #include "motorDriven/pumpFan/OptimalSpecificSpeedCorrection.h"
-
-#include <emscripten/bind.h>
+#include "motorDriven/pumpFan/PumpEfficiency.h"
 
 using namespace emscripten;
 
-EMSCRIPTEN_BINDINGS(pump_enums)
-{
+EMSCRIPTEN_BINDINGS(pump_enums) {
     enum_<Pump::Style>("PumpStyle")
         .value("END_SUCTION_SLURRY", Pump::Style::END_SUCTION_SLURRY)
         .value("END_SUCTION_SEWAGE", Pump::Style::END_SUCTION_SEWAGE)
@@ -27,12 +26,11 @@ EMSCRIPTEN_BINDINGS(pump_enums)
         .value("NOT_FIXED_SPEED", Pump::SpecificSpeed::NOT_FIXED_SPEED);
 }
 
-//pump shaft power
-EMSCRIPTEN_BINDINGS(pump_shaft_class)
-{
+// pump shaft power
+EMSCRIPTEN_BINDINGS(pump_shaft_class) {
     class_<MoverShaftPower>("MoverShaftPower")
-            .constructor<double, Motor::Drive, double>()
-            .function("calculate", &MoverShaftPower::calculate);
+        .constructor<double, Motor::Drive, double>()
+        .function("calculate", &MoverShaftPower::calculate);
 
     class_<MoverShaftPower::Output>("MoverShaftPowerOutput")
         .constructor<double, double>()
@@ -40,23 +38,20 @@ EMSCRIPTEN_BINDINGS(pump_shaft_class)
         .property("driveEfficiency", &MoverShaftPower::Output::driveEfficiency);
 }
 
-//achievableEfficiency
-EMSCRIPTEN_BINDINGS(optimal_specified_speed_class)
-{
+// achievableEfficiency
+EMSCRIPTEN_BINDINGS(optimal_specified_speed_class) {
     class_<OptimalSpecificSpeedCorrection>("OptimalSpecificSpeedCorrection")
         .constructor<Pump::Style, double>()
         .function("calculate", &OptimalSpecificSpeedCorrection::calculate);
 }
-//pumpEfficiency
-EMSCRIPTEN_BINDINGS(pump_efficiency)
-{
+// pumpEfficiency
+EMSCRIPTEN_BINDINGS(pump_efficiency) {
     class_<PumpEfficiency>("PumpEfficiency")
         .constructor<Pump::Style, double, double, double, double, double, double>()
         .function("calculate", &PumpEfficiency::calculate);
 }
 
-EMSCRIPTEN_BINDINGS(pump_efficiency_output)
-{
+EMSCRIPTEN_BINDINGS(pump_efficiency_output) {
     class_<PumpEfficiency::Output>("PumpEfficiencyResults")
         .constructor<double, double>()
         .property("average", &PumpEfficiency::Output::average)

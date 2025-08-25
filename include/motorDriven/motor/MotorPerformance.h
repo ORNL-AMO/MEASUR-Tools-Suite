@@ -10,21 +10,21 @@
 #define TOOLS_SUITE_MOTORPERFORMANCE_H
 
 #include <array>
-#include "MotorData.h"
 #include <exception>
 #include <stdexcept>
 
+#include "MotorData.h"
+
 class MotorPerformance {
-public:
+  public:
     struct Output {
-	    /**
-	     * @param current
-	     * @param efficiency
-	     * @param powerFactor
-	     */
+        /**
+         * @param current
+         * @param efficiency
+         * @param powerFactor
+         */
         Output(const double current, const double efficiency, const double powerFactor)
-                : current(current), efficiency(efficiency), powerFactor(powerFactor)
-        {}
+            : current(current), efficiency(efficiency), powerFactor(powerFactor) {}
 
         const double current, efficiency, powerFactor;
     };
@@ -38,41 +38,28 @@ public:
      * @param loadFactor double, load factor - unitless
      * @param ratedVoltage double, Rated voltage of the motor in Volts
      * @param fullLoadAmps double,
-    */
-    MotorPerformance(
-        Motor::LineFrequency lineFrequency,
-        double motorRpm,
-        Motor::EfficiencyClass efficiencyClass,
-        double motorRatedPower,
-        double specifiedEfficiency,
-        double loadFactor,
-        double ratedVoltage,
-        double fullLoadAmps
-     ) :
-        lineFrequency(lineFrequency),
-        motorRpm(motorRpm),
-        efficiencyClass(efficiencyClass),
-        motorRatedPower(motorRatedPower),
-        specifiedEfficiency(specifiedEfficiency),
-        loadFactor(loadFactor),
-        ratedVoltage(ratedVoltage),
-        fullLoadAmps(fullLoadAmps)
-    {};
+     */
+    MotorPerformance(Motor::LineFrequency lineFrequency, double motorRpm, Motor::EfficiencyClass efficiencyClass,
+                     double motorRatedPower, double specifiedEfficiency, double loadFactor, double ratedVoltage,
+                     double fullLoadAmps)
+        : lineFrequency(lineFrequency), motorRpm(motorRpm), efficiencyClass(efficiencyClass),
+          motorRatedPower(motorRatedPower), specifiedEfficiency(specifiedEfficiency), loadFactor(loadFactor),
+          ratedVoltage(ratedVoltage), fullLoadAmps(fullLoadAmps) {};
 
     /**
      * Calculates motor performance
      */
     Output calculate();
 
-private:
-        Motor::LineFrequency lineFrequency;
-        double motorRpm;
-        Motor::EfficiencyClass efficiencyClass;
-        double motorRatedPower;
-        double specifiedEfficiency;
-        double loadFactor;
-        double ratedVoltage;
-        double fullLoadAmps;
+  private:
+    Motor::LineFrequency   lineFrequency;
+    double                 motorRpm;
+    Motor::EfficiencyClass efficiencyClass;
+    double                 motorRatedPower;
+    double                 specifiedEfficiency;
+    double                 loadFactor;
+    double                 ratedVoltage;
+    double                 fullLoadAmps;
 };
 
-#endif //TOOLS_SUITE_MOTORPERFORMANCE_H
+#endif // TOOLS_SUITE_MOTORPERFORMANCE_H

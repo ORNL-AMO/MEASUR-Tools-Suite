@@ -1,6 +1,7 @@
 /**
  * @file
- * @brief Calculate energy savings from using exhaust gas (waste) heat to provide energy for an absorption chiller in place of a compressor.
+ * @brief Calculate energy savings from using exhaust gas (waste) heat to provide energy for an absorption chiller in
+ * place of a compressor.
  *
  *
  *
@@ -13,20 +14,21 @@
 #define TOOLS_SUITE_WATERHEATINGUSINGEXHAUST_H
 
 class WaterHeatingUsingExhaust {
-public:
-    struct Output
-    {
-        Output(double recoveredHeat, double hotWaterFlow, double tonsRefrigeration, double capacityChiller, double electricalEnergy) :
-                recoveredHeat(recoveredHeat), hotWaterFlow(hotWaterFlow), tonsRefrigeration(tonsRefrigeration), capacityChiller(capacityChiller), electricalEnergy(electricalEnergy) {}
+  public:
+    struct Output {
+        Output(double recoveredHeat, double hotWaterFlow, double tonsRefrigeration, double capacityChiller,
+               double electricalEnergy)
+            : recoveredHeat(recoveredHeat), hotWaterFlow(hotWaterFlow), tonsRefrigeration(tonsRefrigeration),
+              capacityChiller(capacityChiller), electricalEnergy(electricalEnergy) {}
 
-        Output() = default;
+        Output()             = default;
         double recoveredHeat = 0, hotWaterFlow = 0, tonsRefrigeration = 0, capacityChiller = 0, electricalEnergy = 0;
     };
 
     /**
      * @param no arguments
      */
-    WaterHeatingUsingExhaust(){}
+    WaterHeatingUsingExhaust() {}
 
     /**
      *
@@ -47,8 +49,8 @@ public:
      *
      */
     Output calculate(const double availableHeat, const double heatInput, const double hxEfficiency,
-                                               const double chillerInTemperature, const double chillerOutTemperature,
-                                               const double copChiller, const double chillerEfficiency, const double copCompressor);
+                     const double chillerInTemperature, const double chillerOutTemperature, const double copChiller,
+                     const double chillerEfficiency, const double copCompressor);
 };
 
-#endif //TOOLS_SUITE_WATERHEATINGUSINGEXHAUST_H
+#endif // TOOLS_SUITE_WATERHEATINGUSINGEXHAUST_H

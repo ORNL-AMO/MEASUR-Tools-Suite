@@ -1,11 +1,11 @@
-#include "processCooling/CoolingTower.h"
-#include "processCooling/ChillerEfficiency.h"
 #include <emscripten/bind.h>
+
+#include "processCooling/ChillerEfficiency.h"
+#include "processCooling/CoolingTower.h"
 
 using namespace emscripten;
 
-EMSCRIPTEN_BINDINGS(chillers_class)
-{
+EMSCRIPTEN_BINDINGS(chillers_class) {
     enum_<CoolingTower::FanControlSpeedType>("FanControlSpeedType")
         .value("One", CoolingTower::FanControlSpeedType::One)
         .value("Two", CoolingTower::FanControlSpeedType::Two)
@@ -46,8 +46,10 @@ EMSCRIPTEN_BINDINGS(chillers_class)
         .property("savingsEnergy", &ChillerEfficiency::StagingPowerConsumptionOutput::savingsEnergy);
 
     class_<ChillerEfficiency::CapacityPowerEnergyConsumptionOutput>("CapacityPowerEnergyConsumptionOutput")
-        .property("baselineActualCapacity", &ChillerEfficiency::CapacityPowerEnergyConsumptionOutput::baselineActualCapacity)
-        .property("baselineActualEfficiency", &ChillerEfficiency::CapacityPowerEnergyConsumptionOutput::baselineActualEfficiency)
+        .property("baselineActualCapacity",
+                  &ChillerEfficiency::CapacityPowerEnergyConsumptionOutput::baselineActualCapacity)
+        .property("baselineActualEfficiency",
+                  &ChillerEfficiency::CapacityPowerEnergyConsumptionOutput::baselineActualEfficiency)
         .property("baselinePower", &ChillerEfficiency::CapacityPowerEnergyConsumptionOutput::baselinePower)
         .property("baselineEnergy", &ChillerEfficiency::CapacityPowerEnergyConsumptionOutput::baselineEnergy)
         .property("modActualCapacity", &ChillerEfficiency::CapacityPowerEnergyConsumptionOutput::modActualCapacity)
@@ -56,14 +58,14 @@ EMSCRIPTEN_BINDINGS(chillers_class)
         .property("modEnergy", &ChillerEfficiency::CapacityPowerEnergyConsumptionOutput::modEnergy)
         .property("savingsEnergy", &ChillerEfficiency::CapacityPowerEnergyConsumptionOutput::savingsEnergy);
 
-    class_<CoolingTowerWaterConservationData>("CoolingTowerWaterConservationData")
-        .constructor<int, double>();
+    class_<CoolingTowerWaterConservationData>("CoolingTowerWaterConservationData").constructor<int, double>();
 
     class_<CoolingTowerOperatingConditionsData>("CoolingTowerOperatingConditionsData")
         .constructor<double, double, int, double>();
 
     class_<CoolingTowerMakeupWaterCalculator>("CoolingTowerMakeupWaterCalculator")
-        .constructor<CoolingTowerOperatingConditionsData, CoolingTowerWaterConservationData, CoolingTowerWaterConservationData>()
+        .constructor<CoolingTowerOperatingConditionsData, CoolingTowerWaterConservationData,
+                     CoolingTowerWaterConservationData>()
         .function("calculate", &CoolingTowerMakeupWaterCalculator::calculate);
 
     function("BasinHeaterEnergyConsumption", &CoolingTower::BasinHeaterEnergyConsumption);

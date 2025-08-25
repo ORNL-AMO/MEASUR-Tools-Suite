@@ -1,10 +1,10 @@
+#include <emscripten/bind.h>
+
 #include "motorDriven/motor/MotorEfficiency.h"
 #include "motorDriven/pumpFan/MoverShaftPower.h"
-#include <emscripten/bind.h>
 using namespace emscripten;
 
-EMSCRIPTEN_BINDINGS(motor_enums)
-{
+EMSCRIPTEN_BINDINGS(motor_enums) {
     enum_<Motor::Drive>("Drive")
         .value("DIRECT_DRIVE", Motor::Drive::DIRECT_DRIVE)
         .value("V_BELT_DRIVE", Motor::Drive::V_BELT_DRIVE)

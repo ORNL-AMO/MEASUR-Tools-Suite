@@ -10,5 +10,5 @@
 #include "processHeat/losses/AuxiliaryPower.h"
 
 double AuxiliaryPower::getPowerUsed() const {
-	return std::pow(motorPhase, 0.5) * supplyVoltage * avgCurrent * powerFactor * operatingTime * 3.412136247820839;
+    return std::pow(motorPhase, 0.5) * supplyVoltage * avgCurrent * powerFactor * operatingTime * 3.412136247820839;
 }

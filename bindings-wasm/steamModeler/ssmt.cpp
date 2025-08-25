@@ -1,29 +1,30 @@
-#include "steamModeler/SaturatedProperties.h"
-#include "steamModeler/SteamSystemModelerTool.h"
-#include "steamModeler/SteamProperties.h"
-#include "steamModeler/HeatLoss.h"
-#include "steamModeler/Boiler.h"
-#include "steamModeler/HeatLoss.h"
-#include "steamModeler/FlashTank.h"
-#include "steamModeler/PRV.h"
-#include "steamModeler/Deaerator.h"
-#include "steamModeler/Header.h"
-#include "steamModeler/Turbine.h"
-#include "steamModeler/HeatExchanger.h"
-#include "steamModeler/api/SteamModeler.h"
 #include <vector>
+
 #include <emscripten/bind.h>
+
+#include "steamModeler/api/SteamModeler.h"
+#include "steamModeler/Boiler.h"
+#include "steamModeler/Deaerator.h"
+#include "steamModeler/FlashTank.h"
+#include "steamModeler/Header.h"
+#include "steamModeler/HeatExchanger.h"
+#include "steamModeler/HeatLoss.h"
+#include "steamModeler/PRV.h"
+#include "steamModeler/SaturatedProperties.h"
+#include "steamModeler/SteamProperties.h"
+#include "steamModeler/SteamSystemModelerTool.h"
+#include "steamModeler/Turbine.h"
 using namespace emscripten;
 
-//steamModelerTool
-EMSCRIPTEN_BINDINGS(steamModelerTool)
-{
+// steamModelerTool
+EMSCRIPTEN_BINDINGS(steamModelerTool) {
     class_<SteamSystemModelerTool::SaturatedPropertiesOutput>("SaturatedPropertiesOutput")
         .property("saturatedPressure", &SteamSystemModelerTool::SaturatedPropertiesOutput::pressure)
         .property("saturatedTemperature", &SteamSystemModelerTool::SaturatedPropertiesOutput::temperature)
         .property("liquidEnthalpy", &SteamSystemModelerTool::SaturatedPropertiesOutput::liquidSpecificEnthalpy)
         .property("gasEnthalpy", &SteamSystemModelerTool::SaturatedPropertiesOutput::gasSpecificEnthalpy)
-        .property("evaporationEnthalpy", &SteamSystemModelerTool::SaturatedPropertiesOutput::evaporationSpecificEnthalpy)
+        .property("evaporationEnthalpy",
+                  &SteamSystemModelerTool::SaturatedPropertiesOutput::evaporationSpecificEnthalpy)
         .property("liquidEntropy", &SteamSystemModelerTool::SaturatedPropertiesOutput::liquidSpecificEntropy)
         .property("gasEntropy", &SteamSystemModelerTool::SaturatedPropertiesOutput::gasSpecificEntropy)
         .property("evaporationEntropy", &SteamSystemModelerTool::SaturatedPropertiesOutput::evaporationSpecificEntropy)
@@ -42,7 +43,8 @@ EMSCRIPTEN_BINDINGS(steamModelerTool)
         .property("specificEntropy", &SteamSystemModelerTool::SteamPropertiesOutput::specificEntropy)
         .property("internalEnergy", &SteamSystemModelerTool::SteamPropertiesOutput::internalEnergy);
 
-    class_<SteamSystemModelerTool::FluidProperties, emscripten::base<SteamSystemModelerTool::SteamPropertiesOutput>>("FluidProperties")
+    class_<SteamSystemModelerTool::FluidProperties, emscripten::base<SteamSystemModelerTool::SteamPropertiesOutput>>(
+        "FluidProperties")
         .constructor<double, double, double, double, double, double, double, double, double, double>()
         .smart_ptr<std::shared_ptr<SteamSystemModelerTool::FluidProperties>>("FluidProperties")
         .property("massFlow", &SteamSystemModelerTool::FluidProperties::massFlow)
@@ -50,15 +52,13 @@ EMSCRIPTEN_BINDINGS(steamModelerTool)
 }
 
 // saturatedPressure
-EMSCRIPTEN_BINDINGS(saturatedPressure)
-{
+EMSCRIPTEN_BINDINGS(saturatedPressure) {
     class_<SaturatedPressure>("SaturatedPressure")
         .constructor<double>()
         .function("calculate", &SaturatedPressure::calculate);
 }
 // saturatedTemperature
-EMSCRIPTEN_BINDINGS(saturatedTemperature)
-{
+EMSCRIPTEN_BINDINGS(saturatedTemperature) {
     class_<SaturatedTemperature>("SaturatedTemperature")
         .constructor<double>()
         .function("calculate", &SaturatedTemperature::calculate);
@@ -66,23 +66,20 @@ EMSCRIPTEN_BINDINGS(saturatedTemperature)
 // saturatedPropertiesGivenTemperature
 // saturatedPropertiesGivenPressure
 //(SaturatedProperties)
-EMSCRIPTEN_BINDINGS(saturatedProperties)
-{
+EMSCRIPTEN_BINDINGS(saturatedProperties) {
     class_<SaturatedProperties>("SaturatedProperties")
         .constructor<double, double>()
         .function("calculate", &SaturatedProperties::calculate);
 }
 
 // steamProperties
-EMSCRIPTEN_BINDINGS(steamProperties)
-{
+EMSCRIPTEN_BINDINGS(steamProperties) {
     class_<SteamProperties>("SteamProperties")
         .constructor<double, SteamProperties::ThermodynamicQuantity, double>()
         .function("calculate", &SteamProperties::calculate);
 }
 // boiler
-EMSCRIPTEN_BINDINGS(boiler)
-{
+EMSCRIPTEN_BINDINGS(boiler) {
     class_<Boiler>("Boiler")
         .constructor<double, double, double, double, SteamProperties::ThermodynamicQuantity, double, double>()
         .function("getSteamProperties", &Boiler::getSteamProperties)
@@ -94,8 +91,7 @@ EMSCRIPTEN_BINDINGS(boiler)
         .function("getCombustionEfficiency", &Boiler::getCombustionEfficiency);
 }
 // heatLoss
-EMSCRIPTEN_BINDINGS(heatLoss)
-{
+EMSCRIPTEN_BINDINGS(heatLoss) {
     class_<HeatLoss>("HeatLoss")
         .constructor<double, SteamProperties::ThermodynamicQuantity, double, double, double>()
         .function("getInletProperties", &HeatLoss::getInletProperties)
@@ -108,8 +104,7 @@ EMSCRIPTEN_BINDINGS(heatLoss)
         .function("getQuantityType", &HeatLoss::getQuantityType);
 }
 // flashTank
-EMSCRIPTEN_BINDINGS(flashTank)
-{
+EMSCRIPTEN_BINDINGS(flashTank) {
     class_<FlashTank>("FlashTank")
         .constructor<double, SteamProperties::ThermodynamicQuantity, double, double, double>()
         .smart_ptr<std::shared_ptr<FlashTank>>("FlashTank")
@@ -118,8 +113,7 @@ EMSCRIPTEN_BINDINGS(flashTank)
         .function("getOutletLiquidSaturatedProperties", &FlashTank::getOutletLiquidSaturatedProperties);
 }
 // prvWithoutDesuperheating
-EMSCRIPTEN_BINDINGS(prvWithoutDesuperheating)
-{
+EMSCRIPTEN_BINDINGS(prvWithoutDesuperheating) {
     class_<PrvWithoutDesuperheating>("PrvWithoutDesuperheating")
         .constructor<double, SteamProperties::ThermodynamicQuantity, double, double, double>()
         .smart_ptr<std::shared_ptr<PrvWithoutDesuperheating>>("PrvWithoutDesuperheating")
@@ -132,10 +126,10 @@ EMSCRIPTEN_BINDINGS(prvWithoutDesuperheating)
         .function("isWithDesuperheating", &PrvWithoutDesuperheating::isWithDesuperheating);
 }
 // prvWithDesuperheating
-EMSCRIPTEN_BINDINGS(prvWithDesuperheating)
-{
+EMSCRIPTEN_BINDINGS(prvWithDesuperheating) {
     class_<PrvWithDesuperheating>("PrvWithDesuperheating")
-        .constructor<double, SteamProperties::ThermodynamicQuantity, double, double, double, double, SteamProperties::ThermodynamicQuantity, double, double>()
+        .constructor<double, SteamProperties::ThermodynamicQuantity, double, double, double, double,
+                     SteamProperties::ThermodynamicQuantity, double, double>()
         .smart_ptr<std::shared_ptr<PrvWithDesuperheating>>("PrvWithDesuperheating")
         .function("getInletProperties", &PrvWithDesuperheating::getInletProperties)
         .function("getOutletProperties", &PrvWithDesuperheating::getOutletProperties)
@@ -148,26 +142,24 @@ EMSCRIPTEN_BINDINGS(prvWithDesuperheating)
         .function("getFeedwaterEnergyFlow", &PrvWithDesuperheating::getFeedwaterEnergyFlow)
         .function("isWithDesuperheating", &PrvWithDesuperheating::isWithDesuperheating);
 }
-//prvCastDesuperheating
-EMSCRIPTEN_BINDINGS(PrvCastDesuperheating)
-{
+// prvCastDesuperheating
+EMSCRIPTEN_BINDINGS(PrvCastDesuperheating) {
     class_<PrvCastDesuperheating>("PrvCastDesuperheating")
         .constructor<>()
         .function("Cast", &PrvCastDesuperheating::Cast);
 }
 // deaerator
-EMSCRIPTEN_BINDINGS(deaerator)
-{
+EMSCRIPTEN_BINDINGS(deaerator) {
     class_<Deaerator>("Deaerator")
-        .constructor<double, double, double, double, SteamProperties::ThermodynamicQuantity, double, double, SteamProperties::ThermodynamicQuantity, double>()
+        .constructor<double, double, double, double, SteamProperties::ThermodynamicQuantity, double, double,
+                     SteamProperties::ThermodynamicQuantity, double>()
         .function("getFeedwaterProperties", &Deaerator::getFeedwaterProperties)
         .function("getVentedSteamProperties", &Deaerator::getVentedSteamProperties)
         .function("getInletWaterProperties", &Deaerator::getInletWaterProperties)
         .function("getInletSteamProperties", &Deaerator::getInletSteamProperties);
 }
 // header
-EMSCRIPTEN_BINDINGS(header)
-{
+EMSCRIPTEN_BINDINGS(header) {
     class_<Inlet>("Inlet")
         .constructor<double, SteamProperties::ThermodynamicQuantity, double, double>()
         .function("getInletProperties", &Inlet::getInletProperties)
@@ -185,11 +177,12 @@ EMSCRIPTEN_BINDINGS(header)
         .function("getInlets", &Header::getInlets);
 }
 // turbine
-EMSCRIPTEN_BINDINGS(turbine)
-{
+EMSCRIPTEN_BINDINGS(turbine) {
     class_<Turbine>("Turbine")
-        .constructor<Turbine::Solve, double, SteamProperties::ThermodynamicQuantity, double, Turbine::TurbineProperty, double, double, double, double>()
-        .constructor<Turbine::Solve, double, SteamProperties::ThermodynamicQuantity, double, Turbine::TurbineProperty, double, double, double, SteamProperties::ThermodynamicQuantity, double>()
+        .constructor<Turbine::Solve, double, SteamProperties::ThermodynamicQuantity, double, Turbine::TurbineProperty,
+                     double, double, double, double>()
+        .constructor<Turbine::Solve, double, SteamProperties::ThermodynamicQuantity, double, Turbine::TurbineProperty,
+                     double, double, double, SteamProperties::ThermodynamicQuantity, double>()
         .smart_ptr<std::shared_ptr<Turbine>>("Turbine")
         .function("getInletProperties", &Turbine::getInletProperties)
         .function("getInletEnergyFlow", &Turbine::getInletEnergyFlow)
@@ -202,8 +195,7 @@ EMSCRIPTEN_BINDINGS(turbine)
         .function("getGeneratorEfficiency", &Turbine::getGeneratorEfficiency);
 }
 // heatExchanger
-EMSCRIPTEN_BINDINGS(heatExchanger)
-{
+EMSCRIPTEN_BINDINGS(heatExchanger) {
     class_<HeatExchanger>("HeatExchanger")
         .constructor<SteamSystemModelerTool::FluidProperties, SteamSystemModelerTool::FluidProperties, double>()
         .function("calculate", &HeatExchanger::calculate);

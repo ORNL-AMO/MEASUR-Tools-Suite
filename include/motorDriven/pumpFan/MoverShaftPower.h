@@ -15,16 +15,15 @@
 #include "motorDriven/motor/MotorData.h"
 
 class MoverShaftPower {
-public:
+  public:
     /**
      * @param driveEfficiency, efficiency of the drive defined as a fraction, unitless
-     * 
-     * 
+     *
+     *
      */
     struct Output {
         Output(const double moverShaftPower, const double driveEfficiency)
-            : moverShaftPower(moverShaftPower), driveEfficiency(driveEfficiency)
-        {}
+            : moverShaftPower(moverShaftPower), driveEfficiency(driveEfficiency) {}
 
         const double moverShaftPower, driveEfficiency;
     };
@@ -34,15 +33,8 @@ public:
      * @param motorShaftPower double, motor shaft power as defined in hp
      * @param drive Motor::Drive, type of drive the pump uses from either direct or belt drive.
      */
-    MoverShaftPower(
-        double motorShaftPower,
-        Motor::Drive drive,
-        double specifiedEfficiency
-    ) :
-        motorShaftPower(motorShaftPower),
-        drive(drive),
-        specifiedEfficiency(specifiedEfficiency)
-    {}
+    MoverShaftPower(double motorShaftPower, Motor::Drive drive, double specifiedEfficiency)
+        : motorShaftPower(motorShaftPower), drive(drive), specifiedEfficiency(specifiedEfficiency) {}
 
     /**
      * Calculates the pump shaft power
@@ -54,54 +46,42 @@ public:
      * Gets the motor shaft power
      * @return double, motor shaft power in hp
      */
-    double getMotorShaftPower() const {
-        return motorShaftPower;
-    }
+    double getMotorShaftPower() const { return motorShaftPower; }
 
     /**
      * Sets the motor shaft power
      * @param motorShaftPower double, motor shaft power in hp
      */
-    void setMotorShaftPower(double motorShaftPower) {
-        this->motorShaftPower = motorShaftPower;
-    }
+    void setMotorShaftPower(double motorShaftPower) { this->motorShaftPower = motorShaftPower; }
 
     /**
      * Gets the type of drive the pump uses from either direct or belt drive
      * @return Pump:Drive, type of drive
      */
-    Motor::Drive getDrive() const {
-        return drive;
-    }
+    Motor::Drive getDrive() const { return drive; }
 
     /**
      * Set the type of drive the pump uses from either direct or belt drive
      * @param drive Motor:Drive, type of drive
      */
-    void setDrive(Motor::Drive drive) {
-        this->drive = drive;
-    }
+    void setDrive(Motor::Drive drive) { this->drive = drive; }
 
     /**
      * Gets the specified efficiency
      * @return double, specifiedEfficiency
      */
-    double getSpecifiedEfficiency() const {
-        return specifiedEfficiency;
-    }
+    double getSpecifiedEfficiency() const { return specifiedEfficiency; }
 
     /**
      * Sets the specified efficiency
      * @param specifiedEfficiency double
      */
-    void setSpecifiedEfficiency(double specifiedEfficiency) {
-        this->specifiedEfficiency = specifiedEfficiency;
-    }
+    void setSpecifiedEfficiency(double specifiedEfficiency) { this->specifiedEfficiency = specifiedEfficiency; }
 
-private:
-    double motorShaftPower;
+  private:
+    double       motorShaftPower;
     Motor::Drive drive;
-    double specifiedEfficiency;
+    double       specifiedEfficiency;
 };
 
 #endif

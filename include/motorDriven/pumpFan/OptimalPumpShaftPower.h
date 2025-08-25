@@ -1,7 +1,8 @@
 /**
  * @brief Header file for OptimalPumpShaftPower class
  *
- * This contains the prototypes of OptimalPumpShaftPower calculator including getters and setters for the important fields.
+ * This contains the prototypes of OptimalPumpShaftPower calculator including getters and setters for the important
+ * fields.
  *
  * @author Subhankar Mishra (mishras)
  * @author Gina Accawi (accawigk)
@@ -14,7 +15,7 @@
 #include "FluidPower.h"
 
 class OptimalPumpShaftPower {
-public:
+  public:
     /**
      * Constructor used for pumps
      * @param flowRate double, measured or required flow rate in gpm
@@ -22,9 +23,9 @@ public:
      * @param specificGravity double, specific gravity - unitless
      * @param pumpEfficiency double, pump efficiency at the specified operating conditions as %
      */
-    OptimalPumpShaftPower(const double flowRate, const double head, const double specificGravity, const double pumpEfficiency)
-            : flowRate(flowRate), head(head), specificGravity(specificGravity), efficiency(pumpEfficiency), isPump(true)
-    {}
+    OptimalPumpShaftPower(const double flowRate, const double head, const double specificGravity,
+                          const double pumpEfficiency)
+        : flowRate(flowRate), head(head), specificGravity(specificGravity), efficiency(pumpEfficiency), isPump(true) {}
 
     /**
      * Construct used for fans
@@ -37,9 +38,8 @@ public:
      */
     OptimalPumpShaftPower(const double flowRate, const double inletPressure, const double outletPressure,
                           const double compressibilityFactor, const double fanEfficiency, const double velocityPressure)
-            : flowRate(flowRate), efficiency(fanEfficiency), inletPressure(inletPressure), outletPressure(outletPressure),
-              compressibilityFactor(compressibilityFactor), isPump(false), velocityPressure(velocityPressure)
-    {}
+        : flowRate(flowRate), efficiency(fanEfficiency), inletPressure(inletPressure), outletPressure(outletPressure),
+          compressibilityFactor(compressibilityFactor), isPump(false), velocityPressure(velocityPressure) {}
 
     /**
      * Calculates the optimal pump shaft power
@@ -52,67 +52,51 @@ public:
      * Gets the measured or required flow rate
      * @return double, measured or required flow rate in gpm
      */
-    double getFlowRate() const {
-        return flowRate;
-    }
+    double getFlowRate() const { return flowRate; }
 
     /**
      * Sets the measured or required flow rate
      * @param flowRate double, measured or required flow rate in gpm
      */
-    void setFlowRate(double flowRate) {
-        this->flowRate = flowRate;
-    }
+    void setFlowRate(double flowRate) { this->flowRate = flowRate; }
 
     /**
      * Gets the measured or required pump head
      * @return double, measured or required pump head in ft
      */
-    double getHead() const {
-        return head;
-    }
+    double getHead() const { return head; }
 
     /**
      * Sets the measured or required pump head
      * @param head double, measured or required pump head in ft
      */
-    void setHead(double head) {
-        this->head = head;
-    }
+    void setHead(double head) { this->head = head; }
 
     /**
      * Gets the specific gravity
      * @return double, specific gravity - unitless
      */
-    double getSpecificGravity() const {
-        return specificGravity;
-    }
+    double getSpecificGravity() const { return specificGravity; }
 
     /**
      * Sets the specific gravity
      * @param specificGravity double, specific gravity - unitless
      */
-    void setSpecificGravity(double specificGravity) {
-        this->specificGravity = specificGravity;
-    }
+    void setSpecificGravity(double specificGravity) { this->specificGravity = specificGravity; }
 
     /**
      * Gets the pump efficiency
      * @return double, pump efficiency as %
      */
-    double getPumpEfficiency() const {
-        return efficiency;
-    }
+    double getPumpEfficiency() const { return efficiency; }
 
     /**
      * Sets the pump efficiency
      * @param pumpEfficiency double, pump efficiency as %
      */
-    void setPumpEfficiency(double pumpEfficiency) {
-        this->efficiency = pumpEfficiency;
-    }
+    void setPumpEfficiency(double pumpEfficiency) { this->efficiency = pumpEfficiency; }
 
-private:
+  private:
     double flowRate, head = 0, specificGravity = 0, efficiency = 0;
 
     double inletPressure = 0, outletPressure = 0, compressibilityFactor = 0;
@@ -122,5 +106,4 @@ private:
     double velocityPressure = 0;
 };
 
-
-#endif //TOOLS_SUITE_OPTIMALPUMPSHAFTPOWER_H
+#endif // TOOLS_SUITE_OPTIMALPUMPSHAFTPOWER_H

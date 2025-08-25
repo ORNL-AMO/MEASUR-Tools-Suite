@@ -1,15 +1,14 @@
+#include <emscripten/bind.h>
+
 #include "processHeat/EfficiencyImprovement.h"
 #include "processHeat/EnergyEquivalency.h"
 #include "processHeat/FlowCalculationsEnergyUse.h"
-#include "processHeat/O2Enrichment.h"
 #include "processHeat/HumidityRatio.h"
-
-#include <emscripten/bind.h>
+#include "processHeat/O2Enrichment.h"
 
 using namespace emscripten;
 
-EMSCRIPTEN_BINDINGS(furnace_enums)
-{
+EMSCRIPTEN_BINDINGS(furnace_enums) {
     enum_<FlowCalculationsEnergyUse::Gas>("Gas")
         .value("AIR", FlowCalculationsEnergyUse::Gas::AIR)
         .value("AMMONIA_DISSOCIATED", FlowCalculationsEnergyUse::Gas::AMMONIA_DISSOCIATED)
@@ -33,8 +32,7 @@ EMSCRIPTEN_BINDINGS(furnace_enums)
 }
 
 // efficiencyImprovement
-EMSCRIPTEN_BINDINGS(efficiencyImprovement)
-{
+EMSCRIPTEN_BINDINGS(efficiencyImprovement) {
     class_<EfficiencyImprovement>("EfficiencyImprovement")
         .constructor<double, double, double, double, double, double, double>()
         .function("getCurrentExcessAir", &EfficiencyImprovement::getCurrentExcessAir)
@@ -45,34 +43,31 @@ EMSCRIPTEN_BINDINGS(efficiencyImprovement)
         .function("getNewEnergyInput", &EfficiencyImprovement::getNewEnergyInput);
 }
 // energyEquivalencyElectric
-EMSCRIPTEN_BINDINGS(energyEquivalencyElectric)
-{
+EMSCRIPTEN_BINDINGS(energyEquivalencyElectric) {
     class_<ElectricalEnergyEquivalency>("ElectricalEnergyEquivalency")
         .constructor<double, double, double>()
         .function("getElectricalHeatInput", &ElectricalEnergyEquivalency::getElectricalHeatInput);
 }
 
 // energyEquivalencyFuel
-EMSCRIPTEN_BINDINGS(energyEquivalencyFuel)
-{
+EMSCRIPTEN_BINDINGS(energyEquivalencyFuel) {
     class_<FuelFiredEnergyEquivalency>("FuelFiredEnergyEquivalency")
         .constructor<double, double, double>()
         .function("getFuelFiredHeatInput", &FuelFiredEnergyEquivalency::getFuelFiredHeatInput);
 }
 
 // flowCalculations
-EMSCRIPTEN_BINDINGS(flowCalculations)
-{
+EMSCRIPTEN_BINDINGS(flowCalculations) {
     class_<FlowCalculationsEnergyUse>("FlowCalculationsEnergyUse")
-        .constructor<FlowCalculationsEnergyUse::Gas, double, double, double, FlowCalculationsEnergyUse::Section, double, double, double, double, double, double>()
+        .constructor<FlowCalculationsEnergyUse::Gas, double, double, double, FlowCalculationsEnergyUse::Section, double,
+                     double, double, double, double, double>()
         .function("getFlow", &FlowCalculationsEnergyUse::getFlow)
         .function("getHeatInput", &FlowCalculationsEnergyUse::getHeatInput)
         .function("getTotalFlow", &FlowCalculationsEnergyUse::getTotalFlow);
 }
 
 // o2Enrichment
-EMSCRIPTEN_BINDINGS(o2Enrichment)
-{
+EMSCRIPTEN_BINDINGS(o2Enrichment) {
     class_<O2Enrichment>("O2Enrichment")
         .constructor<double, double, double, double, double, double, double, double, double>()
         .function("getAvailableHeat", &O2Enrichment::getAvailableHeat)
@@ -82,8 +77,7 @@ EMSCRIPTEN_BINDINGS(o2Enrichment)
 }
 
 // humidityRatio
-EMSCRIPTEN_BINDINGS(humidityRatio)
-{
+EMSCRIPTEN_BINDINGS(humidityRatio) {
     class_<HumidityRatio>("HumidityRatio")
         .constructor<double, double, double, double>()
         .function("getHumidityRatioUsingRH", &HumidityRatio::getHumidityRatioUsingRH)

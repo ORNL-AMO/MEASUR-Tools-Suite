@@ -1,5 +1,6 @@
-#include "catch.hpp"
 #include "processHeat/losses/WaterAssessment.h"
+
+#include "catch.hpp"
 
 TEST_CASE("Calculate ProcessWaterUse", "[ProcessWaterUse]") {
     auto output = WaterAssessment().calculateProcessWaterUse(1000, 700, 50, 0.2);

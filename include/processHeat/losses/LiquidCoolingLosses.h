@@ -15,10 +15,11 @@
 /**
  * Liquid Cooling Losses class
  * Contains all of the properties of a cooling system and its liquid media.
- * Used to calculateThermalResistance how much heat loss is caused by the cooling components and their cooling media (a liquid).
+ * Used to calculateThermalResistance how much heat loss is caused by the cooling components and their cooling media (a
+ * liquid).
  */
 class LiquidCoolingLosses {
-public:
+  public:
     /**
      * Constructor
      * @param flowRate double, Rate of flow. Units are gpm,
@@ -29,19 +30,10 @@ public:
      * @param correctionFactor double, Correction factor - unitless
      */
 
-    LiquidCoolingLosses(double flowRate,
-                        double density,
-                        double initialTemperature,
-                        double outletTemperature,
-                        double specificHeat,
-                        double correctionFactor)
-            : flowRate(flowRate),
-              density(density),
-              initialTemperature(initialTemperature),
-              outletTemperature(outletTemperature),
-              specificHeat(specificHeat),
-              correctionFactor(correctionFactor)
-    {
+    LiquidCoolingLosses(double flowRate, double density, double initialTemperature, double outletTemperature,
+                        double specificHeat, double correctionFactor)
+        : flowRate(flowRate), density(density), initialTemperature(initialTemperature),
+          outletTemperature(outletTemperature), specificHeat(specificHeat), correctionFactor(correctionFactor) {
         heatLoss = 0.0;
     }
 
@@ -51,82 +43,62 @@ public:
      * Gets the flow rate
      * @return double, flow rate in gpm
      */
-    double getFlowRate() const {
-        return flowRate;
-    }
+    double getFlowRate() const { return flowRate; }
 
     /**
      * Sets the flow rate
      * @param flowRate double, flow rate in gpm
      */
-    void setFlowRate(double flowRate) {
-        this->flowRate = flowRate;
-    }
+    void setFlowRate(double flowRate) { this->flowRate = flowRate; }
 
     /**
      * Gets the density
      * @return double, denisty in lb/cu.ft
      */
-    double getDensity() const {
-        return density;
-    }
+    double getDensity() const { return density; }
 
     /**
      * Sets the density
      * @param density double, density in lb/cu.ft
      */
-    void setDensity(double density) {
-        this->density = density;
-    }
+    void setDensity(double density) { this->density = density; }
 
     /**
      * Gets the initial temperature
      * @return double, initial temperature in °F
      */
-    double getInitialTemperature() const {
-        return initialTemperature;
-    }
+    double getInitialTemperature() const { return initialTemperature; }
 
     /**
      * Sets the initial temperature
      * @param initialTemperature double, initial temperature in °F
      */
-    void setInitialTemperature(double initialTemperature) {
-        this->initialTemperature = initialTemperature;
-    }
+    void setInitialTemperature(double initialTemperature) { this->initialTemperature = initialTemperature; }
 
     /**
      * Gets the outlet temperature
      * @return double, outlet temperature in °F
      */
-    double getOutletTemperature() const {
-        return outletTemperature;
-    }
+    double getOutletTemperature() const { return outletTemperature; }
 
     /**
      * Sets the outlet temperature
      * @param outletTemperature double, outlet temperature in °F
      */
-    void setOutletTemperature(double outletTemperature) {
-        this->outletTemperature = outletTemperature;
-    }
+    void setOutletTemperature(double outletTemperature) { this->outletTemperature = outletTemperature; }
 
     /**
      * Gets the specific heat
      * @return double, specific heat in btu/(lb*°F)
      */
-    double getSpecificHeat() const {
-        return specificHeat;
-    }
+    double getSpecificHeat() const { return specificHeat; }
 
     /**
      * Sets the specific heat
      * @param specificHeat double, specific heat in btu/(lb*°F)
      *
      */
-    void setSpecificHeat(double specificHeat) {
-        this->specificHeat = specificHeat;
-    }
+    void setSpecificHeat(double specificHeat) { this->specificHeat = specificHeat; }
 
     /**
      * Gets the total heat loss for cooling
@@ -134,7 +106,7 @@ public:
      */
     double getHeatLoss();
 
-private:
+  private:
     // In values
     double flowRate;
     double density;
@@ -145,4 +117,4 @@ private:
     // Out value
     double heatLoss;
 };
-#endif //TOOLS_SUITE_LIQUIDCOOLINGLOSSES_H
+#endif // TOOLS_SUITE_LIQUIDCOOLINGLOSSES_H

@@ -19,26 +19,26 @@
  * Used to calculateThermalResistance the heat loss caused by the exhaust gas coming out of the electric arc furnace.
  */
 class ExhaustGasEAF {
-public:
+  public:
     /**
      * Constructor for the exhaust gas EAF heat loss with all inputs specified
-     * @param offGasTemp double, temperature of exhaust gases from EAF before the gases mix with outside air measured in °F
+     * @param offGasTemp double, temperature of exhaust gases from EAF before the gases mix with outside air measured in
+     * °F
      * @param CO double, % of CO in exhaust gas
      * @param H2 double, % of H2 in exhaust gas
      * @param combustibleGases double, average value of combustible gases % in exhaust gases
      * @param vfr double, (volume flow rate) total volume of exhaust gases measured in cfm
      * @param dustLoading double, dust loading for exhaust gases measured in s/scf (number of dust particles per scf)
      * */
-    ExhaustGasEAF(const double offGasTemp, const double CO, const double H2,
-                  const double combustibleGases, const double vfr, const double dustLoading)
-            : offGasTemp(offGasTemp), CO(CO), H2(H2), combustibleGases(combustibleGases),
-              vfr(vfr), dustLoading(dustLoading)
-    {}
+    ExhaustGasEAF(const double offGasTemp, const double CO, const double H2, const double combustibleGases,
+                  const double vfr, const double dustLoading)
+        : offGasTemp(offGasTemp), CO(CO), H2(H2), combustibleGases(combustibleGases), vfr(vfr),
+          dustLoading(dustLoading) {}
 
     double getTotalHeatExhaust();
 
-private:
+  private:
     const double offGasTemp, CO, H2, combustibleGases, vfr, dustLoading;
 };
 
-#endif //TOOLS_SUITE_EXHAUSTGASEAF_H
+#endif // TOOLS_SUITE_EXHAUSTGASEAF_H

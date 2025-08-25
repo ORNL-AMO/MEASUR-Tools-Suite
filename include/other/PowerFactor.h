@@ -2,8 +2,8 @@
  * @file Header file for Power Factor (pf) Calculations
  *
  * @brief Power Triangle, relationship of P Q S Φ and pf
- *        Calculate Apparent Power S, Real Power P, Reactive Power Q, Phase Angle Φ, Power Factor pf and Capacitance based on inputs.
- *        Inputs Combinations must include two known parameters viz
+ *        Calculate Apparent Power S, Real Power P, Reactive Power Q, Phase Angle Φ, Power Factor pf and Capacitance
+ * based on inputs. Inputs Combinations must include two known parameters viz
  *         1. Apparent Power +
  *            a. Real Power
  *            b. Reactive Power
@@ -28,7 +28,7 @@
 #include <cmath>
 
 class PowerFactor {
-public:
+  public:
     enum Mode {
         ApparentPower_RealPower,
         ApparentPower_ReactivePower,
@@ -42,21 +42,20 @@ public:
     };
     struct Output {
         Output(double realPower, double reactivePower, double apparentPower, double powerFactor, double phaseAngle,
-               double realDemand, double demandPenalty, double proposedReactivePower, double proposedCapacitance) :
-               realPower(realPower), reactivePower(reactivePower), apparentPower(apparentPower),
-               powerFactor(powerFactor), phaseAngle(phaseAngle),
-               realDemand(realDemand), demandPenalty(demandPenalty),
-               proposedReactivePower(proposedReactivePower), proposedCapacitance(proposedCapacitance) {}
+               double realDemand, double demandPenalty, double proposedReactivePower, double proposedCapacitance)
+            : realPower(realPower), reactivePower(reactivePower), apparentPower(apparentPower),
+              powerFactor(powerFactor), phaseAngle(phaseAngle), realDemand(realDemand), demandPenalty(demandPenalty),
+              proposedReactivePower(proposedReactivePower), proposedCapacitance(proposedCapacitance) {}
 
-        Output() = default;
-        double realPower = 0, reactivePower = 0, apparentPower = 0, powerFactor = 0, phaseAngle = 0,
-        realDemand = 0, demandPenalty = 0, proposedReactivePower = 0, proposedCapacitance = 0;
+        Output()         = default;
+        double realPower = 0, reactivePower = 0, apparentPower = 0, powerFactor = 0, phaseAngle = 0, realDemand = 0,
+               demandPenalty = 0, proposedReactivePower = 0, proposedCapacitance = 0;
     };
 
     /**
      * @param no arguments
      */
-    PowerFactor()= default;
+    PowerFactor() = default;
 
     /**
      *
@@ -85,8 +84,8 @@ public:
      */
     Output calculate(Mode mode, double input1, double input2, double inputPowerFactor = 0.95);
 
-private:
+  private:
     double realPower = 0, reactivePower = 0, apparentPower = 0, powerFactor = 0, phaseAngle = 0;
 };
 
-#endif //TOOLS_SUITE_POWERFACTOR_H
+#endif // TOOLS_SUITE_POWERFACTOR_H
