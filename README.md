@@ -29,26 +29,32 @@ The npm packages can be downloaded and install from [registry](https://www.npmjs
 - Emscripten (emsdk) - Follow instructions for install https://emscripten.org/docs/getting_started/downloads.html
 
 #### Node
-
 - Node LTS [https://nodejs.org/en/](https://nodejs.org/en/) 
 
-### Building
+### Build WebAssembly Module
+- Emscripten (emsdk) must be installed and activated
+- run `emcmake cmake -DBUILD_WASM=ON`
+  -   Note: If multiple compilers are present and default environment is not used, use -G "XXX Makefiles",
+        example for windows using MinGW => `emcmake cmake -D BUILD_WASM=ON .. -G "MinGW Makefiles"` 
+- run `emmake make`
+- Build artifacts: `client.js` and `client.wasm` will be created in the `/bin` directory. `client.js` is the glue code for initializing the WASM module, place the two files in the same directory within your project and execute the `client.js` script.
 
-- `cd` into the emsdk directory: 
-    - run `./emsdk install latest` followed by `./emsdk activate latest`
-    - Activate PATH and other environment variables by running `source ./emsdk_env.sh` or on Windows run `emsdk_env.bat`
-- `cd` into MEASUR-Tools-Suite directory:  
-    - create directory `build-wasm` and cd into it 
-    - run `emcmake cmake -DBUILD_WASM=ON ..` 
-        -   Note: If multiple compilers are present and default environment is not used, use -G "XXX Makefiles",
-        example for windows using MinGW => `emcmake cmake -D BUILD_WASM=ON .. -G "MinGW Makefiles"`  
-    - run `emmake make`
+### WASM Initialization Example
 
-### Unit Tests
+Below is an illustration of the WASM initialization process:
 
-- To run the WASM unit tests:
-  - Install node_modules dependencies: `cd` into MEASUR-Tools-Suite directory and  
-    run `npm install` followed by `npm run test-wasm`
+![WASM Initialization](assets/wasm-initialization.png)
+
+### Running WASM Unit Tests
+
+- Follow the "Build WebAssembly Module" steps above
+- run `npm install` to install node dependencies
+- run `npm run test-wasm`
+- a simple express server will be server to `localhost:3000` and a batch of script testing files will be executed
+
+
+### C++ Unit Tests
+
 - To build C++ unit tests, ensure the `BUILD_TESTING` flag is set (which is default) then: 
   - create directory `build-cpp` and cd into it
   - run `'cmake ..'`  
@@ -81,3 +87,5 @@ To make it easy for developers local building and testing, it is dockerized. To 
     - Note: 
       - Every time the container is started it will rebuild the application, to check status run `docker compose logs --tail 5` 
       - **This is not a tutorial for docker, assumption is made the user is knowledgeable.**
+
+
