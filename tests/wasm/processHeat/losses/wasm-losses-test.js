@@ -403,7 +403,7 @@ function wallLosses() {
         surfaceEmissivity: 0.9, conditionFactor: 1.394, correctionFactor: 1
     };
     var wallLosses = new Module.WallLosses(inp.surfaceArea, inp.ambientTemperature, inp.surfaceTemperature, inp.windVelocity, inp.surfaceEmissivity, inp.conditionFactor, inp.correctionFactor);
-    var heatLoss = wallLosses.getHeatLoss()
+    var heatLoss = wallLosses.totalHeatLoss()
     testNumberValue(heatLoss, 404627.551342992, "Process Heat Wall Losses (heatLoss)");
     wallLosses.delete();
 }

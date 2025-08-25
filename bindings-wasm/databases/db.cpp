@@ -13,7 +13,7 @@
 #include <processHeat/losses/GasFlueGasMaterial.h>
 #include <processHeat/losses/SolidLiquidFlueGasMaterial.h>
 #include <processHeat/losses/Atmosphere.h>
-#include <processHeat/losses/WallLosses.h>
+#include <processHeat/losses/wall_losses.h>
 #include <motorDriven/motor/MotorData.h>
 #include <emscripten/bind.h>
 
