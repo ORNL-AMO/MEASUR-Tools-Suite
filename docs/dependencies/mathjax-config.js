@@ -13,7 +13,7 @@ window.MathJax = {
         ],
         // Path to custom extensions (relative to HTML root)
         paths: {
-            custom: '../dependencies'
+            custom: './'
         }
     },
     tex: {
