@@ -30,4 +30,4 @@ jobs:
             emmake make
 
       - name: Run Mocha tests
-        run: npm test-wasm-mocha
+        run: npm run test-wasm-mocha
