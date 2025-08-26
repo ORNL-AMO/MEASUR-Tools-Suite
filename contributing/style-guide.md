@@ -245,73 +245,56 @@ void processData(const std::vector<int>& data) {
 
 ## Naming
 
-Naming conventions are crucial for maintaining a consistent and readable codebase. This section outlines the naming conventions for various elements in the code.
+Use the following naming conventions for various elements in the codebase to ensure consistency and readability.
 
 
 ### Files
 
-Use `snake_case` suffixed with the appropriate file extension (`.h`, `.hpp`, or `.cpp`) for file names:
-
-```cpp
-my_class.h
-my_class.cpp
-```
+Use `snake_case` suffixed with the appropriate file extension (`.h`, `.hpp`, or `.cpp`) for file names (e.g., `my_class.h`, `my_class.cpp`).
 
 > [!NOTE]
-> This project uses `.h` for header files and `.cpp` for source files. 
-> File names should be descriptive and reflect the content or purpose of the file.
+> This project uses `.h` for header files and `.cpp` for source files.
 
 
 ### Namespaces
 
-Namespaces names use `snake_case`:
-
-```cpp
-namespace my_project {
-namespace utils {
-
-// Utility functions go here.
-
-}  // namespace utils
-}  // namespace my_project
-```
-
-> [!NOTE]
-> All code in the namespace should be under one or more directories with the same name as the namespace.
+Use `snake_case` for namespace names (e.g., `my_project`, `utils`).
 
 
 ### Classes and Structs
 
-Use `PascalCase` for class and struct names:
-
-```cpp
-class MyClass {
-    // Class members
-};
-
-struct MyStruct {
-    // Struct members
-};
-```
+Use `PascalCase` for class and struct names (e.g., `MyClass`, `MyStruct`).
 
 
 ### Functions and Methods
 
-Use `camelCase` for function and method names:
+Use `camelCase` for function and method names (e.g., `myFunction`, `computeArea`).
+
+Use verbs or verb phrases for function names to indicate actions.
+
+- Accessor methods (getters) should be named after the property they return, without a `get` prefix (e.g., `eyeColor()`).
+- Mutator methods (setters) should be named with a `set` prefix followed by the property name (e.g., `setEyeColor()`).
+
+#### Example
 
 ```cpp
-void myFunction();
-
-class MyClass {
+class Dog {
 public:
-    void myMethod();
+    std::string eyeColor() const { return eye_color_; } // Accessor for eye_color_
+
+    void setEyeColor(const std::string& color) { eye_color_ = color; } // Mutator for eye_color_
+
+private:
+    std::string eye_color_;
 };
 ```
 
 
 ### Variables
 
-Local variables and function parameters use `snake_case`:
+Use `snake_case` for variable names and function parameters.
+
+#### Example
 
 ```cpp
 void processData(int input_value) {
@@ -322,44 +305,36 @@ void processData(int input_value) {
 
 ### Member Variables
 
-There are two common conventions for member variables:
+Use `snake_case` for member variable names, with a trailing underscore (`_`) to distinguish them from local variables and parameters.
 
-1. Underscore suffix:
-
-   ```cpp
-   class MyClass {
-   private:
-       int value_;
-       std::string name_;
-   };
-   ```
-   
-2. `m_` prefix:
-   
-   ```cpp
-   class MyClass {
-   private:
-       int m_value;
-       std::string m_name;
-   };
-   ```
-
-> [!NOTE]
-> This project uses the underscore suffix convention for class member variables. 
-
-Struct member variables are named like ordinary nonmember variables, without the trailing underscore:
+#### Example 
 
 ```cpp
-struct MyStruct {
-    int value;
-    std::string name;
+class Dog {
+private:
+    std::string name_;
+    int age_;
+    std::string eye_color_;
+};
+```
+
+Use `snake_case` for struct member variables without a trailing underscore.
+
+#### Example
+
+```cpp
+struct Point2 {
+    double x;
+    double y;
 };
 ```
 
 
 ### Constants and Enums
 
-Use `PascalCase` for enum names and `PascalCase` prefixed with `k` for constants and enum values:
+Use `PascalCase` for enum names and `PascalCase` prefixed with `k` for constants and enum values.
+
+#### Example
 
 ```cpp
 enum class Color {
@@ -375,7 +350,9 @@ constexpr double kPi = 3.14159;
 
 ### Aliases
 
-Use `PascalCase` for type aliases defined with `using`:
+Use `PascalCase` for type aliases.
+
+#### Example
 
 ```cpp
 using StringList = std::vector<std::string>;
@@ -384,7 +361,9 @@ using StringList = std::vector<std::string>;
 
 ### Templates
 
-Use `PascalCase` for template parameters:
+Use `PascalCase` for template parameters.
+
+#### Example
 
 ```cpp
 template <typename InputType>
@@ -394,7 +373,9 @@ InputType processInput(InputType input);
 
 ### Macros
 
-Use `UPPER_CASE` with a project-specific prefix for macro names:
+Use `UPPER_CASE` with a project-specific prefix for macro names.
+
+#### Example
 
 ```cpp
 #define MYPROJECT_MAX(a, b) ((a) > (b) ? (a) : (b))
