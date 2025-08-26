@@ -2,8 +2,8 @@
   "name": "measur-tools-suite",
   "version": "1.0.11",
   "engines": {
-    "node": "20.16.0",
-    "npm": "10.8.1"
+    "node": "20.19.4",
+    "npm": "10.8.2"
   },
   "scripts": {
     "test-wasm-mocha": "mocha tests/wasm-mocha/**/*.test.js"
