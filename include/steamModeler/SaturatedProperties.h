@@ -19,7 +19,7 @@
  * Used to calculateThermalResistance the saturated temperature given the saturated pressure.
  */
 class SaturatedTemperature {
-public:
+  public:
     /**
      * Constructor for the saturated temperature calculator
      * @param saturatedPressure double, saturated pressure in MPa
@@ -31,17 +31,16 @@ public:
      */
     double calculate() const;
 
-private:
+  private:
     const double saturatedPressure;
 };
-
 
 /**
  * Saturated pressure class
  * Used to calculateThermalResistance the saturated pressure given the saturated temperature.
  */
 class SaturatedPressure {
-public:
+  public:
     /**
      * Constructor for the saturated pressure calculator
      * @param saturatedTemperature double, saturated temperature in Kelvin
@@ -54,32 +53,28 @@ public:
      */
     double calculate() const;
 
-private:
+  private:
     const double saturatedTemperature;
 };
-
-
 
 /**
  * Saturated properties class
  * Used to calculateThermalResistance the properties of a saturated substance.
  */
 class SaturatedProperties {
-public:
+  public:
     /**
      * Constructor for the saturated properties calculator
      * @param saturatedPressure double, saturated pressure in MPa
      * @param saturatedTemperature double, saturated temperature in Kelvin
      * */
     SaturatedProperties(double saturatedPressure, double saturatedTemperature)
-            : saturatedPressure(saturatedPressure),
-              saturatedTemperature(saturatedTemperature) {}
+        : saturatedPressure(saturatedPressure), saturatedTemperature(saturatedTemperature) {}
 
     SteamSystemModelerTool::SaturatedPropertiesOutput calculate();
 
-private:
+  private:
     const double saturatedPressure, saturatedTemperature;
 };
 
-
-#endif //TOOLS_SUITE_SATURATEDPROPERTIES_H
+#endif // TOOLS_SUITE_SATURATEDPROPERTIES_H

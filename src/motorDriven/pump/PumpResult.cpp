@@ -9,16 +9,16 @@
  *
  */
 
+#include "motorDriven/pump/PumpResult.h"
+
 #include "motorDriven/motor/MotorShaftPower.h"
 #include "motorDriven/motor/OptimalMotorPower.h"
 #include "motorDriven/motor/OptimalMotorShaftPower.h"
-#include "motorDriven/pump/PumpResult.h"
 #include "motorDriven/pumpFan/MoverEfficiency.h"
-#include "motorDriven/pumpFan/OptimalPumpShaftPower.h"
 #include "motorDriven/pumpFan/MoverShaftPower.h"
+#include "motorDriven/pumpFan/OptimalPumpShaftPower.h"
 
-PumpResult::Output PumpResult::calculateExisting()
-{
+PumpResult::Output PumpResult::calculateExisting() {
     /**
      * 1a	Calculate motor shaft power from measured power, OR
      * 1b	Calculate motor shaft power from measured current, voltage
@@ -34,11 +34,11 @@ PumpResult::Output PumpResult::calculateExisting()
      * 4	Calculate pump efficiency
      * 5	Calculate annual energy and energy cost
      */
-    MotorShaftPower motorShaftPower(motor.motorRatedPower, fieldData.motorPower, motor.motorRpm,
-                                    motor.lineFrequency, motor.efficiencyClass, motor.specifiedEfficiency,
-                                    motor.motorRatedVoltage, motor.fullLoadAmps, fieldData.voltage,
-                                    fieldData.loadEstimationMethod, fieldData.motorAmps);
-    auto const output = motorShaftPower.calculate();
+    MotorShaftPower motorShaftPower(motor.motorRatedPower, fieldData.motorPower, motor.motorRpm, motor.lineFrequency,
+                                    motor.efficiencyClass, motor.specifiedEfficiency, motor.motorRatedVoltage,
+                                    motor.fullLoadAmps, fieldData.voltage, fieldData.loadEstimationMethod,
+                                    fieldData.motorAmps);
+    auto const      output = motorShaftPower.calculate();
 
     // existing.motorShaftPower = output.shaftPower;
     // existing.motorCurrent = output.current;
@@ -50,16 +50,19 @@ PumpResult::Output PumpResult::calculateExisting()
 
     // existing.motorRatedPower = motor.motorRatedPower;
 
-    //fix this with proper type and attributes, need to store drive efficiency and get it in return object
-    MoverShaftPower::Output const moverShaftPower = MoverShaftPower(output.shaftPower, pumpInput.drive, pumpInput.specifiedEfficiency).calculate();
-    // MoverShaftPower::Output const moverShaftPower = MoverShaftPower(existing.motorShaftPower, pumpInput.drive, pumpInput.specifiedEfficiency).calculate();
-    // existing.moverShaftPower = moverShaftPower.moverShaftPower;
+    // fix this with proper type and attributes, need to store drive efficiency and get it in return object
+    MoverShaftPower::Output const moverShaftPower =
+        MoverShaftPower(output.shaftPower, pumpInput.drive, pumpInput.specifiedEfficiency).calculate();
+    // MoverShaftPower::Output const moverShaftPower = MoverShaftPower(existing.motorShaftPower, pumpInput.drive,
+    // pumpInput.specifiedEfficiency).calculate(); existing.moverShaftPower = moverShaftPower.moverShaftPower;
     // existing.driveEfficiency = moverShaftPower.driveEfficiency;
 
     double pumpEfficiency;
-    pumpEfficiency = MoverEfficiency(pumpInput.specificGravity, fieldData.flowRate, fieldData.head,
-                                     moverShaftPower.moverShaftPower).calculate();
-    // existing.pumpEfficiency = MoverEfficiency(pumpInput.specificGravity, fieldData.flowRate, fieldData.head, existing.moverShaftPower).calculate();
+    pumpEfficiency =
+        MoverEfficiency(pumpInput.specificGravity, fieldData.flowRate, fieldData.head, moverShaftPower.moverShaftPower)
+            .calculate();
+    // existing.pumpEfficiency = MoverEfficiency(pumpInput.specificGravity, fieldData.flowRate, fieldData.head,
+    // existing.moverShaftPower).calculate();
 
     // Annual energy, MWh/year = kWe * operating hours/1000
     double annualEnergy = output.power * operatingHours / 1000;
@@ -69,13 +72,13 @@ PumpResult::Output PumpResult::calculateExisting()
     double annualCost = annualEnergy * unitCost;
     // existing.annualCost = existing.annualEnergy * unitCost;
 
-    return Output(pumpEfficiency, motor.motorRatedPower, output.shaftPower, moverShaftPower.moverShaftPower, output.efficiency,
-                  output.powerFactor, output.current, output.power, annualEnergy, annualCost, output.loadFactor, moverShaftPower.driveEfficiency, output.estimatedFLA);
+    return Output(pumpEfficiency, motor.motorRatedPower, output.shaftPower, moverShaftPower.moverShaftPower,
+                  output.efficiency, output.powerFactor, output.current, output.power, annualEnergy, annualCost,
+                  output.loadFactor, moverShaftPower.driveEfficiency, output.estimatedFLA);
     // return existing;
 }
 
-PumpResult::Output PumpResult::calculateModified()
-{
+PumpResult::Output PumpResult::calculateModified() {
     /**
          * Steps for calculating the modified values:
      *  1. Calculate fluid power and pump shaft power
@@ -95,11 +98,12 @@ PumpResult::Output PumpResult::calculateModified()
     // modified.pumpEfficiency = pumpInput.pumpEfficiency;
     OptimalPumpShaftPower optimalPumpShaftPower(fieldData.flowRate, fieldData.head, pumpInput.specificGravity,
                                                 pumpInput.pumpEfficiency);
-    double moverShaftPower = optimalPumpShaftPower.calculate();
+    double                moverShaftPower = optimalPumpShaftPower.calculate();
     // modified.moverShaftPower = optimalPumpShaftPower.calculate();
 
     OptimalMotorShaftPower modifiedMotorShaftPower(moverShaftPower, pumpInput.drive, pumpInput.specifiedEfficiency);
-    // OptimalMotorShaftPower modifiedMotorShaftPower(modified.moverShaftPower, pumpInput.drive, pumpInput.specifiedEfficiency);
+    // OptimalMotorShaftPower modifiedMotorShaftPower(modified.moverShaftPower, pumpInput.drive,
+    // pumpInput.specifiedEfficiency);
 
     OptimalMotorShaftPower::Output const motorShaftPowerOutput = modifiedMotorShaftPower.calculate();
     // modified.motorShaftPower = motorShaftPowerOutput.motorShaftPower;
@@ -108,8 +112,8 @@ PumpResult::Output PumpResult::calculateModified()
     // modified.motorRatedPower = motor.motorRatedPower;
 
     OptimalMotorPower modifiedMotorPower(motor.motorRatedPower, motor.motorRpm, motor.lineFrequency,
-                                         motor.efficiencyClass, motor.specifiedEfficiency,
-                                         motor.motorRatedVoltage, fieldData.voltage, motorShaftPowerOutput.motorShaftPower);
+                                         motor.efficiencyClass, motor.specifiedEfficiency, motor.motorRatedVoltage,
+                                         fieldData.voltage, motorShaftPowerOutput.motorShaftPower);
 
     // OptimalMotorPower modifiedMotorPower(modified.motorRatedPower, motor.motorRpm, motor.lineFrequency,
     //                                      motor.efficiencyClass, motor.specifiedEfficiency,
@@ -129,14 +133,16 @@ PumpResult::Output PumpResult::calculateModified()
     double annualCostCalculation = annualEnergyCalculation * unitCost;
 
     // Annual Savings potential
-    //annualSavingsPotential = existing.annualCost - modified.annualCost;
+    // annualSavingsPotential = existing.annualCost - modified.annualCost;
     annualSavingsPotential = 0.0;
     // Optimization Rating
-    //optimizationRating = modified.motorPower / existing.motorPower;
+    // optimizationRating = modified.motorPower / existing.motorPower;
     optimizationRating = 0.0;
 
-    return Output(pumpInput.pumpEfficiency, motor.motorRatedPower, motorShaftPowerOutput.motorShaftPower, moverShaftPower, output.efficiency,
-                  output.powerFactor, output.current, output.power, annualEnergyCalculation, annualCostCalculation, output.loadFactor, motorShaftPowerOutput.driveEfficiency);
+    return Output(pumpInput.pumpEfficiency, motor.motorRatedPower, motorShaftPowerOutput.motorShaftPower,
+                  moverShaftPower, output.efficiency, output.powerFactor, output.current, output.power,
+                  annualEnergyCalculation, annualCostCalculation, output.loadFactor,
+                  motorShaftPowerOutput.driveEfficiency);
 
     // return modified;
 }

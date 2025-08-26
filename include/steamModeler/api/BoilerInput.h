@@ -7,12 +7,12 @@
  * Steam Modeler boiler input data.
  */
 class BoilerInput {
-public:
+  public:
     BoilerInput(double fuelType, double fuel, double combustionEfficiency, double blowdownRate, bool blowdownFlashed,
                 bool preheatMakeupWater, double steamTemperature, double deaeratorVentRate, double deaeratorPressure,
                 double approachTemperature);
 
-    friend std::ostream &operator<<(std::ostream &stream, const BoilerInput &bi);
+    friend std::ostream& operator<<(std::ostream& stream, const BoilerInput& bi);
 
     double getFuelType() const;
 
@@ -34,17 +34,17 @@ public:
 
     double getApproachTemperature() const;
 
-private:
+  private:
     double fuelType;
     double fuel;
     double combustionEfficiency;
     double blowdownRate;
-    bool blowdownFlashed;
-    bool preheatMakeupWater;
+    bool   blowdownFlashed;
+    bool   preheatMakeupWater;
     double steamTemperature;
     double deaeratorVentRate;
     double deaeratorPressure;
     double approachTemperature;
 };
 
-#endif //TOOLS_SUITE_BOILERINPUT_H
+#endif // TOOLS_SUITE_BOILERINPUT_H

@@ -16,10 +16,11 @@
 /**
  * Gas Cooling Losses class
  * Contains all of the properties of a cooling system and its gas media.
- * Used to calculateThermalResistance how much heat loss is caused by the cooling components and their cooling media (a gas).
+ * Used to calculateThermalResistance how much heat loss is caused by the cooling components and their cooling media (a
+ * gas).
  */
 class GasCoolingLosses {
-public:
+  public:
     /**
      * Constructor for the gas cooling losses (including air) with all inputs specified
      *
@@ -31,15 +32,10 @@ public:
      *
      * */
 
-
     GasCoolingLosses(const double flowRate, const double initialTemperature, const double finalTemperature,
                      const double specificHeat, const double correctionFactor, const double gasDensity)
-            : flowRate(flowRate),
-              initialTemperature(initialTemperature),
-              finalTemperature(finalTemperature),
-              specificHeat(specificHeat),
-              correctionFactor(correctionFactor),
-              gasDensity(gasDensity) {}
+        : flowRate(flowRate), initialTemperature(initialTemperature), finalTemperature(finalTemperature),
+          specificHeat(specificHeat), correctionFactor(correctionFactor), gasDensity(gasDensity) {}
 
     /**
      * Gets the total heat loss
@@ -47,7 +43,7 @@ public:
      */
     double getHeatLoss() const;
 
-private:
+  private:
     const double flowRate, initialTemperature, finalTemperature, specificHeat, correctionFactor, gasDensity;
 };
-#endif //TOOLS_SUITE_GASCOOLINGLOSSES_H
+#endif // TOOLS_SUITE_GASCOOLINGLOSSES_H

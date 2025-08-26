@@ -16,9 +16,8 @@
  * Used to find the flow and the heat input of a fuel-fired furnace.
  */
 class FlowCalculationsEnergyUse {
-public:
-
-    ///enum class for gas types
+  public:
+    /// enum class for gas types
     enum class Gas {
         AIR,
         AMMONIA_DISSOCIATED,
@@ -36,12 +35,8 @@ public:
         OTHER
     };
 
-    ///enum class for section type
-    enum class Section {
-        SQUARE_EDGE,
-        SHARP_EDGE,
-        VENTURI
-    };
+    /// enum class for section type
+    enum class Section { SQUARE_EDGE, SHARP_EDGE, VENTURI };
 
     /**
      *
@@ -61,39 +56,24 @@ public:
      *
      *
      * */
-    FlowCalculationsEnergyUse(
-            Gas gasType,
-            double specificGravity,
-            double orificeDiameter,
-            double insidePipeDiameter,
-            Section sectionType,
-            double dischargeCoefficient,
-            double gasHeatingValue,
-            double gasTemperature,
-            double gasPressure,
-            double orificePressureDrop,
-            double operatingTime)
-            : gasType_(gasType),
-              specificGravity_(specificGravity),
-              orificeDiameter_(orificeDiameter),
-              insidePipeDiameter_(insidePipeDiameter),
-              sectionType_(sectionType),
-              dischargeCoefficient_(dischargeCoefficient),
-              gasHeatingValue_(gasHeatingValue),
-              gasTemperature_(gasTemperature),
-              gasPressure_(gasPressure),
-              orificePressureDrop_(orificePressureDrop),
-              operatingTime_(operatingTime)
+    FlowCalculationsEnergyUse(Gas gasType, double specificGravity, double orificeDiameter, double insidePipeDiameter,
+                              Section sectionType, double dischargeCoefficient, double gasHeatingValue,
+                              double gasTemperature, double gasPressure, double orificePressureDrop,
+                              double operatingTime)
+        : gasType_(gasType), specificGravity_(specificGravity), orificeDiameter_(orificeDiameter),
+          insidePipeDiameter_(insidePipeDiameter), sectionType_(sectionType),
+          dischargeCoefficient_(dischargeCoefficient), gasHeatingValue_(gasHeatingValue),
+          gasTemperature_(gasTemperature), gasPressure_(gasPressure), orificePressureDrop_(orificePressureDrop),
+          operatingTime_(operatingTime)
 
     {
-        area_ = 0.0;
+        area_                         = 0.0;
         adjustedDischargeCoefficient_ = 0.0;
-        pressureDrop_ = 0.0;
-        adjustedGasTemperature_ = 0.0;
-        adjustedGasPressure_ = 0.0;
-        flow_ = 0.0;
-        heatInput_ = 0.0;
-
+        pressureDrop_                 = 0.0;
+        adjustedGasTemperature_       = 0.0;
+        adjustedGasPressure_          = 0.0;
+        flow_                         = 0.0;
+        heatInput_                    = 0.0;
     }
 
     FlowCalculationsEnergyUse() = default;
@@ -103,9 +83,7 @@ public:
      *
      * @return Gas, type of gas
      */
-    Gas getGasType() const {
-        return gasType_;
-    }
+    Gas getGasType() const { return gasType_; }
 
     /**
      * Sets the type of gas
@@ -116,7 +94,7 @@ public:
     void setGasType(Gas gasType) {
         gasType_ = gasType;
 
-        switch(gasType) {
+        switch (gasType) {
             case Gas::AIR:
                 specificGravity_ = 1;
             case Gas::AMMONIA_DISSOCIATED:
@@ -153,9 +131,7 @@ public:
      *
      * @return double, specific gravity - unitless
      */
-    double getSpecificGravity() const {
-        return specificGravity_;
-    }
+    double getSpecificGravity() const { return specificGravity_; }
 
     /**
      * Sets the specific gravity using a value
@@ -163,18 +139,14 @@ public:
      * @param specificGravity double, specific gravity - unitless
      *
      */
-    void setSpecificGravity(double specificGravity) {
-        specificGravity_ = specificGravity;
-    }
+    void setSpecificGravity(double specificGravity) { specificGravity_ = specificGravity; }
 
     /**
      * Gets the diameter of orifice
      *
      * @return double, diameter of orifice in inches
      */
-    double getOrificeDiameter() const {
-        return orificeDiameter_;
-    }
+    double getOrificeDiameter() const { return orificeDiameter_; }
 
     /**
      * Sets the diameter of orifice
@@ -182,18 +154,14 @@ public:
      * @param orificeDiameter double, diameter of orifice
      *
      */
-    void setOrificeDiameter(double orificeDiameter) {
-        orificeDiameter_ = orificeDiameter;
-    }
+    void setOrificeDiameter(double orificeDiameter) { orificeDiameter_ = orificeDiameter; }
 
     /**
      * Gets the diameter of inside of pipe
      *
      * @return double, diameter of inside of pipe in inches
      */
-    double getInsidePipeDiameter() const {
-        return insidePipeDiameter_;
-    }
+    double getInsidePipeDiameter() const { return insidePipeDiameter_; }
 
     /**
      * Sets the diameter of inside of pipe
@@ -201,18 +169,14 @@ public:
      * @param insidePipeDiameter double, diameter of inside of pipe
      *
      */
-    void setInsidePipeDiameter(double insidePipeDiameter) {
-        insidePipeDiameter_ = insidePipeDiameter;
-    }
+    void setInsidePipeDiameter(double insidePipeDiameter) { insidePipeDiameter_ = insidePipeDiameter; }
 
     /**
      * Gets the type of section
      *
      * @return Section, type of section
      */
-    Section getSectionType() const {
-        return sectionType_;
-    }
+    Section getSectionType() const { return sectionType_; }
 
     /**
      * Sets the type of section
@@ -223,7 +187,7 @@ public:
     void setSectionType(Section sectionType) {
         sectionType_ = sectionType;
 
-        switch(sectionType) {
+        switch (sectionType) {
             case Section::SHARP_EDGE:
                 dischargeCoefficient_ = 0.6;
             case Section::SQUARE_EDGE:
@@ -238,9 +202,7 @@ public:
      *
      * @return double, coefficient of discharge - unitless
      */
-    double getDischargeCoefficient() const {
-        return dischargeCoefficient_;
-    }
+    double getDischargeCoefficient() const { return dischargeCoefficient_; }
 
     /**
      * Sets the coefficient of discharge
@@ -248,18 +210,14 @@ public:
      * @param dischargeCoefficient double coefficient of discharge - unitless
      *
      */
-    void setDischargeCoefficient(double dischargeCoefficient) {
-        dischargeCoefficient_ = dischargeCoefficient;
-    }
+    void setDischargeCoefficient(double dischargeCoefficient) { dischargeCoefficient_ = dischargeCoefficient; }
 
     /**
      * Gets the gas heating value
      *
      * @return double, gas heating value in Btu/scf
      */
-    double getGasHeatingValue() const {
-        return gasHeatingValue_;
-    }
+    double getGasHeatingValue() const { return gasHeatingValue_; }
 
     /**
      * Sets the gas heating value
@@ -267,18 +225,14 @@ public:
      * @param gasHeatingValue double, gas heating value in Btu/scf
      *
      */
-    void setGasHeatingValue(double gasHeatingValue) {
-        gasHeatingValue_ = gasHeatingValue;
-    }
+    void setGasHeatingValue(double gasHeatingValue) { gasHeatingValue_ = gasHeatingValue; }
 
     /**
      * Gets the temperature of gas in °F
      *
      * @return double, gas temperature in °F
      */
-    double getGasTemperature() const {
-        return gasTemperature_;
-    }
+    double getGasTemperature() const { return gasTemperature_; }
 
     /**
      * Sets the temperature of gas
@@ -286,18 +240,14 @@ public:
      * @param gasTemperature double, temperature of gas in °F
      *
      */
-    void setGasTemperature(double gasTemperature) {
-        gasTemperature_ = gasTemperature;
-    }
+    void setGasTemperature(double gasTemperature) { gasTemperature_ = gasTemperature; }
 
     /**
      * Gets the pressure of gas
      *
      * @return double, pressure of gas in Psig
      */
-    double getGasPressure() const {
-        return gasPressure_;
-    }
+    double getGasPressure() const { return gasPressure_; }
 
     /**
      * Sets the pressure of gas
@@ -305,18 +255,14 @@ public:
      * @param gasPressure double, pressure of gas in Psig
      *
      */
-    void setGasPressure(double gasPressure) {
-        gasPressure_ = gasPressure;
-    }
+    void setGasPressure(double gasPressure) { gasPressure_ = gasPressure; }
 
     /**
      * Gets the pressure drop at orifice
      *
      * @return double, pressure drop at orifice in inch W.C.
      */
-    double getOrificePressureDrop() const {
-        return orificePressureDrop_;
-    }
+    double getOrificePressureDrop() const { return orificePressureDrop_; }
 
     /**
      * Sets the pressure drop at orifice
@@ -324,18 +270,14 @@ public:
      * @param orificePressureDrop double, pressure drop at orifice in inch W.C.
      *
      */
-    void setOrificePressureDrop(double orificePressureDrop) {
-        orificePressureDrop_ = orificePressureDrop;
-    }
+    void setOrificePressureDrop(double orificePressureDrop) { orificePressureDrop_ = orificePressureDrop; }
 
     /**
      * Gets the operating time
      *
      * @return double, operating time in hrs
      */
-    double getOperatingTime() const {
-        return operatingTime_;
-    }
+    double getOperatingTime() const { return operatingTime_; }
 
     /**
      * Sets the operating time
@@ -343,10 +285,7 @@ public:
      * @param operatingTime double, operating time in hrs
      *
      */
-    void setOperatingTime(double operatingTime) {
-        operatingTime_ = operatingTime;
-    }
-
+    void setOperatingTime(double operatingTime) { operatingTime_ = operatingTime; }
 
     /**
      * Gets the area
@@ -397,28 +336,27 @@ public:
      */
     double getHeatInput();
 
-/**
- * Gets the total flow in scf
- *
- * @return double, total flow in scf
- */
+    /**
+     * Gets the total flow in scf
+     *
+     * @return double, total flow in scf
+     */
 
     double getTotalFlow();
 
-private:
+  private:
     // In values
-    FlowCalculationsEnergyUse::Gas gasType_;
-    double specificGravity_ = 0.0;
-    double orificeDiameter_ = 0.0;
-    double insidePipeDiameter_ = 0.0;
+    FlowCalculationsEnergyUse::Gas     gasType_;
+    double                             specificGravity_    = 0.0;
+    double                             orificeDiameter_    = 0.0;
+    double                             insidePipeDiameter_ = 0.0;
     FlowCalculationsEnergyUse::Section sectionType_;
-    double dischargeCoefficient_ = 0.0;
-    double gasHeatingValue_ = 0.0;
-    double gasTemperature_ = 0.0;
-    double gasPressure_ = 0.0;
-    double orificePressureDrop_ = 0.0;
-    double operatingTime_ = 0.0;
-
+    double                             dischargeCoefficient_ = 0.0;
+    double                             gasHeatingValue_      = 0.0;
+    double                             gasTemperature_       = 0.0;
+    double                             gasPressure_          = 0.0;
+    double                             orificePressureDrop_  = 0.0;
+    double                             operatingTime_        = 0.0;
 
     // Out values
     double area_;
@@ -431,6 +369,4 @@ private:
     double totalflow_;
 };
 
-
-
-#endif //TOOLS_SUITE_FLOWCALCULATIONSENERGYUSE_H
+#endif // TOOLS_SUITE_FLOWCALCULATIONSENERGYUSE_H

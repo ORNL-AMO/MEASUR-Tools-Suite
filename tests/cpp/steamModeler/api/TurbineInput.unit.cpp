@@ -1,12 +1,13 @@
-#include "catch.hpp"
 #include "steamModeler/api/TurbineInput.h"
+
+#include "catch.hpp"
 
 TEST_CASE("turbineInputConstructor", "[turbine input constructor]") {
     CondensingTurbine condensingTurbine =
-            CondensingTurbine(1, 1, 1, CondensingTurbineOperation::POWER_GENERATION, 1, 1);
-    PressureTurbine highToLowTurbine = PressureTurbine(1, 1, PressureTurbineOperation::POWER_GENERATION, 1, 1, true);
+        CondensingTurbine(1, 1, 1, CondensingTurbineOperation::POWER_GENERATION, 1, 1);
+    PressureTurbine highToLowTurbine    = PressureTurbine(1, 1, PressureTurbineOperation::POWER_GENERATION, 1, 1, true);
     PressureTurbine highToMediumTurbine = PressureTurbine(2, 2, PressureTurbineOperation::POWER_GENERATION, 2, 2, true);
-    PressureTurbine mediumToLowTurbine = PressureTurbine(3, 3, PressureTurbineOperation::POWER_GENERATION, 3, 3, true);
+    PressureTurbine mediumToLowTurbine  = PressureTurbine(3, 3, PressureTurbineOperation::POWER_GENERATION, 3, 3, true);
 
     auto actual = TurbineInput(condensingTurbine, highToLowTurbine, highToMediumTurbine, mediumToLowTurbine);
     CHECK(actual.getCondensingTurbine().getCondenserPressure() == condensingTurbine.getCondenserPressure());

@@ -27,17 +27,24 @@ The npm packages can be downloaded and install from [registry](https://www.npmjs
 #### Web Assembly Compilation SDK
 
 - Emscripten (emsdk) - Follow instructions for install https://emscripten.org/docs/getting_started/downloads.html
+- From the emsdk directory run `./emsdk install latest`
+- Then run `./emsdk activate latest`
+- Then run `source ./emsdk_env.sh` to set the environment variables in the current terminal session.
+  - On Windows use `emsdk_env.bat`
+
+> [!NOTE]
+> This needs to be done each time a new terminal session is started, or add the command to your shell profile script (e.g. .bashrc, .zshrc, etc.)
 
 #### Node
 - Node LTS [https://nodejs.org/en/](https://nodejs.org/en/) 
 
-### Build WebAssembly Module
-- Emscripten (emsdk) must be installed and activated
-- run `emcmake cmake -DBUILD_WASM=ON`
-  -   Note: If multiple compilers are present and default environment is not used, use -G "XXX Makefiles",
-        example for windows using MinGW => `emcmake cmake -D BUILD_WASM=ON .. -G "MinGW Makefiles"` 
-- run `emmake make`
-- Build artifacts: `client.js` and `client.wasm` will be created in the `/bin` directory. `client.js` is the glue code for initializing the WASM module, place the two files in the same directory within your project and execute the `client.js` script.
+### Build Web Assembly Module
+
+- Ensure you have followed the "Install and Activate Emscripten" steps above
+- From the root directory of the MEASUR Tools Suite repository run `emcmake cmake -DBUILD_WASM=ON`
+  > If multiple compilers are present and default environment is not used, use `-G "<XXX> Makefiles"`. For example, on Windows using MinGW: `emcmake cmake -D BUILD_WASM=ON .. -G "MinGW Makefiles"`
+- Then run `emmake make`
+  > This will create the build artifacts `client.js` and `client.wasm` in the `/bin` directory. `client.js` is the glue code for initializing the WASM module. Place the two files in the same directory within your project and execute the `client.js` script.
 
 ### WASM Initialization Example
 
@@ -45,24 +52,22 @@ Below is an illustration of the WASM initialization process:
 
 ![WASM Initialization](assets/wasm-initialization.png)
 
-### Running WASM Unit Tests
+### WASM Unit Tests
 
-- Follow the "Build WebAssembly Module" steps above
-- run `npm install` to install node dependencies
-- run `npm run test-wasm`
-- a simple express server will be server to `localhost:3000` and a batch of script testing files will be executed
-
+- Ensure you have followed the "Build WebAssembly Module" steps above
+- From the root directory of the MEASUR Tools Suite repository run `npm install` to install node dependencies
+- Then run `npm run test-wasm`
+  > A simple express server will be served to `localhost:3000` and a batch of script testing files will be executed
 
 ### C++ Unit Tests
 
-- To build C++ unit tests, ensure the `BUILD_TESTING` flag is set (which is default) then: 
-  - create directory `build-cpp` and cd into it
-  - run `'cmake ..'`  
-    -   Note: If multiple compilers are present and default environment is not used, use -G "XXX Makefiles",
-    example for windows using MinGW => `cmake .. -G "MinGW Makefiles"`
-  - run `'cmake --build .'`
-  - execute `./cpp_tests`
-- On MacOS or Linux, the test executable can be found under the `bin` directory. On Windows, the executable can be found under either the `Debug` or `Release` directories, depending on CMake configuration
+- Ensure the `BUILD_TESTING` flag is set (which is default) when running CMake
+- From the root directory of the MEASUR Tools Suite repository, run `mkdir build-cpp` and `cd build-cpp`
+- Then run `cmake ..`  
+  > If multiple compilers are present and default environment is not used, use `-G "XXX Makefiles"`. For example for windows using MinGW => `cmake .. -G "MinGW Makefiles"`
+- Then run `cmake --build .`
+- Then run `cd bin` and `./cpp_tests` to execute the tests
+  > On Windows, the executable can be found under either the `Debug` or `Release` directories, depending on CMake configuration
 
 ### Packaging
 
@@ -70,9 +75,11 @@ Below is an illustration of the WASM initialization process:
 - Or use this directly for Windows: `cmake -D BUILD_TESTING:BOOL=OFF ./` and `cmake --build . --config Release --target PACKAGE`
 - To make package on Linux or Mac, run `ccmake.` and set BUILD_TESTING OFF, BUILD_PACKAGE ON, then configure and generate. Then `make package`.
 
-### Documentation
+### Generate Documentation Locally
 
-- To generate documentation: `doxygen Doxyfile`
+- Ensure Doxygen (v 1.14.0 or later) is installed
+- From the root directory of the MEASUR Tools Suite repository run `doxygen Doxyfile`
+  > The documentation will be generated in the `/docs/html` directory
 
 ### Dockerizing 
 
@@ -87,5 +94,3 @@ To make it easy for developers local building and testing, it is dockerized. To 
     - Note: 
       - Every time the container is started it will rebuild the application, to check status run `docker compose logs --tail 5` 
       - **This is not a tutorial for docker, assumption is made the user is knowledgeable.**
-
-

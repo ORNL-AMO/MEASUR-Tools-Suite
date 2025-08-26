@@ -43,7 +43,7 @@ class WallLosses {
      * @brief Gets the ID of the wall.
      * @return ID of the wall.
      */
-    int ID() const { return this->id_; }
+    int id() const { return this->id_; }
 
     /**
      * @brief Sets the ID of the wall.
@@ -111,7 +111,12 @@ class WallLosses {
     }
 
   private:
-    // TODO(2025-08-22): Is this needed?
+    /**
+     * @brief Constructs a wall with specified parameters.
+     * @details Constructs a wall with the provided parameters and an ID of 0.
+     * @param[in] surface_description Description of the wall surface.
+     * @param[in] shape_factor The surface shape/orientation factor used in heat loss calculations @unit{\unitless}.
+     */
     WallLosses(std::string surface_description, double shape_factor)
         : surface_description_(std::move(surface_description)), shape_factor_(shape_factor) {}
 

@@ -18,7 +18,7 @@
  * Used to calculateThermalResistance the heat that is being supplied to an electric arc furnace.
  */
 class EnergyInputEAF {
-    public:
+  public:
     /**
      *
      * Constructor for the energy input EAF heat loss with all inputs specified
@@ -38,10 +38,9 @@ class EnergyInputEAF {
     EnergyInputEAF(const double naturalGasHeatInput, const double coalCarbonInjection, const double coalHeatingValue,
                    const double electrodeUse, const double electrodeHeatingValue, const double otherFuels,
                    const double electricityInput)
-            : naturalGasHeatInput(naturalGasHeatInput), coalCarbonInjection(coalCarbonInjection),
-              coalHeatingValue(coalHeatingValue), electrodeUse(electrodeUse),
-              electrodeHeatingValue(electrodeHeatingValue), otherFuels(otherFuels), electricityInput(electricityInput)
-    {}
+        : naturalGasHeatInput(naturalGasHeatInput), coalCarbonInjection(coalCarbonInjection),
+          coalHeatingValue(coalHeatingValue), electrodeUse(electrodeUse), electrodeHeatingValue(electrodeHeatingValue),
+          otherFuels(otherFuels), electricityInput(electricityInput) {}
 
     /**
      * Calculates the total chemical energy input
@@ -55,8 +54,8 @@ class EnergyInputEAF {
      */
     double getHeatDelivered();
 
-private:
+  private:
     const double naturalGasHeatInput, coalCarbonInjection, coalHeatingValue, electrodeUse;
     const double electrodeHeatingValue, otherFuels, electricityInput;
 };
-#endif //TOOLS_SUITE_ENERGYINPUTEAF_H
+#endif // TOOLS_SUITE_ENERGYINPUTEAF_H

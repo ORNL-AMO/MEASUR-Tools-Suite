@@ -7,7 +7,7 @@ The following table summarizes the changes made to the Emscripten bindings in th
 | Previous Signature | Updated Signature     |
 | ------------------ | --------------------- |
 | getConditionFactor | shapeFactor           |
-| getID              | ID                    |
+| getID              | id                    |
 | getHeatLoss        | totalHeatLoss         |
 | getSurface         | surfaceDescription    |
 | setConditionFactor | setShapeFactor        |

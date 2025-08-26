@@ -261,7 +261,7 @@ EMSCRIPTEN_BINDINGS(wallLosses) {
         .constructor<>()
         .constructor<double, double, double, double, double, double, double>()
         .function("totalHeatLoss", &WallLosses::totalHeatLoss)
-        .function("ID", &WallLosses::ID)
+        .function("id", &WallLosses::id)
         .function("surfaceDescription", &WallLosses::surfaceDescription)
         .function("shapeFactor", &WallLosses::shapeFactor)
         .function("setID", &WallLosses::setID)

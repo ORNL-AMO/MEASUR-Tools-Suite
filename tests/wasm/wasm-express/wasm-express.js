@@ -48,7 +48,7 @@ async function loadStaticFiles(dir) {
     } catch (err) {}
 }
 
-let server = app.listen(port, () => console.log(`Wasm Testing Served on: localhost:${port}`));
+let server = app.listen(port, '0.0.0.0', () => console.log(`Wasm Testing Served on: http://0.0.0.0:${port}`));
 
 process.on('SIGTERM', () => {
   console.log('SIGTERM received: closing server...');

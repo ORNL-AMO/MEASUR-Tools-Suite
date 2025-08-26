@@ -1,11 +1,11 @@
 #include "processCooling/ProcessCooling.h"
+
 #include <emscripten/bind.h>
 
 using namespace std;
 using namespace emscripten;
 
-EMSCRIPTEN_BINDINGS(processCooling_class)
-{
+EMSCRIPTEN_BINDINGS(processCooling_class) {
     enum_<ProcessCooling::RefrigerantType>("RefrigerantType")
         .value("R_11", ProcessCooling::RefrigerantType::R_11)
         .value("R_123", ProcessCooling::RefrigerantType::R_123)
@@ -46,7 +46,6 @@ EMSCRIPTEN_BINDINGS(processCooling_class)
     class_<ProcessCooling::AirCooledSystemInput>("AirCooledSystemInput")
         .constructor<double, double, ProcessCooling::ACSourceLocation, double, double>();
 
-
     class_<ProcessCooling::ChillerOutput>("ChillerOutput")
         .property("efficiency", &ProcessCooling::ChillerOutput::efficiency)
         .property("hours", &ProcessCooling::ChillerOutput::hours)
@@ -61,23 +60,29 @@ EMSCRIPTEN_BINDINGS(processCooling_class)
         .property("hours", &ProcessCooling::TowerOutput::hours)
         .property("energy", &ProcessCooling::TowerOutput::energy);
 
-
-    class_<ProcessCooling::PumpInput>("PumpInput")
-        .constructor<bool, double, double, double, double>();
+    class_<ProcessCooling::PumpInput>("PumpInput").constructor<bool, double, double, double, double>();
 
     class_<ProcessCooling::TowerInput>("TowerInput")
-        .constructor<int, int, ProcessCooling::FanMotorSpeedType, ProcessCooling::TowerSizedBy, ProcessCooling::CellFanType, double, double>();
+        .constructor<int, int, ProcessCooling::FanMotorSpeedType, ProcessCooling::TowerSizedBy,
+                     ProcessCooling::CellFanType, double, double>();
 
     class_<ProcessCooling::ChillerInput>("ChillerInput")
-        .constructor<ProcessCooling::ChillerCompressorType, double, bool, double, double, bool, bool, vector<vector<double>>>()
-        .constructor<ProcessCooling::ChillerCompressorType, double, bool, double, double, bool, bool, vector<vector<double>>, bool, ProcessCooling::RefrigerantType, ProcessCooling::RefrigerantType>()
-        .constructor<ProcessCooling::ChillerCompressorType, double, bool, double, double, bool, bool, vector<vector<double>>, vector<double>, vector<double>>()
-        .constructor<ProcessCooling::ChillerCompressorType, double, bool, double, double, bool, bool, vector<vector<double>>, vector<double>, vector<double>, ProcessCooling::RefrigerantType, ProcessCooling::RefrigerantType>();
-
+        .constructor<ProcessCooling::ChillerCompressorType, double, bool, double, double, bool, bool,
+                     vector<vector<double>>>()
+        .constructor<ProcessCooling::ChillerCompressorType, double, bool, double, double, bool, bool,
+                     vector<vector<double>>, bool, ProcessCooling::RefrigerantType, ProcessCooling::RefrigerantType>()
+        .constructor<ProcessCooling::ChillerCompressorType, double, bool, double, double, bool, bool,
+                     vector<vector<double>>, vector<double>, vector<double>>()
+        .constructor<ProcessCooling::ChillerCompressorType, double, bool, double, double, bool, bool,
+                     vector<vector<double>>, vector<double>, vector<double>, ProcessCooling::RefrigerantType,
+                     ProcessCooling::RefrigerantType>();
 
     class_<ProcessCooling>("ProcessCooling")
-        .constructor<const vector<int>&, const vector<double>&, const vector<double>&, const vector<ProcessCooling::ChillerInput>&, ProcessCooling::TowerInput, ProcessCooling::WaterCooledSystemInput>()
-        .constructor<const vector<int>&, const vector<double>&, const vector<double>&, const vector<ProcessCooling::ChillerInput>&, ProcessCooling::AirCooledSystemInput>()
+        .constructor<const vector<int>&, const vector<double>&, const vector<double>&,
+                     const vector<ProcessCooling::ChillerInput>&, ProcessCooling::TowerInput,
+                     ProcessCooling::WaterCooledSystemInput>()
+        .constructor<const vector<int>&, const vector<double>&, const vector<double>&,
+                     const vector<ProcessCooling::ChillerInput>&, ProcessCooling::AirCooledSystemInput>()
         .function("calculateTowerEnergy", &ProcessCooling::calculateTowerEnergy)
         .function("calculateChillerEnergy", &ProcessCooling::calculateChillerEnergy)
         .function("calculatePumpEnergy", &ProcessCooling::calculatePumpEnergy);

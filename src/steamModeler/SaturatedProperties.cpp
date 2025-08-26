@@ -8,6 +8,7 @@
  */
 
 #include "steamModeler/SaturatedProperties.h"
+
 #include "steamModeler/SteamSystemModelerTool.h"
 
 double SaturatedTemperature::calculate() const {
@@ -17,10 +18,10 @@ double SaturatedTemperature::calculate() const {
     const double C10 = 0.65017534844798E+03;
 
     const double SS = std::pow(saturatedPressure, 0.25);
-    const double E = SS * SS + C3 * SS + C6;
-    const double F = C1 * SS * SS + C4 * SS + C7;
-    const double G = C2 * SS * SS + C5 * SS + C8;
-    const double D = 2 * G / (-F - std::sqrt(pow(F, 2) - 4 * E * G));
+    const double E  = SS * SS + C3 * SS + C6;
+    const double F  = C1 * SS * SS + C4 * SS + C7;
+    const double G  = C2 * SS * SS + C5 * SS + C8;
+    const double D  = 2 * G / (-F - std::sqrt(pow(F, 2) - 4 * E * G));
 
     return (C10 + D - std::sqrt(std::pow((C10 + D), 2) - 4 * (C9 + C10 * D))) / 2;
 }
@@ -31,7 +32,7 @@ double SaturatedPressure::calculate() const {
     const double C7 = -0.48232657361591E+04, C8 = 0.40511340542057E+06, C9 = -0.23855557567849E+00;
     const double C10 = 0.65017534844798E+03;
 
-    const double v = saturatedTemperature + (C9 / (saturatedTemperature - C10));
+    const double v        = saturatedTemperature + (C9 / (saturatedTemperature - C10));
     const double vSquared = std::pow(v, 2);
 
     const double A = vSquared + (C1 * v) + C2;
@@ -45,21 +46,29 @@ SteamSystemModelerTool::SaturatedPropertiesOutput SaturatedProperties::calculate
     auto gasProperties = SteamSystemModelerTool::region2(saturatedTemperature, saturatedPressure);
     SteamSystemModelerTool::SteamPropertiesOutput liquidProperties;
 
-    if ((saturatedTemperature >= SteamSystemModelerTool::TEMPERATURE_MIN)
-        && (saturatedTemperature <= SteamSystemModelerTool::TEMPERATURE_Tp)) {
+    if ((saturatedTemperature >= SteamSystemModelerTool::TEMPERATURE_MIN) &&
+        (saturatedTemperature <= SteamSystemModelerTool::TEMPERATURE_Tp)) {
         liquidProperties = SteamSystemModelerTool::region1(saturatedTemperature, saturatedPressure);
     }
 
-    if ((saturatedTemperature > SteamSystemModelerTool::TEMPERATURE_Tp)
-        && (saturatedTemperature <= SteamSystemModelerTool::TEMPERATURE_CRIT)) {
+    if ((saturatedTemperature > SteamSystemModelerTool::TEMPERATURE_Tp) &&
+        (saturatedTemperature <= SteamSystemModelerTool::TEMPERATURE_CRIT)) {
         liquidProperties = SteamSystemModelerTool::region3(saturatedTemperature, saturatedPressure);
     }
 
     const double evaporationEnthalpy = gasProperties.specificEnthalpy - liquidProperties.specificEnthalpy;
-    const double evaporationEntropy = gasProperties.specificEntropy - liquidProperties.specificEntropy;
-    const double evaporationVolume = gasProperties.specificVolume - liquidProperties.specificVolume;
+    const double evaporationEntropy  = gasProperties.specificEntropy - liquidProperties.specificEntropy;
+    const double evaporationVolume   = gasProperties.specificVolume - liquidProperties.specificVolume;
 
-	return {saturatedTemperature, saturatedPressure, gasProperties.specificVolume, gasProperties.specificEnthalpy,
-            gasProperties.specificEntropy, liquidProperties.specificVolume, liquidProperties.specificEnthalpy,
-            liquidProperties.specificEntropy, evaporationVolume, evaporationEnthalpy, evaporationEntropy};
+    return {saturatedTemperature,
+            saturatedPressure,
+            gasProperties.specificVolume,
+            gasProperties.specificEnthalpy,
+            gasProperties.specificEntropy,
+            liquidProperties.specificVolume,
+            liquidProperties.specificEnthalpy,
+            liquidProperties.specificEntropy,
+            evaporationVolume,
+            evaporationEnthalpy,
+            evaporationEntropy};
 }

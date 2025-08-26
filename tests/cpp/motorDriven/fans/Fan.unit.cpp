@@ -1,8 +1,7 @@
+#include "catch.hpp"
 #include "motorDriven/fans/fan203.h"
 #include "motorDriven/fans/FanCurve.h"
 #include "motorDriven/pumpFan/FanEnergyIndex.h"
-
-#include "catch.hpp"
 
 TEST_CASE("FanEnergyIndex", "[FanEnergyIndex]") {
     CHECK(Approx(FanEnergyIndex(129691, -16, 1, 0.07024, 450).calculateEnergyIndex()) == 0.9678686743);
@@ -18,8 +17,8 @@ TEST_CASE("Fan203", "[Fan203]") {
         {0.691, 0.621, 0.610, 0.774, 0.747, 0.835, 0.8825, 1.23, 1.210, 1.569}};
 
     const double area = (143.63 * 32.63 * 2) / 144.0;
-    FlangePlane fanInletFlange(area, 123, 26.57);
-    FlangePlane fanOrEvaseOutletFlange(70 * 78 / 144.0, 132.7, 26.57);
+    FlangePlane  fanInletFlange(area, 123, 26.57);
+    FlangePlane  fanOrEvaseOutletFlange(70 * 78 / 144.0, 132.7, 26.57);
 
     TraversePlane flowTraverse(143.63 * 32.63 / 144.0, 123.0, 26.57, -18.1, std::sqrt(0.762), traverseHoleData);
 
@@ -39,9 +38,9 @@ TEST_CASE("Fan203", "[Fan203]") {
     BaseGasDensity baseGasDensity(123, -17.6, 26.57, 0.0547, BaseGasDensity::GasType::AIR);
 
     auto const motorShaftPower = FanShaftPower::calculateMotorShaftPower(4200, 205, 0.88) / 746.0;
-    auto fanShaftPower = FanShaftPower(motorShaftPower, 95.0, 100, 100, 0);
+    auto       fanShaftPower   = FanShaftPower(motorShaftPower, 95.0, 100, 100, 0);
 
-    auto fan = Fan203(fanRatedInfo, planeData, baseGasDensity, fanShaftPower);
+    auto fan     = Fan203(fanRatedInfo, planeData, baseGasDensity, fanShaftPower);
     auto results = fan.calculate();
 
     CHECK(results.fanEfficiencyTotalPressure == Approx(53.607386));
@@ -65,8 +64,8 @@ TEST_CASE("Fan203", "[Fan203]") {
 
 TEST_CASE("FanCurve", "[Fan203][FanCurve]") {
     // using row 2 appendix 1
-    double density = 0.0308, n = 1180, densityC = 0.0332, nC = 1187, pb = 29.36;
-    double pbC = 29.36, pt1F = -0.93736, gamma = 1.4, gammaC = 1.4, a1 = 34, a2 = 12.7;
+    double       density = 0.0308, n = 1180, densityC = 0.0332, nC = 1187, pb = 29.36;
+    double       pbC = 29.36, pt1F = -0.93736, gamma = 1.4, gammaC = 1.4, a1 = 34, a2 = 12.7;
     FanCurveType curveType = FanCurveType::FanStaticPressure;
 
     std::vector<FanCurveData::BaseCurve> baseCurveData = {
@@ -115,8 +114,8 @@ TEST_CASE("FanCurve", "[Fan203][FanCurve]") {
         {129691, 14.8, 566, density, n, nC}, {144101, 12.7, 615, density, n, nC}, {158511, 10.2, 667, density, n, nC},
         {172921, 7.3, 725, density, n, nC},  {187331, 3.7, 789, density, n, nC},  {201741, -0.8, 861, density, n, nC}};
 
-    FanCurve fc2(density, densityC, n, nC, pb, pbC, pt1F, gamma, gammaC, a1, a2,
-                 FanCurveData(curveType, ratedPointData));
+    FanCurve   fc2(density, densityC, n, nC, pb, pbC, pt1F, gamma, gammaC, a1, a2,
+                   FanCurveData(curveType, ratedPointData));
     auto const results2 = fc2.calculate();
     for (std::size_t i = 0; i < results2.size(); i++) {
         compareRows(results2[i], expected[i]);
