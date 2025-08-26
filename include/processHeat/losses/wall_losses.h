@@ -43,7 +43,7 @@ class WallLosses {
      * @brief Gets the ID of the wall.
      * @return ID of the wall.
      */
-    int ID() const { return this->id_; }
+    int id() const { return this->id_; }
 
     /**
      * @brief Sets the ID of the wall.
