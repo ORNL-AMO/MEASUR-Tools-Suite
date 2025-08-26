@@ -399,10 +399,10 @@ function solidLoadChargeMaterial() {
 // wallLosses
 function wallLosses() {
     var inp = {
-        surfaceArea: 500, ambientTemperature: 80, surfaceTemperature: 225, windVelocity: 10,
-        surfaceEmissivity: 0.9, conditionFactor: 1.394, correctionFactor: 1
+        surfaceArea: 500, ambientTemperature: 80, surfaceTemperature: 225, windSpeed: 10,
+        surfaceEmissivity: 0.9, shapeFactor: 1.394, correctionFactor: 1
     };
-    var wallLosses = new Module.WallLosses(inp.surfaceArea, inp.ambientTemperature, inp.surfaceTemperature, inp.windVelocity, inp.surfaceEmissivity, inp.conditionFactor, inp.correctionFactor);
+    var wallLosses = new Module.WallLosses(inp.surfaceArea, inp.ambientTemperature, inp.surfaceTemperature, inp.windSpeed, inp.surfaceEmissivity, inp.shapeFactor, inp.correctionFactor);
     var totalHeatLoss = wallLosses.totalHeatLoss()
     testNumberValue(totalHeatLoss, 404487.5887582747, "Process Heat Wall Losses (totalHeatLoss)");
     wallLosses.delete();
