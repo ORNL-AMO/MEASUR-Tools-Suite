@@ -7,7 +7,6 @@ const wasmPath = path.resolve(__dirname, '../../../../bin/client.wasm');
 describe('Process Heat ExhaustGasEAF', function () {
     let ToolsSuiteModule;
     before(async function () {
-        // Dynamically import the Emscripten module with locateFile for .wasm
         const createModule = (await import(clientPath)).default;
         ToolsSuiteModule = await createModule({
             locateFile: (filename) => {

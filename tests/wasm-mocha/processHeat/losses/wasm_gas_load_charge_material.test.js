@@ -1,7 +1,6 @@
 const path = require('path');
 const assert = require('chai').assert;
 
-// Adjust the path to your client.js as needed
 const clientPath = path.resolve(__dirname, '../../../../bin/client.js');
 const wasmPath = path.resolve(__dirname, '../../../../bin/client.wasm');
 describe('Process Heat GasLoadChargeMaterial', function () {

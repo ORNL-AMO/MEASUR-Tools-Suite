@@ -8,7 +8,6 @@ const wasmPath = path.resolve(__dirname, '../../../../bin/client.wasm');
 describe('Process Heat GasCoolingLosses', function () {
 
     let ToolsSuiteModule;
-
     before(async function () {
         const createModule = (await import(clientPath)).default;
         ToolsSuiteModule = await createModule({
