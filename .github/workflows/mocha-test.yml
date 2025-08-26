@@ -11,10 +11,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Get Node version
+        run: echo "BUILD_NODE_VER=$(grep -o -P -m 1 '(?<=node":\s").*(?=")' package.json)" >> $GITHUB_ENV
+      - name: Node setup
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ env.BUILD_NODE_VER }}
 
       - name: Install dependencies
         run: npm ci
