@@ -15,25 +15,25 @@
  * analysis alongside simple equipment and property calculators. Both the system assessment tools and the simple
  * calculators can be used as stand-alone tools for more focused analysis.
  *
- * - @ref CompressedAirAssessments
- * - @ref FanSystemAssessments
- * - @ref ProcessCoolingAssessments
- * - @ref ProcessHeatingAssessments
- * - @ref PumpingSystemAssessments
- * - @ref SteamSystemAssessments
- * - @ref WaterAssessments
- * - @ref WasteWaterAssessments
- * - @ref EnergyTreasureHuntModule
- * - @ref SimpleEquipmentAndPropertyCalculators
+ * - @ref compressed_air_assessments
+ * - @ref fan_system_assessments
+ * - @ref process_cooling_assessments
+ * - @ref process_heating_assessments
+ * - @ref pumping_system_assessments
+ * - @ref steam_system_assessments
+ * - @ref water_assessments
+ * - @ref waste_water_assessments
+ * - @ref treasure_hunt_calculators
+ * - @ref heat_loss_calculators
  *
- * @defgroup CompressedAirAssessments Compressed Air Assessments
+ * @defgroup compressed_air_assessments Compressed Air Assessments
  *
  * This portion of MEASUR includes tools such as AirMaster+ and related calculators. MEASUR includes a series of tools
  * that help users analyze energy use and savings opportunities in industrial compressed air systems. They can baseline
  * existing and model future system operations improvements, and evaluate energy and dollar savings from many energy
  * efficiency measures.
  *
- * @defgroup FanSystemAssessments Fan System Assessments
+ * @defgroup fan_system_assessments Fan System Assessments
  *
  * This portion of MEASUR includes tools such as the Fan System Assessment Tool (FSAT) and related calculators. This
  * tool helps users identify and evaluate the potential energy savings opportunities in fan systems. Industrial users
@@ -41,7 +41,7 @@
  * customized "what-if" operating scenarios to minimize energy consumption. Alternatively, users can utilize the
  * automatic optimizer functionality which is built upon published fan efficiency data and motor performance data.
  *
- * @defgroup ProcessCoolingAssessments Process Cooling Assessments
+ * @defgroup process_cooling_assessments Process Cooling Assessments
  *
  * This portion of MEASUR includes tools such as the Chilled Water System Assessment (CWSA) tool and releated
  * calculators. This tool helps users understand and evalute the potential energy savings opportunities of chillers and
@@ -49,7 +49,7 @@
  * a process cooling system, including chillers, cooling towers, and pumps. The tool helps estimate the year-round
  * operating conditions and test "what-if" scenarios for various opportunities to reduce energy use.
  *
- * @defgroup ProcessHeatingAssessments Process Heating Assessments
+ * @defgroup process_heating_assessments Process Heating Assessments
  *
  * This portion of MEASUR includes tools such as the Process Heating Assessment and Survey Tool (PHAST) and related
  * calculators. This tool introduces methods to improve thermal and electrical efficiency of process heating equipment.
@@ -57,7 +57,10 @@
  * energy-intensive equipment. This tool can be used to perform a heat balance that identifies major areas of energy use
  * under various operating conditions and test "what-if" scenarios for various options to reduce energy use.
  *
- * @defgroup PumpingSystemAssessments Pumping System Assessments
+ * @defgroup heat_loss_calculators Heat Loss Calculators
+ * @ingroup process_heating_assessments
+ *
+ * @defgroup pumping_system_assessments Pumping System Assessments
  *
  * This portion of MEASUR includes tools such as the Pump System Assessment Tool (PSAT) and related calculators.
  * MEASUR's pumping system tool helps evaluate the potential energy savings opportunities of pumping systems based on
@@ -68,7 +71,7 @@
  * the Hydraulic Institute (HI) and motor performance data. All MEASUR tools have extensive help text and the ability to
  * share analyses with others.
  *
- * @defgroup SteamSystemAssessments Steam System Assessments
+ * @defgroup steam_system_assessments Steam System Assessments
  *
  * This portion of MEASUR includes tools such as the SSAT/SSMT and related calculators. This tool helps users identify
  * and evaluate the potential energy savings opportunities in steam systems. Industrial users can better understand the
@@ -76,14 +79,14 @@
  * tool helps estimate the various steam flows throughout the system and test "what-if" scenarios for various
  * opportunities to reduce energy use.
  *
- * @defgroup WaterAssessments Water Assessments
+ * @defgroup water_assessments Water Assessments
  *
  * This portion of MEASUR includes tools such as the Plant Water Profiler (PWP) and the water diagram. This tool helps
  * users create a water flow diagram and water balance, as well as calculate the true cost of water for a facility. This
  * can help users identify systems that contribute the most toward water intake and the true cost to target for water
  * efficiency measures.
  *
- * @defgroup WasteWaterAssessments Waste Water Assessments
+ * @defgroup waste_water_assessments Waste Water Assessments
  *
  * This portion of MEASUR includes tools such as the Bio-tiger wastewater model and related calculators. This tool helps
  * users identify and evaluate the potential energy savings opportunities in the aeration stage of large-scale
@@ -92,7 +95,7 @@
  * Monod kinetics and mass balances of the activated sludge process and test "what-if" scenarios for various
  * opportunities to reduce energy use.
  *
- * @defgroup EnergyTreasureHuntModule Energy Treasure Hunt Module
+ * @defgroup treasure_hunt_calculators Energy Treasure Hunt Calculators
  *
  * MEASUR's Treasure Hunt is a collection of calculators that can be used in an energy Treasure Hunt or Energy Sweep
  * type event. It pairs with the DOE Better Plants Treasure Hunt Toolkit. This tool helps industrial users quantify
@@ -102,7 +105,7 @@
  * steam and water/wastewater. The tool helps users organize the opportunities found during the event in their "Treasure
  * Chest", share them between users, and roll them together in a comprehensive report.
  *
- * @defgroup SimpleEquipmentAndPropertyCalculators Simple Equipment and Property Calculators
+ * @defgroup equipment_and_property_calculators Simple Equipment and Property Calculators
  *
  * The MEASUR software contains over 80 equipment and property calculators for simple energy-related calculations and
  * analyses. These calculators can aid users in identifying, assessing, and quantifying simple energy-saving
