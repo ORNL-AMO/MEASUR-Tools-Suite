@@ -1,7 +1,7 @@
 /**
  * @file wall_losses.h
  * @authors Gina Accawi, Liam White
- * @ingroup losses
+ * @ingroup heat_loss_calculators
  * @brief Contains the WallLosses class for calculating wall heat losses (convective and radiative).
  */
 #pragma once
@@ -10,7 +10,7 @@
 
 /**
  * @class WallLosses
- * @ingroup losses
+ * @ingroup heat_loss_calculators
  * @brief A class for calculating wall heat losses (convective and radiative).
  */
 class WallLosses {

@@ -1,7 +1,7 @@
 /**
  * @file fan203.h
  * @authors Colin Causey, Allie Ledbetter, Preston Shires, Liam White
- * @ingroup FanSystemAssessments
+ * @ingroup fan_system_assessments
  * @brief Implements AMCA 203 standard fan performance calculations.
  */
 #pragma once
@@ -16,7 +16,7 @@
 
 /**
  * @struct FanRatedInfo
- * @ingroup FanSystemAssessments
+ * @ingroup fan_system_assessments
  * @brief Stores measured and reference-corrected fan and motor operating data for AMCA 203 calculations.
  * @details This struct encapsulates both as-tested and reference-corrected values for fan speed, motor speed, gas
  * density, and barometric pressure, as required by the AMCA 203 standard. These values are used to convert measured fan
