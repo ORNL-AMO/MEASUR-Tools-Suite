@@ -67,6 +67,7 @@ Below is an illustration of the WASM initialization and usage process:
 - From the root directory of the MEASUR Tools Suite repository, run `mkdir build-cpp` and `cd build-cpp`
 - Then run `cmake ..`  
   > If multiple compilers are present and default environment is not used, use `-G "XXX Makefiles"`. For example for windows using MinGW => `cmake .. -G "MinGW Makefiles"`
+  > For MacOS with arm64, add compiler flag `-DCMAKE_OSX_ARCHITECTURES=arm64`
 - Then run `cmake --build .`
 - Then run `cd bin` and `./cpp_tests` to execute the tests
   > On Windows, the executable can be found under either the `Debug` or `Release` directories, depending on CMake configuration
