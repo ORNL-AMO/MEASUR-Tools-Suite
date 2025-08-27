@@ -283,19 +283,27 @@ TAB_SIZE               = 4
 # with the commands \{ and \} for these it is advised to use the version @{ and
 # @} or use a double escape (\\{ and \\})
 
-# Use @unit{unit} to create a unit with the unit name and value.
-ALIASES                += "unit{1}=\f$[\unit{\1}]\f$"
-
-# Use @formula{label; equation} to create a formula with label. 
-# The label entered is prefixed with "eq" and can be used to reference the 
-# equation by using: \eqref{eq:label}.
-ALIASES                += "formula{2;}=\f{equation}{\label{eq:\1}\2\f}"
-
-# Use @math{expression} to create a mathematical expression.
+# Use @math{<math expression>} to create a mathematical expression
 ALIASES                += "math{1}=\f$\1\f$"
 
-# Use @symbol{symbol; description} to create a symbol with a description.
-ALIASES                += "symbol{2;}=\f$\1\f$&nbsp;\2"
+# Use the following aliases to create units formatted using siunitx:
+# - @unitr{<unit expression>} to create a regular unit.
+# - @unitb{<unit expression>} to create a bracketed unit.
+# - @unitp{<unit expression>} to create a parenthesized unit.
+ALIASES                += "unitr{1}=\f$\unit{\1}\f$" \
+                          "unitb{1}=\f$[\unit{\1}]\f$" \
+                          "unitp{1}=\f$(\unit{\1})\f$"
+
+# Use @formula{<label>; <equation>} to create a labeled equation. 
+# The label entered is prefixed with "eq" and can be used to reference the 
+# equation with: \eqref{eq:<label>}.
+ALIASES                += "formula{2;}=\f{equation}{\label{eq:\1}\2\f}"
+
+# Use @symtable, @symrow{<symbol>; <description>; <unit expression>}, and @endsymtable to create
+# a table of symbols with their descriptions and units.
+ALIASES                += "symtable=<table border=\"0\" cellpadding=\"5\" cellspacing=\"0\">" \
+                          "symrow{3;}=<tr><td>\f$\1\f$</td><td>\2 \unitb{\3}</td></tr>" \
+                          "endsymtable=</table>"
 
 # Set the OPTIMIZE_OUTPUT_FOR_C tag to YES if your project consists of C sources
 # only. Doxygen will then generate output that is more tailored for C. For

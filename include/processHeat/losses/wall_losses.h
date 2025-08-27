@@ -24,14 +24,15 @@ class WallLosses {
     /**
      * @brief Constructs a wall with specified parameters for heat loss calculations.
      * @details Constructs a wall with the provided parameters, an ID of 0, and a surface description of "Unknown".
-     * @param[in] surface_area Total exterior surface area of the wall @unit{\foot\squared}.
-     * @param[in] ambient_temperature Ambient temperature measured on the exterior of the wall @unit{\degreeFahrenheit}.
+     * @param[in] surface_area Total exterior surface area of the wall @unitb{\foot\squared}.
+     * @param[in] ambient_temperature Ambient temperature measured on the exterior of the wall
+     * @unitb{\degreeFahrenheit}.
      * @param[in] surface_temperature Average surface temperature measured on the exterior of the wall
-     * @unit{\degreeFahrenheit}.
-     * @param[in] wind_speed Average wind speed measured on the exterior of the wall @unit{\mile\per\hour}.
-     * @param[in] surface_emissivity Surface emissivity of the wall @unit{\unitless}.
-     * @param[in] shape_factor The surface shape/orientation factor used in heat loss calculations @unit{\unitless}.
-     * @param[in] correction_factor Correction factor for the wall heat loss calculations @unit{\unitless}.
+     * @unitb{\degreeFahrenheit}.
+     * @param[in] wind_speed Average wind speed measured on the exterior of the wall @unitb{\mile\per\hour}.
+     * @param[in] surface_emissivity Surface emissivity of the wall @unitb{\unitless}.
+     * @param[in] shape_factor The surface shape/orientation factor used in heat loss calculations @unitb{\unitless}.
+     * @param[in] correction_factor Correction factor for the wall heat loss calculations @unitb{\unitless}.
      */
     WallLosses(double surface_area, double ambient_temperature, double surface_temperature, double wind_speed,
                double surface_emissivity, double shape_factor, double correction_factor)
@@ -70,7 +71,7 @@ class WallLosses {
     /**
      * @brief Gets the shape factor of the wall surface.
      * @details The shape factor is the surface shape/orientation factor used in heat loss calculations.
-     * @return Shape factor of the wall surface @unit{\unitless}.
+     * @return Shape factor of the wall surface @unitb{\unitless}.
      */
     double shapeFactor() const { return shape_factor_; }
 
@@ -78,7 +79,7 @@ class WallLosses {
      * @brief Sets the shape factor of the wall surface.
      * @details The shape factor is the surface shape/orientation factor used in heat loss calculations. Used for
      * default data initialization.
-     * @param[in] shape_factor Shape factor to set for the wall surface @unit{\unitless}.
+     * @param[in] shape_factor Shape factor to set for the wall surface @unitb{\unitless}.
      */
     void setShapeFactor(double shape_factor) { this->shape_factor_ = shape_factor; }
 
@@ -86,16 +87,19 @@ class WallLosses {
      * @brief Calculates the total heat loss from the wall to the ambient (convective + radiative).
      * @details Combines convective and radiative heat loss calculations to provide the total heat loss:
      *
+     * @par Governing equation
      * @formula{wall-total-heat-loss; Q_\text{total} = Q_\text{conv} + Q_\text{rad}}
      *
-     * @b Symbols
-     * - @symbol{Q_\text{total}; is the total heat loss} @unit{\btu\per\hour}
-     * - @symbol{Q_\text{conv}; is the convective heat loss} @unit{\btu\per\hour}
-     *   \eqref{eq:wall-convective-heat-loss}
-     * - @symbol{Q_\text{rad}; is the radiative heat loss} @unit{\btu\per\hour}
-     *   \eqref{eq:wall-radiative-heat-loss}
+     * @par Symbols
+     * @symtable
+     * @symrow{Q_\text{total}; Total heat loss; \btu\per\hour}
+     * @symrow{Q_\text{conv}; Convective heat loss; \btu\per\hour}
+     * @symrow{Q_\text{rad}; Radiative heat loss ; \btu\per\hour}
+     * @endsymtable
      *
-     * @return Total heat loss @unit{\btu\per\hour}.
+     * @see convectiveHeatLoss(), radiativeHeatLoss()
+     *
+     * @return Total heat loss @unitb{\btu\per\hour}.
      */
     double totalHeatLoss() const;
 
@@ -115,41 +119,48 @@ class WallLosses {
      * @brief Constructs a wall with specified parameters.
      * @details Constructs a wall with the provided parameters and an ID of 0.
      * @param[in] surface_description Description of the wall surface.
-     * @param[in] shape_factor The surface shape/orientation factor used in heat loss calculations @unit{\unitless}.
+     * @param[in] shape_factor The surface shape/orientation factor used in heat loss calculations @unitb{\unitless}.
      */
     WallLosses(std::string surface_description, double shape_factor)
         : surface_description_(std::move(surface_description)), shape_factor_(shape_factor) {}
 
     /**
      * @brief Computes the convective heat loss from the wall to the ambient.
-     * @details Calculates the convective heat loss based on empirical constants and the temperature difference between
-     * the surface and ambient, the mean temperature, and the wind speed:
+     * @details Calculates the convective heat loss using an empirical correlation that accounts for surface shape,
+     * duty factor, temperature difference, mean temperature, and wind speed.
      *
-     * @formula{wall-convective-heat-loss; Q_\text{conv} = \left( \phi_\text{shape} \cdot \phi_\text{duty} \cdot
-     * \phi_{\Delta T} \cdot \phi_{\bar{T}} \cdot \phi_\text{wind} \right) A \cdot \Delta T}
+     * @par Governing equation
+     * @formula{wall-qconv; Q_\text{conv} = h A \Delta T}
      *
-     * @b Factors
-     * - @symbol{\phi_\text{shape}; is the shape factor} @unit{\unitless}
-     * - @symbol{\phi_\text{duty}; is the duty factor} @unit{\unitless}
-     *   @formula{wall-duty-factor; \phi_\text{duty}=\left(\frac{1}{24}\right)^{0.2}} (here, 24 = hours per day)
-     * - @symbol{\phi_{\Delta T}; is the temperature difference factor} @unit{\unitless}
-     *   @formula{wall-delta-temp-factor; \phi_{\Delta T}=\left(\Delta T\right)^{0.266}}
-     * - @symbol{\phi_{\bar{T}}; is the mean temperature factor} @unit{\unitless}
-     *   @formula{wall-mean-temp-factor; \phi_{\bar{T}}=\left(\frac{1}{\bar{T}}\right)^{0.181}}
-     * - @symbol{\phi_\text{wind}; is the wind factor} @unit{\unitless}
-     *   @formula{wall-wind-factor; \phi_\text{wind}=\sqrt{1 + \left( 1.277 \cdot V_\text{wind} \right)}}
+     * @par Convection coefficient
+     * @formula{wall-h; h = f_\text{shape} \cdot f_\text{duty} \cdot f_{\Delta T} \cdot f_{\bar{T}} \cdot f_\text{wind}}
      *
-     * @b Symbols
-     * - @symbol{Q_\text{conv}; is the convective heat loss} @unit{\btu\per\hour}
-     * - @symbol{A; is the surface area} @unit{\foot\squared}
-     * - @symbol{\Delta T; is the temperature difference} @unit{\degreeFahrenheit}
-     *   @formula{wall-delta-temp; \Delta T = T_s - T_a}
-     * - @symbol{T_s; is the surface temperature} @unit{\degreeFahrenheit}
-     * - @symbol{T_a; is the ambient temperature} @unit{\degreeFahrenheit}
-     * - @symbol{\bar{T}; is the mean temperature} @unit{\degreeFahrenheit}
-     * - @symbol{V_\text{wind}; is the wind speed} @unit{\mile\per\hour}
+     * @par Factors
+     * @formula{wall-duty; f_\text{duty} = \left(\frac{1}{24}\right)^{0.2}}
+     * @formula{wall-dTfactor; f_{\Delta T} = (\Delta T)^{0.266}}
+     * @formula{wall-Tbarfactor; f_{\bar{T}} = \left(\frac{1}{\bar{T}}\right)^{0.181}}
+     * @formula{wall-windfactor; f_\text{wind} = \sqrt{1 + 1.277 \cdot V_\text{wind}}}
      *
-     * @return Convective heat loss @unit{\btu\per\hour}.
+     * @par Temperature relations
+     * @formula{wall-dT; \Delta T = T_s - T_a}
+     * @formula{wall-Tbar; \bar{T} = \frac{T_s + T_a}{2}}
+     *
+     * @par Symbols
+     * @symtable
+     * @symrow{Q_\text{conv}; Convective heat loss; \btu\per\hour}
+     * @symrow{h; Convection coefficient; \btu\per\hour\foot\squared\degreeFahrenheit}
+     * @symrow{A; Surface area; \foot\squared}
+     * @symrow{\Delta T; Temperature difference between surface and ambient; \degreeFahrenheit}
+     * @symrow{f_\text{shape}; Surface shape factor; \unitless}
+     * @symrow{f_\text{duty}; Duty factor; \unitless}
+     * @symrow{f_{\Delta T}; Temperature difference factor; \unitless}
+     * @symrow{f_{\bar{T}}; Mean temperature factor; \unitless}
+     * @symrow{f_\text{wind}; Wind factor; \unitless}
+     * @symrow{T_s; Surface temperature; \degreeFahrenheit}
+     * @symrow{T_a; Ambient temperature; \degreeFahrenheit}
+     * @endsymtable
+     *
+     * @return Convective heat loss @unitb{\btu\per\hour}.
      */
     double convectiveHeatLoss() const;
 
@@ -158,31 +169,35 @@ class WallLosses {
      * @details Calculates the radiative heat loss using the Stefan-Boltzmann law, based on the fourth power of the
      * absolute temperatures of the surface and ambient, the surface area, and the surface emissivity.
      *
-     * @formula{wall-radiative-heat-loss; Q_\text{rad} = A \varepsilon \sigma (T_s^4 - T_a^4)}
+     * @par Governing equation
+     * @formula{wall-qrad; Q_\text{rad} = \varepsilon \sigma A (T_s^4 - T_a^4)}
      *
-     * @b Symbols
-     * - @symbol{Q_\text{rad}; is the radiative heat loss} @unit{\btu\per\hour}
-     * - @symbol{A; is the surface area} @unit{\foot\squared}
-     * - @symbol{\varepsilon; is the surface emissivity} @unit{\unitless}
-     * - @symbol{\sigma; is the Stefan-Boltzmann constant} @unit{\btu\per\hour\foot\squared\degreeRankine\tothe{4}}
-     * - @symbol{T_s; is the surface temperature} @unit{\degreeRankine}
-     * - @symbol{T_a; is the ambient temperature} @unit{\degreeRankine}
+     * @par Symbols
+     * @symtable
+     * @symrow{Q_\text{rad}; Radiative heat loss; \btu\per\hour}
+     * @symrow{\sigma; Stefan-Boltzmann constant; \btu\per\hour\foot\squared\degreeRankine\tothe{4}}
+     * @symrow{\varepsilon; Surface emissivity; \unitless}
+     * @symrow{A; Surface area; \foot\squared}
+     * @symrow{T_s; Surface temperature; \degreeRankine}
+     * @symrow{T_a; Ambient temperature; \degreeRankine}
+     * @endsymtable
      *
-     * @return Radiative heat loss @unit{\btu\per\hour}.
+     * @return Radiative heat loss @unitb{\btu\per\hour}.
      */
     double radiativeHeatLoss() const;
 
     int         id_                  = 0;         ///< Unique identifier for the wall.
     std::string surface_description_ = "Unknown"; ///< Description of the wall surface.
 
-    double surface_area_;        ///< Total exterior surface area of the wall @unit{\foot\squared}.
-    double ambient_temperature_; ///< Ambient temperature measured on the exterior of the wall @unit{\degreeFahrenheit}.
+    double surface_area_; ///< Total exterior surface area of the wall @unitb{\foot\squared}.
+    double
+        ambient_temperature_; ///< Ambient temperature measured on the exterior of the wall @unitb{\degreeFahrenheit}.
     double surface_temperature_; ///< Average surface temperature measured on the exterior of the wall.
-                                 ///< @unit{\degreeFahrenheit}.
-    double wind_speed_;          ///< Average wind speed measured on the exterior of the wall @unit{\mile\per\hour}.
-    double surface_emissivity_;  ///< Surface emissivity of the wall @unit{\unitless}.
-    double shape_factor_; ///< The surface shape/orientation factor used in heat loss calculations @unit{\unitless}.
-    double correction_factor_; ///< Correction factor for the wall heat loss calculations @unit{\unitless}.
+                                 ///< @unitb{\degreeFahrenheit}.
+    double wind_speed_;          ///< Average wind speed measured on the exterior of the wall @unitb{\mile\per\hour}.
+    double surface_emissivity_;  ///< Surface emissivity of the wall @unitb{\unitless}.
+    double shape_factor_; ///< The surface shape/orientation factor used in heat loss calculations @unitb{\unitless}.
+    double correction_factor_; ///< Correction factor for the wall heat loss calculations @unitb{\unitless}.
 
     friend class DefaultData; ///< Friend class for testing and default data initialization.
 };
