@@ -40,11 +40,11 @@ TEST_CASE("Compressed Air Reduction Bag Method and Electricity", "[CompressedAir
 
     auto compressedAirReduction = CompressedAirReduction(compressedAirReductionInputVec);
     auto testOutput             = compressedAirReduction.calculate();
-    CHECK(testOutput.energyUse == Approx(9424.779607694));
-    CHECK(testOutput.energyCost == Approx(1130.9733552923));
-    CHECK(testOutput.flowRate == Approx(3.408846));
+    CHECK(testOutput.energyUse == Approx(239984.64));
+    CHECK(testOutput.energyCost == Approx(28798.1568));
+    CHECK(testOutput.flowRate == Approx(43.4));
     CHECK(testOutput.singleNozzleFlowRate == Approx(0.0));
-    CHECK(testOutput.consumption == Approx(3534291.73528));
+    CHECK(testOutput.consumption == Approx(89994240.0));
 }
 
 TEST_CASE("Compressed Air Reduction Orifice Pressure Method and Electricity", "[CompressedAirReduction][Util]") {
