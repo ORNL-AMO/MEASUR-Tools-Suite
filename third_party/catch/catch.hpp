@@ -2068,7 +2068,11 @@ namespace Catch {
 // #included from: catch_platform.h
 #define TWOBLUECUBES_CATCH_PLATFORM_H_INCLUDED
 
-#if defined(__MAC_OS_X_VERSION_MIN_REQUIRED)
+
+// Prefer Apple Silicon/arm64 detection before generic macOS
+#if defined(__APPLE__) && (defined(__aarch64__) || defined(__arm64__))
+#  define CATCH_PLATFORM_APPLE_ARM64
+#elif defined(__MAC_OS_X_VERSION_MIN_REQUIRED)
 #  define CATCH_PLATFORM_MAC
 #elif  defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
 #  define CATCH_PLATFORM_IPHONE
@@ -2092,9 +2096,12 @@ namespace Catch{
 	void writeToDebugConsole( std::string const& text );
 }
 
-#ifdef CATCH_PLATFORM_MAC
 
-// The following code snippet based on:
+#ifdef CATCH_PLATFORM_APPLE_ARM64
+#  include <signal.h>
+#  define CATCH_TRAP() raise(SIGTRAP)
+#elif defined(CATCH_PLATFORM_MAC)
+    // The following code snippet based on:
     // http://cocoawithlove.com/2008/03/break-into-debugger.html
     #if defined(__ppc64__) || defined(__ppc__)
         #define CATCH_TRAP() \
@@ -7147,26 +7154,26 @@ namespace Catch {
 
 namespace Catch {
 
-    struct RandomNumberGenerator {
-        typedef std::ptrdiff_t result_type;
+//     struct RandomNumberGenerator {
+//         typedef std::ptrdiff_t result_type;
 
-        result_type operator()( result_type n ) const { return std::rand() % n; }
+//         result_type operator()( result_type n ) const { return std::rand() % n; }
 
-#ifdef CATCH_CONFIG_CPP11_SHUFFLE
-        static constexpr result_type min() { return 0; }
-        static constexpr result_type max() { return 1000000; }
-        result_type operator()() const { return std::rand() % max(); }
-#endif
-        template<typename V>
-        static void shuffle( V& vector ) {
-            RandomNumberGenerator rng;
-#ifdef CATCH_CONFIG_CPP11_SHUFFLE
-            std::shuffle( vector.begin(), vector.end(), rng );
-#else
-            std::random_shuffle( vector.begin(), vector.end(), rng );
-#endif
-        }
-    };
+// #ifdef CATCH_CONFIG_CPP11_SHUFFLE
+//         static constexpr result_type min() { return 0; }
+//         static constexpr result_type max() { return 1000000; }
+//         result_type operator()() const { return std::rand() % max(); }
+// #endif
+//         template<typename V>
+//         static void shuffle( V& vector ) {
+//             RandomNumberGenerator rng;
+// #ifdef CATCH_CONFIG_CPP11_SHUFFLE
+//             std::shuffle( vector.begin(), vector.end(), rng );
+// #else
+//             std::random_shuffle( vector.begin(), vector.end(), rng );
+// #endif
+//         }
+//     };
 
     inline std::vector<TestCase> sortTests( IConfig const& config, std::vector<TestCase> const& unsortedTestCases ) {
 
@@ -7177,10 +7184,10 @@ namespace Catch {
                 std::sort( sorted.begin(), sorted.end() );
                 break;
             case RunTests::InRandomOrder:
-                {
-                    seedRng( config );
-                    RandomNumberGenerator::shuffle( sorted );
-                }
+                // {
+                //     seedRng( config );
+                //     RandomNumberGenerator::shuffle( sorted );
+                // }
                 break;
             case RunTests::InDeclarationOrder:
                 // already in declaration order
