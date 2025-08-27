@@ -23,9 +23,10 @@ double WallLosses::convectiveHeatLoss() const {
 
     const double wind_factor = std::sqrt(1.0 + (kWindVelocityCoefficient * wind_speed_));
 
-    const double convective_heat_loss =
-        (shape_factor_ * duty_factor * delta_temperature_factor * mean_temperature_factor * wind_factor) *
-        surface_area_ * delta_temperature;
+    const double convection_coefficient =
+        shape_factor_ * duty_factor * delta_temperature_factor * mean_temperature_factor * wind_factor;
+
+    const double convective_heat_loss = convection_coefficient * surface_area_ * delta_temperature;
 
     return convective_heat_loss;
 }

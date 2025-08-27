@@ -757,27 +757,17 @@ Commands:
 **[Return to Index](#documentation-index)**
 <!-- END mdsplit-ignore -->
 
-## Custom Commands
+## Doxygen Aliases
 
+The following Doxygen aliases are defined in the `Doxyfile` to simplify common documentation tasks:
 - `@math{<math expression>}`
-- `@unit{<unit expression>}`
+- `@unitr{<unit expression>}`
+- `@unitb{<unit expression>}`
+- `@unitp{<unit expression>}`
 - `@formula{<label>; <equation>}`
-- `symbol{<symbol>; <description>}`
-
-<!-- START mdsplit-ignore -->
-**[Return to Index](#documentation-index)**
-<!-- END mdsplit-ignore -->
-
-## Generating Doxygen Documentation
-
-1. Ensure [Doxygen](https://www.doxygen.nl/) is installed on your system.
-2. From the project root, run:
-   ```bash
-   doxygen Doxyfile
-   ```
-3. The generated HTML and/or LaTeX documentation will appear in the output directory specified in your `Doxyfile`.
-
-For more details on configuring or customizing Doxygen output, see the official [Doxygen manual](https://www.doxygen.nl/manual/index.html) or review the `Doxyfile` in the project root.
+- `@symtable`
+- `@symrow{<symbol>; <description>; <unit expression>}`
+- `@endsymtable`
 
 <!-- START mdsplit-ignore -->
 **[Return to Index](#documentation-index)**
@@ -809,13 +799,13 @@ Use the `@math{<math expression>}` command to to write LaTeX-style mathematical 
 
 ### Units
 
-Use the `@unit{<unit expression>}` command to document units. The `@unit{}` command uses the siunitx package to format units in LaTeX.
+Use the `@unitb{<unit expression>}` command to document units. The `@unitb{}` command uses the siunitx package to format units in LaTeX style and encloses them in brackets.
 
 #### Example
 
 ```cpp
 /**
- * The speed of light in water is often denoted as @math{C_w} and is approximately 2.25 @unit{\meter\per\second}.
+ * The speed of light in water is often denoted as @math{C_w} and is approximately 2.25 @unitb{\meter\per\second}.
  */
 ```
 
@@ -826,7 +816,7 @@ Use the `@unit{<unit expression>}` command to document units. The `@unit{}` comm
 ### Formulas
 
 Use the `@formula{<label>; <equation>}` command to document formulas. The command takes 2 arguments, separated by `;`:
-1. A label for the formula, which can be used to reference the formula in the documentation by using `\eqref{eq:formula-label}`.
+1. A label for the formula, which can be used to reference the formula in the documentation by using `\eqref{eq:<formula-label>}`.
    - All labels are automatically prefixed with `eq:` to avoid conflicts.
 2. The formula itself, written in LaTeX syntax.
 
@@ -849,9 +839,10 @@ Use the `@formula{<label>; <equation>}` command to document formulas. The comman
 
 ### Symbols
 
-Use the `symbol{<symbol>; <description>}` command to document mathematical symbols. This command takes two arguments, separated by `;`:
+Use the `@symtable` and `@endsymtable` commands to create a table of symbols used in formulas. Each symbol is documented using the `@symrow{<symbol>; <description>; <unit expression>}` command, which takes three arguments, separated by `;`:
 1. The symbol itself, written in LaTeX syntax.
 2. A description of the symbol.
+3. The unit of the symbol, written in LaTeX syntax and formatted using the siunitx package.
 
 #### Example
 
@@ -860,9 +851,11 @@ Use the `symbol{<symbol>; <description>}` command to document mathematical symbo
  * The area of a circle can be computed using the formula:
  * @formula{circle-area; A = \pi r^2}
  * where:
- * - @symbol{A; is the area of the circle}
- * - @symbol{\pi; is the mathematical constant pi}
- * - @symbol{r; is the radius of the circle}
+ * @symtable
+ * @symrow{A; is the area of the circle; \meter\squared}
+ * @symrow{\pi; is the mathematical constant pi; 1}
+ * @symrow{r; is the radius of the circle; \meter}
+ * @endsymtable
  */
 ```
 
@@ -984,9 +977,12 @@ public:
      * @details Uses the Shoelace formula to compute the area:
      * @formula{polygon-area; A = \frac{1}{2} \sum_{i=1}^{n} (x_i y_{i+1} - x_{i+1} y_i)}
      * where:
-     * - @symbol{A; is the signed area}
-     * - @symbol{x_i \& y_i; are the coordinates of the i-th vertex}
-     * - @symbol{n; is the number of vertices}
+     * @symtable
+     * @symrow{A; is the signed area of the polygon; \meter\squared}
+     * @symrow{n; is the number of vertices; 1}
+     * @symrow{x_i, y_i; are the coordinates of vertex i; \meter}
+     * @symrow{x_{n+1}, y_{n+1}; are the coordinates of vertex 1 (wrap-around); \meter}
+     * @endsymtable
      * @note The area is positive if vertices are in counter-clockwise order. 
      * @return The signed area of the polygon.
      */
@@ -1050,7 +1046,7 @@ Use inline comments with `///<` to document constants and their purpose.
 #### Example
 
 ```cpp
-constexpr double kPi = 3.141592653589793;    ///< Circle ratio @unit{radians}.
+constexpr double kPi = 3.141592653589793;    ///< Circle ratio @unitb{radians}.
 inline constexpr Point2 kOrigin {0.0, 0.0};  ///< Reference point (0,0).
 ```
 
@@ -1111,6 +1107,23 @@ Place a **Doxygen block** in a central location (e.g., `mainpage.dox`) to define
  * @brief Geometry module for 2D and 3D shapes.
  */
 ```
+
+<!-- START mdsplit-ignore -->
+**[Return to Index](#documentation-index)**
+<!-- END mdsplit-ignore -->
+
+<!-- START mdsplit-ignore -->
+## Generating Doxygen Documentation
+
+1. Ensure [Doxygen](https://www.doxygen.nl/) is installed on your system.
+2. From the project root, run:
+   ```bash
+   doxygen Doxyfile
+   ```
+3. The generated HTML and/or LaTeX documentation will appear in the output directory specified in your `Doxyfile`.
+
+For more details on configuring or customizing Doxygen output, see the official [Doxygen manual](https://www.doxygen.nl/manual/index.html) or review the `Doxyfile` in the project root.
+<!-- END mdsplit-ignore -->
 
 <!-- START mdsplit-ignore -->
 **[Return to Index](#documentation-index)**
