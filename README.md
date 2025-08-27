@@ -48,7 +48,8 @@ The npm packages can be downloaded and install from [registry](https://www.npmjs
 
 ### WASM Initialization Example
 
-Below is an illustration of the WASM initialization process:
+MEASUR Tools Suite is distributed as a modularized WebAssembly Module. 
+Below is an illustration of the WASM initialization and usage process:
 
 ![WASM Initialization](assets/wasm-initialization.png)
 
@@ -56,8 +57,9 @@ Below is an illustration of the WASM initialization process:
 
 - Ensure you have followed the "Build WebAssembly Module" steps above
 - From the root directory of the MEASUR Tools Suite repository run `npm install` to install node dependencies
-- Then run `npm run test-wasm`
-  > A simple express server will be served to `localhost:3000` and a batch of script testing files will be executed
+- Then run `npm run test-wasm-mocha`
+  > All mocha tests found under `tests/wasm-mocha/` will be executed. 
+  > Migration of unit tests to the mocha framework is a WIP.
 
 ### C++ Unit Tests
 

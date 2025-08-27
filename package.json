@@ -2,12 +2,11 @@
   "name": "measur-tools-suite",
   "version": "1.0.11",
   "engines": {
-    "node": "20.16.0",
-    "npm": "10.8.1"
+    "node": "20.19.4",
+    "npm": "10.8.2"
   },
   "scripts": {
-    "test-wasm": "node tests/wasm/wasm-express/wasm-express.js",
-    "test-wasm-stop": "node tests/wasm/wasm-express/wasm-express-stop.js"
+    "test:browser": "karma start"
   },
   "description": "Calculation library for the Department of Energy Advanced Manufacturing and Materials Technologies Office and the Industrial Efficiency & Decarbonization Office (DOE AMMTO IEDO)  suite of tools",
   "author": "Gina Accawi <accawigk@ornl.gov>",
@@ -21,7 +20,13 @@
   },
   "homepage": "https://github.com/ORNL-AMO/MEASUR-Tools-Suite#readme",
   "devDependencies": {
+    "chai": "^6.0.1",
     "express": "^4.17.1",
-    "jquery": "^3.4.1"
+    "jquery": "^3.4.1",
+    "karma": "^6.4.4",
+    "karma-chrome-launcher": "^3.2.0",
+    "karma-mocha": "^2.0.1",
+    "karma-webpack": "^5.0.1",
+    "mocha": "^11.7.1"
   }
 }
