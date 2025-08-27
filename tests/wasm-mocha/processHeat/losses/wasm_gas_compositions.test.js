@@ -1,20 +1,11 @@
-const assert = require('chai').assert;
-const path = require('path');
-
-const clientPath = path.resolve(__dirname, '../../../../bin/client.js');
-const wasmPath = path.resolve(__dirname, '../../../../bin/client.wasm');
+import { assert } from 'chai';
 
 describe('Process Heat GasCompositions', function () {
-    let ToolsSuiteModule;
+    let moduleInstance;
     before(async function () {
-        const createModule = (await import(clientPath)).default;
-        ToolsSuiteModule = await createModule({
-            locateFile: (filename) => {
-                if (filename.endsWith('.wasm')) {
-                    return wasmPath;
-                }
-                return filename;
-            }
+        const ToolsSuiteModule = (await import('../../../../bin/client.js')).default;
+        moduleInstance = await ToolsSuiteModule({
+            locateFile: (filename) => '/base/bin/' + filename
         });
     });
 
@@ -33,7 +24,7 @@ describe('Process Heat GasCompositions', function () {
             O2: 0
         }
 
-        var flueGasByVolumeCalculateHeatingValue = new ToolsSuiteModule.GasCompositions('some substance', inp.CH4, inp.C2H6, inp.N2, inp.H2, inp.C3H8, inp.C4H10_CnH2n, inp.H2O, inp.CO, inp.CO2, inp.SO2, inp.O2);
+        var flueGasByVolumeCalculateHeatingValue = new moduleInstance.GasCompositions('some substance', inp.CH4, inp.C2H6, inp.N2, inp.H2, inp.C3H8, inp.C4H10_CnH2n, inp.H2O, inp.CO, inp.CO2, inp.SO2, inp.O2);
         var heatingValue = flueGasByVolumeCalculateHeatingValue.getHeatingValue();
         flueGasByVolumeCalculateHeatingValue.delete();
         assert.equal(heatingValue, 22630.355481082854);
@@ -54,7 +45,7 @@ describe('Process Heat GasCompositions', function () {
             O2: 0
         }
 
-        var flueGasByVolumeCalculateHeatingValue = new ToolsSuiteModule.GasCompositions('some substance', inp.CH4, inp.C2H6, inp.N2, inp.H2, inp.C3H8, inp.C4H10_CnH2n, inp.H2O, inp.CO, inp.CO2, inp.SO2, inp.O2);
+        var flueGasByVolumeCalculateHeatingValue = new moduleInstance.GasCompositions('some substance', inp.CH4, inp.C2H6, inp.N2, inp.H2, inp.C3H8, inp.C4H10_CnH2n, inp.H2O, inp.CO, inp.CO2, inp.SO2, inp.O2);
         var heatingValueVolume = flueGasByVolumeCalculateHeatingValue.getHeatingValueVolume();
         flueGasByVolumeCalculateHeatingValue.delete();
         assert.equal(heatingValueVolume, 1019.664897346019);
@@ -75,7 +66,7 @@ describe('Process Heat GasCompositions', function () {
             O2: 0
         }
 
-        var flueGasByVolumeCalculateHeatingValue = new ToolsSuiteModule.GasCompositions('some substance', inp.CH4, inp.C2H6, inp.N2, inp.H2, inp.C3H8, inp.C4H10_CnH2n, inp.H2O, inp.CO, inp.CO2, inp.SO2, inp.O2);
+        var flueGasByVolumeCalculateHeatingValue = new moduleInstance.GasCompositions('some substance', inp.CH4, inp.C2H6, inp.N2, inp.H2, inp.C3H8, inp.C4H10_CnH2n, inp.H2O, inp.CO, inp.CO2, inp.SO2, inp.O2);
         var specificGravity = flueGasByVolumeCalculateHeatingValue.getSpecificGravity();
         flueGasByVolumeCalculateHeatingValue.delete();
         assert.equal(specificGravity, 0.6317829589672002);
@@ -88,7 +79,7 @@ describe('Process Heat GasCompositions', function () {
 
         // /100 convert to decimal
         var o2InFlueGas = .5 / 100;
-        var flueGasCalculateExcessAir = new ToolsSuiteModule.GasCompositions('some substance', inp.CH4, inp.C2H6, inp.N2, inp.H2, inp.C3H8, inp.C4H10_CnH2n, inp.H2O, inp.CO, inp.CO2, inp.SO2, inp.O2);
+        var flueGasCalculateExcessAir = new moduleInstance.GasCompositions('some substance', inp.CH4, inp.C2H6, inp.N2, inp.H2, inp.C3H8, inp.C4H10_CnH2n, inp.H2O, inp.CO, inp.CO2, inp.SO2, inp.O2);
         //x100 to convert to %
         var excessAir = flueGasCalculateExcessAir.calculateExcessAir(o2InFlueGas) * 100;
         flueGasCalculateExcessAir.delete();
@@ -101,7 +92,7 @@ describe('Process Heat GasCompositions', function () {
         }
 
         var o2InFlueGas = 3 / 100;
-        var flueGasCalculateExcessAir = new ToolsSuiteModule.GasCompositions('some substance', inp.CH4, inp.C2H6, inp.N2, inp.H2, inp.C3H8, inp.C4H10_CnH2n, inp.H2O, inp.CO, inp.CO2, inp.SO2, inp.O2);
+        var flueGasCalculateExcessAir = new moduleInstance.GasCompositions('some substance', inp.CH4, inp.C2H6, inp.N2, inp.H2, inp.C3H8, inp.C4H10_CnH2n, inp.H2O, inp.CO, inp.CO2, inp.SO2, inp.O2);
         //x100 to convert to %
         var excessAir = flueGasCalculateExcessAir.calculateExcessAir(o2InFlueGas) * 100;
         flueGasCalculateExcessAir.delete();
@@ -114,7 +105,7 @@ describe('Process Heat GasCompositions', function () {
         }
 
         var o2InFlueGas = 7 / 100;
-        var flueGasCalculateExcessAir = new ToolsSuiteModule.GasCompositions('some substance', inp.CH4, inp.C2H6, inp.N2, inp.H2, inp.C3H8, inp.C4H10_CnH2n, inp.H2O, inp.CO, inp.CO2, inp.SO2, inp.O2);
+        var flueGasCalculateExcessAir = new moduleInstance.GasCompositions('some substance', inp.CH4, inp.C2H6, inp.N2, inp.H2, inp.C3H8, inp.C4H10_CnH2n, inp.H2O, inp.CO, inp.CO2, inp.SO2, inp.O2);
         //x100 to convert to %
         var excessAir = flueGasCalculateExcessAir.calculateExcessAir(o2InFlueGas) * 100;
         flueGasCalculateExcessAir.delete();
@@ -129,7 +120,7 @@ describe('Process Heat GasCompositions', function () {
 
         // /100 convert to decimal
         var o2InFlueGas = 2.3172 / 100;
-        var flueGasCalculateO2 = new ToolsSuiteModule.GasCompositions('some substance', inp.CH4, inp.C2H6, inp.N2, inp.H2, inp.C3H8, inp.C4H10_CnH2n, inp.H2O, inp.CO, inp.CO2, inp.SO2, inp.O2);
+        var flueGasCalculateO2 = new moduleInstance.GasCompositions('some substance', inp.CH4, inp.C2H6, inp.N2, inp.H2, inp.C3H8, inp.C4H10_CnH2n, inp.H2O, inp.CO, inp.CO2, inp.SO2, inp.O2);
         //x100 to convert to %
         var o2 = flueGasCalculateO2.calculateO2(o2InFlueGas) * 100;
         flueGasCalculateO2.delete();
@@ -143,7 +134,7 @@ describe('Process Heat GasCompositions', function () {
 
         // /100 convert to decimal
         var o2InFlueGas = 15.5223 / 100;
-        var flueGasCalculateO2 = new ToolsSuiteModule.GasCompositions('some substance', inp.CH4, inp.C2H6, inp.N2, inp.H2, inp.C3H8, inp.C4H10_CnH2n, inp.H2O, inp.CO, inp.CO2, inp.SO2, inp.O2);
+        var flueGasCalculateO2 = new moduleInstance.GasCompositions('some substance', inp.CH4, inp.C2H6, inp.N2, inp.H2, inp.C3H8, inp.C4H10_CnH2n, inp.H2O, inp.CO, inp.CO2, inp.SO2, inp.O2);
         //x100 to convert to %
         var o2 = flueGasCalculateO2.calculateO2(o2InFlueGas) * 100;
         flueGasCalculateO2.delete();
@@ -157,7 +148,7 @@ describe('Process Heat GasCompositions', function () {
 
         // /100 convert to decimal
         var o2InFlueGas = 45.197 / 100;
-        var flueGasCalculateO2 = new ToolsSuiteModule.GasCompositions('some substance', inp.CH4, inp.C2H6, inp.N2, inp.H2, inp.C3H8, inp.C4H10_CnH2n, inp.H2O, inp.CO, inp.CO2, inp.SO2, inp.O2);
+        var flueGasCalculateO2 = new moduleInstance.GasCompositions('some substance', inp.CH4, inp.C2H6, inp.N2, inp.H2, inp.C3H8, inp.C4H10_CnH2n, inp.H2O, inp.CO, inp.CO2, inp.SO2, inp.O2);
         //x100 to convert to %
         var o2 = flueGasCalculateO2.calculateO2(o2InFlueGas) * 100;
         flueGasCalculateO2.delete();
@@ -176,7 +167,7 @@ describe('Process Heat GasCompositions', function () {
         var ambientAirTemp = 60;
         var combAirMoisturePerc = 0;
         var excessAirPercentage = 0.09;
-        var gasComposition = new ToolsSuiteModule.GasCompositions('some substance', inp.CH4, inp.C2H6, inp.N2, inp.H2, inp.C3H8, inp.C4H10_CnH2n, inp.H2O, inp.CO, inp.CO2, inp.SO2, inp.O2);
+        var gasComposition = new moduleInstance.GasCompositions('some substance', inp.CH4, inp.C2H6, inp.N2, inp.H2, inp.C3H8, inp.C4H10_CnH2n, inp.H2O, inp.CO, inp.CO2, inp.SO2, inp.O2);
         var heatLoss = gasComposition.getProcessHeatProperties(flueGasTemperature, flueGasO2Percentage, combustionAirTemperature, fuelTemperature, ambientAirTemp, combAirMoisturePerc, excessAirPercentage).availableHeat;
         gasComposition.delete();
         assert.equal(heatLoss, 0.7858766581499935);

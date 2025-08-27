@@ -1,22 +1,11 @@
-const path = require('path');
-const assert = require('chai').assert;
-
-// Adjust the path to your client.js as needed
-const clientPath = path.resolve(__dirname, '../../../../bin/client.js');
-const wasmPath = path.resolve(__dirname, '../../../../bin/client.wasm');
+import { assert } from 'chai';
 
 describe('Process Heat GasCoolingLosses', function () {
-
-    let ToolsSuiteModule;
+    let moduleInstance;
     before(async function () {
-        const createModule = (await import(clientPath)).default;
-        ToolsSuiteModule = await createModule({
-            locateFile: (filename) => {
-                if (filename.endsWith('.wasm')) {
-                    return wasmPath;
-                }
-                return filename;
-            }
+        const ToolsSuiteModule = (await import('../../../../bin/client.js')).default;
+        moduleInstance = await ToolsSuiteModule({
+            locateFile: (filename) => '/base/bin/' + filename
         });
     });
 
@@ -25,7 +14,7 @@ describe('Process Heat GasCoolingLosses', function () {
             flowRate: 2500, initialTemperature: 80, finalTemperature: 280, specificHeat: 0.02, correctionFactor: 1.0,
             gasDensity: 1
         };
-        var gasCoolingLosses = new ToolsSuiteModule.GasCoolingLosses(inp.flowRate, inp.initialTemperature, inp.finalTemperature, inp.specificHeat, inp.correctionFactor, inp.correctionFactor);
+        var gasCoolingLosses = new moduleInstance.GasCoolingLosses(inp.flowRate, inp.initialTemperature, inp.finalTemperature, inp.specificHeat, inp.correctionFactor, inp.correctionFactor);
         var heatLoss = gasCoolingLosses.getHeatLoss();
         assert.equal(heatLoss, 600000.0);
         gasCoolingLosses.delete();
@@ -36,7 +25,7 @@ describe('Process Heat GasCoolingLosses', function () {
             flowRate: 600, initialTemperature: 80, finalTemperature: 350, specificHeat: 0.02, correctionFactor: 1.0,
             gasDensity: 1
         };
-        var gasCoolingLosses = new ToolsSuiteModule.GasCoolingLosses(inp.flowRate, inp.initialTemperature, inp.finalTemperature, inp.specificHeat, inp.correctionFactor, inp.correctionFactor);
+        var gasCoolingLosses = new moduleInstance.GasCoolingLosses(inp.flowRate, inp.initialTemperature, inp.finalTemperature, inp.specificHeat, inp.correctionFactor, inp.correctionFactor);
         var heatLoss = gasCoolingLosses.getHeatLoss();
         assert.equal(heatLoss, 194400.0);
         gasCoolingLosses.delete();

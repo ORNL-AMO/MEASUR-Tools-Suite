@@ -1,21 +1,11 @@
-const path = require('path');
-const assert = require('chai').assert;
-
-const clientPath = path.resolve(__dirname, '../../../../bin/client.js');
-const wasmPath = path.resolve(__dirname, '../../../../bin/client.wasm');
+import { assert } from 'chai';
 
 describe('Process Heat FixtureLosses', function () {
-    let ToolsSuiteModule;
-
+    let moduleInstance;
     before(async function () {
-        const createModule = (await import(clientPath)).default;
-        ToolsSuiteModule = await createModule({
-            locateFile: (filename) => {
-                if (filename.endsWith('.wasm')) {
-                    return wasmPath;
-                }
-                return filename;
-            }
+        const ToolsSuiteModule = (await import('../../../../bin/client.js')).default;
+        moduleInstance = await ToolsSuiteModule({
+            locateFile: (filename) => '/base/bin/' + filename
         });
     });
 
@@ -26,7 +16,7 @@ describe('Process Heat FixtureLosses', function () {
         const final_temperature = 1800.0;
         const correction_factor = 1.0;
 
-        const fixtureLosses = new ToolsSuiteModule.FixtureLosses(
+        const fixtureLosses = new moduleInstance.FixtureLosses(
             specific_heat,
             feed_rate,
             initial_temperature,

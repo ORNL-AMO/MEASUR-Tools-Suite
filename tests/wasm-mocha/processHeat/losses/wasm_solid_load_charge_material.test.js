@@ -1,22 +1,14 @@
-const path = require('path');
-const assert = require('chai').assert;
+import { assert } from 'chai';
 
-const clientPath = path.resolve(__dirname, '../../../../bin/client.js');
-const wasmPath = path.resolve(__dirname, '../../../../bin/client.wasm');
 describe('Process Heat SolidLoadChargeMaterial', function () {
-
-    let ToolsSuiteModule;
+    let moduleInstance;
     before(async function () {
-        const createModule = (await import(clientPath)).default;
-        ToolsSuiteModule = await createModule({
-            locateFile: (filename) => {
-                if (filename.endsWith('.wasm')) {
-                    return wasmPath;
-                }
-                return filename;
-            }
+        const ToolsSuiteModule = (await import('../../../../bin/client.js')).default;
+        moduleInstance = await ToolsSuiteModule({
+            locateFile: (filename) => '/base/bin/' + filename
         });
     });
+
 
     it('should calculate totalHeat correctly', function () {
         var inp = {
@@ -25,7 +17,7 @@ describe('Process Heat SolidLoadChargeMaterial', function () {
             dischargeTemperature: 2200, waterVaporDischargeTemperature: 500, chargeMelted: 0, chargeReacted: 1,
             reactionHeat: 100, additionalHeat: 0
         };
-        var solidLoadChargeMaterial = new ToolsSuiteModule.SolidLoadChargeMaterial(ToolsSuiteModule.ThermicReactionType.EXOTHERMIC, inp.specificHeatSolid, inp.latentHeat, inp.specificHeatLiquid, inp.meltingPoint, inp.chargeFeedRate, inp.waterContentCharged, inp.waterContentDischarged, inp.initialTemperature, inp.dischargeTemperature, inp.waterVaporDischargeTemperature, inp.chargeMelted, inp.chargeReacted, inp.reactionHeat, inp.additionalHeat);
+        var solidLoadChargeMaterial = new moduleInstance.SolidLoadChargeMaterial(moduleInstance.ThermicReactionType.EXOTHERMIC, inp.specificHeatSolid, inp.latentHeat, inp.specificHeatLiquid, inp.meltingPoint, inp.chargeFeedRate, inp.waterContentCharged, inp.waterContentDischarged, inp.initialTemperature, inp.dischargeTemperature, inp.waterVaporDischargeTemperature, inp.chargeMelted, inp.chargeReacted, inp.reactionHeat, inp.additionalHeat);
         var totalHeat = solidLoadChargeMaterial.getTotalHeat()
         assert.equal(totalHeat, 3204310.28);
         solidLoadChargeMaterial.delete();
