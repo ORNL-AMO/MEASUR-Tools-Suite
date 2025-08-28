@@ -1,4 +1,4 @@
-#include "databases/DB.h"
+#include "databases/default_data.h"
 
 #include <catch.hpp>
 
@@ -9,7 +9,6 @@
 #include "databases/MotorData.h"
 #include "databases/SolidLiquidFlueGasMaterialData.h"
 #include "databases/SolidLoadChargeMaterialData.h"
-#include "databases/WallLossesSurfaceData.h"
 #include "motorDriven/motor/MotorData.h"
 #include "processHeat/losses/atmosphere.h"
 #include "processHeat/losses/gas_flue_gas_material.h"
@@ -486,26 +485,6 @@ TEST_CASE("DefaultData - getAtmosphereSpecificHeat", "[databases]") {
         Atmosphere expected;
         expected.setSubstance("Nitrogen");
         expected.setSpecificHeat(0.0185);
-        expected.setID(1);
-
-        CHECK(expected == output);
-    }
-}
-
-TEST_CASE("DefaultData - getWallLossesSurface", "[databases]") {
-    auto defaultData = DefaultData();
-
-    {
-        auto const outputs = defaultData.getWallLossesSurface();
-        CHECK(outputs.size() == 7);
-    }
-
-    {
-        auto const output = defaultData.getWallLossesSurface()[0];
-
-        WallLosses expected;
-        expected.setSurfaceDescription("Horizontal cylinders");
-        expected.setShapeFactor(1.016);
         expected.setID(1);
 
         CHECK(expected == output);

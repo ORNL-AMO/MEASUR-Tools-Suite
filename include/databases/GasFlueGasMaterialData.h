@@ -1,7 +1,6 @@
-#ifndef TOOLS_SUITE_GASFLUEGASMATERIAL_DATA_H
-#define TOOLS_SUITE_GASFLUEGASMATERIAL_DATA_H
+#pragma once
 
-#include "DB.h"
+#include "default_data.h"
 
 class GasCompositions;
 
@@ -22,5 +21,3 @@ std::vector<GasCompositions> DefaultData::get_default_gas_flue_gas_materials() {
         {"Hydrogen", 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 61095.0, 325, .0746887967},
     };
 }
-
-#endif // TOOLS_SUITE_GASFLUEGASMATERIAL_DATA_H

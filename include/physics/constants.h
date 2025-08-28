@@ -29,15 +29,18 @@ inline constexpr double kStefanBoltzmann = 5.670374419e-8;
 namespace physics::imperial {}
 
 /**
- * @namespace physics::customary
+ * @namespace physics::us
  * @brief Physical constants defined in U.S. Customary units.
  */
-namespace physics::customary {
+namespace physics::us {
 
-/// @brief Stefan–Boltzmann constant @unitb{\btu\per\hour\foot\squared\degreeRankine\tothe{4}}
+/**
+ * @brief Stefan–Boltzmann constant @unitb{\btu\per\hour\foot\squared\degreeRankine\tothe{4}}
+ * @details Source: @cite capehart2007guide
+ */
 inline constexpr double kStefanBoltzmann = 1.713441e-9;
 
-} // namespace physics::customary
+} // namespace physics::us
 
 /**
  * @namespace physics::conversions

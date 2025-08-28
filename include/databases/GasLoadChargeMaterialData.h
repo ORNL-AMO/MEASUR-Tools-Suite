@@ -1,7 +1,6 @@
-#ifndef TOOLS_SUITE_GASLOADCHARGEMATERIALDATA_H
-#define TOOLS_SUITE_GASLOADCHARGEMATERIALDATA_H
+#pragma once
 
-#include "DB.h"
+#include "default_data.h"
 
 class GasLoadChargeMaterial;
 
@@ -17,5 +16,3 @@ std::vector<GasLoadChargeMaterial> DefaultData::get_default_gas_load_charge_mate
             {"Carbon Monoxide - Low Pressure", 0.2501},
             {"Hydrogen - Low Pressure", 3.45}};
 }
-
-#endif // TOOLS_SUITE_GASLOADCHARGEMATERIALDATA_H
