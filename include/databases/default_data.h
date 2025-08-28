@@ -9,7 +9,7 @@
 #include "processHeat/losses/liquid_load_charge_material.h"
 #include "processHeat/losses/solid_liquid_flue_gas_material.h"
 #include "processHeat/losses/solid_load_charge_material.h"
-#include "processHeat/losses/wall_losses.h"
+#include "processHeat/losses/wall_heat_loss.h"
 
 class SolidLoadChargeMaterial;
 class LiquidLoadChargeMaterial;
@@ -80,15 +80,6 @@ class DefaultData {
         return specificHeat;
     }
 
-    std::vector<WallLosses> getWallLossesSurface() {
-        std::vector<WallLosses> wallLossesSurface = get_default_wall_losses_surface();
-        auto                    size              = (int)wallLossesSurface.size();
-        for (auto i = 0; i < size; i++) {
-            (wallLossesSurface[i]).setID(i + 1);
-        }
-        return wallLossesSurface;
-    }
-
     std::vector<MotorData> getMotorData() {
         std::vector<MotorData> motorData = get_default_motor_data();
         auto                   size      = (int)motorData.size();
@@ -105,6 +96,5 @@ class DefaultData {
     std::vector<SolidLiquidFlueGasMaterial> get_default_solid_liquid_flue_gas_materials();
     std::vector<GasCompositions>            get_default_gas_flue_gas_materials();
     std::vector<Atmosphere>                 get_default_atmosphere_specific_heat();
-    std::vector<WallLosses>                 get_default_wall_losses_surface();
     std::vector<MotorData>                  get_default_motor_data();
 };

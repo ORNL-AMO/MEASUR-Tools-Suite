@@ -57,7 +57,7 @@ Below is an illustration of the WASM initialization and usage process:
 
 - Ensure you have followed the "Build WebAssembly Module" steps above
 - From the root directory of the MEASUR Tools Suite repository run `npm install` to install node dependencies
-- Then run `npm run test-wasm-mocha`
+- Then run `npm run test:browser`
   > All mocha tests found under `tests/wasm-mocha/` will be executed. 
   > Migration of unit tests to the mocha framework is a WIP.
 

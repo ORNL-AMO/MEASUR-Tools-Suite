@@ -1,10 +1,8 @@
-#ifndef TOOLS_SUITE_MOTORDATADB_H
-#define TOOLS_SUITE_MOTORDATADB_H
-
+#pragma once
 #include <fstream>
 #include <tuple>
 
-#include "DB.h"
+#include "default_data.h"
 #include "motorDriven/motor/MotorEfficiency.h"
 
 std::vector<std::tuple<double, int, double, Motor::EfficiencyClass, std::string, Motor::LineFrequency, int>>
@@ -1247,5 +1245,3 @@ std::vector<MotorData> DefaultData::get_default_motor_data() {
     defaultMotorData.insert(defaultMotorData.end(), standardEffMotorData.begin(), standardEffMotorData.end());
     return defaultMotorData;
 }
-
-#endif // TOOLS_SUITE_MOTORDATADB_H

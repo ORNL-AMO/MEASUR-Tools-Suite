@@ -1,7 +1,6 @@
-#ifndef TOOLS_SUITE_ATMOSPHERESPECIFICHEATDATA_H
-#define TOOLS_SUITE_ATMOSPHERESPECIFICHEATDATA_H
+#pragma once
 
-#include "DB.h"
+#include "default_data.h"
 
 class Atmosphere;
 
@@ -11,5 +10,3 @@ std::vector<Atmosphere> DefaultData::get_default_atmosphere_specific_heat() {
         {"Endothermic Gas", 0.0185}, {"Air", 0.0184},      {"Water Vapor", 0.0212},
     };
 }
-
-#endif // TOOLS_SUITE_ATMOSPHERESPECIFICHEATDATA_H

@@ -4,12 +4,16 @@ The following table summarizes the changes made to the Emscripten bindings in th
 
 ## WallLosses class
 
-| Previous Signature | Updated Signature     |
-| ------------------ | --------------------- |
-| getConditionFactor | shapeFactor           |
-| getID              | id                    |
-| getHeatLoss        | totalHeatLoss         |
-| getSurface         | surfaceDescription    |
-| setConditionFactor | setShapeFactor        |
-| setSurface         | setSurfaceDescription |
+The `WallLosses` class has been refactored into a namespace called `wall_heat_loss` with many methoids being removed or renamed. The following table outlines the updated emscripten bindings:
 
+| Current Signature                | Previous Signature | Notes                                                                 |
+| -------------------------------- | ------------------ | --------------------------------------------------------------------- |
+| totalHeatLoss                    | getHeatLoss        | Renamed                                                               |
+| convectiveHeatLoss               | ---                | New standalone method to calculate convective heat loss.              |
+| radiativeHeatLoss                | ---                | New standalone method to calculate radiative heat loss.               |
+| ShapeFactor                      | ---                | New Struct that holds shape factor data (description & factor value). |
+| ShapeFactor.surfaceConfiguration | surfaceDescription | New field in ShapeFactor struct that holds the description.           |
+| ShapeFactor.value                | shapeFactor        | New field in ShapeFactor struct that holds the factor value.          |
+| shapeFactors                     | ---                | New method that returns a vector of ShapeFactor structs.              |
+
+See `wasm_wall_heat_loss.test.js` for usage examples.

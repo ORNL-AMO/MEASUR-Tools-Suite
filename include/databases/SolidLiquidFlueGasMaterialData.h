@@ -1,7 +1,6 @@
-#ifndef TOOLS_SUITE_SOLIDLIQUIDFLUEGASMATERIALDATA_H
-#define TOOLS_SUITE_SOLIDLIQUIDFLUEGASMATERIALDATA_H
+#pragma once
 
-#include "DB.h"
+#include "default_data.h"
 
 class SolidLiquidFlueGasMaterial;
 
@@ -33,5 +32,3 @@ std::vector<SolidLiquidFlueGasMaterial> DefaultData::get_default_solid_liquid_fl
             {"Fuel Oil #6", 87.1, 10.6, 2.1, 0.2, 0, 0, 0},
             {"Typical Wood", 51.7, 5.4, 0.1, 3.1, 39.5, 0, 0.2}};
 }
-
-#endif // TOOLS_SUITE_SOLIDLIQUIDFLUEGASMATERIALDATA_H
