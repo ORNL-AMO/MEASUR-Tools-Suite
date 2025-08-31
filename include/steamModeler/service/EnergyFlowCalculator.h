@@ -5,13 +5,13 @@
 #include <steamModeler/SteamSystemModelerTool.h>
 
 class EnergyFlowCalculator {
-public:
-    double calc(const double massFlow, const Boiler &boiler) const;
+  public:
+    double calc(const double massFlow, const Boiler& boiler) const;
 
-    double
-    calc(const double massFlow, const SteamSystemModelerTool::SteamPropertiesOutput &steamPropertiesOutput) const;
+    double calc(const double                                         massFlow,
+                const SteamSystemModelerTool::SteamPropertiesOutput& steamPropertiesOutput) const;
 
     double calc(const double massFlow, const double specificEnthalpy) const;
 };
 
-#endif //TOOLS_SUITE_ENERGYFLOWCALCULATOR_H
+#endif // TOOLS_SUITE_ENERGYFLOWCALCULATOR_H

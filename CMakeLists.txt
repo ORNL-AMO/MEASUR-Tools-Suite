@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 project(measur_tools_suite)
 
 set(CMAKE_MACOSX_RPATH 1)
@@ -27,11 +27,14 @@ include(cmake/ProjectMacros.cmake)
 if(BUILD_WASM)
   set(BUILD_PACKAGE false)
   set(BUILD_TESTING false)
-  set(CMAKE_CXX_STANDARD 11)
-  set(CMAKE_CXX_FLAGS "-fexceptions -O3 -std=c++11")
-  set(CMAKE_EXE_LINKER_FLAGS "--no-entry --bind -s WASM=1 -s ASSERTIONS=1 -s ERROR_ON_UNDEFINED_SYMBOLS=0")
+  set(CMAKE_CXX_STANDARD 20)
+  set(CMAKE_CXX_FLAGS "-fexceptions -O3 -std=c++20")
+  # set(CMAKE_EXE_LINKER_FLAGS "--no-entry --bind -s WASM=1 -s ASSERTIONS=1 -s ERROR_ON_UNDEFINED_SYMBOLS=0")
+  set(CMAKE_EXE_LINKER_FLAGS "--no-entry --bind -s WASM=1 -s ASSERTIONS=1 -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s SINGLE_FILE=0 -s MODULARIZE=1 -s EXPORT_ES6=0 -s ENVIRONMENT=web")
 else()
   include(cmake/CompilerFlags.cmake)
+  set(CMAKE_CXX_STANDARD 20)
+  set(CMAKE_CXX_STANDARD_REQUIRED ON)
 endif()
 
 # On Windows, things end up under Debug/ or Release/.

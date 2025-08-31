@@ -10,22 +10,22 @@
  * Typically need to start the model over with an adjusted initial mass flow amount.
  */
 class SteamBalanceException : public std::exception {
-public:
+  public:
     /**
      * @param additionalSteamNeeded The additional amount of steam needed.
      * @param adjustedInitialSteam The adjusted amount of steam to use when re-running the model.
      */
     SteamBalanceException(double additionalSteamNeeded, double adjustedInitialSteam);
 
-    friend std::ostream &operator<<(std::ostream &stream, const SteamBalanceException &e);
+    friend std::ostream& operator<<(std::ostream& stream, const SteamBalanceException& e);
 
     double getAdditionalSteamNeeded() const;
 
     double getAdjustedInitialSteam() const;
 
-private:
+  private:
     double additionalSteamNeeded;
     double adjustedInitialSteam;
 };
 
-#endif //TOOLS_SUITE_STEAMBALANCEEXCEPTION_H
+#endif // TOOLS_SUITE_STEAMBALANCEEXCEPTION_H

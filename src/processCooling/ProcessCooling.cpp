@@ -1,6 +1,7 @@
 /**
  * @file Implementation of Process Fluid Cooling Energy Calculations
- * Originally (CWSAT) writen in VB by University of Massachusetts - Amherst with funding from the U.S. Department of Energy
+ * Originally (CWSAT) writen in VB by University of Massachusetts - Amherst with funding from the U.S. Department of
+ * Energy
  * @author Converted by Omer Aziz from VB to C++ (omerb).
  */
 
@@ -8,32 +9,35 @@
 
 const double nominalWaterFlowGPMPerTon = 3.0; // Typical value for towers
 
-ProcessCooling::ProcessCooling(const vector<int>& systemOperationAnnualHours,
-                               const vector<double>& weatherDryBulbHourlyTemp, const vector<double>& weatherWetBulbHourlyTemp,
-                               const vector<ChillerInput>& chillerInputList,
-                               AirCooledSystemInput airCooledSystemInput, TowerInput towerInput, WaterCooledSystemInput waterCooledSystemInput) {
-    if(systemOperationAnnualHours.size() != HOURS_IN_YEAR || systemOperationAnnualHours.size() != weatherDryBulbHourlyTemp.size() ||
-       systemOperationAnnualHours.size() != weatherWetBulbHourlyTemp.size() || chillerInputList.empty()) {
-        throw invalid_argument("Invalid input, requires weather and operation data of size " + to_string(HOURS_IN_YEAR) + " and at least one chiller.");
+ProcessCooling::ProcessCooling(const vector<int>&          systemOperationAnnualHours,
+                               const vector<double>&       weatherDryBulbHourlyTemp,
+                               const vector<double>&       weatherWetBulbHourlyTemp,
+                               const vector<ChillerInput>& chillerInputList, AirCooledSystemInput airCooledSystemInput,
+                               TowerInput towerInput, WaterCooledSystemInput waterCooledSystemInput) {
+    if (systemOperationAnnualHours.size() != HOURS_IN_YEAR ||
+        systemOperationAnnualHours.size() != weatherDryBulbHourlyTemp.size() ||
+        systemOperationAnnualHours.size() != weatherWetBulbHourlyTemp.size() || chillerInputList.empty()) {
+        throw invalid_argument("Invalid input, requires weather and operation data of size " +
+                               to_string(HOURS_IN_YEAR) + " and at least one chiller.");
     }
 
-    if((airCooledSystemInput.isAirCooled && waterCooledSystemInput.isWaterCooled) ||
-       (!airCooledSystemInput.isAirCooled && !waterCooledSystemInput.isWaterCooled)) {
+    if ((airCooledSystemInput.isAirCooled && waterCooledSystemInput.isWaterCooled) ||
+        (!airCooledSystemInput.isAirCooled && !waterCooledSystemInput.isWaterCooled)) {
         throw invalid_argument("Invalid cooling system.");
     }
 
     systemOperationAnnual = systemOperationAnnualHours;
-    dryBulbHourlyTemp = weatherDryBulbHourlyTemp;
-    wetBulbHourlyTemp = weatherWetBulbHourlyTemp;
+    dryBulbHourlyTemp     = weatherDryBulbHourlyTemp;
+    wetBulbHourlyTemp     = weatherWetBulbHourlyTemp;
 
     tower = towerInput;
 
-    if(airCooledSystemInput.isAirCooled) {
-        coolingType = CoolingSystemType::Air;
+    if (airCooledSystemInput.isAirCooled) {
+        coolingType     = CoolingSystemType::Air;
         airCooledSystem = airCooledSystemInput;
     }
-    else if(waterCooledSystemInput.isWaterCooled) {
-        coolingType = CoolingSystemType::Water;
+    else if (waterCooledSystemInput.isWaterCooled) {
+        coolingType       = CoolingSystemType::Water;
         waterCooledSystem = waterCooledSystemInput;
 
         FCTemp = waterCooledSystem.CHWT - waterCooledSystem.HEXApproachTemp - 10;
@@ -58,18 +62,18 @@ ProcessCooling::ProcessCooling(const vector<int>& systemOperationAnnualHours,
 
 ProcessCooling::TowerOutput ProcessCooling::calculateTowerEnergy() {
     vector<double> tempBins = TowerOutput().tempBins;
-    int numBins = (int)tempBins.size();
+    int            numBins  = (int)tempBins.size();
     vector<double> towerHours(numBins, 0);
     vector<double> towerEnergy(numBins, 0);
 
     for (int j = 0; j < HOURS_IN_YEAR; ++j) {
         double towerPowerHourly;
         if (systemOperationAnnual[j] == 1) {
-            double TWetBulb = wetBulbHourlyTemp[j];
+            double TWetBulb         = wetBulbHourlyTemp[j];
             double percentWaterFlow = getPercentWaterFlow(j);
-            double range = getRange(j);
-            double approach = getApproach(TWetBulb, 60); // Minimum temperature to chillers 60
-            double percentFanPower = getPercentFanPower(TWetBulb, percentWaterFlow, range, approach, j);
+            double range            = getRange(j);
+            double approach         = getApproach(TWetBulb, 60); // Minimum temperature to chillers 60
+            double percentFanPower  = getPercentFanPower(TWetBulb, percentWaterFlow, range, approach, j);
 
             towerPowerHourly = tower.fanHP * tower.numFanPerTower_Cells * tower.numTower * 0.746 * percentFanPower;
 
@@ -123,13 +127,13 @@ ProcessCooling::ChillerPumpingEnergyOutput ProcessCooling::calculatePumpEnergy(P
     vector<double> chillerPumpingEnergy(numChillers, 0);
     vector<double> chillerVSDPumpingEnergy(numChillers, 0);
 
-    if (pump.motorSize == 0) { //Size unknown
-        pump.motorSize = getPumpHP(
-                getChillerTonnageTotal() * pump.flowRate * 30 / 3960 / (pump.efficiency / 100) / numChillers);
+    if (pump.motorSize == 0) { // Size unknown
+        pump.motorSize =
+            getPumpHP(getChillerTonnageTotal() * pump.flowRate * 30 / 3960 / (pump.efficiency / 100) / numChillers);
     }
 
     for (int c = 0; c < numChillers; ++c) {
-        double pumpEnergyTotal = 0;
+        double pumpEnergyTotal    = 0;
         double pumpVSDEnergyTotal = 0;
 
         for (int l = 1; l < LOAD_NUM; ++l) {
@@ -153,7 +157,7 @@ ProcessCooling::ChillerPumpingEnergyOutput ProcessCooling::calculatePumpEnergy(P
                 default:
                     break;
             }
-            double pumpPower = pump.motorSize * 0.746 / (pump.motorEfficiency / 100);
+            double pumpPower    = pump.motorSize * 0.746 / (pump.motorEfficiency / 100);
             double pumpVSDPower = pumpPower * VSDM;
 
             pumpEnergyTotal += pumpPower * chillerHourlyLoadOperational[c][l];
@@ -168,16 +172,18 @@ ProcessCooling::ChillerPumpingEnergyOutput ProcessCooling::calculatePumpEnergy(P
         }
     }
 
-    return pump.variableFlow ? ChillerPumpingEnergyOutput(chillerVSDPumpingEnergy) : ChillerPumpingEnergyOutput(chillerPumpingEnergy);
+    return pump.variableFlow ? ChillerPumpingEnergyOutput(chillerVSDPumpingEnergy)
+                             : ChillerPumpingEnergyOutput(chillerPumpingEnergy);
 }
 
 void ProcessCooling::annualChillerLoadProfile() {
-    vector<vector<vector<double>>> chillerMonthlyLoads(numChillers, vector<vector<double>>(MONTHS, vector<double>(LOAD_NUM, 0)));
-    vector<int> monthHourStart = {0, 744, 1416, 2160, 2880, 3624, 4344, 5088, 5832, 6552, 7296, 8016, 8760};
+    vector<vector<vector<double>>> chillerMonthlyLoads(numChillers,
+                                                       vector<vector<double>>(MONTHS, vector<double>(LOAD_NUM, 0)));
+    vector<int>    monthHourStart         = {0, 744, 1416, 2160, 2880, 3624, 4344, 5088, 5832, 6552, 7296, 8016, 8760};
     vector<double> systemOperationMonthly = {744, 672, 744, 720, 744, 720, 744, 744, 720, 744, 720, 744};
 
-    int monthIndex = 0;
-    int monthHours = 0;
+    int monthIndex  = 0;
+    int monthHours  = 0;
     int cutOffHours = monthHourStart[monthIndex + 1] - 1;
 
     for (int c = 0; c < numChillers; ++c) {
@@ -193,18 +199,19 @@ void ProcessCooling::annualChillerLoadProfile() {
         if (j > cutOffHours) {
             systemOperationMonthly[monthIndex] = monthHours;
             ++monthIndex;
-            monthHours = 0;
+            monthHours  = 0;
             cutOffHours = monthHourStart[monthIndex + 1] - 1;
         }
-        if (systemOperationAnnual[j] == 1) ++monthHours;
+        if (systemOperationAnnual[j] == 1)
+            ++monthHours;
     }
 
     for (int c = 0; c < numChillers; ++c) {
         for (int m = 0; m < MONTHS; ++m) {
-            int count = 0;
-            int j = 12;
-            double remainder = 0;
-            bool evenMarker = true;
+            int    count      = 0;
+            int    j          = 12;
+            double remainder  = 0;
+            bool   evenMarker = true;
 
             vector<double> temp(LOAD_NUM, 0);
             for (int l = 0; l < LOAD_NUM; ++l) {
@@ -231,12 +238,14 @@ void ProcessCooling::annualChillerLoadProfile() {
                                 chillerHourlyLoad[c][index] = loadNum * 10;
                                 temp[loadNum]--;
                                 remainder = 0;
-                            } else {
+                            }
+                            else {
                                 remainder = temp[loadNum];
                                 loadNum--;
                                 j -= 24;
                             }
-                        } else {
+                        }
+                        else {
                             chillerHourlyLoad[c][index] = 0;
                         }
                     }
@@ -246,10 +255,11 @@ void ProcessCooling::annualChillerLoadProfile() {
                     if (monthHourStart[m] + j > monthHourStart[m + 1]) {
                         if (evenMarker) {
                             count++;
-                            j = 12 + count;
+                            j          = 12 + count;
                             evenMarker = false;
-                        } else {
-                            j = 12 - count;
+                        }
+                        else {
+                            j          = 12 - count;
                             evenMarker = true;
                         }
                     }
@@ -266,149 +276,148 @@ void ProcessCooling::annualChillerLoadProfile() {
 void ProcessCooling::annualChillerEfficiencyProfileARI() {
     // Method 2 - Part Load Efficiency Curves [%Load vs. %kW], All chiller types, fullLoadEff known
     vector<vector<double>> ArrayMethod2 = {
-            // x^3 - x, B [constant]
-            {0.3807, 0.2203, 0.2485, 0.1553},  // CentrifugalFan / Water-Cooled
-            {0.0, 0.3412, 0.6792, -0.0154},    // Reciprocating / Water-Cooled
-            {0.5024, -0.022, 0.3832, 0.136},   // Helical Rotary / Water-Cooled
-            {0.0, -0.0263, 0.9971, 0.0103},    // Reciprocating / Air-Cooled
-            {0.5024, -0.022, 0.3832, 0.136}    // Helical Rotary / Air-Cooled
+        // x^3 - x, B [constant]
+        {0.3807, 0.2203, 0.2485, 0.1553}, // CentrifugalFan / Water-Cooled
+        {0.0, 0.3412, 0.6792, -0.0154},   // Reciprocating / Water-Cooled
+        {0.5024, -0.022, 0.3832, 0.136},  // Helical Rotary / Water-Cooled
+        {0.0, -0.0263, 0.9971, 0.0103},   // Reciprocating / Air-Cooled
+        {0.5024, -0.022, 0.3832, 0.136}   // Helical Rotary / Air-Cooled
     };
 
     // Method 1 CentrifugalFan / Water-Cooled, Water, centrifugal, fullLoadEff unknown
-    vector<vector<double>> ArrayCDataWater{
-            // capacity [tons], Full Load Efficiency [kW/ton], x^5 - x, B [constant]
-            {200, 0.84, 0.0, 0.0, -2.1395, 5.2528, -3.7337, 1.4533},
-            {250, 0.68, 0.0, 0.0, -1.732, 4.2522, -3.0225, 1.1764} // Includes 250-1000 by 50, 1000-2000 by 100
+    vector<vector<double>> ArrayCDataWater {
+        // capacity [tons], Full Load Efficiency [kW/ton], x^5 - x, B [constant]
+        {200, 0.84, 0.0, 0.0, -2.1395, 5.2528, -3.7337, 1.4533},
+        {250, 0.68, 0.0, 0.0, -1.732, 4.2522, -3.0225, 1.1764} // Includes 250-1000 by 50, 1000-2000 by 100
     };
 
     // Method 1 Reciprocating / Water-Cooled, Water, reciprocating, fullLoadEff unknown
-    vector<vector<double>> ArrayRDataWater = {
-            // capacity [tons], Full Load Efficiency [kW/ton], x^5 - x, B [constant]
-            {20, 0.88, 0.0, 0.0, 0.0, -0.0954, 0.4706, 0.502},
-            {25, 0.88, 0.0, 0.0, 0.0, -0.0954, 0.4706, 0.502},
-            {30, 32.5 / 34.5, 0.0, 0.0, 0.0, -0.1023, 0.5049, 0.5386},
-            {35, 32.5 / 34.5, 0.0, 0.0, 0.0, -0.1023, 0.5049, 0.5386},
-            {40, 32.5 / 34.5, 0.0, 0.0, 0.0, -0.1023, 0.5049, 0.5386},
-            {45, 50.5 / 49.4, 0.0, 0.0, 0.0, -0.111, 0.5479, 0.5844},
-            {50, 50.5 / 49.4, 0.0, 0.0, 0.0, -0.111, 0.5479, 0.5844},
-            {60, 12.0 / 13.2, 0.0, 0.0, 0.0, -0.098, 0.486, 0.5196},
-            {70, 12.0 / 13.0, 0.0, 0.0, 0.2574, -0.6057, 0.799, 0.4719},
-            {80, 12.0 / 13.8, 0.0, 0.0, 0.2365, -0.5533, 0.7141, 0.4748},
-            {90, 12.0 / 13.9, 0.0, -10.43, 28.937, -28.825, 12.435, -1.2535},
-            {100, 12.0 / 13.1, 0.0, -20.508, 56.982, -56.78, 24.15, -2.9284},
-            {110, 12.0 / 13.8, 0.0, -11.693, 32.445, -32.318, 13.903, -1.4673},
-            {115, 12.0 / 13.5, 0.0, -7.9441, 21.944, -21.655, 9.2935, -0.7489},
-            {120, 12.0 / 13.2, 0.0, -19.057, 52.955, -52.81, 22.529, -2.7065},
-            {130, 12.0 / 12.7, 0.0, 0.0, 0.7169, -1.0517, 0.7741, 0.5088},
-            {140, 12.0 / 12.8, 0.0, 0.0, 0.0, 0.223, 0.1025, 0.6095},
-            {150, 12.0 / 12.7, 0.0, 4.9661, -11.483, 9.3654, -2.7811, 0.8762},
-            {160, 12.0 / 13.0, 0.0, 4.1948, -9.2594, 7.2022, -1.9972, 0.7876},
-            {170, 12.0 / 12.6, 0.0, 4.275, -9.3462, 7.0888, -1.8392, 0.7739},
-            {175, 12.0 / 12.6, 0.0, 4.275, -9.3462, 7.0888, -1.8392, 0.7739},
-            {180, 12.0 / 12.6, 0.0, 4.275, -9.3462, 7.0888, -1.8392, 0.7739},
-            {190, 12.0 / 12.2, 0.0, 4.9849, -11.281, 9.0204, -2.6834, 0.946},
-            {200, 12.0 / 12.5, -10.1, 32.577, -38.646, 20.939, -4.8209, 1.0106},
-            {210, 12.0 / 12.5, -10.1, 32.577, -38.646, 20.939, -4.8209, 1.0106},
-            {220, 12.0 / 12.5, -10.1, 32.577, -38.646, 20.939, -4.8209, 1.0106},
-            {230, 12.0 / 12.1, -15.869, 47.034, -52.156, 26.754, -6.0112, 1.237},
-            {240, 12.0 / 12.1, -15.869, 47.034, -52.156, 26.754, -6.0112, 1.237},
-            {250, 12.0 / 12.1, -15.869, 47.034, -52.156, 26.754, -6.0112, 1.237}
-    };
+    vector<vector<double>> ArrayRDataWater = {// capacity [tons], Full Load Efficiency [kW/ton], x^5 - x, B [constant]
+                                              {20, 0.88, 0.0, 0.0, 0.0, -0.0954, 0.4706, 0.502},
+                                              {25, 0.88, 0.0, 0.0, 0.0, -0.0954, 0.4706, 0.502},
+                                              {30, 32.5 / 34.5, 0.0, 0.0, 0.0, -0.1023, 0.5049, 0.5386},
+                                              {35, 32.5 / 34.5, 0.0, 0.0, 0.0, -0.1023, 0.5049, 0.5386},
+                                              {40, 32.5 / 34.5, 0.0, 0.0, 0.0, -0.1023, 0.5049, 0.5386},
+                                              {45, 50.5 / 49.4, 0.0, 0.0, 0.0, -0.111, 0.5479, 0.5844},
+                                              {50, 50.5 / 49.4, 0.0, 0.0, 0.0, -0.111, 0.5479, 0.5844},
+                                              {60, 12.0 / 13.2, 0.0, 0.0, 0.0, -0.098, 0.486, 0.5196},
+                                              {70, 12.0 / 13.0, 0.0, 0.0, 0.2574, -0.6057, 0.799, 0.4719},
+                                              {80, 12.0 / 13.8, 0.0, 0.0, 0.2365, -0.5533, 0.7141, 0.4748},
+                                              {90, 12.0 / 13.9, 0.0, -10.43, 28.937, -28.825, 12.435, -1.2535},
+                                              {100, 12.0 / 13.1, 0.0, -20.508, 56.982, -56.78, 24.15, -2.9284},
+                                              {110, 12.0 / 13.8, 0.0, -11.693, 32.445, -32.318, 13.903, -1.4673},
+                                              {115, 12.0 / 13.5, 0.0, -7.9441, 21.944, -21.655, 9.2935, -0.7489},
+                                              {120, 12.0 / 13.2, 0.0, -19.057, 52.955, -52.81, 22.529, -2.7065},
+                                              {130, 12.0 / 12.7, 0.0, 0.0, 0.7169, -1.0517, 0.7741, 0.5088},
+                                              {140, 12.0 / 12.8, 0.0, 0.0, 0.0, 0.223, 0.1025, 0.6095},
+                                              {150, 12.0 / 12.7, 0.0, 4.9661, -11.483, 9.3654, -2.7811, 0.8762},
+                                              {160, 12.0 / 13.0, 0.0, 4.1948, -9.2594, 7.2022, -1.9972, 0.7876},
+                                              {170, 12.0 / 12.6, 0.0, 4.275, -9.3462, 7.0888, -1.8392, 0.7739},
+                                              {175, 12.0 / 12.6, 0.0, 4.275, -9.3462, 7.0888, -1.8392, 0.7739},
+                                              {180, 12.0 / 12.6, 0.0, 4.275, -9.3462, 7.0888, -1.8392, 0.7739},
+                                              {190, 12.0 / 12.2, 0.0, 4.9849, -11.281, 9.0204, -2.6834, 0.946},
+                                              {200, 12.0 / 12.5, -10.1, 32.577, -38.646, 20.939, -4.8209, 1.0106},
+                                              {210, 12.0 / 12.5, -10.1, 32.577, -38.646, 20.939, -4.8209, 1.0106},
+                                              {220, 12.0 / 12.5, -10.1, 32.577, -38.646, 20.939, -4.8209, 1.0106},
+                                              {230, 12.0 / 12.1, -15.869, 47.034, -52.156, 26.754, -6.0112, 1.237},
+                                              {240, 12.0 / 12.1, -15.869, 47.034, -52.156, 26.754, -6.0112, 1.237},
+                                              {250, 12.0 / 12.1, -15.869, 47.034, -52.156, 26.754, -6.0112, 1.237}};
 
     // Method 1 Helical Rotary / Water-Cooled, Water, helical rotary, fullLoadEff unknown
     vector<vector<double>> ArraySDataWater = {
-            // capacity [tons], Full Load Efficiency [kW/ton], x^5 - x, B [constant]
-            {70, 12.0 / 15.3, 0.0, 0.0, 0.0, 0.493, -0.3382, 0.6329},
-            {80, 12.0 / 15.6, 0.0, 0.0, -3.0228, 6.8805, -4.5542, 1.4658},
-            {90, 12.0 / 15.5, 0.0, 0.0, -1.6269, 3.8762, -2.5615, 1.0865},
-            {100, 12.0 / 15.4, 0.0, 0.0, -1.3381, 3.141, -1.982, 0.9584},
-            {110, 12.0 / 15.2, 0.0, 0.0, -1.5986, 3.6242, -2.2305, 0.9944},
-            {120, 12.0 / 15.3, 0.0, 0.0, -2.4371, 5.5781, -3.7157, 1.3591},
-            {125, 12.0 / 15.3, 0.0, 0.0, -2.4371, 5.5781, -3.7157, 1.3591},
-            {130, 12.0 / 15.3, 0.0, 0.0, -2.4371, 5.5781, -3.7157, 1.3591},
-            {140, 0.84, 0.0, 0.0, 0.0, 1.0149, -1.1397, 0.9731} // Includes 140-200 by 10, 200-800 by 50
+        // capacity [tons], Full Load Efficiency [kW/ton], x^5 - x, B [constant]
+        {70, 12.0 / 15.3, 0.0, 0.0, 0.0, 0.493, -0.3382, 0.6329},
+        {80, 12.0 / 15.6, 0.0, 0.0, -3.0228, 6.8805, -4.5542, 1.4658},
+        {90, 12.0 / 15.5, 0.0, 0.0, -1.6269, 3.8762, -2.5615, 1.0865},
+        {100, 12.0 / 15.4, 0.0, 0.0, -1.3381, 3.141, -1.982, 0.9584},
+        {110, 12.0 / 15.2, 0.0, 0.0, -1.5986, 3.6242, -2.2305, 0.9944},
+        {120, 12.0 / 15.3, 0.0, 0.0, -2.4371, 5.5781, -3.7157, 1.3591},
+        {125, 12.0 / 15.3, 0.0, 0.0, -2.4371, 5.5781, -3.7157, 1.3591},
+        {130, 12.0 / 15.3, 0.0, 0.0, -2.4371, 5.5781, -3.7157, 1.3591},
+        {140, 0.84, 0.0, 0.0, 0.0, 1.0149, -1.1397, 0.9731} // Includes 140-200 by 10, 200-800 by 50
     };
 
     // Method 1 Reciprocating / Air-Cooled, Air, reciprocating, fullLoadEff unknown
-    vector<vector<double>> ArrayRDataAir = {
-            // capacity [tons], Full Load Efficiency [kW/ton], x^5 - x, B [constant]
-            {40, 1.05, 0.0, 0.0, 0.0, 0.0482, -0.1241, 1.125},
-            {50, 1.09, 0.0, 0.0, 0.0, 0.05, -0.1286, 1.166},
-            {60, 1.09, 0.0, 0.0, 0.0, 0.05, -0.1286, 1.166},
-            {70, 1.11, 0.0, 0.0, 0.0, 0.051, -0.1313, 1.1903},
-            {80, 1.11, 0.0, 0.0, 0.0, 0.051, -0.1313, 1.1903},
-            {90, 1.09, 0.0, 0.0, 0.0, 0.05, -0.1286, 1.166},
-            {100, 1.06, 0.0, 0.0, 0.0, 0.0487, -0.1252, 1.135},
-            {110, 1.11, 0.0, 0.0, 0.0, 0.051, -0.1313, 1.1903},
-            {200, 1.15, 0.0, 0.0, 0.0, 0.0527, -0.1355, 1.2284},
-            {210, 1.15, 0.0, 0.0, 0.0, 0.0527, -0.1355, 1.2284},
-            {220, 1.15, 0.0, 0.0, 0.0, 0.0527, -0.1355, 1.2284},
-            {230, 12.0 / 9.5, 0.0, -17.753, 42.824, -34.985, 10.845, 0.2139},
-            {240, 12.0 / 9.5, 0.0, -17.753, 42.824, -34.985, 10.845, 0.2139},
-            {250, 12.0 / 9.5, 0.0, -17.753, 42.824, -34.985, 10.845, 0.2139},
-            {275, 12.0 / 9.7, 0.0, -20.957, 53.744, -47.559, 16.471, -0.5675},
-            {300, 12.0 / 9.7, 53.156, -159.84, 182.28, -97.116, 23.5, -0.8358},
-            {325, 12.0 / 9.6, 57.771, -173.81, 198.34, -105.76, 25.624, -0.9891},
-            {350, 12.0 / 9.6, 57.771, -173.81, 198.34, -105.76, 25.624, -0.9891},
-            {370, 12.0 / 9.5, 16.672, -53.78, 65.6, -36.521, 8.7508, 0.427},
-            {375, 12.0 / 9.5, 16.672, -53.78, 65.6, -36.521, 8.7508, 0.427},
-            {400, 12.0 / 9.7, 11.306, -39.007, 50.56, -29.343, 7.0493, 0.577},
-            {425, 12.0 / 9.6, 12.317, -42.59, 55.331, -32.217, 7.777, 0.5474},
-            {450, 12.0 / 9.6, 12.317, -42.59, 55.331, -32.217, 7.777, 0.5474}
-    };
+    vector<vector<double>> ArrayRDataAir = {// capacity [tons], Full Load Efficiency [kW/ton], x^5 - x, B [constant]
+                                            {40, 1.05, 0.0, 0.0, 0.0, 0.0482, -0.1241, 1.125},
+                                            {50, 1.09, 0.0, 0.0, 0.0, 0.05, -0.1286, 1.166},
+                                            {60, 1.09, 0.0, 0.0, 0.0, 0.05, -0.1286, 1.166},
+                                            {70, 1.11, 0.0, 0.0, 0.0, 0.051, -0.1313, 1.1903},
+                                            {80, 1.11, 0.0, 0.0, 0.0, 0.051, -0.1313, 1.1903},
+                                            {90, 1.09, 0.0, 0.0, 0.0, 0.05, -0.1286, 1.166},
+                                            {100, 1.06, 0.0, 0.0, 0.0, 0.0487, -0.1252, 1.135},
+                                            {110, 1.11, 0.0, 0.0, 0.0, 0.051, -0.1313, 1.1903},
+                                            {200, 1.15, 0.0, 0.0, 0.0, 0.0527, -0.1355, 1.2284},
+                                            {210, 1.15, 0.0, 0.0, 0.0, 0.0527, -0.1355, 1.2284},
+                                            {220, 1.15, 0.0, 0.0, 0.0, 0.0527, -0.1355, 1.2284},
+                                            {230, 12.0 / 9.5, 0.0, -17.753, 42.824, -34.985, 10.845, 0.2139},
+                                            {240, 12.0 / 9.5, 0.0, -17.753, 42.824, -34.985, 10.845, 0.2139},
+                                            {250, 12.0 / 9.5, 0.0, -17.753, 42.824, -34.985, 10.845, 0.2139},
+                                            {275, 12.0 / 9.7, 0.0, -20.957, 53.744, -47.559, 16.471, -0.5675},
+                                            {300, 12.0 / 9.7, 53.156, -159.84, 182.28, -97.116, 23.5, -0.8358},
+                                            {325, 12.0 / 9.6, 57.771, -173.81, 198.34, -105.76, 25.624, -0.9891},
+                                            {350, 12.0 / 9.6, 57.771, -173.81, 198.34, -105.76, 25.624, -0.9891},
+                                            {370, 12.0 / 9.5, 16.672, -53.78, 65.6, -36.521, 8.7508, 0.427},
+                                            {375, 12.0 / 9.5, 16.672, -53.78, 65.6, -36.521, 8.7508, 0.427},
+                                            {400, 12.0 / 9.7, 11.306, -39.007, 50.56, -29.343, 7.0493, 0.577},
+                                            {425, 12.0 / 9.6, 12.317, -42.59, 55.331, -32.217, 7.777, 0.5474},
+                                            {450, 12.0 / 9.6, 12.317, -42.59, 55.331, -32.217, 7.777, 0.5474}};
 
     // Method 1 Helical Rotary / Air-Cooled Air, helical rotary, fullLoadEff unknown
-    vector<vector<double>> ArraySDataAir = {
-            {70, 12.0 / 10.2, 0.0, 0.0, 0.0, 0.3996, 0.0891, 0.6929},
-            {80, 12.0 / 10.2, 0.0, 0.0, -4.6584, 9.9259, -5.9944, 1.9034},
-            {90, 12.0 / 9.9, 0.0, 0.0, -2.0203, 4.3627, -2.362, 1.2317},
-            {100, 12.0 / 9.7, 0.0, 0.0, -1.9174, 3.8677, -1.7496, 1.0364},
-            {110, 12.0 / 9.7, 0.0, 0.0, -2.3327, 4.6982, -2.2427, 1.1143},
-            {120, 12.0 / 9.8, 0.0, 0.0, -2.7475, 5.8423, -3.2581, 1.3878},
-            {125, 12.0 / 9.8, 0.0, 0.0, -2.7475, 5.8423, -3.2581, 1.3878},
-            {130, 12.0 / 9.5, 0.0, 0.0, 0.0, 0.5195, 0.0769, 0.6646},
-            {140, 12.0 / 9.5, 0.0, 0.0, 0.0, 0.4609, 0.1068, 0.6556},
-            {150, 12.0 / 9.5, 0.0, 0.0, 0.0, 0.4609, 0.1068, 0.6556},
-            {155, 12.0 / 9.4, 0.0, 0.0, 0.0, 0.3573, 0.2743, 0.6364},
-            {160, 12.0 / 9.2, 0.0, 0.0, 0.0, 0.8587, -0.3208, 0.7601},
-            {170, 12.0 / 9.2, 0.0, 0.0, 0.0, 0.8587, -0.3208, 0.7601},
-            {180, 12.0 / 9.2, 0.0, 0.0, 0.0, 1.2421, -0.9662, 1.0278},
-            {185, 12.0 / 9.2, 0.0, 0.0, 0.0, 1.2421, -0.9662, 1.0278},
-            {190, 12.0 / 9.2, 0.0, 0.0, 0.0, 1.2421, -0.9662, 1.0278},
-            {200, 12.0 / 9.0, 0.0, 0.0, 3.3211, -5.4082, 3.2153, 0.2052},
-            {215, 12.0 / 9.2, 0.0, 0.0, 3.2895, -5.4202, 3.2557, 0.1793},
-            {220, 12.0 / 9.2, 0.0, 0.0, 3.2895, -5.4202, 3.2557, 0.1793},
-            {230, 12.0 / 9.4, 0.0, 0.0, 0.0, 0.7427, -0.131, 0.6627},
-            {240, 12.0 / 9.4, 0.0, 0.0, 0.0, 0.7427, -0.131, 0.6627},
-            {250, 12.0 / 9.4, 0.0, 0.0, 0.0, 0.7427, -0.131, 0.6627},
-            {270, 12.0 / 9.3, 0.0, 0.0, 0.0, 0.9024, -0.2977, 0.687},
-            {275, 12.0 / 9.3, 0.0, 0.0, 0.0, 0.9024, -0.2977, 0.687},
-            {300, 12.0 / 9.2, 0.0, 0.0, 0.0, 0.8341, -0.2, 0.6749},
-            {325, 12.0 / 9.4, 0.0, 0.0, 0.0, 0.7244, -0.0863, 0.637},
-            {340, 12.0 / 9.4, 0.0, 0.0, 0.0, 0.7244, -0.0863, 0.637},
-            {350, 12.0 / 9.4, 0.0, 0.0, 0.0, 0.7244, -0.0863, 0.637},
-            {370, 12.0 / 9.3, 0.0, 0.0, 0.0, 0.7642, -0.1199, 0.6474},
-            {375, 12.0 / 9.3, 0.0, 0.0, 0.0, 0.7642, -0.1199, 0.6474},
-            {400, 12.0 / 9.3, 0.0, 0.0, 0.0, 0.7331, -0.0961, 0.6528}
-    };
+    vector<vector<double>> ArraySDataAir = {{70, 12.0 / 10.2, 0.0, 0.0, 0.0, 0.3996, 0.0891, 0.6929},
+                                            {80, 12.0 / 10.2, 0.0, 0.0, -4.6584, 9.9259, -5.9944, 1.9034},
+                                            {90, 12.0 / 9.9, 0.0, 0.0, -2.0203, 4.3627, -2.362, 1.2317},
+                                            {100, 12.0 / 9.7, 0.0, 0.0, -1.9174, 3.8677, -1.7496, 1.0364},
+                                            {110, 12.0 / 9.7, 0.0, 0.0, -2.3327, 4.6982, -2.2427, 1.1143},
+                                            {120, 12.0 / 9.8, 0.0, 0.0, -2.7475, 5.8423, -3.2581, 1.3878},
+                                            {125, 12.0 / 9.8, 0.0, 0.0, -2.7475, 5.8423, -3.2581, 1.3878},
+                                            {130, 12.0 / 9.5, 0.0, 0.0, 0.0, 0.5195, 0.0769, 0.6646},
+                                            {140, 12.0 / 9.5, 0.0, 0.0, 0.0, 0.4609, 0.1068, 0.6556},
+                                            {150, 12.0 / 9.5, 0.0, 0.0, 0.0, 0.4609, 0.1068, 0.6556},
+                                            {155, 12.0 / 9.4, 0.0, 0.0, 0.0, 0.3573, 0.2743, 0.6364},
+                                            {160, 12.0 / 9.2, 0.0, 0.0, 0.0, 0.8587, -0.3208, 0.7601},
+                                            {170, 12.0 / 9.2, 0.0, 0.0, 0.0, 0.8587, -0.3208, 0.7601},
+                                            {180, 12.0 / 9.2, 0.0, 0.0, 0.0, 1.2421, -0.9662, 1.0278},
+                                            {185, 12.0 / 9.2, 0.0, 0.0, 0.0, 1.2421, -0.9662, 1.0278},
+                                            {190, 12.0 / 9.2, 0.0, 0.0, 0.0, 1.2421, -0.9662, 1.0278},
+                                            {200, 12.0 / 9.0, 0.0, 0.0, 3.3211, -5.4082, 3.2153, 0.2052},
+                                            {215, 12.0 / 9.2, 0.0, 0.0, 3.2895, -5.4202, 3.2557, 0.1793},
+                                            {220, 12.0 / 9.2, 0.0, 0.0, 3.2895, -5.4202, 3.2557, 0.1793},
+                                            {230, 12.0 / 9.4, 0.0, 0.0, 0.0, 0.7427, -0.131, 0.6627},
+                                            {240, 12.0 / 9.4, 0.0, 0.0, 0.0, 0.7427, -0.131, 0.6627},
+                                            {250, 12.0 / 9.4, 0.0, 0.0, 0.0, 0.7427, -0.131, 0.6627},
+                                            {270, 12.0 / 9.3, 0.0, 0.0, 0.0, 0.9024, -0.2977, 0.687},
+                                            {275, 12.0 / 9.3, 0.0, 0.0, 0.0, 0.9024, -0.2977, 0.687},
+                                            {300, 12.0 / 9.2, 0.0, 0.0, 0.0, 0.8341, -0.2, 0.6749},
+                                            {325, 12.0 / 9.4, 0.0, 0.0, 0.0, 0.7244, -0.0863, 0.637},
+                                            {340, 12.0 / 9.4, 0.0, 0.0, 0.0, 0.7244, -0.0863, 0.637},
+                                            {350, 12.0 / 9.4, 0.0, 0.0, 0.0, 0.7244, -0.0863, 0.637},
+                                            {370, 12.0 / 9.3, 0.0, 0.0, 0.0, 0.7642, -0.1199, 0.6474},
+                                            {375, 12.0 / 9.3, 0.0, 0.0, 0.0, 0.7642, -0.1199, 0.6474},
+                                            {400, 12.0 / 9.3, 0.0, 0.0, 0.0, 0.7331, -0.0961, 0.6528}};
 
-    vector<int> capacityIndex(31, 0);
-    vector<vector<double>> efficiencyData(numChillers, vector<double>(7, 0)); // 7 columns for each chiller. Dummy array for chiller values
-    for (int c = 0; c < numChillers; ++c) { //gvg for custom chiller
+    vector<int>            capacityIndex(31, 0);
+    vector<vector<double>> efficiencyData(
+        numChillers, vector<double>(7, 0)); // 7 columns for each chiller. Dummy array for chiller values
+    for (int c = 0; c < numChillers; ++c) { // gvg for custom chiller
         // Method 1 CentrifugalFan / Water-Cooled
         if (chillers[c].chillerType == ChillerCompressorType::Centrifugal && coolingType == CoolingSystemType::Water) {
-            if (capacityIndex[c] > 1) capacityIndex[c] = 2;
+            if (capacityIndex[c] > 1)
+                capacityIndex[c] = 2;
         }
 
         // Method 1 Helical Rotary / Water-Cooled;
         if (chillers[c].chillerType == ChillerCompressorType::Screw && coolingType == CoolingSystemType::Water) {
-            if(capacityIndex[c] > 8) capacityIndex[c] = 9;
+            if (capacityIndex[c] > 8)
+                capacityIndex[c] = 9;
         }
 
         // Method 1 Reciprocating / Air-Cooled;
-        if (chillers[c].chillerType == ChillerCompressorType::Reciprocating && coolingType == CoolingSystemType::Air){
-            if (capacityIndex[c] > 7 && capacityIndex[c] < 17) capacityIndex[c] = 8;
-            else if (capacityIndex[c] > 16) capacityIndex[c] = capacityIndex[c] - 8;
+        if (chillers[c].chillerType == ChillerCompressorType::Reciprocating && coolingType == CoolingSystemType::Air) {
+            if (capacityIndex[c] > 7 && capacityIndex[c] < 17)
+                capacityIndex[c] = 8;
+            else if (capacityIndex[c] > 16)
+                capacityIndex[c] = capacityIndex[c] - 8;
         }
 
         if (chillers[c].isFullLoadEffKnown) {
@@ -453,24 +462,21 @@ void ProcessCooling::annualChillerEfficiencyProfileARI() {
                 double load = chillerHourlyLoad[c][j];
 
                 if (load == 0) {
-                    chillerHourlyEfficiencyARI[c][j] = (1 + chillers[c].age / 100.0f) *
-                                                       (efficiencyData[c][0] * pow(1.0f / 10, 3) +
-                                                        efficiencyData[c][1] * pow(1.0f / 10, 2) +
-                                                        efficiencyData[c][2] * (1.0f / 10) +
-                                                        efficiencyData[c][3]) *
-                                                       chillers[c].fullLoadEff / 1.0f / (1.0f / 10);
+                    chillerHourlyEfficiencyARI[c][j] =
+                        (1 + chillers[c].age / 100.0f) *
+                        (efficiencyData[c][0] * pow(1.0f / 10, 3) + efficiencyData[c][1] * pow(1.0f / 10, 2) +
+                         efficiencyData[c][2] * (1.0f / 10) + efficiencyData[c][3]) *
+                        chillers[c].fullLoadEff / 1.0f / (1.0f / 10);
                 }
                 else if (load == 100) {
-                    chillerHourlyEfficiencyARI[c][j] = (1 + chillers[c].age / 100.0f) *
-                                                       chillers[c].fullLoadEff / 1.0f;
+                    chillerHourlyEfficiencyARI[c][j] = (1 + chillers[c].age / 100.0f) * chillers[c].fullLoadEff / 1.0f;
                 }
                 else {
-                    chillerHourlyEfficiencyARI[c][j] = (1 + chillers[c].age / 100.0f) *
-                                                       (efficiencyData[c][0] * pow(load / 100.0f, 3) +
-                                                        efficiencyData[c][1] * pow(load / 100.0f, 2) +
-                                                        efficiencyData[c][2] * (load / 100.0f) +
-                                                        efficiencyData[c][3]) *
-                                                       chillers[c].fullLoadEff / 1.0f / (load / 100.0f);
+                    chillerHourlyEfficiencyARI[c][j] =
+                        (1 + chillers[c].age / 100.0f) *
+                        (efficiencyData[c][0] * pow(load / 100.0f, 3) + efficiencyData[c][1] * pow(load / 100.0f, 2) +
+                         efficiencyData[c][2] * (load / 100.0f) + efficiencyData[c][3]) *
+                        chillers[c].fullLoadEff / 1.0f / (load / 100.0f);
                 }
             }
         }
@@ -530,33 +536,26 @@ void ProcessCooling::annualChillerEfficiencyProfileARI() {
                 double load = chillerHourlyLoad[c][j];
 
                 if (load == 0) {
-                    chillerHourlyEfficiencyARI[c][j] = (1 + chillers[c].age / 100.0f) *
-                                                       (efficiencyData[c][0] * pow(1.0f / 10, 5) +
-                                                        efficiencyData[c][1] * pow(1.0f / 10, 4) +
-                                                        efficiencyData[c][2] * pow(1.0f / 10, 3) +
-                                                        efficiencyData[c][3] * pow(1.0f / 10, 2) +
-                                                        efficiencyData[c][4] * (1.0f / 10) +
-                                                        efficiencyData[c][5]) * 2 -
-                                                       (1 + chillers[c].age / 100.0f) *
-                                                       (efficiencyData[c][0] * pow(2.0f / 10, 5) +
-                                                        efficiencyData[c][1] * pow(2.0f / 10, 4) +
-                                                        efficiencyData[c][2] * pow(2.0f / 10, 3) +
-                                                        efficiencyData[c][3] * pow(2.0f / 10, 2) +
-                                                        efficiencyData[c][4] * (2.0f / 10) +
-                                                        efficiencyData[c][5]);
+                    chillerHourlyEfficiencyARI[c][j] =
+                        (1 + chillers[c].age / 100.0f) *
+                            (efficiencyData[c][0] * pow(1.0f / 10, 5) + efficiencyData[c][1] * pow(1.0f / 10, 4) +
+                             efficiencyData[c][2] * pow(1.0f / 10, 3) + efficiencyData[c][3] * pow(1.0f / 10, 2) +
+                             efficiencyData[c][4] * (1.0f / 10) + efficiencyData[c][5]) *
+                            2 -
+                        (1 + chillers[c].age / 100.0f) *
+                            (efficiencyData[c][0] * pow(2.0f / 10, 5) + efficiencyData[c][1] * pow(2.0f / 10, 4) +
+                             efficiencyData[c][2] * pow(2.0f / 10, 3) + efficiencyData[c][3] * pow(2.0f / 10, 2) +
+                             efficiencyData[c][4] * (2.0f / 10) + efficiencyData[c][5]);
                 }
                 else if (load == 100) {
-                    chillerHourlyEfficiencyARI[c][j] = (1 + chillers[c].age / 100.0f) *
-                                                       efficiencyData[c][6];
+                    chillerHourlyEfficiencyARI[c][j] = (1 + chillers[c].age / 100.0f) * efficiencyData[c][6];
                 }
                 else {
-                    chillerHourlyEfficiencyARI[c][j] = (1 + chillers[c].age / 100.0f) *
-                                                       (efficiencyData[c][0] * pow(load / 100.0f, 5) +
-                                                        efficiencyData[c][1] * pow(load / 100.0f, 4) +
-                                                        efficiencyData[c][2] * pow(load / 100.0f, 3) +
-                                                        efficiencyData[c][3] * pow(load / 100.0f, 2) +
-                                                        efficiencyData[c][4] * (load / 100.0f) +
-                                                        efficiencyData[c][5]);
+                    chillerHourlyEfficiencyARI[c][j] =
+                        (1 + chillers[c].age / 100.0f) *
+                        (efficiencyData[c][0] * pow(load / 100.0f, 5) + efficiencyData[c][1] * pow(load / 100.0f, 4) +
+                         efficiencyData[c][2] * pow(load / 100.0f, 3) + efficiencyData[c][3] * pow(load / 100.0f, 2) +
+                         efficiencyData[c][4] * (load / 100.0f) + efficiencyData[c][5]);
                 }
 
                 if (load <= 40) {
@@ -565,8 +564,7 @@ void ProcessCooling::annualChillerEfficiencyProfileARI() {
                                       efficiencyData[c][1] * pow((load / 100.0f + 0.1f), 4) +
                                       efficiencyData[c][2] * pow((load / 100.0f + 0.1f), 3) +
                                       efficiencyData[c][3] * pow((load / 100.0f + 0.1f), 2) +
-                                      efficiencyData[c][4] * (load / 100.0f + 0.1f) +
-                                      efficiencyData[c][5]);
+                                      efficiencyData[c][4] * (load / 100.0f + 0.1f) + efficiencyData[c][5]);
 
                     if (chillerHourlyEfficiencyARI[c][j] < tempEff) {
                         chillerHourlyEfficiencyARI[c][j] = tempEff * 1.1f;
@@ -578,15 +576,15 @@ void ProcessCooling::annualChillerEfficiencyProfileARI() {
 }
 
 void ProcessCooling::annualChillerEfficiencyProfile() {
-    int measureCount = 0;
+    int    measureCount = 0;
     double CWTdiff;
     double CWTeffAdjust = 0;
     double ECMeffAdjust;
 
-    double CHWTVar = (44 - (coolingType == Water ? waterCooledSystem.CHWT : airCooledSystem.CHWT));
-    vector<double> CHWTMult(numChillers, 0);
-    vector<double> CtypeMult(numChillers, 0);
-    vector<double> refrigMult(numChillers, 1);
+    double                 CHWTVar = (44 - (coolingType == Water ? waterCooledSystem.CHWT : airCooledSystem.CHWT));
+    vector<double>         CHWTMult(numChillers, 0);
+    vector<double>         CtypeMult(numChillers, 0);
+    vector<double>         refrigMult(numChillers, 1);
     vector<vector<double>> VSDMult(numChillers, vector<double>(LOAD_NUM, 1));
 
     for (int c = 0; c < numChillers; ++c) {
@@ -606,8 +604,9 @@ void ProcessCooling::annualChillerEfficiencyProfile() {
         }
 
         vector<double> refrigFactor = {0.45, 0.46, 0.51, 0.52, 0.5, 0.48};
-        refrigMult[c] = chillers[c].changeRefrig ?
-                        refrigFactor[chillers[c].proposedRefrig] / refrigFactor[chillers[c].currentRefrig] : 1;
+        refrigMult[c]               = chillers[c].changeRefrig
+                                          ? refrigFactor[chillers[c].proposedRefrig] / refrigFactor[chillers[c].currentRefrig]
+                                          : 1;
     }
 
     if (coolingType == CoolingSystemType::Water) {
@@ -617,55 +616,62 @@ void ProcessCooling::annualChillerEfficiencyProfile() {
 
                 if (chillerHourlyLoad[Chiller][j] >= 0 && chillerHourlyLoad[Chiller][j] <= 50) {
                     CWTBase = 65;
-                } else if (chillerHourlyLoad[Chiller][j] == 60) {
+                }
+                else if (chillerHourlyLoad[Chiller][j] == 60) {
                     CWTBase = 69;
-                } else if (chillerHourlyLoad[Chiller][j] == 70) {
+                }
+                else if (chillerHourlyLoad[Chiller][j] == 70) {
                     CWTBase = 73;
-                } else if (chillerHourlyLoad[Chiller][j] == 80) {
+                }
+                else if (chillerHourlyLoad[Chiller][j] == 80) {
                     CWTBase = 77;
-                } else if (chillerHourlyLoad[Chiller][j] == 90) {
+                }
+                else if (chillerHourlyLoad[Chiller][j] == 90) {
                     CWTBase = 81;
-                } else if (chillerHourlyLoad[Chiller][j] == 100) {
+                }
+                else if (chillerHourlyLoad[Chiller][j] == 100) {
                     CWTBase = 85;
                 }
 
                 if (CWTHourly[j] != 0) {
                     CWTdiff = CWTBase - CWTHourly[j];
-                } else {
+                }
+                else {
                     double CWTWater;
                     if (waterCooledSystem.constantCWT) {
                         CWTdiff = (CWTBase - waterCooledSystem.CWT);
-                    } else {
+                    }
+                    else {
                         CWTWater = wetBulbHourlyTemp[j] + waterCooledSystem.CWTFollow;
                         CWTWater = max(60.0, min(CWTWater, 110.0));
-                        CWTdiff = (CWTBase - CWTWater);
+                        CWTdiff  = (CWTBase - CWTWater);
                     }
                 }
 
                 if (chillers[Chiller].chillerType == ChillerCompressorType::Reciprocating) {
-                    CWTeffAdjust = (CWTdiff >= 0)
-                                   ? 1 + (0.0273 * CWTdiff * CWTdiff - 1.5769 * CWTdiff) / 100
-                                   : 1 + (-0.0273 * CWTdiff * CWTdiff - 1.5769 * CWTdiff) / 100;
+                    CWTeffAdjust = (CWTdiff >= 0) ? 1 + (0.0273 * CWTdiff * CWTdiff - 1.5769 * CWTdiff) / 100
+                                                  : 1 + (-0.0273 * CWTdiff * CWTdiff - 1.5769 * CWTdiff) / 100;
                 }
                 else if (chillers[Chiller].chillerType == ChillerCompressorType::Screw) {
-                    CWTeffAdjust = (CWTdiff >= 0)
-                                   ? 1 + (0.0282 * CWTdiff * CWTdiff - 2.0172 * CWTdiff) / 100
-                                   : 1 + (-0.0282 * CWTdiff * CWTdiff - 2.0172 * CWTdiff) / 100;
+                    CWTeffAdjust = (CWTdiff >= 0) ? 1 + (0.0282 * CWTdiff * CWTdiff - 2.0172 * CWTdiff) / 100
+                                                  : 1 + (-0.0282 * CWTdiff * CWTdiff - 2.0172 * CWTdiff) / 100;
                 }
                 else if (chillers[Chiller].chillerType == ChillerCompressorType::Centrifugal) {
-                    CWTeffAdjust = (CWTdiff >= 0)
-                                   ? 1 + (0.0014 * CWTdiff * CWTdiff - 0.4363 * CWTdiff) / 100
-                                   : 1 + (-0.0014 * CWTdiff * CWTdiff - 0.4363 * CWTdiff) / 100;
+                    CWTeffAdjust = (CWTdiff >= 0) ? 1 + (0.0014 * CWTdiff * CWTdiff - 0.4363 * CWTdiff) / 100
+                                                  : 1 + (-0.0014 * CWTdiff * CWTdiff - 0.4363 * CWTdiff) / 100;
                 }
 
                 if (measureCount == 0) {
                     ECMeffAdjust = 1.0;
                     measureCount = 1;
-                } else {
-                    ECMeffAdjust = refrigMult[Chiller] * VSDMult[Chiller][static_cast<int>(chillerHourlyLoad[Chiller][j] / 10)];
+                }
+                else {
+                    ECMeffAdjust =
+                        refrigMult[Chiller] * VSDMult[Chiller][static_cast<int>(chillerHourlyLoad[Chiller][j] / 10)];
                 }
 
-                chillerHourlyEfficiency[Chiller][j] = chillerHourlyEfficiencyARI[Chiller][j] * CHWTMult[Chiller] * CWTeffAdjust * ECMeffAdjust;
+                chillerHourlyEfficiency[Chiller][j] =
+                    chillerHourlyEfficiencyARI[Chiller][j] * CHWTMult[Chiller] * CWTeffAdjust * ECMeffAdjust;
             }
         }
     }
@@ -673,27 +679,35 @@ void ProcessCooling::annualChillerEfficiencyProfile() {
         for (int c = 0; c < numChillers; ++c) {
             for (int j = 0; j < HOURS_IN_YEAR; ++j) {
                 double OADT_ARI = 95;
-                double OADTVar = (OADT_ARI - airCooledSystem.OADT);
+                double OADTVar  = (OADT_ARI - airCooledSystem.OADT);
 
                 // Determine CATBase based on load
                 double CATBase = 55; // Default value
                 if (chillerHourlyLoad[c][j] == 10 || chillerHourlyLoad[c][j] == 0) {
                     CATBase = 55;
-                } else if (chillerHourlyLoad[c][j] == 30) {
+                }
+                else if (chillerHourlyLoad[c][j] == 30) {
                     CATBase = 57;
-                } else if (chillerHourlyLoad[c][j] == 40) {
+                }
+                else if (chillerHourlyLoad[c][j] == 40) {
                     CATBase = 61;
-                } else if (chillerHourlyLoad[c][j] == 50) {
+                }
+                else if (chillerHourlyLoad[c][j] == 50) {
                     CATBase = 65;
-                } else if (chillerHourlyLoad[c][j] == 60) {
+                }
+                else if (chillerHourlyLoad[c][j] == 60) {
                     CATBase = 71;
-                } else if (chillerHourlyLoad[c][j] == 70) {
+                }
+                else if (chillerHourlyLoad[c][j] == 70) {
                     CATBase = 77;
-                } else if (chillerHourlyLoad[c][j] == 80) {
+                }
+                else if (chillerHourlyLoad[c][j] == 80) {
                     CATBase = 83;
-                } else if (chillerHourlyLoad[c][j] == 90) {
+                }
+                else if (chillerHourlyLoad[c][j] == 90) {
                     CATBase = 89;
-                } else if (chillerHourlyLoad[c][j] == 100) {
+                }
+                else if (chillerHourlyLoad[c][j] == 100) {
                     CATBase = 95;
                 }
 
@@ -703,43 +717,40 @@ void ProcessCooling::annualChillerEfficiencyProfile() {
                 }
                 else if (airCooledSystem.ACSource == ACSourceLocation::Outside) {
                     double CWTAir = dryBulbHourlyTemp[j] + airCooledSystem.CWTFollow;
-                    CATdiff = (CATBase - CWTAir);
+                    CATdiff       = (CATBase - CWTAir);
                 }
 
                 double OADeffAdjust = 1.0;
                 double CATeffAdjust = 1.0;
 
                 if (chillers[c].chillerType == ChillerCompressorType::Reciprocating) {
-                    OADeffAdjust = (OADTVar >= 0) ?
-                                   1 + (-0.0273 * pow(OADTVar, 2) - 1.5769 * OADTVar) / 100 :
-                                   1 + (0.0273 * pow(OADTVar, 2) - 1.5769 * OADTVar) / 100;
+                    OADeffAdjust = (OADTVar >= 0) ? 1 + (-0.0273 * pow(OADTVar, 2) - 1.5769 * OADTVar) / 100
+                                                  : 1 + (0.0273 * pow(OADTVar, 2) - 1.5769 * OADTVar) / 100;
                 }
                 else if (chillers[c].chillerType == ChillerCompressorType::Screw) {
-                    OADeffAdjust = (OADTVar >= 0) ?
-                                   1 + (-0.0282 * pow(OADTVar, 2) - 2.0172 * OADTVar) / 100 :
-                                   1 + (0.0282 * pow(OADTVar, 2) - 2.0172 * OADTVar) / 100;
+                    OADeffAdjust = (OADTVar >= 0) ? 1 + (-0.0282 * pow(OADTVar, 2) - 2.0172 * OADTVar) / 100
+                                                  : 1 + (0.0282 * pow(OADTVar, 2) - 2.0172 * OADTVar) / 100;
                 }
 
                 if (chillers[c].chillerType == ChillerCompressorType::Reciprocating) {
-                    CATeffAdjust = (CATdiff >= 0) ?
-                                   1 + (0.0273 * pow(CATdiff, 2) - 1.5769 * CATdiff) / 100 :
-                                   1 + (-0.0273 * pow(CATdiff, 2) - 1.5769 * CATdiff) / 100;
+                    CATeffAdjust = (CATdiff >= 0) ? 1 + (0.0273 * pow(CATdiff, 2) - 1.5769 * CATdiff) / 100
+                                                  : 1 + (-0.0273 * pow(CATdiff, 2) - 1.5769 * CATdiff) / 100;
                 }
                 else if (chillers[c].chillerType == ChillerCompressorType::Screw) {
-                    CATeffAdjust = (CATdiff >= 0) ?
-                                   1 + (0.0282 * pow(CATdiff, 2) - 2.0172 * CATdiff) / 100 :
-                                   1 + (-0.0282 * pow(CATdiff, 2) - 2.0172 * CATdiff) / 100;
+                    CATeffAdjust = (CATdiff >= 0) ? 1 + (0.0282 * pow(CATdiff, 2) - 2.0172 * CATdiff) / 100
+                                                  : 1 + (-0.0282 * pow(CATdiff, 2) - 2.0172 * CATdiff) / 100;
                 }
 
                 if (measureCount == 0) {
                     ECMeffAdjust = 1.0;
                     measureCount = 1;
-                } else {
-                    ECMeffAdjust = refrigMult[c] *
-                                   VSDMult[c][static_cast<int>(chillerHourlyLoad[c][j] / 10)];
+                }
+                else {
+                    ECMeffAdjust = refrigMult[c] * VSDMult[c][static_cast<int>(chillerHourlyLoad[c][j] / 10)];
                 }
 
-                chillerHourlyEfficiency[c][j] = chillerHourlyEfficiencyARI[c][j] * CHWTMult[c] * OADeffAdjust * CATeffAdjust * ECMeffAdjust;
+                chillerHourlyEfficiency[c][j] =
+                    chillerHourlyEfficiencyARI[c][j] * CHWTMult[c] * OADeffAdjust * CATeffAdjust * ECMeffAdjust;
             }
         }
     }
@@ -748,21 +759,22 @@ void ProcessCooling::annualChillerEfficiencyProfile() {
 void ProcessCooling::annualChillerPowerProfile() {
     for (int c = 0; c < numChillers; ++c) {
         for (int j = 0; j < HOURS_IN_YEAR; ++j) {
-            chillerHourlyPower[c][j] = (waterCooledSystem.useFreeCooling && wetBulbHourlyTemp[j] <= FCTemp) ? 0 :
-                                       chillerHourlyLoad[c][j] / 100 * chillers[c].capacity * chillerHourlyEfficiency[c][j];
+            chillerHourlyPower[c][j] =
+                (waterCooledSystem.useFreeCooling && wetBulbHourlyTemp[j] <= FCTemp)
+                    ? 0
+                    : chillerHourlyLoad[c][j] / 100 * chillers[c].capacity * chillerHourlyEfficiency[c][j];
         }
     }
 }
 
-double ProcessCooling::getFanHP(double tonnage, TowerSizedBy towerSizing, int fanNum, CellFanType fanType, double fanHP) {
+double ProcessCooling::getFanHP(double tonnage, TowerSizedBy towerSizing, int fanNum, CellFanType fanType,
+                                double fanHP) {
     if (towerSizing == TowerSizedBy::Fan_HP) {
         return fanHP;
     }
 
-    vector<double> fanHPOptions = {
-            0.5, 1.0, 1.5, 2.0, 3.0, 5.0, 7.5, 10.0, 15.0,
-            20.0, 25.0, 30.0, 40.0, 50.0, 60.0, 75.0, 100.0, 125.0
-    };
+    vector<double> fanHPOptions = {0.5,  1.0,  1.5,  2.0,  3.0,  5.0,  7.5,  10.0,  15.0,
+                                   20.0, 25.0, 30.0, 40.0, 50.0, 60.0, 75.0, 100.0, 125.0};
 
     if (fanNum == 0) {
         fanNum = 1;
@@ -774,7 +786,7 @@ double ProcessCooling::getFanHP(double tonnage, TowerSizedBy towerSizing, int fa
         calculatedHP *= 2;
     }
 
-    int a = 0;
+    int a    = 0;
     int size = static_cast<int>(fanHPOptions.size());
     while (a < size - 1 && !(calculatedHP > fanHPOptions[a] && calculatedHP < fanHPOptions[a + 1])) {
         ++a;
@@ -782,34 +794,33 @@ double ProcessCooling::getFanHP(double tonnage, TowerSizedBy towerSizing, int fa
 
     if (a >= size - 1) {
         return fanHPOptions.back();
-    } else {
+    }
+    else {
         return fanHPOptions[a + 1];
     }
 }
 
-double ProcessCooling::getPercentFanPower(double wetBulbTemp, double percentWaterFlow, double range, double desiredApproach, int yearHourIndex) {
-    double percentFanPower = 0.0;
+double ProcessCooling::getPercentFanPower(double wetBulbTemp, double percentWaterFlow, double range,
+                                          double desiredApproach, int yearHourIndex) {
+    double percentFanPower         = 0.0;
     double percentFanPowerReturned = 0.0;
-    double deltaPercentFanPower = 0.05;
-    double oldDeltaApproach = 1000;
-    string towerFlowType = "X";
+    double deltaPercentFanPower    = 0.05;
+    double oldDeltaApproach        = 1000;
+    string towerFlowType           = "X";
 
     for (int percentFanPowerCount = 0; percentFanPowerCount <= 20; ++percentFanPowerCount) {
         double approach1, approach2, approach, deltaApproach;
 
         if (towerFlowType == "X") { // Cross flow
-            approach1 = -2.1985908408527 * 1 +
-                        -24.3108065555106 * percentFanPower +
+            approach1 = -2.1985908408527 * 1 + -24.3108065555106 * percentFanPower +
                         21.9333667825398 * percentFanPower * percentFanPower +
                         -4.94979078884808 * percentFanPower * percentFanPower * percentFanPower +
-                        14.6788552214526 * percentWaterFlow +
-                        -15.4612468065777 * percentFanPower * percentWaterFlow +
+                        14.6788552214526 * percentWaterFlow + -15.4612468065777 * percentFanPower * percentWaterFlow +
                         2.83753688605444 * percentFanPower * percentFanPower * percentWaterFlow +
                         10.0023162199558 * percentWaterFlow * percentWaterFlow +
                         2.70780345372045 * percentFanPower * percentWaterFlow * percentWaterFlow +
                         -5.91993527180418 * percentWaterFlow * percentWaterFlow * percentWaterFlow +
-                        0.194222288920726 * wetBulbTemp +
-                        0.142543400927955 * percentFanPower * wetBulbTemp +
+                        0.194222288920726 * wetBulbTemp + 0.142543400927955 * percentFanPower * wetBulbTemp +
                         -0.0818947291400898 * percentFanPower * percentFanPower * wetBulbTemp +
                         -0.169584760441541 * percentWaterFlow * wetBulbTemp +
                         0.0186741309635284 * percentFanPower * percentWaterFlow * wetBulbTemp +
@@ -817,38 +828,31 @@ double ProcessCooling::getPercentFanPower(double wetBulbTemp, double percentWate
                         -0.00375848174056975 * wetBulbTemp * wetBulbTemp +
                         0.000623763881051551 * percentFanPower * wetBulbTemp * wetBulbTemp +
                         -0.000709769430542879 * percentWaterFlow * wetBulbTemp * wetBulbTemp +
-                        0.0000234697776728891 * wetBulbTemp * wetBulbTemp * wetBulbTemp +
-                        2.45541543720225 * range +
+                        0.0000234697776728891 * wetBulbTemp * wetBulbTemp * wetBulbTemp + 2.45541543720225 * range +
                         -0.607566456611435 * percentFanPower * range +
                         0.117339576910507 * percentFanPower * percentFanPower * range;
 
-            approach2 = 1.64648551160799 * percentWaterFlow * range +
-                        -0.135898905926974 * percentFanPower * percentWaterFlow * range +
-                        -0.152577581866506 * percentWaterFlow * percentWaterFlow * range +
-                        -0.034055419164321 * wetBulbTemp * range +
-                        0.00274052705314173 * percentFanPower * wetBulbTemp * range +
-                        -0.00442366885652332 * percentWaterFlow * wetBulbTemp * range +
-                        0.0000687098236486247 * wetBulbTemp * wetBulbTemp * range +
-                        -0.0416435261408276 * range * range +
-                        0.00263481599534274 * percentFanPower * range * range +
-                        -0.010325259545311 * percentWaterFlow * range * range +
-                        0.000356999078067433 * wetBulbTemp * range * range +
-                        0.000249188476685273 * range * range * range;
-
+            approach2 =
+                1.64648551160799 * percentWaterFlow * range +
+                -0.135898905926974 * percentFanPower * percentWaterFlow * range +
+                -0.152577581866506 * percentWaterFlow * percentWaterFlow * range +
+                -0.034055419164321 * wetBulbTemp * range + 0.00274052705314173 * percentFanPower * wetBulbTemp * range +
+                -0.00442366885652332 * percentWaterFlow * wetBulbTemp * range +
+                0.0000687098236486247 * wetBulbTemp * wetBulbTemp * range + -0.0416435261408276 * range * range +
+                0.00263481599534274 * percentFanPower * range * range +
+                -0.010325259545311 * percentWaterFlow * range * range +
+                0.000356999078067433 * wetBulbTemp * range * range + 0.000249188476685273 * range * range * range;
         }
         else { // Counter flow
-            approach1 = -4.48760943345722 * 1 +
-                        0.741749875850003 * percentFanPower +
+            approach1 = -4.48760943345722 * 1 + 0.741749875850003 * percentFanPower +
                         1.74679844252553 * percentFanPower * percentFanPower +
                         -0.397320959632943 * percentFanPower * percentFanPower * percentFanPower +
-                        19.5106208955792 * percentWaterFlow +
-                        -9.79489761472574 * percentFanPower * percentWaterFlow +
+                        19.5106208955792 * percentWaterFlow + -9.79489761472574 * percentFanPower * percentWaterFlow +
                         1.96690857354709 * percentFanPower * percentFanPower * percentWaterFlow +
                         -1.40803729637148 * percentWaterFlow * percentWaterFlow +
                         0.633867141219563 * percentFanPower * percentWaterFlow * percentWaterFlow +
                         -0.517255742412696 * percentWaterFlow * percentWaterFlow * percentWaterFlow +
-                        0.0546335532842876 * wetBulbTemp +
-                        0.0468060318806566 * percentFanPower * wetBulbTemp +
+                        0.0546335532842876 * wetBulbTemp + 0.0468060318806566 * percentFanPower * wetBulbTemp +
                         -0.0244033403339062 * percentFanPower * percentFanPower * wetBulbTemp +
                         -0.267365212754448 * percentWaterFlow * wetBulbTemp +
                         0.0385664546399435 * percentFanPower * percentWaterFlow * wetBulbTemp +
@@ -856,8 +860,7 @@ double ProcessCooling::getPercentFanPower(double wetBulbTemp, double percentWate
                         -0.000928698541521428 * wetBulbTemp * wetBulbTemp +
                         -0.000122211107650076 * percentFanPower * wetBulbTemp * wetBulbTemp +
                         0.000682937021895334 * percentWaterFlow * wetBulbTemp * wetBulbTemp +
-                        0.00000679217734960548 * wetBulbTemp * wetBulbTemp * wetBulbTemp +
-                        1.47274732178792 * range +
+                        0.00000679217734960548 * wetBulbTemp * wetBulbTemp * wetBulbTemp + 1.47274732178792 * range +
                         -0.869303590626237 * percentFanPower * range +
                         0.149995781695274 * percentFanPower * percentFanPower * range;
 
@@ -867,19 +870,18 @@ double ProcessCooling::getPercentFanPower(double wetBulbTemp, double percentWate
                         -0.0251101427687245 * wetBulbTemp * range +
                         0.00430042875730149 * percentFanPower * wetBulbTemp * range +
                         -0.013969370453107 * percentWaterFlow * wetBulbTemp * range +
-                        0.000096171182587938 * wetBulbTemp * wetBulbTemp * range +
-                        -0.0251558254472348 * range * range +
+                        0.000096171182587938 * wetBulbTemp * wetBulbTemp * range + -0.0251558254472348 * range * range +
                         0.0077094706621763 * percentFanPower * range * range +
                         -0.0173842428341529 * percentWaterFlow * range * range +
                         0.000244578460749651 * wetBulbTemp * range * range +
                         0.000123026859143619 * range * range * range;
         }
 
-        approach = approach1 + approach2;
+        approach      = approach1 + approach2;
         deltaApproach = abs(approach - desiredApproach);
 
         if (deltaApproach < oldDeltaApproach || deltaApproach > 100) {
-            oldDeltaApproach = deltaApproach;
+            oldDeltaApproach        = deltaApproach;
             percentFanPowerReturned = percentFanPower;
         }
 
@@ -898,7 +900,8 @@ double ProcessCooling::getPercentFanPower(double wetBulbTemp, double percentWate
         if (CWTHourly[yearHourIndex] > 150) {
             CWTHourly[yearHourIndex] = 150;
         }
-    } else {
+    }
+    else {
         CWTHourly[yearHourIndex] = wetBulbHourlyTemp[yearHourIndex] + desiredApproach;
     }
 
@@ -909,8 +912,9 @@ double ProcessCooling::getPercentWaterFlow(int yearHourIndex) {
     double percentWaterFlowTemporary;
     double chillerTonnageTotal;
 
-    chillerTonnageTotal = getChillerTonnageTotal();
-    percentWaterFlowTemporary = (waterCooledSystem.CWFlowRate * chillerTonnageTotal) / (nominalWaterFlowGPMPerTon * tower.tonnage * tower.numTower);
+    chillerTonnageTotal       = getChillerTonnageTotal();
+    percentWaterFlowTemporary = (waterCooledSystem.CWFlowRate * chillerTonnageTotal) /
+                                (nominalWaterFlowGPMPerTon * tower.tonnage * tower.numTower);
 
     if (waterCooledSystem.CWVariableFlow) {
         double weightedAverageChillerLoad = getWeightedAverageChillerLoad(yearHourIndex) / chillerTonnageTotal;
@@ -924,13 +928,14 @@ double ProcessCooling::getPercentWaterFlow(int yearHourIndex) {
 }
 
 double ProcessCooling::getRange(int yearHourIndex) {
-    double chillerTonnageTotal = getChillerTonnageTotal();
+    double chillerTonnageTotal        = getChillerTonnageTotal();
     double weightedAverageChillerLoad = getWeightedAverageChillerLoad(yearHourIndex) / chillerTonnageTotal;
     if (weightedAverageChillerLoad == 0) {
         return 0.0;
     }
 
-    double percentWaterFlowTemporary = (waterCooledSystem.CWFlowRate * chillerTonnageTotal) / (nominalWaterFlowGPMPerTon * tower.tonnage * tower.numTower);
+    double percentWaterFlowTemporary = (waterCooledSystem.CWFlowRate * chillerTonnageTotal) /
+                                       (nominalWaterFlowGPMPerTon * tower.tonnage * tower.numTower);
 
     double averageChillerEfficiency = 0.0;
     for (int Chiller = 0; Chiller < numChillers; ++Chiller) {
@@ -942,13 +947,20 @@ double ProcessCooling::getRange(int yearHourIndex) {
         percentWaterFlowTemporary *= weightedAverageChillerLoad;
 
         if (weightedAverageChillerLoad < 0.5) {
-            range = ((1 * weightedAverageChillerLoad + averageChillerEfficiency * 3413 / 12000) / (waterCooledSystem.CWFlowRate * 0.5)) * 24;
-        } else {
-            range = ((1 * weightedAverageChillerLoad + averageChillerEfficiency * 3413 / 12000) / (waterCooledSystem.CWFlowRate * weightedAverageChillerLoad)) * 24;
+            range = ((1 * weightedAverageChillerLoad + averageChillerEfficiency * 3413 / 12000) /
+                     (waterCooledSystem.CWFlowRate * 0.5)) *
+                    24;
         }
-
-    } else {
-        range = ((1 * weightedAverageChillerLoad + averageChillerEfficiency * 3413 / 12000) / waterCooledSystem.CWFlowRate) * 24;
+        else {
+            range = ((1 * weightedAverageChillerLoad + averageChillerEfficiency * 3413 / 12000) /
+                     (waterCooledSystem.CWFlowRate * weightedAverageChillerLoad)) *
+                    24;
+        }
+    }
+    else {
+        range = ((1 * weightedAverageChillerLoad + averageChillerEfficiency * 3413 / 12000) /
+                 waterCooledSystem.CWFlowRate) *
+                24;
     }
 
     if (percentWaterFlowTemporary > 2) { // Maximum 200% flow (need bypass)
@@ -963,20 +975,24 @@ double ProcessCooling::getApproach(double wetBulbTemp, double minToChillersTemp)
 
     if (waterCooledSystem.useFreeCooling && wetBulbTemp <= FCTemp) {
         approach = FCTemp - wetBulbTemp;
-    } else {
+    }
+    else {
         if (waterCooledSystem.constantCWT) {
             approach = waterCooledSystem.CWT - wetBulbTemp;
-        } else {
+        }
+        else {
             double followDiffTemp = coolingType == Water ? waterCooledSystem.CWVariableFlow : airCooledSystem.CWTFollow;
             if (wetBulbTemp < (minToChillersTemp - followDiffTemp)) {
                 approach = minToChillersTemp - wetBulbTemp;
-            } else {
+            }
+            else {
                 if (wetBulbTemp + followDiffTemp > 110) {
                     approach = 110 - wetBulbTemp;
                     if (approach <= 0) {
                         approach = 1;
                     }
-                } else {
+                }
+                else {
                     approach = followDiffTemp;
                 }
             }
@@ -1008,10 +1024,11 @@ double ProcessCooling::modifyPercentFanPower(double percentFanPower) const {
     else if (tower.fanSpeedType == FanMotorSpeedType::Variable) {
         motorEfficiency = 1;
 
-        VSDEfficiency = (50.87 +
-                         1.283 * percentFanPowerTemporary1 * 100 -
+        VSDEfficiency = (50.87 + 1.283 * percentFanPowerTemporary1 * 100 -
                          0.0142 * percentFanPowerTemporary1 * 100 * percentFanPowerTemporary1 * 100 +
-                         0.0000583 * percentFanPowerTemporary1 * 100 * percentFanPowerTemporary1 * 100 * percentFanPowerTemporary1 * 100) / 100;
+                         0.0000583 * percentFanPowerTemporary1 * 100 * percentFanPowerTemporary1 * 100 *
+                             percentFanPowerTemporary1 * 100) /
+                        100;
 
         percentFanPowerTemporary1 /= (VSDEfficiency * motorEfficiency);
     }
@@ -1041,14 +1058,14 @@ double ProcessCooling::getChillerTonnageTotal() {
 double ProcessCooling::getCubeRoot(double number) {
     if (number > 0.0) {
         return exp(log(number) / 3.0);
-    } else {
+    }
+    else {
         return number;
     }
 }
 
 double ProcessCooling::getPumpHP(double power) {
-    double pumpHPOptions[21] = {0.5, 1, 1.5, 2, 3, 5, 7.5, 10, 15, 20,
-                                25, 30, 40, 50, 60, 75, 100, 125, 150, 175, 200};
+    double pumpHPOptions[21] = {0.5, 1, 1.5, 2, 3, 5, 7.5, 10, 15, 20, 25, 30, 40, 50, 60, 75, 100, 125, 150, 175, 200};
 
     double result = power;
     for (int p = 0; p < 20; ++p) {

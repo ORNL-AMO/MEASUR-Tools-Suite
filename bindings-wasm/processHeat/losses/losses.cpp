@@ -1,39 +1,37 @@
+#include <emscripten/bind.h>
+
 #include "processHeat/losses/Atmosphere.h"
 #include "processHeat/losses/AuxiliaryPower.h"
-#include "processHeat/losses/FixtureLosses.h"
 #include "processHeat/losses/EnergyInputEAF.h"
 #include "processHeat/losses/EnergyInputExhaustGasLosses.h"
 #include "processHeat/losses/ExhaustGasEAF.h"
-#include "processHeat/losses/GasFlueGasMaterial.h"
-#include "processHeat/losses/SolidLiquidFlueGasMaterial.h"
+#include "processHeat/losses/FixtureLosses.h"
 #include "processHeat/losses/GasCoolingLosses.h"
+#include "processHeat/losses/GasFlueGasMaterial.h"
 #include "processHeat/losses/GasLoadChargeMaterial.h"
-#include "processHeat/losses/LoadChargeMaterial.h"
 #include "processHeat/losses/LeakageLosses.h"
 #include "processHeat/losses/LiquidCoolingLosses.h"
 #include "processHeat/losses/LiquidLoadChargeMaterial.h"
+#include "processHeat/losses/LoadChargeMaterial.h"
 #include "processHeat/losses/OpeningLosses.h"
 #include "processHeat/losses/SlagOtherMaterialLosses.h"
+#include "processHeat/losses/SolidLiquidFlueGasMaterial.h"
 #include "processHeat/losses/SolidLoadChargeMaterial.h"
-#include "processHeat/losses/WallLosses.h"
+#include "processHeat/losses/wall_losses.h"
 #include "processHeat/losses/WaterCoolingLosses.h"
-
-#include <emscripten/bind.h>
 
 using namespace emscripten;
 
-EMSCRIPTEN_BINDINGS(losses_enums)
-{
+EMSCRIPTEN_BINDINGS(losses_enums) {
     enum_<LoadChargeMaterial::ThermicReactionType>("ThermicReactionType")
         .value("ENDOTHERMIC", LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC)
         .value("EXOTHERMIC", LoadChargeMaterial::ThermicReactionType::EXOTHERMIC)
         .value("NONE", LoadChargeMaterial::ThermicReactionType::NONE);
 }
 
-//atmosphere
-//getTotalHeat()
-EMSCRIPTEN_BINDINGS(atmosphere)
-{
+// atmosphere
+// getTotalHeat()
+EMSCRIPTEN_BINDINGS(atmosphere) {
     class_<Atmosphere>("Atmosphere")
         .constructor<>()
         .constructor<double, double, double, double, double>()
@@ -48,10 +46,9 @@ EMSCRIPTEN_BINDINGS(atmosphere)
     register_vector<Atmosphere>("AtmosphereV");
 }
 
-//auxiliaryPowerLoss
-//getPowerUsed()
-EMSCRIPTEN_BINDINGS(auxiliaryPowerLoss)
-{
+// auxiliaryPowerLoss
+// getPowerUsed()
+EMSCRIPTEN_BINDINGS(auxiliaryPowerLoss) {
     // motorPhase, supplyVoltage, avgCurrent, powerFactor, operatingTime
     class_<AuxiliaryPower>("AuxiliaryPower")
         .constructor<double, double, double, double, double>()
@@ -59,16 +56,15 @@ EMSCRIPTEN_BINDINGS(auxiliaryPowerLoss)
 }
 // fixtureLosses
 // getHeatLoss()
-EMSCRIPTEN_BINDINGS(fixtureLosses)
-{
-    // specificHeat, feedRate, initialTemperature, finalTemperature, correctionFactor
+EMSCRIPTEN_BINDINGS(fixtureLosses) {
+    // specificHeat, feedRate, initialTemperature, finalTemperature,
+    // correctionFactor
     class_<FixtureLosses>("FixtureLosses")
         .constructor<double, double, double, double, double>()
         .function("getHeatLoss", &FixtureLosses::getHeatLoss);
 }
 // energyInputEAF
-EMSCRIPTEN_BINDINGS(energyInputEAF)
-{
+EMSCRIPTEN_BINDINGS(energyInputEAF) {
     // naturalGasHeatInput, coalCarbonInjection, coalHeatingValue, electrodeUse,
     //    electrodeHeatingValue, otherFuels, electricityInput
     class_<EnergyInputEAF>("EnergyInputEAF")
@@ -77,8 +73,7 @@ EMSCRIPTEN_BINDINGS(energyInputEAF)
         .function("getHeatDelivered", &EnergyInputEAF::getHeatDelivered);
 }
 // energyInputExhaustGasLosses
-EMSCRIPTEN_BINDINGS(energyInputExhaustGasLosses)
-{
+EMSCRIPTEN_BINDINGS(energyInputExhaustGasLosses) {
     class_<EnergyInputExhaustGasLosses>("EnergyInputExhaustGasLosses")
         .constructor<double, double, double, double>()
         .function("getHeatDelivered", &EnergyInputExhaustGasLosses::getHeatDelivered)
@@ -86,14 +81,12 @@ EMSCRIPTEN_BINDINGS(energyInputExhaustGasLosses)
         .function("getAvailableHeat", &EnergyInputExhaustGasLosses::getAvailableHeat);
 }
 // exhaustGasEAF
-EMSCRIPTEN_BINDINGS(exhaustGasEAF)
-{
+EMSCRIPTEN_BINDINGS(exhaustGasEAF) {
     class_<ExhaustGasEAF>("ExhaustGasEAF")
         .constructor<double, double, double, double, double, double>()
         .function("getTotalHeatExhaust", &ExhaustGasEAF::getTotalHeatExhaust);
 }
-EMSCRIPTEN_BINDINGS(flueGasLosses)
-{
+EMSCRIPTEN_BINDINGS(flueGasLosses) {
     class_<GasCompositions::ProcessHeatPropertiesResults>("ProcessHeatPropertiesResults")
         .property("stoichAir", &GasCompositions::ProcessHeatPropertiesResults::stoichAir)
         .property("excessAir", &GasCompositions::ProcessHeatPropertiesResults::excessAir)
@@ -106,7 +99,8 @@ EMSCRIPTEN_BINDINGS(flueGasLosses)
     // flueGasCalculateExcessAir
     // flueGasCalculateO2
     class_<GasCompositions>("GasCompositions")
-        .constructor<std::string, double, double, double, double, double, double, double, double, double, double, double>()
+        .constructor<std::string, double, double, double, double, double, double, double, double, double, double,
+                     double>()
         .function("getProcessHeatProperties", &GasCompositions::getProcessHeatProperties)
         .function("getHeatingValue", &GasCompositions::getHeatingValue)
         .function("getHeatingValueVolume", &GasCompositions::getHeatingValueVolume)
@@ -131,7 +125,8 @@ EMSCRIPTEN_BINDINGS(flueGasLosses)
     // flueGasByMassCalculateExcessAir
     class_<SolidLiquidFlueGasMaterial>("SolidLiquidFlueGasMaterial")
         .constructor<std::string, double, double, double, double, double, double, double>()
-        .constructor<double, double, double, double, double, double, double, double, double, double, double, double, double, double, double>()
+        .constructor<double, double, double, double, double, double, double, double, double, double, double, double,
+                     double, double, double>()
         .constructor()
         .function("getHeatLoss", &SolidLiquidFlueGasMaterial::getHeatLoss)
         .function("calculateHeatingValueFuel", &SolidLiquidFlueGasMaterial::calculateHeatingValueFuel)
@@ -155,26 +150,25 @@ EMSCRIPTEN_BINDINGS(flueGasLosses)
         .function("setO2", &SolidLiquidFlueGasMaterial::setO2)
         .function("setMoisture", &SolidLiquidFlueGasMaterial::setMoisture)
         .function("setNitrogen", &SolidLiquidFlueGasMaterial::setNitrogen)
-		.function("getAmbientAirTempF", &SolidLiquidFlueGasMaterial::getAmbientAirTempF)
-		.function("setAmbientAirTempF", &SolidLiquidFlueGasMaterial::setAmbientAirTempF)
+        .function("getAmbientAirTempF", &SolidLiquidFlueGasMaterial::getAmbientAirTempF)
+        .function("setAmbientAirTempF", &SolidLiquidFlueGasMaterial::setAmbientAirTempF)
         .function("getHeatingValueFuel", &SolidLiquidFlueGasMaterial::getHeatingValueFuel);
 
     register_vector<SolidLiquidFlueGasMaterial>("SolidLiquidFlueGasMaterialV");
 }
 
 // gasCoolingLosses
-EMSCRIPTEN_BINDINGS(gasCoolingLosses)
-{
+EMSCRIPTEN_BINDINGS(gasCoolingLosses) {
     class_<GasCoolingLosses>("GasCoolingLosses")
         .constructor<double, double, double, double, double, double>()
         .function("getHeatLoss", &GasCoolingLosses::getHeatLoss);
 }
 // gasLoadChargeMaterial
-EMSCRIPTEN_BINDINGS(gasLoadChargeMaterial)
-{
+EMSCRIPTEN_BINDINGS(gasLoadChargeMaterial) {
     class_<GasLoadChargeMaterial>("GasLoadChargeMaterial")
         .constructor<>()
-        .constructor<LoadChargeMaterial::ThermicReactionType, double, double, double, double, double, double, double, double, double>()
+        .constructor<LoadChargeMaterial::ThermicReactionType, double, double, double, double, double, double, double,
+                     double, double>()
         .function("getTotalHeat", &GasLoadChargeMaterial::getTotalHeat)
         .function("getID", &GasLoadChargeMaterial::getID)
         .function("getSubstance", &GasLoadChargeMaterial::getSubstance)
@@ -186,25 +180,23 @@ EMSCRIPTEN_BINDINGS(gasLoadChargeMaterial)
     register_vector<GasLoadChargeMaterial>("GasLoadChargeMaterialV");
 }
 // leakageLosses
-EMSCRIPTEN_BINDINGS(leakageLosses)
-{
+EMSCRIPTEN_BINDINGS(leakageLosses) {
     class_<LeakageLosses>("LeakageLosses")
         .constructor<double, double, double, double, double, double, double>()
         .function("getExfiltratedGasesHeatContent", &LeakageLosses::getExfiltratedGasesHeatContent);
 }
 // liquidCoolingLosses
-EMSCRIPTEN_BINDINGS(liquidCoolingLosses)
-{
+EMSCRIPTEN_BINDINGS(liquidCoolingLosses) {
     class_<LiquidCoolingLosses>("LiquidCoolingLosses")
         .constructor<double, double, double, double, double, double>()
         .function("getHeatLoss", &LiquidCoolingLosses::getHeatLoss);
 }
 // liquidLoadChargeMaterial
-EMSCRIPTEN_BINDINGS(liquidLoadChargeMaterial)
-{
+EMSCRIPTEN_BINDINGS(liquidLoadChargeMaterial) {
     class_<LiquidLoadChargeMaterial>("LiquidLoadChargeMaterial")
         .constructor<>()
-        .constructor<LoadChargeMaterial::ThermicReactionType, double, double, double, double, double, double, double, double, double, double, double>()
+        .constructor<LoadChargeMaterial::ThermicReactionType, double, double, double, double, double, double, double,
+                     double, double, double, double>()
         .function("getTotalHeat", &LiquidLoadChargeMaterial::getTotalHeat)
         .function("getID", &LiquidLoadChargeMaterial::getID)
         .function("getSubstance", &LiquidLoadChargeMaterial::getSubstance)
@@ -224,29 +216,29 @@ EMSCRIPTEN_BINDINGS(liquidLoadChargeMaterial)
 // openingLossesCircular
 // openingLossesQuad
 // viewFactorCalculation
-EMSCRIPTEN_BINDINGS(openingLosses)
-{
+EMSCRIPTEN_BINDINGS(openingLosses) {
     class_<OpeningLosses>("OpeningLosses")
         .constructor<double, double, double, double, double, double, double, double>()
         .constructor<double, double, double, double, double, double, double, double, double>()
         .constructor()
         .function("getHeatLoss", &OpeningLosses::getHeatLoss)
-        .function("calculateViewFactorQuad", select_overload<double(double, double, double)>(&OpeningLosses::calculateViewFactor))
-        .function("calculateViewFactorCircular", select_overload<double(double, double)>(&OpeningLosses::calculateViewFactor));
+        .function("calculateViewFactorQuad",
+                  select_overload<double(double, double, double)>(&OpeningLosses::calculateViewFactor))
+        .function("calculateViewFactorCircular",
+                  select_overload<double(double, double)>(&OpeningLosses::calculateViewFactor));
 }
 // slagOtherMaterialLosses
-EMSCRIPTEN_BINDINGS(slagOtherMaterialLosses)
-{
+EMSCRIPTEN_BINDINGS(slagOtherMaterialLosses) {
     class_<SlagOtherMaterialLosses>("SlagOtherMaterialLosses")
         .constructor<double, double, double, double, double>()
         .function("getHeatLoss", &SlagOtherMaterialLosses::getHeatLoss);
 }
 // solidLoadChargeMaterial
-EMSCRIPTEN_BINDINGS(solidLoadChargeMaterial)
-{
+EMSCRIPTEN_BINDINGS(solidLoadChargeMaterial) {
     class_<SolidLoadChargeMaterial>("SolidLoadChargeMaterial")
         .constructor<>()
-        .constructor<LoadChargeMaterial::ThermicReactionType, double, double, double, double, double, double, double, double, double, double, double, double, double, double>()
+        .constructor<LoadChargeMaterial::ThermicReactionType, double, double, double, double, double, double, double,
+                     double, double, double, double, double, double, double>()
         .function("getTotalHeat", &SolidLoadChargeMaterial::getTotalHeat)
         .function("getID", &SolidLoadChargeMaterial::getID)
         .function("getSubstance", &SolidLoadChargeMaterial::getSubstance)
@@ -264,24 +256,22 @@ EMSCRIPTEN_BINDINGS(solidLoadChargeMaterial)
     register_vector<SolidLoadChargeMaterial>("SolidLoadChargeMaterialV");
 }
 // wallLosses
-EMSCRIPTEN_BINDINGS(wallLosses)
-{
+EMSCRIPTEN_BINDINGS(wallLosses) {
     class_<WallLosses>("WallLosses")
         .constructor<>()
         .constructor<double, double, double, double, double, double, double>()
-        .function("getHeatLoss", &WallLosses::getHeatLoss)
-        .function("getID", &WallLosses::getID)
-        .function("getSurface", &WallLosses::getSurface)
-        .function("getConditionFactor", &WallLosses::getConditionFactor)
+        .function("totalHeatLoss", &WallLosses::totalHeatLoss)
+        .function("id", &WallLosses::id)
+        .function("surfaceDescription", &WallLosses::surfaceDescription)
+        .function("shapeFactor", &WallLosses::shapeFactor)
         .function("setID", &WallLosses::setID)
-        .function("setSurface", &WallLosses::setSurface)
-        .function("setConditionFactor", &WallLosses::setConditionFactor);
+        .function("setSurfaceDescription", &WallLosses::setSurfaceDescription)
+        .function("setShapeFactor", &WallLosses::setShapeFactor);
 
     register_vector<WallLosses>("WallLossesV");
 }
 // waterCoolingLosses
-EMSCRIPTEN_BINDINGS(waterCoolingLosses)
-{
+EMSCRIPTEN_BINDINGS(waterCoolingLosses) {
     class_<WaterCoolingLosses>("WaterCoolingLosses")
         .constructor<double, double, double, double>()
         .function("getHeatLoss", &WaterCoolingLosses::getHeatLoss);

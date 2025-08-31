@@ -13,13 +13,12 @@
 #ifndef TOOLS_SUITE_CURVEFITVAL_H
 #define TOOLS_SUITE_CURVEFITVAL_H
 
-#include <vector>
 #include <exception>
-#include <stdexcept>
 #include <iostream>
-class CurveFitVal
-{
-public:
+#include <stdexcept>
+#include <vector>
+class CurveFitVal {
+  public:
     /**
      * Constructor
      * @param xcoord vector of x coordinates as doubles
@@ -27,17 +26,10 @@ public:
      * @param pdegree int, degree of polynomial curve
      * @param loadFactor double, load factor - unitless
      */
-    CurveFitVal(
-        std::vector<double> xcoord,
-        std::vector<double> ycoord,
-        const std::size_t pdegree,
-        const double loadFactor = 0) : pdegree(pdegree),
-                                       xcoord(std::move(xcoord)),
-                                       ycoord(std::move(ycoord)),
-                                       loadFactor(loadFactor)
-    {
-        if (this->xcoord.size() != this->ycoord.size())
-        {
+    CurveFitVal(std::vector<double> xcoord, std::vector<double> ycoord, const std::size_t pdegree,
+                const double loadFactor = 0)
+        : pdegree(pdegree), xcoord(std::move(xcoord)), ycoord(std::move(ycoord)), loadFactor(loadFactor) {
+        if (this->xcoord.size() != this->ycoord.size()) {
             throw std::runtime_error("X and Y coordinate vectors must be the same size");
         }
 
@@ -51,11 +43,11 @@ public:
     double calculate() const;
     double calculate(double) const;
 
-public:
+  public:
     // coeff public so quadratic equation can be used
     std::vector<double> coeff;
 
-private:
+  private:
     /**
      * Degree of polynomial curve
      */

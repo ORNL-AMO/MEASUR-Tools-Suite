@@ -1,5 +1,6 @@
 /**
- * @brief Contains the declaration of MotorCurrent class including the getters and setters as well as the calculators for motor current.
+ * @brief Contains the declaration of MotorCurrent class including the getters and setters as well as the calculators
+ * for motor current.
  *
  * @author Subhankar Mishra (mishras)
  * @author Gina Accawi (accawigk)
@@ -13,7 +14,7 @@
 #include "MotorData.h"
 
 class MotorCurrent {
-public:
+  public:
     /**
      * Constructor
      * @param motorRatedPower double, Rated power of motor in hp
@@ -26,13 +27,10 @@ public:
      */
     MotorCurrent(double motorRatedPower, double motorRPM, Motor::LineFrequency lineFrequency,
                  Motor::EfficiencyClass efficiencyClass, double specifiedEfficiency, double loadFactor,
-                 double ratedVoltage) :
-            motorRatedPower(motorRatedPower), motorRPM(motorRPM),
-            lineFrequency(lineFrequency),
-            efficiencyClass(efficiencyClass),
-            specifiedEfficiency(specifiedEfficiency),
-            loadFactor(loadFactor), ratedVoltage(ratedVoltage)
-    {};
+                 double ratedVoltage)
+        : motorRatedPower(motorRatedPower), motorRPM(motorRPM), lineFrequency(lineFrequency),
+          efficiencyClass(efficiencyClass), specifiedEfficiency(specifiedEfficiency), loadFactor(loadFactor),
+          ratedVoltage(ratedVoltage) {};
 
     /**
      * calculates the motor current at a given load factor.
@@ -41,29 +39,27 @@ public:
      */
     double calculateCurrent(double fullLoadAmps);
 
-	/**
-	 * calculates the optimal motor current
-	 * @return double, optimal motor current in amps
-	 */
+    /**
+     * calculates the optimal motor current
+     * @return double, optimal motor current in amps
+     */
     double calculateOptimalCurrent();
 
     /**
      * Gets the estimated full load amp
      * @return double, estimated current at full load in Amps
      */
-    double getEstimatedFLA() {
-        return estimatedFLA;
-    }
+    double getEstimatedFLA() { return estimatedFLA; }
 
-private:
-    double motorRatedPower;
-    double motorRPM;
-    Motor::LineFrequency lineFrequency;
+  private:
+    double                 motorRatedPower;
+    double                 motorRPM;
+    Motor::LineFrequency   lineFrequency;
     Motor::EfficiencyClass efficiencyClass;
-    double specifiedEfficiency;
-    double loadFactor;
-    double ratedVoltage;
-    double estimatedFLA = 0.0;
+    double                 specifiedEfficiency;
+    double                 loadFactor;
+    double                 ratedVoltage;
+    double                 estimatedFLA = 0.0;
 };
 
-#endif //TOOLS_SUITE_MOTORCURRENT_H
+#endif // TOOLS_SUITE_MOTORCURRENT_H

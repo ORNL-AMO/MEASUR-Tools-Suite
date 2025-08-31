@@ -1,30 +1,27 @@
 #include "databases/DB.h"
-#include "databases/MotorData.h"
+
+#include <emscripten/bind.h>
+
 #include "databases/AtmosphereSpecificHeatData.h"
 #include "databases/GasFlueGasMaterialData.h"
 #include "databases/GasLoadChargeMaterialData.h"
 #include "databases/LiquidLoadChargeMaterialData.h"
-#include "databases/SolidLoadChargeMaterialData.h"
+#include "databases/MotorData.h"
 #include "databases/SolidLiquidFlueGasMaterialData.h"
+#include "databases/SolidLoadChargeMaterialData.h"
 #include "databases/WallLossesSurfaceData.h"
-#include "databases/compressors_data.h"
-#include "databases/lighting_data.h"
-#include <compressedAir/compressors_data.h>
-#include <other/lighting_data.h>
-#include <processHeat/losses/SolidLoadChargeMaterial.h>
-#include <processHeat/losses/LiquidLoadChargeMaterial.h>
-#include <processHeat/losses/GasLoadChargeMaterial.h>
-#include <processHeat/losses/GasFlueGasMaterial.h>
-#include <processHeat/losses/SolidLiquidFlueGasMaterial.h>
-#include <processHeat/losses/Atmosphere.h>
-#include <processHeat/losses/WallLosses.h>
-#include <motorDriven/motor/MotorData.h>
-#include <emscripten/bind.h>
+#include "motorDriven/motor/MotorData.h"
+#include "processHeat/losses/Atmosphere.h"
+#include "processHeat/losses/GasFlueGasMaterial.h"
+#include "processHeat/losses/GasLoadChargeMaterial.h"
+#include "processHeat/losses/LiquidLoadChargeMaterial.h"
+#include "processHeat/losses/SolidLiquidFlueGasMaterial.h"
+#include "processHeat/losses/SolidLoadChargeMaterial.h"
+#include "processHeat/losses/wall_losses.h"
 
 using namespace emscripten;
 
-EMSCRIPTEN_BINDINGS(db_class)
-{
+EMSCRIPTEN_BINDINGS(db_class) {
     class_<DefaultData>("DefaultData")
         .constructor<>()
 

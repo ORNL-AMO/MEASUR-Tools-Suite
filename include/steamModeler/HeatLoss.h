@@ -10,43 +10,46 @@
  */
 
 #include <iostream>
+
 #include "SteamProperties.h"
 #include "SteamSystemModelerTool.h"
 
 #ifndef TOOLS_SUITE_HEATLOSS_H
-#define TOOLS_SUITE_HEATLOSS_H
+    #define TOOLS_SUITE_HEATLOSS_H
 
 /**
  * Heat Loss calculator class
  * Used to calculateThermalResistance the heat energy loss and outlet steam properties
  */
 class HeatLoss {
-public:
+  public:
     /**
      * Constructor for the heat loss calculator
      *
      * @param inletPressure double, inlet pressure in MPa
-     * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
-     * @param quantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy
+     * in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     * @param quantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in
+     * kJ/kg/K, or quality - unitless)
      * @param inletMassFlow double, inlet mass flow in kg/hr
      * @param percentHeatLoss double, heat loss as %
      */
     HeatLoss(double inletPressure, SteamProperties::ThermodynamicQuantity quantityType, double quantityValue,
              double inletMassFlow, double percentHeatLoss);
 
-    friend std::ostream &operator<<(std::ostream &stream, const HeatLoss &heatLoss);
+    friend std::ostream& operator<<(std::ostream& stream, const HeatLoss& heatLoss);
 
     /**
      * Gets all of the inlet properties
      * @return SteamSystemModelerTool::FluidProperties, inlet properties
      */
-    SteamSystemModelerTool::FluidProperties const & getInletProperties() const { return inletProperties; };
+    SteamSystemModelerTool::FluidProperties const& getInletProperties() const { return inletProperties; };
 
     /**
      * Gets all of the outlet steam properties
      * @return SteamSystemModelerTool::FluidProperties, outlet steam properties
      */
-    SteamSystemModelerTool::FluidProperties const & getOutletProperties() const { return outletProperties; };
+    SteamSystemModelerTool::FluidProperties const& getOutletProperties() const { return outletProperties; };
 
     /**
      * Gets the heat loss
@@ -61,9 +64,10 @@ public:
     double getInletPressure() const { return inletPressure; };
 
     /**
-	 * Gets the quantity value
-	 * @return double, value of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
-	 */
+     * Gets the quantity value
+     * @return double, value of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality -
+     * unitless)
+     */
     double getQuantityValue() const { return quantityValue; };
 
     /**
@@ -79,27 +83,29 @@ public:
     double getPercentHeatLoss() const { return percentHeatLoss; };
 
     /**
-	 * Gets the quantity type
-	 * @return SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
-	 */
+     * Gets the quantity type
+     * @return SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg,
+     * entropy in kJ/kg/K, or quality - unitless)
+     */
     SteamProperties::ThermodynamicQuantity getQuantityType() const { return quantityType; };
 
     /**
-	 * Sets the inlet pressure
-	 * @param inletPressure double, pressure of the inlet steam in MPa
-	 */
+     * Sets the inlet pressure
+     * @param inletPressure double, pressure of the inlet steam in MPa
+     */
     void setInletPressure(double inletPressure);
 
     /**
      * Sets the quantity value
-     * @param quantityValue double, value of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     * @param quantityValue double, value of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K,
+     * or quality - unitless)
      */
     void setQuantityValue(double quantityValue);
 
     /**
-	 * Sets the inlet mass flow
-	 * @param inletMassFlow double, mass flow of the inlet steam in kg/hr
-	 */
+     * Sets the inlet mass flow
+     * @param inletMassFlow double, mass flow of the inlet steam in kg/hr
+     */
     void setInletMassFlow(double inletMassFlow);
 
     /**
@@ -110,20 +116,21 @@ public:
 
     /**
      * Sets the quantity type
-     * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy
+     * in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
      */
     void setQuantityType(SteamProperties::ThermodynamicQuantity quantityType);
 
-private:
+  private:
     void calculateProperties();
 
-    double inletPressure, quantityValue, inletMassFlow, percentHeatLoss;
+    double                                  inletPressure, quantityValue, inletMassFlow, percentHeatLoss;
     SteamSystemModelerTool::FluidProperties inletProperties;
-    double inletEnergyFlow, outletEnergyFlow;
+    double                                  inletEnergyFlow, outletEnergyFlow;
     SteamSystemModelerTool::FluidProperties outletProperties;
 
-    double heatLoss;
+    double                                 heatLoss;
     SteamProperties::ThermodynamicQuantity quantityType;
 };
 
-#endif //TOOLS_SUITE_HEATLOSS_H
+#endif // TOOLS_SUITE_HEATLOSS_H

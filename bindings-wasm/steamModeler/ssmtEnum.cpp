@@ -1,11 +1,11 @@
+#include <emscripten/bind.h>
+
+#include "steamModeler/api/TurbineInput.h"
 #include "steamModeler/SteamProperties.h"
 #include "steamModeler/Turbine.h"
-#include "steamModeler/api/TurbineInput.h"
-#include <emscripten/bind.h>
 using namespace emscripten;
 
-EMSCRIPTEN_BINDINGS(steam_enums)
-{
+EMSCRIPTEN_BINDINGS(steam_enums) {
     enum_<SteamProperties::ThermodynamicQuantity>("ThermodynamicQuantity")
         .value("TEMPERATURE", SteamProperties::ThermodynamicQuantity::TEMPERATURE)
         .value("ENTHALPY", SteamProperties::ThermodynamicQuantity::ENTHALPY)

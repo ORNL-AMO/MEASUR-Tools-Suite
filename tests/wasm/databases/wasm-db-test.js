@@ -95,7 +95,7 @@ function gasFlueGasMaterials(defaultData){
 }
 
 function wallLossesSurfaceLog(item){
-    logMessage(item.getID() + ', ' + item.getSurface() + ', ' + item.getConditionFactor());
+    logMessage(item.ID() + ', ' + item.surfaceDescription() + ', ' + item.shapeFactor());
 }
 
 function wallLossesSurface(defaultData){

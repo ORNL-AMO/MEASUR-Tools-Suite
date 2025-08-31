@@ -21,7 +21,7 @@ app.get('/scriptsList', function(req, res) {
     res.json(scriptsList);
 });
 
-app.use('/assets', express.static('build-wasm/bin'));
+app.use('/assets', express.static('bin'));
 app.use('/jquery', express.static('node_modules/jquery/dist/'));
 app.use('/assert', express.static('node_modules/assert-plus'));
 app.use('/tests', express.static('tests/wasm/'));
@@ -48,7 +48,7 @@ async function loadStaticFiles(dir) {
     } catch (err) {}
 }
 
-let server = app.listen(port, () => console.log(`Wasm Testing Served on: localhost:${port}`));
+let server = app.listen(port, '0.0.0.0', () => console.log(`Wasm Testing Served on: http://0.0.0.0:${port}`));
 
 process.on('SIGTERM', () => {
   console.log('SIGTERM received: closing server...');

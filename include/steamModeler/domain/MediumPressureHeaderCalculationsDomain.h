@@ -1,35 +1,37 @@
 #ifndef TOOLS_SUITE_MEDIUMPRESSUREHEADERCALCULATIONSDOMAIN_H
 #define TOOLS_SUITE_MEDIUMPRESSUREHEADERCALCULATIONSDOMAIN_H
 
-#include <memory>
 #include <iostream>
+#include <memory>
+
 #include <steamModeler/FlashTank.h>
 #include <steamModeler/PRV.h>
 #include <steamModeler/SteamSystemModelerTool.h>
 #include <steamModeler/Turbine.h>
 
 class MediumPressureHeaderCalculationsDomain {
-public:
+  public:
     std::shared_ptr<PrvWithoutDesuperheating> highToMediumPressurePrv;
-    std::shared_ptr<FlashTank> highPressureCondensateFlashTank;
-    HeatLoss mediumPressureHeaderHeatLoss;
-    SteamSystemModelerTool::FluidProperties mediumPressureHeaderOutput;
-    SteamSystemModelerTool::FluidProperties mediumPressureCondensate;
-    std::shared_ptr<Turbine> mediumToLowPressureTurbine;
-    std::shared_ptr<Turbine> mediumToLowPressureTurbineIdeal;
-    std::shared_ptr<Turbine> highToLowPressureTurbineUpdated;
-    std::shared_ptr<Turbine> highToLowPressureTurbineIdealUpdated;
+    std::shared_ptr<FlashTank>                highPressureCondensateFlashTank;
+    HeatLoss                                  mediumPressureHeaderHeatLoss;
+    SteamSystemModelerTool::FluidProperties   mediumPressureHeaderOutput;
+    SteamSystemModelerTool::FluidProperties   mediumPressureCondensate;
+    std::shared_ptr<Turbine>                  mediumToLowPressureTurbine;
+    std::shared_ptr<Turbine>                  mediumToLowPressureTurbineIdeal;
+    std::shared_ptr<Turbine>                  highToLowPressureTurbineUpdated;
+    std::shared_ptr<Turbine>                  highToLowPressureTurbineIdealUpdated;
 
-    friend std::ostream &operator<<(std::ostream &stream, const MediumPressureHeaderCalculationsDomain &domain) {
-        const std::shared_ptr<PrvWithoutDesuperheating> &prvWithoutPtr = domain.highToMediumPressurePrv;
+    friend std::ostream& operator<<(std::ostream& stream, const MediumPressureHeaderCalculationsDomain& domain) {
+        const std::shared_ptr<PrvWithoutDesuperheating>& prvWithoutPtr = domain.highToMediumPressurePrv;
 
         stream << "MediumPressureHeaderCalculationsDomain[";
 
         if (prvWithoutPtr->isWithDesuperheating()) {
             std::shared_ptr<PrvWithDesuperheating> prvWithPtr =
-                    std::static_pointer_cast<PrvWithDesuperheating>(prvWithoutPtr);
+                std::static_pointer_cast<PrvWithDesuperheating>(prvWithoutPtr);
             stream << "highToMediumPressurePrv=" << prvWithPtr;
-        } else {
+        }
+        else {
             stream << "highToMediumPressurePrv=" << prvWithoutPtr;
         }
 
@@ -40,21 +42,21 @@ public:
                << ", mediumToLowPressureTurbine=" << domain.mediumToLowPressureTurbine
                << ", mediumToLowPressureTurbineIdeal=" << domain.mediumToLowPressureTurbineIdeal
                << ", highToLowPressureTurbineUpdated=" << domain.highToLowPressureTurbineUpdated
-               << ", highToLowPressureTurbineIdealUpdated=" << domain.highToLowPressureTurbineIdealUpdated
-               << "]";
+               << ", highToLowPressureTurbineIdealUpdated=" << domain.highToLowPressureTurbineIdealUpdated << "]";
 
         return stream;
     }
 
-    friend std::ostream &
-    operator<<(std::ostream &stream, const std::shared_ptr<MediumPressureHeaderCalculationsDomain> &domain) {
+    friend std::ostream& operator<<(std::ostream&                                                  stream,
+                                    const std::shared_ptr<MediumPressureHeaderCalculationsDomain>& domain) {
         if (domain == nullptr) {
             stream << "MediumPressureHeaderCalculationsDomain[nullptr]";
-        } else {
+        }
+        else {
             stream << *domain;
         }
         return stream;
     }
 };
 
-#endif //TOOLS_SUITE_MEDIUMPRESSUREHEADERCALCULATIONSDOMAIN_H
+#endif // TOOLS_SUITE_MEDIUMPRESSUREHEADERCALCULATIONSDOMAIN_H

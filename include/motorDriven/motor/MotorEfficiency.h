@@ -12,12 +12,13 @@
 #define TOOLS_SUITE_MOTOREFFICIENCY_H
 
 #include <array>
-#include "MotorData.h"
 #include <exception>
 #include <stdexcept>
 
+#include "MotorData.h"
+
 class MotorEfficiency {
-public:
+  public:
     /**
      * Constructor
      * @param lineFrequency Motor::LineFrequency, classification of line frequency in Hz
@@ -25,17 +26,10 @@ public:
      * @param efficiencyClass Motor::EfficiencyClass, efficiency class of motor
      * @param motorRatedPower double, rated power of motor in hp
      */
-    MotorEfficiency(
-        Motor::LineFrequency lineFrequency,
-        double motorRpm,
-        Motor::EfficiencyClass efficiencyClass,
-        double motorRatedPower
-    ) :
-        lineFrequency(lineFrequency),
-        motorRpm(motorRpm),
-        efficiencyClass(efficiencyClass),
-        motorRatedPower(motorRatedPower)
-    {};
+    MotorEfficiency(Motor::LineFrequency lineFrequency, double motorRpm, Motor::EfficiencyClass efficiencyClass,
+                    double motorRatedPower)
+        : lineFrequency(lineFrequency), motorRpm(motorRpm), efficiencyClass(efficiencyClass),
+          motorRatedPower(motorRatedPower) {};
 
     /**
      * Calculates the motor efficiency
@@ -49,142 +43,111 @@ public:
      * calculate25intervals(): Calculates the motor efficiency given at 25% intervals of load factor.
      * @return std::array<double, 5> containing motor efficiency at 25% intervals of load factor
      */
-	std::array<double, 5> calculate25intervals();
+    std::array<double, 5> calculate25intervals();
 
     /**
      * Gets the line frequency
      * @return Motor::LineFrequency, classification of line frequency in Hz
      */
-    Motor::LineFrequency getLineFrequency() const {
-        return lineFrequency;
-    }
+    Motor::LineFrequency getLineFrequency() const { return lineFrequency; }
 
     /**
      * Sets the line frequency
      * @param lineFrequency Motor::LineFrequency, classification of line frequency in Hz
      */
-    void setLineFrequency(Motor::LineFrequency lineFrequency) {
-        this->lineFrequency = lineFrequency;
-    }
+    void setLineFrequency(Motor::LineFrequency lineFrequency) { this->lineFrequency = lineFrequency; }
 
     /**
      * Gets the RPM of motor
      * @return double, RPM of motor
      */
-    double getMotorRpm() const {
-        return motorRpm;
-    }
+    double getMotorRpm() const { return motorRpm; }
 
     /**
      * Sets the RPM of motor
      * @param motorRpm double, RPM of motor
      */
-    void setMotorRpm(double motorRpm) {
-        this->motorRpm = motorRpm;
-    }
+    void setMotorRpm(double motorRpm) { this->motorRpm = motorRpm; }
 
     /**
      * Gets the efficiency class of motor
      * @return Motor::EfficiencyClass, efficiency class of motor
      */
-    Motor::EfficiencyClass getEfficiencyClass() const {
-        return efficiencyClass;
-    }
+    Motor::EfficiencyClass getEfficiencyClass() const { return efficiencyClass; }
 
     /**
      * Sets the efficiency class of motor
      * @param efficiencyClass Motor::EfficiencyClass, efficiency class of motor
      */
-    void setEfficiencyClass(Motor::EfficiencyClass efficiencyClass) {
-        this->efficiencyClass = efficiencyClass;
-    }
+    void setEfficiencyClass(Motor::EfficiencyClass efficiencyClass) { this->efficiencyClass = efficiencyClass; }
 
     /**
      * Gets the horsepower of motor
      * @return double, horsepower of motor
      */
-    double getHp() const {
-        return hp;
-    }
+    double getHp() const { return hp; }
 
     /**
      * Sets the horsepower of motor
      * @param hp double, horsepower of motor
      */
-    void setHp(double hp) {
-        this->hp = hp;
-    }
+    void setHp(double hp) { this->hp = hp; }
 
     /**
      * Gets the motor power in kWh
      * @return double, motor power in kWh
      */
-    double getMotorKwh() const {
-        return motorKwh;
-    }
+    double getMotorKwh() const { return motorKwh; }
 
     /**
      * Sets the motor power in kWh
      * @param motorKwh double, motor power in kWh
      */
-    void setMotorKwh(double motorKwh) {
-        this->motorKwh = motorKwh;
-    }
+    void setMotorKwh(double motorKwh) { this->motorKwh = motorKwh; }
 
     /**
      * Gets the motor amps
      * @return double, motor amps in A
      */
-    double getMotorAmps() const {
-        return motorAmps;
-    }
+    double getMotorAmps() const { return motorAmps; }
 
     /**
      * Sets the motor amps
      * @param motorAmps double, motor amps in A
      */
-    void setMotorAmps(double motorAmps) {
-        this->motorAmps = motorAmps;
-    }
+    void setMotorAmps(double motorAmps) { this->motorAmps = motorAmps; }
 
     /**
      * Gets the actual efficiency of motor
      * @return double, actual efficiency of motor as %
      */
-    double getActualEfficiency() const {
-        return actualEfficiency;
-    }
+    double getActualEfficiency() const { return actualEfficiency; }
 
     /**
      * Sets the actual efficiency of motor
      * @param actualEfficiency double, actual efficiency of motor as %
      */
-    void setActualEfficiency(double actualEfficiency) {
-        this->actualEfficiency = actualEfficiency;
-    }
+    void setActualEfficiency(double actualEfficiency) { this->actualEfficiency = actualEfficiency; }
 
     /**
      * Gets the loss of power in kW
      * @return double, power loss in kW
      */
-    double getKWloss0() const {
-        return kWloss0;
-    }
+    double getKWloss0() const { return kWloss0; }
 
-private:
-    const std::array< std::array<double, 4>, 5> determinePartialLoadCoefficients(std::size_t pole) const;
+  private:
+    const std::array<std::array<double, 4>, 5> determinePartialLoadCoefficients(std::size_t pole) const;
 
-    Motor::LineFrequency lineFrequency;
-    double motorEff = 0.0;
-    double motorRpm;
+    Motor::LineFrequency   lineFrequency;
+    double                 motorEff = 0.0;
+    double                 motorRpm;
     Motor::EfficiencyClass efficiencyClass;
-    double hp;
-    double motorKwh;
-    double motorAmps;
-    double kWloss0 = 0.0;
-    double actualEfficiency;
-    double motorRatedPower;
+    double                 hp;
+    double                 motorKwh;
+    double                 motorAmps;
+    double                 kWloss0 = 0.0;
+    double                 actualEfficiency;
+    double                 motorRatedPower;
 };
 
-
-#endif //TOOLS_SUITE_MOTOREFFICIENCY_H
+#endif // TOOLS_SUITE_MOTOREFFICIENCY_H

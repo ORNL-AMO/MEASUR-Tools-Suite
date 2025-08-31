@@ -12,7 +12,7 @@
 #define TOOLS_SUITE_FLUIDPOWER_H
 
 class FluidPower {
-public:
+  public:
     /**
      * FluidPower constructor for pump systems
      * @param specificGravity double, specified gravity - unitless
@@ -20,8 +20,7 @@ public:
      * @param head double, pump head measured in feet
      */
     FluidPower(double specificGravity, double flowRate, double head)
-            : specificGravity(specificGravity), flowRate(flowRate), head(head), isPump(true)
-    {};
+        : specificGravity(specificGravity), flowRate(flowRate), head(head), isPump(true) {};
 
     /**
      * FluidPower constructor for Fan systems
@@ -30,10 +29,10 @@ public:
      * @param outletPressure double, in inches of water column, gauge
      * @param compressibilityFactor double, unitless
      */
-    FluidPower(double flowRate, const double inletPressure, const double outletPressure, const double compressibilityFactor, const double velocityPressure)
-            : flowRate(flowRate), inletPressure(inletPressure), outletPressure(outletPressure),
-              compressibilityFactor(compressibilityFactor), isPump(false), velocityPressure(velocityPressure)
-    {};
+    FluidPower(double flowRate, const double inletPressure, const double outletPressure,
+               const double compressibilityFactor, const double velocityPressure)
+        : flowRate(flowRate), inletPressure(inletPressure), outletPressure(outletPressure),
+          compressibilityFactor(compressibilityFactor), isPump(false), velocityPressure(velocityPressure) {};
 
     /**
      * Calculates pump or fan fluid power in kw, depending on the number of constructor inputs (isPump)
@@ -46,7 +45,7 @@ public:
         return 0.746 * flowRate * (outletPressure - inletPressure - velocityPressure) * compressibilityFactor / 6362;
     }
 
-private:
+  private:
     const double specificGravity = 0, flowRate, head = 0;
 
     // used only for fan fluid power calculations
@@ -57,4 +56,4 @@ private:
     const double velocityPressure = 0;
 };
 
-#endif //TOOLS_SUITE_FLUIDPOWER_H
+#endif // TOOLS_SUITE_FLUIDPOWER_H

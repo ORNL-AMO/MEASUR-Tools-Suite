@@ -1,8 +1,8 @@
 # MEASUR Tools Suite  
 
-## Update (07/03/2025)
+## Update (08/25/2025)
 
-The MEASUR Tools Suite is currently undergoing a major update to improve usability and maintainability. This includes a refactoring of the codebase to follow consistent practices, better organization, and enhanced documentation around the engineering aspects of the calculations. To follow the progress of this update, please refer to the [Roadmap](ROADMAP.md).
+The MEASUR Tools Suite is currently undergoing a major update to improve usability and maintainability. This includes a refactoring of the codebase to follow consistent practices, better organization, and enhanced documentation around the engineering aspects of the calculations. To follow the progress of this update, please refer to the [Roadmap](ROADMAP.md). As the codebase is refactored, some Emscripten bindings will change. A summary of these changes can be found in the [Emscripten Bindings Changes](EMSCRIPTEN_BINDINGS_CHANGES.md) document.
 
 ## About
 
@@ -27,36 +27,49 @@ The npm packages can be downloaded and install from [registry](https://www.npmjs
 #### Web Assembly Compilation SDK
 
 - Emscripten (emsdk) - Follow instructions for install https://emscripten.org/docs/getting_started/downloads.html
+- From the emsdk directory run `./emsdk install latest`
+- Then run `./emsdk activate latest`
+- Then run `source ./emsdk_env.sh` to set the environment variables in the current terminal session.
+  - On Windows use `emsdk_env.bat`
+
+> [!NOTE]
+> This needs to be done each time a new terminal session is started, or add the command to your shell profile script (e.g. .bashrc, .zshrc, etc.)
 
 #### Node
-
 - Node LTS [https://nodejs.org/en/](https://nodejs.org/en/) 
 
-### Building
+### Build Web Assembly Module
 
-- `cd` into the emsdk directory: 
-    - run `./emsdk install latest` followed by `./emsdk activate latest`
-    - Activate PATH and other environment variables by running `source ./emsdk_env.sh` or on Windows run `emsdk_env.bat`
-- `cd` into MEASUR-Tools-Suite directory:  
-    - create directory `build-wasm` and cd into it 
-    - run `emcmake cmake -DBUILD_WASM=ON ..` 
-        -   Note: If multiple compilers are present and default environment is not used, use -G "XXX Makefiles",
-        example for windows using MinGW => `emcmake cmake -D BUILD_WASM=ON .. -G "MinGW Makefiles"`  
-    - run `emmake make`
+- Ensure you have followed the "Install and Activate Emscripten" steps above
+- From the root directory of the MEASUR Tools Suite repository run `emcmake cmake -DBUILD_WASM=ON`
+  > If multiple compilers are present and default environment is not used, use `-G "<XXX> Makefiles"`. For example, on Windows using MinGW: `emcmake cmake -D BUILD_WASM=ON .. -G "MinGW Makefiles"`
+- Then run `emmake make`
+  > This will create the build artifacts `client.js` and `client.wasm` in the `/bin` directory. `client.js` is the glue code for initializing the WASM module. Place the two files in the same directory within your project and execute the `client.js` script.
 
-### Unit Tests
+### WASM Initialization Example
 
-- To run the WASM unit tests:
-  - Install node_modules dependencies: `cd` into MEASUR-Tools-Suite directory and  
-    run `npm install` followed by `npm run test-wasm`
-- To build C++ unit tests, ensure the `BUILD_TESTING` flag is set (which is default) then: 
-  - create directory `build-cpp` and cd into it
-  - run `'cmake ..'`  
-    -   Note: If multiple compilers are present and default environment is not used, use -G "XXX Makefiles",
-    example for windows using MinGW => `cmake .. -G "MinGW Makefiles"`
-  - run `'cmake --build .'`
-  - execute `./cpp_tests`
-- On MacOS or Linux, the test executable can be found under the `bin` directory. On Windows, the executable can be found under either the `Debug` or `Release` directories, depending on CMake configuration
+MEASUR Tools Suite is distributed as a modularized WebAssembly Module. 
+Below is an illustration of the WASM initialization and usage process:
+
+![WASM Initialization](assets/wasm-initialization.png)
+
+### WASM Unit Tests
+
+- Ensure you have followed the "Build WebAssembly Module" steps above
+- From the root directory of the MEASUR Tools Suite repository run `npm install` to install node dependencies
+- Then run `npm run test-wasm-mocha`
+  > All mocha tests found under `tests/wasm-mocha/` will be executed. 
+  > Migration of unit tests to the mocha framework is a WIP.
+
+### C++ Unit Tests
+
+- Ensure the `BUILD_TESTING` flag is set (which is default) when running CMake
+- From the root directory of the MEASUR Tools Suite repository, run `mkdir build-cpp` and `cd build-cpp`
+- Then run `cmake ..`  
+  > If multiple compilers are present and default environment is not used, use `-G "XXX Makefiles"`. For example for windows using MinGW => `cmake .. -G "MinGW Makefiles"`
+- Then run `cmake --build .`
+- Then run `cd bin` and `./cpp_tests` to execute the tests
+  > On Windows, the executable can be found under either the `Debug` or `Release` directories, depending on CMake configuration
 
 ### Packaging
 
@@ -64,9 +77,11 @@ The npm packages can be downloaded and install from [registry](https://www.npmjs
 - Or use this directly for Windows: `cmake -D BUILD_TESTING:BOOL=OFF ./` and `cmake --build . --config Release --target PACKAGE`
 - To make package on Linux or Mac, run `ccmake.` and set BUILD_TESTING OFF, BUILD_PACKAGE ON, then configure and generate. Then `make package`.
 
-### Documentation
+### Generate Documentation Locally
 
-- To generate documentation: `doxygen Doxyfile`
+- Ensure Doxygen (v 1.14.0 or later) is installed
+- From the root directory of the MEASUR Tools Suite repository run `doxygen Doxyfile`
+  > The documentation will be generated in the `/docs/html` directory
 
 ### Dockerizing 
 
