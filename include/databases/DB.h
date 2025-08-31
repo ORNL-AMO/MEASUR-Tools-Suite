@@ -129,6 +129,6 @@ class DefaultData {
     std::vector<Atmosphere>                 get_default_atmosphere_specific_heat();
     std::vector<WallLosses>                 get_default_wall_losses_surface();
     std::vector<MotorData>                  get_default_motor_data();
-    std::vector<CompressorsData> get_default_compressor_data();
-    std::vector<LightingData> get_default_lighting_data();
+    std::vector<CompressorsData>            get_default_compressor_data();
+    std::vector<LightingData>               get_default_lighting_data();
 };

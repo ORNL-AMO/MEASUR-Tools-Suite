@@ -10,6 +10,10 @@
 #include "databases/SolidLiquidFlueGasMaterialData.h"
 #include "databases/SolidLoadChargeMaterialData.h"
 #include "databases/WallLossesSurfaceData.h"
+#include "databases/compressors_data.h"
+#include "databases/lighting_data.h"
+#include <compressedAir/compressors_data.h>
+#include <other/lighting_data.h>
 #include "motorDriven/motor/MotorData.h"
 #include "processHeat/losses/Atmosphere.h"
 #include "processHeat/losses/GasFlueGasMaterial.h"
@@ -564,4 +568,3 @@ TEST_CASE( "DefaultData - getLightingData", "[databases]" ) {
         CHECK(1 == outputLastLS.lumenDegradationFactor());
     }
 }
-
