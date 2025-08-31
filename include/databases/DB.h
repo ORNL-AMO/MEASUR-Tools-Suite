@@ -13,6 +13,8 @@
 #include "processHeat/losses/LiquidLoadChargeMaterial.h"
 #include "processHeat/losses/SolidLoadChargeMaterial.h"
 #include "processHeat/losses/WallLosses.h"
+#include "compressedAir/compressors_data.h"
+#include "other/lighting_data.h"
 
 class SolidLoadChargeMaterial;
 class LiquidLoadChargeMaterial;
@@ -22,6 +24,8 @@ class SolidLiquidFlueGasMaterial;
 class Atmosphere;
 class WallLosses;
 class MotorData;
+class CompressorsData;
+class LightingData;
 
 class DefaultData
 {
@@ -102,6 +106,24 @@ public:
         return motorData;
     }
 
+    std::vector<CompressorsData> getCompressorData() {
+        std::vector<CompressorsData> compressorData = get_default_compressor_data();
+        auto size = (int)compressorData.size();
+        for(auto i = 0; i < size; i++) {
+            compressorData.at(i).setID(i + 1);
+        }
+        return compressorData;
+    }
+
+    std::vector<LightingData> getLightingData() {
+        std::vector<LightingData> lightingData = get_default_lighting_data();
+        auto size = (int)lightingData.size();
+        for(auto i = 0; i < size; i++) {
+            lightingData.at(i).setID(i + 1);
+        }
+        return lightingData;
+    }
+
 private:
     std::vector<SolidLoadChargeMaterial> get_default_solid_load_charge_materials();
     std::vector<GasLoadChargeMaterial> get_default_gas_load_charge_materials();
@@ -111,6 +133,8 @@ private:
     std::vector<Atmosphere> get_default_atmosphere_specific_heat();
     std::vector<WallLosses> get_default_wall_losses_surface();
     std::vector<MotorData> get_default_motor_data();
+    std::vector<CompressorsData> get_default_compressor_data();
+    std::vector<LightingData> get_default_lighting_data();
 };
 
 #endif //TOOLS_SUITE_DB_H

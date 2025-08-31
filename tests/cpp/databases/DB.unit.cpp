@@ -8,6 +8,10 @@
 #include "databases/SolidLiquidFlueGasMaterialData.h"
 #include "databases/SolidLoadChargeMaterialData.h"
 #include "databases/WallLossesSurfaceData.h"
+#include "databases/compressors_data.h"
+#include "databases/lighting_data.h"
+#include <compressedAir/compressors_data.h>
+#include <other/lighting_data.h>
 #include <processHeat/losses/SolidLoadChargeMaterial.h>
 #include <processHeat/losses/GasLoadChargeMaterial.h>
 #include <processHeat/losses/LiquidLoadChargeMaterial.h>
@@ -521,3 +525,48 @@ TEST_CASE( "DefaultData - getMotorData", "[databases]" ) {
         CHECK( outputs.size() == 954 );
     }
 }
+
+TEST_CASE( "DefaultData - getCompressorData", "[databases]" ) {
+    auto const outputs = DefaultData().getCompressorData();
+
+    {
+        CHECK( outputs.size() == 1630 );
+    }
+
+    {
+        auto const& outputFirstCD = outputs[0];
+        CHECK(1 == outputFirstCD.ID());
+        CHECK("5 hp/3.7 kW" == outputFirstCD.model());
+        CHECK(85 == outputFirstCD.effFL());
+
+        auto length = outputs.size();
+        auto const& outputLastCD = outputs[length - 1];
+        CHECK(length == outputLastCD.ID());
+        CHECK("400 hp/300 kW" == outputLastCD.model());
+        CHECK(94.5 == outputLastCD.effFL());
+    }
+}
+
+TEST_CASE( "DefaultData - getLightingData", "[databases]" ) {
+    auto const outputs = DefaultData().getLightingData();
+
+    {
+        CHECK( outputs.size() == 74 );
+    }
+
+    {
+        auto const& outputFirstLS = outputs[0];
+        CHECK(1 == outputFirstLS.ID());
+        CHECK("Metal Halide" == outputFirstLS.category());
+        CHECK("175-W Metal Halide" == outputFirstLS.type());
+        CHECK(0.8333 == outputFirstLS.lumenDegradationFactor());
+
+        auto length = outputs.size();
+        auto const& outputLastLS = outputs[length - 1];
+        CHECK(length == outputLastLS.ID());
+        CHECK("LED Troffers" == outputLastLS.category());
+        CHECK("4L 2 Foot LED" == outputLastLS.type());
+        CHECK(1 == outputLastLS.lumenDegradationFactor());
+    }
+}
+

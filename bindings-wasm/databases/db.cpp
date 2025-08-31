@@ -7,6 +7,10 @@
 #include "databases/SolidLoadChargeMaterialData.h"
 #include "databases/SolidLiquidFlueGasMaterialData.h"
 #include "databases/WallLossesSurfaceData.h"
+#include "databases/compressors_data.h"
+#include "databases/lighting_data.h"
+#include <compressedAir/compressors_data.h>
+#include <other/lighting_data.h>
 #include <processHeat/losses/SolidLoadChargeMaterial.h>
 #include <processHeat/losses/LiquidLoadChargeMaterial.h>
 #include <processHeat/losses/GasLoadChargeMaterial.h>
@@ -31,5 +35,7 @@ EMSCRIPTEN_BINDINGS(db_class)
         .function("getGasFlueGasMaterials", &DefaultData::getGasFlueGasMaterials)
         .function("getAtmosphereSpecificHeat", &DefaultData::getAtmosphereSpecificHeat)
         .function("getWallLossesSurface", &DefaultData::getWallLossesSurface)
-        .function("getMotorData", &DefaultData::getMotorData);
+        .function("getMotorData", &DefaultData::getMotorData)
+        .function("getCompressorData", &DefaultData::getCompressorData)
+        .function("getLightingData", &DefaultData::getLightingData);
 }
