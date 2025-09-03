@@ -12,7 +12,7 @@
 #ifndef TOOLS_SUITE_WATERHEATINGUSINGFLUE_H
 #define TOOLS_SUITE_WATERHEATINGUSINGFLUE_H
 
-#include "losses/GasFlueGasMaterial.h"
+#include "losses/gas_flue_gas_material.h"
 
 class WaterHeatingUsingFlue {
   public:

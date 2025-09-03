@@ -11,12 +11,12 @@
 #include "databases/SolidLoadChargeMaterialData.h"
 #include "databases/WallLossesSurfaceData.h"
 #include "motorDriven/motor/MotorData.h"
-#include "processHeat/losses/Atmosphere.h"
-#include "processHeat/losses/GasFlueGasMaterial.h"
-#include "processHeat/losses/GasLoadChargeMaterial.h"
-#include "processHeat/losses/LiquidLoadChargeMaterial.h"
-#include "processHeat/losses/SolidLiquidFlueGasMaterial.h"
-#include "processHeat/losses/SolidLoadChargeMaterial.h"
+#include "processHeat/losses/atmosphere.h"
+#include "processHeat/losses/gas_flue_gas_material.h"
+#include "processHeat/losses/gas_load_charge_material.h"
+#include "processHeat/losses/liquid_load_charge_material.h"
+#include "processHeat/losses/solid_liquid_flue_gas_material.h"
+#include "processHeat/losses/solid_load_charge_material.h"
 #include "processHeat/losses/wall_losses.h"
 
 using namespace emscripten;

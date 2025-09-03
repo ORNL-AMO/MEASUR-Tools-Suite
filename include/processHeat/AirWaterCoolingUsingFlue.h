@@ -11,7 +11,7 @@
 #ifndef TOOLS_SUITE_AIRWATERCOOLINGUSINGFLUE_H
 #define TOOLS_SUITE_AIRWATERCOOLINGUSINGFLUE_H
 
-#include "losses/GasFlueGasMaterial.h"
+#include "losses/gas_flue_gas_material.h"
 
 class AirWaterCoolingUsingFlue {
   public:
