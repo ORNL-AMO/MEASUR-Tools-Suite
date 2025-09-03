@@ -28,7 +28,9 @@ jobs:
         uses: addnab/docker-run-action@v3
         with:
           image: emscripten/emsdk:3.1.60
+          options: -v ${{ github.workspace }}:/test_mocha
           run: |
+            cd /test_mocha
             emcmake cmake -DBUILD_WASM=ON
             emmake make
 
