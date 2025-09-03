@@ -24,9 +24,11 @@ jobs:
       - name: Remove build directory
         run: rm -rf build
 
-      - name: Remove CMake cache
+      - name: Clean build and CMake cache
         run: |
-          rm -rf CMakeFiles CMakeCache.txt
+          rm -rf build-cpp
+          rm -f CMakeCache.txt
+          rm -rf CMakeFiles
 
       - name: List files with 'Atmosphere' in the name
         run: find . -type f -name '*Atmosphere*'
