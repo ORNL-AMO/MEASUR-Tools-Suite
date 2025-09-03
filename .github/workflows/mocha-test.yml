@@ -21,9 +21,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Clean CMakeFiles directories
-        run: find . -type d -name 'CMakeFiles' -exec rm -rf {} +
+      - name: Remove build directory
+        run: rm -rf build
 
+      - name: Remove CMake cache
+        run: |
+          rm -rf CMakeFiles CMakeCache.txt
+          
       - name: Build WASM with Emscripten
         uses: addnab/docker-run-action@v3
         with:
