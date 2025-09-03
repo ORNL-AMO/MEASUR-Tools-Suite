@@ -32,6 +32,7 @@ jobs:
           run: |
             cd /test_mocha
             emcmake cmake -DBUILD_WASM=ON
+            emmake make clean
             emmake make
 
       - name: Run Mocha tests
