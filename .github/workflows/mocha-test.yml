@@ -27,6 +27,9 @@ jobs:
       - name: Remove CMake cache
         run: |
           rm -rf CMakeFiles CMakeCache.txt
+
+      - name: List files with 'Atmosphere' in the name
+        run: find . -type f -name '*Atmosphere*'
           
       - name: Build WASM with Emscripten
         uses: addnab/docker-run-action@v3
