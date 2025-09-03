@@ -1,4 +1,4 @@
-#include "processHeat/losses/Atmosphere.h"
+#include "processHeat/losses/atmosphere.h"
 
 #include "catch.hpp"
 

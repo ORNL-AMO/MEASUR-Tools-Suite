@@ -6,7 +6,7 @@
  * @bug No known bugs.
  *
  */
-#include "processHeat/losses/Atmosphere.h"
+#include "processHeat/losses/atmosphere.h"
 
 double Atmosphere::getTotalHeat() {
     // return the total net heat for the example case
