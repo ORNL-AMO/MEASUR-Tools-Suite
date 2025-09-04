@@ -64,7 +64,7 @@ TEST_CASE("Compressed Air Leak Survey Bag Method and Electricity", "[CompressedA
 
     auto compressedAirLeakSurvey = CompressedAirLeakSurvey(compressedAirLeakSurveyInputVec);
     auto testOutput              = compressedAirLeakSurvey.calculate();
-    CHECK(testOutput.annualTotalElectricity == Approx(.3456));
+    CHECK(testOutput.annualTotalElectricity == Approx(0.3456));
     CHECK(testOutput.annualTotalElectricityCost == Approx(0.041472));
     CHECK(testOutput.totalFlowRate == Approx(144.0));
     CHECK(testOutput.annualTotalFlowRate == Approx(129.6));
