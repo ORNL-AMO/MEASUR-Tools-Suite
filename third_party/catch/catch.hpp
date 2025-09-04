@@ -7164,10 +7164,6 @@ namespace Catch {
                 std::sort( sorted.begin(), sorted.end() );
                 break;
             case RunTests::InRandomOrder:
-                // {
-                //     seedRng( config );
-                //     RandomNumberGenerator::shuffle( sorted );
-                // }
                 break;
             case RunTests::InDeclarationOrder:
                 // already in declaration order
