@@ -9,7 +9,6 @@
 #include "processHeat/losses/liquid_load_charge_material.h"
 #include "processHeat/losses/solid_liquid_flue_gas_material.h"
 #include "processHeat/losses/solid_load_charge_material.h"
-#include "processHeat/losses/wall_heat_loss.h"
 
 class SolidLoadChargeMaterial;
 class LiquidLoadChargeMaterial;
