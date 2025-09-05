@@ -267,7 +267,6 @@ EMSCRIPTEN_BINDINGS(solidLoadChargeMaterial) {
 
     register_vector<SolidLoadChargeMaterial>("SolidLoadChargeMaterialV");
 }
-struct WallHeatLoss {};
 
 // wall_heat_loss
 EMSCRIPTEN_BINDINGS(wall_heat_loss) {
