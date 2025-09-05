@@ -1,37 +1,33 @@
 # Documentation
 
-This project uses [Doxygen](https://www.doxygen.nl/) to generate documentation from annotated source code. Doxygen comments are used to describe the purpose, behavior, and usage of classes, functions, and other entities in the codebase. Follow these guidelines to ensure your code is well-documented and easy to understand. Always use `@` for Doxygen commands and tags, as this is the standard convention in this project.
+This project uses [Doxygen](https://www.doxygen.nl/) to generate documentation from annotated source code. Doxygen comments are used to describe the purpose, behavior, and usage of classes, functions, and other entities in the codebase. Follow these guidelines to ensure your code is well-documented and easy to understand. Always use `@` for Doxygen commands.
 
 
 ## Doxygen Commands
 
-All commands start with `@`. 
+All commands must start with `@`. 
 
-Some commands have one or more arguments. Each argument has a certain range:
-- If `<sharp>` braces are used the argument is a single word.
-- If `(round)` braces are used the argument extends until the end of the line on which the command was found.
-- If `{curly}` braces are used the argument extends until the next paragraph. Paragraphs are delimited by a blank line or by a section indicator.
-
-Commands:
+Useful Commands:
 - `@file <name>`
-- `@authors { list of authors }`
-- `@ingroup (<group-name>)`
-- `@defgroup <name> (group title)`
+- `@authors <authors>`
+- `@ingroup <group-name>`
+- `@defgroup <name> <group-title>`
 - `@namespace <name>`
 - `@class <name>`
 - `@struct <name>`
 - `@enum <name>`
-- `@brief { brief description }`
-- `@details { detailed description }`
-- `@param[<dir>] <parameter-name> { parameter description }`
-- `@tparam <template-parameter-name> { description }`
-- `@return { description of the return value }`
-- `@throws <exception-object> { exception description }`
-- `@note { text }`
-- `@bug { bug description }`
-- `@see { references }`                                       
-- `@def <name>`                                      
-- `@copyright { copyright description }`
+- `@brief <brief description>`
+- `@details <detailed description>`
+- `@param[<direction>] <parameter-name> <parameter-description>`
+- `@tparam <template-parameter-name> <description>`
+- `@return <description>`
+- `@throws <exception-object> <description>`
+- `@note <text>`
+- `@bug <description>`
+- `@see <reference>`
+- `@copyright <text>`
+- `@cite <reference>`
+- `@ref <reference> <display-text>`
 
 
 ## Doxygen Aliases
@@ -126,25 +122,27 @@ Use the `@symtable` and `@endsymtable` commands to create a table of symbols use
 
 Use a **Doxygen block** at the very top of each header file to document the file's purpose, authors, and any relevant notes.
 
-#### Required tags
+#### Relevant commands
 
-`@file`, `@authors`, `@ingroup`, `@brief`
-
-#### Optional tags
-
-`@details`, `@note`, `@bug`, `@see`, `@copyright`
+- `@ingroup`
+- `@file`
+- `@authors`
+- `@brief`
+- `@details`
+- `@note`
+- `@see`
+- `@copyright`
 
 #### Example
 
 ```cpp
 /**
+ * @ingroup geometry
  * @file polygon.h
  * @authors Alice Brown, Carlos Diaz
- * @ingroup geometry
  * @brief Defines the Polygon class for representing simple 2-D polygons.
  * @details This file contains the Polygon class, which provides methods for adding vertices, computing area, and checking point containment.
  * @note The Polygon class assumes vertices are provided in counter-clockwise order.
- * @bug Self-intersection checks are not implemented.
  * @see https://en.wikipedia.org/wiki/Polygon
  * @copyright 2025 Geometry Toolkit
  */
@@ -155,20 +153,21 @@ Use a **Doxygen block** at the very top of each header file to document the file
 
 Use a **Doxygen block** above each namespace declaration in header files to document the namespace's purpose and contents.
 
-#### Required tags
+#### Relevant commands
 
-`@namespace`, `@ingroup`, `@brief`
-
-#### Optional tags
-
-`@details`, `@note`, `@see`
+- `@ingroup`
+- `@namespace`
+- `@brief`
+- `@details`
+- `@note`
+- `@see`
 
 #### Example
 
 ```cpp
 /**
- * @namespace constants
  * @ingroup math
+ * @namespace constants
  * @brief Defines mathematical constants used throughout the project.
  */
 namespace constants {}
@@ -179,20 +178,24 @@ namespace constants {}
 
 Use a **Doxygen block** above each class or struct declaration in header files to document its purpose, behavior, and any important details. This applies to both classes and structs.
 
-#### Required tags
+#### Relevant commands
 
-`@class` **or** `@struct`, `@ingroup`, `@brief`
-
-#### Optional tags
-
-`@details`, `@tparam`, `@note`, `@bug`, `@see`
+- `@ingroup`
+- `@class`
+- `@struct`
+- `@brief`
+- `@details`
+- `@tparam`
+- `@note`
+- `@bug`
+- `@see`
 
 #### Example
 
 ```cpp
 /**
- * @struct Point2
  * @ingroup geometry
+ * @struct Point2
  * @brief Lightweight 2-D point with double precision.
  */
 struct Point2 {
@@ -201,8 +204,8 @@ struct Point2 {
 };
 
 /**
- * @class Polygon
  * @ingroup geometry
+ * @class Polygon
  * @brief Simple 2-D polygon representation.
  * @details Stores vertices in counter-clockwise order.
  * @note Capacity is fixed at construction.
@@ -251,13 +254,17 @@ private:
 
 Use a **Doxygen block** above each public function or method declaration in header files. This applies to both free functions and member functions of classes or structs.
 
-#### Required tags
+#### Relevant commands
 
-`@brief`, `@param[in]` **or** `param[out]` **or** `param[in,out]`, `@return` (if applicable)
-
-#### Optional tags
-
-`@details`, `@tparam`, `@throws`, `@note`, `@bug`, `@see`
+- `@brief`
+- `@param[in]` **or** `param[out]` **or** `param[in,out]`
+- `@return`
+- `@details`
+- `@tparam`
+- `@throws`
+- `@note`
+- `@bug`
+- `@see`
 
 #### Example
 
@@ -299,20 +306,22 @@ inline constexpr Point2 kOrigin {0.0, 0.0};  ///< Reference point (0,0).
 
 Use a **Doxygen block** above each enum declaration in header files to document the enum type and its enumerators. Each enumerator should have an inline comment describing its purpose.
 
-#### Required tags
+#### Relevant commands
 
-`@enum`, `@ingroup`, `@brief`
-
-#### Optional tags
-
-`@details`, `@note`, `@bug`, `@see`
+- `@ingroup`
+- `@enum`
+- `@brief`
+- `@details`
+- `@note`
+- `@bug`
+- `@see`
 
 #### Example
 
 ```cpp
 /**
- * @enum Axis
  * @ingroup geometry
+ * @enum Axis
  * @brief Principal 3-D axes.
  */
 enum class Axis {
@@ -327,21 +336,23 @@ enum class Axis {
 
 Use **Doxygen groups** to organize related namespaces, classes, and functions into logical modules.
 
-Place a **Doxygen block** in a central location (e.g., `mainpage.dox`) to define the group and provide an overview. Each related code element should reference the group using the `@ingroup` command in its own documentation block.
+Large groups must be defined in their own file (e.g., `math.dox`, `geometry.dox`) to avoid cluttering header files. These files should be placed in the `docs/` directory or one of its subdirectories.
 
-#### Required tags
+#### Relevant commands
 
-`@defgroup`, `@brief`
-
-#### Optional tags
-
-`@details`, `@note`, `@see`
+- `@defgroup`
+- `ingroup`
+- `@brief`
+- `@details`
+- `@copydoc`
+- `@see`
 
 #### Example
 
 ```cpp
 /**
  * @defgroup geometry Geometry
+ * @ingroup math
  * @brief Geometry module for 2D and 3D shapes.
  */
 ```
@@ -349,7 +360,6 @@ Place a **Doxygen block** in a central location (e.g., `mainpage.dox`) to define
 
    ```bash
    doxygen Doxyfile
-
 
 
 
