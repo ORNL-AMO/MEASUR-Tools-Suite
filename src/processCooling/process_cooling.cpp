@@ -14,7 +14,7 @@ vector<int> ProcessCooling::getSysOpAnnualHours(const vector<int>& weeklyOpStart
 
     auto dayIndex = 0;
     auto monthIndex = 0;
-    for(auto i=0; i<=HOURS_IN_YEAR; i+=7)
+    for(auto i=0; i<HOURS_IN_YEAR; i+=7)
     {
         auto weekDayIndex = dayIndex % 7;
         auto startHour = weeklyOpStartHour[weekDayIndex];
@@ -22,7 +22,7 @@ vector<int> ProcessCooling::getSysOpAnnualHours(const vector<int>& weeklyOpStart
 
         for (auto hr = 0; hr < 24; hr++)
         {
-            auto hrIndex = i + hr + 24 * dayIndex - 7 * dayIndex;
+            auto hrIndex = i + hr + dayIndex * 17; // 17 => 24 - 7
 
             if (hrIndex >= HOURS_IN_YEAR) break;
             if (hrIndex >= monthHourStart[monthIndex + 1]) monthIndex++;

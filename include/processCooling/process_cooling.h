@@ -491,7 +491,7 @@ class ProcessCooling {
 
     /**
      *
-     ** @details Use this constructor for air cooled system
+     * @details Use this constructor for air cooled system
      *
      * @param systemOperationAnnualHours integer array of 8760 hours of the year with values as 0 or 1
      * @param weatherDryBulbHourlyTemp double array of 8760 hours of the year with dry bulb hourly recorded temperature
