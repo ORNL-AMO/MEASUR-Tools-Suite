@@ -82,6 +82,118 @@ function airCooledSystemTest(testNum) {
     logMessage('Test #' + testNum + ': Air Cooled Single Chiller System END', true);
 }
 
+function airCooledSystemOpAtOnlyDayTimeTest(testNum) {
+    logMessage('Test #' + testNum + ': Air Cooled Single Chiller System Operating at Only Day Time: ', true);
+
+    let chiller = new Module.ChillerInput(Module.ChillerCompressorType.Reciprocating, 25, true, 0.1, 1, false, false, chillerMonthlyLoad);
+    let chillersA = new Module.ChillerInputV();
+    chillersA.push_back(chiller);
+    let acs = new Module.AirCooledSystemInput(44, 80, Module.ACSourceLocation.Outside, 70, 5);
+
+    const weeklyOpStartHourA = [8, 8, 8, 8, 8, 8, 8]; // start at 8 AM
+    const weeklyOpStopHourA = [20, 20, 20, 20, 20, 20, 20]; // stops at 8 PM
+    const monthlyOpMaxHoursA = [744, 672, 744, 720, 744, 720, 744, 744, 720, 744, 720, 744]; // max hours per month
+    let weeklyOpStartHour = new Module.IntVector();
+    let weeklyOpStopHour = new Module.IntVector();
+    let monthlyOpMaxHours = new Module.IntVector();
+    for (let i = 0; i < weeklyOpStartHourA.length; i++) {
+        weeklyOpStartHour.push_back(weeklyOpStartHourA[i]);
+        weeklyOpStopHour.push_back(weeklyOpStopHourA[i]);
+    }
+    for (let i = 0; i < monthlyOpMaxHoursA.length; i++) {
+        monthlyOpMaxHours.push_back(monthlyOpMaxHoursA[i]);
+    }
+    let systemOperationAnnualHoursDay = Module.getSysOpAnnualHours(weeklyOpStartHour, weeklyOpStopHour, monthlyOpMaxHours);
+
+    weeklyOpStartHour.delete();
+    weeklyOpStopHour.delete();
+    monthlyOpMaxHours.delete();
+
+    let pcA = new Module.ProcessCooling(systemOperationAnnualHoursDay, dryBulbHourlyTemp, wetBulbHourlyTemp, chillersA, acs);
+
+    logMessage('Chiller #1 Output: ', true);
+    let chillerOutput = pcA.calculateChillerEnergy();
+    logMessage('Efficiency @ Load : ', true);
+    validateArrays(chillerOutput.efficiency.get(0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.062114349], chillerBins);
+    logMessage('Hour @ Load : ', true);
+    validateArrays(chillerOutput.hours.get(0), [4380, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4380], chillerBins);
+    logMessage('Power @ Load : ', true);
+    validateArrays(chillerOutput.power.get(0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.5528587244], chillerBins);
+    logMessage('Energy @ Load : ', true);
+    validateArrays(chillerOutput.energy.get(0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6801.5212129796], chillerBins);
+
+    logMessage('Pump #1 Output: ', true);
+    let pumpInputA = new Module.PumpInput(true, 2.4, 0.75, 1, 0.85);
+    let chillerPumpingEnergyOutput = pcA.calculatePumpEnergy(pumpInputA);
+    logMessage('Pump Energy For Chiller # : ', true);
+    validateArrays(chillerPumpingEnergyOutput.chillerPumpingEnergy, [3920.976], pumpBins);
+
+    systemOperationAnnualHoursDay.delete();
+    chiller.delete();
+    chillersA.delete();
+    pumpInputA.delete();
+    acs.delete();
+    pcA.delete();
+
+    logMessage('Test #' + testNum + ': Air Cooled Single Chiller System Operating at Only Day Time END', true);
+}
+
+function airCooledSystemOpAtOnlyDayTimeFebNovTest(testNum) {
+    logMessage('Test #' + testNum + ': Air Cooled Single Chiller System Operating at Only Day Time Feb-Nov: ', true);
+
+    let chiller = new Module.ChillerInput(Module.ChillerCompressorType.Reciprocating, 25, true, 0.1, 1, false, false, chillerMonthlyLoad);
+    let chillersA = new Module.ChillerInputV();
+    chillersA.push_back(chiller);
+    let acs = new Module.AirCooledSystemInput(44, 80, Module.ACSourceLocation.Outside, 70, 5);
+
+    const weeklyOpStartHourA = [8, 8, 8, 8, 8, 8, 8]; // start at 8 AM
+    const weeklyOpStopHourA = [20, 20, 20, 20, 20, 20, 20]; // stops at 8 PM
+    const monthlyOpMaxHoursA = [0, 672, 744, 720, 744, 720, 744, 744, 720, 744, 720, 0]; // max hours per month
+    let weeklyOpStartHour = new Module.IntVector();
+    let weeklyOpStopHour = new Module.IntVector();
+    let monthlyOpMaxHours = new Module.IntVector();
+    for (let i = 0; i < weeklyOpStartHourA.length; i++) {
+        weeklyOpStartHour.push_back(weeklyOpStartHourA[i]);
+        weeklyOpStopHour.push_back(weeklyOpStopHourA[i]);
+    }
+    for (let i = 0; i < monthlyOpMaxHoursA.length; i++) {
+        monthlyOpMaxHours.push_back(monthlyOpMaxHoursA[i]);
+    }
+    let systemOperationAnnualHoursDay = Module.getSysOpAnnualHours(weeklyOpStartHour, weeklyOpStopHour, monthlyOpMaxHours);
+
+    weeklyOpStartHour.delete();
+    weeklyOpStopHour.delete();
+    monthlyOpMaxHours.delete();
+
+    let pcA = new Module.ProcessCooling(systemOperationAnnualHoursDay, dryBulbHourlyTemp, wetBulbHourlyTemp, chillersA, acs);
+
+    logMessage('Chiller #1 Output: ', true);
+    let chillerOutput = pcA.calculateChillerEnergy();
+    logMessage('Efficiency @ Load : ', true);
+    validateArrays(chillerOutput.efficiency.get(0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0602286673], chillerBins);
+    logMessage('Hour @ Load : ', true);
+    validateArrays(chillerOutput.hours.get(0), [5124, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3636], chillerBins);
+    logMessage('Power @ Load : ', true);
+    validateArrays(chillerOutput.power.get(0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.5057166823], chillerBins);
+    logMessage('Energy @ Load : ', true);
+    validateArrays(chillerOutput.energy.get(0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5474.7858568695], chillerBins);
+
+    logMessage('Pump #1 Output: ', true);
+    let pumpInputA = new Module.PumpInput(true, 2.4, 0.75, 1, 0.85);
+    let chillerPumpingEnergyOutput = pcA.calculatePumpEnergy(pumpInputA);
+    logMessage('Pump Energy For Chiller # : ', true);
+    validateArrays(chillerPumpingEnergyOutput.chillerPumpingEnergy, [3254.9472], pumpBins);
+
+    systemOperationAnnualHoursDay.delete();
+    chiller.delete();
+    chillersA.delete();
+    pumpInputA.delete();
+    acs.delete();
+    pcA.delete();
+
+    logMessage('Test #' + testNum + ': Air Cooled Single Chiller System Operating at Only Day Time Feb-Nov END', true);
+}
+
 function waterCooledSystemTest(testNum){
     logMessage('Test #' + testNum + ': Water Cooled Two Chiller System: ', true);
 
@@ -601,6 +713,8 @@ function airCooled3ChillerSystemNonVaryingMonthlyLoadSchedule(testNum) {
 let testNum = 1;
 initTestData();
 airCooledSystemTest(testNum++);
+airCooledSystemOpAtOnlyDayTimeTest(testNum++);
+airCooledSystemOpAtOnlyDayTimeFebNovTest(testNum++);
 waterCooledSystemTest(testNum++);
 waterCooledSystemReplaceRefrigerantTest(testNum++);
 waterCooledSystemCustomChillerTest(testNum++);

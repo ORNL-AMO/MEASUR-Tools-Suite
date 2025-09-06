@@ -1,4 +1,4 @@
-#include "processCooling/ProcessCooling.h"
+#include "processCooling/process_cooling.h"
 
 #include <emscripten/bind.h>
 
@@ -85,7 +85,8 @@ EMSCRIPTEN_BINDINGS(processCooling_class) {
                      const vector<ProcessCooling::ChillerInput>&, ProcessCooling::AirCooledSystemInput>()
         .function("calculateTowerEnergy", &ProcessCooling::calculateTowerEnergy)
         .function("calculateChillerEnergy", &ProcessCooling::calculateChillerEnergy)
-        .function("calculatePumpEnergy", &ProcessCooling::calculatePumpEnergy);
+        .function("calculatePumpEnergy", &ProcessCooling::calculatePumpEnergy)
+        .class_function("getSysOpAnnualHours", &ProcessCooling::getSysOpAnnualHours);
 
     register_vector<int>("IntVector");
     register_vector<ProcessCooling::ChillerInput>("ChillerInputV");

@@ -1,4 +1,4 @@
-#include "processCooling/ProcessCooling.h"
+#include "processCooling/process_cooling.h"
 
 #include <catch.hpp>
 
@@ -1256,6 +1256,44 @@ TEST_CASE("Process Fluid Cooling Energy Calculations:", "[processCooling]") {
     INFO("Pump Output: ")
     auto chillerPumpingEnergyOutput = pc.calculatePumpEnergy(ProcessCooling::PumpInput(true, 2.4, 0.75, 1, 0.85));
     validateArrays(chillerPumpingEnergyOutput.chillerPumpingEnergy, {7841.95});
+
+    INFO("Air Cooled Single Chiller System Operating Only at Day Time: ")
+    auto systemOperationAnnualHoursDay = ProcessCooling::getSysOpAnnualHours(
+            {8, 8, 8, 8, 8, 8, 8}, {20, 20, 20, 20, 20, 20, 20},
+            {744, 672, 744, 720, 744, 720, 744, 744, 720, 744, 720, 744});
+
+    pc = ProcessCooling(systemOperationAnnualHoursDay, dryBulbHourlyTemp, wetBulbHourlyTemp, chillers,
+                        ProcessCooling::AirCooledSystemInput(44, 80, ProcessCooling::Outside, 70, 5));
+
+    INFO("Chiller Output: ")
+    chillerOutput = pc.calculateChillerEnergy();
+    validateArrays(chillerOutput.efficiency[0], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.062114349});
+    validateArrays(chillerOutput.hours[0], {4380, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4380});
+    validateArrays(chillerOutput.power[0], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.5528587244});
+    validateArrays(chillerOutput.energy[0], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6801.5212129796});
+
+    INFO("Pump Output: ")
+    chillerPumpingEnergyOutput = pc.calculatePumpEnergy(ProcessCooling::PumpInput(true, 2.4, 0.75, 1, 0.85));
+    validateArrays(chillerPumpingEnergyOutput.chillerPumpingEnergy, {3920.976});
+
+    INFO("Air Cooled Single Chiller System Operating Only at Day Time Feb-Nov: ")
+    systemOperationAnnualHoursDay = ProcessCooling::getSysOpAnnualHours(
+            {8, 8, 8, 8, 8, 8, 8}, {20, 20, 20, 20, 20, 20, 20},
+            {0, 672, 744, 720, 744, 720, 744, 744, 720, 744, 720, 0});
+
+    pc = ProcessCooling(systemOperationAnnualHoursDay, dryBulbHourlyTemp, wetBulbHourlyTemp, chillers,
+                        ProcessCooling::AirCooledSystemInput(44, 80, ProcessCooling::Outside, 70, 5));
+
+    INFO("Chiller Output: ")
+    chillerOutput = pc.calculateChillerEnergy();
+    validateArrays(chillerOutput.efficiency[0], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0602286673});
+    validateArrays(chillerOutput.hours[0], {5124, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3636});
+    validateArrays(chillerOutput.power[0], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.5057166823});
+    validateArrays(chillerOutput.energy[0], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5474.7858568695});
+
+    INFO("Pump Output: ")
+    chillerPumpingEnergyOutput = pc.calculatePumpEnergy(ProcessCooling::PumpInput(true, 2.4, 0.75, 1, 0.85));
+    validateArrays(chillerPumpingEnergyOutput.chillerPumpingEnergy, {3254.9472});
     INFO("Test #1: Air Cooled System Test Passed")
 
     INFO("Test #2: Water Cooled Two Chiller System: ")

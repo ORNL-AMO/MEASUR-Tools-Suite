@@ -5,7 +5,41 @@
  * @author Converted by Omer Aziz from VB to C++ (omerb).
  */
 
-#include "processCooling/ProcessCooling.h"
+#include "processCooling/process_cooling.h"
+const vector<int> monthHourStart = {0, 744, 1416, 2160, 2880, 3624, 4344, 5088, 5832, 6552, 7296, 8016, 8760};
+
+vector<int> ProcessCooling::getSysOpAnnualHours(const vector<int>& weeklyOpStartHour, const vector<int>& weeklyOpStopHour, const vector<int>& monthlyOpMaxHour){
+    vector<int> systemOperationAnnualHours(HOURS_IN_YEAR, 0);
+    vector<int> monthHours(12, 0);
+
+    auto dayIndex = 0;
+    auto monthIndex = 0;
+    for(auto i=0; i<=HOURS_IN_YEAR; i+=7)
+    {
+        auto weekDayIndex = dayIndex % 7;
+        auto startHour = weeklyOpStartHour[weekDayIndex];
+        auto endHour = weeklyOpStopHour[weekDayIndex];
+
+        for (auto hr = 0; hr < 24; hr++)
+        {
+            auto hrIndex = i + hr + 24 * dayIndex - 7 * dayIndex;
+
+            if (hrIndex >= HOURS_IN_YEAR) break;
+            if (hrIndex >= monthHourStart[monthIndex + 1]) monthIndex++;
+            if (monthHours[monthIndex] >= monthlyOpMaxHour[monthIndex]) continue;
+
+            if (hr >= startHour && hr < endHour)
+            {
+                systemOperationAnnualHours[hrIndex] = 1;
+                monthHours[monthIndex]++;
+            }
+        }
+
+        dayIndex++;
+    }
+
+    return systemOperationAnnualHours;
+}
 
 const double nominalWaterFlowGPMPerTon = 3.0; // Typical value for towers
 
@@ -179,7 +213,6 @@ ProcessCooling::ChillerPumpingEnergyOutput ProcessCooling::calculatePumpEnergy(P
 void ProcessCooling::annualChillerLoadProfile() {
     vector<vector<vector<double>>> chillerMonthlyLoads(numChillers,
                                                        vector<vector<double>>(MONTHS, vector<double>(LOAD_NUM, 0)));
-    vector<int>    monthHourStart         = {0, 744, 1416, 2160, 2880, 3624, 4344, 5088, 5832, 6552, 7296, 8016, 8760};
     vector<double> systemOperationMonthly = {744, 672, 744, 720, 744, 720, 744, 744, 720, 744, 720, 744};
 
     int monthIndex  = 0;
