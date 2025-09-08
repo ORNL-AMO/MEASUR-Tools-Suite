@@ -2,7 +2,6 @@
 
 #include <catch.hpp>
 
-#include "databases/AtmosphereSpecificHeatData.h"
 #include "databases/GasFlueGasMaterialData.h"
 #include "databases/GasLoadChargeMaterialData.h"
 #include "databases/LiquidLoadChargeMaterialData.h"
@@ -10,7 +9,6 @@
 #include "databases/SolidLiquidFlueGasMaterialData.h"
 #include "databases/SolidLoadChargeMaterialData.h"
 #include "motorDriven/motor/MotorData.h"
-#include "processHeat/losses/atmosphere.h"
 #include "processHeat/losses/gas_flue_gas_material.h"
 #include "processHeat/losses/gas_load_charge_material.h"
 #include "processHeat/losses/liquid_load_charge_material.h"
@@ -468,26 +466,6 @@ TEST_CASE("DefaultData - getSolidLiquidFlueGasMaterials", "[databases]") {
         CHECK(expected.getO2() == output.getO2());
         CHECK(expected.getMoisture() == output.getMoisture());
         CHECK(expected.getNitrogen() == output.getNitrogen());
-    }
-}
-
-TEST_CASE("DefaultData - getAtmosphereSpecificHeat", "[databases]") {
-    auto defaultData = DefaultData();
-
-    {
-        auto const outputs = defaultData.getAtmosphereSpecificHeat();
-        CHECK(outputs.size() == 6);
-    }
-
-    {
-        auto const output = defaultData.getAtmosphereSpecificHeat()[0];
-
-        Atmosphere expected;
-        expected.setSubstance("Nitrogen");
-        expected.setSpecificHeat(0.0185);
-        expected.setID(1);
-
-        CHECK(expected == output);
     }
 }
 

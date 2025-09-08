@@ -2,7 +2,6 @@
 
 #include <emscripten/bind.h>
 
-#include "databases/AtmosphereSpecificHeatData.h"
 #include "databases/GasFlueGasMaterialData.h"
 #include "databases/GasLoadChargeMaterialData.h"
 #include "databases/LiquidLoadChargeMaterialData.h"
@@ -10,7 +9,6 @@
 #include "databases/SolidLiquidFlueGasMaterialData.h"
 #include "databases/SolidLoadChargeMaterialData.h"
 #include "motorDriven/motor/MotorData.h"
-#include "processHeat/losses/atmosphere.h"
 #include "processHeat/losses/gas_flue_gas_material.h"
 #include "processHeat/losses/gas_load_charge_material.h"
 #include "processHeat/losses/liquid_load_charge_material.h"
@@ -28,6 +26,5 @@ EMSCRIPTEN_BINDINGS(db_class) {
         .function("getLiquidLoadChargeMaterials", &DefaultData::getLiquidLoadChargeMaterials)
         .function("getSolidLiquidFlueGasMaterials", &DefaultData::getSolidLiquidFlueGasMaterials)
         .function("getGasFlueGasMaterials", &DefaultData::getGasFlueGasMaterials)
-        .function("getAtmosphereSpecificHeat", &DefaultData::getAtmosphereSpecificHeat)
         .function("getMotorData", &DefaultData::getMotorData);
 }
