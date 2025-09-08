@@ -2,7 +2,7 @@
 
 The following table summarizes the changes made to the Emscripten bindings in the MEASUR Tools Suite. These changes are part of an ongoing effort to improve the usability and maintainability of the codebase.
 
-## WallLosses class
+## Wall Heat Loss Calculator
 
 The `WallLosses` class has been refactored into a namespace called `wall_heat_loss` with many methoids being removed or renamed. The following table outlines the updated emscripten bindings:
 
@@ -17,3 +17,17 @@ The `WallLosses` class has been refactored into a namespace called `wall_heat_lo
 | shapeFactors                     | ---                | New method that returns a vector of ShapeFactor structs.              |
 
 See `wasm_wall_heat_loss.test.js` for usage examples.
+
+## Atmosphere Heat Loss Calculator
+
+The `Atmosphere` class has been removed and its functionality has been integrated into the `atmosphere_heat_loss` namespace. The following table outlines the updated emscripten bindings:
+
+| Current Signature                | Previous Signature | Notes                                                                               |
+| -------------------------------- | ------------------ | ----------------------------------------------------------------------------------- |
+| atmosphereTotalHeatLoss          | getTotalHeatLoss   | Renamed                                                                             |
+| AtmosphereGasType                | ---                | New Struct that holds atmosphere gas type data (description & specific heat value). |
+| AtmosphereGasType.gasDescription | getSubstance       | New field in AtmosphereGasType struct that holds the description of the gas.        |
+| AtmosphereGasType.specificHeat   | getSpecificHeat    | New field in AtmosphereGasType struct that holds the specific heat of the gas       |
+| atmosphereGasTypes               | ---                | New method that returns a vector of AtmosphereGasType structs.                      |
+
+See `wasm_atmosphere_heat_loss.test.js` for usage examples.

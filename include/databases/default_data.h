@@ -3,7 +3,6 @@
 #include <vector>
 
 #include "motorDriven/motor/MotorData.h"
-#include "processHeat/losses/atmosphere.h"
 #include "processHeat/losses/gas_flue_gas_material.h"
 #include "processHeat/losses/gas_load_charge_material.h"
 #include "processHeat/losses/liquid_load_charge_material.h"
@@ -15,7 +14,6 @@ class LiquidLoadChargeMaterial;
 class GasLoadChargeMaterial;
 class GasCompositions;
 class SolidLiquidFlueGasMaterial;
-class Atmosphere;
 class WallLosses;
 class MotorData;
 
@@ -70,15 +68,6 @@ class DefaultData {
         return material;
     }
 
-    std::vector<Atmosphere> getAtmosphereSpecificHeat() {
-        std::vector<Atmosphere> specificHeat = get_default_atmosphere_specific_heat();
-        auto                    size         = (int)specificHeat.size();
-        for (auto i = 0; i < size; i++) {
-            (specificHeat[i]).setID(i + 1);
-        }
-        return specificHeat;
-    }
-
     std::vector<MotorData> getMotorData() {
         std::vector<MotorData> motorData = get_default_motor_data();
         auto                   size      = (int)motorData.size();
@@ -94,6 +83,5 @@ class DefaultData {
     std::vector<LiquidLoadChargeMaterial>   get_default_liquid_load_charge_materials();
     std::vector<SolidLiquidFlueGasMaterial> get_default_solid_liquid_flue_gas_materials();
     std::vector<GasCompositions>            get_default_gas_flue_gas_materials();
-    std::vector<Atmosphere>                 get_default_atmosphere_specific_heat();
     std::vector<MotorData>                  get_default_motor_data();
 };

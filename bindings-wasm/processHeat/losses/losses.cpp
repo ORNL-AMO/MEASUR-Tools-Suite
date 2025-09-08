@@ -1,6 +1,6 @@
 #include <emscripten/bind.h>
 
-#include "processHeat/losses/atmosphere.h"
+#include "processHeat/losses/atmosphere_heat_loss.h"
 #include "processHeat/losses/auxiliary_power.h"
 #include "processHeat/losses/energy_input_EAF.h"
 #include "processHeat/losses/energy_input_exhaust_gas_losses.h"
@@ -29,21 +29,18 @@ EMSCRIPTEN_BINDINGS(losses_enums) {
         .value("NONE", LoadChargeMaterial::ThermicReactionType::NONE);
 }
 
-// atmosphere
-// getTotalHeat()
-EMSCRIPTEN_BINDINGS(atmosphere) {
-    class_<Atmosphere>("Atmosphere")
-        .constructor<>()
-        .constructor<double, double, double, double, double>()
-        .function("getTotalHeat", &Atmosphere::getTotalHeat)
-        .function("getID", &Atmosphere::getID)
-        .function("getSubstance", &Atmosphere::getSubstance)
-        .function("getSpecificHeat", &Atmosphere::getSpecificHeat)
-        .function("setID", &Atmosphere::setID)
-        .function("setSubstance", &Atmosphere::setSubstance)
-        .function("setSpecificHeat", &Atmosphere::setSpecificHeat);
+// Bindings for the atmosphere_heat_loss namespace
+EMSCRIPTEN_BINDINGS(atmosphere_heat_loss) {
+    using namespace atmosphere_heat_loss;
 
-    register_vector<Atmosphere>("AtmosphereV");
+    value_object<GasType>("AtmosphereGasType")
+        .field("gasDescription", &GasType::gas_description)
+        .field("specificHeat", &GasType::specific_heat);
+
+    register_vector<GasType>("AtmosphereGasTypes");
+
+    function("atmosphereGasTypes", &gasTypes);
+    function("atmosphereTotalHeatLoss", &totalHeatLoss);
 }
 
 // auxiliaryPowerLoss
@@ -268,7 +265,7 @@ EMSCRIPTEN_BINDINGS(solidLoadChargeMaterial) {
     register_vector<SolidLoadChargeMaterial>("SolidLoadChargeMaterialV");
 }
 
-// wall_heat_loss
+// Bindings for the wall_heat_loss namespace
 EMSCRIPTEN_BINDINGS(wall_heat_loss) {
     value_object<wall_heat_loss::ShapeFactor>("WallShapeFactor")
         .field("surfaceConfiguration", &wall_heat_loss::ShapeFactor::surface_configuration)
