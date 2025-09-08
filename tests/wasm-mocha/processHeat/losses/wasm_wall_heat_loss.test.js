@@ -11,7 +11,7 @@ describe('Process Wall Heat Loss', function () {
     });
 
     it('should verify defined shape factors are correct', function () {
-        const shapeFactors = moduleInstance.shapeFactors();
+        const shapeFactors = moduleInstance.wallShapeFactors();
 
         // Expected shape factors
         const expected = [
@@ -47,7 +47,7 @@ describe('Process Wall Heat Loss', function () {
         };
 
         // Calculate total heat loss
-        const totalHeatLoss = moduleInstance.totalHeatLoss(
+        const totalHeatLoss = moduleInstance.wallTotalHeatLoss(
             inp.surfaceArea,
             inp.ambientTemperature,
             inp.surfaceTemperature,
