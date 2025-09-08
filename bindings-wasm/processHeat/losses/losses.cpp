@@ -270,16 +270,16 @@ EMSCRIPTEN_BINDINGS(solidLoadChargeMaterial) {
 
 // wall_heat_loss
 EMSCRIPTEN_BINDINGS(wall_heat_loss) {
-    value_object<wall_heat_loss::ShapeFactor>("ShapeFactor")
+    value_object<wall_heat_loss::ShapeFactor>("WallShapeFactor")
         .field("surfaceConfiguration", &wall_heat_loss::ShapeFactor::surface_configuration)
         .field("value", &wall_heat_loss::ShapeFactor::value);
 
-    register_vector<wall_heat_loss::ShapeFactor>("ShapeFactorsVector");
+    register_vector<wall_heat_loss::ShapeFactor>("WallShapeFactorsVector");
 
-    function("shapeFactors", &wall_heat_loss::shapeFactors);
-    function("totalHeatLoss", &wall_heat_loss::totalHeatLoss);
-    function("convectiveHeatLoss", &wall_heat_loss::convectiveHeatLoss);
-    function("radiativeHeatLoss", &wall_heat_loss::radiativeHeatLoss);
+    function("wallShapeFactors", &wall_heat_loss::shapeFactors);
+    function("wallTotalHeatLoss", &wall_heat_loss::totalHeatLoss);
+    function("wallConvectiveHeatLoss", &wall_heat_loss::convectiveHeatLoss);
+    function("wallRadiativeHeatLoss", &wall_heat_loss::radiativeHeatLoss);
 }
 
 // waterCoolingLosses
