@@ -294,6 +294,9 @@ ALIASES                += "unitr{1}=\f$\unit{\1}\f$" \
                           "unitb{1}=\f$[\unit{\1}]\f$" \
                           "unitp{1}=\f$(\unit{\1})\f$"
 
+# Use @qty{<quantity>; <unit expression>} to create a quantity with a unit.
+ALIASES                += "qty{2;}=\f$\qty{\1}{\2}\f$"
+
 # Use @formula{<label>; <equation>} to create a labeled equation. 
 # The label entered is prefixed with "eq" and can be used to reference the 
 # equation with: \eqref{eq:<label>}.
