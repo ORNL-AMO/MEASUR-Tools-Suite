@@ -1,3 +1,4 @@
+#pragma once
 /**
  * @file
  * @brief Calculator for heat required for atmosphere
@@ -12,11 +13,8 @@
 
 #include <string>
 
-#ifndef TOOLS_SUITE_ATMOSPHERE_H
-    #define TOOLS_SUITE_ATMOSPHERE_H
-
-    /** Reference Temperature is 60°F */
-    #define REFERENCE_TEMPERATURE 60.0
+/** Reference Temperature is 60°F */
+#define REFERENCE_TEMPERATURE 60.0
 
 /**
  * Atmosphere class
@@ -175,5 +173,3 @@ class Atmosphere {
     Atmosphere(std::string substance, double specificHeat)
         : specificHeat(specificHeat), substance(std::move(substance)) {}
 };
-
-#endif // TOOLS_SUITE_ATMOSPHERE_H

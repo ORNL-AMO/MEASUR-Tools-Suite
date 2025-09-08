@@ -5,6 +5,7 @@
 #include "physics/constants.h"
 
 namespace wall_heat_loss {
+
 double totalHeatLoss(double surface_area, double ambient_temperature, double surface_temperature, double wind_speed,
                      double surface_emissivity, double shape_factor, double correction_factor) {
 
@@ -62,4 +63,5 @@ double radiativeHeatLoss(double surface_emissivity, double surface_area, double 
 
     return radiative_heat_loss;
 }
+
 } // namespace wall_heat_loss

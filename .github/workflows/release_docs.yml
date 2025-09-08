@@ -14,7 +14,8 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y doxygen
+          sudo apt-get install -y doxygen \
+            texlive-binaries texlive-base
       - name: Generate docs
         run: doxygen Doxyfile
       - name: Upload artifact
