@@ -1,11 +1,3 @@
-/**
- * @file
- * @brief Contains the implementation of the atmosphere total heat.
- *
- * @author Gina Accawi (accawigk)
- * @bug No known bugs.
- *
- */
 #include "processHeat/losses/atmosphere.h"
 
 double Atmosphere::getTotalHeat() {
