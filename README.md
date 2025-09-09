@@ -127,9 +127,9 @@ MEASUR Tools Suite is distributed as a modularized WebAssembly Module. Below is 
 
 ### Dockerizing 
 
-To make it easy for developers local building and testing, it is dockerized. To run it in docker follow these steps.
+To make it easy for developers local building and testing, it is dockerized. To run it in docker follow these steps. 
 
-- Navigate to the root directory of the MEASUR Tools Suite repository.
+- Navigate to the root directory of the MEASUR Tools Suite repository
 - To build the docker image run:
   ```bash
   docker compose up -d
