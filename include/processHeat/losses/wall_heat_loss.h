@@ -6,6 +6,7 @@
  * @brief Defines functions and data structures for calculating heat losses from walls.
  */
 
+#include <array>
 #include <string>
 #include <vector>
 
@@ -18,35 +19,38 @@ namespace wall_heat_loss {
 
 /**
  * @ingroup wall_heat_loss_calculator
- * @struct ShapeFactor
- * @brief Represents a surface configuration and its associated factor value used in heat loss calculations.
+ * @struct WallType
+ * @brief Represents a wall type and its associated shape factor used in heat loss calculations.
  * @see shape_factors
  */
-struct ShapeFactor {
-    std::string surface_configuration; ///< Description of the surface shape/orientation/condition.
-    double      value;                 ///< Factor value associated with the surface configuration.
+struct WallType {
+    std::string wall_description; ///< Description of the wall type.
+    double      shape_factor;     ///< Shape factor associated with the wall type @unitb{\unitless}
 };
 
 /**
  * @ingroup wall_heat_loss_calculator
- * @brief A collection of shape factors used in wall heat loss calculations.
+ * @brief Predefined shape factors for various wall types.
  * @see shape_factors
  */
-const std::vector<ShapeFactor> kShapeFactors {{"Horizontal cylinders", 1.016},
-                                              {"Longer vertical cylinders", 1.235},
-                                              {"Vertical plates", 1.394},
-                                              {"Horizontal plate facing up, warmer than air", 1.79},
-                                              {"Horizontal plate facing down, warmer than air", 0.89},
-                                              {"Horizontal plate facing up, cooler than air", 0.89},
-                                              {"Horizontal plate facing down, cooler than air", 1.79}};
+inline const std::array<WallType, 7> kWallTypes {{{"Horizontal cylinders", 1.016},
+                                                  {"Longer vertical cylinders", 1.235},
+                                                  {"Vertical plates", 1.394},
+                                                  {"Horizontal plate facing up, warmer than air", 1.79},
+                                                  {"Horizontal plate facing down, warmer than air", 0.89},
+                                                  {"Horizontal plate facing up, cooler than air", 0.89},
+                                                  {"Horizontal plate facing down, cooler than air", 1.79}}};
 
 /**
  * @ingroup wall_heat_loss_calculator
- * @brief Returns the predefined shape factors for wall heat loss calculations.
- * @return A vector of ShapeFactor structs containing surface configurations and their associated factor values.
+ * @brief Retrieves the predefined shape factors for various wall types.
+ * @return A vector of WallType structures containing wall descriptions and their corresponding shape factors.
  * @see shape_factors
  */
-inline const std::vector<ShapeFactor>& shapeFactors() { return kShapeFactors; }
+inline const std::vector<WallType>& wallTypes() {
+    static const std::vector<WallType> wall_types_vector(kWallTypes.begin(), kWallTypes.end());
+    return wall_types_vector;
+}
 
 /**
  * @ingroup wall_heat_loss_calculator

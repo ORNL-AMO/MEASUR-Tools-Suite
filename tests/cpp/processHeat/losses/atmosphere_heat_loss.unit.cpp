@@ -2,7 +2,7 @@
 
 #include <catch.hpp>
 
-TEST_CASE("Calculate Total Heat loss for atmospheric gasses", "[Process Heating][Losses][Atmosphere]") {
+TEST_CASE("Calculate total heat loss for atmospheric gasses", "[Process Heating][Losses][Atmosphere]") {
     double flow_rate          = 1200.0; // scfh
     double specific_heat      = 0.02;   // btu/scf°F
     double inlet_temperature  = 100.0;  // °F

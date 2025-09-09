@@ -10,10 +10,10 @@ describe('Process Wall Heat Loss', function () {
         });
     });
 
-    it('should verify defined shape factors are correct', function () {
-        const shapeFactors = moduleInstance.wallShapeFactors();
+    it('should verify defined wall types are correct', function () {
+        const wallTypes = moduleInstance.wallTypes();
 
-        // Expected shape factors
+        // Expected wall types and their shape factors
         const expected = [
             ['Horizontal cylinders', 1.016],
             ['Longer vertical cylinders', 1.235],
@@ -24,13 +24,13 @@ describe('Process Wall Heat Loss', function () {
             ['Horizontal plate facing down, cooler than air', 1.79],
         ];
 
-        // Assert the number of shape factors
-        assert.equal(shapeFactors.size(), expected.length, 'shapeFactors length mismatch');
+        // Assert the number of wall types
+        assert.equal(wallTypes.size(), expected.length, 'wallTypes length mismatch');
 
         // Assert each shape factor's description and value
-        expected.forEach(([desc, factor], i) => {
-            assert.equal(shapeFactors.get(i).surfaceConfiguration, desc, `Configuration description ${i} mismatch`);
-            assert.equal(shapeFactors.get(i).value, factor, `Shape factor ${i} mismatch`);
+        expected.forEach(([description, factor], i) => {
+            assert.equal(wallTypes.get(i).wallDescription, description, `Wall description ${i} mismatch`);
+            assert.equal(wallTypes.get(i).shapeFactor, factor, `Shape factor ${i} mismatch`);
         });
     });
 
