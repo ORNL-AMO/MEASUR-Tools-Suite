@@ -2,7 +2,7 @@
 
 #include <catch.hpp>
 
-TEST_CASE("Calculate Heat Loss for furnace walls", "[Heat Loss]") {
+TEST_CASE("Calculate total heat loss for furnace walls", "[Process Heating][Losses][Wall]") {
     double surface_area        = 500.0; // ft²
     double ambient_temperature = 80.0;  // °F
     double surface_temperature = 225.0; // °F
