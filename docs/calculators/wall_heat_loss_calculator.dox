@@ -1,10 +1,13 @@
 /**
  * @defgroup wall_heat_loss_calculator Wall Heat Loss Calculator
  * @ingroup heat_loss_calculators
- * @brief Calculates heat losses from walls in industrial settings.
- * @details The Wall Heat Loss Calculator is used to estimate heat losses from walls in industrial settings. The
- * calculator computes the total heat loss as the sum of convective and radiative heat losses, adjusted by a correction
- * factor. Relevant formulas and factors are documented below.
+ * @brief Calculates heat losses from walls of process heating equipment to the ambient.
+ * @details The Wall Heat Loss Calculator is used to estimate the heat losses that occur due to heat transferred from
+ * the outer surface of the walls or casing of process heating equipment to the surrounding. These losses are in the
+ * form of convective heat transfer and radiative heat transfer from the outer wall surfaces. Wall heat losses are high
+ * for systems that are poorly insulated and/or use poorly designed materials. The calculator computes the total heat
+ * loss as the sum of convective and radiative heat losses, adjusted by a correction factor. Relevant formulas and
+ * factors are documented below.
  *
  * @heading{Total Heat Loss}
  * @copydoc wall_total_heat_loss_formula
@@ -30,7 +33,9 @@
  * @symrow{Q_\text{rad}; Radiative heat loss; \btu\per\hour}
  * @symrow{f_\text{corr}; Correction factor; \unitless}
  * @endsymtable
- *
+ */
+
+/**
  * @defgroup wall_convective_heat_loss_formula Wall Convective Heat Loss Formula
  * @ingroup wall_heat_loss_calculator
  * @formula{wall-qconv; Q_\text{conv} = h A \Delta T}
@@ -60,7 +65,9 @@
  * @symrow{T_s; Surface temperature; \degreeFahrenheit}
  * @symrow{T_a; Ambient temperature; \degreeFahrenheit}
  * @endsymtable
- *
+ */
+
+/**
  * @defgroup wall_radiative_heat_loss_formula Wall Radiative Heat Loss Formula
  * @ingroup wall_heat_loss_calculator
  * @formula{wall-qrad; Q_\text{rad} = \varepsilon \sigma A (T_s^4 - T_a^4)}
@@ -74,17 +81,19 @@
  * @symrow{T_s; Surface temperature; \degreeRankine}
  * @symrow{T_a; Ambient temperature; \degreeRankine}
  * @endsymtable
- *
+ */
+
+/**
  * @defgroup shape_factors Shape Factors
  * @ingroup wall_heat_loss_calculator
- * | Surface Configuration                         | Value @unitb{\unitless} |
- * |-----------------------------------------------|-------------------------|
- * | Horizontal cylinders                          | 1.016                   |
- * | Longer vertical cylinders                     | 1.235                   |
- * | Vertical plates                               | 1.394                   |
- * | Horizontal plate facing up, warmer than air   | 1.79                    |
- * | Horizontal plate facing down, warmer than air | 0.89                    |
- * | Horizontal plate facing up, cooler than air   | 0.89                    |
- * | Horizontal plate facing down, cooler than air | 1.79                    |
+ * | Wall Type                                     | Shape Factor @unitb{\unitless} |
+ * |-----------------------------------------------|--------------------------------|
+ * | Horizontal cylinders                          | 1.016                          |
+ * | Longer vertical cylinders                     | 1.235                          |
+ * | Vertical plates                               | 1.394                          |
+ * | Horizontal plate facing up, warmer than air   | 1.79                           |
+ * | Horizontal plate facing down, warmer than air | 0.89                           |
+ * | Horizontal plate facing up, cooler than air   | 0.89                           |
+ * | Horizontal plate facing down, cooler than air | 1.79                           |
  * Source: @cite astmC680
  */
