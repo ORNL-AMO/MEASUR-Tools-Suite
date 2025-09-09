@@ -1,9 +1,10 @@
 #pragma once
 /**
- * @ingroup heat_loss_calculators
+ * @ingroup wall_heat_loss_calculator
  * @file wall_heat_loss.h
  * @authors Gina Accawi, Liam White
- * @brief Defines functions and data structures for calculating heat losses from walls.
+ *
+ * @copybrief wall_heat_loss_calculator
  */
 
 #include <array>
@@ -13,7 +14,7 @@
 /**
  * @ingroup wall_heat_loss_calculator
  * @namespace wall_heat_loss
- * @brief A collection of functions and data structures for calculating heat losses from walls.
+ * @copybrief wall_heat_loss_calculator
  */
 namespace wall_heat_loss {
 
@@ -66,7 +67,11 @@ inline const std::vector<WallType>& wallTypes() {
  * @unitb{\unitless}
  * @param[in] correction_factor Correction factor for the wall heat loss calculations @unitb{\unitless}
  * @return Total heat loss @unitb{\btu\per\hour}.
- * @see wall_total_heat_loss_formula, wall_convective_heat_loss_formula, wall_radiative_heat_loss_formula
+ * @see
+ * - wall_total_heat_loss_formula
+ * - wall_convective_heat_loss_formula
+ * - wall_radiative_heat_loss_formula
+ * - shape_factors
  */
 double totalHeatLoss(double surface_area, double ambient_temperature, double surface_temperature, double wind_speed,
                      double surface_emissivity, double shape_factor, double correction_factor);
