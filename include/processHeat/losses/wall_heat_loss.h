@@ -22,7 +22,7 @@ namespace wall_heat_loss {
  * @ingroup wall_heat_loss_calculator
  * @struct WallType
  * @brief Represents a wall type and its associated shape factor used in heat loss calculations.
- * @see shape_factors
+ * @see wall_shape_factors
  */
 struct WallType {
     std::string wall_description; ///< Description of the wall type.
@@ -32,7 +32,7 @@ struct WallType {
 /**
  * @ingroup wall_heat_loss_calculator
  * @brief Predefined shape factors for various wall types.
- * @see shape_factors
+ * @see wall_shape_factors
  */
 inline const std::array<WallType, 7> kWallTypes {{{"Horizontal cylinders", 1.016},
                                                   {"Longer vertical cylinders", 1.235},
@@ -46,7 +46,7 @@ inline const std::array<WallType, 7> kWallTypes {{{"Horizontal cylinders", 1.016
  * @ingroup wall_heat_loss_calculator
  * @brief Retrieves the predefined shape factors for various wall types.
  * @return A vector of WallType structures containing wall descriptions and their corresponding shape factors.
- * @see shape_factors
+ * @see wall_shape_factors
  */
 inline const std::vector<WallType>& wallTypes() {
     static const std::vector<WallType> wall_types_vector(kWallTypes.begin(), kWallTypes.end());
@@ -71,7 +71,7 @@ inline const std::vector<WallType>& wallTypes() {
  * - wall_total_heat_loss_formula
  * - wall_convective_heat_loss_formula
  * - wall_radiative_heat_loss_formula
- * - shape_factors
+ * - wall_shape_factors
  */
 double totalHeatLoss(double surface_area, double ambient_temperature, double surface_temperature, double wind_speed,
                      double surface_emissivity, double shape_factor, double correction_factor);
@@ -89,7 +89,9 @@ double totalHeatLoss(double surface_area, double ambient_temperature, double sur
  * @unitb{\degreeFahrenheit}
  * @param[in] ambient_temperature Ambient temperature measured on the exterior of the wall @unitb{\degreeFahrenheit}
  * @return Convective heat loss @unitb{\btu\per\hour}.
- * @see wall_convective_heat_loss_formula
+ * @see
+ * - wall_convective_heat_loss_formula
+ * - wall_shape_factors
  */
 double convectiveHeatLoss(double shape_factor, double wind_speed, double surface_area, double surface_temperature,
                           double ambient_temperature);
