@@ -2,12 +2,13 @@
  * @defgroup wall_heat_loss_calculator Wall Heat Loss Calculator
  * @ingroup heat_loss_calculators
  * @brief Calculates heat losses from walls of process heating equipment to the ambient.
- * @details This calculator can be used to calculate fuel savings from improving wall insulation 
- * or otherwise reduce heat lost through the walls. Wall losses occur as heat is transferred 
- * from the outer surface of the walls or casing of process heating equipment to the surrounding environment. 
- * This can occur via convection and radiation. Wall losses are high for systems that are poorly 
- * insulated or use poorly designed materials or surfaces. Heat loss due to opening in the unit are 
- * covered under opening losses, leakage losses, or atmosphere losses.
+ * @details This calculator can be used to calculate fuel savings from improving wall insulation or otherwise reduce
+ * heat lost through the walls. Wall losses occur as heat is transferred from the outer surface of the walls or casing
+ * of process heating equipment to the surrounding environment. This can occur via convection and radiation. Wall losses
+ * are high for systems that are poorly insulated or use poorly designed materials or surfaces. The calculator computes
+ * the total heat loss as the sum of convective and radiative heat losses, adjusted by a correction factor. Relevant
+ * formulas and factors are documented below. Heat losses due to openings in the unit are covered by the
+ * @ref opening_heat_loss_calculator, @ref leakage_heat_loss_calculator, or @ref atmosphere_heat_loss_calculator.
  *
  * @heading{Total Heat Loss}
  * @copydoc wall_total_heat_loss_formula
@@ -84,7 +85,7 @@
  */
 
 /**
- * @defgroup shape_factors Shape Factors
+ * @defgroup wall_shape_factors Wall Shape Factors
  * @ingroup wall_heat_loss_calculator
  * | Wall Type                                     | Shape Factor @unitb{\unitless} |
  * |-----------------------------------------------|--------------------------------|
