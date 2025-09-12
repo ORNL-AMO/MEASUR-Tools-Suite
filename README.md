@@ -65,8 +65,34 @@ The npm packages can be downloaded and install from [registry](https://www.npmjs
 
 MEASUR Tools Suite is distributed as a modularized WebAssembly Module. Below is an illustration of the WASM initialization and usage process:
 
-<!-- TODO: Replace with updated code snippet -->
-![WASM Initialization](assets/wasm-initialization.png)
+```js
+//initialize module
+const moduleFactory = (await import('/path/to/client.js')).default;
+toolsSuiteModule = await moduleFactory({
+          locateFile: (filename) => '/path/to/client.wasm'
+});
+
+const surfaceArea = 500;
+const ambientTemperature = 80;
+const surfaceTemperature = 225;
+const windSpeed = 10;
+const surfaceEmissivity = 0.9;
+const shapeFactor = 1.394;
+const correctionFactor = 1;
+
+// Calculate total heat loss
+const totalHeatLoss = toolsSuiteModule.wallTotalHeatLoss(
+            surfaceArea,
+            ambientTemperature,
+            surfaceTemperature,
+            windSpeed,
+            surfaceEmissivity,
+            shapeFactor,
+            correctionFactor);
+```
+
+
+
 
 ### WASM Unit Tests
 
