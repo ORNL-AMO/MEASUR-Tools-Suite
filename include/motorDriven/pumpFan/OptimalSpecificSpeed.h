@@ -1,7 +1,8 @@
 /**
  * @brief Header file for OptimalSpecificSpeed class
  *
- * This contains the prototypes of Optimal Specific Speed calculator including getters and setters for the important fields.
+ * This contains the prototypes of Optimal Specific Speed calculator including getters and setters for the important
+ * fields.
  *
  * @author Subhankar Mishra (mishras)
  * @author Gina Accawi (accawigk)
@@ -13,7 +14,7 @@
 #define TOOLS_SUITE_OPTIMALSPECIFICSPEED_H
 
 class OptimalSpecificSpeed {
-public:
+  public:
     /**
      * Constructor
      * @param rpm double, pump RPM to define its operating speed
@@ -21,17 +22,8 @@ public:
      * @param head double, measured or required pump head in feet
      * @param stageCount double, the number of pump stages
      */
-    OptimalSpecificSpeed(
-        double rpm,
-        double flowRate,
-        double head,
-        double stageCount
-    ):
-        stageCount(stageCount),
-        flowRate(flowRate),
-        head(head),
-        rpm(rpm)
-    {};
+    OptimalSpecificSpeed(double rpm, double flowRate, double head, double stageCount)
+        : stageCount(stageCount), flowRate(flowRate), head(head), rpm(rpm) {};
 
     /**
      * Calculates the optimal specific speed
@@ -39,12 +31,11 @@ public:
      */
     double calculate();
 
-private:
+  private:
     double stageCount;
     double flowRate;
     double head;
     double rpm;
 };
 
-
-#endif //TOOLS_SUITE_OPTIMALSPECIFICSPEED_H
+#endif // TOOLS_SUITE_OPTIMALSPECIFICSPEED_H

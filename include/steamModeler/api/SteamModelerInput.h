@@ -10,10 +10,10 @@
  * Steam Modeler input data; holds all of the needed input data.
  */
 class SteamModelerInput {
-public:
-    SteamModelerInput(const bool isBaselineCalc, const double baselinePowerDemand, const BoilerInput &boilerInput,
-                      const HeaderInput &headerInput, const OperationsInput &operationsInput,
-                      const TurbineInput &turbineInput);
+  public:
+    SteamModelerInput(const bool isBaselineCalc, const double baselinePowerDemand, const BoilerInput& boilerInput,
+                      const HeaderInput& headerInput, const OperationsInput& operationsInput,
+                      const TurbineInput& turbineInput);
 
     bool isBaselineCalc() const;
 
@@ -27,13 +27,13 @@ public:
 
     TurbineInput getTurbineInput() const;
 
-private:
-    bool baselineCalc;
-    double baselinePowerDemand;
-    BoilerInput boilerInput;
-    HeaderInput headerInput;
+  private:
+    bool            baselineCalc;
+    double          baselinePowerDemand;
+    BoilerInput     boilerInput;
+    HeaderInput     headerInput;
     OperationsInput operationsInput;
-    TurbineInput turbineInput;
+    TurbineInput    turbineInput;
 };
 
-#endif //TOOLS_SUITE_STEAMMODELERINPUT_H
+#endif // TOOLS_SUITE_STEAMMODELERINPUT_H

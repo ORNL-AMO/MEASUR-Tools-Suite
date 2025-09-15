@@ -1,12 +1,11 @@
-#include "vector"
-
-#include "wasteWater/SludgeVolumeIndex.h"
 #include <emscripten/bind.h>
+
+#include "vector"
+#include "wasteWater/SludgeVolumeIndex.h"
 
 using namespace emscripten;
 
-EMSCRIPTEN_BINDINGS(svi_class)
-{
+EMSCRIPTEN_BINDINGS(svi_class) {
     enum_<SludgeVolumeIndex::SVIParameter>("SVIParameter")
         .value("SVISN", SludgeVolumeIndex::SVIParameter::SVISN)
         .value("SVIGN", SludgeVolumeIndex::SVIParameter::SVIGN)

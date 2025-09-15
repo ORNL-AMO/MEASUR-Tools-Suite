@@ -1,43 +1,41 @@
 
-#include "motorDriven/fans/Fan203.h"
-#include "motorDriven/pumpFan/CompressibilityFactor.h"
+#include <emscripten/bind.h>
+
+#include "motorDriven/fans/fan203.h"
 #include "motorDriven/fans/FanCurve.h"
-#include "motorDriven/fans/Planar.h"
 #include "motorDriven/fans/FanResult.h"
+#include "motorDriven/fans/Planar.h"
+#include "motorDriven/motor/MotorData.h"
+#include "motorDriven/pumpFan/CompressibilityFactor.h"
 #include "motorDriven/pumpFan/FanShaftPower.h"
 #include "motorDriven/pumpFan/OptimalFanEfficiency.h"
-#include "motorDriven/motor/MotorData.h"
-
-#include <emscripten/bind.h>
 
 using namespace emscripten;
 
-//fanResultsExisting / fanResultsModified
-EMSCRIPTEN_BINDINGS(fans_results)
-{
-    //fan input
-    class_<Fan::Input>("FanInput")
-        .constructor<double, double, Motor::Drive, double>();
+// fanResultsExisting / fanResultsModified
+EMSCRIPTEN_BINDINGS(fans_results) {
+    // fan input
+    class_<Fan::Input>("FanInput").constructor<double, double, Motor::Drive, double>();
 
-    //field data basleline
+    // field data basleline
     class_<Fan::FieldDataBaseline>("FieldDataBaseline")
         .constructor<double, double, double, double, double, double, double, Motor::LoadEstimationMethod, double>();
 
-    //field data modified
+    // field data modified
     class_<Fan::FieldDataModified>("FieldDataModified")
         .constructor<double, double, double, double, double, double, double>();
 
-    //fan result
+    // fan result
     class_<FanResult>("FanResult")
         .constructor<Fan::Input, Motor, double, double>()
         .function("calculateExisting", &FanResult::calculateExisting)
         .function("calculateModified", &FanResult::calculateModified);
 }
 
-EMSCRIPTEN_BINDINGS(fans_output)
-{
+EMSCRIPTEN_BINDINGS(fans_output) {
     class_<FanResult::Output>("FanOutput")
-        .constructor<double, double, double, double, double, double, double, double, double, double, double, double, double, double>()
+        .constructor<double, double, double, double, double, double, double, double, double, double, double, double,
+                     double, double>()
         .property("fanEfficiency", &FanResult::Output::fanEfficiency)
         .property("motorRatedPower", &FanResult::Output::motorRatedPower)
         .property("motorShaftPower", &FanResult::Output::motorShaftPower)
@@ -53,32 +51,28 @@ EMSCRIPTEN_BINDINGS(fans_output)
         .property("driveEfficiency", &FanResult::Output::driveEfficiency)
         .property("estimatedFLA", &FanResult::Output::estimatedFLA);
 }
-//fan203
-EMSCRIPTEN_BINDINGS(fan_203)
-{
-    //fan rated info
-    class_<FanRatedInfo>("FanRatedInfo")
-        .constructor<double, double, double, double, double>();
-    //plane data
+// fan203
+EMSCRIPTEN_BINDINGS(fan_203) {
+    // fan rated info
+    class_<FanRatedInfo>("FanRatedInfo").constructor<double, double, double, double, double>();
+    // plane data
     class_<PlaneData>("PlaneData")
-        .constructor<FlangePlane, FlangePlane, TraversePlane, std::vector<TraversePlane>, MstPlane, MstPlane, double, double, bool>();
-    //FlangePlane
-    class_<FlangePlane>("FlangePlane")
-        .constructor<double, double, double>();
-    //TraversePlane
-    class_<TraversePlane, base<VelocityPressureTraverseData>>("TraversePlane") // Also inherits from Planar (multiple inheritance?)
+        .constructor<FlangePlane, FlangePlane, TraversePlane, std::vector<TraversePlane>, MstPlane, MstPlane, double,
+                     double, bool>();
+    // FlangePlane
+    class_<FlangePlane>("FlangePlane").constructor<double, double, double>();
+    // TraversePlane
+    class_<TraversePlane, base<VelocityPressureTraverseData>>(
+        "TraversePlane") // Also inherits from Planar (multiple inheritance?)
         .constructor<double, double, double, double, double, std::vector<std::vector<double>>>();
     register_vector<TraversePlane>("TraversePlaneVector");
-    //MstPlane
-    class_<MstPlane>("MstPlane")
-        .constructor<double, double, double, double>();
-    //fan shaft power
-    class_<FanShaftPower>("FanShaftPower")
-        .constructor<double, double, double, double, double>();
-    //fan203
-    class_<Fan203>("Fan203")
-        .constructor<FanRatedInfo, PlaneData, BaseGasDensity, FanShaftPower>()
-        .function("calculate", &Fan203::calculate);
+    // MstPlane
+    class_<MstPlane>("MstPlane").constructor<double, double, double, double>();
+    // fan shaft power
+    class_<FanShaftPower>("FanShaftPower").constructor<double, double, double, double, double>();
+    // fan203
+    class_<Fan203>("Fan203").constructor<FanRatedInfo, PlaneData, BaseGasDensity, FanShaftPower>().function(
+        "calculate", &Fan203::calculate);
     class_<Fan203::Results>("Fan203Results")
         .constructor<double, double, double, double, double, double>()
         .property("kpc", &Fan203::Results::kpc)
@@ -99,16 +93,15 @@ EMSCRIPTEN_BINDINGS(fan_203)
     register_vector<std::vector<double>>("DoubleVector2D");
 }
 
-
-//getBaseGasDensityRelativeHumidity
-//getBaseGasDensityDewPoint
-//getBaseGasDensityWetBulb
-EMSCRIPTEN_BINDINGS(base_gas_density)
-{
+// getBaseGasDensityRelativeHumidity
+// getBaseGasDensityDewPoint
+// getBaseGasDensityWetBulb
+EMSCRIPTEN_BINDINGS(base_gas_density) {
     class_<BaseGasDensity>("BaseGasDensity")
         .constructor<double, double, double, double, BaseGasDensity::GasType>()
         .constructor<double, double, double, double, BaseGasDensity::GasType, BaseGasDensity::InputType, double>()
-        .constructor<double, double, double, double, BaseGasDensity::GasType, BaseGasDensity::InputType, double, double>()
+        .constructor<double, double, double, double, BaseGasDensity::GasType, BaseGasDensity::InputType, double,
+                     double>()
         .function("getGasDensity", &BaseGasDensity::getGasDensity)
         .function("getAbsolutePressureIn", &BaseGasDensity::getAbsolutePressureIn)
         .function("getSaturatedHumidityRatio", &BaseGasDensity::getSaturatedHumidityRatio)
@@ -120,22 +113,18 @@ EMSCRIPTEN_BINDINGS(base_gas_density)
         .function("getRelativeHumidity", &BaseGasDensity::getRelativeHumidity)
         .function("getSaturationPressure", &BaseGasDensity::getSaturationPressure)
         .function("getWetBulbTemp", &BaseGasDensity::getWetBulbTemp);
-
 }
 
-//getVelocityPressureData
-EMSCRIPTEN_BINDINGS(velocity_pressure_data)
-{
+// getVelocityPressureData
+EMSCRIPTEN_BINDINGS(velocity_pressure_data) {
     class_<VelocityPressureTraverseData>("VelocityPressureTraverseData")
         .function("getPv3Value", &VelocityPressureTraverseData::getPv3Value)
         .function("get75percentRule", &VelocityPressureTraverseData::get75percentRule);
 }
 
-//getPlaneResults
-EMSCRIPTEN_BINDINGS(plane_results)
-{
-    class_<PlaneData::NodeBinding>("PlaneDataNodeBinding")
-        .function("calculate", &PlaneData::NodeBinding::calculate);
+// getPlaneResults
+EMSCRIPTEN_BINDINGS(plane_results) {
+    class_<PlaneData::NodeBinding>("PlaneDataNodeBinding").function("calculate", &PlaneData::NodeBinding::calculate);
     function("PlaneDataNodeBindingCalculate", &PlaneData::NodeBinding::calculate);
     class_<PlaneData::NodeBinding::Data>("PlaneDataNodeBindingData")
         .constructor<double, double, double, double, double>()
@@ -158,17 +147,15 @@ EMSCRIPTEN_BINDINGS(plane_results)
         .property("addlTravPlanes", &PlaneData::NodeBinding::Output::addlTravPlanes);
 }
 
-//optimalFanEfficiency
-EMSCRIPTEN_BINDINGS(optimal_fan_efficiency)
-{
+// optimalFanEfficiency
+EMSCRIPTEN_BINDINGS(optimal_fan_efficiency) {
     class_<OptimalFanEfficiency>("OptimalFanEfficiency")
         .constructor<OptimalFanEfficiency::FanType, double, double, double, double, double>()
         .function("calculate", &OptimalFanEfficiency::calculate);
 }
 
-//compressibilityFactor
-EMSCRIPTEN_BINDINGS(compressibility_factor)
-{
+// compressibilityFactor
+EMSCRIPTEN_BINDINGS(compressibility_factor) {
     class_<CompressibilityFactor>("CompressibilityFactor")
         .constructor<double, double, double, double, double, double>()
         .function("calculate", &CompressibilityFactor::calculate);

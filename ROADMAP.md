@@ -1,0 +1,107 @@
+# Roadmap
+
+This document provides an overview of the refactoring and documentation efforts being undertaken to improve the codebase and enhance the understanding of its functionality.
+
+## Tasks
+
+- [ ] Reorganize project directories to mirror the module structure
+  - [ ] `Compressed Air Assessments`
+    - [ ] Create directory and migrate relevant files
+    - [ ] Create associated namespace
+  - [ ] `Fan System Assessments`
+    - [ ] Create directory and migrate relevant files
+    - [ ] Create associated namespace
+    - [ ] Create `README.md` file to explain the purpose and functionality
+  - [ ] `Process Cooling Assessments`
+    - [ ] Create directory and migrate relevant files
+    - [ ] Create associated namespace
+    - [ ] Create `README.md` file to explain the purpose and functionality
+  - [ ] `Process Heating Assessments`
+    - [ ] Create directory and migrate relevant files
+    - [ ] Create associated namespace
+    - [ ] Create `README.md` file to explain the purpose and functionality
+  - [ ] `Pumping System Assessments`
+    - [ ] Create directory and migrate relevant files
+    - [ ] Create associated namespace
+    - [ ] Create `README.md` file to explain the purpose and functionality
+  - [ ] `Steam System Assessments`
+    - [ ] Create directory and migrate relevant files
+    - [ ] Create associated namespace
+    - [ ] Create `README.md` file to explain the purpose and functionality
+  - [ ] `Water Assessments`
+    - [ ] Create directory and migrate relevant files
+    - [ ] Create associated namespace
+    - [ ] Create `README.md` file to explain the purpose and functionality
+  - [ ] `Waste Water Assessments`
+    - [ ] Create directory and migrate relevant files
+    - [ ] Create associated namespace
+    - [ ] Create `README.md` file to explain the purpose and functionality
+  - [ ] `Energy Treasure Hunt Module`
+    - [ ] Create directory and migrate relevant files
+    - [ ] Create associated namespace
+    - [ ] Create `README.md` file to explain the purpose and functionality
+  - [ ] `Simple Equipment and Property Calculators`
+    - [ ] Create directory and migrate relevant files
+    - [ ] Create associated namespace
+    - [ ] Create `README.md` file to explain the purpose and functionality
+- [ ] Update project `README.md` to reflect the new structure and provide an overview of each module
+- [ ] Create global constants header file and refactor existing code to use it
+  - [x] Create `constants.h` file
+  - [ ] Move existing constants from various modules into `constants.h`
+  - [ ] Update all modules to include `constants.h` where necessary
+  - [ ] Document the purpose and usage of each constant in `constants.h`
+- [ ] Refactor & document `Compressed Air Assessments` module
+- [ ] Refactor & document `Fan System Assessments` module
+  - [ ] Refactor & document `fan203.h`
+    - [x] Rename header and associated source files to `fan203.h` and `fan203.cpp`
+    - [x] Refactor & document `FanRatedInfo` class
+    - [ ] Refactor & document `BaseGasDensity` class
+    - [ ] Refactor & document `PlaneData` class
+    - [ ] Refactor & document `Fan203` class
+  - [ ] Refactor `FanCurve.h`
+    - [ ] Rename header and associated source files to `fan_curve.h` and `fan_curve.cpp`
+    - [ ] Refactor & document `FanCurveType` enum
+    - [ ] Refactor & document `ResultData` class
+    - [ ] Refactor & document `FanCurveData` class
+    - [ ] Refactor & document `FanCurve` class
+  - [ ] Refactor `FanResult.h`
+    - [ ] Rename header and associated source files to `fan_result.h` and `fan_result.cpp`
+    - [ ] Refactor & document `Input` struct
+    - [ ] Refactor & document `FieldDataModified` struct
+    - [ ] Refactor & document `FieldDataBaseline` struct
+    - [ ] Refactor & document `FanResult` class
+  - [ ] Refactor & document `Planar.h`
+    - [ ] Rename header and associated source files to `planar.h` and `planar.cpp`
+    - [ ] Refactor & document `VelocityPressureTraverseData` class
+    - [ ] Refactor & document `Planar` class
+    - [ ] Refactor & document `FlangePlane` class
+    - [ ] Refactor & document `TraversePlane` class
+    - [ ] Refactor & document `MstPlane` class
+- [ ] Refactor & document `Process Cooling Assessments` module
+- [ ] Refactor & document `Process Heating Assessments` module
+- [ ] Refactor & document `Pumping System Assessments` module
+- [ ] Refactor & document `Steam System Assessments` module
+- [ ] Refactor & document `Water Assessments` module
+- [ ] Refactor & document `Waste Water Assessments` module
+- [ ] Refactor & document `Energy Treasure Hunt` module
+- [ ] Refactor & document `Simple Equipment and Property Calculators` module
+- [ ] Refactor & document `processHeat/losses`
+  - [ ] Atmosphere
+  - [ ] AuxiliaryPower
+  - [ ] EnergyInputEAF
+  - [ ] EnergyInputExhaustGasLosses
+  - [ ] ExhaustGasEAF
+  - [ ] FixtureLosses
+  - [ ] GasCoolingLosses
+  - [ ] GasFlueGasMaterial
+  - [ ] GasLoadChargeMaterial
+  - [ ] LeakageLosses
+  - [ ] LiquidCoolingLosses
+  - [ ] LiquidLoadChargeMaterial
+  - [ ] OpeningLosses
+  - [ ] SlagOtherMaterialLosses
+  - [ ] SolidLiquidFlueGasMaterial
+  - [ ] SolidLoadChargeMaterial
+  - [x] WallLosses
+  - [ ] WaterAssessment
+  - [ ] WaterCoolingLosses

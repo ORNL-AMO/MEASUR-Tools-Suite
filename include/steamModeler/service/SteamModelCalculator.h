@@ -21,23 +21,24 @@
  * Run one iteration of the Steam Modeler algorithm.
  */
 class SteamModelCalculator {
-public:
-    SteamModelCalculationsDomain
-    calc(const bool isBaselineCalc, const double baselinePowerDemand, const HeaderInput &headerInput,
-         const BoilerInput &boilerInput, const TurbineInput &turbineInput, const OperationsInput &operationsInput,
-         const double initialMassFlow) const;
+  public:
+    SteamModelCalculationsDomain calc(const bool isBaselineCalc, const double baselinePowerDemand,
+                                      const HeaderInput& headerInput, const BoilerInput& boilerInput,
+                                      const TurbineInput& turbineInput, const OperationsInput& operationsInput,
+                                      const double initialMassFlow) const;
 
-private:
-    const BoilerFactory boilerFactory = BoilerFactory();
-    const DeaeratorModeler deaeratorModeler = DeaeratorModeler();
-    const EnergyAndCostCalculator energyAndCostCalculator = EnergyAndCostCalculator();
-    const FlashTankFactory flashTankFactory = FlashTankFactory();
-    const HighPressureHeaderModeler highPressureHeaderModeler = HighPressureHeaderModeler();
-    const LowPressureHeaderModeler lowPressureHeaderModeler = LowPressureHeaderModeler();
-    const MakeupWaterAndCondensateHeaderModeler makeupWaterAndCondensateHeaderModeler = MakeupWaterAndCondensateHeaderModeler();
+  private:
+    const BoilerFactory                         boilerFactory             = BoilerFactory();
+    const DeaeratorModeler                      deaeratorModeler          = DeaeratorModeler();
+    const EnergyAndCostCalculator               energyAndCostCalculator   = EnergyAndCostCalculator();
+    const FlashTankFactory                      flashTankFactory          = FlashTankFactory();
+    const HighPressureHeaderModeler             highPressureHeaderModeler = HighPressureHeaderModeler();
+    const LowPressureHeaderModeler              lowPressureHeaderModeler  = LowPressureHeaderModeler();
+    const MakeupWaterAndCondensateHeaderModeler makeupWaterAndCondensateHeaderModeler =
+        MakeupWaterAndCondensateHeaderModeler();
     const MediumPressureHeaderModeler mediumPressureHeaderModeler = MediumPressureHeaderModeler();
-    const PowerBalanceChecker powerBalanceChecker = PowerBalanceChecker();
-    const ProcessSteamUsageModeler processSteamUsageModeler = ProcessSteamUsageModeler();
+    const PowerBalanceChecker         powerBalanceChecker         = PowerBalanceChecker();
+    const ProcessSteamUsageModeler    processSteamUsageModeler    = ProcessSteamUsageModeler();
 };
 
-#endif //TOOLS_SUITE_STEAMMODELCALCULATOR_H
+#endif // TOOLS_SUITE_STEAMMODELCALCULATOR_H

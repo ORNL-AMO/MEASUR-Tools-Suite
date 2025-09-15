@@ -55,11 +55,6 @@ INSTALL(DIRECTORY include/
         PATTERN CMakeLists.txt EXCLUDE
 )
 
-INSTALL(FILES third_party/sqlite/sqlite3.h
-        DESTINATION include/sqlite
-        COMPONENT headers
-        )
-
 #install(FILES "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/measur_tools_suite.db" DESTINATION "./db/")
 
 set(CPACK_COMPONENTS_ALL libraries headers)

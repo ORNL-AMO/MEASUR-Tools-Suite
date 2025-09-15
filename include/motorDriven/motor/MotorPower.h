@@ -12,22 +12,15 @@
 #define TOOLS_SUITE_MOTORPOWER_H
 
 class MotorPower {
-public:
+  public:
     /**
      * Constructor
      * @param ratedVoltage double, Rated voltage of motor in volts
      * @param motorCurrent double, Motor current as defined in amps.
      * @param powerFactor double, Power factor - unitless
      */
-    MotorPower(
-        double ratedVoltage,
-        double motorCurrent,
-        double powerFactor
-    ) :
-        ratedVoltage(ratedVoltage),
-        motorCurrent(motorCurrent),
-        powerFactor(powerFactor)
-    {};
+    MotorPower(double ratedVoltage, double motorCurrent, double powerFactor)
+        : ratedVoltage(ratedVoltage), motorCurrent(motorCurrent), powerFactor(powerFactor) {};
 
     /**
      * Calculates the motor power
@@ -35,7 +28,7 @@ public:
      */
     double calculate();
 
-private:
+  private:
     /**
      * Rated voltage of motor in volts
      */
@@ -50,5 +43,4 @@ private:
     double powerFactor;
 };
 
-
-#endif //TOOLS_SUITE_MOTORPOWER_H
+#endif // TOOLS_SUITE_MOTORPOWER_H

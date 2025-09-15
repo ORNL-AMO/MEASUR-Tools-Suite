@@ -14,16 +14,13 @@
 #include "MotorData.h"
 
 class Poles {
-public:
+  public:
     /**
      * Constructor
      * @param motorRpm double, RPM of motor.
      * @param lineFreq Motor::LineFrequency, Line frequency of motor as either 50Hz or 60Hz.
      */
-    Poles(double motorRpm, Motor::LineFrequency lineFreq)
-            : motorRpm(motorRpm), 
-              lineFreq(lineFreq) 
-    {};
+    Poles(double motorRpm, Motor::LineFrequency lineFreq) : motorRpm(motorRpm), lineFreq(lineFreq) {};
 
     /**
      * Calculates the number of poles
@@ -31,9 +28,9 @@ public:
      */
     int calculate();
 
-private:
-    double motorRpm;
+  private:
+    double               motorRpm;
     Motor::LineFrequency lineFreq;
 };
 
-#endif //UNTITLED_POLECALCULATE_H
+#endif // UNTITLED_POLECALCULATE_H

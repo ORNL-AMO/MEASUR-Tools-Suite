@@ -14,14 +14,17 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y doxygen
+          sudo apt-get install -y doxygen \
+            texlive-binaries texlive-base
       - name: Generate docs
         run: doxygen Doxyfile
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: docs
-          path: ./docs/html
+          path: |
+            ./docs/html
+            ./docs/dependencies
           if-no-files-found: error
           retention-days: 3
 

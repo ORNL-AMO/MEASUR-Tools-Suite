@@ -1,0 +1,6 @@
+nav:
+  - Home: index.md
+  - Style Guide: style-guide.md
+  - Formatting: formatting.md
+  - Documentation: documentation.md
+  - Conventional Commits: conventional-commits.md

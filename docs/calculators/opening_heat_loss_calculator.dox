@@ -1,0 +1,4 @@
+/**
+ * @defgroup opening_heat_loss_calculator Opening Heat Loss Calculator
+ * @ingroup heat_loss_calculators
+ */

@@ -1,39 +1,37 @@
 #include "steamModeler/service/TurbineCalculator.h"
 
-Turbine TurbineCalculator::calc(const SteamSystemModelerTool::FluidProperties &headerProperties,
-                                const HeaderWithHighestPressure &highPressureHeaderInput, const int headerCountInput,
-                                const double connectedHeaderProcessSteamUsage,
-                                const std::shared_ptr<HeaderNotHighestPressure> &headerWithNotHighPressure,
-                                const PressureTurbine &pressureTurbine) const {
-    const Turbine::TurbineProperty &turbineProperty = determineTurbineProperty(pressureTurbine);
+Turbine TurbineCalculator::calc(const SteamSystemModelerTool::FluidProperties& headerProperties,
+                                const HeaderWithHighestPressure& highPressureHeaderInput, const int headerCountInput,
+                                const double                                     connectedHeaderProcessSteamUsage,
+                                const std::shared_ptr<HeaderNotHighestPressure>& headerWithNotHighPressure,
+                                const PressureTurbine&                           pressureTurbine) const {
+    const Turbine::TurbineProperty& turbineProperty = determineTurbineProperty(pressureTurbine);
 
-    double massFlowOrPowerOut =
-            calcMassFlowOrPowerOut(headerProperties, highPressureHeaderInput, headerCountInput,
-                                   connectedHeaderProcessSteamUsage);
-    massFlowOrPowerOut = adjustMassFlowOrPowerOut(massFlowOrPowerOut, pressureTurbine);
+    double massFlowOrPowerOut = calcMassFlowOrPowerOut(headerProperties, highPressureHeaderInput, headerCountInput,
+                                                       connectedHeaderProcessSteamUsage);
+    massFlowOrPowerOut        = adjustMassFlowOrPowerOut(massFlowOrPowerOut, pressureTurbine);
 
     return turbineFactory.make(headerProperties, turbineProperty, pressureTurbine, massFlowOrPowerOut,
                                headerWithNotHighPressure);
 }
 
-Turbine
-TurbineCalculator::calc(const std::shared_ptr<HeaderNotHighestPressure> &mediumPressureHeaderInput,
-                        const SteamSystemModelerTool::FluidProperties &mediumPressureHeaderOutput,
-                        const PressureTurbine &mediumToLowTurbineInput,
-                        const std::shared_ptr<HeaderNotHighestPressure> &lowPressureHeaderInput) const {
-    const Turbine::TurbineProperty &turbineProperty = determineTurbineProperty(mediumToLowTurbineInput);
+Turbine TurbineCalculator::calc(const std::shared_ptr<HeaderNotHighestPressure>& mediumPressureHeaderInput,
+                                const SteamSystemModelerTool::FluidProperties&   mediumPressureHeaderOutput,
+                                const PressureTurbine&                           mediumToLowTurbineInput,
+                                const std::shared_ptr<HeaderNotHighestPressure>& lowPressureHeaderInput) const {
+    const Turbine::TurbineProperty& turbineProperty = determineTurbineProperty(mediumToLowTurbineInput);
 
     double massFlowOrPowerOut = calcMassFlowOrPowerOut(mediumPressureHeaderInput, mediumPressureHeaderOutput);
-    massFlowOrPowerOut = adjustMassFlowOrPowerOut(massFlowOrPowerOut, mediumToLowTurbineInput);
+    massFlowOrPowerOut        = adjustMassFlowOrPowerOut(massFlowOrPowerOut, mediumToLowTurbineInput);
 
     return turbineFactory.make(mediumPressureHeaderOutput, turbineProperty, mediumToLowTurbineInput, massFlowOrPowerOut,
                                lowPressureHeaderInput);
 }
 
-Turbine::TurbineProperty TurbineCalculator::determineTurbineProperty(const PressureTurbine &pressureTurbine) const {
+Turbine::TurbineProperty TurbineCalculator::determineTurbineProperty(const PressureTurbine& pressureTurbine) const {
     Turbine::TurbineProperty turbineProperty = Turbine::TurbineProperty::MassFlow;
 
-    const PressureTurbineOperation &operationType = pressureTurbine.getOperationType();
+    const PressureTurbineOperation& operationType = pressureTurbine.getOperationType();
     switch (operationType) {
         case PressureTurbineOperation::STEAM_FLOW:
             break;
@@ -56,10 +54,9 @@ Turbine::TurbineProperty TurbineCalculator::determineTurbineProperty(const Press
     return turbineProperty;
 }
 
-
-double TurbineCalculator::calcMassFlowOrPowerOut(const SteamSystemModelerTool::FluidProperties &headerProperties,
-                                                 const HeaderWithHighestPressure &highPressureHeaderInput,
-                                                 const int headerCountInput,
+double TurbineCalculator::calcMassFlowOrPowerOut(const SteamSystemModelerTool::FluidProperties& headerProperties,
+                                                 const HeaderWithHighestPressure&               highPressureHeaderInput,
+                                                 const int                                      headerCountInput,
                                                  const double connectedHeaderProcessSteamUsage) const {
     double massFlowOrPowerOut = headerProperties.massFlow - highPressureHeaderInput.getProcessSteamUsage();
 
@@ -69,21 +66,21 @@ double TurbineCalculator::calcMassFlowOrPowerOut(const SteamSystemModelerTool::F
     return massFlowOrPowerOut;
 }
 
-double
-TurbineCalculator::calcMassFlowOrPowerOut(const std::shared_ptr<HeaderNotHighestPressure> &mediumPressureHeaderInput,
-                                          const SteamSystemModelerTool::FluidProperties &mediumPressureHeaderOutput) const {
-    const double inletMassFlow = mediumPressureHeaderOutput.massFlow;
+double TurbineCalculator::calcMassFlowOrPowerOut(
+    const std::shared_ptr<HeaderNotHighestPressure>& mediumPressureHeaderInput,
+    const SteamSystemModelerTool::FluidProperties&   mediumPressureHeaderOutput) const {
+    const double inletMassFlow     = mediumPressureHeaderOutput.massFlow;
     const double processSteamUsage = mediumPressureHeaderInput->getProcessSteamUsage();
 
     return inletMassFlow - processSteamUsage;
 }
 
-double TurbineCalculator::adjustMassFlowOrPowerOut(const double massFlowOrPowerOut,
-                                                   const PressureTurbine &pressureTurbine) const {
+double TurbineCalculator::adjustMassFlowOrPowerOut(const double           massFlowOrPowerOut,
+                                                   const PressureTurbine& pressureTurbine) const {
     double adjustedMassFlowOrPowerOut = massFlowOrPowerOut;
 
-    //mass flow can be adjusted depending on operation type of the turbine
-    const PressureTurbineOperation &operationType = pressureTurbine.getOperationType();
+    // mass flow can be adjusted depending on operation type of the turbine
+    const PressureTurbineOperation& operationType = pressureTurbine.getOperationType();
     switch (operationType) {
         case PressureTurbineOperation::STEAM_FLOW:
             adjustedMassFlowOrPowerOut = pressureTurbine.getOperationValue1();
@@ -100,14 +97,14 @@ double TurbineCalculator::adjustMassFlowOrPowerOut(const double massFlowOrPowerO
             const double operationValue1 = pressureTurbine.getOperationValue1();
             if (massFlowOrPowerOut < operationValue1) {
                 adjustedMassFlowOrPowerOut = operationValue1;
-            } else if (massFlowOrPowerOut > pressureTurbine.getOperationValue2()) {
+            }
+            else if (massFlowOrPowerOut > pressureTurbine.getOperationValue2()) {
                 adjustedMassFlowOrPowerOut = pressureTurbine.getOperationValue2();
             }
-        }
-            break;
+        } break;
         default:
             std::string msg = "TurbineCalculator::adjustMassFlowOrPowerOut: operationType enum not handled";
-           // std::cout << msg << std::endl;
+            // std::cout << msg << std::endl;
             throw std::invalid_argument(msg);
     }
 

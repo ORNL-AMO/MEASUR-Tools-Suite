@@ -1,3 +1,7 @@
+#include <vector>
+
+#include <emscripten/bind.h>
+
 #include "compressedAir/AirSystemCapacity.h"
 #include "compressedAir/AirVelocity.h"
 #include "compressedAir/BagMethod.h"
@@ -10,14 +14,10 @@
 #include "compressedAir/PneumaticAirRequirement.h"
 #include "compressedAir/PneumaticValve.h"
 #include "compressedAir/ReceiverTank.h"
-#include <vector>
-
-#include <emscripten/bind.h>
 
 using namespace emscripten;
 
-EMSCRIPTEN_BINDINGS(compressedAir_enums)
-{
+EMSCRIPTEN_BINDINGS(compressedAir_enums) {
     enum_<ReceiverTank::Method>("ReceiverTankMethod")
         .value("General", ReceiverTank::Method::General)
         .value("DedicatedStorage", ReceiverTank::Method::DedicatedStorage)
@@ -30,8 +30,7 @@ EMSCRIPTEN_BINDINGS(compressedAir_enums)
 }
 
 // pneumaticAirRequirement
-EMSCRIPTEN_BINDINGS(pneumaticAirRequirement)
-{
+EMSCRIPTEN_BINDINGS(pneumaticAirRequirement) {
     class_<PneumaticAirRequirement>("PneumaticAirRequirement")
         .constructor()
         .constructor<PneumaticAirRequirement::PistonType, double, double, double, double>()
@@ -47,8 +46,7 @@ EMSCRIPTEN_BINDINGS(pneumaticAirRequirement)
 
 // usableAirCapacity
 // receiverTank
-EMSCRIPTEN_BINDINGS(receiverTank)
-{
+EMSCRIPTEN_BINDINGS(receiverTank) {
     class_<ReceiverTank>("ReceiverTank")
         .constructor()
         .constructor<ReceiverTank::Method, double, double, double>()
@@ -60,8 +58,7 @@ EMSCRIPTEN_BINDINGS(receiverTank)
 }
 
 // operatingCost
-EMSCRIPTEN_BINDINGS(operatingCost)
-{
+EMSCRIPTEN_BINDINGS(operatingCost) {
     class_<OperatingCost>("OperatingCost")
         .constructor<double, double, double, double, double, double, double>()
         .function("calculate", &OperatingCost::calculate);
@@ -75,10 +72,10 @@ EMSCRIPTEN_BINDINGS(operatingCost)
 }
 
 // airSystemCapacity
-EMSCRIPTEN_BINDINGS(airSystemCapacity)
-{
+EMSCRIPTEN_BINDINGS(airSystemCapacity) {
     class_<PipeData>("PipeData")
-        .constructor<double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double>()
+        .constructor<double, double, double, double, double, double, double, double, double, double, double, double,
+                     double, double, double, double, double, double, double, double>()
         .property("oneHalf", &PipeData::oneHalf)
         .property("threeFourths", &PipeData::threeFourths)
         .property("one", &PipeData::one)
@@ -114,16 +111,14 @@ EMSCRIPTEN_BINDINGS(airSystemCapacity)
 }
 
 // airVelocity
-EMSCRIPTEN_BINDINGS(airVelocity)
-{
+EMSCRIPTEN_BINDINGS(airVelocity) {
     class_<AirVelocity>("AirVelocity")
         .constructor<double, double, double>()
         .function("calculate", &AirVelocity::calculate);
 }
 
 // pipeSizing
-EMSCRIPTEN_BINDINGS(pipeSizing)
-{
+EMSCRIPTEN_BINDINGS(pipeSizing) {
     class_<PipeSizing>("PipeSizing")
         .constructor<double, double, double, double>()
         .function("calculate", &PipeSizing::calculate);
@@ -135,8 +130,7 @@ EMSCRIPTEN_BINDINGS(pipeSizing)
 }
 
 // pneumaticValve
-EMSCRIPTEN_BINDINGS(pneumaticValve)
-{
+EMSCRIPTEN_BINDINGS(pneumaticValve) {
     class_<PneumaticValve>("PneumaticValve")
         .constructor<double, double>()
         .constructor<double, double, double>()
@@ -144,8 +138,7 @@ EMSCRIPTEN_BINDINGS(pneumaticValve)
 }
 
 // bagMethod
-EMSCRIPTEN_BINDINGS(bagMethod)
-{
+EMSCRIPTEN_BINDINGS(bagMethod) {
     class_<BagMethod>("BagMethod")
         .constructor<double, double, double, double>()
         .function("calculate", &BagMethod::calculate);
@@ -157,8 +150,7 @@ EMSCRIPTEN_BINDINGS(bagMethod)
 }
 
 // estimateMethod
-EMSCRIPTEN_BINDINGS(estimateMethod)
-{
+EMSCRIPTEN_BINDINGS(estimateMethod) {
     class_<EstimateMethod>("EstimateMethod")
         .constructor<double, double>()
         .function("calculate", &EstimateMethod::calculate);
@@ -169,8 +161,7 @@ EMSCRIPTEN_BINDINGS(estimateMethod)
 }
 
 // decibelsMethod
-EMSCRIPTEN_BINDINGS(decibelsMethod)
-{
+EMSCRIPTEN_BINDINGS(decibelsMethod) {
     class_<DecibelsMethod>("DecibelsMethod")
         .constructor<double, double, double, double, double, double, double, double, double, double, double>()
         .function("calculate", &DecibelsMethod::calculate);
@@ -182,8 +173,7 @@ EMSCRIPTEN_BINDINGS(decibelsMethod)
 }
 
 // orificeMethod
-EMSCRIPTEN_BINDINGS(orificeMethod)
-{
+EMSCRIPTEN_BINDINGS(orificeMethod) {
     class_<OrificeMethod>("OrificeMethod")
         .constructor<double, double, double, double, double, double, double>()
         .function("calculate", &OrificeMethod::calculate);

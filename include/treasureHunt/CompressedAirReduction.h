@@ -7,12 +7,9 @@
 
 #include "compressedAir/BagMethod.h"
 
-
-class CompressedAirFlowMeterMethodData
-{
+class CompressedAirFlowMeterMethodData {
   public:
-    CompressedAirFlowMeterMethodData(const double meterReading)
-        : meterReading(meterReading) {}
+    CompressedAirFlowMeterMethodData(const double meterReading) : meterReading(meterReading) {}
 
     double getMeterReading() const { return meterReading; }
 
@@ -20,8 +17,7 @@ class CompressedAirFlowMeterMethodData
     double meterReading;
 };
 
-class BagMethodData
-{
+class BagMethodData {
   public:
     BagMethodData(const double height, const double diameter, const double fillTime)
         : height(height), diameter(diameter), fillTime(fillTime) {}
@@ -34,8 +30,7 @@ class BagMethodData
     double height, diameter, fillTime;
 };
 
-class PressureMethodData
-{
+class PressureMethodData {
   public:
     PressureMethodData(const int nozzleType, const int numberOfNozzles, const double supplyPressure)
         : nozzleType(nozzleType), numberOfNozzles(numberOfNozzles), supplyPressure(supplyPressure) {}
@@ -45,15 +40,13 @@ class PressureMethodData
     double calculate();
 
   private:
-    int nozzleType, numberOfNozzles;
+    int    nozzleType, numberOfNozzles;
     double supplyPressure;
 };
 
-class CompressedAirOtherMethodData
-{
+class CompressedAirOtherMethodData {
   public:
-    CompressedAirOtherMethodData(const double consumption)
-        : consumption(consumption) {}
+    CompressedAirOtherMethodData(const double consumption) : consumption(consumption) {}
 
     double getConsumption() const { return consumption; }
 
@@ -61,9 +54,8 @@ class CompressedAirOtherMethodData
     double consumption;
 };
 
-//calculates electricity use for a compressor if utilityType == electricity
-class CompressorElectricityData
-{
+// calculates electricity use for a compressor if utilityType == electricity
+class CompressorElectricityData {
   public:
     CompressorElectricityData(const double compressorControlAdjustment, const double compressorSpecificPower)
         : compressorControlAdjustment(compressorControlAdjustment), compressorSpecificPower(compressorSpecificPower) {}
@@ -74,63 +66,61 @@ class CompressorElectricityData
     double compressorControlAdjustment, compressorSpecificPower;
 };
 
-class CompressedAirReductionInput
-{
+class CompressedAirReductionInput {
 
   public:
-    CompressedAirReductionInput(const int hoursPerYear, const int utilityType, const double utilityCost, const int measurementMethod,
-                                const CompressedAirFlowMeterMethodData flowMeterMethodData, const BagMethod bagMethod,
-                                const PressureMethodData pressureMethodData, const CompressedAirOtherMethodData otherMethodData,
+    CompressedAirReductionInput(const int hoursPerYear, const int utilityType, const double utilityCost,
+                                const int measurementMethod, const CompressedAirFlowMeterMethodData flowMeterMethodData,
+                                const BagMethod bagMethod, const PressureMethodData pressureMethodData,
+                                const CompressedAirOtherMethodData otherMethodData,
                                 const CompressorElectricityData compressorElectricityData, const int units)
-        : hoursPerYear(hoursPerYear), utilityType(utilityType), utilityCost(utilityCost), measurementMethod(measurementMethod),
-          flowMeterMethodData(flowMeterMethodData), bagMethod(bagMethod),
+        : hoursPerYear(hoursPerYear), utilityType(utilityType), utilityCost(utilityCost),
+          measurementMethod(measurementMethod), flowMeterMethodData(flowMeterMethodData), bagMethod(bagMethod),
           pressureMethodData(pressureMethodData), otherMethodData(otherMethodData),
           compressorElectricityData(compressorElectricityData), units(units) {}
 
-    int getHoursPerYear() const { return hoursPerYear; }
-    int getUtilityType() const { return utilityType; }
-    int getMeasurementMethod() const { return measurementMethod; }
-    int getUnits() const { return units; }
-    double getUtilityCost() const { return utilityCost; }
+    int                              getHoursPerYear() const { return hoursPerYear; }
+    int                              getUtilityType() const { return utilityType; }
+    int                              getMeasurementMethod() const { return measurementMethod; }
+    int                              getUnits() const { return units; }
+    double                           getUtilityCost() const { return utilityCost; }
     CompressedAirFlowMeterMethodData getFlowMeterMethodData() const { return flowMeterMethodData; }
-    BagMethod getBagMethod() const { return bagMethod; }
-    PressureMethodData getPressureMethodData() const { return pressureMethodData; }
-    CompressedAirOtherMethodData getOtherMethodData() const { return otherMethodData; }
-    CompressorElectricityData getCompressorElectricityData() const { return compressorElectricityData; }
+    BagMethod                        getBagMethod() const { return bagMethod; }
+    PressureMethodData               getPressureMethodData() const { return pressureMethodData; }
+    CompressedAirOtherMethodData     getOtherMethodData() const { return otherMethodData; }
+    CompressorElectricityData        getCompressorElectricityData() const { return compressorElectricityData; }
 
   private:
-    int hoursPerYear, utilityType;
-    double utilityCost;
-    int measurementMethod;
+    int                              hoursPerYear, utilityType;
+    double                           utilityCost;
+    int                              measurementMethod;
     CompressedAirFlowMeterMethodData flowMeterMethodData;
-    BagMethod bagMethod;
-    PressureMethodData pressureMethodData;
-    CompressedAirOtherMethodData otherMethodData;
-    CompressorElectricityData compressorElectricityData;
-    int units;
+    BagMethod                        bagMethod;
+    PressureMethodData               pressureMethodData;
+    CompressedAirOtherMethodData     otherMethodData;
+    CompressorElectricityData        compressorElectricityData;
+    int                              units;
 };
 
-class CompressedAirReduction
-{
+class CompressedAirReduction {
   public:
-    struct Output
-    {
+    struct Output {
         Output(double energyUse, double energyCost, double flowRate, double singleNozzleFlowRate, double consumption)
-            : energyUse(energyUse), energyCost(energyCost), flowRate(flowRate), singleNozzleFlowRate(singleNozzleFlowRate), consumption(consumption) {}
+            : energyUse(energyUse), energyCost(energyCost), flowRate(flowRate),
+              singleNozzleFlowRate(singleNozzleFlowRate), consumption(consumption) {}
 
-        Output() = default;
+        Output()         = default;
         double energyUse = 0, energyCost = 0, flowRate = 0, singleNozzleFlowRate = 0, consumption = 0;
     };
 
-    CompressedAirReduction(std::vector<CompressedAirReductionInput> compressedAirReductionInputVec) : compressedAirReductionInputVec(compressedAirReductionInputVec)
-    {
-    }
+    CompressedAirReduction(std::vector<CompressedAirReductionInput> compressedAirReductionInputVec)
+        : compressedAirReductionInputVec(compressedAirReductionInputVec) {}
 
     CompressedAirReduction::Output calculate();
 
   private:
     std::vector<CompressedAirReductionInput> compressedAirReductionInputVec;
-    CompressedAirReduction::Output output;
+    CompressedAirReduction::Output           output;
 };
 
 #endif // TOOLS_SUITE_COMPRESSEDAIRREDUCTION_H

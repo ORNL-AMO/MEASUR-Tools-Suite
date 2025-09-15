@@ -3,7 +3,8 @@
 doxygen_log.txt
 cmake-build-*
 *.db
-docs
+docs/html
+docs/latex
 
 .nyc_output
 
@@ -101,6 +102,8 @@ CPackConfig.cmake
 CPackSourceConfig.cmake
 install_manifest.txt
 CTestTestfile.cmake
+compile_commands.json
+
 ### TortoiseGit template
 # Project-level settings
 /.tgitconfig
@@ -127,6 +130,10 @@ x86/
 bld/
 [Oo]bj/
 [Ll]og/
+
+build-cpp/
+build-wasm/
+bin/
 
 # Visual Studio 2015 cache/options directory
 .vs/
@@ -398,6 +405,8 @@ paket-files/
 ### NetBeans template
 nbproject/private/
 build/
+build-cpp/
+build-wasm/
 nbbuild/
 dist/
 nbdist/

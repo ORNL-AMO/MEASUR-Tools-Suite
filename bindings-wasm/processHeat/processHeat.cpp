@@ -1,16 +1,17 @@
+#include <string>
+
+#include <emscripten/bind.h>
+
 #include "processHeat/AirHeatingUsingExhaust.h"
+#include "processHeat/AirWaterCoolingUsingFlue.h"
 #include "processHeat/CascadeHeatHighToLow.h"
 #include "processHeat/WaterHeatingUsingExhaust.h"
-#include "processHeat/WaterHeatingUsingSteam.h"
 #include "processHeat/WaterHeatingUsingFlue.h"
-#include "processHeat/AirWaterCoolingUsingFlue.h"
-#include <emscripten/bind.h>
-#include <string>
+#include "processHeat/WaterHeatingUsingSteam.h"
 
 using namespace emscripten;
 
-EMSCRIPTEN_BINDINGS(processHeat_class)
-{
+EMSCRIPTEN_BINDINGS(processHeat_class) {
     enum_<WaterHeatingUsingFlue::SteamCondition>("SteamConditionType")
         .value("Superheated", WaterHeatingUsingFlue::SteamCondition::Superheated)
         .value("Saturated", WaterHeatingUsingFlue::SteamCondition::Saturated);
@@ -98,8 +99,8 @@ EMSCRIPTEN_BINDINGS(processHeat_class)
         .function("calculate", &WaterHeatingUsingSteam::calculate);
 
     class_<CascadeHeatHighToLow>("CascadeHeatHighToLow")
-        .constructor<GasCompositions, double, double, double, double, double, double,
-        double, double, double, double, double, double, double, double, double>()
+        .constructor<GasCompositions, double, double, double, double, double, double, double, double, double, double,
+                     double, double, double, double, double>()
         .function("calculate", &CascadeHeatHighToLow::calculate);
 
     class_<WaterHeatingUsingFlue>("WaterHeatingUsingFlue")

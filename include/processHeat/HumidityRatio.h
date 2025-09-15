@@ -13,7 +13,7 @@
 #define TOOLS_SUITE_HUMIDITYRATIO_H
 
 class HumidityRatio {
-public:
+  public:
     /**
      *
      * Constructor for the humidity ratio calculator
@@ -25,21 +25,14 @@ public:
      *
      *
      * */
-    HumidityRatio(
-            double atmosphericPressure,
-            double dryBulbTemp,
-            double relativeHumidity,
-            double wetBulbTemp)
-            : atmosphericPressure_(atmosphericPressure),
-              dryBulbTemp_(dryBulbTemp),
-              relativeHumidity_(relativeHumidity),
-              wetBulbTemp_(wetBulbTemp)
+    HumidityRatio(double atmosphericPressure, double dryBulbTemp, double relativeHumidity, double wetBulbTemp)
+        : atmosphericPressure_(atmosphericPressure), dryBulbTemp_(dryBulbTemp), relativeHumidity_(relativeHumidity),
+          wetBulbTemp_(wetBulbTemp)
 
     {
-        saturationPressure_ = 0.0;
-        humidityRatioUsingRH_ = 0.0;
+        saturationPressure_    = 0.0;
+        humidityRatioUsingRH_  = 0.0;
         humidityRatioUsingWBT_ = 0.0;
-
     }
 
     HumidityRatio() = default;
@@ -49,9 +42,7 @@ public:
      *
      * @return double, atmospheric pressure in atm
      */
-    double getAtmosphericPressure() const {
-        return atmosphericPressure_;
-    }
+    double getAtmosphericPressure() const { return atmosphericPressure_; }
 
     /**
      * Sets the pressure of the atmosphere
@@ -59,18 +50,14 @@ public:
      * @param atmosphericPressure double atmospheric pressure in atm
      *
      */
-    void setAtmosphericPressure(double atmosphericPressure) {
-        atmosphericPressure_ = atmosphericPressure;
-    }
+    void setAtmosphericPressure(double atmosphericPressure) { atmosphericPressure_ = atmosphericPressure; }
 
     /**
      * Gets the dry bulb temperature
      *
      * @return double, dry bulb temperature in °F
      */
-    double getDryBulbTemp() const {
-        return dryBulbTemp_;
-    }
+    double getDryBulbTemp() const { return dryBulbTemp_; }
 
     /**
      * Sets the dry bulb temperature
@@ -78,18 +65,14 @@ public:
      * @param dryBulbTemp double, dry bulb temperature
      *
      */
-    void setDryBulbTemp(double dryBulbTemp) {
-        dryBulbTemp_ = dryBulbTemp;
-    }
+    void setDryBulbTemp(double dryBulbTemp) { dryBulbTemp_ = dryBulbTemp; }
 
     /**
      * Gets the relative humidity
      *
      * @return double, relative humidity as %
      */
-    double getRelativeHumidity() const {
-        return relativeHumidity_;
-    }
+    double getRelativeHumidity() const { return relativeHumidity_; }
 
     /**
      * Sets the relative humidity
@@ -97,18 +80,14 @@ public:
      * @param relativeHumidity double, relative humidity as %
      *
      */
-    void setRelativeHumidity(double relativeHumidity) {
-        relativeHumidity_ = relativeHumidity;
-    }
+    void setRelativeHumidity(double relativeHumidity) { relativeHumidity_ = relativeHumidity; }
 
     /**
      * Gets the wet bulb temperature
      *
      * @return double, wet bulb temperature in °F
      */
-    double getWetBulbTemp() const {
-        return wetBulbTemp_;
-    }
+    double getWetBulbTemp() const { return wetBulbTemp_; }
 
     /**
      * Gets the saturation pressure
@@ -123,9 +102,7 @@ public:
      * @param wetBulbTemp double, wet bulb temperature in °F
      *
      */
-    void setWetBulbTemp(double wetBulbTemp) {
-        wetBulbTemp_ = wetBulbTemp;
-    }
+    void setWetBulbTemp(double wetBulbTemp) { wetBulbTemp_ = wetBulbTemp; }
 
     /**
      * Gets the humidity ratio using the relative humidity (instead of wet bulb temperature)
@@ -141,20 +118,18 @@ public:
      */
     double getHumidityRatioUsingWBT();
 
-
-
-private:
+  private:
     // In values
     double atmosphericPressure_ = 0.0;
-    double dryBulbTemp_ = 0.0;
-    double relativeHumidity_ = 0.0;
-    double wetBulbTemp_ = 0.0;
+    double dryBulbTemp_         = 0.0;
+    double relativeHumidity_    = 0.0;
+    double wetBulbTemp_         = 0.0;
 
-    //In-Out Values
+    // In-Out Values
     double saturationPressure_;
 
     // Out values
     double humidityRatioUsingRH_;
     double humidityRatioUsingWBT_;
 };
-#endif //TOOLS_SUITE_HUMIDITYRATIO_H
+#endif // TOOLS_SUITE_HUMIDITYRATIO_H

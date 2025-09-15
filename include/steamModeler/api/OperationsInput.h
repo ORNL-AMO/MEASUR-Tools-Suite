@@ -7,11 +7,11 @@
  * Steam Modeler operations input data.
  */
 class OperationsInput {
-public:
+  public:
     OperationsInput(double sitePowerImport, double makeUpWaterTemperature, double operatingHoursPerYear,
                     double fuelCosts, double electricityCosts, double makeUpWaterCosts);
 
-    friend std::ostream &operator<<(std::ostream &stream, const OperationsInput &oi);
+    friend std::ostream& operator<<(std::ostream& stream, const OperationsInput& oi);
 
     double getSitePowerImport() const;
 
@@ -25,7 +25,7 @@ public:
 
     double getMakeUpWaterCosts() const;
 
-private:
+  private:
     double sitePowerImport;
     double makeUpWaterTemperature;
     double operatingHoursPerYear;
@@ -34,4 +34,4 @@ private:
     double makeUpWaterCosts;
 };
 
-#endif //TOOLS_SUITE_OPERATIONSINPUT_H
+#endif // TOOLS_SUITE_OPERATIONSINPUT_H

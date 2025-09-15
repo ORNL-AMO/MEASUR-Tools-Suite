@@ -8,8 +8,9 @@
  *
  */
 
-#include <cmath>
 #include "motorDriven/pumpFan/OptimalSpecificSpeed.h"
+
+#include <cmath>
 
 double OptimalSpecificSpeed::calculate() {
     double specificSpeed = rpm * sqrt(flowRate) / (pow((head / stageCount), 0.75));

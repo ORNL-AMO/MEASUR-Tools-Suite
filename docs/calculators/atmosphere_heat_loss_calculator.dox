@@ -1,0 +1,46 @@
+/**
+ * @defgroup atmosphere_heat_loss_calculator Atmosphere Heat Loss Calculator
+ * @ingroup heat_loss_calculators
+ * @brief Calculates heat losses from escaping atmospheric gases in process heating equipment.
+ * @details This calculator is used to estimate heat losses of process heating equipment due to the introduction of
+ * atmospheric gases (e.g., nitrogen, hydrogen, etc.). These gases absorb heat from the equipment and carry it away when
+ * they exit the system. The calculator computes the total heat loss based on the flow rate, specific heat of the gas,
+ * inlet and outlet temperatures, and a correction factor @cite trinks2003industrial. Relevant formulas and values are
+ * documented below.
+ *
+ * @heading{Heat Loss}
+ * @copydoc atmosphere_heat_loss_formula
+ *
+ * @heading{Specific Heat Values}
+ * @copydoc atmosphere_specific_heat_values
+ */
+
+/**
+ * @defgroup atmosphere_heat_loss_formula Atmosphere Heat Loss Formula
+ * @ingroup atmosphere_heat_loss_calculator
+ * @formula{atmosphere-heat-loss; Q = \dot{v} \cdot c_p \cdot (T_\text{out} - T_\text{in}) \cdot
+ * f_\text{corr}}
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q; Heat loss; \btu\per\hour}
+ * @symrow{\dot{v}; Flow rate of gas; \standardCubicFeet\per\hour}
+ * @symrow{c_p; Specific heat of gas; \btu\per\standardCubicFeet\degreeFahrenheit}
+ * @symrow{T_\text{out}; Outlet temperature of gas; \degreeFahrenheit}
+ * @symrow{T_\text{in}; %Inlet temperature of gas; \degreeFahrenheit}
+ * @symrow{f_\text{corr}; Correction factor; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup atmosphere_specific_heat_values Atmosphere Specific Heat Values
+ * @ingroup atmosphere_heat_loss_calculator
+ * Reference temperature: @qty{60; \degreeFahrenheit}
+ * | Gas Type        | Specific Heat @unitb{\btu\per\standardCubicFeet\degreeFahrenheit} |
+ * | --------------- | ----------------------------------------------------------------- |
+ * | Nitrogen        | 0.0185                                                            |
+ * | Hydrogen        | 0.0182                                                            |
+ * | Exothermic Gas  | 0.0185                                                            |
+ * | Endothermic Gas | 0.0185                                                            |
+ * | Air             | 0.0184                                                            |
+ * | Water Vapor     | 0.0212                                                            |
+ */

@@ -2,7 +2,7 @@
 #define TOOLS_SUITE_ENERGYANDCOSTCALCULATIONSDOMAIN_H
 
 class EnergyAndCostCalculationsDomain {
-public:
+  public:
     const double powerGenerated;
     const double sitePowerImport;
     const double powerDemand;
@@ -12,19 +12,14 @@ public:
     const double totalOperatingCost;
     const double boilerFuelUsage;
 
-    friend std::ostream &operator<<(std::ostream &stream, const EnergyAndCostCalculationsDomain &domain) {
-        stream << "EnergyAndCostCalculationsDomain["
-               << "powerGenerated=" << domain.powerGenerated
-               << ", sitePowerImport=" << domain.sitePowerImport
-               << ", powerDemand=" << domain.powerDemand
-               << ", powerGenerationCost=" << domain.powerGenerationCost
-               << ", boilerFuelCost=" << domain.boilerFuelCost
-               << ", makeupWaterCost=" << domain.makeupWaterCost
-               << ", totalOperatingCost=" << domain.totalOperatingCost
-               << ", boilerFuelUsage=" << domain.boilerFuelUsage
-               << "]";
+    friend std::ostream& operator<<(std::ostream& stream, const EnergyAndCostCalculationsDomain& domain) {
+        stream << "EnergyAndCostCalculationsDomain[" << "powerGenerated=" << domain.powerGenerated
+               << ", sitePowerImport=" << domain.sitePowerImport << ", powerDemand=" << domain.powerDemand
+               << ", powerGenerationCost=" << domain.powerGenerationCost << ", boilerFuelCost=" << domain.boilerFuelCost
+               << ", makeupWaterCost=" << domain.makeupWaterCost << ", totalOperatingCost=" << domain.totalOperatingCost
+               << ", boilerFuelUsage=" << domain.boilerFuelUsage << "]";
         return stream;
     }
 };
 
-#endif //TOOLS_SUITE_ENERGYANDCOSTCALCULATIONSDOMAIN_H
+#endif // TOOLS_SUITE_ENERGYANDCOSTCALCULATIONSDOMAIN_H
