@@ -34,6 +34,18 @@ const int MONTHS        = 12;
 const int LOAD_NUM      = 11;
 const int HOURS_IN_YEAR = 8760;
 
+/**
+ * @class ProcessCooling
+ * @ingroup ProcessCooling
+ * @brief Calculator estimates energy consumption of operating Chillers, Pumps and Towers in a cooling system (both
+ * air & water). Allows: Input multiple & varying capacity and types of Chillers that are operating together. Flexible
+ * input for operating schedule for each Chiller. Apply changes ( improvements / measures) and compare & examine,
+ * quantifying energy and cost savings. Changes: Increasing the chilled water temperature Decreasing the condenser water
+ * temperature Replacing the chillers Applying variable speed control to circulation pump motors Upgrade Tower Cell Fan
+ * Motor controls Upgrades: Replace chiller refrigerant Install Variable Speed Drive (VSD) on Centrifugal compressors
+ *                      Use Free Cooling
+ */
+
 class ProcessCooling {
   public:
     enum RefrigerantType { R_11, R_123, R_12, R_134a, R_22, R_717 };
@@ -55,10 +67,10 @@ class ProcessCooling {
          *
          * @returns arrays of double corresponding to 11 % load bins (0,10,20,30,40,50,60,70,80,90,100)
          *
-         * @param efficiency array of double, units kW/ton
-         * @param hours array of double, units hours
-         * @param power array of double, units kW
-         * @param energy array of double, units kWh
+         * @param efficiency array of double, @unit{\kW\ton}
+         * @param hours array of double, @unit{\hours}
+         * @param power array of double, @unit{\kW}
+         * @param energy array of double, @unit{\kWh}
          */
         ChillerOutput(vector<vector<double>> efficiency, vector<vector<double>> hours, vector<vector<double>> power,
                       vector<vector<double>> energy)
@@ -76,7 +88,7 @@ class ProcessCooling {
          *
          * @returns array of double (Pumps Energy), size corresponding to the # of chillers
          *
-         * @param chillerPumpingEnergy double, units kWh
+         * @param chillerPumpingEnergy double, @unit{\kWh}
          */
         explicit ChillerPumpingEnergyOutput(vector<double> pumpingEnergy)
             : chillerPumpingEnergy(std::move(pumpingEnergy)) {}
@@ -96,8 +108,8 @@ class ProcessCooling {
          * @returns arrays of double corresponding to 6 wet bulb temp bins => <35, 35-44, 45-54, 55-64, 65-74, >=75;
          *
          * @param tempBins, constant array  {35, 45, 55, 65, 75, 75}
-         * @param hours array of double, units hours
-         * @param energy array of double, units kWh
+         * @param hours array of double, @unit{\hours}
+         * @param energy array of double, @unit{\kWh}
          */
         TowerOutput(vector<double> hours, vector<double> energy) : hours(std::move(hours)), energy(std::move(energy)) {}
 
@@ -115,14 +127,14 @@ class ProcessCooling {
 
         /**
          *
-         * @param CHWT double, units F, 35 - 55 Default 44, Chilled Water Supply Temperature
+         * @param CHWT double, @unit{\F}, 35 - 55 Default 44, Chilled Water Supply Temperature
          * @param useFreeCooling boolean
-         * @param HEXApproachTemp double, units F,  5 - 20, heat exchange temp when free cooling and heat exchanger used
+         * @param HEXApproachTemp double, @unit{\F},  5 - 20, heat exchange temp when free cooling and heat exchanger used
          * @param constantCWT boolean, Is CW temperature constant
-         * @param CWT double, units F, 70 - 90, CW temperature constant
+         * @param CWT double, @unit{\F}, 70 - 90, CW temperature constant
          * @param CWVariableFlow boolean
-         * @param CWFlowRate double, units gpm/ton
-         * @param CWTFollow double, units F, when CW temperature not constant
+         * @param CWFlowRate double, @unit{\gpm\ton}
+         * @param CWTFollow double, @unit{\F}, when CW temperature not constant
          */
         WaterCooledSystemInput(double CHWT, bool useFreeCooling, double HEXApproachTemp, bool constantCWT, double CWT,
                                bool CWVariableFlow, double CWFlowRate, double CWTFollow)
@@ -151,11 +163,11 @@ class ProcessCooling {
 
         /**
          *
-         * @param CHWT double, units F, 35 - 55 Default 44, Chilled Water Supply Temperature
-         * @param OADT double, units F, 80 - 110 Standard 95, Outdoor Air Design Temperature
+         * @param CHWT double, @unit{\F}, 35 - 55 Default 44, Chilled Water Supply Temperature
+         * @param OADT double, @unit{\F}, 80 - 110 Standard 95, Outdoor Air Design Temperature
          * @param ACSource Enumeration ACSourceLocation, Cooling Air Source, Indoor or Outside
-         * @param indoorTemp double, units F, if Air Source Indoor 60 - 90
-         * @param CWTFollow double, units F, if Air Source Outside 5 - 20
+         * @param indoorTemp double, @unit{\F}, if Air Source Indoor 60 - 90
+         * @param CWTFollow double, @unit{\F}, if Air Source Outside 5 - 20
          */
         AirCooledSystemInput(double CHWT, double OADT, ACSourceLocation ACSource, double indoorTemp, double CWTFollow)
             : CHWT(CHWT), OADT(OADT), ACSource(ACSource), indoorTemp(indoorTemp), CWTFollow(CWTFollow) {
@@ -174,9 +186,9 @@ class ProcessCooling {
         /**
          *
          * @param variableFlow boolean
-         * @param flowRate double, units gpm/ton
+         * @param flowRate double, @unit{\gpm\ton}
          * @param efficiency double, percentage as fraction
-         * @param motorSize double, units hp
+         * @param motorSize double, @unit{\hp}
          * @param motorEfficiency double, percentage as fraction
          */
         PumpInput(bool variableFlow, double flowRate, double efficiency, double motorSize, double motorEfficiency)
@@ -204,8 +216,8 @@ class ProcessCooling {
          * @param fanSpeedType Enumeration FanMotorSpeedType
          * @param towerSizing Enumeration TowerSizedBy, sized by tonnage or fan hp
          * @param towerCellFanType Enumeration CellFanType
-         * @param cellFanHP double, units hp, 1 -100 hp
-         * @param tonnage double, units ton, 20 - 3000
+         * @param cellFanHP double, @unit{\hp}, 1 -100 hp
+         * @param tonnage double, @unit{\ton}, 20 - 3000
          */
         TowerInput(int numTower, int numFanPerTower_Cells, FanMotorSpeedType fanSpeedType, TowerSizedBy towerSizing,
                    CellFanType towerCellFanType, double cellFanHP, double tonnage)
@@ -227,7 +239,7 @@ class ProcessCooling {
          * @details Use this constructor when not defining custom Chiller and not replacing chiller refrigerant
          *
          * @param chillerType Enumeration ChillerCompressorType
-         * @param capacity double, units ton
+         * @param capacity double, @unit{\ton}
          * @param isFullLoadEffKnown boolean, Is full load efficiency known? for this Chiller
          * @param fullLoadEff double, fraction, 0.2 - 2.5 increments of .01
          * @param age double # of years, 0 - 20, (can be 1.5 for eighteen months), assumption chiller efficiency is
@@ -252,7 +264,7 @@ class ProcessCooling {
          * @details Use this constructor when replacing chiller refrigerant
          *
          * @param chillerType Enumeration ChillerCompressorType
-         * @param capacity double, units ton
+         * @param capacity double, @unit{\ton}
          * @param isFullLoadEffKnown boolean, Is full load efficiency known? for this Chiller
          * @param fullLoadEff double, fraction, 0.2 - 2.5 increments of .01
          * @param age double # of years, 0 - 20, (can be 1.5 for eighteen months), assumption chiller efficiency is
@@ -281,7 +293,7 @@ class ProcessCooling {
          * @details Use this constructor when replacing chiller refrigerant
          *
          * @param chillerType Enumeration ChillerCompressorType
-         * @param capacity double, units ton
+         * @param capacity double, @unit{\ton}
          * @param isFullLoadEffKnown boolean, Is full load efficiency known? for this Chiller
          * @param fullLoadEff double, fraction, 0.2 - 2.5 increments of .01
          * @param age double # of years, 0 - 20, (can be 1.5 for eighteen months), assumption chiller efficiency is
@@ -310,7 +322,7 @@ class ProcessCooling {
          * @details Use this constructor to define custom Chiller
          *
          * @param chillerType Enumeration ChillerCompressorType
-         * @param capacity double, units ton
+         * @param capacity double, @unit{\ton}
          * @param isFullLoadEffKnown boolean, Is full load efficiency known? for this Chiller
          * @param fullLoadEff double, fraction, 0.2 - 2.5 increments of .01
          * @param age double # of years, 0 - 20, (can be 1.5 for eighteen months), assumption chiller efficiency is
@@ -340,7 +352,7 @@ class ProcessCooling {
          * @details Use this constructor for custom Chiller with replacing refrigerant
          *
          * @param chillerType Enumeration ChillerCompressorType
-         * @param capacity double, units ton
+         * @param capacity double, @unit{\ton}
          * @param isFullLoadEffKnown boolean, Is full load efficiency known? for this Chiller
          * @param fullLoadEff double, fraction, 0.2 - 2.5 increments of .01
          * @param age double # of years, 0 - 20, (can be 1.5 for eighteen months), assumption chiller efficiency is
@@ -462,9 +474,9 @@ class ProcessCooling {
      * @details Use this constructor for water cooling system
      *
      * @param systemOperationAnnualHours integer array of 8760 hours of the year with values as 0 or 1
-     * @param weatherDryBulbHourlyTemp double, units F, array of 8760 hours of the year with dry bulb hourly recorded
+     * @param weatherDryBulbHourlyTemp double, @unit{\F}, array of 8760 hours of the year with dry bulb hourly recorded
      * temperature
-     * @param weatherWetBulbHourlyTemp double, units F, array of 8760 hours of the year with wet bulb hourly recorded
+     * @param weatherWetBulbHourlyTemp double, @unit{\F}, array of 8760 hours of the year with wet bulb hourly recorded
      * temperature
      * @param chillerInputList ChillerInput array
      *
@@ -479,7 +491,7 @@ class ProcessCooling {
 
     /**
      *
-     ** @details Use this constructor for air cooled system
+     * @details Use this constructor for air cooled system
      *
      * @param systemOperationAnnualHours integer array of 8760 hours of the year with values as 0 or 1
      * @param weatherDryBulbHourlyTemp double array of 8760 hours of the year with dry bulb hourly recorded temperature
@@ -512,6 +524,19 @@ class ProcessCooling {
      * @return ChillerPumpingEnergyOutput
      */
     ChillerPumpingEnergyOutput calculatePumpEnergy(PumpInput pump);
+
+    /**
+     *
+     ** @details Use this method to generate system operation annual hours from weekly schedules and monthly max operation hours
+     *
+     * @param weeklyOpStartHour integer array of 7 with hours of the day of the week with start hour of operation (0-23)
+     * @param weeklyOpStopHour integer array of 7 with hours of the day of the week with stop hour of operation (0-24)
+     * @param monthlyOpMaxHour integer array of 12 with months of the year with max operation hours in that month (0-744)
+     * 0 for no operation for that month. If monthlyOpMaxHour exceeds the total hours for a month, it will be capped to the max hours in that month and ending hour for that month will be set to non operational after the max hours is reached.
+     *
+     * @return integer array of 8760 hours of the year with values as 0 or 1 set based on weekly and monthly schedules
+     */
+    static vector<int> getSysOpAnnualHours(const vector<int>& weeklyOpStartHour, const vector<int>& weeklyOpStopHour, const vector<int>& monthlyOpMaxHour);
 
   private:
     ProcessCooling(const vector<int>& systemOperationAnnualHours, const vector<double>& weatherDryBulbHourlyTemp,
