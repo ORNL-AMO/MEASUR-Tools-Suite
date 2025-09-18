@@ -778,6 +778,7 @@ describe('Process Cooling Tests', function () {
         waterCooledSystemCustomChillerTest(testNum++);
         waterCooledSystemCustomChillerReplaceRefrigTest(testNum++);
         airCooledSystemWithARIScheduleTest(testNum++);
+        // TODO uncomment when project can be run for testing
         // waterCooledSystemTest_CWSAT_VINPLT(testNum++);
         // airCooledSystemTest_CWSAT(testNum++);
 
