@@ -6,7 +6,8 @@
     "npm": "10.8.2"
   },
   "scripts": {
-    "test:browser": "karma start"
+    "test:browser": "karma start",
+    "tests": "npx karma start --browsers ChromeHeadlessNoSandbox --auto-watch false"
   },
   "description": "Calculation library for the Department of Energy Advanced Manufacturing and Materials Technologies Office and the Industrial Efficiency & Decarbonization Office (DOE AMMTO IEDO)  suite of tools",
   "author": "Gina Accawi <accawigk@ornl.gov>",

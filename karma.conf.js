@@ -1,5 +1,12 @@
 module.exports = function (config) {
     config.set({
+        port: 3000,
+        customLaunchers: {
+            ChromeHeadlessNoSandbox: {
+                base: 'ChromeHeadless',
+                flags: ['--no-sandbox']
+            }
+        },
         frameworks: ['mocha'],
         files: [
             // All browser-based WASM Mocha tests
