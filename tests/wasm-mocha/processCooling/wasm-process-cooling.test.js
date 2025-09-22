@@ -175,7 +175,7 @@ describe('Process Cooling Tests', function () {
             for (let i = 0; i < monthlyOpMaxHoursA.length; i++) {
                 monthlyOpMaxHours.push_back(monthlyOpMaxHoursA[i]);
             }
-            let systemOperationAnnualHoursDay = moduleInstance.getSysOpAnnualHours(weeklyOpStartHour, weeklyOpStopHour, monthlyOpMaxHours);
+            let systemOperationAnnualHoursDay = moduleInstance.ProcessCooling.getSysOpAnnualHours(weeklyOpStartHour, weeklyOpStopHour, monthlyOpMaxHours);
 
             weeklyOpStartHour.delete();
             weeklyOpStopHour.delete();
@@ -730,7 +730,7 @@ describe('Process Cooling Tests', function () {
         initTestData();
         airCooledSystemTest(testNum++);
         airCooledSystemOpAtOnlyDayTimeTest(testNum++);
-        // airCooledSystemOpAtOnlyDayTimeFebNovTest(testNum++);
+        airCooledSystemOpAtOnlyDayTimeFebNovTest(testNum++);
         waterCooledSystemTest(testNum++);
         waterCooledSystemReplaceRefrigerantTest(testNum++);
         waterCooledSystemCustomChillerTest(testNum++);
