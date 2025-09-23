@@ -164,17 +164,40 @@ To make it easy for developers local building and testing, it is dockerized. To 
   ```bash
   docker compose down
   ```
-- To run the unit tests (both WASM and C++):
-  - WASM: In a browser, launch [http://localhost:3000/](http://localhost:3000/)
-  - C++: Run the following commands in order:
+- To run the wasm tests locally on the host computer after build completes in the docker container, stop the container.
+  - Run the following two commands from the root directory of the repository:
+      ```bash
+      npm install
+
+      npm run test:browser
+      or
+      npm run tests
+      ```
+    > [!NOTE] If changes are made to any of the wasm test files, docker container does not have to be started or running, or the build in the docker container does not need to be rerun. The updated tests will run with the last successful build.
+
+
+- To run the unit tests inside the container (both WASM and C++):
+  - Run the following command to enter the container bash:
     ```bash
     docker exec -it measur-tools-suite-build /bin/bash
     ```
+    - For WASM:
+      ```bash
+      cd /home/MEASUR-Tools-Suite/
+      ```
+      ```bash
+      npm run tests
+      ```
+    - For C++:
+      ```bash
+      cd /home/MEASUR-Tools-Suite/build-cpp/bin/
+      ```
+      ```bash
+      ./cpp_tests
+      ```
+  - To exit the container bash run:
     ```bash
-    cd /usr/src/app/build-cpp/bin
-    ```
-    ```bash
-    ./cpp_tests
+    exit
     ```
 
 > [!NOTE]
