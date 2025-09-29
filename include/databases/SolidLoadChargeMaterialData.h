@@ -1,7 +1,6 @@
-#ifndef TOOLS_SUITE_SOLIDLOADCHARGEMATERIALDATA_H
-#define TOOLS_SUITE_SOLIDLOADCHARGEMATERIALDATA_H
+#pragma once
 
-#include "DB.h"
+#include "default_data.h"
 
 class SolidLoadChargeMaterial;
 
@@ -47,5 +46,3 @@ std::vector<SolidLoadChargeMaterial> DefaultData::get_default_solid_load_charge_
             {"Refractory", 0.250059708621925, 425, 0.26, 5000},
             {"Ladle Refractory", 0.250059708621925, 425, 0.26, 5000}};
 }
-
-#endif // TOOLS_SUITE_SOLIDLOADCHARGEMATERIALDATA_H

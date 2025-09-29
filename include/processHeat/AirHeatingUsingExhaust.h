@@ -13,8 +13,8 @@
 #ifndef TOOLS_SUITE_AIRHEATINGUSINGEXHAUST_H
 #define TOOLS_SUITE_AIRHEATINGUSINGEXHAUST_H
 
-#include "losses/GasFlueGasMaterial.h"
-#include "losses/SolidLiquidFlueGasMaterial.h"
+#include "losses/gas_flue_gas_material.h"
+#include "losses/solid_liquid_flue_gas_material.h"
 
 class AirHeatingUsingExhaust {
   public:

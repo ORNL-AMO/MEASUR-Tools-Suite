@@ -2,7 +2,7 @@
 
 ## Update (08/25/2025)
 
-The MEASUR Tools Suite is currently undergoing a major update to improve usability and maintainability. This includes a refactoring of the codebase to follow consistent practices, better organization, and enhanced documentation around the engineering aspects of the calculations. To follow the progress of this update, please refer to the [Roadmap](ROADMAP.md). As the codebase is refactored, some Emscripten bindings will change. A summary of these changes can be found in the [Emscripten Bindings Changes](EMSCRIPTEN_BINDINGS_CHANGES.md) document.
+The MEASUR Tools Suite is currently undergoing a major update to improve usability and maintainability. This includes a refactoring of the codebase to follow consistent practices, better organization, and enhanced documentation around the engineering aspects of the calculations. To follow the progress of this update, please refer to the [Roadmap](ROADMAP.md).
 
 ## About
 
@@ -26,73 +26,179 @@ The npm packages can be downloaded and install from [registry](https://www.npmjs
 
 #### Web Assembly Compilation SDK
 
-- Emscripten (emsdk) - Follow instructions for install https://emscripten.org/docs/getting_started/downloads.html
-- From the emsdk directory run `./emsdk install latest`
-- Then run `./emsdk activate latest`
-- Then run `source ./emsdk_env.sh` to set the environment variables in the current terminal session.
-  - On Windows use `emsdk_env.bat`
+- [Install Emscripten (emsdk)](https://emscripten.org/docs/getting_started/downloads.html)
+- Navigate to the `emsdk` directory.
+- Run the following commands in order:
+  ```bash
+  ./emsdk install latest
+  ```
+  ```bash
+  ./emsdk activate latest
+  ```
+  ```bash
+  source ./emsdk_env.sh
+  ``` 
+  > This sets up the current terminal session to use the Emscripten tools. On Windows use `emsdk_env.bat`.
 
-> [!NOTE]
-> This needs to be done each time a new terminal session is started, or add the command to your shell profile script (e.g. .bashrc, .zshrc, etc.)
+  > [!NOTE]
+  > This needs to be done each time a new terminal session is started, or add the command to your shell profile script (e.g. .bashrc, .zshrc, etc.)
 
 #### Node
+
 - Node LTS [https://nodejs.org/en/](https://nodejs.org/en/) 
 
 ### Build Web Assembly Module
 
-- Ensure you have followed the "Install and Activate Emscripten" steps above
-- From the root directory of the MEASUR Tools Suite repository run `emcmake cmake -DBUILD_WASM=ON`
-  > If multiple compilers are present and default environment is not used, use `-G "<XXX> Makefiles"`. For example, on Windows using MinGW: `emcmake cmake -D BUILD_WASM=ON .. -G "MinGW Makefiles"`
-- Then run `emmake make`
+- Ensure Emscripten environment is activated (see above).
+- Naviagate to the root directory of the MEASUR Tools Suite repository.
+- Run the following commands in order:
+  ```bash
+  emcmake cmake -DBUILD_WASM=ON
+  ```
+  > If multiple compilers are present and default environment is not used, use `-G "<XXX> Makefiles"`. On Windows using MinGW: `emcmake cmake -D BUILD_WASM=ON .. -G "MinGW Makefiles"`
+  ```bash
+  emmake make
+  ```
   > This will create the build artifacts `client.js` and `client.wasm` in the `/bin` directory. `client.js` is the glue code for initializing the WASM module. Place the two files in the same directory within your project and execute the `client.js` script.
 
 ### WASM Initialization Example
 
-MEASUR Tools Suite is distributed as a modularized WebAssembly Module. 
-Below is an illustration of the WASM initialization and usage process:
+MEASUR Tools Suite is distributed as a modularized WebAssembly Module. Below is an illustration of the WASM initialization and usage process:
 
-![WASM Initialization](assets/wasm-initialization.png)
+```js
+//initialize module
+const moduleFactory = (await import('/path/to/client.js')).default;
+toolsSuiteModule = await moduleFactory({
+          locateFile: (filename) => '/path/to/client.wasm'
+});
+
+const surfaceArea = 500;
+const ambientTemperature = 80;
+const surfaceTemperature = 225;
+const windSpeed = 10;
+const surfaceEmissivity = 0.9;
+const shapeFactor = 1.394;
+const correctionFactor = 1;
+
+// Calculate total heat loss
+const totalHeatLoss = toolsSuiteModule.wallTotalHeatLoss(
+            surfaceArea,
+            ambientTemperature,
+            surfaceTemperature,
+            windSpeed,
+            surfaceEmissivity,
+            shapeFactor,
+            correctionFactor);
+```
+
+
+
 
 ### WASM Unit Tests
 
-- Ensure you have followed the "Build WebAssembly Module" steps above
-- From the root directory of the MEASUR Tools Suite repository run `npm install` to install node dependencies
-- Then run `npm run test-wasm-mocha`
-  > All mocha tests found under `tests/wasm-mocha/` will be executed. 
-  > Migration of unit tests to the mocha framework is a WIP.
+- Ensure Emscripten environment is activated (see above).
+- Navigate to the root directory of the MEASUR Tools Suite repository.
+- Run the following commands in order:
+  ```bash
+  npm install
+  ``` 
+  > This will install the node dependencies.
+  ```bash
+  npm run test:browser
+  ```
+  > All mocha tests found under `tests/wasm-mocha/` will be executed. Migration of unit tests to the mocha framework is a WIP.
 
 ### C++ Unit Tests
 
-- Ensure the `BUILD_TESTING` flag is set (which is default) when running CMake
-- From the root directory of the MEASUR Tools Suite repository, run `mkdir build-cpp` and `cd build-cpp`
-- Then run `cmake ..`  
-  > If multiple compilers are present and default environment is not used, use `-G "XXX Makefiles"`. For example for windows using MinGW => `cmake .. -G "MinGW Makefiles"`
-- Then run `cmake --build .`
-- Then run `cd bin` and `./cpp_tests` to execute the tests
+- Ensure the CMake flag `BUILD_TESTING` is set (which is default).
+- Navigate to the root directory of the MEASUR Tools Suite repository.
+- Run the following commands in order:
+  ```bash
+  mkdir build-cpp
+  ```
+  ```bash
+  cd build-cpp
+  ```
+  ```bash
+  cmake ..
+  ```  
+  > If multiple compilers are present and default environment is not used, use `-G "XXX Makefiles"`. For windows using MinGW => `cmake .. -G "MinGW Makefiles"`
+  ```bash
+  cmake --build .
+  ```
+  ```bash
+  cd bin
+  ```
   > On Windows, the executable can be found under either the `Debug` or `Release` directories, depending on CMake configuration
+  ```bash
+  ./cpp_tests
+  ```
+  
 
 ### Packaging
 
 - Enable the `BUILD_PACKAGE` flag in the CMakeCache, then `cmake ./` then `make package`
 - Or use this directly for Windows: `cmake -D BUILD_TESTING:BOOL=OFF ./` and `cmake --build . --config Release --target PACKAGE`
-- To make package on Linux or Mac, run `ccmake.` and set BUILD_TESTING OFF, BUILD_PACKAGE ON, then configure and generate. Then `make package`.
+- To make package on Linux or Mac, run `ccmake.` and set `BUILD_TESTING OFF`, `BUILD_PACKAGE ON`, then configure and generate. Then `make package`.
 
 ### Generate Documentation Locally
 
-- Ensure Doxygen (v 1.14.0 or later) is installed
-- From the root directory of the MEASUR Tools Suite repository run `doxygen Doxyfile`
-  > The documentation will be generated in the `/docs/html` directory
+- Ensure Doxygen (v 1.14.0 or later) is installed.
+- Navigate to the root directory of the MEASUR Tools Suite repository.
+- Run:
+  ```
+  doxygen Doxyfile
+  ```
+  > The documentation will be generated in the `/docs/html` directory.
 
 ### Dockerizing 
 
 To make it easy for developers local building and testing, it is dockerized. To run it in docker follow these steps.
 
-- Download the repository
-- Open command line tool, change directory to the repository run `docker compose up -d`
-- To stop the running container run `docker compose down`
-- Running Unit Tests
-  - WASM: in a browser, launch [http://localhost:3000/](http://localhost:3000/)
-  - C++: run `docker exec -it measur-tools-suite-build /bin/bash` and run the executable `/home/MEASUR-Tools-Suite/build-cpp/cpp_tests`
-    - Note: 
-      - Every time the container is started it will rebuild the application, to check status run `docker compose logs --tail 5` 
-      - **This is not a tutorial for docker, assumption is made the user is knowledgeable.**
+- Navigate to the root directory of the MEASUR Tools Suite repository.
+- To build the docker image run:
+  ```bash
+  docker compose up -d
+  ```
+- To stop the container run:
+  ```bash
+  docker compose down
+  ```
+- To run the wasm tests locally on the host computer after build completes in the docker container, stop the container.
+  - Run the following two commands from the root directory of the repository:
+      ```bash
+      npm install
+
+      npm run test:browser
+      or
+      npm run tests
+      ```
+    > [!NOTE] If changes are made to any of the wasm test files, docker container does not have to be started or running, or the build in the docker container does not need to be rerun. The updated tests will run with the last successful build.
+
+
+- To run the unit tests inside the container (both WASM and C++):
+  - Run the following command to enter the container bash:
+    ```bash
+    docker exec -it measur-tools-suite-build /bin/bash
+    ```
+    - For WASM:
+      ```bash
+      cd /home/MEASUR-Tools-Suite/
+      ```
+      ```bash
+      npm run tests
+      ```
+    - For C++:
+      ```bash
+      cd /home/MEASUR-Tools-Suite/build-cpp/bin/
+      ```
+      ```bash
+      ./cpp_tests
+      ```
+  - To exit the container bash run:
+    ```bash
+    exit
+    ```
+
+> [!NOTE]
+> Every time the container is started it will rebuild the application. To check status run: `docker compose logs --tail 5`.

@@ -21,14 +21,27 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Remove build directory
+        run: rm -rf build
+
+      - name: Clean build and CMake cache
+        run: |
+          rm -rf build-cpp
+          rm -f CMakeCache.txt
+          rm -rf CMakeFiles
+
+      - name: List files with 'Atmosphere' in the name
+        run: find . -type f -name '*Atmosphere*'
+          
       - name: Build WASM with Emscripten
         uses: addnab/docker-run-action@v3
         with:
           image: emscripten/emsdk:3.1.60
-          options: -v ${{ github.workspace }}:/src
+          options: -v ${{ github.workspace }}:/test_mocha
           run: |
-            cd /src
+            cd /test_mocha
             emcmake cmake -DBUILD_WASM=ON
+            emmake make clean
             emmake make
 
       - name: Run Mocha tests

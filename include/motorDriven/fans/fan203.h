@@ -1,7 +1,7 @@
 /**
  * @file fan203.h
  * @authors Colin Causey, Allie Ledbetter, Preston Shires, Liam White
- * @ingroup FanSystemAssessments
+ * @ingroup fan_system_assessments
  * @brief Implements AMCA 203 standard fan performance calculations.
  */
 #pragma once
@@ -16,32 +16,30 @@
 
 /**
  * @struct FanRatedInfo
- * @ingroup FanSystemAssessments
- *
+ * @ingroup fan_system_assessments
  * @brief Stores measured and reference-corrected fan and motor operating data for AMCA 203 calculations.
- *
- * @details
- * This class encapsulates both as-tested and reference-corrected values for fan speed, motor speed, gas density, and
- * barometric pressure, as required by the AMCA 203 standard. These values are used to convert measured fan performance
- * data to standardized reference conditions, enabling consistent comparison and evaluation of fan performance across
- * different test environments.
+ * @details This struct encapsulates both as-tested and reference-corrected values for fan speed, motor speed, gas
+ * density, and barometric pressure, as required by the AMCA 203 standard. These values are used to convert measured fan
+ * performance data to standardized reference conditions, enabling consistent comparison and evaluation of fan
+ * performance across different test environments.
  */
 struct FanRatedInfo {
-    double fan_speed;           ///< Fan speed @unit{\revolutionsPerMinute}
-    double motor_speed;         ///< %Motor speed @unit{\revolutionsPerMinute}
-    double fan_speed_corrected; ///< Fan speed corrected to reference conditions @unit{\revolutionsPerMinute}
-    double density_corrected;   ///< Gas density corrected to reference conditions @unit{\pound\per\foot\cubed}
-    double pressure_barometric_corrected; ///< Barometric pressure corrected to reference conditions @unit{\inch\of{Hg}}
+    double fan_speed;           ///< Fan speed @unitb{\revolutionsPerMinute}
+    double motor_speed;         ///< %Motor speed @unitb{\revolutionsPerMinute}
+    double fan_speed_corrected; ///< Fan speed corrected to reference conditions @unitb{\revolutionsPerMinute}
+    double density_corrected;   ///< Gas density corrected to reference conditions @unitb{\pound\per\foot\cubed}
+    double
+        pressure_barometric_corrected; ///< Barometric pressure corrected to reference conditions @unitb{\inch\of{Hg}}
 
     /**
      * @brief Constructor for FanRatedInfo
      *
-     * @param[in] fan_speed Fan speed @unit{\revolutionsPerMinute}
-     * @param[in] motor_speed %Motor speed @unit{\revolutionsPerMinute}
-     * @param[in] fan_speed_corrected Fan speed corrected to reference conditions @unit{\revolutionsPerMinute}
-     * @param[in] density_corrected Gas density corrected to reference conditions @unit{\pound\per\foot\cubed}
+     * @param[in] fan_speed Fan speed @unitb{\revolutionsPerMinute}
+     * @param[in] motor_speed %Motor speed @unitb{\revolutionsPerMinute}
+     * @param[in] fan_speed_corrected Fan speed corrected to reference conditions @unitb{\revolutionsPerMinute}
+     * @param[in] density_corrected Gas density corrected to reference conditions @unitb{\pound\per\foot\cubed}
      * @param[in] pressure_barometric_corrected Barometric pressure corrected to reference conditions
-     * @unit{\inch\of{Hg}}
+     * @unitb{\inch\of{Hg}}
      */
     FanRatedInfo(double fan_speed, double motor_speed, double fan_speed_corrected, double density_corrected,
                  double pressure_barometric_corrected)

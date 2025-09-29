@@ -58,9 +58,13 @@ Use Conventional Commits to structure your commit messages. This helps maintain 
   - [How to Format Code](#how-to-format-code)
   - [Best Practices](#best-practices)
 - [Documentation](#documentation)
-  - [Common Doxygen Tags](#common-doxygen-tags)
-  - [How to Generate Doxygen Documentation](#how-to-generate-doxygen-documentation)
+  - [Doxygen Commands](#doxygen-commands)
+  - [Doxygen Aliases](#doxygen-aliases)
   - [Documenting Code](#documenting-code)
+    - [Math](#math)
+    - [Units](#units)
+    - [Formulas](#formulas)
+    - [Symbols](#symbols)
     - [Files](#files-1)
     - [Namespaces](#namespaces-2)
     - [Classes \& Structs](#classes--structs)
@@ -68,9 +72,8 @@ Use Conventional Commits to structure your commit messages. This helps maintain 
     - [Member Variables](#member-variables-1)
     - [Constants](#constants)
     - [Enums](#enums)
-    - [Formulas](#formulas)
-    - [Units](#units)
-    - [Modules](#modules)
+    - [Groups](#groups)
+  - [Generating Doxygen Documentation](#generating-doxygen-documentation)
 - [Conventional Commits](#conventional-commits)
   - [Commit Format](#commit-format)
   - [Commit Types](#commit-types)
@@ -698,7 +701,7 @@ If you have questions about the formatting rules or need help configuring your e
 
 # Documentation
 
-This project uses [Doxygen](https://www.doxygen.nl/) to generate documentation from annotated source code. Doxygen comments are used to describe the purpose, behavior, and usage of classes, functions, and other entities in the codebase. Follow these guidelines to ensure your code is well-documented and easy to understand. Always use `@` for Doxygen commands and tags, as this is the standard convention in this project.
+This project uses [Doxygen](https://www.doxygen.nl/) to generate documentation from annotated source code. Doxygen comments are used to describe the purpose, behavior, and usage of classes, functions, and other entities in the codebase. Follow these guidelines to ensure your code is well-documented and easy to understand. Always use `@` for Doxygen commands.
 
 <!-- START mdsplit-ignore -->
 <a id="documentation-index"></a>
@@ -706,9 +709,13 @@ This project uses [Doxygen](https://www.doxygen.nl/) to generate documentation f
 <summary><Strong>Index</Strong></summary>
 
 - [Documentation](#documentation)
-  - [Common Doxygen Tags](#common-doxygen-tags)
-  - [How to Generate Doxygen Documentation](#how-to-generate-doxygen-documentation)
+  - [Doxygen Commands](#doxygen-commands)
+  - [Doxygen Aliases](#doxygen-aliases)
   - [Documenting Code](#documenting-code)
+    - [Math](#math)
+    - [Units](#units)
+    - [Formulas](#formulas)
+    - [Symbols](#symbols)
     - [Files](#files-1)
     - [Namespaces](#namespaces-2)
     - [Classes \& Structs](#classes--structs)
@@ -716,68 +723,53 @@ This project uses [Doxygen](https://www.doxygen.nl/) to generate documentation f
     - [Member Variables](#member-variables-1)
     - [Constants](#constants)
     - [Enums](#enums)
-    - [Formulas](#formulas)
-    - [Units](#units)
-    - [Modules](#modules)
+    - [Groups](#groups)
+  - [Generating Doxygen Documentation](#generating-doxygen-documentation)
 
 </details>
 <!-- END mdsplit-ignore -->
 
 ## Doxygen Commands
 
-All commands start with `@`. 
+All commands must start with `@`. 
 
-Some commands have one or more arguments. Each argument has a certain range:
-- If `<sharp>` braces are used the argument is a single word.
-- If `(round)` braces are used the argument extends until the end of the line on which the command was found.
-- If `{curly}` braces are used the argument extends until the next paragraph. Paragraphs are delimited by a blank line or by a section indicator.
-
-Commands:
+Useful Commands:
 - `@file <name>`
-- `@authors { list of authors }`
-- `@ingroup (<group-name>)`
-- `@defgroup <name> (group title)`
+- `@authors <authors>`
+- `@ingroup <group-name>`
+- `@defgroup <name> <group-title>`
 - `@namespace <name>`
 - `@class <name>`
 - `@struct <name>`
 - `@enum <name>`
-- `@brief { brief description }`
-- `@details { detailed description }`
-- `@param[<dir>] <parameter-name> { parameter description }`
-- `@tparam <template-parameter-name> { description }`
-- `@return { description of the return value }`
-- `@throws <exception-object> { exception description }`
-- `@note { text }`
-- `@bug { bug description }`
-- `@see { references }`                                       
-- `@def <name>`                                      
-- `@copyright { copyright description }`
+- `@brief <brief description>`
+- `@details <detailed description>`
+- `@param[<direction>] <parameter-name> <parameter-description>`
+- `@tparam <template-parameter-name> <description>`
+- `@return <description>`
+- `@throws <exception-object> <description>`
+- `@note <text>`
+- `@bug <description>`
+- `@see <reference>`
+- `@copyright <text>`
+- `@cite <reference>`
+- `@ref <reference> <display-text>`
 
 <!-- START mdsplit-ignore -->
 **[Return to Index](#documentation-index)**
 <!-- END mdsplit-ignore -->
 
-## Custom Commands
+## Doxygen Aliases
 
+The following Doxygen aliases are defined in the `Doxyfile` to simplify common documentation tasks:
 - `@math{<math expression>}`
-- `@unit{<unit expression>}`
+- `@unitr{<unit expression>}`
+- `@unitb{<unit expression>}`
+- `@unitp{<unit expression>}`
 - `@formula{<label>; <equation>}`
-- `symbol{<symbol>; <description>}`
-
-<!-- START mdsplit-ignore -->
-**[Return to Index](#documentation-index)**
-<!-- END mdsplit-ignore -->
-
-## Generating Doxygen Documentation
-
-1. Ensure [Doxygen](https://www.doxygen.nl/) is installed on your system.
-2. From the project root, run:
-   ```bash
-   doxygen Doxyfile
-   ```
-3. The generated HTML and/or LaTeX documentation will appear in the output directory specified in your `Doxyfile`.
-
-For more details on configuring or customizing Doxygen output, see the official [Doxygen manual](https://www.doxygen.nl/manual/index.html) or review the `Doxyfile` in the project root.
+- `@symtable`
+- `@symrow{<symbol>; <description>; <unit expression>}`
+- `@endsymtable`
 
 <!-- START mdsplit-ignore -->
 **[Return to Index](#documentation-index)**
@@ -809,13 +801,13 @@ Use the `@math{<math expression>}` command to to write LaTeX-style mathematical 
 
 ### Units
 
-Use the `@unit{<unit expression>}` command to document units. The `@unit{}` command uses the siunitx package to format units in LaTeX.
+Use the `@unitb{<unit expression>}` command to document units. The `@unitb{}` command uses the siunitx package to format units in LaTeX style and encloses them in brackets.
 
 #### Example
 
 ```cpp
 /**
- * The speed of light in water is often denoted as @math{C_w} and is approximately 2.25 @unit{\meter\per\second}.
+ * The speed of light in water is often denoted as @math{C_w} and is approximately 2.25 @unitb{\meter\per\second}.
  */
 ```
 
@@ -826,7 +818,7 @@ Use the `@unit{<unit expression>}` command to document units. The `@unit{}` comm
 ### Formulas
 
 Use the `@formula{<label>; <equation>}` command to document formulas. The command takes 2 arguments, separated by `;`:
-1. A label for the formula, which can be used to reference the formula in the documentation by using `\eqref{eq:formula-label}`.
+1. A label for the formula, which can be used to reference the formula in the documentation by using `\eqref{eq:<formula-label>}`.
    - All labels are automatically prefixed with `eq:` to avoid conflicts.
 2. The formula itself, written in LaTeX syntax.
 
@@ -849,9 +841,10 @@ Use the `@formula{<label>; <equation>}` command to document formulas. The comman
 
 ### Symbols
 
-Use the `symbol{<symbol>; <description>}` command to document mathematical symbols. This command takes two arguments, separated by `;`:
+Use the `@symtable` and `@endsymtable` commands to create a table of symbols used in formulas. Each symbol is documented using the `@symrow{<symbol>; <description>; <unit expression>}` command, which takes three arguments, separated by `;`:
 1. The symbol itself, written in LaTeX syntax.
 2. A description of the symbol.
+3. The unit of the symbol, written in LaTeX syntax and formatted using the siunitx package.
 
 #### Example
 
@@ -860,9 +853,11 @@ Use the `symbol{<symbol>; <description>}` command to document mathematical symbo
  * The area of a circle can be computed using the formula:
  * @formula{circle-area; A = \pi r^2}
  * where:
- * - @symbol{A; is the area of the circle}
- * - @symbol{\pi; is the mathematical constant pi}
- * - @symbol{r; is the radius of the circle}
+ * @symtable
+ * @symrow{A; is the area of the circle; \meter\squared}
+ * @symrow{\pi; is the mathematical constant pi; 1}
+ * @symrow{r; is the radius of the circle; \meter}
+ * @endsymtable
  */
 ```
 
@@ -874,25 +869,27 @@ Use the `symbol{<symbol>; <description>}` command to document mathematical symbo
 
 Use a **Doxygen block** at the very top of each header file to document the file's purpose, authors, and any relevant notes.
 
-#### Required tags
+#### Relevant commands
 
-`@file`, `@authors`, `@ingroup`, `@brief`
-
-#### Optional tags
-
-`@details`, `@note`, `@bug`, `@see`, `@copyright`
+- `@ingroup`
+- `@file`
+- `@authors`
+- `@brief`
+- `@details`
+- `@note`
+- `@see`
+- `@copyright`
 
 #### Example
 
 ```cpp
 /**
+ * @ingroup geometry
  * @file polygon.h
  * @authors Alice Brown, Carlos Diaz
- * @ingroup geometry
  * @brief Defines the Polygon class for representing simple 2-D polygons.
  * @details This file contains the Polygon class, which provides methods for adding vertices, computing area, and checking point containment.
  * @note The Polygon class assumes vertices are provided in counter-clockwise order.
- * @bug Self-intersection checks are not implemented.
  * @see https://en.wikipedia.org/wiki/Polygon
  * @copyright 2025 Geometry Toolkit
  */
@@ -906,20 +903,21 @@ Use a **Doxygen block** at the very top of each header file to document the file
 
 Use a **Doxygen block** above each namespace declaration in header files to document the namespace's purpose and contents.
 
-#### Required tags
+#### Relevant commands
 
-`@namespace`, `@ingroup`, `@brief`
-
-#### Optional tags
-
-`@details`, `@note`, `@see`
+- `@ingroup`
+- `@namespace`
+- `@brief`
+- `@details`
+- `@note`
+- `@see`
 
 #### Example
 
 ```cpp
 /**
- * @namespace constants
  * @ingroup math
+ * @namespace constants
  * @brief Defines mathematical constants used throughout the project.
  */
 namespace constants {}
@@ -933,20 +931,24 @@ namespace constants {}
 
 Use a **Doxygen block** above each class or struct declaration in header files to document its purpose, behavior, and any important details. This applies to both classes and structs.
 
-#### Required tags
+#### Relevant commands
 
-`@class` **or** `@struct`, `@ingroup`, `@brief`
-
-#### Optional tags
-
-`@details`, `@tparam`, `@note`, `@bug`, `@see`
+- `@ingroup`
+- `@class`
+- `@struct`
+- `@brief`
+- `@details`
+- `@tparam`
+- `@note`
+- `@bug`
+- `@see`
 
 #### Example
 
 ```cpp
 /**
- * @struct Point2
  * @ingroup geometry
+ * @struct Point2
  * @brief Lightweight 2-D point with double precision.
  */
 struct Point2 {
@@ -955,8 +957,8 @@ struct Point2 {
 };
 
 /**
- * @class Polygon
  * @ingroup geometry
+ * @class Polygon
  * @brief Simple 2-D polygon representation.
  * @details Stores vertices in counter-clockwise order.
  * @note Capacity is fixed at construction.
@@ -984,9 +986,12 @@ public:
      * @details Uses the Shoelace formula to compute the area:
      * @formula{polygon-area; A = \frac{1}{2} \sum_{i=1}^{n} (x_i y_{i+1} - x_{i+1} y_i)}
      * where:
-     * - @symbol{A; is the signed area}
-     * - @symbol{x_i \& y_i; are the coordinates of the i-th vertex}
-     * - @symbol{n; is the number of vertices}
+     * @symtable
+     * @symrow{A; is the signed area of the polygon; \meter\squared}
+     * @symrow{n; is the number of vertices; 1}
+     * @symrow{x_i, y_i; are the coordinates of vertex i; \meter}
+     * @symrow{x_{n+1}, y_{n+1}; are the coordinates of vertex 1 (wrap-around); \meter}
+     * @endsymtable
      * @note The area is positive if vertices are in counter-clockwise order. 
      * @return The signed area of the polygon.
      */
@@ -1005,13 +1010,17 @@ private:
 
 Use a **Doxygen block** above each public function or method declaration in header files. This applies to both free functions and member functions of classes or structs.
 
-#### Required tags
+#### Relevant commands
 
-`@brief`, `@param[in]` **or** `param[out]` **or** `param[in,out]`, `@return` (if applicable)
-
-#### Optional tags
-
-`@details`, `@tparam`, `@throws`, `@note`, `@bug`, `@see`
+- `@brief`
+- `@param[in]` **or** `param[out]` **or** `param[in,out]`
+- `@return`
+- `@details`
+- `@tparam`
+- `@throws`
+- `@note`
+- `@bug`
+- `@see`
 
 #### Example
 
@@ -1050,7 +1059,7 @@ Use inline comments with `///<` to document constants and their purpose.
 #### Example
 
 ```cpp
-constexpr double kPi = 3.141592653589793;    ///< Circle ratio @unit{radians}.
+constexpr double kPi = 3.141592653589793;    ///< Circle ratio @unitb{radians}.
 inline constexpr Point2 kOrigin {0.0, 0.0};  ///< Reference point (0,0).
 ```
 
@@ -1062,20 +1071,22 @@ inline constexpr Point2 kOrigin {0.0, 0.0};  ///< Reference point (0,0).
 
 Use a **Doxygen block** above each enum declaration in header files to document the enum type and its enumerators. Each enumerator should have an inline comment describing its purpose.
 
-#### Required tags
+#### Relevant commands
 
-`@enum`, `@ingroup`, `@brief`
-
-#### Optional tags
-
-`@details`, `@note`, `@bug`, `@see`
+- `@ingroup`
+- `@enum`
+- `@brief`
+- `@details`
+- `@note`
+- `@bug`
+- `@see`
 
 #### Example
 
 ```cpp
 /**
- * @enum Axis
  * @ingroup geometry
+ * @enum Axis
  * @brief Principal 3-D axes.
  */
 enum class Axis {
@@ -1093,26 +1104,46 @@ enum class Axis {
 
 Use **Doxygen groups** to organize related namespaces, classes, and functions into logical modules.
 
-Place a **Doxygen block** in a central location (e.g., `mainpage.dox`) to define the group and provide an overview. Each related code element should reference the group using the `@ingroup` command in its own documentation block.
+Large groups must be defined in their own file (e.g., `math.dox`, `geometry.dox`) to avoid cluttering header files. These files should be placed in the `docs/` directory or one of its subdirectories.
 
-#### Required tags
+#### Relevant commands
 
-`@defgroup`, `@brief`
-
-#### Optional tags
-
-`@details`, `@note`, `@see`
+- `@defgroup`
+- `ingroup`
+- `@brief`
+- `@details`
+- `@copydoc`
+- `@see`
 
 #### Example
 
 ```cpp
 /**
  * @defgroup geometry Geometry
+ * @ingroup math
  * @brief Geometry module for 2D and 3D shapes.
  */
 ```
 
 <!-- START mdsplit-ignore -->
+**[Return to Index](#documentation-index)**
+<!-- END mdsplit-ignore -->
+
+<!-- START mdsplit-ignore -->
+## Generating Doxygen Documentation
+
+Use the `Doxyfile` to configure Doxygen settings like input/output directories, file patterns, and more.
+
+Use the `DoxygenLayout.xml` file to customize the layout of the generated documentation.
+
+To generate the documentation, follow these steps:
+1. Ensure [Doxygen](https://www.doxygen.nl/) is installed.
+2. From the project root, run:
+   ```bash
+   doxygen Doxyfile
+   ```
+3. The generated HTML and/or LaTeX documentation will appear in the output directory specified in the `Doxyfile`.
+
 **[Return to Index](#documentation-index)**
 <!-- END mdsplit-ignore -->
 

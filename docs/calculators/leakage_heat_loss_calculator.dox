@@ -1,0 +1,4 @@
+/**
+ * @defgroup leakage_heat_loss_calculator Leakage Heat Loss Calculator
+ * @ingroup heat_loss_calculators
+ */

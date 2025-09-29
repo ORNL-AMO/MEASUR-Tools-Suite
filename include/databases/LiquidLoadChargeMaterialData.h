@@ -1,7 +1,6 @@
-#ifndef TOOLS_SUITE_LIQUIDLOADCHARGEMATERIALDATA_H
-#define TOOLS_SUITE_LIQUIDLOADCHARGEMATERIALDATA_H
+#pragma once
 
-#include "DB.h"
+#include "default_data.h"
 
 class LiquidLoadChargeMaterial;
 
@@ -20,5 +19,3 @@ std::vector<LiquidLoadChargeMaterial> DefaultData::get_default_liquid_load_charg
             {"Fuel Oil No. 6 (Average)", 0.5799, 108, 0.55, 600},
             {"Kerosene", 0.5701, 260, 0.62, 260}};
 }
-
-#endif // TOOLS_SUITE_LIQUIDLOADCHARGEMATERIALDATA_H

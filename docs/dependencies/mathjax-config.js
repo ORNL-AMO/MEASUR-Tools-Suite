@@ -80,6 +80,9 @@ window.MathJax = {
 
                 \DeclareSIUnit{\percent}{\%}
                 \DeclareSIUnit{\unitless}{-}
+
+                \DeclareSIUnit{\standardCubicFeet}{scf}
+                \DeclareSIUnit{\scf}{scf}
             `);
         }
     },

@@ -129,7 +129,7 @@ BRIEF_MEMBER_DESC      = YES
 # brief descriptions will be completely suppressed.
 # The default value is: YES.
 
-REPEAT_BRIEF           = YES
+REPEAT_BRIEF           = NO
 
 # This tag implements a quasi-intelligent brief description abbreviator that is
 # used to form the text in various listings. Each string in this list, if found
@@ -283,19 +283,35 @@ TAB_SIZE               = 4
 # with the commands \{ and \} for these it is advised to use the version @{ and
 # @} or use a double escape (\\{ and \\})
 
-# Use @unit{unit} to create a unit with the unit name and value.
-ALIASES                += "unit{1}=\f$[\unit{\1}]\f$"
-
-# Use @formula{label; equation} to create a formula with label. 
-# The label entered is prefixed with "eq" and can be used to reference the 
-# equation by using: \eqref{eq:label}.
-ALIASES                += "formula{2;}=\f{equation}{\label{eq:\1}\2\f}"
-
-# Use @math{expression} to create a mathematical expression.
+# Use @math{<math expression>} to create a mathematical expression
 ALIASES                += "math{1}=\f$\1\f$"
 
-# Use @symbol{symbol; description} to create a symbol with a description.
-ALIASES                += "symbol{2;}=\f$\1\f$&nbsp;\2"
+# Use the following aliases to create units formatted using siunitx:
+# - @unitr{<unit expression>} to create a regular unit.
+# - @unitb{<unit expression>} to create a bracketed unit.
+# - @unitp{<unit expression>} to create a parenthesized unit.
+ALIASES                += "unitr{1}=\f$\unit{\1}\f$" \
+                          "unitb{1}=\f$[\unit{\1}]\f$" \
+                          "unitp{1}=\f$(\unit{\1})\f$"
+
+# Use @qty{<quantity>; <unit expression>} to create a quantity with a unit.
+ALIASES                += "qty{2;}=\f$\qty{\1}{\2}\f$"
+
+# Use @formula{<label>; <equation>} to create a labeled equation. 
+# The label entered is prefixed with "eq" and can be used to reference the 
+# equation with: \eqref{eq:<label>}.
+ALIASES                += "formula{2;}=\f{equation}{\label{eq:\1}\2\f}"
+
+# Use @symtable, @symrow{<symbol>; <description>; <unit expression>}, and @endsymtable to create
+# a table of symbols with their descriptions and units.
+ALIASES                += "symtable=<table border=\"0\" cellpadding=\"5\" cellspacing=\"0\">" \
+                          "symrow{3;}=<tr><td>\f$\1\f$</td><td>\2 \unitb{\3}</td></tr>" \
+                          "endsymtable=</table>"
+
+# Use @heading{<heading text>} to create a heading followed by a horizontal rule.
+# Use @subheading{<subheading text>} to create a subheading (no horizontal rule).
+ALIASES                += "heading{1}=<h3>\1</h3><hr>" \
+                          "subheading{1}=\par \1"
 
 # Set the OPTIMIZE_OUTPUT_FOR_C tag to YES if your project consists of C sources
 # only. Doxygen will then generate output that is more tailored for C. For
@@ -827,7 +843,7 @@ FILE_VERSION_FILTER    =
 # DoxygenLayout.xml, doxygen will parse it automatically even if the LAYOUT_FILE
 # tag is left empty.
 
-LAYOUT_FILE            =
+LAYOUT_FILE            = DoxygenLayout.xml
 
 # The CITE_BIB_FILES tag can be used to specify one or more bib files containing
 # the reference definitions. This must be a list of .bib files. The .bib
@@ -837,7 +853,7 @@ LAYOUT_FILE            =
 # LATEX_BIB_STYLE. To use this feature you need bibtex and perl available in the
 # search path. See also \cite for info how to create references.
 
-CITE_BIB_FILES         =
+CITE_BIB_FILES         = docs/references.bib
 
 #---------------------------------------------------------------------------
 # Configuration options related to warning and progress messages
@@ -848,7 +864,7 @@ CITE_BIB_FILES         =
 # messages are off.
 # The default value is: NO.
 
-QUIET                  = NO
+QUIET                  = YES
 
 # The WARNINGS tag can be used to turn on/off the warning messages that are
 # generated to standard error (stderr) by doxygen. If WARNINGS is set to YES
@@ -857,14 +873,14 @@ QUIET                  = NO
 # Tip: Turn warnings on while writing the documentation.
 # The default value is: YES.
 
-WARNINGS               = YES
+WARNINGS               = NO
 
 # If the WARN_IF_UNDOCUMENTED tag is set to YES then doxygen will generate
 # warnings for undocumented members. If EXTRACT_ALL is set to YES then this flag
 # will automatically be disabled.
 # The default value is: YES.
 
-WARN_IF_UNDOCUMENTED   = YES
+WARN_IF_UNDOCUMENTED   = NO
 
 # If the WARN_IF_DOC_ERROR tag is set to YES, doxygen will generate warnings for
 # potential errors in the documentation, such as documenting some parameters in
@@ -872,7 +888,7 @@ WARN_IF_UNDOCUMENTED   = YES
 # using markup commands wrongly.
 # The default value is: YES.
 
-WARN_IF_DOC_ERROR      = YES
+WARN_IF_DOC_ERROR      = NO
 
 # If WARN_IF_INCOMPLETE_DOC is set to YES, doxygen will warn about incomplete
 # function parameter documentation. If set to NO, doxygen will accept that some
@@ -955,7 +971,7 @@ WARN_LOGFILE           =
 # spaces. See also FILE_PATTERNS and EXTENSION_MAPPING
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = docs/mainpage.dox include
+INPUT                  = include docs/mainpage.dox docs/calculators/
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
