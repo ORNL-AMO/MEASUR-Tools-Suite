@@ -22,7 +22,7 @@ module.exports = function (config) {
             mode: 'development',
             experiments: { asyncWebAssembly: true },
             resolve: {
-                extensions: ['.js', '.wasm']
+                extensions: ['.js', '.wasm'],
             },
             module: {
                 rules: [
@@ -35,6 +35,14 @@ module.exports = function (config) {
         },
         browsers: ['ChromeHeadless'],
         singleRun: true,
-        reporters: ['progress']
+        reporters: ['progress', 'mocha'],
+        client: {
+            captureConsole: true
+        },
+        browserConsoleLogOptions: {
+            level: "log",
+            format: "%b %T: %m",
+            terminal: true
+        },
     });
 };
