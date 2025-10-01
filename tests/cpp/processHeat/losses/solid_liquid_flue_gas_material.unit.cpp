@@ -2,6 +2,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Calculate SolidLiquidFlueGasMaterial Heat Loss", "[Heat Loss]") {
     auto excessAir =
         SolidLiquidFlueGasMaterial().calculateExcessAirFromFlueGasO2(0.005, 1.0, 75.0, 5.0, 1.0, 9.0, 7.0, 0.0, 1.5);

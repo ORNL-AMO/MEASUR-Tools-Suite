@@ -1,6 +1,8 @@
 #include "treasureHunt/NaturalGasReduction.h"
 
-#include <catch.hpp>
+#include "catch.hpp"
+
+using namespace Catch;
 
 TEST_CASE("Natural Gas Reduction Flow Meter Method", "[NaturalGasReduction][Util]") {
 

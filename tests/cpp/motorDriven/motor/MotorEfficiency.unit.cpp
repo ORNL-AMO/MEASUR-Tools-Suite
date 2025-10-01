@@ -2,6 +2,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Calculate Motor Efficiency - 200 HP", "[MotorEfficiency]") {
     MotorEfficiency motorEff(Motor::LineFrequency::FREQ60, 1785, Motor::EfficiencyClass::ENERGY_EFFICIENT, 200);
     CHECK(motorEff.calculate(0) == Approx(0.0));

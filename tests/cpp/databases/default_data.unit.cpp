@@ -1,6 +1,8 @@
 #include "databases/default_data.h"
 
-#include <catch.hpp>
+#include "catch.hpp"
+
+using namespace Catch;
 
 #include "databases/GasFlueGasMaterialData.h"
 #include "databases/GasLoadChargeMaterialData.h"

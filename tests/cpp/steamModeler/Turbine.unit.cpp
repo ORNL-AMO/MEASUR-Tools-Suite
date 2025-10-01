@@ -1,6 +1,8 @@
 #include "steamModeler/Turbine.h"
 
-#include <catch.hpp>
+#include "catch.hpp"
+
+using namespace Catch;
 
 TEST_CASE("Turbine", "[Turbine]") {
 

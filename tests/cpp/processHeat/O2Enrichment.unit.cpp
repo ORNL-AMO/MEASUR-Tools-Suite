@@ -2,6 +2,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Calculate o2 enrichment", "[Available Heat][O2Enrichment][Calculator]") {
     auto o2Enrichment = O2Enrichment(21, 100, 1800, 1900, 5, 1, 900, 80, 10);
     CHECK(o2Enrichment.getAvailableHeat() == Approx(61.97));

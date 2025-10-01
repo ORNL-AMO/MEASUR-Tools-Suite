@@ -4,6 +4,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 void verifyHeader(const HeaderWithHighestPressure& actualHeader, const HeaderWithHighestPressure& expectedHeader) {
     CHECK(actualHeader.getCondensateReturnTemperature() == expectedHeader.getCondensateReturnTemperature());
     CHECK(actualHeader.getCondensationRecoveryRate() == expectedHeader.getCondensationRecoveryRate());

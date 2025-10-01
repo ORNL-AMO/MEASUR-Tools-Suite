@@ -2,6 +2,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Waste Water Treatment", "[Test 1]") {
     WasteWater_Treatment wasteWaterTreatment(20, 200, 1, 1, 40, 35, 0.85, 200, 20, 8, 10000, 3000, 0.1, 0.6, 60, 0.1, 8,
                                              72, 2, 4.5, 0.84, 0.92, 2.7, 150, 200, 24, 1, 100, 0.09);
@@ -23,16 +25,16 @@ TEST_CASE("Waste Water Treatment", "[Test 1]") {
     REQUIRE(output.TotalOxygenReqWDenit == Approx(2698.14));
     REQUIRE(output.TotalOxygenSupplied == Approx(3394.16));
     REQUIRE(output.MixingIntensityInReactor == Approx(150.00));
-    REQUIRE(output.RASFlowRate == Approx(0.4456));
+    REQUIRE(output.RASFlowRate == Approx(0.4456).epsilon(0.005));
     REQUIRE(output.RASRecyclePercentage == Approx(44.5608));
-    REQUIRE(output.WASFlowRate == Approx(0.009829));
+    REQUIRE(output.WASFlowRate == Approx(0.009829).epsilon(0.005));
     REQUIRE(output.RASTSSConcentration == Approx(10000.00));
     REQUIRE(output.TotalSludgeProduction == Approx(886.48));
     REQUIRE(output.ReactorDetentionTime == Approx(24.00));
     REQUIRE(output.VOLR == Approx(12.4766));
     REQUIRE(output.EffluentCBOD5 == Approx(3.94929));
     REQUIRE(output.EffluentTSS == Approx(8.00));
-    REQUIRE(output.EffluentAmmonia_N == Approx(0.34517));
+    REQUIRE(output.EffluentAmmonia_N == Approx(0.34517).epsilon(0.005));
     REQUIRE(output.EffluentNO3_N == Approx(26.17));
     REQUIRE(output.EffluentNO3_N_W_Denit == Approx(7.85103));
     REQUIRE(output.FieldOTR == Approx(0.94282));

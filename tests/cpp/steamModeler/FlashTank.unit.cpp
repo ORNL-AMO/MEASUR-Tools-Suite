@@ -2,6 +2,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Calculate the Inlet Water Energy Flow #1", "[Inlet Water Energy Flow][FlashTank][steamModeler]") {
     CHECK(FlashTank(4.54484, SteamProperties::ThermodynamicQuantity::ENTHALPY, 2000, 36133, 3.3884)
               .getInletWaterProperties()

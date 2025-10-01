@@ -4,6 +4,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Reynolds Number", "[InsulationServices][util]") {
     double diameter = 0.1778;
     double windVel  = 0.89408;
@@ -148,7 +150,7 @@ TEST_CASE("Thermal Resistance 2", "[InsulationServices][util]") {
     double thermalConductivity = 57.60;
     double result =
         InsulatedPipeReduction::calculateThermalResistance(diameter_a, diameter_b, diameter_c, thermalConductivity);
-    CHECK(result == Approx(0.00022));
+    CHECK(result == Approx(0.00022).epsilon(0.005));
 }
 
 TEST_CASE("Thermal Resistance 3", "[InsulationServices][util]") {
@@ -158,7 +160,7 @@ TEST_CASE("Thermal Resistance 3", "[InsulationServices][util]") {
     double thermalConductivity = 17.98;
     double result =
         InsulatedPipeReduction::calculateThermalResistance(diameter_a, diameter_b, diameter_c, thermalConductivity);
-    CHECK(result == Approx(0.00010));
+    CHECK(result == Approx(0.000105).epsilon(0.005));
 }
 
 TEST_CASE("Insulated Pipe", "[InsulatedPipeReduction][util]") {

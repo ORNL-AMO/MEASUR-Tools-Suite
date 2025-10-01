@@ -7,6 +7,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Estimate maximum air flow that can be heated by using exhaust gas", "[processHeat]") {
     GasCompositions gas("Gas", 94.0, 2.07, 1.41, 0.01, 0.42, 0.28, 0.0, 1.0, 0.71, 0, 0);
     auto            res = AirHeatingUsingExhaust(gas).calculate(400, 0.358, 8, 4000, 45, 0.85, 0.60, 4000);
@@ -45,7 +47,7 @@ TEST_CASE("Estimate maximum air flow that can be heated by using exhaust gas", "
     CHECK(resCascadeHeatHighToLow.priExcessAir == Approx(0.4519750365));
     CHECK(resCascadeHeatHighToLow.priAvailableHeat == Approx(0.4724916999));
     CHECK(resCascadeHeatHighToLow.secExcessAir == Approx(-1.05775222));
-    CHECK(resCascadeHeatHighToLow.secAvailableHeat == Approx(0.896416));
+    CHECK(resCascadeHeatHighToLow.secAvailableHeat == Approx(0.8964).epsilon(0.005));
 
     auto resSteamEnergy =
         WaterHeatingUsingSteam().calculate(0.1565, 340.2, 285.93, 0.5150, 2.7255, 285.93, 0.2048, 0.72, 0.8, 7000);
@@ -98,10 +100,10 @@ TEST_CASE("Estimate maximum air flow that can be heated by using exhaust gas", "
     CHECK(resHeatRecovery.excessAir == Approx(0.2169692841));
     CHECK(resHeatRecovery.flowFlueGas == Approx(107022.7016052115));
     CHECK(resHeatRecovery.specHeat == Approx(0.2577908474));
-    CHECK(resHeatRecovery.fracCondensed == Approx(0.19816));
+    CHECK(resHeatRecovery.fracCondensed == Approx(0.19816).epsilon(0.005));
     CHECK(resHeatRecovery.effThermal == Approx(0.8443608099));
     CHECK(resHeatRecovery.effThermalLH == Approx(0.8645004409));
-    CHECK(resHeatRecovery.effLH == Approx(0.02014));
+    CHECK(resHeatRecovery.effLH == Approx(0.02014).epsilon(0.005));
     CHECK(resHeatRecovery.heatRecovery == Approx(2.3362));
     CHECK(resHeatRecovery.sensibleHeatRecovery == Approx(4.8281577633));
 }

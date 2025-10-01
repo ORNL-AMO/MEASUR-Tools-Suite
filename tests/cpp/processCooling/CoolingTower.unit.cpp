@@ -2,7 +2,9 @@
 
 #include <tuple>
 
-#include <catch.hpp>
+#include "catch.hpp"
+
+using namespace Catch;
 
 TEST_CASE("Cooling Tower Makeup Water Calculator", "[CoolingTower][Chillers]") {
     auto const test = [](const std::tuple<double, double, int, double, int, double, int, double>& input,

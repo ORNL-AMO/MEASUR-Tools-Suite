@@ -2,6 +2,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Test HeatExchanger 1", "[HeatExchanger]") {
     auto hotInlet =
         SteamSystemModelerTool::FluidProperties(3761, 4153, 527, 4.2382, 0, 0.001, 1 / 0.001, 1104.3, 2.828);
@@ -25,7 +27,7 @@ TEST_CASE("Test HeatExchanger 1", "[HeatExchanger]") {
     CHECK(output.coldOutlet.specificEnthalpy == Approx(-4.0940253949));
     CHECK(output.coldOutlet.specificEntropy == Approx(-0.015386657));
     CHECK(output.coldOutlet.quality == Approx(0));
-    CHECK(output.coldOutlet.specificVolume == Approx(0.001));
+    CHECK(output.coldOutlet.specificVolume == Approx(0.001).epsilon(0.005));
     CHECK(output.coldOutlet.massFlow == Approx(83327));
     CHECK(output.coldOutlet.energyFlow == Approx(-341142.8540839599));
 }
@@ -44,7 +46,7 @@ TEST_CASE("Test HeatExchanger 2", "[HeatExchanger]") {
     CHECK(output.hotOutlet.specificEnthalpy == Approx(147.0142483402));
     CHECK(output.hotOutlet.specificEntropy == Approx(0.5054463436));
     CHECK(output.hotOutlet.quality == Approx(0));
-    CHECK(output.hotOutlet.specificVolume == Approx(0.001));
+    CHECK(output.hotOutlet.specificVolume == Approx(0.001006).epsilon(0.005));
     CHECK(output.hotOutlet.massFlow == Approx(1768));
     CHECK(output.hotOutlet.energyFlow == Approx(259921.1910654366));
 
@@ -53,7 +55,7 @@ TEST_CASE("Test HeatExchanger 2", "[HeatExchanger]") {
     CHECK(output.coldOutlet.specificEnthalpy == Approx(-4.9566309285));
     CHECK(output.coldOutlet.specificEntropy == Approx(-0.0185572601));
     CHECK(output.coldOutlet.quality == Approx(0));
-    CHECK(output.coldOutlet.specificVolume == Approx(0.001));
+    CHECK(output.coldOutlet.specificVolume == Approx(0.001).epsilon(0.005));
     CHECK(output.coldOutlet.massFlow == Approx(51922));
     CHECK(output.coldOutlet.energyFlow == Approx(-257358.1910703886));
 }

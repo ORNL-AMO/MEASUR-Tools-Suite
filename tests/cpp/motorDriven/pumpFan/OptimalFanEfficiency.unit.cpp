@@ -2,6 +2,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("OptimalFanEfficiency", "[OptimalFanEfficiency]") {
     CHECK(Approx(
               OptimalFanEfficiency(OptimalFanEfficiency::FanType::AirfoilSISW, 1180, 40000, -9, 1, .995).calculate()) ==

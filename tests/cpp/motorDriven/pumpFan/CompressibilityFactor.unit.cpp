@@ -2,6 +2,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Calculate Compressibility Factor", "[Fans][Compressibility]") {
     CHECK(CompressibilityFactor(300, -8.5, 3, 29, 1000, 1.4).calculate() == Approx(1.5795535958));
     CHECK(CompressibilityFactor(566, -16.36, 1.1, 29.36, 129691, 1.4).calculate() == Approx(0.9879934727));

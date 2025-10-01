@@ -1,6 +1,8 @@
 #include "processHeat/losses/wall_heat_loss.h"
 
-#include <catch.hpp>
+#include "catch.hpp"
+
+using namespace Catch;
 
 TEST_CASE("Calculate total heat loss for furnace walls", "[Process Heating][Losses][Wall]") {
     double surface_area        = 500.0; // ft²

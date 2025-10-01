@@ -1,6 +1,8 @@
 #include "treasureHunt/CompressedAirPressureReduction.h"
 
-#include <catch.hpp>
+#include "catch.hpp"
+
+using namespace Catch;
 
 TEST_CASE("Compressed Air Pressure Reduction Baseline", "[CompressedAirPressureReduction][Util]") {
     std::vector<CompressedAirPressureReductionInput> compressedAirPressureReductionInputVec = {

@@ -2,6 +2,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Calculate Fluid Power for Pumps and Fans", "[FluidPower]") {
     CHECK(FluidPower(1.02, 1000, 280.0).calculate() == Approx(53.7836814443));
     CHECK(FluidPower(1.02, 1200, 280.0).calculate() == Approx(64.5404177332));

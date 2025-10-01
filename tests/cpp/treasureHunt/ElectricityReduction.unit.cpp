@@ -1,6 +1,8 @@
 #include "treasureHunt/ElectricityReduction.h"
 
-#include <catch.hpp>
+#include "catch.hpp"
+
+using namespace Catch;
 
 TEST_CASE("Electricity Reduction Multimeter Reading - 3 Phases", "[ElectricityReduction][util]") {
 

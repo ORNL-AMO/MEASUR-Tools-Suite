@@ -1,8 +1,9 @@
 #include "compressedAir/CompressedAirLeakSurvey.h"
-
-#include <catch.hpp>
-
 #include "compressedAir/BagMethod.h"
+
+#include "catch.hpp"
+
+using namespace Catch;
 
 TEST_CASE("Compressed Air Leak Survey Estimate Method and Electricity", "[CompressedAirLeakSurvey][Util]") {
     std::vector<CompressedAirLeakSurveyInput> compressedAirLeakSurveyInputVec = {CompressedAirLeakSurveyInput(

@@ -2,6 +2,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 auto validate = [](PowerFactor::Output const& results, PowerFactor::Output expected) {
     CHECK(Approx(results.realDemand) == expected.realDemand);
     CHECK(Approx(results.demandPenalty) == expected.demandPenalty);

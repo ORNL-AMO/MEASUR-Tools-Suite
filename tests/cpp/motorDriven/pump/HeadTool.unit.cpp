@@ -2,6 +2,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Calculate Pump Head with and without suction tanks", "[HeadToolCalculations]") {
     const double flowRate = 2000;
     auto         res      = HeadToolSuctionTank(1, flowRate, 17.9, 115, 0, 1, 10, 124, 0, 1).calculate();

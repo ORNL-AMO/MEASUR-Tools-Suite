@@ -2,6 +2,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Calculate the Flow(1)", "[Flow][FlowCalculationsEnergyUse][Calculator]") {
     CHECK(FlowCalculationsEnergyUse(FlowCalculationsEnergyUse::Gas::HELIUM, 0.14, 5, 9,
                                     FlowCalculationsEnergyUse::Section::SHARP_EDGE, 0.6, 7325, 52, 63, 26, 16)
