@@ -145,6 +145,50 @@ function motorData(defaultData){
     motorDataLog(listItems.get(count-1));
 }
 
+function compressorDataLog(item){
+    logMessage(item.ID() + ', ' + ', ' + item.idCompType() + ', ' +
+        item.model() + ', ' + item.hp()  + ', ' + item.ratedCapacity() + ', ' +
+        item.ratedPressure() + ', ' + item.maxFullFlowPressure()  + ', ' + item.idControlType() + ', ' +
+        item.unloadPoint() + ', ' + item.minULSumpPressure()  + ', ' + item.blowdownTime() + ', ' +
+        item.unloadSteps() + ', ' + item.modulatingPressRange()  + ', ' + item.powerFLBHP() + ', ' +
+        item.totPackageInputPower() + ', ' + item.specPackagePower()  + ', ' + item.noLoadPowerFM() + ', ' +
+        item.noLoadPowerUL() + ', ' + item.maxSurgePressure()  + ', ' + item.maxPressSurgeFlow() + ', ' +
+        item.minStonewallPressure() + ', ' + item.minPressStonewallFlow()  + ', ' + item.designSurgeFlow() + ', ' +
+        item.designInTemp() + ', ' + item.designInPressure()  + ', ' + item.ampsFL() + ', ' +
+        item.effFL());
+}
+
+function compressorsData(defaultData){
+    logMessage('Compressors Data', true);
+
+    let listItems = defaultData.getCompressorData();
+    let count = listItems.size();
+    testNumberValue(count, 1630, "Select All Default Data");
+
+    logMessage('Default Data (start - end):');
+    compressorDataLog(listItems.get(0));
+    compressorDataLog(listItems.get(count-1));
+}
+
+function lightingDataLog(item){
+    logMessage(item.ID() + ', ' + item.category() + ', ' + item.type() + ', ' +
+        item.lampsPerFixture() + ', ' + item.lampWattage()  + ', ' + item.lampOutput() + ', ' +
+        item.lampLife() + ', ' + item.lampCRI()  + ', ' + item.coefficientOfUtilization() + ', ' +
+        item.ballastFactor() + ', ' + item.lumenDegradationFactor());
+}
+
+function lightingData(defaultData){
+    logMessage('Lighting Data', true);
+
+    let listItems = defaultData.getLightingData();
+    let count = listItems.size();
+    testNumberValue(count, 74, "Select All Default Data");
+
+    logMessage('Default Data (start - end):');
+    lightingDataLog(listItems.get(0));
+    lightingDataLog(listItems.get(count-1));
+}
+
 function db(){
     logMessage('DB Default Data Test:', true);
 
@@ -158,6 +202,8 @@ function db(){
     wallLossesSurface(instance);
     atmosphereData(instance);
     motorData(instance);
+    compressorsData(instance);
+    lightingData(instance);
 
     instance.delete();
 
