@@ -8,8 +8,6 @@
 #ifndef MEASUR_TOOLS_SUITE_LIGHTING_DATA_DB_H
 #define MEASUR_TOOLS_SUITE_LIGHTING_DATA_DB_H
 
-#include "DB.h"
-
 class LightingData;
 
 std::vector<LightingData> DefaultData::get_default_lighting_data() {

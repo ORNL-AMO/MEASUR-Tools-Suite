@@ -8,8 +8,6 @@
 #ifndef MEASUR_TOOLS_SUITE_COMPRESSORS_DATA_DB_H
 #define MEASUR_TOOLS_SUITE_COMPRESSORS_DATA_DB_H
 
-#include "DB.h"
-
 class CompressorsData;
 
 std::vector<CompressorsData> DefaultData::get_default_compressor_data() {
