@@ -26,5 +26,7 @@ EMSCRIPTEN_BINDINGS(db_class) {
         .function("getLiquidLoadChargeMaterials", &DefaultData::getLiquidLoadChargeMaterials)
         .function("getSolidLiquidFlueGasMaterials", &DefaultData::getSolidLiquidFlueGasMaterials)
         .function("getGasFlueGasMaterials", &DefaultData::getGasFlueGasMaterials)
-        .function("getMotorData", &DefaultData::getMotorData);
+        .function("getMotorData", &DefaultData::getMotorData)
+        .function("getCompressorData", &DefaultData::getCompressorData)
+        .function("getLightingData", &DefaultData::getLightingData);
 }
