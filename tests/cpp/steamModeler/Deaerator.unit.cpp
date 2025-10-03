@@ -2,6 +2,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Calculate the Feedwater Energy Flow for Deaerator calculator #1",
           "[Feedwater Energy Flow][Deaerator][steamModeler]") {
     CHECK(Deaerator(0.36, 0.2, 40279, 0.15, SteamProperties::ThermodynamicQuantity::TEMPERATURE, 344.55, 0.4,

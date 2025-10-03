@@ -2,6 +2,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Calculate Boiler properties", "[Boiler][steamModeler]") {
     auto b = Boiler(10, 85, 2, 20, SteamProperties::ThermodynamicQuantity::ENTHALPY, 2000, 45);
     CHECK(b.getSteamProperties().energyFlow == Approx(110753.3647508802));

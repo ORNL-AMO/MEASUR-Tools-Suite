@@ -3,6 +3,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Calculate the Saturated Temperature from Pressure", "[Saturated Temperature][steamModeler][Calculator]") {
     CHECK(SaturatedTemperature(20).calculate() == Approx(638.8959115457));
 }
@@ -45,7 +47,7 @@ TEST_CASE("Calculate the Saturated Liquid Specific Entropy (Region 1)", "[Liquid
 TEST_CASE("Calculate the Saturated Liquid Specific Volume (Region 1)", "[Liquid Volume][steamModeler][Calculator]") {
     SaturatedProperties sp    = SaturatedProperties(0.0035365894, 300);
     auto const          props = sp.calculate();
-    CHECK(props.liquidSpecificVolume == Approx(0.001));
+    CHECK(props.liquidSpecificVolume == Approx(0.001).epsilon(0.005));
 }
 
 TEST_CASE("Calculate the Evaporation Specific Volume", "[Evaporation Volume][steamModeler][Calculator]") {

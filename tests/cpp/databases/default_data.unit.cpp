@@ -1,6 +1,8 @@
 #include "databases/default_data.h"
 
-#include <catch.hpp>
+#include "catch.hpp"
+
+using namespace Catch;
 
 #include "databases/GasFlueGasMaterialData.h"
 #include "databases/GasLoadChargeMaterialData.h"
@@ -495,7 +497,7 @@ TEST_CASE( "DefaultData - getCompressorData", "[databases]" ) {
         CHECK("5 hp/3.7 kW" == outputFirstCD.model());
         CHECK(85 == outputFirstCD.effFL());
 
-        auto length = outputs.size();
+        auto length = (int)outputs.size();
         auto const& outputLastCD = outputs[length - 1];
         CHECK(length == outputLastCD.ID());
         CHECK("400 hp/300 kW" == outputLastCD.model());
@@ -517,7 +519,7 @@ TEST_CASE( "DefaultData - getLightingData", "[databases]" ) {
         CHECK("175-W Metal Halide" == outputFirstLS.type());
         CHECK(0.8333 == outputFirstLS.lumenDegradationFactor());
 
-        auto length = outputs.size();
+        auto length = (int)outputs.size();
         auto const& outputLastLS = outputs[length - 1];
         CHECK(length == outputLastLS.ID());
         CHECK("LED Troffers" == outputLastLS.category());

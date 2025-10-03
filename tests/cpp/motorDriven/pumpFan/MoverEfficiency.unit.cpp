@@ -1,9 +1,10 @@
 #include "motorDriven/pumpFan/MoverEfficiency.h"
 
 #include <array>
-#include <unordered_map>
 
 #include "catch.hpp"
+
+using namespace Catch;
 
 TEST_CASE("Pump efficiency", "[Pump][pump efficiency]") {
     CHECK(MoverEfficiency(0.5, 1000, 125, 125).calculate() == Approx(0.126218641));

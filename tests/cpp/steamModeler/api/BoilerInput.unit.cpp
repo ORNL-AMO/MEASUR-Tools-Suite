@@ -2,6 +2,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("boilerInputConstructor", "[boiler input constructor]") {
     auto actual = BoilerInput(1, 1, 1, 1, true, true, 1, 1, 1, 1);
     CHECK(actual.getFuelType() == 1);

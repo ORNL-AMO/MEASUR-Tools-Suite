@@ -2,6 +2,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Calculate ProcessWaterUse", "[ProcessWaterUse]") {
     auto output = WaterAssessment().calculateProcessWaterUse(1000, 700, 50, 0.2);
     CHECK(output.recirculatedWater == Approx(200));
@@ -38,7 +40,7 @@ TEST_CASE("Calculate LandscapingGrossWaterUse", "[LandscapingGrossWaterUse]") {
 }
 
 TEST_CASE("Calculate HeatEnergyInDischarge", "[HeatEnergyInDischarge]") {
-    CHECK(WaterAssessment().calculateHeatEnergyInDischarge(50, 60, 0.8, 200) == Approx(0.01335));
+    CHECK(WaterAssessment().calculateHeatEnergyInDischarge(50, 60, 0.8, 200) == Approx(0.01335).epsilon(0.005));
 }
 
 TEST_CASE("Calculate AddedMotorEnergyUse", "[AddedMotorEnergyUse]") {

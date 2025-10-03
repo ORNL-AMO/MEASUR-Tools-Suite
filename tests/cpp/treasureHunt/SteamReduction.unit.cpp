@@ -1,6 +1,8 @@
 #include "treasureHunt/SteamReduction.h"
 
-#include <catch.hpp>
+#include "catch.hpp"
+
+using namespace Catch;
 
 TEST_CASE("Steam Reduction Flow Meter Method", "[SteamReduction][Util]") {
     std::vector<SteamReductionInput> steamReductionInputVec = {SteamReductionInput(

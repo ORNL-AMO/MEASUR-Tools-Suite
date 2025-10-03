@@ -2,6 +2,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Calculate Heat Loss for opening Losses", "[Heat Loss]") {
     // Circular
     REQUIRE(OpeningLosses(0.95, 12.0, 9.0, 1.33, 75.0, 1600.0, 100.0, 0.70).getHeatLoss() ==

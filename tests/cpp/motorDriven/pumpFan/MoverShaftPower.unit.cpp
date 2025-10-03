@@ -4,6 +4,8 @@
 #include <unordered_map>
 
 #include "catch.hpp"
+
+using namespace Catch;
 #include "motorDriven/pump/Pump.h"
 
 TEST_CASE("Pump shaft power", "[Pump][pump shaft power][drive]") {

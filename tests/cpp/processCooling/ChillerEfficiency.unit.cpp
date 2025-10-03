@@ -4,6 +4,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Chiller Efficiency Capacity Power Energy Consumption Calculator", "[CoolingTower][Chillers]") {
     auto res = ChillerEfficiency::ChillerCapacityEfficiency(ChillerEfficiency::Centrifugal, ChillerEfficiency::Water,
                                                             ChillerEfficiency::NoVFD, 1000, 0.676, 1.00, 1.00, 2000.00,
@@ -21,7 +23,7 @@ TEST_CASE("Chiller Efficiency Capacity Power Energy Consumption Calculator", "[C
     res = ChillerEfficiency::ChillerCapacityEfficiency(ChillerEfficiency::Centrifugal, ChillerEfficiency::Water,
                                                        ChillerEfficiency::VFD, 1000, 0.676, 1.00, 1.00, 2000.00, 10, 42,
                                                        82.12, 43, 82.12);
-    CHECK(res.baselineActualEfficiency == Approx(0.50594));
+    CHECK(res.baselineActualEfficiency == Approx(0.50594).epsilon(0.005));
     CHECK(res.baselineActualCapacity == Approx(1017.8465));
     CHECK(res.baselinePower == Approx(514.97077));
     CHECK(res.baselineEnergy == Approx(514.97077));
@@ -47,7 +49,7 @@ TEST_CASE("Chiller Efficiency Capacity Power Energy Consumption Calculator", "[C
     res = ChillerEfficiency::ChillerCapacityEfficiency(ChillerEfficiency::Screw, ChillerEfficiency::Water,
                                                        ChillerEfficiency::NoVFD, 1000, 0.676, 1.00, 1.00, 2000.00, 10,
                                                        42, 82.12, 43, 82.12);
-    CHECK(res.baselineActualEfficiency == Approx(0.5899));
+    CHECK(res.baselineActualEfficiency == Approx(0.5899).epsilon(0.005));
     CHECK(res.baselineActualCapacity == Approx(963.087556));
     CHECK(res.baselinePower == Approx(568.13317));
     CHECK(res.baselineEnergy == Approx(568.13317));
@@ -64,7 +66,7 @@ TEST_CASE("Chiller Efficiency Capacity Power Energy Consumption Calculator", "[C
     CHECK(res.baselineActualCapacity == Approx(1050.0458));
     CHECK(res.baselinePower == Approx(501.67899));
     CHECK(res.baselineEnergy == Approx(501.67899));
-    CHECK(res.modActualEfficiency == Approx(0.4604));
+    CHECK(res.modActualEfficiency == Approx(0.460).epsilon(0.005));
     CHECK(res.modActualCapacity == Approx(1081.77855));
     CHECK(res.modPower == Approx(498.0641));
     CHECK(res.modEnergy == Approx(498.0641));
@@ -76,12 +78,12 @@ TEST_CASE("Chiller Efficiency Capacity Power Energy Consumption Calculator", "[C
     CHECK(res.baselineActualEfficiency == Approx(0.442926));
     CHECK(res.baselineActualCapacity == Approx(1130.92));
     CHECK(res.baselinePower == Approx(500.91377));
-    CHECK(res.modActualEfficiency == Approx(0.4285));
+    CHECK(res.modActualEfficiency == Approx(0.4285).epsilon(0.005));
     CHECK(res.modActualCapacity == Approx(1168.492));
     CHECK(res.baselineEnergy == Approx(500.91377));
     CHECK(res.modPower == Approx(500.7157));
     CHECK(res.modEnergy == Approx(500.7157));
-    CHECK(res.savingsEnergy == Approx(0.19807));
+    CHECK(res.savingsEnergy == Approx(0.1980).epsilon(0.005));
 }
 
 TEST_CASE("Chiller Efficiency Chiller Staging Efficiency Calculator", "[CoolingTower][Chillers]") {

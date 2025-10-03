@@ -16,7 +16,6 @@ class LiquidLoadChargeMaterial;
 class GasLoadChargeMaterial;
 class GasCompositions;
 class SolidLiquidFlueGasMaterial;
-class WallLosses;
 class MotorData;
 class CompressorsData;
 class LightingData;

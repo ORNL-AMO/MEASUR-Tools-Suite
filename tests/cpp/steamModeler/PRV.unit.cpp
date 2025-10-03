@@ -2,6 +2,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Calculate the Inlet Energy Flow without Desuperheating", "[Inlet Energy Flow][PRV][steamModeler]") {
     CHECK(PrvWithoutDesuperheating(4.8794, SteamProperties::ThermodynamicQuantity::TEMPERATURE, 691.5, 37970, 4.0823)
               .getInletEnergyFlow() == Approx(123147934.9316));

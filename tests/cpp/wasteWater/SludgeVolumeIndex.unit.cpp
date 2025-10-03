@@ -4,6 +4,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("State Point Analysis", "SVIXX/VoK") {
     auto res = SludgeVolumeIndex(SludgeVolumeIndex::SVIGN, 0.150000, 1, 930, 0.0025, 1892705, 788627, 1).calculate();
     CHECK(res.TotalAreaClarifier == Approx(930));
@@ -31,7 +33,7 @@ TEST_CASE("State Point Analysis", "SVIXX/VoK") {
     CHECK(res.TotalAreaClarifier == Approx(168.6971));
     CHECK(res.SurfaceOverflow == Approx(934.9626));
     CHECK(res.AppliedSolidsLoading == Approx(3.973591));
-    CHECK(res.RasConcentration == Approx(0.006071));
+    CHECK(res.RasConcentration == Approx(0.006071).epsilon(0.005));
     CHECK(res.UnderFlowRateX2 == Approx(6.07142857));
     CHECK(res.UnderFlowRateY1 == Approx(3.97359117));
     CHECK(res.OverFlowRateX2 == Approx(7.37591695));

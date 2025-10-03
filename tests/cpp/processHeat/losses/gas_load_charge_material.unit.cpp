@@ -1,6 +1,8 @@
 #include "processHeat/losses/gas_load_charge_material.h"
 
 #include "catch.hpp"
+
+using namespace Catch;
 #include "processHeat/losses/load_charge_material.h"
 
 TEST_CASE("Calculate Total Heat for Charge Material - Gas", "[Total Heat][ChargeMaterial][Gas]") {

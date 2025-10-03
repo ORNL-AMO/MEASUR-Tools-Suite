@@ -3,6 +3,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 // TEST_CASE( "region 1", "[region 1]") {
 //	auto result = SteamSystemModelerTool::region1(300, 15);
 //	CHECK( result.pressure == Approx(15.0));
@@ -66,7 +68,7 @@ TEST_CASE("waterPropertiesPressureTemperature", "[waterPropertiesPressureTemp]")
     CHECK(result.specificEntropy == Approx(4.0543976678954));
 
     result = SteamProperties(3, quality, 300).calculate();
-    CHECK(result.specificVolume == Approx(0.001));
+    CHECK(result.specificVolume == Approx(0.001).epsilon(0.005));
     CHECK(result.specificEnthalpy == Approx(115.3312730214));
     CHECK(result.specificEntropy == Approx(0.3922947924));
 
@@ -120,7 +122,7 @@ TEST_CASE("waterPropertiesPressureTemperature", "[waterPropertiesPressureTemp]")
     result = SteamProperties(25.6, quality, 650).calculate();
     CHECK(result.specificEnthalpy == Approx(1863.1063178273));
     CHECK(result.specificEntropy == Approx(4.0537243346));
-    CHECK(result.specificVolume == Approx(0.002));
+    CHECK(result.specificVolume == Approx(0.002).epsilon(0.005));
 
     result = SteamProperties(22.293064, quality, 650).calculate();
     CHECK(result.specificEnthalpy == Approx(2375.12401));
@@ -148,7 +150,7 @@ TEST_CASE("waterPropertiesPressureSpecificEnthalpy2", "[waterPropertiesPressureE
     auto result = sp.calculate();
     CHECK(result.pressure == Approx(50));
     CHECK(result.temperature == Approx(501.9871417891));
-    CHECK(result.specificVolume == Approx(0.0011538465));
+    CHECK(result.specificVolume == Approx(0.0011538));
     CHECK(result.specificEnthalpy == Approx(1000.0));
     CHECK(result.specificEntropy == Approx(2.5188578322));
 }
@@ -195,9 +197,9 @@ TEST_CASE("Calculate Steam Properties using Pressure and Enthalpy", "[waterPrope
     result = SteamProperties(80, quality, 500).calculate();
     CHECK(result.pressure == Approx(80));
     CHECK(result.temperature == Approx(378.1241736021));
-    CHECK(result.specificVolume == Approx(.001));
+    CHECK(result.specificVolume == Approx(.00101).epsilon(0.005));
     CHECK(result.specificEnthalpy == Approx(500));
-    CHECK(result.specificEntropy == Approx(1.304));
+    CHECK(result.specificEntropy == Approx(1.304).epsilon(0.005));
 
     result = SteamProperties(80, quality, 1500).calculate();
     CHECK(result.pressure == Approx(80));

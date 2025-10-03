@@ -2,6 +2,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Calculate the Current Excess Air", "[Current Excess Air][EfficiencyImprovement][Calculator]") {
     CHECK(EfficiencyImprovement(6, 2, 1600, 1200, 80, 750, 10).getCurrentExcessAir() == Approx(35.80));
 }

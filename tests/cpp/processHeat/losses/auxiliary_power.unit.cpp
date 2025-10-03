@@ -2,6 +2,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Calculate power used for ??", "[Power Used]") {
     CHECK(AuxiliaryPower(3, 460, 19, 0.85, 100).getPowerUsed() == Approx(43905.3405494047));
     CHECK(AuxiliaryPower(3, 510, 19, 0.85, 100).getPowerUsed() == Approx(48677.66017434));

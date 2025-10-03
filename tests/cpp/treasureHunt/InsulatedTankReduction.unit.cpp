@@ -4,6 +4,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Insulated Tank", "[InsulatedTankReduction][util]") {
     int    operatingHours         = 8760;
     double tankHeight             = 10;

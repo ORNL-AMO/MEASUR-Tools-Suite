@@ -4,6 +4,8 @@
 #include <unordered_map>
 
 #include "catch.hpp"
+
+using namespace Catch;
 #include "motorDriven/motor/EstimateFLA.h"
 #include "motorDriven/pump/Pump.h"
 
@@ -263,8 +265,9 @@ TEST_CASE("PumpResults2 v-belt type", "[PumpResults]") {
     PumpResult      pumpResult(pump, motor, fd, operating_hours, cost_kw_hour);
 
     auto const& ex  = pumpResult.calculateExisting();
-    auto const& mod = pumpResult.calculateModified();
+    CHECK(ex.motorPower == Approx(150.0));
 
+    auto const& mod = pumpResult.calculateModified();
     CHECK(mod.pumpEfficiency * 100 == Approx(62.3));
     CHECK(mod.motorRatedPower == Approx(200));
     CHECK(mod.motorShaftPower == Approx(200.507050278));
@@ -303,8 +306,9 @@ TEST_CASE("PumpResults notched v belt", "[PumpResults]") {
     PumpResult      pumpResult(pump, motor, fd, operating_hours, cost_kw_hour);
 
     auto const& ex  = pumpResult.calculateExisting();
-    auto const& mod = pumpResult.calculateModified();
+    CHECK(ex.motorPower == Approx(150.0));
 
+    auto const& mod = pumpResult.calculateModified();
     CHECK(mod.pumpEfficiency * 100 == Approx(62.3));
     CHECK(mod.motorRatedPower == Approx(200));
     CHECK(mod.motorShaftPower == Approx(198.2102452363));
@@ -343,8 +347,9 @@ TEST_CASE("PumpResults sync belt", "[PumpResults]") {
     PumpResult      pumpResult(pump, motor, fd, operating_hours, cost_kw_hour);
 
     auto const& ex  = pumpResult.calculateExisting();
-    auto const& mod = pumpResult.calculateModified();
+    CHECK(ex.motorPower == Approx(150.0));
 
+    auto const& mod = pumpResult.calculateModified();
     CHECK(mod.motorShaftPower == Approx(194.767));
     CHECK(mod.moverShaftPower == Approx(192.468232632));
     CHECK(mod.motorPower == Approx(151.8722277599));

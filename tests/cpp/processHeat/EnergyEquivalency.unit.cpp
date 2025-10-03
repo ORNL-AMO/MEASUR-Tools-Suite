@@ -2,6 +2,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Calculate the Equivalent Electrical Heat Input", "[Electrical Heat Input][EnergyEquivalency][Calculator]") {
     CHECK(ElectricalEnergyEquivalency(6.59, 50, 87.3).getElectricalHeatInput() == Approx(3371.2686785819));
 }

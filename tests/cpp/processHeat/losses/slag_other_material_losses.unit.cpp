@@ -3,6 +3,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Calculate SlagOtherMaterialLosses Heat Loss", "[Heat Loss]") {
     auto aluminumSpecificHeat = 0.247910198232625;
     auto slag                 = SlagOtherMaterialLosses(3, 500, 550, aluminumSpecificHeat, 1.0);

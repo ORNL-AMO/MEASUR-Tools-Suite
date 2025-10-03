@@ -2,7 +2,9 @@
 
 #include <iostream>
 
-#include <catch.hpp>
+#include "catch.hpp"
+
+using namespace Catch;
 
 TEST_CASE("Water Reduction Metered Flow Data", "[WaterReduction][util]") {
     std::vector<WaterReductionInput> waterReductionInputVec = {

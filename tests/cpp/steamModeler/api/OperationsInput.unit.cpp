@@ -2,6 +2,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("operationsInputConstructor", "[operations input constructor]") {
     auto actual = OperationsInput(1, 1, 1, 1, 1, 1);
     CHECK(actual.getElectricityCosts() == 1);

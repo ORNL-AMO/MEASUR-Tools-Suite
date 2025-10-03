@@ -1,4 +1,4 @@
-#include <catch.hpp>
+#include "catch.hpp"
 
 #include "compressedAir/AirSystemCapacity.h"
 #include "compressedAir/AirVelocity.h"
@@ -13,11 +13,13 @@
 #include "compressedAir/PneumaticValve.h"
 #include "compressedAir/ReceiverTank.h"
 
+using namespace Catch;
+
 TEST_CASE("PneumaticAirRequirement", "[CompressedAir][PneumaticAirRequirement]") {
     std::size_t unitTestNumber = 1;
     auto const  compare        = [&unitTestNumber](PneumaticAirRequirement::Output const& actual,
                                            PneumaticAirRequirement::Output const& expected) {
-        INFO("Unit test number " + std::to_string(unitTestNumber))
+        INFO("Unit test number " + std::to_string(unitTestNumber));
         CHECK(expected.volumeAirIntakePiston == Approx(actual.volumeAirIntakePiston));
         CHECK(expected.compressionRatio == Approx(actual.compressionRatio));
         CHECK(expected.airRequirementPneumaticCylinder == Approx(actual.airRequirementPneumaticCylinder));
@@ -119,7 +121,7 @@ TEST_CASE("ReceiverTank - Size Calculation", "[CompressedAir][ReceiverTank][Size
 TEST_CASE("Compressor Operating Cost", "[CompressedAir][OperatingCost]") {
     std::size_t unitTestNumber = 1;
     auto const compare = [&unitTestNumber](OperatingCost::Output const& actual, OperatingCost::Output const& expected) {
-        INFO("Unit test number " + std::to_string(unitTestNumber))
+        INFO("Unit test number " + std::to_string(unitTestNumber));
         CHECK(expected.runTimeUnloaded == Approx(actual.runTimeUnloaded));
         CHECK(expected.costForLoaded == Approx(actual.costForLoaded));
         CHECK(expected.costForUnloaded == Approx(actual.costForUnloaded));

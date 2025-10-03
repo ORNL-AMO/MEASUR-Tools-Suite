@@ -1,6 +1,8 @@
 #include "treasureHunt/CompressedAirReduction.h"
 
-#include <catch.hpp>
+#include "catch.hpp"
+
+using namespace Catch;
 
 #include "compressedAir/BagMethod.h"
 

@@ -1,6 +1,8 @@
 #include "processHeat/losses/atmosphere_heat_loss.h"
 
-#include <catch.hpp>
+#include "catch.hpp"
+
+using namespace Catch;
 
 TEST_CASE("Calculate total heat loss for atmospheric gasses", "[Process Heating][Losses][Atmosphere]") {
     double flow_rate          = 1200.0; // scfh

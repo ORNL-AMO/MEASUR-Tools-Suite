@@ -1,6 +1,8 @@
 #include "util/CurveFitVal.h"
 
-#include <catch.hpp>
+#include "catch.hpp"
+
+using namespace Catch;
 
 TEST_CASE("CurveFitVal", "[CurveFitVal]") {
     CHECK(CurveFitVal({.25, .50, .75, 1.00, 1.25}, {0.93, 0.94, 0.95, 0.956, 0.949}, 4, 0.25).calculate() ==
