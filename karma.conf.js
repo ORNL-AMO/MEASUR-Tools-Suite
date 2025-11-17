@@ -10,8 +10,8 @@ module.exports = function (config) {
         frameworks: ['mocha'],
         files: [
             // All browser-based WASM Mocha tests
-            { pattern: 'bin/client.js', included: false, served: true, watched: false },
-            { pattern: 'bin/client.wasm', included: false, served: true, watched: false },
+            { pattern: 'build-wasm/bin/client.js', included: false, served: true, watched: false },
+            { pattern: 'build-wasm/bin/client.wasm', included: false, served: true, watched: false },
             'tests/wasm-mocha/**/*.test.js',
             // Add any additional files or patterns as needed
         ],

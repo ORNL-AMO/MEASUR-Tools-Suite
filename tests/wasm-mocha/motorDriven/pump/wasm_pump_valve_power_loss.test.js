@@ -3,9 +3,9 @@ import { assert } from 'chai';
 describe('Calculate Pump valve power loss and Annual Energy usage', function () {
     let moduleInstance;
     before(async function () {
-        const ToolsSuiteModule = (await import('../../../../bin/client.js')).default;
+        const ToolsSuiteModule = (await import('../../../../build-wasm/bin/client.js')).default;
         moduleInstance = await ToolsSuiteModule({
-            locateFile: (filename) => '/base/bin/' + filename
+            locateFile: (filename) => '/base/build-wasm/bin/' + filename
         });
     });
 
