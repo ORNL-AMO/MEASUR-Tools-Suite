@@ -66,6 +66,7 @@ See [BUILD.md](BUILD.md) for detailed build instructions, testing, and Docker wo
 
 Contributions are welcome! Please refer to [CONTRIBUTING.md](CONTRIBUTING.md) for:
 - Code style guidelines ([contributing/style-guide.md](contributing/style-guide.md))
+- Formatting standards ([contributing/formatting.md](contributing/formatting.md))
 - Documentation standards ([contributing/documentation.md](contributing/documentation.md))
 - Commit message conventions ([contributing/conventional-commits.md](contributing/conventional-commits.md))
 

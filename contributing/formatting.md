@@ -2,6 +2,11 @@
 
 This project uses [clang-format](https://clang.llvm.org/docs/ClangFormat.html) to ensure a consistent code style across all C++ files.
 
+## Table of Contents
+
+- [Configuration](#configuration)
+- [How to Format Code](#how-to-format-code)
+- [Best Practices](#best-practices)
 
 ## Configuration
 
@@ -16,6 +21,7 @@ The formatting style is defined in the `.clang-format` file at the root of the r
    ```
 5. **Commit and review:** Commit only the style changes and immediately open a pull request. This keeps formatting changes separate from functional code changes, making reviews easier and reducing merge conflicts.
 
+**[Table of Contents](#table-of-contents)**
 
 ## How to Format Code
 
@@ -36,6 +42,7 @@ find . -name '*.cpp' -o -name '*.h' | xargs clang-format -i --style=file
 
 You can also configure your editor (such as VS Code, CLion, or Vim) to automatically format code on save using clang-format. Refer to your editor’s documentation or extensions/plugins for setup instructions.
 
+**[Table of Contents](#table-of-contents)**
 
 ## Best Practices
 
@@ -45,7 +52,4 @@ You can also configure your editor (such as VS Code, CLion, or Vim) to automatic
 
 If you have questions about the formatting rules or need help configuring your editor, ask in the project discussions or open an issue.
 
-
-
-
-<!-- Generated with mdsplit: https://github.com/alandefreitas/mdsplit -->
+**[Table of Contents](#table-of-contents)**

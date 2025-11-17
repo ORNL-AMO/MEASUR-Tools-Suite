@@ -2,6 +2,24 @@
 
 This project uses [Doxygen](https://www.doxygen.nl/) to generate documentation from annotated source code. Doxygen comments are used to describe the purpose, behavior, and usage of classes, functions, and other entities in the codebase. Follow these guidelines to ensure your code is well-documented and easy to understand. Always use `@` for Doxygen commands.
 
+## Table of Contents
+
+- [Doxygen Commands](#doxygen-commands)
+- [Doxygen Aliases](#doxygen-aliases)
+- [Documenting Code](#documenting-code)
+  - [Math](#math)
+  - [Units](#units)
+  - [Formulas](#formulas)
+  - [Symbols](#symbols)
+  - [Files](#files)
+  - [Namespaces](#namespaces)
+  - [Classes \& Structs](#classes--structs)
+  - [Functions \& Methods](#functions--methods)
+  - [Member Variables](#member-variables)
+  - [Constants](#constants)
+  - [Enums](#enums)
+  - [Groups](#groups)
+- [Generating Doxygen Documentation](#generating-doxygen-documentation)
 
 ## Doxygen Commands
 
@@ -29,6 +47,7 @@ Useful Commands:
 - `@cite <reference>`
 - `@ref <reference> <display-text>`
 
+**[Table of Contents](#table-of-contents)**
 
 ## Doxygen Aliases
 
@@ -42,11 +61,13 @@ The following Doxygen aliases are defined in the `Doxyfile` to simplify common d
 - `@symrow{<symbol>; <description>; <unit expression>}`
 - `@endsymtable`
 
+**[Table of Contents](#table-of-contents)**
 
 ## Documenting Code
 
 When documenting code, use Doxygen comments to describe the purpose and behavior of classes, functions, and other entities. Follow these guidelines to ensure your documentation is clear, consistent, and useful.
 
+**[Table of Contents](#table-of-contents)**
 
 ### Math
 
@@ -60,6 +81,7 @@ Use the `@math{<math expression>}` command to to write LaTeX-style mathematical 
  */
 ```
 
+**[Table of Contents](#table-of-contents)**
 
 ### Units
 
@@ -73,6 +95,7 @@ Use the `@unitb{<unit expression>}` command to document units. The `@unitb{}` co
  */
 ```
 
+**[Table of Contents](#table-of-contents)**
 
 ### Formulas
 
@@ -94,6 +117,7 @@ Use the `@formula{<label>; <equation>}` command to document formulas. The comman
  */
 ```
 
+**[Table of Contents](#table-of-contents)**
 
 ### Symbols
 
@@ -117,6 +141,7 @@ Use the `@symtable` and `@endsymtable` commands to create a table of symbols use
  */
 ```
 
+**[Table of Contents](#table-of-contents)**
 
 ### Files
 
@@ -148,6 +173,7 @@ Use a **Doxygen block** at the very top of each header file to document the file
  */
 ```
 
+**[Table of Contents](#table-of-contents)**
 
 ### Namespaces
 
@@ -173,6 +199,7 @@ Use a **Doxygen block** above each namespace declaration in header files to docu
 namespace constants {}
 ```
 
+**[Table of Contents](#table-of-contents)**
 
 ### Classes & Structs
 
@@ -249,6 +276,7 @@ private:
 };
 ```
 
+**[Table of Contents](#table-of-contents)**
 
 ### Functions & Methods
 
@@ -278,6 +306,7 @@ Use a **Doxygen block** above each public function or method declaration in head
 std::size_t Polygon::addVertex(const Point2& p);
 ```
 
+**[Table of Contents](#table-of-contents)**
 
 ### Member Variables
 
@@ -289,6 +318,7 @@ Use inline comments with `///<` for one-line descriptions of data members. This 
 std::vector<Point2> vertices_; ///< Vertices in counter-clockwise order.
 ```
 
+**[Table of Contents](#table-of-contents)**
 
 ### Constants
 
@@ -301,6 +331,7 @@ constexpr double kPi = 3.141592653589793;    ///< Circle ratio @unitb{radians}.
 inline constexpr Point2 kOrigin {0.0, 0.0};  ///< Reference point (0,0).
 ```
 
+**[Table of Contents](#table-of-contents)**
 
 ### Enums
 
@@ -331,6 +362,7 @@ enum class Axis {
 };
 ```
 
+**[Table of Contents](#table-of-contents)**
 
 ### Groups
 
@@ -357,10 +389,20 @@ Large groups must be defined in their own file (e.g., `math.dox`, `geometry.dox`
  */
 ```
 
+**[Table of Contents](#table-of-contents)**
 
+## Generating Doxygen Documentation
+
+Use the `Doxyfile` to configure Doxygen settings like input/output directories, file patterns, and more.
+
+Use the `DoxygenLayout.xml` file to customize the layout of the generated documentation.
+
+To generate the documentation, follow these steps:
+1. Ensure [Doxygen](https://www.doxygen.nl/) is installed.
+2. From the project root, run:
    ```bash
    doxygen Doxyfile
+   ```
+3. The generated HTML and/or LaTeX documentation will appear in the output directory specified in the `Doxyfile`.
 
-
-
-<!-- Generated with mdsplit: https://github.com/alandefreitas/mdsplit -->
+**[Table of Contents](#table-of-contents)**

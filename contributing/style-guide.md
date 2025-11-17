@@ -2,6 +2,37 @@
 
 Use this guide to ensure your contributions align with the project's coding standards. It is loosely based on the [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html) and the [C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines), with some modifications to suit this project's needs.
 
+## Table of Contents
+
+- [Header Files](#header-files)
+  - [Include Guards](#include-guards)
+  - [Include What You Use](#include-what-you-use)
+  - [Include Order](#include-order)
+  - [Function Definitions in Headers](#function-definitions-in-headers)
+- [Scoping](#scoping)
+  - [Namespaces](#namespaces)
+  - [Local Variables](#local-variables)
+- [Classes](#classes)
+  - [Access Control](#access-control)
+  - [Declaration Order](#declaration-order)
+- [Structs](#structs)
+- [Looping and Branching Statements](#looping-and-branching-statements)
+- [Preincrement and Predecrement](#preincrement-and-predecrement)
+- [Use of `const`](#use-of-const)
+- [Naming](#naming)
+  - [Files](#files)
+  - [Namespaces](#namespaces-1)
+  - [Classes and Structs](#classes-and-structs)
+  - [Functions and Methods](#functions-and-methods)
+  - [Variables](#variables)
+  - [Member Variables](#member-variables)
+  - [Constants and Enums](#constants-and-enums)
+  - [Aliases](#aliases)
+  - [Templates](#templates)
+  - [Macros](#macros)
+- [Comments](#comments)
+  - [When to comment](#when-to-comment)
+  - [Comment Style](#comment-style)
 
 ## Header Files
 
@@ -10,6 +41,7 @@ Every C++ source file (`.cpp`) should have a corresponding header file (`.h`). T
 > [!NOTE]
 > A common exception is unit tests, which may not require a separate header file. Small `.cpp` files containing just a `main()` function may also not have a corresponding header.
 
+**[Table of Contents](#table-of-contents)**
 
 ### Include Guards
 
@@ -23,6 +55,7 @@ Every header file must have a `#pragma once` directive to prevent multiple inclu
 // file content
 ```
 
+**[Table of Contents](#table-of-contents)**
 
 ### Include What You Use
 
@@ -52,6 +85,7 @@ Avoid using forward declarations where possible. Instead, include the headers yo
   }
   ```
 
+**[Table of Contents](#table-of-contents)**
 
 ### Include Order
 
@@ -67,6 +101,7 @@ Clang-Format manages include order via the `.clang-format` file. The typical ord
 
 List each third-party library as a separate category in `.clang-format`. Update `IncludeCategories` when adding new libraries.
 
+**[Table of Contents](#table-of-contents)**
 
 ### Function Definitions in Headers
 
@@ -99,11 +134,13 @@ void Foo<T>::doSomething() {
 }
 ```
 
+**[Table of Contents](#table-of-contents)**
 
 ## Scoping
 
 Scoping helps organize code, prevent name collisions, and manage visibility.
 
+**[Table of Contents](#table-of-contents)**
 
 ### Namespaces
 
@@ -118,6 +155,7 @@ namespace my_project {
 > [!NOTE]
 > Avoid `using namespace ...;` and inline namespaces.
 
+**[Table of Contents](#table-of-contents)**
 
 ### Local Variables
 
@@ -139,16 +177,19 @@ for (int i = 0; i < 1000000; ++i) {
 }
 ```
 
+**[Table of Contents](#table-of-contents)**
 
 ## Classes
 
 Use `class` for types that encapsulate data and behavior. This section provides guidelines for writing classes in C++.
 
+**[Table of Contents](#table-of-contents)**
 
 ### Access Control
 
 Make data members `private` (except for constants) to protect invariants and encapsulation. Use accessor methods as needed.
 
+**[Table of Contents](#table-of-contents)**
 
 ### Declaration Order
 
@@ -167,6 +208,7 @@ Within each section, group declarations in this order:
 
 This keeps related items together and improves readability.
 
+**[Table of Contents](#table-of-contents)**
 
 ## Structs
 
@@ -176,6 +218,7 @@ Prefer to use a `struct` instead of a `std::pair` or `std::tuple` whenever the e
 
 Use pairs and tuples only in generic code where the elements do not have specific meanings, or when required for interoperability with existing code or APIs.
 
+**[Table of Contents](#table-of-contents)**
 
 ## Looping and Branching Statements
 
@@ -205,6 +248,7 @@ switch (var) {
 }
 ```
 
+**[Table of Contents](#table-of-contents)**
 
 ## Preincrement and Predecrement
 
@@ -224,6 +268,7 @@ while (it != vec.end()) {
 }
 ```
 
+**[Table of Contents](#table-of-contents)**
 
 ## Use of `const`
 
@@ -242,11 +287,13 @@ void processData(const std::vector<int>& data) {
 }
 ```
 
+**[Table of Contents](#table-of-contents)**
 
 ## Naming
 
 Use the following naming conventions for various elements in the codebase to ensure consistency and readability.
 
+**[Table of Contents](#table-of-contents)**
 
 ### Files
 
@@ -255,16 +302,19 @@ Use `snake_case` suffixed with the appropriate file extension (`.h`, `.hpp`, or 
 > [!NOTE]
 > This project uses `.h` for header files and `.cpp` for source files.
 
+**[Table of Contents](#table-of-contents)**
 
 ### Namespaces
 
 Use `snake_case` for namespace names (e.g., `my_project`, `utils`).
 
+**[Table of Contents](#table-of-contents)**
 
 ### Classes and Structs
 
 Use `PascalCase` for class and struct names (e.g., `MyClass`, `MyStruct`).
 
+**[Table of Contents](#table-of-contents)**
 
 ### Functions and Methods
 
@@ -289,6 +339,7 @@ private:
 };
 ```
 
+**[Table of Contents](#table-of-contents)**
 
 ### Variables
 
@@ -302,6 +353,7 @@ void processData(int input_value) {
 }
 ```
 
+**[Table of Contents](#table-of-contents)**
 
 ### Member Variables
 
@@ -329,6 +381,7 @@ struct Point2 {
 };
 ```
 
+**[Table of Contents](#table-of-contents)**
 
 ### Constants and Enums
 
@@ -347,6 +400,7 @@ const int kMaxValue = 100;
 constexpr double kPi = 3.14159;
 ```
 
+**[Table of Contents](#table-of-contents)**
 
 ### Aliases
 
@@ -358,6 +412,7 @@ Use `PascalCase` for type aliases.
 using StringList = std::vector<std::string>;
 ```
 
+**[Table of Contents](#table-of-contents)**
 
 ### Templates
 
@@ -370,6 +425,7 @@ template <typename InputType>
 InputType processInput(InputType input);
 ```
 
+**[Table of Contents](#table-of-contents)**
 
 ### Macros
 
@@ -384,11 +440,13 @@ Use `UPPER_CASE` with a project-specific prefix for macro names.
 > [!NOTE]
 > Try to avoid using macros whenever possible. Macros can lead to hard-to-debug issues and are generally discouraged in modern C++. Instead, prefer `inline` or `constexpr` functions.
 
+**[Table of Contents](#table-of-contents)**
 
 ## Comments
 
 Comments are essential for understanding code. They help explain the intent behind code, document design decisions, and provide context for future maintainers. This section provides guidelines for writing effective comments.
 
+**[Table of Contents](#table-of-contents)**
 
 ### When to comment
 
@@ -399,6 +457,7 @@ Comments are essential for understanding code. They help explain the intent behi
 | There is a subtle **invariant / side-effect**.     | The function already documents the behaviour. |
 | You’re **explaining why**, not *what*.             | You’re restating the *what* (“increment i”).  |
 
+**[Table of Contents](#table-of-contents)**
 
 ### Comment Style
 
@@ -419,7 +478,4 @@ if (hasSelfIntersection(verts)) return Err::kInvalid;
 // TODO(alice, 2025-07-01): Replace O(n^2) intersection test with a sweep-line algorithm.
 ```
 
-
-
-
-<!-- Generated with mdsplit: https://github.com/alandefreitas/mdsplit -->
+**[Table of Contents](#table-of-contents)**
