@@ -1,7 +1,13 @@
-# Conventional Commits
+# Conventional Commits <!-- omit in toc -->
 
 This project follows the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification for commit messages to ensure clarity, consistency, and automation in version control. This helps in generating changelogs, automating releases, and improving collaboration among contributors.
 
+## Table of Contents <!-- omit in toc -->
+
+- [Commit Format](#commit-format)
+- [Commit Types](#commit-types)
+- [Commit Scopes](#commit-scopes)
+- [Breaking Changes](#breaking-changes)
 
 ## Commit Format
 
@@ -15,6 +21,7 @@ Each commit message should follow this format:
 <optional footer>
 ```
 
+**[Table of Contents](#table-of-contents)**
 
 ## Commit Types
 
@@ -33,6 +40,7 @@ Commit types indicate the nature of the changes made in the commit. They help ca
 - **`test`**: Adding missing tests or correcting existing tests.
 - **`wip`**: Work in progress.
 
+**[Table of Contents](#table-of-contents)**
 
 ## Commit Scopes
 
@@ -65,6 +73,7 @@ When a commit affects multiple areas, you can specify multiple scopes separated 
 feat(cli, docs): add new command to generate reports
 ```
 
+**[Table of Contents](#table-of-contents)**
 
 ## Breaking Changes
 
@@ -84,6 +93,4 @@ If included in the `type/scope` prefix, breaking changes **MUST** be indicated b
 feat!: send an email to the customer when a product is shipped
 ```
 
-
-
-<!-- Generated with mdsplit: https://github.com/alandefreitas/mdsplit -->
+**[Table of Contents](#table-of-contents)**
