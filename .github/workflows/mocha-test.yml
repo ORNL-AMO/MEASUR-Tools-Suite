@@ -27,6 +27,7 @@ jobs:
       - name: Clean build and CMake cache
         run: |
           rm -rf build-cpp
+          rm -rf build-wasm
           rm -f CMakeCache.txt
           rm -rf CMakeFiles
 
@@ -40,9 +41,8 @@ jobs:
           options: -v ${{ github.workspace }}:/test_mocha
           run: |
             cd /test_mocha
-            emcmake cmake -DBUILD_WASM=ON
-            emmake make clean
-            emmake make
+            emcmake cmake -S . -B build-wasm -DBUILD_WASM=ON
+            cmake --build build-wasm --clean-first
 
       - name: Run Mocha tests
         run: npm run test:browser
