@@ -1,4 +1,4 @@
-#include "processHeat/losses/fixture_losses.h"
+#include "processHeat/losses/fixture_heat_loss.h"
 
 #include "catch.hpp"
 

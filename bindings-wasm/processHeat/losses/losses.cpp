@@ -5,7 +5,7 @@
 #include "processHeat/losses/energy_input_EAF.h"
 #include "processHeat/losses/energy_input_exhaust_gas_losses.h"
 #include "processHeat/losses/exhaust_gas_EAF.h"
-#include "processHeat/losses/fixture_losses.h"
+#include "processHeat/losses/fixture_heat_loss.h"
 #include "processHeat/losses/gas_cooling_losses.h"
 #include "processHeat/losses/gas_flue_gas_material.h"
 #include "processHeat/losses/gas_load_charge_material.h"

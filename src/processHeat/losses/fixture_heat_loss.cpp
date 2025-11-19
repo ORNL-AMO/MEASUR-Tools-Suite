@@ -6,7 +6,7 @@
  * @bug No known bugs.
  *
  */
-#include "processHeat/losses/fixture_losses.h"
+#include "processHeat/losses/fixture_heat_loss.h"
 
 double FixtureLosses::getHeatLoss() {
     heatLoss = feedRate * specificHeat * (finalTemperature - initialTemperature) * correctionFactor;

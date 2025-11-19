@@ -111,4 +111,3 @@ class FixtureLosses {
     // Out values
     double heatLoss;
 };
-
