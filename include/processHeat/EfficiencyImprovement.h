@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculator for fuel fired furnace
@@ -8,9 +10,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_EFFICIENCYIMPROVEMENT_H
-#define TOOLS_SUITE_EFFICIENCYIMPROVEMENT_H
 
 /**
  * Efficiency Improvement calculator class
@@ -299,4 +298,3 @@ class EfficiencyImprovement {
     double newFuelSavings_;
     double newEnergyInput_;
 };
-#endif // TOOLS_SUITE_EFFICIENCYIMPROVEMENT_H

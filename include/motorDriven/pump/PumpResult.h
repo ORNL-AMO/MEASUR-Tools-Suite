@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Function prototypes for the Pump result fields
@@ -10,9 +12,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_PUMPRESULT_H
-#define TOOLS_SUITE_PUMPRESULT_H
 
 #include "motorDriven/pump/Pump.h"
 
@@ -134,4 +133,3 @@ class PumpResult {
     double          operatingHours, unitCost;
 };
 
-#endif // TOOLS_SUITE_PUMPRESULT_H

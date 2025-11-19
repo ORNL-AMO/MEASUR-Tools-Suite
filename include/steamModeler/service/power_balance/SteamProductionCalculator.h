@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_STEAMPRODUCTIONCALCULATOR_H
-#define TOOLS_SUITE_STEAMPRODUCTIONCALCULATOR_H
+#pragma once
 
 #include <memory>
 
@@ -39,4 +38,3 @@ class SteamProductionCalculator {
     double addPrvMassFlow(double prvAdditionalSteam, const std::shared_ptr<PrvWithoutDesuperheating>& prv) const;
 };
 
-#endif // TOOLS_SUITE_STEAMPRODUCTIONCALCULATOR_H

@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_STEAMUSECALCULATOR_H
-#define TOOLS_SUITE_STEAMUSECALCULATOR_H
+#pragma once
 
 #include <steamModeler/api/HeaderInput.h>
 #include <steamModeler/api/TurbineInput.h>
@@ -19,4 +18,3 @@ class SteamUseCalculator {
                                  const std::shared_ptr<HeaderNotHighestPressure>& mediumPressureHeaderInput) const;
 };
 
-#endif // TOOLS_SUITE_STEAMUSECALCULATOR_H

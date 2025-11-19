@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_STEAMBALANCECALCULATOR_H
-#define TOOLS_SUITE_STEAMBALANCECALCULATOR_H
+#pragma once
 
 #include <steamModeler/api/BoilerInput.h>
 #include <steamModeler/api/HeaderInput.h>
@@ -31,4 +30,3 @@ class SteamBalanceCalculator {
     const SteamProductionCalculator steamProductionCalculator = SteamProductionCalculator();
 };
 
-#endif // TOOLS_SUITE_STEAMBALANCECALCULATOR_H

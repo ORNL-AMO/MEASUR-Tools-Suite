@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculate Heat Recovery by using flue gas - condensing heat exchanger.
@@ -7,9 +9,6 @@
  * @author Omer Aziz (omerb)
  *
  */
-
-#ifndef TOOLS_SUITE_AIRWATERCOOLINGUSINGFLUE_H
-#define TOOLS_SUITE_AIRWATERCOOLINGUSINGFLUE_H
 
 #include "losses/gas_flue_gas_material.h"
 
@@ -89,4 +88,3 @@ class AirWaterCoolingUsingFlue {
     }
 };
 
-#endif // TOOLS_SUITE_AIRWATERCOOLINGUSINGFLUE_H

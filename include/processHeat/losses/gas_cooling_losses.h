@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculator for total energy loss for gas, including air
@@ -9,9 +11,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_GASCOOLINGLOSSES_H
-#define TOOLS_SUITE_GASCOOLINGLOSSES_H
 
 /**
  * Gas Cooling Losses class
@@ -46,4 +45,3 @@ class GasCoolingLosses {
   private:
     const double flowRate, initialTemperature, finalTemperature, specificHeat, correctionFactor, gasDensity;
 };
-#endif // TOOLS_SUITE_GASCOOLINGLOSSES_H

@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_STEAMMODELERINPUT_H
-#define TOOLS_SUITE_STEAMMODELERINPUT_H
+#pragma once
 
 #include "BoilerInput.h"
 #include "HeaderInput.h"
@@ -36,4 +35,3 @@ class SteamModelerInput {
     TurbineInput    turbineInput;
 };
 
-#endif // TOOLS_SUITE_STEAMMODELERINPUT_H

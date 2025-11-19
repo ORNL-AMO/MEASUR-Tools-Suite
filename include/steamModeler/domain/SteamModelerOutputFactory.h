@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_STEAMMODELEROUTPUTFACTORY_H
-#define TOOLS_SUITE_STEAMMODELEROUTPUTFACTORY_H
+#pragma once
 
 #include <steamModeler/api/SteamModelerOutput.h>
 #include <steamModeler/domain/SteamModelCalculationsDomain.h>
@@ -10,4 +9,3 @@ class SteamModelerOutputFactory {
     SteamModelerOutput make(const SteamModelCalculationsDomain& domain) const;
 };
 
-#endif // TOOLS_SUITE_STEAMMODELEROUTPUTFACTORY_H

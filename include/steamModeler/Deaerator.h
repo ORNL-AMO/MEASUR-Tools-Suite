@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculator for the deaerator for steam systems
@@ -14,8 +16,6 @@
 #include "SaturatedProperties.h"
 #include "SteamProperties.h"
 
-#ifndef TOOLS_SUITE_DEAERATOR_H
-    #define TOOLS_SUITE_DEAERATOR_H
 
 /**
  * Deaerator calculator class
@@ -200,4 +200,3 @@ class Deaerator {
     SteamSystemModelerTool::FluidProperties inletSteamProperties;
 };
 
-#endif // TOOLS_SUITE_DEAERATOR_H

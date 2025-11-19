@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculator for heat loss in an Electric Arc Furnace (EAF)
@@ -9,9 +11,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_ENERGYINPUTEAF_H
-#define TOOLS_SUITE_ENERGYINPUTEAF_H
 
 /**
  * Energy Input for an Electric Arc Furnace class
@@ -58,4 +57,3 @@ class EnergyInputEAF {
     const double naturalGasHeatInput, coalCarbonInjection, coalHeatingValue, electrodeUse;
     const double electrodeHeatingValue, otherFuels, electricityInput;
 };
-#endif // TOOLS_SUITE_ENERGYINPUTEAF_H

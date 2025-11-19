@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_STEAMMODELRUNNER_H
-#define TOOLS_SUITE_STEAMMODELRUNNER_H
+#pragma once
 
 #include <steamModeler/api/BoilerInput.h>
 #include <steamModeler/api/HeaderInput.h>
@@ -39,4 +38,3 @@ class SteamModelRunner {
     void logSection(const std::string& message) const;
 };
 
-#endif // TOOLS_SUITE_STEAMMODELRUNNER_H

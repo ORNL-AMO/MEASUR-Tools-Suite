@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Function prototypes for the Fan result fields
@@ -10,9 +12,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_FANRESULT_H
-#define TOOLS_SUITE_FANRESULT_H
 
 #include "motorDriven/motor/MotorShaftPower.h"
 
@@ -134,4 +133,3 @@ class FanResult {
     double     operatingHours, unitCost;
 };
 
-#endif // TOOLS_SUITE_FANRESULT_H

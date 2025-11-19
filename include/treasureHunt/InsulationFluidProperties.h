@@ -1,5 +1,4 @@
-#ifndef TOOLSSUITEAIRPROPERTIESH
-#define TOOLSSUITEAIRPROPERTIESH
+#pragma once
 
 #include <cmath>
 
@@ -64,5 +63,3 @@ class InsulationFluidProperties {
     double reynolds;
     double rayleigh;
 };
-
-#endif

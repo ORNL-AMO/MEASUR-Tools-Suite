@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file Header file for Process Fluid Cooling Energy Calculations
  *
@@ -16,9 +18,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_PROCESSCOOLING_H
-#define TOOLS_SUITE_PROCESSCOOLING_H
 
 #include <cmath>
 #include <fstream>
@@ -594,4 +593,3 @@ class ProcessCooling {
     static double getPumpHP(double power);
 };
 
-#endif // TOOLS_SUITE_PROCESSCOOLING_H

@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file Header file for Water Assessment
  *
@@ -9,9 +11,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_WATERASSESSMENT_H
-#define TOOLS_SUITE_WATERASSESSMENT_H
 
 class WaterAssessment {
   public:
@@ -190,4 +189,3 @@ class WaterAssessment {
     }
 };
 
-#endif // TOOLS_SUITE_WATERASSESSMENT_H

@@ -1,12 +1,11 @@
+#pragma once
+
 /**
  * @file Data structure for Lighting default data
  *
  * @author Omer Aziz (omerb)
  *
  */
-
-#ifndef MEASUR_TOOLS_SUITE_LIGHTING_DATA_H
-#define MEASUR_TOOLS_SUITE_LIGHTING_DATA_H
 
 #include <string>
 
@@ -123,4 +122,3 @@ private:
     friend class DefaultData;
 };
 
-#endif //MEASUR_TOOLS_SUITE_LIGHTING_DATA_H

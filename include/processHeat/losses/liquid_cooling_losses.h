@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculator for heat losses due to liquid (not water) cooling
@@ -8,9 +10,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_LIQUIDCOOLINGLOSSES_H
-#define TOOLS_SUITE_LIQUIDCOOLINGLOSSES_H
 
 /**
  * Liquid Cooling Losses class
@@ -117,4 +116,3 @@ class LiquidCoolingLosses {
     // Out value
     double heatLoss;
 };
-#endif // TOOLS_SUITE_LIQUIDCOOLINGLOSSES_H

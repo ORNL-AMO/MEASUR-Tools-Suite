@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_HIGHPRESSURECONDENSATECALCULATOR_H
-#define TOOLS_SUITE_HIGHPRESSURECONDENSATECALCULATOR_H
+#pragma once
 
 #include <steamModeler/api/HeaderInput.h>
 #include <steamModeler/Boiler.h>
@@ -19,4 +18,3 @@ class HighPressureCondensateCalculator {
     const MassFlowCalculator     massFlowCalculator     = MassFlowCalculator();
 };
 
-#endif // TOOLS_SUITE_HIGHPRESSURECONDENSATECALCULATOR_H

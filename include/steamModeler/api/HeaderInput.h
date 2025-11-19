@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_HEADERINPUT_H
-#define TOOLS_SUITE_HEADERINPUT_H
+#pragma once
 
 #include <iostream>
 #include <list>
@@ -98,4 +97,3 @@ class HeaderInput {
     std::shared_ptr<HeaderNotHighestPressure> lowPressureHeader;
 };
 
-#endif // TOOLS_SUITE_HEADERINPUT_H

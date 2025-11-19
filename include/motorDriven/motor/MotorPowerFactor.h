@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @brief Contains the declaration of MotorPowerFactor class including the getters and setters as well as the
  * calculators. for motor efficiency. calculateThermalResistance(): Calculates the motor power factor
@@ -6,9 +8,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_MOTORPOWERFACTOR_H
-#define TOOLS_SUITE_MOTORPOWERFACTOR_H
 
 #include "MotorData.h"
 
@@ -106,4 +105,3 @@ class MotorPowerFactor {
     double ratedVoltage;
 };
 
-#endif // TOOLS_SUITE_MOTORPOWERFACTOR_H

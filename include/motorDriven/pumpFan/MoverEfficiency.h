@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @brief Header file for PumpEfficiency class
  *
@@ -7,9 +9,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_PUMPEFFICIENCY_H
-#define TOOLS_SUITE_PUMPEFFICIENCY_H
 
 #include "FluidPower.h"
 
@@ -106,4 +105,3 @@ class MoverEfficiency {
     double     velocityPressure = 0;
 };
 
-#endif // TOOLS_SUITE_PUMPEFFICIENCY_H

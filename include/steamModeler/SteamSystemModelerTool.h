@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_STEAMSYSTEMMODELERTOOL_H
-#define TOOLS_SUITE_STEAMSYSTEMMODELERTOOL_H
+#pragma once
 
 #include <cmath>
 #include <iostream>
@@ -427,4 +426,3 @@ class SteamSystemModelerTool {
     friend class SaturatedProperties;
 };
 
-#endif // TOOLS_SUITE_STEAMSYSTEMMODELERTOOL_H

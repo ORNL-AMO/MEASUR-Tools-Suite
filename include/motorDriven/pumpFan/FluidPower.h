@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @brief Contains the skeleton of FluidPower class.
  *      calculateThermalResistance(): Calculates the fluid power
@@ -7,9 +9,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_FLUIDPOWER_H
-#define TOOLS_SUITE_FLUIDPOWER_H
 
 class FluidPower {
   public:
@@ -56,4 +55,3 @@ class FluidPower {
     const double velocityPressure = 0;
 };
 
-#endif // TOOLS_SUITE_FLUIDPOWER_H

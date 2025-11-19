@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_MAKEUPWATERVOLUMEFLOWCALCULATIONSDOMAIN_H
-#define TOOLS_SUITE_MAKEUPWATERVOLUMEFLOWCALCULATIONSDOMAIN_H
+#pragma once
 
 class MakeupWaterVolumeFlowCalculationsDomain {
   public:
@@ -13,4 +12,3 @@ class MakeupWaterVolumeFlowCalculationsDomain {
     }
 };
 
-#endif // TOOLS_SUITE_MAKEUPWATERVOLUMEFLOWCALCULATIONSDOMAIN_H

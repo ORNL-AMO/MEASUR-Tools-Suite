@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_RETURNCONDENSATECALCULATIONSDOMAIN_H
-#define TOOLS_SUITE_RETURNCONDENSATECALCULATIONSDOMAIN_H
+#pragma once
 
 #include <steamModeler/FlashTank.h>
 #include <steamModeler/SteamSystemModelerTool.h>
@@ -16,4 +15,3 @@ class ReturnCondensateCalculationsDomain {
     }
 };
 
-#endif // TOOLS_SUITE_RETURNCONDENSATECALCULATIONSDOMAIN_H

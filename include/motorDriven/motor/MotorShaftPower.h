@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief MotorShaftPower class
@@ -14,9 +16,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_MOTORSHAFTPOWER_H
-#define TOOLS_SUITE_MOTORSHAFTPOWER_H
 
 #include "MotorData.h"
 
@@ -89,4 +88,3 @@ class MotorShaftPower {
     Motor::LoadEstimationMethod loadEstimationMethod;
 };
 
-#endif // TOOLS_SUITE_MOTORSHAFTPOWER_H

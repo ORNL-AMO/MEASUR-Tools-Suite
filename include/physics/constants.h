@@ -1,11 +1,11 @@
+#pragma once
+
 /**
  * @file constants.h
  * @authors Liam White
  * @brief Defines physical constants and unit conversions.
  * @details https://physics.nist.gov/cuu/Constants/index.html
  */
-#pragma once
-
 /**
  * @namespace physics
  * @brief Contains physical constants and unit conversions.

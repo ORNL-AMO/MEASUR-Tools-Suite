@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @brief Contains the declaration of MotorCurrent class including the getters and setters as well as the calculators
  * for motor current.
@@ -7,9 +9,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_MOTORCURRENT_H
-#define TOOLS_SUITE_MOTORCURRENT_H
 
 #include "MotorData.h"
 
@@ -62,4 +61,3 @@ class MotorCurrent {
     double                 estimatedFLA = 0.0;
 };
 
-#endif // TOOLS_SUITE_MOTORCURRENT_H

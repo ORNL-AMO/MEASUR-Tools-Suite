@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculator for saturated properties for steam systems
@@ -8,9 +10,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_SATURATEDPROPERTIES_H
-#define TOOLS_SUITE_SATURATEDPROPERTIES_H
 
 #include "SteamSystemModelerTool.h"
 
@@ -77,4 +76,3 @@ class SaturatedProperties {
     const double saturatedPressure, saturatedTemperature;
 };
 
-#endif // TOOLS_SUITE_SATURATEDPROPERTIES_H

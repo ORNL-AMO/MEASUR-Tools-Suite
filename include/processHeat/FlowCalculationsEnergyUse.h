@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculator for flow calculations energy use for fuel-fired furnaces
@@ -9,8 +11,6 @@
  *
  */
 
-#ifndef TOOLS_SUITE_FLOWCALCULATIONSENERGYUSE_H
-#define TOOLS_SUITE_FLOWCALCULATIONSENERGYUSE_H
 /**
  * Flow Calculations Energy Use calculator class
  * Used to find the flow and the heat input of a fuel-fired furnace.
@@ -369,4 +369,3 @@ class FlowCalculationsEnergyUse {
     double totalflow_;
 };
 
-#endif // TOOLS_SUITE_FLOWCALCULATIONSENERGYUSE_H

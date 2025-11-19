@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Implementations of Operating Cost of a compressed air system
@@ -6,9 +8,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_OPERATINGCOST_H
-#define TOOLS_SUITE_OPERATINGCOST_H
 
 #include <cmath>
 #include <functional>
@@ -60,4 +59,3 @@ class OperatingCost {
     double efficiencyUnloaded, costOfElectricity;
 };
 
-#endif

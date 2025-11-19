@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_UNABLETOBALANCEEXCEPTION_H
-#define TOOLS_SUITE_UNABLETOBALANCEEXCEPTION_H
+#pragma once
 
 #include <exception>
 #include <iostream>
@@ -17,4 +16,3 @@ class UnableToBalanceException : public std::exception {
     std::string message;
 };
 
-#endif // TOOLS_SUITE_UNABLETOBALANCEEXCEPTION_H

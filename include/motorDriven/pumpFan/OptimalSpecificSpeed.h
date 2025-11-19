@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @brief Header file for OptimalSpecificSpeed class
  *
@@ -9,9 +11,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_OPTIMALSPECIFICSPEED_H
-#define TOOLS_SUITE_OPTIMALSPECIFICSPEED_H
 
 class OptimalSpecificSpeed {
   public:
@@ -38,4 +37,3 @@ class OptimalSpecificSpeed {
     double rpm;
 };
 
-#endif // TOOLS_SUITE_OPTIMALSPECIFICSPEED_H

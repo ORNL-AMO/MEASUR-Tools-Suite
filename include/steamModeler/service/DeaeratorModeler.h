@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_DEAERATORMODELER_H
-#define TOOLS_SUITE_DEAERATORMODELER_H
+#pragma once
 
 #include <steamModeler/Boiler.h>
 #include <steamModeler/domain/DeaeratorFactory.h>
@@ -36,4 +35,3 @@ class DeaeratorModeler {
         const double                                                feedwaterMassFlow) const;
 };
 
-#endif // TOOLS_SUITE_DEAERATORMODELER_H

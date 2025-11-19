@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @brief Contains the declaration of MotorEfficiency class including the getters and setters as well as the
  * calculators for motor efficiency.
@@ -7,9 +9,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_MOTOREFFICIENCY_H
-#define TOOLS_SUITE_MOTOREFFICIENCY_H
 
 #include <array>
 #include <exception>
@@ -150,4 +149,3 @@ class MotorEfficiency {
     double                 motorRatedPower;
 };
 
-#endif // TOOLS_SUITE_MOTOREFFICIENCY_H

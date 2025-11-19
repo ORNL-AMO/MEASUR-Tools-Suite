@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief State point analysis for rate of activated sludge.
@@ -8,8 +10,6 @@
  * @bug No known bugs.
  *
  */
-#pragma once
-
 #include <vector>
 
 class SludgeVolumeIndex {

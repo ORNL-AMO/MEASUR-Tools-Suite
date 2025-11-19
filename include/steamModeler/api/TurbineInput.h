@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_TURBINEINPUT_H
-#define TOOLS_SUITE_TURBINEINPUT_H
+#pragma once
 
 #include <iostream>
 #include <type_traits>
@@ -112,4 +111,3 @@ class TurbineInput {
     PressureTurbine   mediumToLowTurbine;
 };
 
-#endif // TOOLS_SUITE_TURBINEINPUT_H

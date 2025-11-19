@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_HEATEXCHANGER_H
-#define TOOLS_SUITE_HEATEXCHANGER_H
+#pragma once
 
 #include <stdexcept>
 
@@ -81,4 +80,3 @@ class HeatExchanger {
     const double                            approachTemp;
 };
 
-#endif // TOOLS_SUITE_HEATEXCHANGER_H
