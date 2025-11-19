@@ -52,14 +52,11 @@ EMSCRIPTEN_BINDINGS(auxiliaryPowerLoss) {
         .function("getPowerUsed", &AuxiliaryPower::getPowerUsed);
 }
 
-// fixtureLosses
-// getHeatLoss()
-EMSCRIPTEN_BINDINGS(fixtureLosses) {
-    // specificHeat, feedRate, initialTemperature, finalTemperature,
-    // correctionFactor
-    class_<FixtureLosses>("FixtureLosses")
-        .constructor<double, double, double, double, double>()
-        .function("getHeatLoss", &FixtureLosses::getHeatLoss);
+// Bindings for the fixture_heat_loss namespace
+EMSCRIPTEN_BINDINGS(fixture_heat_loss) {
+    using namespace fixture_heat_loss;
+
+    function("fixtureTotalHeatLoss", &totalHeatLoss);
 }
 
 // energyInputEAF

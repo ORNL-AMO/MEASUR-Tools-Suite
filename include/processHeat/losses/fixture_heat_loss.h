@@ -1,113 +1,36 @@
 #pragma once
 
 /**
- * @file
- * @brief Calculator for heat loss due to fixtures, trays, conveyors
+ * @ingroup fixture_heat_loss_calculator
+ * @file fixture_heat_loss.h
+ * @authors Gina Accawi, Liam White
  *
- * This contains the inputs for calculating heat loss due to fixtures, trays, conveyors.
- *
- * Assumes there is no melting or phase change of the fixture material involved.
- *
- * @author Gina Accawi (accawigk)
- * @bug No known bugs.
- *
+ * @copybrief fixture_heat_loss
  */
 
 /**
- * Fixture Losses class
- * Contains all of the properties of a fixture, tray, conveyor belt, etc.
- * Used to calculateThermalResistance the heat loss caused by fixtures, trays, conveyor belts, etc. that enter the
- * furnace at lower temperatures.
+ * @ingroup fixture_heat_loss_calculator
+ * @namespace fixture_heat_loss
+ * @copybrief fixture_heat_loss_calculator
  */
-class FixtureLosses {
-  public:
-    /**
-     * Constructor
-     * @param specificHeat double, Specific heat in btu/(lb*°F).
-     * @param feedRate double, Feed Rate for Gas Mixture in lb/hr
-     * @param initialTemperature double, Initial temperature in °F.
-     * @param finalTemperature double, Final temperature in °F.
-     * @param correctionFactor double, correction factor - unitless
-     */
-    FixtureLosses(const double specificHeat, const double feedRate, const double initialTemperature,
-                  const double finalTemperature, const double correctionFactor)
-        : specificHeat(specificHeat), feedRate(feedRate), initialTemperature(initialTemperature),
-          finalTemperature(finalTemperature), correctionFactor(correctionFactor) {
-        heatLoss = 0.0;
-    }
+namespace fixture_heat_loss {
 
-    FixtureLosses() = default;
+/**
+ * @ingroup fixture_heat_loss_calculator
+ * @brief Calculates the total heat loss from fixtures, trays, or conveyors.
+ * @details This function computes the heat loss caused by fixtures, trays, conveyor belts, and similar equipment that
+ * enter the furnace at lower temperatures and are heated to the furnace temperature. The calculation assumes there is
+ * no melting or phase change of the fixture material involved.
+ * @param[in] specific_heat Specific heat of fixture material @unitb{\btu\per\pound\degreeFahrenheit}
+ * @param[in] feed_rate Feed rate of fixture material @unitb{\pound\per\hour}
+ * @param[in] initial_temperature Initial temperature of fixture @unitb{\degreeFahrenheit}
+ * @param[in] final_temperature Final temperature of fixture @unitb{\degreeFahrenheit}
+ * @param[in] correction_factor Correction factor @unitb{\unitless}
+ * @return Total heat loss @unitb{\btu\per\hour}
+ * @see
+ * - fixture_heat_loss_formula
+ */
+double totalHeatLoss(double specific_heat, double feed_rate, double initial_temperature, double final_temperature,
+                     double correction_factor);
 
-    /**
-     * Gets the specific heat
-     * @return double, specific heat in btu/(lb*°F)
-     */
-    double getSpecificHeat() const { return specificHeat; }
-
-    /**
-     * Sets the specific heat
-     * @param specificHeat double, specific heat in btu/(lb*°F)
-     */
-    void setSpecificHeat(const double specificHeat) { this->specificHeat = specificHeat; }
-
-    /**
-     * Gets the feed rate for gas mixture
-     * @return double, feed rate for gas mixture in lb/hr
-     */
-    double getFeedRate() const { return feedRate; }
-
-    /**
-     * Sets the feed rate for gas mixture
-     * @param feedRate double, feed rate for gas mixture in lb/hr
-     */
-    void setFeedRate(const double feedRate) { this->feedRate = feedRate; }
-
-    /**
-     * Gets the initial temperature
-     * @return double, initial temperature in °F
-     */
-    double getInitialTemperature() const { return initialTemperature; }
-
-    /**
-     * Sets the initial temperature
-     * @param initialTemperature double, initial temperature in °F
-     */
-    void setInitialTemperature(const double initialTemperature) { this->initialTemperature = initialTemperature; }
-
-    /**
-     * Gets the final temperature
-     * @return double, final temperature in °F
-     */
-    double getFinalTemperature() const { return finalTemperature; }
-
-    /**
-     * Sets the final temperature
-     * @param finalTemperature double, final temperature in °F
-     */
-    void setFinalTemperature(const double finalTemperature) { this->finalTemperature = finalTemperature; }
-
-    /**
-     * Gets the correction factor
-     * @return double, correction factor - unitless
-     */
-    double getCorrectionFactor() const { return correctionFactor; }
-
-    /**
-     * Sets the correction factor
-     * @param correctionFactor double, correction factor - unitless
-     */
-    void setCorrectionFactor(const double correctionFactor) { this->correctionFactor = correctionFactor; }
-
-    /**
-     * Gets the total heat loss
-     * @return double, total heat loss in btu/hr
-     */
-    double getHeatLoss();
-
-  private:
-    // In values
-    double specificHeat, feedRate, initialTemperature, finalTemperature, correctionFactor;
-
-    // Out values
-    double heatLoss;
-};
+} // namespace fixture_heat_loss

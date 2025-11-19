@@ -1,14 +1,10 @@
-/**
- * @file
- * @brief Contains the implementation of the fixture losses total heat.
- *
- * @author Gina Accawi (accawigk)
- * @bug No known bugs.
- *
- */
 #include "processHeat/losses/fixture_heat_loss.h"
 
-double FixtureLosses::getHeatLoss() {
-    heatLoss = feedRate * specificHeat * (finalTemperature - initialTemperature) * correctionFactor;
-    return heatLoss;
+namespace fixture_heat_loss {
+
+double totalHeatLoss(double specific_heat, double feed_rate, double initial_temperature, double final_temperature,
+                     double correction_factor) {
+    return feed_rate * specific_heat * (final_temperature - initial_temperature) * correction_factor;
 }
+
+} // namespace fixture_heat_loss
