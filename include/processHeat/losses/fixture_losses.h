@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculator for heat loss due to fixtures, trays, conveyors
@@ -10,9 +12,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_FIXTURELOSSES_H
-#define TOOLS_SUITE_FIXTURELOSSES_H
 
 /**
  * Fixture Losses class
@@ -113,4 +112,3 @@ class FixtureLosses {
     double heatLoss;
 };
 
-#endif // TOOLS_SUITE_FIXTURELOSSES_H

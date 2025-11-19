@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_SOLIDLIQUIDFLUEGASMATERIAL_H
-#define TOOLS_SUITE_SOLIDLIQUIDFLUEGASMATERIAL_H
+#pragma once
 
 #include <string>
 
@@ -258,4 +257,3 @@ class SolidLiquidFlueGasMaterial {
     double      heatingValueFuel = 0, stoichometricAir = 0, ambientAirTempF = 60;
 };
 
-#endif // TOOLS_SUITE_SOLIDLIQUIDFLUEGASMATERIAL_H

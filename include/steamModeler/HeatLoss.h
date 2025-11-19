@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculator for the heat loss for steam systems
@@ -14,8 +16,6 @@
 #include "SteamProperties.h"
 #include "SteamSystemModelerTool.h"
 
-#ifndef TOOLS_SUITE_HEATLOSS_H
-    #define TOOLS_SUITE_HEATLOSS_H
 
 /**
  * Heat Loss calculator class
@@ -133,4 +133,3 @@ class HeatLoss {
     SteamProperties::ThermodynamicQuantity quantityType;
 };
 
-#endif // TOOLS_SUITE_HEATLOSS_H

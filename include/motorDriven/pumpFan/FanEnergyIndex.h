@@ -1,5 +1,5 @@
-#ifndef TOOLS_SUITE_FANENERGYINDEX_H
-#define TOOLS_SUITE_FANENERGYINDEX_H
+#pragma once
+
 /**
  * @file FanEnergyIndex.h
  * @author Preston Shires (pshires) & Allie Ledbetter (aeledbetter)
@@ -66,4 +66,3 @@ class FanEnergyIndex {
     const double flowRate, inletPressure, outletPressure, airDensity, motorPower;
 };
 
-#endif // TOOLS_SUITE_FANENERGYINDEX_H

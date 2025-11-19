@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file Header file for Power Factor (pf) Calculations
  *
@@ -21,9 +23,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_POWERFACTOR_H
-#define TOOLS_SUITE_POWERFACTOR_H
 
 #include <cmath>
 
@@ -88,4 +87,3 @@ class PowerFactor {
     double realPower = 0, reactivePower = 0, apparentPower = 0, powerFactor = 0, phaseAngle = 0;
 };
 
-#endif // TOOLS_SUITE_POWERFACTOR_H

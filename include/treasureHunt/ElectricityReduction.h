@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_ELECTRICITYREDUCTION_H
-#define TOOLS_SUITE_ELECTRICITYREDUCTION_H
+#pragma once
 
 #include <exception>
 #include <stdexcept>
@@ -160,5 +159,3 @@ class ElectricityReduction {
     std::vector<ElectricityReductionInput> electricityReductionInputVec;
     ElectricityReduction::Output           output;
 };
-
-#endif // TOOLS_SUITE_ELECTRICITYREDUCTION_H

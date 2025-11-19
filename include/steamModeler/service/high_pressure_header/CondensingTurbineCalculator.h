@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_CONDENSINGTURBINECALCULATOR_H
-#define TOOLS_SUITE_CONDENSINGTURBINECALCULATOR_H
+#pragma once
 
 #include <steamModeler/api/TurbineInput.h>
 #include <steamModeler/domain/TurbineFactory.h>
@@ -20,4 +19,3 @@ class CondensingTurbineCalculator {
                                         const bool                                     isCalcIdeal) const;
 };
 
-#endif // TOOLS_SUITE_CONDENSINGTURBINECALCULATOR_H

@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_BOILERINPUT_H
-#define TOOLS_SUITE_BOILERINPUT_H
+#pragma once
 
 #include <iostream>
 
@@ -47,4 +46,3 @@ class BoilerInput {
     double approachTemperature;
 };
 
-#endif // TOOLS_SUITE_BOILERINPUT_H

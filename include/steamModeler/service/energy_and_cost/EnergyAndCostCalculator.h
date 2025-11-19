@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_ENERGYANDCOSTCALCULATOR_H
-#define TOOLS_SUITE_ENERGYANDCOSTCALCULATOR_H
+#pragma once
 
 #include <memory>
 
@@ -44,4 +43,3 @@ class EnergyAndCostCalculator {
     double calcBoilerFuelUsage(const double fuelEnergyInput, const double operatingHoursPerYearInput) const;
 };
 
-#endif // TOOLS_SUITE_ENERGYANDCOSTCALCULATOR_H

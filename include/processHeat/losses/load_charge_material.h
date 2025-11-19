@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_LOADCHARGEMATERIAL_H
-#define TOOLS_SUITE_LOADCHARGEMATERIAL_H
+#pragma once
 
 /**
  * Load Charge Material class
@@ -10,4 +9,3 @@ namespace LoadChargeMaterial {
 enum class ThermicReactionType { ENDOTHERMIC, EXOTHERMIC, NONE };
 } // namespace LoadChargeMaterial
 
-#endif // TOOLS_SUITE_LOADCHARGEMATERIAL_H

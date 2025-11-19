@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculator for the humidity ratio
@@ -8,9 +10,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_HUMIDITYRATIO_H
-#define TOOLS_SUITE_HUMIDITYRATIO_H
 
 class HumidityRatio {
   public:
@@ -132,4 +131,3 @@ class HumidityRatio {
     double humidityRatioUsingRH_;
     double humidityRatioUsingWBT_;
 };
-#endif // TOOLS_SUITE_HUMIDITYRATIO_H

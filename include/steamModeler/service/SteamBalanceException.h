@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_STEAMBALANCEEXCEPTION_H
-#define TOOLS_SUITE_STEAMBALANCEEXCEPTION_H
+#pragma once
 
 #include <exception>
 #include <iostream>
@@ -28,4 +27,3 @@ class SteamBalanceException : public std::exception {
     double adjustedInitialSteam;
 };
 
-#endif // TOOLS_SUITE_STEAMBALANCEEXCEPTION_H

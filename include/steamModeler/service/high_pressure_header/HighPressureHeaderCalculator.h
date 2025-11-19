@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_HIGHPRESSUREHEADERCALCULATOR_H
-#define TOOLS_SUITE_HIGHPRESSUREHEADERCALCULATOR_H
+#pragma once
 
 #include <steamModeler/api/HeaderInput.h>
 #include <steamModeler/Boiler.h>
@@ -17,4 +16,3 @@ class HighPressureHeaderCalculator {
     const HeaderFactory          headerFactory          = HeaderFactory();
 };
 
-#endif // TOOLS_SUITE_HIGHPRESSUREHEADERCALCULATOR_H

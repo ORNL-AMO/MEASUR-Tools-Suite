@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Implementations of Air System Capacity of a compressed air system
@@ -6,9 +8,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_AIRSYSTEMCAPACITY_H
-#define TOOLS_SUITE_AIRSYSTEMCAPACITY_H
 
 #include "PipeData.h"
 
@@ -53,4 +52,3 @@ class AirSystemCapacity {
     std::vector<double> receivers;
 };
 
-#endif

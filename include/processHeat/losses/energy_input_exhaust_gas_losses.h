@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculator for energy input - exhaust gas losses for a non-EAF electric furnace
@@ -8,9 +10,6 @@
  * @bug No known bugs.
  *
  */
-#ifndef TOOLS_SUITE_ENERGYINPUTEXHAUSTGASLOSSES_H
-#define TOOLS_SUITE_ENERGYINPUTEXHAUSTGASLOSSES_H
-
 /**
  * Energy Input Exhaust Gas Losses
  * Used to calculateThermalResistance the fuel heat that is delivered to the oven/furnace
@@ -47,4 +46,3 @@ class EnergyInputExhaustGasLosses {
     const double combustionAirCorrection, availableHeat, heatDelivered, exhaustGasLosses;
 };
 
-#endif // TOOLS_SUITE_ENERGYINPUTEXHAUSTGASLOSSES_H

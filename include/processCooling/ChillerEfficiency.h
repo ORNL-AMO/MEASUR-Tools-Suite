@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @brief Contains the Consumption (Water / Power / Energy) & Savings calculators for
  *  Chiller
@@ -8,9 +10,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_CHILLEREFFICIENCY_H
-#define TOOLS_SUITE_CHILLEREFFICIENCY_H
 
 #include <math.h>
 
@@ -277,4 +276,3 @@ class ChillerEfficiency {
     }
 };
 
-#endif // TOOLS_SUITE_CHILLEREFFICIENCY_H

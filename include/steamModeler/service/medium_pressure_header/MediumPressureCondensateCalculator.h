@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_MEDIUMPRESSURECONDENSATECALCULATOR_H
-#define TOOLS_SUITE_MEDIUMPRESSURECONDENSATECALCULATOR_H
+#pragma once
 
 #include <steamModeler/api/HeaderInput.h>
 #include <steamModeler/SteamSystemModelerTool.h>
@@ -17,4 +16,3 @@ class MediumPressureCondensateCalculator {
     const MassFlowCalculator   massFlowCalculator   = MassFlowCalculator();
 };
 
-#endif // TOOLS_SUITE_MEDIUMPRESSURECONDENSATECALCULATOR_H

@@ -1,12 +1,11 @@
+#pragma once
+
 /**
  * @file Default data for Compressors
  *
  * @author Omer Aziz (omerb)
  *
  */
-
-#ifndef MEASUR_TOOLS_SUITE_COMPRESSORS_DATA_DB_H
-#define MEASUR_TOOLS_SUITE_COMPRESSORS_DATA_DB_H
 
 class CompressorsData;
 
@@ -1645,4 +1644,3 @@ std::vector<CompressorsData> DefaultData::get_default_compressor_data() {
     };
 }
 
-#endif //MEASUR_TOOLS_SUITE_COMPRESSORS_DATA_DB_H

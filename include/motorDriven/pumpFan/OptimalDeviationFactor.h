@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @brief Header file for OptimalDeviationFactor class
  *
@@ -9,9 +11,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_OPTIMALDEVIATIONFACTOR_H
-#define TOOLS_SUITE_OPTIMALDEVIATIONFACTOR_H
 
 class OptimalDeviationFactor {
   public:
@@ -31,4 +30,3 @@ class OptimalDeviationFactor {
     double flowRate;
 };
 
-#endif // TOOLS_SUITE_OPTIMALDEVIATIONFACTOR_H

@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_LOWPRESSUREHEADERCALCULATIONSDOMAIN_H
-#define TOOLS_SUITE_LOWPRESSUREHEADERCALCULATIONSDOMAIN_H
+#pragma once
 
 #include <memory>
 
@@ -51,4 +50,3 @@ class LowPressureHeaderCalculationsDomain {
     }
 };
 
-#endif // TOOLS_SUITE_LOWPRESSUREHEADERCALCULATIONSDOMAIN_H

@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculator for auxiliary power usage
@@ -8,9 +10,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_AUXILIARYPOWER_H
-#define TOOLS_SUITE_AUXILIARYPOWER_H
 
 #include <cmath>
 
@@ -46,4 +45,3 @@ class AuxiliaryPower {
     const double motorPhase, supplyVoltage, avgCurrent, powerFactor, operatingTime;
 };
 
-#endif // TOOLS_SUITE_AUXILIARYPOWER_H

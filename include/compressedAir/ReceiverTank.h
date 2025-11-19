@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Implementations of Receiver Tank of a compressed air system
@@ -6,9 +8,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_RECEIVERTANK_H
-#define TOOLS_SUITE_RECEIVERTANK_H
 
 #include <cmath>
 #include <functional>
@@ -158,4 +157,3 @@ class ReceiverTank {
     double meteredFlowControl;
 };
 
-#endif

@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @brief Header file for OptimalPrePumpEff class
  *
@@ -8,9 +10,6 @@
  * @bug No known bugs.
  *
  */
-#ifndef TOOLS_SUITE_OPTIMALPREPUMPEFF_H
-#define TOOLS_SUITE_OPTIMALPREPUMPEFF_H
-
 #include "motorDriven/pump/PumpResult.h"
 
 class OptimalPrePumpEff {
@@ -33,4 +32,3 @@ class OptimalPrePumpEff {
     const double      flowRate;
 };
 
-#endif // TOOLS_SUITE_OPTIMALPREPUMPEFF_H

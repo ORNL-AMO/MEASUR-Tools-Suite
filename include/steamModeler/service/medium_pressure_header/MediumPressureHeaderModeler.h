@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_MEDIUMPRESSUREHEADERMODELER_H
-#define TOOLS_SUITE_MEDIUMPRESSUREHEADERMODELER_H
+#pragma once
 
 #include <memory>
 
@@ -48,4 +47,3 @@ class MediumPressureHeaderModeler {
                    const HighPressureHeaderCalculationsDomain& highPressureHeaderCalculationsDomain) const;
 };
 
-#endif // TOOLS_SUITE_MEDIUMPRESSUREHEADERMODELER_H

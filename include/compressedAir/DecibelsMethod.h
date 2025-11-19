@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Implementations of Decibels Method of a compressed air system
@@ -6,9 +8,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_DECIBELSMETHOD_H
-#define TOOLS_SUITE_DECIBELSMETHOD_H
 
 class DecibelsMethod {
   public:
@@ -86,4 +85,3 @@ class DecibelsMethod {
     double secondFlowB;    // Q22
 };
 
-#endif

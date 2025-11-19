@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculator for heat required for slag - other material losses
@@ -14,9 +16,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_SLAGOTHERMATERIAL_H
-#define TOOLS_SUITE_SLAGOTHERMATERIAL_H
 
 /**
  * Slag Other Material Losses class
@@ -128,4 +127,3 @@ class SlagOtherMaterialLosses {
     double totalHeat;
 };
 
-#endif // TOOLS_SUITE_SLAGOTHERMATERIAL_H

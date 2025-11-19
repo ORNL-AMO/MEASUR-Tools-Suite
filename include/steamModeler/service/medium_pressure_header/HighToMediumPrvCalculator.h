@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_HIGHTOMEDIUMPRVCALCULATOR_H
-#define TOOLS_SUITE_HIGHTOMEDIUMPRVCALCULATOR_H
+#pragma once
 
 #include <steamModeler/api/HeaderInput.h>
 #include <steamModeler/api/TurbineInput.h>
@@ -24,4 +23,3 @@ class HighToMediumPrvCalculator {
     const PrvCalculator prvCalculator = PrvCalculator();
 };
 
-#endif // TOOLS_SUITE_HIGHTOMEDIUMPRVCALCULATOR_H

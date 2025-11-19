@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculator for turbines for steam systems
@@ -8,9 +10,6 @@
  * @bug No known bugs.
  *
  */
-#ifndef TOOLS_SUITE_TURBINE_H
-#define TOOLS_SUITE_TURBINE_H
-
 #include <iostream>
 
 #include "SteamProperties.h"
@@ -301,4 +300,3 @@ class Turbine {
     double inletEnergyFlow, outletEnergyFlow = 0, energyOut, powerOut, massFlow;
 };
 
-#endif // TOOLS_SUITE_TURBINE_H

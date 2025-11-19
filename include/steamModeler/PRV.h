@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculator for the steam properties after after a pressure drop for steam systems
@@ -11,8 +13,6 @@
 
 #include "SteamProperties.h"
 
-#ifndef TOOLS_SUITE_PRV_H
-    #define TOOLS_SUITE_PRV_H
 
 /**
  * PRV without Desuperheating calculator class
@@ -358,4 +358,3 @@ class PrvCastDesuperheating {
     }
 };
 
-#endif // TOOLS_SUITE_PRV_H

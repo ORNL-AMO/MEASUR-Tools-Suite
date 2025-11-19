@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Contains the class definition for Bio-Tiger waste water treatment simulation.
@@ -9,9 +11,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_WASTEWATER_TREATMENT_H
-#define TOOLS_SUITE_WASTEWATER_TREATMENT_H
 
 #include <vector>
 
@@ -273,4 +272,3 @@ class WasteWater_Treatment {
     double EnergyCostUnit;
     double DefinedSRT;
 };
-#endif // TOOLS_SUITE_WASTEWATER_TREATMENT_H

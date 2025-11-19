@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_ENERGYFLOWCALCULATOR_H
-#define TOOLS_SUITE_ENERGYFLOWCALCULATOR_H
+#pragma once
 
 #include <steamModeler/Boiler.h>
 #include <steamModeler/SteamSystemModelerTool.h>
@@ -14,4 +13,3 @@ class EnergyFlowCalculator {
     double calc(const double massFlow, const double specificEnthalpy) const;
 };
 
-#endif // TOOLS_SUITE_ENERGYFLOWCALCULATOR_H

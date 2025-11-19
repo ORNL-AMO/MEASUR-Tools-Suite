@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @brief Header file for MoverShaftPower class
  *
@@ -8,9 +10,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_MOVERSHAFTPOWER_H
-#define TOOLS_SUITE_MOVERSHAFTPOWER_H
 
 #include "motorDriven/motor/MotorData.h"
 
@@ -84,4 +83,3 @@ class MoverShaftPower {
     double       specifiedEfficiency;
 };
 
-#endif
