@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculate energy savings from using exhaust gas (waste) of high temperature to supply heat to low temperature
@@ -9,9 +11,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_CASCADEHEATHIGHTOLOW_H
-#define TOOLS_SUITE_CASCADEHEATHIGHTOLOW_H
 
 #include "losses/gas_flue_gas_material.h"
 #include "losses/solid_liquid_flue_gas_material.h"
@@ -120,4 +119,3 @@ class CascadeHeatHighToLow {
     double secFiringRate = 0, secExhaustTemperature = 0, secExhaustO2 = 0, secCombAirTemperature = 0, secOpHours = 0;
 };
 
-#endif // TOOLS_SUITE_CASCADEHEATHIGHTOLOW_H

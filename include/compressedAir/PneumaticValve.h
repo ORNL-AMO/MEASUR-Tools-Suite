@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Implementations of Pneumatic Valve of a compressed air system
@@ -6,9 +8,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_PNEUMATICVALVE_H
-#define TOOLS_SUITE_PNEUMATICVALVE_H
 
 #include <cmath>
 #include <functional>
@@ -52,4 +51,3 @@ class PneumaticValve {
     bool   flowRateKnown;
 };
 
-#endif

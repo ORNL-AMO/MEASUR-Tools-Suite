@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_LOWPRESSUREHEADERCALCULATOR_H
-#define TOOLS_SUITE_LOWPRESSUREHEADERCALCULATOR_H
+#pragma once
 
 #include <steamModeler/domain/FluidPropertiesFactory.h>
 #include <steamModeler/domain/HeaderFactory.h>
@@ -22,4 +21,3 @@ class LowPressureHeaderCalculator {
     const HeaderFactory          headerFactory          = HeaderFactory();
 };
 
-#endif // TOOLS_SUITE_LOWPRESSUREHEADERCALCULATOR_H

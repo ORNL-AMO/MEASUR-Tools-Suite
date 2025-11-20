@@ -1,3 +1,4 @@
+#pragma once
 
 /**
  * @brief Contains some of the Fan related classes
@@ -7,9 +8,6 @@
  * @bug No known bugs.
  *
  */
-#ifndef TOOLS_SUITE_COMPRESSIBILITYFACTOR_H
-#define TOOLS_SUITE_COMPRESSIBILITYFACTOR_H
-
 #include <cmath>
 /**
  * Compressability Factor calculator class
@@ -60,4 +58,3 @@ class CompressibilityFactor {
     const double moverShaftPower, inletPressure, outletPressure, barometricPressure, flowRate, specificHeatRatio;
 };
 
-#endif // TOOLS_SUITE_COMPRESSIBILITYFACTOR_H

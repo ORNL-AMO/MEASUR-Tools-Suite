@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculate estimated power(kW) consumption and air flow(acfm) for a compressor based on control type.
@@ -29,9 +31,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_COMPRESSORS_H
-#define TOOLS_SUITE_COMPRESSORS_H
 
 #include <math.h>
 
@@ -1266,4 +1265,3 @@ class CompressorEEMs {
                ((pow((P_discharge + P_alt) / P_alt, 0.283) - 1) / (pow((P_fl_rated + P_atm) / P_atm, 0.283) - 1));
     }
 };
-#endif // TOOLS_SUITE_COMPRESSORS_H

@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_HIGHTOMEDIUMSTEAMTURBINECALCULATOR_H
-#define TOOLS_SUITE_HIGHTOMEDIUMSTEAMTURBINECALCULATOR_H
+#pragma once
 
 #include <memory>
 
@@ -88,4 +87,3 @@ class HighToMediumSteamTurbineCalculator {
                                  const std::shared_ptr<Turbine>&                highToLowPressureTurbine) const;
 };
 
-#endif // TOOLS_SUITE_HIGHTOMEDIUMSTEAMTURBINECALCULATOR_H

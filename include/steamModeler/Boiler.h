@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculator for boiler
@@ -14,8 +16,6 @@
 #include "SteamProperties.h"
 #include "SteamSystemModelerTool.h"
 
-#ifndef TOOLS_SUITE_BOILER_H
-    #define TOOLS_SUITE_BOILER_H
 
 /**
  * Boiler calculator class
@@ -161,4 +161,3 @@ class Boiler {
     double                                  boilerEnergy, fuelEnergy;
 };
 
-#endif // TOOLS_SUITE_BOILER_H

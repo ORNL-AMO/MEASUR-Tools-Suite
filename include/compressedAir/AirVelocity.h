@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Implementations of Air Velocity of a compressed air system
@@ -6,9 +8,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_AIRVELOCITY_H
-#define TOOLS_SUITE_AIRVELOCITY_H
 
 #include "PipeData.h"
 
@@ -41,4 +40,3 @@ class AirVelocity {
     double airFlow, pipePressure, atmosphericPressure;
 };
 
-#endif

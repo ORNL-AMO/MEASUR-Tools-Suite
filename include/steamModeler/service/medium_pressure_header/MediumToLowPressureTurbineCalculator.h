@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_MEDIUMTOLOWPRESSURETURBINECALCULATOR_H
-#define TOOLS_SUITE_MEDIUMTOLOWPRESSURETURBINECALCULATOR_H
+#pragma once
 
 #include <steamModeler/api/HeaderInput.h>
 #include <steamModeler/api/TurbineInput.h>
@@ -101,4 +100,3 @@ class MediumToLowPressureTurbineCalculator {
                                  const SteamSystemModelerTool::FluidProperties&   mediumPressureHeaderOutput) const;
 };
 
-#endif // TOOLS_SUITE_MEDIUMTOLOWPRESSURETURBINECALCULATOR_H

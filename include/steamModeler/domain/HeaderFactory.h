@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_HEADERFACTORY_H
-#define TOOLS_SUITE_HEADERFACTORY_H
+#pragma once
 
 #include <memory>
 
@@ -79,4 +78,3 @@ class HeaderFactory {
         const std::shared_ptr<LowPressureHeaderCalculationsDomain>& lowPressureHeaderCalculationsDomain) const;
 };
 
-#endif // TOOLS_SUITE_HEADERFACTORY_H

@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculator for energy equivalency for electric and fuel-fired furnaces
@@ -8,9 +10,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_ENERGYEQUIVALENCY_H
-#define TOOLS_SUITE_ENERGYEQUIVALENCY_H
 
 /**
  * Electrical Energy Equivalency calculator class
@@ -193,4 +192,3 @@ class FuelFiredEnergyEquivalency {
     /// natural gas heat
     double fuelFiredHeatInput_;
 };
-#endif // TOOLS_SUITE_ENERGYEQUIVALENCY_H

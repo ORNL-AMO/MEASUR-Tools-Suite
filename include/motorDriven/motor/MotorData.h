@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_MOTORDATA_H
-#define TOOLS_SUITE_MOTORDATA_H
+#pragma once
 
 #include <string>
 
@@ -120,4 +119,3 @@ class MotorData {
     friend class DefaultData;
 };
 
-#endif // TOOLS_SUITE_MOTORDATA_H

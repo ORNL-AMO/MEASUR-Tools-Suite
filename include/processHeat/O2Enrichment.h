@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculator for fuel fired furnace
@@ -8,9 +10,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_O2ENRICHMENT_H
-#define TOOLS_SUITE_O2ENRICHMENT_H
 
 /**
  * O2 Enrichment calculator class
@@ -292,4 +291,3 @@ class O2Enrichment {
     double fuelConsumptionEnriched, fuelSavingsEnriched;
 };
 
-#endif // TOOLS_SUITE_O2ENRICHMENT_H

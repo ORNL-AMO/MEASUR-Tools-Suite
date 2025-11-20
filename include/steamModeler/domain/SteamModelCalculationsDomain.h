@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_STEAMMODELCALCULATIONSDOMAIN_H
-#define TOOLS_SUITE_STEAMMODELCALCULATIONSDOMAIN_H
+#pragma once
 
 #include <memory>
 
@@ -27,4 +26,3 @@ class SteamModelCalculationsDomain {
     EnergyAndCostCalculationsDomain                         energyAndCostCalculationsDomain;
 };
 
-#endif // TOOLS_SUITE_STEAMMODELCALCULATIONSDOMAIN_H

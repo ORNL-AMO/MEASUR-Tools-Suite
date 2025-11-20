@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_LOWPRESSUREHEADERMODELER_H
-#define TOOLS_SUITE_LOWPRESSUREHEADERMODELER_H
+#pragma once
 
 #include <steamModeler/api/TurbineInput.h>
 #include <steamModeler/Boiler.h>
@@ -45,4 +44,3 @@ class LowPressureHeaderModeler {
         LowPressureFlashedSteamIntoHeaderCalculator();
 };
 
-#endif // TOOLS_SUITE_LOWPRESSUREHEADERMODELER_H

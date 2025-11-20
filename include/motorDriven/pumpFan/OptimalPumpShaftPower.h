@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @brief Header file for OptimalPumpShaftPower class
  *
@@ -9,9 +11,6 @@
  * @bug No known bugs.
  *
  */
-#ifndef TOOLS_SUITE_OPTIMALPUMPSHAFTPOWER_H
-#define TOOLS_SUITE_OPTIMALPUMPSHAFTPOWER_H
-
 #include "FluidPower.h"
 
 class OptimalPumpShaftPower {
@@ -106,4 +105,3 @@ class OptimalPumpShaftPower {
     double velocityPressure = 0;
 };
 
-#endif // TOOLS_SUITE_OPTIMALPUMPSHAFTPOWER_H

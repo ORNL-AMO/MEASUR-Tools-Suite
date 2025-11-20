@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculate energy and cost savings from using flue gas (waste) heat to heat boiler feed water using
@@ -8,9 +10,6 @@
  * @author Omer Aziz (omerb)
  *
  */
-
-#ifndef TOOLS_SUITE_WATERHEATINGUSINGFLUE_H
-#define TOOLS_SUITE_WATERHEATINGUSINGFLUE_H
 
 #include "losses/gas_flue_gas_material.h"
 
@@ -105,4 +104,3 @@ class WaterHeatingUsingFlue {
     inline double TempFtoK(double tempF) const { return ((tempF - 32) / 1.8) + 273.15; }
 };
 
-#endif // TOOLS_SUITE_WATERHEATINGUSINGFLUE_H

@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_PROCESSSTEAMUSAGEMODELER_H
-#define TOOLS_SUITE_PROCESSSTEAMUSAGEMODELER_H
+#pragma once
 
 #include <memory>
 
@@ -29,4 +28,3 @@ class ProcessSteamUsageModeler {
                            const SteamSystemModelerTool::FluidProperties&   pressureCondensate) const;
 };
 
-#endif // TOOLS_SUITE_PROCESSSTEAMUSAGEMODELER_H

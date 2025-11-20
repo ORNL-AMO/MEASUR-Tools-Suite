@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_MASSFLOWCALCULATOR_H
-#define TOOLS_SUITE_MASSFLOWCALCULATOR_H
+#pragma once
 
 #include <steamModeler/api/HeaderInput.h>
 
@@ -16,4 +15,3 @@ class MassFlowCalculator {
     double addToMassFlow(const std::string& objectName, double massFlow, const double mediumProcessSteamUsage) const;
 };
 
-#endif // TOOLS_SUITE_MASSFLOWCALCULATOR_H

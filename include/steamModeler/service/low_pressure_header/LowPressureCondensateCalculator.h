@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_LOWPRESSURECONDENSATECALCULATOR_H
-#define TOOLS_SUITE_LOWPRESSURECONDENSATECALCULATOR_H
+#pragma once
 
 #include <steamModeler/api/HeaderInput.h>
 #include <steamModeler/domain/FluidPropertiesFactory.h>
@@ -13,4 +12,3 @@ class LowPressureCondensateCalculator {
     const FluidPropertiesFactory fluidPropertiesFactory = FluidPropertiesFactory();
 };
 
-#endif // TOOLS_SUITE_LOWPRESSURECONDENSATECALCULATOR_H

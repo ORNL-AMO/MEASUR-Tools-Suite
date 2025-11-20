@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_INSULATEDPIPECALCULATOR_H
-#define TOOLS_SUITE_INSULATEDPIPECALCULATOR_H
+#pragma once
 
 #include <vector>
 
@@ -133,5 +132,3 @@ class InsulatedPipeReduction {
         {-2.08438E-13, -1.72787E-11, 8.00624E-07, -0.000694606, 0.845781218} // Prandtl
     };
 };
-
-#endif

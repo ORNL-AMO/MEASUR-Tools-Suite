@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_INLETFACTORY_H
-#define TOOLS_SUITE_INLETFACTORY_H
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -31,4 +30,3 @@ class InletFactory {
     Inlet makeWithTemperature(const std::shared_ptr<HeatExchanger::Output>& output) const;
 };
 
-#endif // TOOLS_SUITE_INLETFACTORY_H

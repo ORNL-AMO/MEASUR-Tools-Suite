@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_COMBINEDCONDENSATECALCULATOR_H
-#define TOOLS_SUITE_COMBINEDCONDENSATECALCULATOR_H
+#pragma once
 
 #include <steamModeler/domain/HeaderFactory.h>
 #include <steamModeler/domain/HighPressureHeaderCalculationsDomain.h>
@@ -18,4 +17,3 @@ class CombinedCondensateCalculator {
     const HeaderFactory headerFactory = HeaderFactory();
 };
 
-#endif // TOOLS_SUITE_COMBINEDCONDENSATECALCULATOR_H

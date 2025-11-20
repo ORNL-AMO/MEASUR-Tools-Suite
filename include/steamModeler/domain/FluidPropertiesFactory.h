@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_FLUIDPROPERTIESFACTORY_H
-#define TOOLS_SUITE_FLUIDPROPERTIESFACTORY_H
+#pragma once
 
 #include <steamModeler/api/HeaderInput.h>
 #include <steamModeler/Boiler.h>
@@ -47,4 +46,3 @@ class FluidPropertiesFactory {
         const std::shared_ptr<HeaderNotHighestPressure>& notHighestPressureHeaderInput) const;
 };
 
-#endif // TOOLS_SUITE_FLUIDPROPERTIESFACTORY_H

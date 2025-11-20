@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculator for total energy loss for gas leakages
@@ -9,9 +11,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_LEAKAGELOSSES_H
-#define TOOLS_SUITE_LEAKAGELOSSES_H
 
 /**
  * Leakage Losses class
@@ -143,4 +142,3 @@ class LeakageLosses {
     // Out value
     double exfiltratedGasesHeatContent;
 };
-#endif // TOOLS_SUITE_LEAKAGELOSSES_H

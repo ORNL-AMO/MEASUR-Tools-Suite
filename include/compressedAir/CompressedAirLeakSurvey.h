@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_COMPRESSEDAIRLEAKSURVEY_H
-#define TOOLS_SUITE_COMPRESSEDAIRLEAKSURVEY_H
+#pragma once
 
 #include <exception>
 #include <stdexcept>
@@ -203,5 +202,3 @@ class CompressedAirLeakSurvey {
     std::vector<CompressedAirLeakSurveyInput> compressedAirLeakSurveyInputVec;
     CompressedAirLeakSurvey::Output           output;
 };
-
-#endif

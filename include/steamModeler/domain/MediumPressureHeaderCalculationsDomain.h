@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_MEDIUMPRESSUREHEADERCALCULATIONSDOMAIN_H
-#define TOOLS_SUITE_MEDIUMPRESSUREHEADERCALCULATIONSDOMAIN_H
+#pragma once
 
 #include <iostream>
 #include <memory>
@@ -59,4 +58,3 @@ class MediumPressureHeaderCalculationsDomain {
     }
 };
 
-#endif // TOOLS_SUITE_MEDIUMPRESSUREHEADERCALCULATIONSDOMAIN_H

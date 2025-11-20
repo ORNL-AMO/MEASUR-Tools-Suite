@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_STEAMREDUCER_H
-#define TOOLS_SUITE_STEAMREDUCER_H
+#pragma once
 
 #include <steamModeler/api/TurbineInput.h>
 #include <steamModeler/domain/TurbineFactory.h>
@@ -61,4 +60,3 @@ class SteamReducer {
                                        const std::shared_ptr<HeaderNotHighestPressure>& lowPressureHeaderInput) const;
 };
 
-#endif // TOOLS_SUITE_STEAMREDUCER_H

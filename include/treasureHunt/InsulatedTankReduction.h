@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_INSULATEDTANKCALCULATOR_H
-#define TOOLS_SUITE_INSULATEDTANKCALCULATOR_H
+#pragma once
 
 #include <vector>
 
@@ -106,5 +105,3 @@ class InsulatedTankReduction {
         {-1.63898601e-15, 7.98394765e-12, -1.80852621e-8, 3.85957991e-5, -1.49489778e-3}, // thermCond
     };
 };
-
-#endif

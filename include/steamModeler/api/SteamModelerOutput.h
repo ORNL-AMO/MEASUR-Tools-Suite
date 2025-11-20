@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_STEAMMODELEROUPUT_H
-#define TOOLS_SUITE_STEAMMODELEROUPUT_H
+#pragma once
 
 #include <steamModeler/Boiler.h>
 #include <steamModeler/Deaerator.h>
@@ -43,4 +42,3 @@ class SteamModelerOutput {
     }
 };
 
-#endif // TOOLS_SUITE_STEAMMODELEROUPUT_H

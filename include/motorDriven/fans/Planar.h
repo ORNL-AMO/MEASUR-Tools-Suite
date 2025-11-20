@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * Contains calculations for Planar Data
  * @author Preston Shires (pshires)
@@ -5,8 +7,6 @@
  * @bug No Known Bugs.
  *
  */
-#ifndef TOOLS_SUITE_PLANAR_H
-#define TOOLS_SUITE_PLANAR_H
 #include <cmath>
 #include <vector>
 
@@ -96,4 +96,3 @@ class MstPlane : public Planar {
     MstPlane(const double area, const double tdx, const double pbx, const double psx) : Planar(area, tdx, pbx, psx) {}
 };
 
-#endif // TOOLS_SUITE_PLANAR_H

@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Implementations of Pneumatic Air Requirement of a compressed air system
@@ -6,9 +8,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_PNEUMATICAIRREQUIREMENT_H
-#define TOOLS_SUITE_PNEUMATICAIRREQUIREMENT_H
 
 #include <cmath>
 #include <functional>
@@ -106,4 +105,3 @@ class PneumaticAirRequirement {
     double     cylinderDiameter, cylinderStroke, pistonRodDiameter = 0, airPressure, cyclesPerMin;
 };
 
-#endif

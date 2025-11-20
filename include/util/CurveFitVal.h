@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @brief Curve Fit class
  *
@@ -9,9 +11,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_CURVEFITVAL_H
-#define TOOLS_SUITE_CURVEFITVAL_H
 
 #include <exception>
 #include <iostream>
@@ -67,4 +66,3 @@ class CurveFitVal {
     std::vector<double> Fit_Coefficients();
 };
 
-#endif // TOOLS_SUITE_CURVEFITVAL_H

@@ -1,12 +1,11 @@
+#pragma once
+
 /**
  * @file Default data for Lighting system
  *
  * @author Omer Aziz (omerb)
  *
  */
-
-#ifndef MEASUR_TOOLS_SUITE_LIGHTING_DATA_DB_H
-#define MEASUR_TOOLS_SUITE_LIGHTING_DATA_DB_H
 
 class LightingData;
 
@@ -89,4 +88,3 @@ std::vector<LightingData> DefaultData::get_default_lighting_data() {
     };
 }
 
-#endif //MEASUR_TOOLS_SUITE_LIGHTING_DATA_DB_H

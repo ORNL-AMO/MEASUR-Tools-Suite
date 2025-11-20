@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_LOWPRESSUREFLASHEDSTEAMINTOHEADERCALCULATOR_H
-#define TOOLS_SUITE_LOWPRESSUREFLASHEDSTEAMINTOHEADERCALCULATOR_H
+#pragma once
 
 #include <memory>
 
@@ -40,4 +39,3 @@ class LowPressureFlashedSteamIntoHeaderCalculator {
                                        const std::shared_ptr<FlashTank>& highPressureCondensateFlashTank) const;
 };
 
-#endif // TOOLS_SUITE_LOWPRESSUREFLASHEDSTEAMINTOHEADERCALCULATOR_H

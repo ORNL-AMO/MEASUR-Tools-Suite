@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculate energy savings from using vent steam to heat water using a steam to liquid heat exchanger.
@@ -8,9 +10,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_WATERHEATINGUSINGSTEAM_H
-#define TOOLS_SUITE_WATERHEATINGUSINGSTEAM_H
 
 class WaterHeatingUsingSteam {
   public:
@@ -68,4 +67,3 @@ class WaterHeatingUsingSteam {
                      const double operatingHours);
 };
 
-#endif // TOOLS_SUITE_WATERHEATINGUSINGSTEAM_H

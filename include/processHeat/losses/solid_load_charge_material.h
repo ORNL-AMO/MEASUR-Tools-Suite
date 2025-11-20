@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculator for total heat of solid load/charge material
@@ -10,9 +12,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_SOLIDLOADCHARGEMATERIAL_H
-#define TOOLS_SUITE_SOLIDLOADCHARGEMATERIAL_H
 
 #include <string>
 
@@ -371,4 +370,3 @@ class SolidLoadChargeMaterial {
           specificHeatLiquid(specificHeatLiquid), meltingPoint(meltingPoint) {}
 };
 
-#endif // TOOLS_SUITE_SOLIDLOADCHARGEMATERIAL_H

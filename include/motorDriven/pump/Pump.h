@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_PUMP_H
-#define TOOLS_SUITE_PUMP_H
+#pragma once
 
 #include <string>
 
@@ -78,5 +77,3 @@ struct Input {
     double              specifiedEfficiency;
 };
 } // namespace Pump
-
-#endif // TOOLS_SUITE_PUMP_H
