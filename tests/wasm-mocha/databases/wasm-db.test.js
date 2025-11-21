@@ -157,13 +157,51 @@ describe('DB Default Data Test', function () {
         function compressorsData(defaultData){
             logMessage('Compressors Data');
 
-            logMessage('********************************* Disabled for now - loading this huge data causes out of memory error in test. However works fine on Windows 11 development computer. ********************************* ');
-            return;
-
-            let listItems = defaultData.getCompressorData();
+            let listItems = defaultData.getCompressorType1Data();
             let count = listItems.size();
-            assert.equal(count, 1630, "Select All Default Data");
+            assert.equal(count, 308, "Select All Compressor Default Data for Type 1 < 100 kW");
+            logMessage('Default Data (start - end):');
+            compressorDataLog(listItems.get(0));
+            compressorDataLog(listItems.get(count-1));
 
+            listItems = defaultData.getCompressorType1_GT100kWData();
+            count = listItems.size();
+            assert.equal(count, 317, "Select All Compressor Default Data for Type 1 > 100 kW");
+            logMessage('Default Data (start - end):');
+            compressorDataLog(listItems.get(0));
+            compressorDataLog(listItems.get(count-1));
+
+            listItems = defaultData.getCompressorType2Data();
+            count = listItems.size();
+            assert.equal(count, 225, "Select All Compressor Default Data for Type 2");
+            logMessage('Default Data (start - end):');
+            compressorDataLog(listItems.get(0));
+            compressorDataLog(listItems.get(count-1));
+
+            listItems = defaultData.getCompressorType3Data();
+            count = listItems.size();
+            assert.equal(count, 180, "Select All Compressor Default Data for Type 3");
+            logMessage('Default Data (start - end):');
+            compressorDataLog(listItems.get(0));
+            compressorDataLog(listItems.get(count-1));
+
+            listItems = defaultData.getCompressorType4Data();
+            count = listItems.size();
+            assert.equal(count, 294, "Select All Compressor Default Data for Type 4");
+            logMessage('Default Data (start - end):');
+            compressorDataLog(listItems.get(0));
+            compressorDataLog(listItems.get(count-1));
+
+            listItems = defaultData.getCompressorType5Data();
+            count = listItems.size();
+            assert.equal(count, 301, "Select All Compressor Default Data for Type 5");
+            logMessage('Default Data (start - end):');
+            compressorDataLog(listItems.get(0));
+            compressorDataLog(listItems.get(count-1));
+
+            listItems = defaultData.getCompressorType6Data();
+            count = listItems.size();
+            assert.equal(count, 5, "Select All Compressor Default Data for Type 6");
             logMessage('Default Data (start - end):');
             compressorDataLog(listItems.get(0));
             compressorDataLog(listItems.get(count-1));
