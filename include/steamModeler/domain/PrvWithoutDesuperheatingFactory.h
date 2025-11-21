@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_PRVWITHOUTDESUPERHEATINGFACTORY_H
-#define TOOLS_SUITE_PRVWITHOUTDESUPERHEATINGFACTORY_H
+#pragma once
 
 #include <steamModeler/api/HeaderInput.h>
 #include <steamModeler/PRV.h>
@@ -10,4 +9,3 @@ class PrvWithoutDesuperheatingFactory {
                                   const std::shared_ptr<HeaderNotHighestPressure>& headerNotHighestPressure) const;
 };
 
-#endif // TOOLS_SUITE_PRVWITHOUTDESUPERHEATINGFACTORY_H

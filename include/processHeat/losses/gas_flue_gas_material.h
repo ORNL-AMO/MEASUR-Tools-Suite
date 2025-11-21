@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculator for flue gas heat losses
@@ -8,9 +10,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_GASFLUEGASMATERIAL_H
-#define TOOLS_SUITE_GASFLUEGASMATERIAL_H
 
 #include <cmath>
 #include <functional>
@@ -354,4 +353,3 @@ class GasFlueGasMaterial {
     const double    flueGasTemperature, excessAirPercentage, combustionAirTemperature, fuelTemperature;
     GasCompositions compositions;
 };
-#endif // TOOLS_SUITE_GASFLUEGASMATERIAL_H

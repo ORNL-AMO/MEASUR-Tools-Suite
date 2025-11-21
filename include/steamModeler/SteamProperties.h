@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_STEAMPROPERTIES_H
-#define TOOLS_SUITE_STEAMPROPERTIES_H
+#pragma once
 
 #include <string>
 
@@ -80,4 +79,3 @@ class SteamProperties {
     const ThermodynamicQuantity thermodynamicQuantity_;
 };
 
-#endif // TOOLS_SUITE_STEAMPROPERTIES_H

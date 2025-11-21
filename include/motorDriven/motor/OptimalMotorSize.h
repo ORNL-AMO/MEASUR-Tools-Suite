@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @brief Header file for OptimalMotorSize class
  *
@@ -8,9 +10,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_OPTIMALMOTORSIZE_H
-#define TOOLS_SUITE_OPTIMALMOTORSIZE_H
 
 class OptimalMotorSize {
   public:
@@ -34,4 +33,3 @@ class OptimalMotorSize {
     double optimalMotorRatedPower;
 };
 
-#endif // TOOLS_SUITE_OPTIMALMOTORSIZE_H

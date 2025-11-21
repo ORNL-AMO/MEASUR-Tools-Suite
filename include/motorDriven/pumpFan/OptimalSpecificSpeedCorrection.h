@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @brief Header file for OptimalSpecificSpeedCorrection class
  *
@@ -8,9 +10,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_OPTIMALSPECIFICSPEEDCORRECTION_H
-#define TOOLS_SUITE_OPTIMALSPECIFICSPEEDCORRECTION_H
 
 #include "motorDriven/pump/PumpResult.h"
 
@@ -35,4 +34,3 @@ class OptimalSpecificSpeedCorrection {
     const Pump::Style style;
 };
 
-#endif // TOOLS_SUITE_OPTIMALSPECIFICSPEEDCORRECTION_H

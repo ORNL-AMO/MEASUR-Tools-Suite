@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculator for total heat of liquid load/charge material
@@ -9,9 +11,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_LIQUIDLOADCHARGEMATERIAL_H
-#define TOOLS_SUITE_LIQUIDLOADCHARGEMATERIAL_H
 
 #include <string>
 
@@ -308,4 +307,3 @@ class LiquidLoadChargeMaterial {
         : specificHeatLiquid(specificHeatLiquid), vaporizingTemperature(vaporizingTemperature), latentHeat(latentHeat),
           specificHeatVapor(specificHeatVapor), substance(std::move(substance)) {}
 };
-#endif // TOOLS_SUITE_LIQUIDLOADCHARGEMATERIAL_H

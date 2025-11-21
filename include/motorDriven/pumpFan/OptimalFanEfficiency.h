@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * Contains calculations for Optimal Fan Efficiency
  * @author Preston Shires (pshires)
@@ -5,8 +7,6 @@
  * @bug No Known Bugs.
  *
  */
-#pragma once
-
 #include <cfloat>
 #include <cmath>
 #include <functional>

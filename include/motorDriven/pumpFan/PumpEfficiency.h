@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @brief TODO
  *
@@ -5,9 +7,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_PUMPEFFICIENCY_H
-#define TOOLS_SUITE_PUMPEFFICIENCY_H
 
 #include "motorDriven/pump/PumpResult.h"
 
@@ -52,4 +51,3 @@ class PumpEfficiency {
     double      head;
 };
 
-#endif // TOOLS_SUITE_PUMPEFFICIENCY_H

@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_WATERANDCONDENSATEMODELER_H
-#define TOOLS_SUITE_WATERANDCONDENSATEMODELER_H
+#pragma once
 
 #include <steamModeler/api/OperationsInput.h>
 #include <steamModeler/domain/FlashTankFactory.h>
@@ -46,4 +45,3 @@ class MakeupWaterAndCondensateHeaderModeler {
     ReturnCondensateCalculator      returnCondensateCalculator      = ReturnCondensateCalculator();
 };
 
-#endif // TOOLS_SUITE_WATERANDCONDENSATEMODELER_H

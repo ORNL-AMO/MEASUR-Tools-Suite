@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Implementations of Bag Method of a compressed air system
@@ -6,9 +8,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_BAGMETHOD_H
-#define TOOLS_SUITE_BAGMETHOD_H
 
 #include <cmath>
 #include <functional>
@@ -50,4 +49,3 @@ class BagMethod {
     double operatingTime, bagFillTime, bagVolume, numberOfUnits;
 };
 
-#endif

@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file Header file for Steam Reduction Calculations
  *
@@ -7,9 +9,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_STEAMREDUCTION_H
-#define TOOLS_SUITE_STEAMREDUCTION_H
 
 #include <exception>
 #include <stdexcept>
@@ -210,5 +209,3 @@ class SteamReduction {
     std::vector<SteamReductionInput> steamReductionInputVec;
     SteamReduction::Output           output;
 };
-
-#endif // TOOLS_SUITE_STEAMREDUCTION_H

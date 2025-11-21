@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculator for the flash tank for steam systems
@@ -13,8 +15,6 @@
 #include "SteamProperties.h"
 #include "SteamSystemModelerTool.h"
 
-#ifndef TOOLS_SUITE_FLASHTANK_H
-    #define TOOLS_SUITE_FLASHTANK_H
 
 /**
  * Heat Loss calculator class
@@ -131,4 +131,3 @@ class FlashTank {
         outletGasSaturatedProperties;
 };
 
-#endif // TOOLS_SUITE_FLASHTANK_H

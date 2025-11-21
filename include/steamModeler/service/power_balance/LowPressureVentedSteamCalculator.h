@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_LOWPRESSUREVENTEDSTEAMCALCULATOR_H
-#define TOOLS_SUITE_LOWPRESSUREVENTEDSTEAMCALCULATOR_H
+#pragma once
 
 #include <steamModeler/api/BoilerInput.h>
 #include <steamModeler/api/HeaderInput.h>
@@ -44,4 +43,3 @@ class LowPressureVentedSteamCalculator {
                                       const double                                     massFlow) const;
 };
 
-#endif // TOOLS_SUITE_LOWPRESSUREVENTEDSTEAMCALCULATOR_H

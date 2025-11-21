@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_STEAMMODELER_H
-#define TOOLS_SUITE_STEAMMODELER_H
+#pragma once
 
 #include <steamModeler/domain/SteamModelCalculationsDomain.h>
 #include <steamModeler/domain/SteamModelerOutputFactory.h>
@@ -55,4 +54,3 @@ class SteamModeler {
                       const OperationsInput& operationsInput);
 };
 
-#endif // TOOLS_SUITE_STEAMMODELER_H

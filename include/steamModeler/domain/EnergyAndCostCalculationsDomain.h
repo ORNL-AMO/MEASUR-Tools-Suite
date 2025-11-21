@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_ENERGYANDCOSTCALCULATIONSDOMAIN_H
-#define TOOLS_SUITE_ENERGYANDCOSTCALCULATIONSDOMAIN_H
+#pragma once
 
 class EnergyAndCostCalculationsDomain {
   public:
@@ -22,4 +21,3 @@ class EnergyAndCostCalculationsDomain {
     }
 };
 
-#endif // TOOLS_SUITE_ENERGYANDCOSTCALCULATIONSDOMAIN_H

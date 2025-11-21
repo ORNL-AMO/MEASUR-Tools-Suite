@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculator for opening heat losses
@@ -8,8 +10,6 @@
  * @bug No known bugs.
  *
  */
-#pragma once
-
 #include <array>
 #include <cmath>
 #include <functional>

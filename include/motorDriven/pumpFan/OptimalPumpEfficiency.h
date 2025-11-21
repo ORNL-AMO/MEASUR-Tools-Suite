@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @brief Header file for OptimalPumpEfficiency class
  *
@@ -9,9 +11,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_OPTIMALPUMPEFFICIENCY_H
-#define TOOLS_SUITE_OPTIMALPUMPEFFICIENCY_H
 
 #include "motorDriven/pump/PumpResult.h"
 
@@ -144,4 +143,3 @@ class OptimalPumpEfficiency {
     double      prePumpEfficiency = 0.0;
 };
 
-#endif // TOOLS_SUITE_OPTIMALPUMPEFFICIENCY_H

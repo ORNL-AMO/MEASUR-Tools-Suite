@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_MAKEUPWATERVOLUMEFLOWCALCULATOR_H
-#define TOOLS_SUITE_MAKEUPWATERVOLUMEFLOWCALCULATOR_H
+#pragma once
 
 #include <steamModeler/api/OperationsInput.h>
 #include <steamModeler/domain/MakeupWaterVolumeFlowCalculationsDomain.h>
@@ -17,4 +16,3 @@ class MakeupWaterVolumeFlowCalculator {
                                            const double operatingHoursPerYear) const;
 };
 
-#endif // TOOLS_SUITE_MAKEUPWATERVOLUMEFLOWCALCULATOR_H

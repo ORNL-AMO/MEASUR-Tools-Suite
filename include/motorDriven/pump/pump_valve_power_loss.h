@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file pump_valve-power-loss.h
  *
@@ -7,9 +9,6 @@
  *
  * @brief Calculate the electrical power loss for a pump throttled valve compared to wide-open.
  */
-
-#ifndef MEASUR_TOOLS_SUITE_PUMP_VALVE_POWER_LOSS_H
-#define MEASUR_TOOLS_SUITE_PUMP_VALVE_POWER_LOSS_H
 
 /**
  * @class PumpValvePowerLoss
@@ -84,4 +83,3 @@ public:
                      const double downstream_pressure, const double downstream_gauge_elevation) const;
 };
 
-#endif //MEASUR_TOOLS_SUITE_PUMP_VALVE_POWER_LOSS_H

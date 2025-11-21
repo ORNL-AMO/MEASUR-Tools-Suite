@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_PRVCALCULATOR_H
-#define TOOLS_SUITE_PRVCALCULATOR_H
+#pragma once
 
 #include <steamModeler/api/HeaderInput.h>
 #include <steamModeler/api/TurbineInput.h>
@@ -43,4 +42,3 @@ class PrvCalculator {
     double getTurbineMassFlow(const std::shared_ptr<Turbine>& turbine, const std::string& turbineName) const;
 };
 
-#endif // TOOLS_SUITE_PRVCALCULATOR_H

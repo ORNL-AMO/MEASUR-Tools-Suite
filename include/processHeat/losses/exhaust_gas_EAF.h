@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculator for gas exhaust losses in an Electric Arc Furnace (EAF)
@@ -9,9 +11,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_EXHAUSTGASEAF_H
-#define TOOLS_SUITE_EXHAUSTGASEAF_H
 
 /**
  * Exhaust Gas for an Electric Arc Furnace class
@@ -41,4 +40,3 @@ class ExhaustGasEAF {
     const double offGasTemp, CO, H2, combustibleGases, vfr, dustLoading;
 };
 
-#endif // TOOLS_SUITE_EXHAUSTGASEAF_H

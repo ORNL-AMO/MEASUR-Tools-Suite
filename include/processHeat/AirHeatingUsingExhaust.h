@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Estimate maximum air flow that can be heated by using exhaust gas heat of flue gases from a furnace or oven or
@@ -9,9 +11,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_AIRHEATINGUSINGEXHAUST_H
-#define TOOLS_SUITE_AIRHEATINGUSINGEXHAUST_H
 
 #include "losses/gas_flue_gas_material.h"
 #include "losses/solid_liquid_flue_gas_material.h"
@@ -103,4 +102,3 @@ class AirHeatingUsingExhaust {
     double stoichAir        = 0;
 };
 
-#endif // TOOLS_SUITE_AIRHEATINGUSINGEXHAUST_H

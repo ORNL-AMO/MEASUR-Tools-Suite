@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculator for heat losses due to water cooling
@@ -8,9 +10,6 @@
  * @bug No known bugs.
  *
  */
-#ifndef TOOLS_SUITE_WATERCOOLINGLOSSES_H
-#define TOOLS_SUITE_WATERCOOLINGLOSSES_H
-
 /**
  * Water Cooling Losses class
  * Contains all of the properties of a water cooling system.
@@ -86,4 +85,3 @@ class WaterCoolingLosses {
     // Out value
     double heatLoss;
 };
-#endif // TOOLS_SUITE_WATERCOOLINGLOSSES_H

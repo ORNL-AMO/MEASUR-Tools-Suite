@@ -1,12 +1,11 @@
+#pragma once
+
 /**
  * @file Data structure for Compressors default data
  *
  * @author Omer Aziz (omerb)
  *
  */
-
-#ifndef MEASUR_TOOLS_SUITE_COMPRESSORSDATA_H
-#define MEASUR_TOOLS_SUITE_COMPRESSORSDATA_H
 
 #include <string>
 
@@ -262,4 +261,3 @@ private:
     friend class DefaultData;
 };
 
-#endif //MEASUR_TOOLS_SUITE_COMPRESSORSDATA_H

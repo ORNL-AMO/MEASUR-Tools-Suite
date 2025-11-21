@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_REDUCEDSTEAMEXCEPTION_H
-#define TOOLS_SUITE_REDUCEDSTEAMEXCEPTION_H
+#pragma once
 
 #include <exception>
 #include <iostream>
@@ -30,4 +29,3 @@ class ReducedSteamException : public std::exception {
     std::shared_ptr<Turbine> highToLowPressureTurbineIdealUpdated;
 };
 
-#endif // TOOLS_SUITE_REDUCEDSTEAMEXCEPTION_H

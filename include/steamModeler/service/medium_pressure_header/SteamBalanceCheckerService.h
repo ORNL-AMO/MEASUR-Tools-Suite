@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_STEAMBALANCECHECKERSERVICE_H
-#define TOOLS_SUITE_STEAMBALANCECHECKERSERVICE_H
+#pragma once
 
 #include <steamModeler/api/HeaderInput.h>
 #include <steamModeler/api/TurbineInput.h>
@@ -32,4 +31,3 @@ class SteamBalanceCheckerService {
     const SteamReducer     steamReducer = SteamReducer();
 };
 
-#endif // TOOLS_SUITE_STEAMBALANCECHECKERSERVICE_H

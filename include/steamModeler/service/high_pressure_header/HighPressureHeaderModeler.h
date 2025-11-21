@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_HIGHPRESSUREHEADERMODELER_H
-#define TOOLS_SUITE_HIGHPRESSUREHEADERMODELER_H
+#pragma once
 
 #include <steamModeler/api/HeaderInput.h>
 #include <steamModeler/api/TurbineInput.h>
@@ -47,4 +46,3 @@ class HighPressureHeaderModeler {
     const HighToMediumSteamTurbineCalculator highToMediumSteamTurbineCalculator = HighToMediumSteamTurbineCalculator();
 };
 
-#endif // TOOLS_SUITE_HIGHPRESSUREHEADERMODELER_H
