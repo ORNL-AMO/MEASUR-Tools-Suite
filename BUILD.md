@@ -171,13 +171,10 @@ emcc --version  # should show Emscripten version
 
 With emsdk activated, configure and build:
 ```bash
-emcmake cmake -S . -B build-wasm -DBUILD_WASM=ON
-emmake make -C build-wasm
+emcmake cmake -DBUILD_WASM=ON
+emmake make
 ```
-Artifacts appear under `build-wasm/bin/`. Copy them to `bin/` for standard access:
-```bash
-cp -a build-wasm/bin ./bin
-```
+Artifacts appear under `bin/`
 
 ### 6.5 WebAssembly Usage Example
 
