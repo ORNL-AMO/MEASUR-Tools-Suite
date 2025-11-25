@@ -2,7 +2,7 @@
 
 <img align="left" width="80" height="80" src="docs/assets/app-icon.png">
 
-The MEASUR Tools Suite is a collection of industrial efficiency calculations written in C++ with WebAssembly bindings for browser and Node.js environments. The suite provides computational engines for the MEASUR (Manufacturing Energy Assessment Tool for Uniform Reporting) application ecosystem.
+The MEASUR Tools Suite is a collection of industrial efficiency calculations written in C++ with WebAssembly bindings for browser and Node.js environments. The suite provides computational engines for the [MEASUR](https://github.com/ORNL-AMO/AMO-Tools-Desktop) (Manufacturing Energy Assessment Suite for Utility Reduction) application ecosystem.
 
 ## Features
 
@@ -15,6 +15,8 @@ The MEASUR Tools Suite is a collection of industrial efficiency calculations wri
   - Steam system modeling
   - Waste water treatment
 
+Check out the [Master List of MEASUR Calculators](https://github.com/ORNL-AMO/AMO-Tools-Desktop/blob/develop/docs/calculator_list.md)
+
 ## Quick Start
 
 ### Using npm Package
@@ -23,9 +25,17 @@ The MEASUR Tools Suite is a collection of industrial efficiency calculations wri
 npm install measur-tools-suite
 ```
 
-```javascript
-const measurTools = require('measur-tools-suite');
-// Use calculation functions
+```js
+// Initialize module
+const moduleFactory = (await import('/path/to/client.js')).default;
+const toolsSuiteModule = await moduleFactory({
+	locateFile: (filename) => '/path/to/client.wasm'
+});
+
+// Example call
+const totalHeatLoss = toolsSuiteModule.wallTotalHeatLoss(
+	500, 80, 225, 10, 0.9, 1.394, 1
+);
 ```
 
 ### Building from Source
@@ -36,8 +46,8 @@ cmake -S . -B build-cpp
 cmake --build build-cpp
 
 # WebAssembly build (requires Emscripten)
-emcmake cmake -S . -B build-wasm -DBUILD_WASM=ON
-emmake make -C build-wasm
+emcmake cmake -DBUILD_WASM=ON
+emmake make
 
 # Packaging
 cmake -S . -B build-pkg -DBUILD_PACKAGE=ON -DBUILD_TESTING=OFF
