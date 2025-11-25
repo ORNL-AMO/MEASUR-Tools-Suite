@@ -83,6 +83,8 @@ window.MathJax = {
 
                 \DeclareSIUnit{\standardCubicFeet}{scf}
                 \DeclareSIUnit{\scf}{scf}
+                \DeclareSIUnit{\cubicFoot}{ft^3}
+                \DeclareSIUnit{\inchWaterColumn}{in\,WC}
             `);
         }
     },
