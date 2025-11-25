@@ -3,7 +3,7 @@
 
 /**
  * @ingroup leakage_heat_loss_calculator
- * @file leakage_losses.h
+ * @file leakage_heat_loss.h
  * @authors Gina Accawi
  *
  * @copybrief leakage_heat_loss
