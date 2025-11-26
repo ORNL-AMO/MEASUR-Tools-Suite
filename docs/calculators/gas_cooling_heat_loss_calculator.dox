@@ -1,0 +1,28 @@
+/**
+ * @defgroup gas_cooling_heat_loss_calculator Gas Cooling Heat Loss Calculator
+ * @ingroup heat_loss_calculators
+ * @brief Calculates heat loss due to gas (including air) cooling in process heating equipment.
+ * @details This calculator estimates the heat removed by gas cooling systems, using flow rate, gas density, inlet and outlet temperatures, specific heat, and a correction factor. The algorithm is suitable for modeling cooling losses in industrial furnaces, ovens, and similar systems, for gases including air.
+ *
+ * @heading{Total Gas Cooling Heat Loss}
+ * @copydoc gas_cooling_heat_loss_formula
+ *
+ * @see Perry’s Chemical Engineers’ Handbook; NIST Engineering Statistics
+ */
+
+/**
+ * @defgroup gas_cooling_heat_loss_formula Gas Cooling Heat Loss Formula
+ * @ingroup gas_cooling_heat_loss_calculator
+ * @formula{gas-cooling-heat-loss; Q_\text{cool} = FR \cdot 60 \cdot \rho_{g,lb/ft^3} \cdot SH \cdot \Delta T \cdot CF}
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_\text{cool}; Gas cooling heat loss; \btu\per\hour}
+ * @symrow{FR; Gas flow rate; \foot\cubed\per\minute}
+ * @symrow{60; Minutes per hour (SCFM to SCFH conversion); \unitless}
+ * @symrow{\rho_{g,lb/ft^3}; Gas density; \pound\per\cubic\foot}
+ * @symrow{SH; Specific heat of gas; \btu\per\scf\per\degreeFahrenheit}
+ * @symrow{\Delta T; Temperature rise (outlet - inlet); \degreeFahrenheit}
+ * @symrow{CF; Correction factor; \unitless}
+ * @endsymtable
+ * @details The formula multiplies flow rate (SCFM), minutes per hour, gas density, specific heat, temperature rise, and correction factor to obtain total heat loss.
+ */

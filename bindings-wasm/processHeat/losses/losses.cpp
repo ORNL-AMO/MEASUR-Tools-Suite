@@ -6,7 +6,7 @@
 #include "processHeat/losses/energy_input_exhaust_gas_losses.h"
 #include "processHeat/losses/exhaust_gas_EAF.h"
 #include "processHeat/losses/fixture_heat_loss.h"
-#include "processHeat/losses/gas_cooling_losses.h"
+#include "processHeat/losses/gas_cooling_heat_loss.h"
 #include "processHeat/losses/gas_flue_gas_material.h"
 #include "processHeat/losses/gas_load_charge_material.h"
 #include "processHeat/losses/leakage_heat_loss.h"
@@ -155,10 +155,10 @@ EMSCRIPTEN_BINDINGS(flueGasLosses) {
 }
 
 // gasCoolingLosses
-EMSCRIPTEN_BINDINGS(gasCoolingLosses) {
-    class_<GasCoolingLosses>("GasCoolingLosses")
-        .constructor<double, double, double, double, double, double>()
-        .function("getHeatLoss", &GasCoolingLosses::getHeatLoss);
+EMSCRIPTEN_BINDINGS(gas_cooling_heat_loss) {
+    //double flow_rate, double initial_temperature, double final_temperature, double specific_heat, double correction_factor, double gas_density
+    using namespace gas_cooling_heat_loss;
+    function("gasCoolingTotalHeatLoss", &totalHeatLoss);
 }
 
 // gasLoadChargeMaterial
