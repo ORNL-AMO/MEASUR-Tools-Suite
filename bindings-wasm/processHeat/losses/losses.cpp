@@ -1,7 +1,7 @@
 #include <emscripten/bind.h>
 
 #include "processHeat/losses/atmosphere_heat_loss.h"
-#include "processHeat/losses/auxiliary_power.h"
+#include "processHeat/losses/auxiliary_power_used.h"
 #include "processHeat/losses/energy_input_EAF.h"
 #include "processHeat/losses/energy_input_exhaust_gas_losses.h"
 #include "processHeat/losses/exhaust_gas_EAF.h"
@@ -45,17 +45,15 @@ EMSCRIPTEN_BINDINGS(atmosphere_heat_loss) {
 
 // auxiliaryPowerLoss
 // getPowerUsed()
-EMSCRIPTEN_BINDINGS(auxiliaryPowerLoss) {
+EMSCRIPTEN_BINDINGS(auxiliary_power_used) {
     // motorPhase, supplyVoltage, avgCurrent, powerFactor, operatingTime
-    class_<AuxiliaryPower>("AuxiliaryPower")
-        .constructor<double, double, double, double, double>()
-        .function("getPowerUsed", &AuxiliaryPower::getPowerUsed);
+    using namespace auxiliary_power_used;
+    function("auxiliaryCalculatePowerUsed", &calculatePowerUsed);
 }
 
 // Bindings for the fixture_heat_loss namespace
 EMSCRIPTEN_BINDINGS(fixture_heat_loss) {
     using namespace fixture_heat_loss;
-
     function("fixtureTotalHeatLoss", &totalHeatLoss);
 }
 

@@ -55,6 +55,13 @@ inline constexpr double kFahrenheitToRankineOffset = 459.67;
 inline constexpr double kHoursPerDay = 24.0;
 
 /**
+ * @brief Conversion factor from kilowatts to BTU/hr @unitb{\btu\per\hour\per\kilowatt}
+ * @details Source: NIST, Perry's Chemical Engineers' Handbook
+ */
+inline constexpr double kKilowattToBtuPerHour = 3412.136247820839;
+
+
+/**
  * @brief Convert Fahrenheit to Rankine.
  * @details Converts a temperature from degrees Fahrenheit to degrees Rankine:
  *
