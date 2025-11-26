@@ -18,7 +18,7 @@
 #include "processHeat/losses/solid_liquid_flue_gas_material.h"
 #include "processHeat/losses/solid_load_charge_material.h"
 #include "processHeat/losses/wall_heat_loss.h"
-#include "processHeat/losses/water_cooling_losses.h"
+#include "processHeat/losses/water_cooling_heat_loss.h"
 
 using namespace emscripten;
 
@@ -272,8 +272,7 @@ EMSCRIPTEN_BINDINGS(wall_heat_loss) {
 }
 
 // waterCoolingLosses
-EMSCRIPTEN_BINDINGS(waterCoolingLosses) {
-    class_<WaterCoolingLosses>("WaterCoolingLosses")
-        .constructor<double, double, double, double>()
-        .function("getHeatLoss", &WaterCoolingLosses::getHeatLoss);
+EMSCRIPTEN_BINDINGS(water_cooling_heat_loss) {
+    using namespace water_cooling_heat_loss;
+    function("waterCoolingTotalHeatLoss", &totalHeatLoss);
 }

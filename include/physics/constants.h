@@ -20,6 +20,12 @@ namespace physics::si {
 /// @brief Stefan–Boltzmann constant @unitb{\watt\per\meter\squared\kelvin\tothe{4}}
 inline constexpr double kStefanBoltzmann = 5.670374419e-8;
 
+/**
+ * @brief Standard density of water at 4°C @unitb{\kilogram\per\meter\cubed}
+ * @details Used for water property calculations. Source: NIST, CRC Handbook of Chemistry and Physics.
+ */
+inline constexpr double kWaterDensityBase = 1000.0;
+
 } // namespace physics::si
 
 /**
@@ -62,6 +68,13 @@ inline constexpr double kKilowattToBtuPerHour = 3412.136247820839;
 
 
 /**
+ * @brief Conversion factor from kilograms per cubic meter to pounds per gallon @unitb{\pound\per\gallon\per\kilogram\per\meter\cubed}
+ * @details Multiplies water density in kg/m^3 to obtain lb/gal. Source: NIST, CRC Handbook of Chemistry and Physics.
+ */
+inline constexpr double kKgPerM3ToLbPerGal = 0.0083454;
+
+
+/**
  * @brief Convert Fahrenheit to Rankine.
  * @details Converts a temperature from degrees Fahrenheit to degrees Rankine:
  *
@@ -78,5 +91,26 @@ inline constexpr double kKilowattToBtuPerHour = 3412.136247820839;
  * @return Temperature in degrees Rankine @unitb{\degreeRankine}
  */
 constexpr double fahrenheitToRankine(double fahrenheit) { return fahrenheit + kFahrenheitToRankineOffset; }
+
+/**
+ * @brief Convert Fahrenheit to Celsius.
+ * @details Converts a temperature from degrees Fahrenheit to degrees Celsius:
+ *
+ * @par Relation
+ * @formula{fahrenheit-to-celsius; T_C = \frac{5}{9}(T_F - 32)}
+ *
+ * @par Symbols
+ * @symtable
+ * @symrow{T_C; Temperature in degrees Celsius; \degreeCelsius}
+ * @symrow{T_F; Temperature in degrees Fahrenheit; \degreeFahrenheit}
+ * @endsymtable
+ *
+ * @param[in] fahrenheit Temperature in degrees Fahrenheit @unitb{\degreeFahrenheit}
+ * @return Temperature in degrees Celsius @unitb{\degreeCelsius}
+ */
+constexpr double fahrenheitToCelsius(double fahrenheit) { return (fahrenheit - 32.0) / 1.8; }
+
+
+
 
 } // namespace physics::conversions

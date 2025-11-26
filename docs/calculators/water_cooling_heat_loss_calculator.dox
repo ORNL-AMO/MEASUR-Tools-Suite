@@ -1,0 +1,42 @@
+/**
+ * @defgroup water_cooling_heat_loss_calculator Water Cooling Heat Loss Calculator
+ * @ingroup heat_loss_calculators
+ * @brief Calculates heat loss due to water cooling in process heating equipment.
+ * @details This calculator estimates the heat removed by water cooling systems, using flow rate, inlet and outlet temperatures, and a correction factor. It accounts for water density variation with temperature and converts between SI and U.S. Customary units as needed. The algorithm is suitable for modeling cooling losses in industrial furnaces, ovens, and similar systems.
+ *
+ * @heading{Total Water Cooling Heat Loss}
+ * @copydoc water_cooling_heat_loss_formula
+ *
+ * @heading{Water Density Calculation}
+ * @copydoc water_density_formula
+ *
+ * @see Perry’s Chemical Engineers’ Handbook; NIST Engineering Statistics; Tanaka et al. (2001)
+ */
+
+/**
+ * @defgroup water_cooling_heat_loss_formula Water Cooling Heat Loss Formula
+ * @ingroup water_cooling_heat_loss_calculator
+ * @formula{water-cooling-heat-loss; Q_\text{cool} = FR \cdot 60 \cdot \rho_{w,lb/gal} \cdot \Delta T \cdot CF}
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_\text{cool}; Water cooling heat loss; \btu\per\hour}
+ * @symrow{FR; Water flow rate; \gallon\per\minute}
+ * @symrow{60; Minutes per hour (GPM to GPH conversion); \unitless}
+ * @symrow{\rho_{w,lb/gal}; Water density; \pound\per\gallon}
+ * @symrow{\Delta T; Temperature rise (outlet - inlet); \degreeFahrenheit}
+ * @symrow{CF; Correction factor; \unitless}
+ * @endsymtable
+ * @details Water density is calculated using Tanaka et al. (2001) empirical formula, then converted to lb/gal. The formula multiplies flow rate (GPM), minutes per hour, water density, temperature rise, and correction factor to obtain total heat loss.
+ */
+
+/**
+ * @defgroup water_density_formula Water Density Calculation Formula
+ * @ingroup water_cooling_heat_loss_calculator
+ * @formula{water-density-tanaka; \rho_w = 1000 \left[1 - \frac{(T_C + 288.9414)}{508929.2 (T_C + 68.12963)} (T_C - 3.9863)^2 \right]}
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{\rho_w; Water density; \kilogram\per\meter\cubed}
+ * @symrow{T_C; Average water temperature; \degreeCelsius}
+ * @endsymtable
+ * @details This formula is from Tanaka et al. (2001) and is used to calculate the density of water as a function of temperature in degrees Celsius.
+ */
