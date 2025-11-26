@@ -1,4 +1,89 @@
 /**
  * @defgroup opening_heat_loss_calculator Opening Heat Loss Calculator
  * @ingroup heat_loss_calculators
+ * @brief Calculates heat losses from process heating equipment openings to the ambient.
+ * @details This calculator estimates radiative heat loss through circular and rectangular openings in process heating equipment. It uses empirical polynomial approximations for the radiative view factor, based on the geometry of the opening and wall thickness. The calculator is suitable for modeling heat loss from doors, ports, and other openings, and is based on standard heat transfer references and ASHRAE research.
+ *
+ * @heading{Total Opening Heat Loss}
+ * @copydoc opening_total_heat_loss_formula
+ *
+ * @heading{View Factor Calculation}
+ * @copydoc opening_view_factor_formula
+ *
+ * @heading{Polynomial Approximations}
+ * @copydoc opening_view_factor_polynomials
+ *
+ * @heading{Symbols}
+ * @copydoc opening_heat_loss_symbols
+ *
+ * @note For wall losses, see @ref wall_heat_loss_calculator. For leakage losses, see @ref leakage_heat_loss_calculator.
+ * @see Kays & Crawford, "Convective Heat and Mass Transfer"; Incropera & DeWitt, "Fundamentals of Heat and Mass Transfer"; Glicksman (ASHRAE Transactions, 1972); Perry’s Chemical Engineers’ Handbook
+ */
+
+/**
+ * @defgroup opening_total_heat_loss_formula Opening Total Heat Loss Formula
+ * @ingroup opening_heat_loss_calculator
+ * @formula{opening-total-heat-loss; Q_\text{open} = \varepsilon \sigma A (T_\text{in}^4 - T_\text{amb}^4) \cdot F \cdot \frac{t_\text{open}}{100}}
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_\text{open}; Opening heat loss; \btu\per\hour}
+ * @symrow{\varepsilon; Surface emissivity; \unitless}
+ * @symrow{\sigma; @ref physics::us::kStefanBoltzmann "Stefan-Boltzmann constant"; \btu\per\hour\foot\squared\degreeRankine\tothe{4}}
+ * @symrow{A; Opening area; \foot\squared}
+ * @symrow{T_\text{in}; Inside temperature; \degreeRankine}
+ * @symrow{T_\text{amb}; Ambient temperature; \degreeRankine}
+ * @symrow{F; Radiative view factor; \unitless}
+ * @symrow{t_\text{open}; Percent time open; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup opening_view_factor_formula Opening View Factor Formula
+ * @ingroup opening_heat_loss_calculator
+ * @brief The radiative view factor F is a function of the opening geometry and wall thickness.
+ * @details For circular openings, F is approximated by a polynomial in the thickness-to-diameter ratio. For rectangular openings, F is a function of thickness-to-length and lateral dimension ratios, using piecewise polynomial fits.
+ * @formula{opening-view-factor-circular; F_\text{circ} = f_1(x) \text{ or } f_2(x),\ \text{where}\ x = \frac{d}{t}}
+ * @formula{opening-view-factor-rect; F_\text{rect} = f_3(x, y) \text{ or } f_4(x, y),\ \text{where}\ x = \frac{l}{t},\ y = \frac{l}{h}}
+ * @note See @ref opening_view_factor_polynomials for explicit polynomial forms.
+ */
+
+/**
+ * @defgroup opening_view_factor_polynomials Opening View Factor Polynomials
+ * @ingroup opening_heat_loss_calculator
+ * @brief Polynomial approximations for radiative view factor.
+ * @details The following polynomials are used for different ranges of thickness-to-diameter or thickness-to-length ratios. Coefficients are fit to published view factor data for furnace openings.
+ *
+ * @subheading{Circular Openings}
+ * @formula{opening-vf-case1; F_1(x) = \frac{1.10 + 92.86x - 57.59x^2 + 15.62x^3}{100}}
+ * @formula{opening-vf-case2; F_2(x) = \frac{29.50 + 26.84x - 4.35x^2 - 0.083x^3 + 0.104x^4 - 0.0083x^5}{100}}
+ *
+ * @subheading{Rectangular Openings}
+ * @formula{opening-vf-case3; F_3(x) = \frac{3.50 + 89.58x - 50.00x^2 + 10.42x^3}{100}}
+ * @formula{opening-vf-case4; F_4(x) = \frac{24.00 + 39.39x - 11.60x^2 + 1.85x^3 - 0.146x^4 + 0.0042x^5}{100}}
+ * @formula{opening-vf-case5; F_5(x) = \frac{2.70 + 112.68x - 70.98x^2 + 15.62x^3}{100}}
+ * @formula{opening-vf-case6; F_6(x) = \frac{35.50 + 29.46x - 4.52x^2 - 0.687x^3 + 0.271x^4 - 0.021x^5}{100}}
+ * @formula{opening-vf-case7; F_7(x) = \frac{13.00 + 123.75x - 100.00x^2 + 31.25x^3}{100}}
+ * @formula{opening-vf-case8; F_8(x) = \frac{27.00 + 64.57x - 29.92x^2 + 7.15x^3 - 0.833x^4 + 0.0375x^5}{100}}
+ *
+ * @note For details, see Glicksman (ASHRAE Transactions, 1972) and Perry’s Chemical Engineers’ Handbook.
+ */
+
+/**
+ * @defgroup opening_heat_loss_symbols Opening Heat Loss Symbols
+ * @ingroup opening_heat_loss_calculator
+ * @brief Symbols used in opening heat loss formulas.
+ * @symtable
+ * @symrow{Q_\text{open}; Opening heat loss; \btu\per\hour}
+ * @symrow{\varepsilon; Surface emissivity; \unitless}
+ * @symrow{\sigma; Stefan-Boltzmann constant; \btu\per\hour\foot\squared\degreeRankine\tothe{4}}
+ * @symrow{A; Opening area; \foot\squared}
+ * @symrow{T_\text{in}; Inside temperature; \degreeRankine}
+ * @symrow{T_\text{amb}; Ambient temperature; \degreeRankine}
+ * @symrow{F; Radiative view factor; \unitless}
+ * @symrow{t_\text{open}; Percent time open; \unitless}
+ * @symrow{d; Diameter of circular opening; \inch}
+ * @symrow{t; Wall thickness; \inch}
+ * @symrow{l; Length of rectangular opening; \inch}
+ * @symrow{h; Height of rectangular opening; \inch}
+ * @endsymtable
  */

@@ -13,7 +13,7 @@
 #include "processHeat/losses/liquid_cooling_losses.h"
 #include "processHeat/losses/liquid_load_charge_material.h"
 #include "processHeat/losses/load_charge_material.h"
-#include "processHeat/losses/opening_losses.h"
+#include "processHeat/losses/opening_heat_loss.h"
 #include "processHeat/losses/slag_other_material_losses.h"
 #include "processHeat/losses/solid_liquid_flue_gas_material.h"
 #include "processHeat/losses/solid_load_charge_material.h"
@@ -219,16 +219,12 @@ EMSCRIPTEN_BINDINGS(liquidLoadChargeMaterial) {
 // openingLossesCircular
 // openingLossesQuad
 // viewFactorCalculation
-EMSCRIPTEN_BINDINGS(openingLosses) {
-    class_<OpeningLosses>("OpeningLosses")
-        .constructor<double, double, double, double, double, double, double, double>()
-        .constructor<double, double, double, double, double, double, double, double, double>()
-        .constructor()
-        .function("getHeatLoss", &OpeningLosses::getHeatLoss)
-        .function("calculateViewFactorQuad",
-                  select_overload<double(double, double, double)>(&OpeningLosses::calculateViewFactor))
-        .function("calculateViewFactorCircular",
-                  select_overload<double(double, double)>(&OpeningLosses::calculateViewFactor));
+EMSCRIPTEN_BINDINGS(openingLosses) {    
+    using namespace opening_heat_loss;
+    function("openingTotalHeatLossQuad", &totalHeatLossQuad);
+    function("openingTotalHeatLossCircular", &totalHeatLossCircular);
+    function("calculateViewFactorCircular", &calculateViewFactorCircular);
+    function("calculateViewFactorQuad", &calculateViewFactorQuad);
 }
 
 // slagOtherMaterialLosses
