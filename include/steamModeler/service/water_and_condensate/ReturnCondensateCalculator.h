@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_RETURNCONDENSATECALCULATOR_H
-#define TOOLS_SUITE_RETURNCONDENSATECALCULATOR_H
+#pragma once
 
 #include <steamModeler/api/BoilerInput.h>
 #include <steamModeler/api/HeaderInput.h>
@@ -22,4 +21,3 @@ class ReturnCondensateCalculator {
     FluidPropertiesFactory fluidPropertiesFactory = FluidPropertiesFactory();
 };
 
-#endif // TOOLS_SUITE_RETURNCONDENSATECALCULATOR_H

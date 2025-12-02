@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_HIGHTOLOWSTEAMTURBINECALCULATOR_H
-#define TOOLS_SUITE_HIGHTOLOWSTEAMTURBINECALCULATOR_H
+#pragma once
 
 #include <steamModeler/api/HeaderInput.h>
 #include <steamModeler/api/TurbineInput.h>
@@ -66,4 +65,3 @@ class HighToLowSteamTurbineCalculator {
                                  const std::shared_ptr<Turbine>&                condensingTurbine) const;
 };
 
-#endif // TOOLS_SUITE_HIGHTOLOWSTEAMTURBINECALCULATOR_H

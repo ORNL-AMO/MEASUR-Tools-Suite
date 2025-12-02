@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Implementations of Estimate Method of a compressed air system
@@ -6,9 +8,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_ESTIMATEMETHOD_H
-#define TOOLS_SUITE_ESTIMATEMETHOD_H
 
 class EstimateMethod {
   public:
@@ -40,4 +39,3 @@ class EstimateMethod {
     double operatingTime, leakRateEstimate;
 };
 
-#endif

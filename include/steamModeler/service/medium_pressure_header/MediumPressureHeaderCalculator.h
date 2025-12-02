@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_MEDIUMPRESSUREHEADERCALCULATOR_H
-#define TOOLS_SUITE_MEDIUMPRESSUREHEADERCALCULATOR_H
+#pragma once
 
 #include <steamModeler/api/HeaderInput.h>
 #include <steamModeler/api/TurbineInput.h>
@@ -49,4 +48,3 @@ class MediumPressureHeaderCalculator {
     const SteamBalanceCheckerService steamBalanceCheckerService = SteamBalanceCheckerService();
 };
 
-#endif // TOOLS_SUITE_MEDIUMPRESSUREHEADERCALCULATOR_H

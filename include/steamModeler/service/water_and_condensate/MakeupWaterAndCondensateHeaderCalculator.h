@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_MAKEUPWATERANDCONDENSATEHEADERCALCULATOR_H
-#define TOOLS_SUITE_MAKEUPWATERANDCONDENSATEHEADERCALCULATOR_H
+#pragma once
 
 #include <steamModeler/api/BoilerInput.h>
 #include <steamModeler/api/TurbineInput.h>
@@ -36,4 +35,3 @@ class MakeupWaterAndCondensateHeaderCalculator {
                                const SteamSystemModelerTool::SteamPropertiesOutput& steamPropertiesOutput) const;
 };
 
-#endif // TOOLS_SUITE_MAKEUPWATERANDCONDENSATEHEADERCALCULATOR_H

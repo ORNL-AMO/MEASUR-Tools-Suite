@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_PROCESSSTEAMUSAGECALCULATIONSDOMAIN_H
-#define TOOLS_SUITE_PROCESSSTEAMUSAGECALCULATIONSDOMAIN_H
+#pragma once
 
 class ProcessSteamUsage {
   public:
@@ -42,4 +41,3 @@ class ProcessSteamUsageCalculationsDomain {
     }
 };
 
-#endif // TOOLS_SUITE_PROCESSSTEAMUSAGECALCULATIONSDOMAIN_H

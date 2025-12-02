@@ -2,6 +2,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Calculate the Total Chemical Energy Input", "[Total Chemical Energy Input][EnergyInputEAF][Furnace]") {
     CHECK(EnergyInputEAF(50, 3300, 9000, 500, 12000, 20, 18000).getTotalChemicalEnergyInput() == Approx(105700000));
 

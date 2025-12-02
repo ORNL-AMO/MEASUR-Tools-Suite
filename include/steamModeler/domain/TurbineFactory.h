@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_TURBINEFACTORY_H
-#define TOOLS_SUITE_TURBINEFACTORY_H
+#pragma once
 
 #include <steamModeler/api/HeaderInput.h>
 #include <steamModeler/api/TurbineInput.h>
@@ -61,4 +60,3 @@ class TurbineFactory {
     convertCondensingTurbineOperationToTurbineProperty(const CondensingTurbineOperation& operationType) const;
 };
 
-#endif // TOOLS_SUITE_TURBINEFACTORY_H

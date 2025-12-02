@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_HIGHPRESSUREFLASHTANKCALCULATOR_H
-#define TOOLS_SUITE_HIGHPRESSUREFLASHTANKCALCULATOR_H
+#pragma once
 
 #include <steamModeler/api/HeaderInput.h>
 #include <steamModeler/domain/FlashTankFactory.h>
@@ -17,4 +16,3 @@ class HighPressureFlashTankCalculator {
     const FlashTankFactory flashTankFactory = FlashTankFactory();
 };
 
-#endif // TOOLS_SUITE_HIGHPRESSUREFLASHTANKCALCULATOR_H

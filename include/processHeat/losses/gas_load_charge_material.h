@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculator for total heat of gas load/charge material
@@ -9,9 +11,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_GASLOADCHARGEMATERIAL_H
-#define TOOLS_SUITE_GASLOADCHARGEMATERIAL_H
 
 #include <string>
 
@@ -250,4 +249,3 @@ class GasLoadChargeMaterial {
         : specificHeatVapor(specificHeatVapor), substance(std::move(substance)) {}
 };
 
-#endif // TOOLS_SUITE_GASLOADCHARGEMATERIAL_H

@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_HEADER_H
-#define TOOLS_SUITE_HEADER_H
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -102,4 +101,3 @@ class Header {
     SteamSystemModelerTool::SteamPropertiesOutput headerProperties;
 };
 
-#endif // TOOLS_SUITE_HEADER_H

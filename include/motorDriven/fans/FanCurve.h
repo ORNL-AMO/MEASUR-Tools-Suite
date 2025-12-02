@@ -1,5 +1,5 @@
-#ifndef TOOLS_SUITE_FANCURVE_H
-#define TOOLS_SUITE_FANCURVE_H
+#pragma once
+
 /**
  * @file
  * @author Preston Shires (pshires) & Allie Ledbetter (aeledbetter)
@@ -115,4 +115,3 @@ class FanCurve {
     FanCurveData curveData;
 };
 
-#endif // TOOLS_SUITE_FANCURVE_H

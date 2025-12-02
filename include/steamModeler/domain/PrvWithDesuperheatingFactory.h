@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_PRVWITHDESUPERHEATINGFACTORY_H
-#define TOOLS_SUITE_PRVWITHDESUPERHEATINGFACTORY_H
+#pragma once
 
 #include <steamModeler/api/HeaderInput.h>
 #include <steamModeler/PRV.h>
@@ -12,4 +11,3 @@ class PrvWithDesuperheatingFactory {
                                const double                                     feedwaterPressure) const;
 };
 
-#endif // TOOLS_SUITE_PRVWITHDESUPERHEATINGFACTORY_H

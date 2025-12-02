@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_HEATLOSSFACTORY_H
-#define TOOLS_SUITE_HEATLOSSFACTORY_H
+#pragma once
 
 #include <steamModeler/api/HeaderInput.h>
 
@@ -18,4 +17,3 @@ class HeatLossFactory {
                         const double                                   percentHeatLoss) const;
 };
 
-#endif // TOOLS_SUITE_HEATLOSSFACTORY_H

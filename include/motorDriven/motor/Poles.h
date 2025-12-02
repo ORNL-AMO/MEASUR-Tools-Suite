@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @brief Header file for Poles class
  *
@@ -7,9 +9,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef UNTITLED_POLECALCULATE_H
-#define UNTITLED_POLECALCULATE_H
 
 #include "MotorData.h"
 
@@ -33,4 +32,3 @@ class Poles {
     Motor::LineFrequency lineFreq;
 };
 
-#endif // UNTITLED_POLECALCULATE_H

@@ -2,6 +2,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Calculate Header properties", "[Header][steamModeler]") {
     auto               qualityType = SteamProperties::ThermodynamicQuantity::TEMPERATURE;
     std::vector<Inlet> inlets = {Inlet(1.9332, qualityType, 579.8, 0.686), Inlet(2.8682, qualityType, 308.5, 0.5019)};

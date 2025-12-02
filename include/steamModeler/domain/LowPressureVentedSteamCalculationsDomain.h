@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_LOWPRESSUREVENTEDSTEAMCALCULATIONSDOMAIN_H
-#define TOOLS_SUITE_LOWPRESSUREVENTEDSTEAMCALCULATIONSDOMAIN_H
+#pragma once
 
 #include <steamModeler/Deaerator.h>
 #include <steamModeler/SteamSystemModelerTool.h>
@@ -35,4 +34,3 @@ class LowPressureVentedSteamCalculationsDomain {
     }
 };
 
-#endif // TOOLS_SUITE_LOWPRESSUREVENTEDSTEAMCALCULATIONSDOMAIN_H

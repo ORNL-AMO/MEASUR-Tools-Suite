@@ -1,6 +1,8 @@
 #include "other/CHP.h"
 
-#include <catch.hpp>
+#include "catch.hpp"
+
+using namespace Catch;
 
 TEST_CASE("CHP", "[CHP]") {
     auto chp = CHP(4160, 23781908, 122581, 5.49, 0.214, CHP::Option::PercentAvgkWhElectricCostAvoided, 5.49, 5.49, 90.0,

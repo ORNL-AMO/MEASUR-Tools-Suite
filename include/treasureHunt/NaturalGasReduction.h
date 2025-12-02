@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_NATURALGASREDUCTION_H
-#define TOOLS_SUITE_NATURALGASREDUCTION_H
+#pragma once
 
 #include <exception>
 #include <stdexcept>
@@ -153,5 +152,3 @@ class NaturalGasReduction {
     std::vector<NaturalGasReductionInput> naturalGasReductionInputVec;
     NaturalGasReduction::Output           output;
 };
-
-#endif // TOOLS_SUITE_NATURALGASREDUCTION_H

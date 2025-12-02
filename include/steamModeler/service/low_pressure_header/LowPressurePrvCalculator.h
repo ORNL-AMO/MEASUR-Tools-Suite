@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_LOWPRESSUREPRVCALCULATOR_H
-#define TOOLS_SUITE_LOWPRESSUREPRVCALCULATOR_H
+#pragma once
 
 #include <steamModeler/api/TurbineInput.h>
 #include <steamModeler/Boiler.h>
@@ -43,4 +42,3 @@ class LowPressurePrvCalculator {
             const SteamSystemModelerTool::FluidProperties& headerOutput, double prvMassFlow) const;
 };
 
-#endif // TOOLS_SUITE_LOWPRESSUREPRVCALCULATOR_H

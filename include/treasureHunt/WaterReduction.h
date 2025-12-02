@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_WATERREDUCTION_H
-#define TOOLS_SUITE_WATERREDUCTION_H
+#pragma once
 
 #include <exception>
 #include <stdexcept>
@@ -135,4 +134,3 @@ class WaterReduction {
     WaterReduction::Output           output;
 };
 
-#endif // TOOLS_SUITE_WATERREDUCTION_H

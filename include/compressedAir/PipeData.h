@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Implementations of Pipe Data of a compressed air system
@@ -6,9 +8,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_PIPEDATA_H
-#define TOOLS_SUITE_PIPEDATA_H
 
 #include <cmath>
 #include <functional>
@@ -56,4 +55,3 @@ struct PipeData {
     const double totalPipeVolume = 0;
 };
 
-#endif

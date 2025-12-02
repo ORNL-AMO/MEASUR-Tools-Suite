@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_HEATEXCHANGERCALCULATOR_H
-#define TOOLS_SUITE_HEATEXCHANGERCALCULATOR_H
+#pragma once
 
 #include <memory>
 
@@ -18,4 +17,3 @@ class HeatExchangerCalculator {
     const FluidPropertiesFactory fluidPropertiesFactory = FluidPropertiesFactory();
 };
 
-#endif // TOOLS_SUITE_HEATEXCHANGERCALCULATOR_H

@@ -1,11 +1,11 @@
+#pragma once
+
 /**
  * @file fan203.h
  * @authors Colin Causey, Allie Ledbetter, Preston Shires, Liam White
  * @ingroup fan_system_assessments
  * @brief Implements AMCA 203 standard fan performance calculations.
  */
-#pragma once
-
 #include <cmath>
 #include <functional>
 #include <stdexcept>

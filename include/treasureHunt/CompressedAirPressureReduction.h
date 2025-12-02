@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_COMPRESSEDAIRPRESSUREREDUCTION_H
-#define TOOLS_SUITE_COMPRESSEDAIRPRESSUREREDUCTION_H
+#pragma once
 
 #include <exception>
 #include <stdexcept>
@@ -65,5 +64,3 @@ class CompressedAirPressureReduction {
     std::vector<CompressedAirPressureReductionInput> compressedAirPressureReductionInputVec;
     CompressedAirPressureReduction::Output           output;
 };
-
-#endif // TOOLS_SUITE_COMPRESSEDAIRPRESSUREREDUCTION_H

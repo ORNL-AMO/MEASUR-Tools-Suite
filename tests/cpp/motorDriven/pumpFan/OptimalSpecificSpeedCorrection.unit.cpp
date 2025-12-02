@@ -2,6 +2,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Calculate Optimal Specific Speed Correction NotVTP", "[optimal][SpecificSpeedCorrection][NotVTP]") {
 
     CHECK(OptimalSpecificSpeedCorrection(Pump::Style::END_SUCTION_SEWAGE, 680).calculate() == Approx(0.05020039));

@@ -1,6 +1,8 @@
 #include "motorDriven/pump/pump_valve_power_loss.h"
 
-#include <catch.hpp>
+#include "catch.hpp"
+
+using namespace Catch;
 
 auto validateValveLosses = [](PumpValvePowerLoss::Output const& results, PumpValvePowerLoss::Output expected) {
     CHECK(Approx(results.pressure_drop) == expected.pressure_drop);

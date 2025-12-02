@@ -3,6 +3,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Calculate Total Heat for Charge Material - Solids", "[Total Heat][ChargeMaterial][Solids]") {
     CHECK(SolidLoadChargeMaterial(LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC, 0.139957009792214, 117.15, 0.16,
                                   2550, 20000.0, 1.0, 0.0, 70, 1500.0, 212.0, 0.0, 0.0, 100.0, 0)

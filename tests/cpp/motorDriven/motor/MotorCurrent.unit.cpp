@@ -2,6 +2,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Motor Current", "[MotorCurrent]") {
     auto const fq60 = Motor::LineFrequency::FREQ60;
     auto const ee   = Motor::EfficiencyClass::ENERGY_EFFICIENT;

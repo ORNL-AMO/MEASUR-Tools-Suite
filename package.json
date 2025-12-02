@@ -1,12 +1,13 @@
 {
   "name": "measur-tools-suite",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "engines": {
     "node": "20.19.4",
     "npm": "10.8.2"
   },
   "scripts": {
-    "test:browser": "karma start"
+    "test:browser": "karma start",
+    "tests": "npx karma start --browsers ChromeHeadlessNoSandbox --auto-watch false"
   },
   "description": "Calculation library for the Department of Energy Advanced Manufacturing and Materials Technologies Office and the Industrial Efficiency & Decarbonization Office (DOE AMMTO IEDO)  suite of tools",
   "author": "Gina Accawi <accawigk@ornl.gov>",
@@ -26,6 +27,7 @@
     "karma": "^6.4.4",
     "karma-chrome-launcher": "^3.2.0",
     "karma-mocha": "^2.0.1",
+    "karma-mocha-reporter": "^2.2.5",
     "karma-webpack": "^5.0.1",
     "mocha": "^11.7.1"
   }

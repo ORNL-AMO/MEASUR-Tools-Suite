@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @brief Contains the entire hierarchy of the HeadTool classes.
  *      calculateThermalResistance(): Calculates the operating pump head
@@ -5,9 +7,6 @@
  * @author Preston Shires (pshires)
  * @bug No known bugs.
  */
-
-#ifndef TOOLS_SUITE_HEADTOOL_H
-#define TOOLS_SUITE_HEADTOOL_H
 
 #include <string>
 #include <unordered_map>
@@ -191,4 +190,3 @@ class HeadTool : private HeadToolBase {
     HeadToolBase::Output output;
 };
 
-#endif // TOOLS_SUITE_HEADTOOL_H

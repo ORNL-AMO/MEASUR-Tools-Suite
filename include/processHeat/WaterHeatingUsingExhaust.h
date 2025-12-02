@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Calculate energy savings from using exhaust gas (waste) heat to provide energy for an absorption chiller in
@@ -9,9 +11,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_WATERHEATINGUSINGEXHAUST_H
-#define TOOLS_SUITE_WATERHEATINGUSINGEXHAUST_H
 
 class WaterHeatingUsingExhaust {
   public:
@@ -53,4 +52,3 @@ class WaterHeatingUsingExhaust {
                      const double chillerEfficiency, const double copCompressor);
 };
 
-#endif // TOOLS_SUITE_WATERHEATINGUSINGEXHAUST_H

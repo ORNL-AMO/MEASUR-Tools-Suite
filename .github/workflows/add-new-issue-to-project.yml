@@ -1,0 +1,40 @@
+name: Add new Issues to GitHub Project
+
+permissions: 
+  issues: write
+  contents: read
+  
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  add-to-project:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add issue to project
+        env:
+          GH_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+          ISSUE_URL: ${{ github.event.issue.html_url }}
+        run: |
+          ISSUE_ID=$(gh api graphql -F url="$ISSUE_URL" -f query='
+            query($url: URI!) {
+              resource(url: $url) {
+                ... on Issue {
+                  id
+                }
+              }
+            }
+          ' --jq '.data.resource.id')
+          
+          PROJECT_ID="PVT_kwDOAPjh784BE-oJ"
+          gh api graphql -F issueId="$ISSUE_ID" -F projectId="$PROJECT_ID" -f query='
+            mutation($issueId:ID!, $projectId:ID!) {
+              addProjectV2ItemById(input: {projectId: $projectId, contentId: $issueId}) {
+                item {
+                  id
+                }
+              }
+            }
+          '
+        shell: bash

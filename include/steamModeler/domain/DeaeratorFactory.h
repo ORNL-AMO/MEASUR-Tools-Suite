@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_DEAERATORFACTORY_H
-#define TOOLS_SUITE_DEAERATORFACTORY_H
+#pragma once
 
 #include <steamModeler/api/BoilerInput.h>
 #include <steamModeler/api/HeaderInput.h>
@@ -13,4 +12,3 @@ class DeaeratorFactory {
                          const SteamSystemModelerTool::FluidProperties& inletHeaderOutput) const;
 };
 
-#endif // TOOLS_SUITE_DEAERATORFACTORY_H

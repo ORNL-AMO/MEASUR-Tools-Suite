@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_MAKEUPWATERMASSFLOWCALCULATOR_H
-#define TOOLS_SUITE_MAKEUPWATERMASSFLOWCALCULATOR_H
+#pragma once
 
 #include <steamModeler/api/BoilerInput.h>
 #include <steamModeler/api/HeaderInput.h>
@@ -59,4 +58,3 @@ class MakeupWaterMassFlowCalculator {
                                      const SteamSystemModelerTool::SteamPropertiesOutput& makeupWater) const;
 };
 
-#endif // TOOLS_SUITE_MAKEUPWATERMASSFLOWCALCULATOR_H

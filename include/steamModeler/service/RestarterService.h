@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_RESTARTERSERVICE_H
-#define TOOLS_SUITE_RESTARTERSERVICE_H
+#pragma once
 
 #include <memory>
 
@@ -20,4 +19,3 @@ class RestarterService {
     void logMessage(const std::string& message) const;
 };
 
-#endif // TOOLS_SUITE_RESTARTERSERVICE_H

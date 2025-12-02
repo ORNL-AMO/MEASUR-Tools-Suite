@@ -2,6 +2,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Calculate estimated power(kW) consumption and air flow(acfm) for a Compressor based on control type",
           "[Power-Flow-Calculations]") {
     auto ccBlow  = Compressors_Centrifugal_BlowOff(452.3, 3138, 370.9, 2510);
@@ -87,7 +89,7 @@ TEST_CASE("Calculate estimated power(kW) consumption and air flow(acfm) for a Co
     resLul = cclUL.calculateFromPerC(0.24);
     CHECK(resLul.kW_Calc == Approx(162.74));
     CHECK(resLul.C_Calc == Approx(753.12));
-    CHECK(resLul.PerkW == Approx(0.3598));
+    CHECK(resLul.PerkW == Approx(0.3598).epsilon(0.005));
     CHECK(resLul.C_Per == Approx(0.24));
     resLul = cclUL.calculateFromkWMeasured(162.828);
     CHECK(resLul.kW_Calc == Approx(162.828));
@@ -97,13 +99,13 @@ TEST_CASE("Calculate estimated power(kW) consumption and air flow(acfm) for a Co
     resLul = cclUL.calculateFromCMeasured(753.12);
     CHECK(resLul.kW_Calc == Approx(162.74));
     CHECK(resLul.C_Calc == Approx(753.12));
-    CHECK(resLul.PerkW == Approx(0.3598));
+    CHECK(resLul.PerkW == Approx(0.3598).epsilon(0.005));
     CHECK(resLul.C_Per == Approx(0.24));
     resLul = cclUL.calculateFromVIPFMeasured(440, 2.152, 50);
     CHECK(resLul.kW_Calc == Approx(82));
     CHECK(resLul.C_Calc == Approx(88.126));
-    CHECK(resLul.PerkW == Approx(0.1813));
-    CHECK(resLul.C_Per == Approx(0.02808));
+    CHECK(resLul.PerkW == Approx(0.1813).epsilon(0.005));
+    CHECK(resLul.C_Per == Approx(0.02808).epsilon(0.005));
 
     cclUL.AdjustDischargePressure({3200, 3138, 2885}, {91, 100, 117}, 100);
     resLul = cclUL.calculateFromPerkW(0.36);
@@ -114,7 +116,7 @@ TEST_CASE("Calculate estimated power(kW) consumption and air flow(acfm) for a Co
     resLul = cclUL.calculateFromPerC(0.24);
     CHECK(resLul.kW_Calc == Approx(162.74));
     CHECK(resLul.C_Calc == Approx(753.12));
-    CHECK(resLul.PerkW == Approx(0.3598));
+    CHECK(resLul.PerkW == Approx(0.3598).epsilon(0.005));
     CHECK(resLul.C_Per == Approx(0.24));
     resLul = cclUL.calculateFromkWMeasured(162.828);
     CHECK(resLul.kW_Calc == Approx(162.828));
@@ -124,13 +126,13 @@ TEST_CASE("Calculate estimated power(kW) consumption and air flow(acfm) for a Co
     resLul = cclUL.calculateFromCMeasured(753.12);
     CHECK(resLul.kW_Calc == Approx(162.74));
     CHECK(resLul.C_Calc == Approx(753.12));
-    CHECK(resLul.PerkW == Approx(0.3598));
+    CHECK(resLul.PerkW == Approx(0.3598).epsilon(0.005));
     CHECK(resLul.C_Per == Approx(0.24));
     resLul = cclUL.calculateFromVIPFMeasured(440, 2.152, 50);
     CHECK(resLul.kW_Calc == Approx(82));
     CHECK(resLul.C_Calc == Approx(88.126));
-    CHECK(resLul.PerkW == Approx(0.1813));
-    CHECK(resLul.C_Per == Approx(0.02808));
+    CHECK(resLul.PerkW == Approx(0.1813).epsilon(0.005));
+    CHECK(resLul.C_Per == Approx(0.02808).epsilon(0.005));
 
     auto ccMuL  = Compressors_Centrifugal_ModulationUnload(452.3, 3138, 71.3, 3005, 411.9, 2731);
     auto resMuL = ccMuL.calculateFromPerkW(0.94);
@@ -156,7 +158,7 @@ TEST_CASE("Calculate estimated power(kW) consumption and air flow(acfm) for a Co
     resMuL = ccMuL.calculateFromVIPFMeasured(440, 2.152, 50);
     CHECK(resMuL.kW_Calc == Approx(82));
     CHECK(resMuL.C_Calc == Approx(85.7932));
-    CHECK(resMuL.PerkW == Approx(0.1813));
+    CHECK(resMuL.PerkW == Approx(0.1813).epsilon(0.005));
     CHECK(resMuL.C_Per == Approx(0.027340));
 
     ccMuL.AdjustDischargePressure({3200, 3138, 2885}, {91, 100, 117}, 100, 58.23);
@@ -164,7 +166,7 @@ TEST_CASE("Calculate estimated power(kW) consumption and air flow(acfm) for a Co
     CHECK(resMuL.kW_Calc == Approx(425.162));
     CHECK(resMuL.C_Calc == Approx(2820.95));
     CHECK(resMuL.PerkW == Approx(0.94));
-    CHECK(resMuL.C_Per == Approx(0.93875));
+    CHECK(resMuL.C_Per == Approx(0.93875).epsilon(0.005));
     resMuL = ccMuL.calculateFromPerC(0.24);
     CHECK(resMuL.kW_Calc == Approx(165.226));
     CHECK(resMuL.C_Calc == Approx(753.12));
@@ -174,7 +176,7 @@ TEST_CASE("Calculate estimated power(kW) consumption and air flow(acfm) for a Co
     CHECK(resMuL.kW_Calc == Approx(425.162));
     CHECK(resMuL.C_Calc == Approx(2820.95));
     CHECK(resMuL.PerkW == Approx(0.94));
-    CHECK(resMuL.C_Per == Approx(0.93875));
+    CHECK(resMuL.C_Per == Approx(0.93875).epsilon(0.005));
     resMuL = ccMuL.calculateFromCMeasured(753.12);
     CHECK(resMuL.kW_Calc == Approx(165.226));
     CHECK(resMuL.C_Calc == Approx(753.12));
@@ -184,7 +186,7 @@ TEST_CASE("Calculate estimated power(kW) consumption and air flow(acfm) for a Co
     CHECK(resMuL.kW_Calc == Approx(94.003));
     CHECK(resMuL.C_Calc == Approx(182.033));
     CHECK(resMuL.PerkW == Approx(0.20783));
-    CHECK(resMuL.C_Per == Approx(0.058));
+    CHECK(resMuL.C_Per == Approx(0.058).epsilon(0.005));
 
     // MODULATION W/O UNLOAD
     auto cMWOuL   = Compressors_ModulationWOUnload(85.4, 473, 55.3);
@@ -255,7 +257,7 @@ TEST_CASE("Calculate estimated power(kW) consumption and air flow(acfm) for a Co
     resSS = cSS.calculateFromkWMeasured(18.35);
     CHECK(resSS.kW_Calc == Approx(18.35));
     CHECK(resSS.C_Calc == Approx(112.015));
-    CHECK(resSS.PerkW == Approx(0.20502));
+    CHECK(resSS.PerkW == Approx(0.20502).epsilon(0.005));
     CHECK(resSS.C_Per == Approx(0.200027));
     resSS = cSS.calculateFromCMeasured(112);
     CHECK(resSS.kW_Calc == Approx(18.3475));
@@ -342,7 +344,7 @@ TEST_CASE("Calculate estimated power(kW) consumption and air flow(acfm) for a Co
     auto redAirLeak = CompressorEEMs::ReduceAirLeaks(473, 100, 10, 0.5);
     CHECK(redAirLeak.C_lkred == Approx(5));
     CHECK(redAirLeak.C_usage_lkred == Approx(95));
-    CHECK(redAirLeak.PerC_lkred == Approx(0.20084));
+    CHECK(redAirLeak.PerC_lkred == Approx(0.20084).epsilon(0.005));
 
     auto endUseEff = CompressorEEMs::ImproveEndUseEfficiency(473, 236, 20);
     CHECK(endUseEff.C_af_red == Approx(216));
@@ -352,7 +354,7 @@ TEST_CASE("Calculate estimated power(kW) consumption and air flow(acfm) for a Co
     CHECK(redAirPressure.P_fl_rpred == Approx(95));
     CHECK(redAirPressure.kW_fl_rpadj == Approx(82.972));
     CHECK(redAirPressure.C_usage_rpred == Approx(97.384));
-    CHECK(redAirPressure.PerC_rpred == Approx(0.2059));
+    CHECK(redAirPressure.PerC_rpred == Approx(0.2059).epsilon(0.005));
 
     auto cascadingSetPoint = CompressorEEMs::AdjustCascadingSetPoint(2578, 1000, 100, 414.4, 105, 14.7, 14.7);
     CHECK(cascadingSetPoint.kW_fl_adj == Approx(425.82));

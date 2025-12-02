@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * Contains calculations for Fan Shaft Power
  * @author Preston Shires (pshires)
@@ -5,9 +7,6 @@
  * @bug No Known Bugs.
  *
  */
-#ifndef TOOLS_SUITE_FANSHAFTPOWER_H
-#define TOOLS_SUITE_FANSHAFTPOWER_H
-
 #include <cmath>
 
 class FanShaftPower {
@@ -54,4 +53,3 @@ class FanShaftPower {
     double motorPowerOutput, fanPowerInput;
 };
 
-#endif // TOOLS_SUITE_FANSHAFTPOWER_H

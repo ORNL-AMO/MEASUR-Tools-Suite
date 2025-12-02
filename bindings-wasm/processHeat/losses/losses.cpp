@@ -5,11 +5,11 @@
 #include "processHeat/losses/energy_input_EAF.h"
 #include "processHeat/losses/energy_input_exhaust_gas_losses.h"
 #include "processHeat/losses/exhaust_gas_EAF.h"
-#include "processHeat/losses/fixture_losses.h"
+#include "processHeat/losses/fixture_heat_loss.h"
 #include "processHeat/losses/gas_cooling_losses.h"
 #include "processHeat/losses/gas_flue_gas_material.h"
 #include "processHeat/losses/gas_load_charge_material.h"
-#include "processHeat/losses/leakage_losses.h"
+#include "processHeat/losses/leakage_heat_loss.h"
 #include "processHeat/losses/liquid_cooling_losses.h"
 #include "processHeat/losses/liquid_load_charge_material.h"
 #include "processHeat/losses/load_charge_material.h"
@@ -52,14 +52,11 @@ EMSCRIPTEN_BINDINGS(auxiliaryPowerLoss) {
         .function("getPowerUsed", &AuxiliaryPower::getPowerUsed);
 }
 
-// fixtureLosses
-// getHeatLoss()
-EMSCRIPTEN_BINDINGS(fixtureLosses) {
-    // specificHeat, feedRate, initialTemperature, finalTemperature,
-    // correctionFactor
-    class_<FixtureLosses>("FixtureLosses")
-        .constructor<double, double, double, double, double>()
-        .function("getHeatLoss", &FixtureLosses::getHeatLoss);
+// Bindings for the fixture_heat_loss namespace
+EMSCRIPTEN_BINDINGS(fixture_heat_loss) {
+    using namespace fixture_heat_loss;
+
+    function("fixtureTotalHeatLoss", &totalHeatLoss);
 }
 
 // energyInputEAF
@@ -183,11 +180,10 @@ EMSCRIPTEN_BINDINGS(gasLoadChargeMaterial) {
     register_vector<GasLoadChargeMaterial>("GasLoadChargeMaterialV");
 }
 
-// leakageLosses
-EMSCRIPTEN_BINDINGS(leakageLosses) {
-    class_<LeakageLosses>("LeakageLosses")
-        .constructor<double, double, double, double, double, double, double>()
-        .function("getExfiltratedGasesHeatContent", &LeakageLosses::getExfiltratedGasesHeatContent);
+// leakageHeatLoss
+EMSCRIPTEN_BINDINGS(leakage_heat_loss) {
+    using namespace leakage_heat_loss;
+    function("leakageTotalHeatLoss", &totalHeatLoss);
 }
 
 // liquidCoolingLosses

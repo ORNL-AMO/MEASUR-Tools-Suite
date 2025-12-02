@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file
  * @brief Implementations of Orifice Method of a compressed air system
@@ -6,9 +8,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_ORIFICEMETHOD_H
-#define TOOLS_SUITE_ORIFICEMETHOD_H
 
 #include <cmath>
 #include <functional>
@@ -74,4 +73,3 @@ class OrificeMethod {
     int    numOrifices;
 };
 
-#endif

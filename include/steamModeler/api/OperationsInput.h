@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_OPERATIONSINPUT_H
-#define TOOLS_SUITE_OPERATIONSINPUT_H
+#pragma once
 
 #include <iostream>
 
@@ -34,4 +33,3 @@ class OperationsInput {
     double makeUpWaterCosts;
 };
 
-#endif // TOOLS_SUITE_OPERATIONSINPUT_H

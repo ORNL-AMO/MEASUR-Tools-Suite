@@ -2,6 +2,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Calculate the Humidity Ratio Using Relative Humidity", "[Humidity Ratio][HumidityRatio][Calculator]") {
     CHECK(HumidityRatio(0.8, 120, 30, 85).getHumidityRatioUsingRH() == Approx(0.028113629));
 }

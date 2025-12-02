@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @brief EstimateFLA class.
  *  This contains the prototypes for the Estimate FLA calculator and 25% interval value calculator.
@@ -6,9 +8,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef UNTITLED_ESTIMATEFLA_H
-#define UNTITLED_ESTIMATEFLA_H
 
 #include <array>
 #include <vector>
@@ -100,4 +99,3 @@ class EstimateFLA {
                                                               {{0.013678436, 0.057848012, 0.071461107}}}};
 };
 
-#endif // UNTITLED_ESTIMATEFLA_H

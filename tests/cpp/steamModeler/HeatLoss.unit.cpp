@@ -2,6 +2,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("Calculate the Inlet Energy Flow #1", "[Inlet Energy Flow][HeatLoss][steamModeler]") {
     CHECK(HeatLoss(2.418, SteamProperties::ThermodynamicQuantity::TEMPERATURE, 521, 5434, 2.44)
               .getInletProperties()

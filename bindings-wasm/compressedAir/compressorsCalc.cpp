@@ -1,8 +1,46 @@
+#include "compressedAir/compressors_data.h"
 #include <emscripten/bind.h>
 
 #include "compressedAir/Compressors.h"
 
 using namespace emscripten;
+
+EMSCRIPTEN_BINDINGS(compressors_data_class)
+{
+    class_<CompressorsData>("CompressorsData")
+        .constructor<int, std::string, double, double, double, double, int, double, double, double, double, double, double,
+                    double, double, double, double, double, double, double, double, double, double, double, double, double>()
+        .function("setID", &CompressorsData::setID)
+        .function("ID", &CompressorsData::ID)
+        .function("idCompType", &CompressorsData::idCompType)
+        .function("model", &CompressorsData::model)
+        .function("hp", &CompressorsData::hp)
+        .function("ratedCapacity", &CompressorsData::ratedCapacity)
+        .function("ratedPressure", &CompressorsData::ratedPressure)
+        .function("maxFullFlowPressure", &CompressorsData::maxFullFlowPressure)
+        .function("idControlType", &CompressorsData::idControlType)
+        .function("unloadPoint", &CompressorsData::unloadPoint)
+        .function("minULSumpPressure", &CompressorsData::minULSumpPressure)
+        .function("blowdownTime", &CompressorsData::blowdownTime)
+        .function("unloadSteps", &CompressorsData::unloadSteps)
+        .function("modulatingPressRange", &CompressorsData::modulatingPressRange)
+        .function("powerFLBHP", &CompressorsData::powerFLBHP)
+        .function("totPackageInputPower", &CompressorsData::totPackageInputPower)
+        .function("specPackagePower", &CompressorsData::specPackagePower)
+        .function("noLoadPowerFM", &CompressorsData::noLoadPowerFM)
+        .function("noLoadPowerUL", &CompressorsData::noLoadPowerUL)
+        .function("maxSurgePressure", &CompressorsData::maxSurgePressure)
+        .function("maxPressSurgeFlow", &CompressorsData::maxPressSurgeFlow)
+        .function("minStonewallPressure", &CompressorsData::minStonewallPressure)
+        .function("minPressStonewallFlow", &CompressorsData::minPressStonewallFlow)
+        .function("designSurgeFlow", &CompressorsData::designSurgeFlow)
+        .function("designInTemp", &CompressorsData::designInTemp)
+        .function("designInPressure", &CompressorsData::designInPressure)
+        .function("ampsFL", &CompressorsData::ampsFL)
+        .function("effFL", &CompressorsData::effFL);
+
+        register_vector<CompressorsData>("CompressorsDataV");
+}
 
 EMSCRIPTEN_BINDINGS(compressors_class) {
     enum_<Compressors::CompressorType>("CompressorType")

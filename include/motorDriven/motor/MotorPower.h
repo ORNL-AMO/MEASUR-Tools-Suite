@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @brief Contains the declaration of MotorPower class including the getters and setters as well as the calculators.
  *          for motor efficiency.
@@ -7,9 +9,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_MOTORPOWER_H
-#define TOOLS_SUITE_MOTORPOWER_H
 
 class MotorPower {
   public:
@@ -43,4 +42,3 @@ class MotorPower {
     double powerFactor;
 };
 
-#endif // TOOLS_SUITE_MOTORPOWER_H

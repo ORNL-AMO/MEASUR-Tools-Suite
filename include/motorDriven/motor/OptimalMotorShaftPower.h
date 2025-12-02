@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @brief Header file for OptimalMotorShaftPower class
  *
@@ -9,9 +11,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_OPTIMALMOTORSHAFTPOWER_H
-#define TOOLS_SUITE_OPTIMALMOTORSHAFTPOWER_H
 
 #include "MotorData.h"
 
@@ -82,4 +81,3 @@ class OptimalMotorShaftPower {
     double specifiedEfficiency;
 };
 
-#endif // TOOLS_SUITE_OPTIMALMOTORSHAFTPOWER_H

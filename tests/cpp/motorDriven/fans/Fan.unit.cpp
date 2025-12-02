@@ -1,4 +1,6 @@
 #include "catch.hpp"
+
+using namespace Catch;
 #include "motorDriven/fans/fan203.h"
 #include "motorDriven/fans/FanCurve.h"
 #include "motorDriven/pumpFan/FanEnergyIndex.h"

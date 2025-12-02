@@ -2,6 +2,8 @@
 
 #include "catch.hpp"
 
+using namespace Catch;
+
 TEST_CASE("turbineInputConstructor", "[turbine input constructor]") {
     CondensingTurbine condensingTurbine =
         CondensingTurbine(1, 1, 1, CondensingTurbineOperation::POWER_GENERATION, 1, 1);

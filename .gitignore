@@ -133,6 +133,7 @@ bld/
 
 build-cpp/
 build-wasm/
+build-pkg/
 bin/
 
 # Visual Studio 2015 cache/options directory

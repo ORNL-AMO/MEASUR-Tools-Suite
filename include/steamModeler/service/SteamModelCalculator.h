@@ -1,5 +1,4 @@
-#ifndef TOOLS_SUITE_STEAMMODELCALCULATOR_H
-#define TOOLS_SUITE_STEAMMODELCALCULATOR_H
+#pragma once
 
 #include <steamModeler/api/BoilerInput.h>
 #include <steamModeler/api/HeaderInput.h>
@@ -41,4 +40,3 @@ class SteamModelCalculator {
     const ProcessSteamUsageModeler    processSteamUsageModeler    = ProcessSteamUsageModeler();
 };
 
-#endif // TOOLS_SUITE_STEAMMODELCALCULATOR_H

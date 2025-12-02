@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @brief Contains the Consumption (Water / Power / Energy) & Savings calculators for
  *  Cooling Tower
@@ -9,9 +11,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_COOLING_TOWER_H
-#define TOOLS_SUITE_COOLING_TOWER_H
 
 #include <math.h>
 
@@ -255,4 +254,3 @@ class CoolingTower {
     }
 };
 
-#endif // TOOLS_SUITE_COOLING_TOWER_H

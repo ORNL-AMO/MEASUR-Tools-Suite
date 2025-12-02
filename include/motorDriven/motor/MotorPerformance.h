@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @brief TODO
  *
@@ -5,9 +7,6 @@
  * @bug No known bugs.
  *
  */
-
-#ifndef TOOLS_SUITE_MOTORPERFORMANCE_H
-#define TOOLS_SUITE_MOTORPERFORMANCE_H
 
 #include <array>
 #include <exception>
@@ -62,4 +61,3 @@ class MotorPerformance {
     double                 fullLoadAmps;
 };
 
-#endif // TOOLS_SUITE_MOTORPERFORMANCE_H

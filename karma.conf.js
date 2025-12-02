@@ -1,5 +1,12 @@
 module.exports = function (config) {
     config.set({
+        port: 3000,
+        customLaunchers: {
+            ChromeHeadlessNoSandbox: {
+                base: 'ChromeHeadless',
+                flags: ['--no-sandbox']
+            }
+        },
         frameworks: ['mocha'],
         files: [
             // All browser-based WASM Mocha tests
@@ -15,7 +22,7 @@ module.exports = function (config) {
             mode: 'development',
             experiments: { asyncWebAssembly: true },
             resolve: {
-                extensions: ['.js', '.wasm']
+                extensions: ['.js', '.wasm'],
             },
             module: {
                 rules: [
@@ -28,6 +35,14 @@ module.exports = function (config) {
         },
         browsers: ['ChromeHeadless'],
         singleRun: true,
-        reporters: ['progress']
+        reporters: ['progress', 'mocha'],
+        client: {
+            captureConsole: true
+        },
+        browserConsoleLogOptions: {
+            level: "log",
+            format: "%b %T: %m",
+            terminal: true
+        },
     });
 };

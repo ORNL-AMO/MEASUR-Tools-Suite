@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * @file CHP.h
  * @author Preston Shires (pshires) & Allie Ledbetter (aeledbetter)
@@ -5,9 +7,6 @@
  *
  *
  */
-#ifndef TOOLS_SUITE_CHP_H
-#define TOOLS_SUITE_CHP_H
-
 #include <array>
 #include <map>
 #include <string>
@@ -238,4 +237,3 @@ class CHP {
     }};
 };
 
-#endif // TOOLS_SUITE_CHP_H
