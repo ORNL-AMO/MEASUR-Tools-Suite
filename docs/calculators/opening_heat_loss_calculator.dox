@@ -1,4 +1,142 @@
 /**
  * @defgroup opening_heat_loss_calculator Opening Heat Loss Calculator
  * @ingroup heat_loss_calculators
+ * @brief Calculates heat losses from process heating equipment openings to the ambient.
+ * @details This calculator estimates radiative heat loss through circular and rectangular openings in process heating equipment. It uses empirical polynomial approximations for the radiative view factor, based on the geometry of the opening and wall thickness. The calculator is suitable for modeling heat loss from doors, ports, and other openings, and is based on standard heat transfer references and ASHRAE research.
+ *
+ * @heading{Total Opening Heat Loss}
+ * @copydoc opening_total_heat_loss_formula
+ *
+ * @heading{View Factor Calculation}
+ * @copydoc opening_view_factor_formula
+ *
+ * @heading{Polynomial Approximations}
+ * @copydoc opening_view_factor_polynomials
+ *
+ * @heading{Symbols}
+ * @copydoc opening_heat_loss_symbols
+ *
+ * @see Kays & Crawford, "Convective Heat and Mass Transfer"; Incropera & DeWitt, "Fundamentals of Heat and Mass Transfer"; Glicksman (ASHRAE Transactions, 1972); Perry’s Chemical Engineers’ Handbook
+ */
+
+/**
+ * @defgroup opening_total_heat_loss_formula Opening Total Heat Loss Formula
+ * @ingroup opening_heat_loss_calculator
+ * @formula{opening-total-heat-loss; Q_\text{open} = \varepsilon \sigma A (T_\text{in}^4 - T_\text{amb}^4) \cdot F \cdot \frac{t_\text{open}}{100}}
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_\text{open}; Opening heat loss; \btu\per\hour}
+ * @symrow{\varepsilon; Surface emissivity; \unitless}
+ * @symrow{\sigma; @ref physics::us::kStefanBoltzmann "Stefan-Boltzmann constant"; \btu\per\hour\foot\squared\degreeRankine\tothe{4}}
+ * @symrow{A; Opening area; \foot\squared}
+ * @symrow{T_\text{in}; Inside temperature; \degreeRankine}
+ * @symrow{T_\text{amb}; Ambient temperature; \degreeRankine}
+ * @symrow{F; Radiative view factor; \unitless}
+ * @symrow{t_\text{open}; Percent time open; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup opening_view_factor_formula Opening View Factor Formula
+ * @ingroup opening_heat_loss_calculator
+ * @brief The radiative view factor F is a function of the opening geometry and wall thickness.
+ * @details The radiative view factor essentially relates the fraction of emitted radiation from surface A that strikes surface B. Typically, this is a straightforward calculation with some basic assumptions; however, it is impractical to assume no restrictions in radiative heat transfer from the interior of the furnace out to the radiation far field. This loss can be modelled by assuming the only opening between surface A and B is one through the depth of the furnace’s walls and insulation. This partially simplifies the process by allowing MEASUR to use empirical equations to determine the view factor based on physical opening geometry. 
+ * @details For circular openings, F is approximated by a polynomial in the thickness-to-diameter ratio. For rectangular openings, F is a function of thickness-to-length and lateral dimension ratios, using piecewise polynomial fits.
+ * @image html assets/opening-view-factor-diagram.png "Opening View Factor Diagram"
+ * The empirical equations for rectangular openings that follow will be presented as cases which take this form of equation:
+ * Each polynomial is of the form where \(TR\) is the thickness-to-dimension ratio for the opening:
+ * @formula{opening-view-factor; F_\text{Case#} = \frac{C_0 + C_1 TR + C_2 TR^2 + C_3 TR^3 + C_4 TR^4 + C_5 TR^5}{100}}
+ * TR is taken to be the thickness ratio, which is defined by the height or length of the opening, whichever is shorter, divided by the furnace wall thickness. LDR, or lateral dimension ratio, is then defined by the larger of either length or height divided by shorter of the two. In calculation, TR is limited to no greater than 6.
+ * @note See @ref opening_view_factor_polynomials for explicit polynomial forms.
+ */
+
+/**
+ * @defgroup opening_view_factor_polynomials Opening View Factor Polynomials
+ * @ingroup opening_heat_loss_calculator
+ * @brief Polynomial approximations for radiative view factor.
+ * @details The following polynomials are used for different ranges of thickness-to-diameter or thickness-to-length ratios. Coefficients are fit to published view factor data for furnace openings.
+ *
+ * @subheading{Polynomial Coefficients for View Factor Cases}
+ * Each polynomial is of the form where \(TR\) is the thickness-to-dimension ratio for the opening:
+ * @formula{opening-view-factor-2; F_\text{Case#} = \frac{C_0 + C_1 TR + C_2 TR^2 + C_3 TR^3 + C_4 TR^4 + C_5 TR^5}{100}}
+ * The following table lists the coefficients (C₀–C₅) for each polynomial used to approximate the radiative view factor for various opening geometries in the code:
+ *
+ * | Case | C₀         | C₁         | C₂         | C₃         | C₄         | C₅         |
+ * |------|------------|------------|------------|------------|------------|------------|
+ * | 1    | 1.1        | 92.8571    | -57.5893   | 15.625     | 0          | 0          | 
+ * | 2    | 29.5       | 26.8417    | -4.35417   | -8.33e-2| .104167e-1 | -8.33e-3| 
+ * | 3    | 3.5        | 89.5833    | -50.0      | 10.4167    | 0          | 0          |
+ * | 4    | 24.0       | 39.3917    | -11.6042   | 1.85417    | -.145833| 4.17e-3 |
+ * | 5    | 2.7        | 112.679    | -70.9821   | 15.625     | 0          | 0          | 
+ * | 6    | 35.5       | 29.4583    | -4.52083   | -6.875e-1  | .270833 | -.208333e-2|
+ * | 7    | 13.0       | 123.75     | -100.0     | 31.25      | 0          | 0          | 
+ * | 8    | 27.0       | 64.5667    | -29.9167   | 7.14583    | -8.33e-1| 3.75e-2    | 
+ *
+ *
+ * @subheading{Circular Openings}
+ * @formula{opening-vf-case1; F_1(TR) = \frac{1.10 + 92.86TR - 57.59TR^2 + 15.62TR^3}{100}}
+ * @formula{opening-vf-case2; F_2(TR) = \frac{29.50 + 26.84TR - 4.35TR^2 - 0.083TR^3 + 0.104TR^4 - 0.0083TR^5}{100}}
+ * @subheading{Circular Opening View Factor Case Table}
+ * The following table shows which polynomial formula is used for each thickness ratio (TR) for circular openings:
+ *
+ * |                |   |
+ * |----------------|---------------------|
+ * | **TR ≤ 0.1**       | @math{TR = 0.1} \n @math{F_1 * \frac{TR}{0.1}} |
+ * | **0.1 < TR ≤ 6** | @math{F_1} |
+ * | **6 < TR**         | @math{TR = 6} \n@math{F_2} | 
+ *
+ * Where:
+ * - TR = thickness ratio (diameter/thickness)
+ * - For TR < 0.1, use TR = 0.1
+ * - For 6 < TR, use TR = 6
+ *
+ * @subheading{Rectangular Openings}
+ * @formula{opening-vf-case3; F_3(TR) = \frac{3.50 + 89.58TR - 50.00TR^2 + 10.42TR^3}{100}}
+ * @formula{opening-vf-case4; F_4(TR) = \frac{24.00 + 39.39TR - 11.60TR^2 + 1.85TR^3 - 0.146TR^4 + 0.0042TR^5}{100}}
+ * @formula{opening-vf-case5; F_5(TR) = \frac{2.70 + 112.68TR - 70.98TR^2 + 15.62TR^3}{100}}
+ * @formula{opening-vf-case6; F_6(TR) = \frac{35.50 + 29.46TR - 4.52TR^2 - 0.687TR^3 + 0.271TR^4 - 0.021TR^5}{100}}
+ * @formula{opening-vf-case7; F_7(TR) = \frac{13.00 + 123.75TR - 100.00TR^2 + 31.25TR^3}{100}}
+ * @formula{opening-vf-case8; F_8(TR) = \frac{27.00 + 64.57TR - 29.92TR^2 + 7.15TR^3 - 0.833TR^4 + 0.0375TR^5}{100}}
+ *
+ * @subheading{Rectangular Opening View Factor Case Table}
+ * The following table shows which polynomial formula is used for each combination of thickness ratio (TR) and lateral dimension ratio (LDR) for rectangular openings:
+ *
+ * |                | 1 ≤ LDR ≤ 2         | 2 < LDR ≤ 9         | 9 < LDR         |
+ * |----------------|---------------------|----------------------|------------------|
+ * | **TR ≤ 0.1**       | @math{TR = 0.1} \n @math{F_3 + (F_5 - F_3) * (LDR - 1)} | @math{TR = 0.1} \n @math{F_5 + (F_7 - F_5) * \frac{(LDR - 2)}{8}} | @math{F_7(TR=0.1)*(\frac{TR}{0.1})}|
+ * | **0.1 < TR ≤ 0.9** | @math{F_3 + (F_5 - F_3) * (LDR - 1)} | @math{F_5 + (F_7 - F_5) * \frac{(LDR - 2)}{8}} | @math{F_7} |
+ * | **0.9 < TR ≤ 6**   | @math{F_4 + (F_6 - F_4) * (LDR - 1)}| @math{F_6 + (F_8 - F_6) * \frac{(LDR - 2)}{8}} | @math{F_8} |
+ * | **6 < TR**         | @math{TR = 6} \n@math{F_4 + (F_6 - F_4) * (LDR - 1)} | @math{TR = 6} \n @math{F_6 + (F_8 - F_6) * \frac{(LDR - 2)}{8}}  | @math{TR = 6} \n @math{F_8} |
+ *
+ * Where:
+ * - TR = thickness ratio (length/thickness or height/thickness)
+ * - LDR = lateral dimension ratio (length/height or height/length)
+ * - For TR < 0.1, use TR = 0.1
+ * - For 6 < TR, use TR = 6
+ *
+ *
+ */
+
+
+/**
+ * @defgroup opening_heat_loss_symbols Opening Heat Loss Symbols
+ * @ingroup opening_heat_loss_calculator
+ * @brief Symbols used in opening heat loss formulas.
+ * @symtable
+ * @symrow{Q_\text{open}; Opening heat loss; \btu\per\hour}
+ * @symrow{\varepsilon; Surface emissivity; \unitless}
+ * @symrow{\sigma; Stefan-Boltzmann constant; \btu\per\hour\foot\squared\degreeRankine\tothe{4}}
+ * @symrow{A; Opening area; \foot\squared}
+ * @symrow{T_\text{in}; Inside temperature; \degreeRankine}
+ * @symrow{T_\text{amb}; Ambient temperature; \degreeRankine}
+ * @symrow{F; Radiative view factor; \unitless}
+ * @symrow{t_\text{open}; Percent time open; \unitless}
+ * @symrow{d; Diameter of circular opening; \inch}
+ * @symrow{t; Wall thickness; \inch}
+ * @symrow{l; Length of rectangular opening; \inch}
+ * @symrow{h; Height of rectangular opening; \inch}
+ * @endsymtable
+ */
+
+/**
  */
