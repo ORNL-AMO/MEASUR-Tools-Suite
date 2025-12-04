@@ -1,4 +1,4 @@
-#include <processHeat/losses/opening_heat_loss_losses.h>
+#include <processHeat/losses/opening_heat_loss.h>
 
 #include "catch.hpp"
 
