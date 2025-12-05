@@ -7,8 +7,7 @@
  * of process heating equipment to the surrounding environment. This can occur via convection and radiation. Wall losses
  * are high for systems that are poorly insulated or use poorly designed materials or surfaces. The calculator computes
  * the total heat loss as the sum of convective and radiative heat losses, adjusted by a correction factor. Relevant
- * formulas and factors are documented below. Heat losses due to openings in the unit are covered by the
- * @ref opening_heat_loss_calculator, @ref leakage_heat_loss_calculator, or @ref atmosphere_heat_loss_calculator.
+ * formulas and factors are documented below.
  *
  * @heading{Total Heat Loss}
  * @copydoc wall_total_heat_loss_formula

@@ -3,9 +3,11 @@
  * @ingroup heat_loss_calculators
  * @brief Calculates heat loss due to gas (including air) cooling in process heating equipment.
  * @details This calculator estimates the heat removed by gas cooling systems, using flow rate, gas density, inlet and outlet temperatures, specific heat, and a correction factor. The algorithm is suitable for modeling cooling losses in industrial furnaces, ovens, and similar systems, for gases including air.
- *
  * @heading{Total Gas Cooling Heat Loss}
  * @copydoc gas_cooling_heat_loss_formula
+ *
+ * @note For heat losses due to liquid cooling see @ref liquid_cooling_heat_loss_calculator or for water see @ref water_cooling_heat_loss_calculator.
+ *
  *
  * @see Perry’s Chemical Engineers’ Handbook; NIST Engineering Statistics
  */
