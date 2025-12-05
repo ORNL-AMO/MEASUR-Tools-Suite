@@ -35,6 +35,6 @@
  * @symtable
  * @symrow{Q_\text{delivered}; Total heat delivered to EAF; \btu\per\hour}
  * @symrow{Q_\text{chem}; Total chemical energy input; \btu\per\hour}
- * @symrow{Q_\text{elec}; Electric power supplied; \btu\per\hour}
+ * @symrow{Q_\text{elec}; Electric power supplied; \kilowatt\hour\per\hour}
  * @endsymtable
  */
