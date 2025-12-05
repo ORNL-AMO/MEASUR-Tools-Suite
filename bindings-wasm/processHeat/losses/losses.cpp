@@ -60,10 +60,11 @@ EMSCRIPTEN_BINDINGS(fixture_heat_loss) {
 // energyInputEAF
 EMSCRIPTEN_BINDINGS(energyInputEAF) {
     using namespace energy_input_electric_arc_furnace;
-    //double natural_gas_heat_input, double coal_carbon_injection, double coal_heating_value,
-    //double electrode_use, double electrode_heating_value, double other_fuels
+    // Parameters for energyInputEAFTotalChemicalEnergyInput:
+    //   natural_gas_heat_input (MMBtu/hr), coal_carbon_injection (lb/hr), coal_heating_value (Btu/lb),
+    //   electrode_use (lb/hr), electrode_heating_value (Btu/lb), other_fuels (MMBtu/hr)
     function("energyInputEAFTotalChemicalEnergyInput", &totalChemicalEnergyInput);
-    //double total_chemical_energy_input, double electricity_input
+    // double total_chemical_energy_input, double electricity_input
     function("energyInputEAFTotalHeatDelivered", &totalHeatDelivered);
 }
 
