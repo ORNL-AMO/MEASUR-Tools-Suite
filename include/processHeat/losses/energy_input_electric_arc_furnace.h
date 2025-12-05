@@ -24,7 +24,7 @@ namespace energy_input_electric_arc_furnace {
  * @param[in] coal_heating_value Heating value of coal/carbon @unitb{\btu\per\pound}
  * @param[in] electrode_use Electrode use @unitb{\pound\per\hour}
  * @param[in] electrode_heating_value Electrode heating value @unitb{\btu\per\pound}
- * @param[in] other_fuels Heat supplied from other sources @unitb{\btu\per\hour}
+ * @param[in] other_fuels Heat supplied from other sources @unitb{\mega\btu\per\hour}
  * @return Total chemical energy input @unitb{\btu\per\hour}
  */
 double totalChemicalEnergyInput(double natural_gas_heat_input, double coal_carbon_injection, double coal_heating_value,
