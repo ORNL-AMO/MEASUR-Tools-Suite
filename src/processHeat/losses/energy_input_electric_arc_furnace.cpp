@@ -4,7 +4,7 @@ namespace energy_input_electric_arc_furnace {
 
 double totalChemicalEnergyInput(double natural_gas_heat_input, double coal_carbon_injection, double coal_heating_value,
                                double electrode_use, double electrode_heating_value, double other_fuels) {
-    // All inputs in BTU/hr except coal/electrode (lb/hr, btu/lb)
+    // Units: natural_gas_heat_input (MMBtu/hr), other_fuels (MMBtu/hr), coal_carbon_injection (lb/hr), coal_heating_value (btu/lb), electrode_use (lb/hr), electrode_heating_value (btu/lb)
     // Convert coal and electrode energy from (lb/hr * btu/lb) to MMBtu/hr
     double coal_heat_content      = (coal_heating_value * coal_carbon_injection)  / 1000000; // MMBtu/hr
     double electrode_heat_content = (electrode_use * electrode_heating_value) / 1000000;     // MMBtu/hr
