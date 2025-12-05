@@ -10,7 +10,7 @@
 #include "processHeat/losses/gas_flue_gas_material.h"
 #include "processHeat/losses/gas_load_charge_material.h"
 #include "processHeat/losses/leakage_heat_loss.h"
-#include "processHeat/losses/liquid_cooling_losses.h"
+#include "processHeat/losses/liquid_cooling_heat_loss.h"
 #include "processHeat/losses/liquid_load_charge_material.h"
 #include "processHeat/losses/load_charge_material.h"
 #include "processHeat/losses/opening_heat_loss.h"
@@ -185,10 +185,10 @@ EMSCRIPTEN_BINDINGS(leakage_heat_loss) {
 }
 
 // liquidCoolingLosses
-EMSCRIPTEN_BINDINGS(liquidCoolingLosses) {
-    class_<LiquidCoolingLosses>("LiquidCoolingLosses")
-        .constructor<double, double, double, double, double, double>()
-        .function("getHeatLoss", &LiquidCoolingLosses::getHeatLoss);
+EMSCRIPTEN_BINDINGS(liquid_cooling_heat_loss) {
+    //double flow_rate, double density, double initial_temperature, double outlet_temperature, double specific_heat, double correction_factor
+    using namespace liquid_cooling_heat_loss;
+    function("liquidCoolingTotalHeatLoss", &totalHeatLoss);
 }
 
 // liquidLoadChargeMaterial

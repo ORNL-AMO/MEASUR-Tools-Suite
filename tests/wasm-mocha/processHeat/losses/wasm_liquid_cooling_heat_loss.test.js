@@ -14,9 +14,7 @@ describe('Process Heat LiquidCoolingLosses', function () {
             flowRate: 100, density: 9.35, initialTemperature: 80, outletTemperature: 210,
             specificHeat: 0.52, correctionFactor: 1.0
         };
-        var liquidCoolingLosses = new moduleInstance.LiquidCoolingLosses(inp.flowRate, inp.density, inp.initialTemperature, inp.outletTemperature, inp.specificHeat, inp.correctionFactor);
-        var heatLoss = liquidCoolingLosses.getHeatLoss()
+        var heatLoss = moduleInstance.liquidCoolingTotalHeatLoss(inp.flowRate, inp.density, inp.initialTemperature, inp.outletTemperature, inp.specificHeat, inp.correctionFactor);
         assert.equal(heatLoss, 3792360.0);
-        liquidCoolingLosses.delete();
     });
 });
