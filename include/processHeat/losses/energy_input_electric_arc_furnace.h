@@ -35,7 +35,7 @@ double totalChemicalEnergyInput(double natural_gas_heat_input, double coal_carbo
  * @brief Calculates the total heat delivered to the EAF.
  * @details Computes the total heat delivered to the EAF, including electric power supplied.
  * @param[in] total_chemical_energy_input Total chemical energy input @unitb{\btu\per\hour}
- * @param[in] electricity_input Total electric power supplied @unitb{\btu\per\hour}
+ * @param[in] electricity_input Total electric power supplied @unitb{\kilowatt\hour\per\hour}
  * @return Total heat delivered to EAF @unitb{\btu\per\hour}
  */
 double totalHeatDelivered(double total_chemical_energy_input, double electricity_input);
