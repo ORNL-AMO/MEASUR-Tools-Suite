@@ -17,10 +17,9 @@ describe('Process Heat EnergyInputEAF', function () {
         var electrodeHeatingValue = 12000;
         var otherFuels = 20;
         var electricityInput = 18000;
-        var energyInputEAF = new moduleInstance.EnergyInputEAF(naturalGasHeatInput, coalCarbonInjection, coalHeatingValue, electrodeUse, electrodeHeatingValue, otherFuels, electricityInput);
-        var heatDelivered = energyInputEAF.getHeatDelivered();
-        energyInputEAF.delete();
-        assert.equal(heatDelivered, 167116000.0);
+        var totalChemicalEnergyInput = moduleInstance.energyInputEAFTotalChemicalEnergyInput(naturalGasHeatInput, coalCarbonInjection, coalHeatingValue, electrodeUse, electrodeHeatingValue, otherFuels);
+        var heatDelivered = moduleInstance.energyInputEAFTotalHeatDelivered(totalChemicalEnergyInput, electricityInput);
+        assert.equal(heatDelivered, 167118452.4607751);
     });
 
     it('should calculate totalChemicalEnergyInput correctly', function () {
@@ -30,10 +29,7 @@ describe('Process Heat EnergyInputEAF', function () {
         var electrodeUse = 500;
         var electrodeHeatingValue = 12000;
         var otherFuels = 20;
-        var electricityInput = 18000;
-        var energyInputEAF = new moduleInstance.EnergyInputEAF(naturalGasHeatInput, coalCarbonInjection, coalHeatingValue, electrodeUse, electrodeHeatingValue, otherFuels, electricityInput);
-        var totalChemicalEnergyInput = energyInputEAF.getTotalChemicalEnergyInput();
-        energyInputEAF.delete();
+        var totalChemicalEnergyInput = moduleInstance.energyInputEAFTotalChemicalEnergyInput(naturalGasHeatInput, coalCarbonInjection, coalHeatingValue, electrodeUse, electrodeHeatingValue, otherFuels);
         assert.equal(totalChemicalEnergyInput, 105700000);
     });
 });
