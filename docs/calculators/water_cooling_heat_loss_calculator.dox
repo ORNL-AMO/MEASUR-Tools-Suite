@@ -10,6 +10,9 @@
  * @heading{Water Density Calculation}
  * @copydoc water_density_formula
  *
+ * @note For heat losses due to liquid cooling see @ref liquid_cooling_heat_loss_calculator or for gas cooling see @ref gas_cooling_heat_loss_calculator.
+ *
+ *
  * @see Perry’s Chemical Engineers’ Handbook; NIST Engineering Statistics; Tanaka et al. (2001)
  */
 

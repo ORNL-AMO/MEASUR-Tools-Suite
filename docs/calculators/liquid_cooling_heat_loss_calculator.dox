@@ -8,6 +8,9 @@
  * @heading{Total Liquid Cooling Heat Loss}
  * @copydoc liquid_cooling_heat_loss_formula
  *
+ *
+ * @note For heat losses due to gas cooling see @ref gas_cooling_heat_loss_calculator.
+ *
  * @see Perry’s Chemical Engineers’ Handbook; NIST Engineering Statistics
  */
 
