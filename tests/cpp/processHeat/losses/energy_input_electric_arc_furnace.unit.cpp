@@ -22,7 +22,6 @@ TEST_CASE("Calculate the Total Chemical Energy Input 2", "[Total Chemical Energy
     const double electrodeUse          = 200;
     const double electrodeHeatingValue = 12000;
     const double otherFuels            = 0;
-    const double electricityInput = 18000;
     double totalChemicalEnergyInput = energy_input_electric_arc_furnace::totalChemicalEnergyInput(
         naturalGasHeatInput, coalCarbonInjection, coalHeatingValue, electrodeUse, electrodeHeatingValue, otherFuels);
     CHECK(totalChemicalEnergyInput == Approx(25500000.0));
