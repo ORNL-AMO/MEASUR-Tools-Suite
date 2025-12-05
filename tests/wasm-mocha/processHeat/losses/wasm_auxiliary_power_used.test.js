@@ -16,10 +16,8 @@ describe('Process Heat AuxiliaryPower', function () {
         var avgCurrent = 19;
         var powerFactor = 0.85;
         var operatingTime = 100;
-        var auxiliaryPowerLoss = new moduleInstance.AuxiliaryPower(motorPhase, supplyVoltage, avgCurrent, powerFactor, operatingTime);
-        var powerUsed = auxiliaryPowerLoss.getPowerUsed();
+        var powerUsed = moduleInstance.auxiliaryCalculatePowerUsed(motorPhase, supplyVoltage, avgCurrent, powerFactor, operatingTime);
         assert.equal(powerUsed, 43905.340549404726);
-        auxiliaryPowerLoss.delete();
     });
 
     it('should calculate power used correctly 2', function () {
@@ -28,10 +26,8 @@ describe('Process Heat AuxiliaryPower', function () {
         var avgCurrent = 19;
         var powerFactor = 0.85;
         var operatingTime = 100;
-        var auxiliaryPowerLoss = new moduleInstance.AuxiliaryPower(motorPhase, supplyVoltage, avgCurrent, powerFactor, operatingTime);
-        var powerUsed = auxiliaryPowerLoss.getPowerUsed();
+        var powerUsed = moduleInstance.auxiliaryCalculatePowerUsed(motorPhase, supplyVoltage, avgCurrent, powerFactor, operatingTime);
         assert.equal(powerUsed, 48677.66017434002);
-        auxiliaryPowerLoss.delete();
     });
 
     it('should calculate power used correctly 3', function () {
@@ -40,10 +36,8 @@ describe('Process Heat AuxiliaryPower', function () {
         var avgCurrent = 25;
         var powerFactor = 0.85;
         var operatingTime = 100;
-        var auxiliaryPowerLoss = new moduleInstance.AuxiliaryPower(motorPhase, supplyVoltage, avgCurrent, powerFactor, operatingTime);
-        var powerUsed = auxiliaryPowerLoss.getPowerUsed();
+        var powerUsed = moduleInstance.auxiliaryCalculatePowerUsed(motorPhase, supplyVoltage, avgCurrent, powerFactor, operatingTime);
         assert.equal(powerUsed, 64049.552860973716);
-        auxiliaryPowerLoss.delete();
     });
 
 
@@ -53,10 +47,8 @@ describe('Process Heat AuxiliaryPower', function () {
         var avgCurrent = 25;
         var powerFactor = 0.55;
         var operatingTime = 100;
-        var auxiliaryPowerLoss = new moduleInstance.AuxiliaryPower(motorPhase, supplyVoltage, avgCurrent, powerFactor, operatingTime);
-        var powerUsed = auxiliaryPowerLoss.getPowerUsed();
+        var powerUsed = moduleInstance.auxiliaryCalculatePowerUsed(motorPhase, supplyVoltage, avgCurrent, powerFactor, operatingTime);
         assert.equal(powerUsed, 41443.828321806526);
-        auxiliaryPowerLoss.delete();
     });
 
 
@@ -66,9 +58,7 @@ describe('Process Heat AuxiliaryPower', function () {
         var avgCurrent = 25;
         var powerFactor = 0.55;
         var operatingTime = 75;
-        var auxiliaryPowerLoss = new moduleInstance.AuxiliaryPower(motorPhase, supplyVoltage, avgCurrent, powerFactor, operatingTime);
-        var powerUsed = auxiliaryPowerLoss.getPowerUsed();
+        var powerUsed = moduleInstance.auxiliaryCalculatePowerUsed(motorPhase, supplyVoltage, avgCurrent, powerFactor, operatingTime);
         assert.equal(powerUsed, 31082.871241354896);
-        auxiliaryPowerLoss.delete();
     });
 });

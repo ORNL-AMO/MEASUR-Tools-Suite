@@ -1,0 +1,28 @@
+/**
+ * @defgroup auxiliary_power_used_calculator Auxiliary Power Used Calculator
+ * @ingroup heat_loss_calculators
+ * @brief Calculates auxiliary power usage for electrical systems in process heating equipment.
+ * @details This calculator estimates the energy use of motors and auxiliary systems associated with process heating equipment. It uses electrical parameters and operating time to compute total power consumption, converting electrical power from kW to BTU/hr using a physical constant. The algorithm is suitable for modeling auxiliary energy losses in industrial furnaces, ovens, and similar systems.
+ *
+ * @heading{Total Auxiliary Power Used}
+ * @copydoc auxiliary_power_used_formula
+ *
+ * @see Perry’s Chemical Engineers’ Handbook; NIST Engineering Statistics; ASHRAE Handbook
+ */
+
+/**
+ * @defgroup auxiliary_power_used_formula Auxiliary Power Used Formula
+ * @ingroup auxiliary_power_used_calculator
+ * @formula{aux-power-used; Q_\text{aux} = \sqrt{P} \cdot V \cdot I \cdot PF \cdot OT \cdot \frac{1}{1000} \cdot k_{\text{kW}\to\text{BTU/hr}}}
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_\text{aux}; Auxiliary power used; \btu\per\hour}
+ * @symrow{P; Motor phase; \unitless}
+ * @symrow{V; Supply voltage; \volt}
+ * @symrow{I; Average current; \ampere}
+ * @symrow{PF; Power factor; \unitless}
+ * @symrow{OT; Operating time (fraction, 0-1); \unitless}
+ * @symrow{k_{\text{kW}\to\text{BTU/hr}}; Conversion factor; \btu\per\hour\per\kilowatt}
+ * @endsymtable
+ * @details The formula first computes electrical power in kW, then converts to BTU/hr using the physical constant @ref physics::conversions::kKilowattToBtuPerHour.
+ */

@@ -85,6 +85,7 @@ window.MathJax = {
                 \DeclareSIUnit{\scf}{scf}
                 \DeclareSIUnit{\cubicFoot}{ft^3}
                 \DeclareSIUnit{\inchWaterColumn}{in\,WC}
+                \DeclareSIUnit{\kilowatt}{kW}
             `);
         }
     },
