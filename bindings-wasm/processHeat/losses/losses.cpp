@@ -14,7 +14,7 @@
 #include "processHeat/losses/liquid_load_charge_material.h"
 #include "processHeat/losses/load_charge_material.h"
 #include "processHeat/losses/opening_heat_loss.h"
-#include "processHeat/losses/slag_other_material_losses.h"
+#include "processHeat/losses/slag_other_material_heat_loss.h"
 #include "processHeat/losses/solid_liquid_flue_gas_material.h"
 #include "processHeat/losses/solid_load_charge_material.h"
 #include "processHeat/losses/wall_heat_loss.h"
@@ -227,9 +227,8 @@ EMSCRIPTEN_BINDINGS(openingLosses) {
 
 // slagOtherMaterialLosses
 EMSCRIPTEN_BINDINGS(slagOtherMaterialLosses) {
-    class_<SlagOtherMaterialLosses>("SlagOtherMaterialLosses")
-        .constructor<double, double, double, double, double>()
-        .function("getHeatLoss", &SlagOtherMaterialLosses::getHeatLoss);
+    using namespace slag_other_material_heat_loss;
+    function("slagOtherMaterialTotalHeatLoss", &totalHeatLoss);
 }
 
 // solidLoadChargeMaterial
