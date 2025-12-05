@@ -18,12 +18,12 @@
  * @subheading{Symbols}
  * @symtable
  * @symrow{Q_\text{chem}; Total chemical energy input; \btu\per\hour}
- * @symrow{Q_\text{ng}; Natural gas heat input; \mega\btu\per\hour}
+ * @symrow{Q_\text{ng}; Natural gas heat input; \btu\per\hour}
  * @symrow{m_\text{coal}; Mass of coal/carbon injection; \pound\per\hour}
  * @symrow{c_\text{coal}; Heating value of coal/carbon; \btu\per\pound}
  * @symrow{m_\text{elec}; Electrode use; \pound\per\hour}
  * @symrow{c_\text{elec}; Electrode heating value; \btu\per\pound}
- * @symrow{Q_\text{other}; Other fuel heat input; \mega\btu\per\hour}
+ * @symrow{Q_\text{other}; Other fuel heat input; \btu\per\hour}
  * @endsymtable
  */
 
