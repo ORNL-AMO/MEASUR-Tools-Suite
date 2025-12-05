@@ -15,16 +15,16 @@
  * analysis alongside simple equipment and property calculators. Both the system assessment tools and the simple
  * calculators can be used as stand-alone tools for more focused analysis.
  *
+ * - @ref process_heating_assessments
+ *   - @ref heat_loss_calculators
  * - @ref compressed_air_assessments
  * - @ref fan_system_assessments
  * - @ref process_cooling_assessments
- * - @ref process_heating_assessments
  * - @ref pumping_system_assessments
  * - @ref steam_system_assessments
  * - @ref water_assessments
  * - @ref waste_water_assessments
  * - @ref treasure_hunt_calculators
- * - @ref heat_loss_calculators
  *
  * @defgroup compressed_air_assessments Compressed Air Assessments
  *
