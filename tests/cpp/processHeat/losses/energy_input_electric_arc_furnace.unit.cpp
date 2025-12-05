@@ -42,7 +42,7 @@ TEST_CASE("Calculate the Heat Delivered 1", "[Heat Delivered][EnergyInputEAF][Fu
     CHECK(heatDelivered == Approx(167118452.4607751));
 }
 
-TEST_CASE("Calculate the Heat Delivered 1", "[Heat Delivered][EnergyInputEAF][Furnace]") {
+TEST_CASE("Calculate the Heat Delivered 2", "[Heat Delivered][EnergyInputEAF][Furnace]") {
     const double naturalGasHeatInput   = 50;
     const double coalCarbonInjection   = 900;
     const double coalHeatingValue      = 9000;
