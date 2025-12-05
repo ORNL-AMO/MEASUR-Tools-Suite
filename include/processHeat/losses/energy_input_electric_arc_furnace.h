@@ -19,7 +19,7 @@ namespace energy_input_electric_arc_furnace {
  * @ingroup energy_input_electric_arc_furnace_calculator
  * @brief Calculates the total chemical energy input for an Electric Arc Furnace (EAF).
  * @details Computes the total chemical energy input from natural gas, coal/carbon injection, electrodes, and other fuels.
- * @param[in] natural_gas_heat_input Total heat input from natural gas @unitb{\btu\per\hour}
+ * @param[in] natural_gas_heat_input Total heat input from natural gas @unitb{\mega\btu\per\hour}
  * @param[in] coal_carbon_injection Mass of coal/carbon injection @unitb{\pound\per\hour}
  * @param[in] coal_heating_value Heating value of coal/carbon @unitb{\btu\per\pound}
  * @param[in] electrode_use Electrode use @unitb{\pound\per\hour}
