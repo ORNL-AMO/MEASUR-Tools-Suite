@@ -59,6 +59,7 @@
  * @symrow{T_{exh}; Exhaust gas temperature; \degreeFahrenheit}
  * @symrow{SH_{air}; Specific heat of air; \btu\per\pound\degreeFahrenheit}
  * @symrow{-1.078913827; Air correction base; \unitless}
+ * @symrow{EA; Excess air as percent; \percent}
  * @endsymtable
  */
 
