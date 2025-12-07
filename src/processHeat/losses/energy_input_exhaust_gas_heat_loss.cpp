@@ -1,6 +1,5 @@
 #include "processHeat/losses/energy_input_exhaust_gas_heat_loss.h"
 
-#include <tuple>
 
 #include "physics/constants.h"
 
