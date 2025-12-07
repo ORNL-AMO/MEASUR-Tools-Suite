@@ -47,9 +47,9 @@ namespace physics::us {
 inline constexpr double kStefanBoltzmann = 1.713441e-9;
 
 /**
- * @brief Standard gas temperature for exhaust calculations @unitb{\degreeFahrenheit}
- */
-inline constexpr double kStandardGasTemperatureF = 520.0;
+ * @brief Standard gas temperature for exhaust calculations @unitb{\degreeRankine}
+ * @details This is an absolute temperature (520°R = 60°F + 460), commonly used as the reference for gas property calculations in U.S. customary units.
+inline constexpr double kStandardGasTemperatureR = 520.0;
 
 /**
  * @brief Ambient reference temperature for exhaust calculations @unitb{\degreeFahrenheit}
