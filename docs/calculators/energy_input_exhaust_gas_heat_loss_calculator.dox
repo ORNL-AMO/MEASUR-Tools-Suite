@@ -72,6 +72,8 @@
  * @symrow{CAC; Combustion air correction; \percent}
  * @symrow{SH_{air}; Specific heat of air; \btu\per\pound\degreeFahrenheit}
  * @symrow{-1.078913827; Air correction base; \unitless}
+ * @symrow{T_{air}; Combustion air temperature; \degreeFahrenheit}
+ * @symrow{EA; Excess air as percent; \percent}
  * @endsymtable
  */
 
