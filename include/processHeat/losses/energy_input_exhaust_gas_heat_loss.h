@@ -75,8 +75,7 @@ struct EnergyInputExhaustGasResult {
  * @param[in] combustion_air_temp Temperature of combustion air @unitb{\degreeFahrenheit}
  * @param[in] exhaust_gas_temp Temperature of exhaust gas @unitb{\degreeFahrenheit}
  * @param[in] total_heat_input Total heat input from all sources @unitb{\btu\per\hour}. If zero, available heat is 100%.
- * @return Tuple: (available_heat_percent @unitb{\percent}, heat_delivered @unitb{\btu\per\hour}, exhaust_gas_losses
- * @unitb{\btu\per\hour})
+ * @return EnergyInputExhaustGasResult struct containing: available_heat @unitb{\percent}, heat_delivered @unitb{\btu\per\hour}, and exhaust_gas_losses @unitb{\btu\per\hour}
  * @see energy_input_exhaust_gas_heat_loss_formula
  */
 EnergyInputExhaustGasResult calculate(double excess_air, double combustion_air_temp, double exhaust_gas_temp,
