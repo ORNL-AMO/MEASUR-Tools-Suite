@@ -72,7 +72,7 @@ EMSCRIPTEN_BINDINGS(energy_input_electric_arc_furnace) {
 EMSCRIPTEN_BINDINGS(energyInputExhaustGasLosses) {
     using namespace energy_input_exhaust_gas_heat_loss;
     // Parameters for EnergyInputExhaustGasResult:
-    //   available_heat (%), heat_delivered (Btu/hr), exhaust_gas_losses
+    //   available_heat (%), heat_delivered (Btu/hr), exhaust_gas_losses (Btu/hr)
     value_object<EnergyInputExhaustGasResult>("EnergyInputExhaustGasLossesResult")
         .field("available_heat", &EnergyInputExhaustGasResult::available_heat)
         .field("heat_delivered", &EnergyInputExhaustGasResult::heat_delivered)
