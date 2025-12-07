@@ -27,7 +27,7 @@ double totalHeatLoss(double off_gas_temp, double co_percent, double h2_percent, 
     double total_heat_flue = chemical_heat + sensible_heat + heat_in_dust;
 
     // Correct volume flow rate for temperature
-    double total_vfr = volume_flow_rate * kStandardGasTemperatureF / (460.0 + off_gas_temp);
+    double total_vfr = volume_flow_rate * kStandardGasTemperatureR / (460.0 + off_gas_temp);
 
     // Total heat loss (Btu/hr)
     double total_heat_loss = total_vfr * total_heat_flue * kMinutesPerHour;
