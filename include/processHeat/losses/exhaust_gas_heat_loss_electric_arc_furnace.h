@@ -24,7 +24,7 @@ namespace exhaust_gas_heat_loss_electric_arc_furnace {
  * @param[in] h2_percent Percent of H2 in exhaust gas @unitb{\percent}
  * @param[in] combustible_gases_percent Average percent of combustible gases in exhaust @unitb{\percent}
  * @param[in] volume_flow_rate Total volume of exhaust gases @unitb{\cubic\foot\per\minute}
- * @param[in] dust_loading Dust loading for exhaust gases @unitb{\per\cubic\foot}
+ * @param[in] dust_loading Dust loading for exhaust gases @unitb{\pound\per\cubic\foot}
  * @return Total heat loss @unitb{\btu\per\hour}
  * @see
  * - exhaust_gas_heat_loss_electric_arc_furnace_formula
