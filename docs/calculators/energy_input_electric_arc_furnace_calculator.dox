@@ -1,0 +1,40 @@
+/**
+ * @defgroup energy_input_electric_arc_furnace_calculator Energy Input Electric Arc Furnace Calculator
+ * @ingroup heat_loss_calculators
+ * @brief Calculates total energy input and heat delivered for electric arc furnaces (EAF).
+ * @details This calculator estimates the total chemical energy input and total heat delivered to an EAF, including contributions from natural gas, coal/carbon injection, electrodes, other fuels, and electricity. It uses standard unit conversions and accounts for all major energy sources supplied to the furnace. Relevant formulas are documented below.
+ *
+ * @heading{Total Chemical Energy Input}
+ * @copydoc energy_input_electric_arc_furnace_formula
+ *
+ * @heading{Total Heat Delivered}
+ * @copydoc energy_input_electric_arc_furnace_heat_delivered_formula
+ */
+
+/**
+ * @defgroup energy_input_electric_arc_furnace_formula Energy Input Electric Arc Furnace Formula
+ * @ingroup energy_input_electric_arc_furnace_calculator
+ * @formula{eaf-chemical-energy-input; Q_\text{chem} = Q_\text{ng} + m_\text{coal} c_\text{coal} + m_\text{elec} c_\text{elec} + Q_\text{other}}
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_\text{chem}; Total chemical energy input; \btu\per\hour}
+ * @symrow{Q_\text{ng}; Natural gas heat input; \btu\per\hour}
+ * @symrow{m_\text{coal}; Mass of coal/carbon injection; \pound\per\hour}
+ * @symrow{c_\text{coal}; Heating value of coal/carbon; \btu\per\pound}
+ * @symrow{m_\text{elec}; Electrode use; \pound\per\hour}
+ * @symrow{c_\text{elec}; Electrode heating value; \btu\per\pound}
+ * @symrow{Q_\text{other}; Other fuel heat input; \btu\per\hour}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup energy_input_electric_arc_furnace_heat_delivered_formula Energy Input Electric Arc Furnace Heat Delivered Formula
+ * @ingroup energy_input_electric_arc_furnace_calculator
+ * @formula{eaf-heat-delivered; Q_\text{delivered} = Q_\text{chem} + Q_\text{elec}}
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_\text{delivered}; Total heat delivered to EAF; \btu\per\hour}
+ * @symrow{Q_\text{chem}; Total chemical energy input; \btu\per\hour}
+ * @symrow{Q_\text{elec}; Electric power supplied; \kilowatt\hour\per\hour}
+ * @endsymtable
+ */

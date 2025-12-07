@@ -2,7 +2,7 @@
 
 #include "processHeat/losses/atmosphere_heat_loss.h"
 #include "processHeat/losses/auxiliary_power_used.h"
-#include "processHeat/losses/energy_input_EAF.h"
+#include "processHeat/losses/energy_input_electric_arc_furnace.h"
 #include "processHeat/losses/energy_input_exhaust_gas_losses.h"
 #include "processHeat/losses/exhaust_gas_EAF.h"
 #include "processHeat/losses/fixture_heat_loss.h"
@@ -59,12 +59,13 @@ EMSCRIPTEN_BINDINGS(fixture_heat_loss) {
 
 // energyInputEAF
 EMSCRIPTEN_BINDINGS(energyInputEAF) {
-    // naturalGasHeatInput, coalCarbonInjection, coalHeatingValue, electrodeUse,
-    //    electrodeHeatingValue, otherFuels, electricityInput
-    class_<EnergyInputEAF>("EnergyInputEAF")
-        .constructor<double, double, double, double, double, double, double>()
-        .function("getTotalChemicalEnergyInput", &EnergyInputEAF::getTotalChemicalEnergyInput)
-        .function("getHeatDelivered", &EnergyInputEAF::getHeatDelivered);
+    using namespace energy_input_electric_arc_furnace;
+    // Parameters for energyInputEAFTotalChemicalEnergyInput:
+    //   natural_gas_heat_input (MMBtu/hr), coal_carbon_injection (lb/hr), coal_heating_value (Btu/lb),
+    //   electrode_use (lb/hr), electrode_heating_value (Btu/lb), other_fuels (MMBtu/hr)
+    function("energyInputEAFTotalChemicalEnergyInput", &totalChemicalEnergyInput);
+    // double total_chemical_energy_input, double electricity_input
+    function("energyInputEAFTotalHeatDelivered", &totalHeatDelivered);
 }
 
 // energyInputExhaustGasLosses
