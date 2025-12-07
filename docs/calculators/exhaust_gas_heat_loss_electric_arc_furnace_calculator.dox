@@ -45,7 +45,7 @@
  * @symrow{0.0225; Sensible heat factor; \btu\per\degreeFahrenheit}
  * @symrow{T_{gas}; Exhaust gas temperature; \degreeFahrenheit}
  * @symrow{T_{ambient}; Ambient/reference temperature; \degreeFahrenheit}
- * @symrow{Dust_{loading}; Dust loading in exhaust gas; \pound}
+ * @symrow{Dust_{loading}; Dust loading in exhaust gas; \pound\per\cubic\foot}
  * @symrow{0.25; Dust heat factor; \btu\per\pound\degreeFahrenheit}
  * @endsymtable
  */
