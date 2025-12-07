@@ -82,7 +82,7 @@ EMSCRIPTEN_BINDINGS(energyInputExhaustGasLosses) {
     //   excess_air (%), combustion_air_temp (°F), exhaust_gas_temp (°F), total_heat_input (Btu/hr)
     function("energyInputExhaustGasHeatLossCalculate", &calculate);
     //parameters for availableHeat:
-    //   excess_air (%), combustion_air_temp (°F), exhaust_gas_temp (
+    //   excess_air (%), combustion_air_temp (°F), exhaust_gas_temp (°F), total_heat_input (Btu/hr)
     function("energyInputAvailableHeat", &availableHeat);
     // parameters for heatDelivered:
     //   available_heat (%), total_heat_input (Btu/hr)
