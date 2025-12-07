@@ -1,0 +1,99 @@
+/**
+ * @defgroup energy_input_exhaust_gas_heat_loss_calculator Energy Input Exhaust Gas Heat Loss Calculation
+ * @ingroup heat_loss_calculators
+ * @brief Calculates available heat, heat delivered, and exhaust gas losses for non-EAF electric furnaces.
+ * @details The following formulas describe the calculation of available heat, heat delivered, exhaust gas losses, and all intermediate steps. Each step is documented with its own formula and symbol table.
+ *
+ * @heading{Exhaust Gas Losses}
+ * @copydoc energy_input_exhaust_gas_total_heat_loss_cpp_formula
+ *
+ * @heading{Heat Delivered}
+ * @copydoc energy_input_exhaust_gas_heat_delivered_cpp_formula
+ *
+ * @heading{Available Heat}
+ * @copydoc energy_input_exhaust_gas_available_heat_cpp_formula
+ *
+ * @heading{Specific Heat of Air}
+ * @copydoc energy_input_exhaust_gas_specific_heat_air_cpp_formula
+ *
+ * @heading{Air Correction}
+ * @copydoc energy_input_exhaust_gas_air_correction_cpp_formula
+ *
+ * @heading{Combustion Air Correction}
+ * @copydoc energy_input_exhaust_gas_combustion_air_correction_cpp_formula
+ */
+
+/**
+ * @defgroup energy_input_exhaust_gas_available_heat_cpp_formula Available Heat Formula
+ * @ingroup energy_input_exhaust_gas_heat_loss_calculator
+ * @formula{energy-input-exhaust-gas-available-heat-cpp; AH = 95 - 0.025 \cdot T_{exh} + AC + CAC}
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{AH; Available heat percent; \percent}
+ * @symrow{T_{exh}; Exhaust gas temperature; \degreeFahrenheit}
+ * @symrow{AC; Air correction; \percent}
+ * @symrow{CAC; Combustion air correction; \percent}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup energy_input_exhaust_gas_specific_heat_air_cpp_formula Specific Heat of Air Formula
+ * @ingroup energy_input_exhaust_gas_heat_loss_calculator
+ * @formula{energy-input-exhaust-gas-specific-heat-air-cpp; SH_{air} = 0.01783 + 0.00000256 \cdot T_{air}}
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{SH_{air}; Specific heat of air; \btu\per\pound\degreeFahrenheit}
+ * @symrow{T_{air}; Combustion air temperature; \degreeFahrenheit}
+ * @symrow{.01783; Base specific heat of air; \unitless}
+ * @symrow{0.00000256; Specific heat air coefficient; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup energy_input_exhaust_gas_air_correction_cpp_formula Air Correction Formula
+ * @ingroup energy_input_exhaust_gas_heat_loss_calculator
+ * @formula{energy-input-exhaust-gas-air-correction-cpp; AC = -[(-1.078913827 + SH_{air} \cdot T_{exh})] \cdot EA/100}
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{AC; Air correction; \percent}
+ * @symrow{T_{exh}; Exhaust gas temperature; \degreeFahrenheit}
+ * @symrow{SH_{air}; Specific heat of air; \btu\per\pound\degreeFahrenheit}
+ * @symrow{-1.078913827; Air correction base; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup energy_input_exhaust_gas_combustion_air_correction_cpp_formula Combustion Air Correction Formula
+ * @ingroup energy_input_exhaust_gas_heat_loss_calculator
+ * @formula{energy-input-exhaust-gas-combustion-air-correction-cpp; CAC = (-1.078913827 + SH_{air} \cdot T_{air}) \cdot (1 + EA/100)}
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{CAC; Combustion air correction; \percent}
+ * @symrow{SH_{air}; Specific heat of air; \btu\per\pound\degreeFahrenheit}
+ * @symrow{-1.078913827; Air correction base; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup energy_input_exhaust_gas_heat_delivered_cpp_formula Heat Delivered Formula
+ * @ingroup energy_input_exhaust_gas_heat_loss_calculator
+ * @formula{energy-input-exhaust-gas-heat-delivered-cpp; Q_{delivered} = Q_{input} \cdot \frac{AH}{100}}
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{delivered}; Heat delivered; \btu\per\hour}
+ * @symrow{Q_{input}; Total heat input; \btu\per\hour}
+ * @symrow{AH; Available heat percent; \percent}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup energy_input_exhaust_gas_total_heat_loss_cpp_formula Exhaust Gas Losses Formula
+ * @ingroup energy_input_exhaust_gas_heat_loss_calculator
+ * @formula{energy-input-exhaust-gas-total-heat-loss-cpp; Q_{loss} = Q_{delivered} \cdot \frac{100 - AH}{AH}}
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{loss}; Exhaust gas losses; \btu\per\hour}
+ * @symrow{Q_{delivered}; Heat delivered; \btu\per\hour}
+ * @symrow{AH; Available heat percent; \percent}
+ * @endsymtable
+ */

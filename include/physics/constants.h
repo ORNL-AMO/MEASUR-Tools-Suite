@@ -57,6 +57,24 @@ inline constexpr double kStandardGasTemperatureR = 520.0;
  */
 inline constexpr double kAmbientTemperatureF = 60.0;
 
+/**
+ * @brief Base specific heat of air @unitb{\btu\per\pound\degreeFahrenheit}
+ * @details Used for exhaust gas heat loss calculations in non-EAF electric furnaces.
+ */
+inline constexpr double kSpecificHeatAirBase = 0.017828518;
+
+/**
+ * @brief Temperature coefficient for specific heat of air @unitb{\btu\per\pound\degreeFahrenheit\per\degreeFahrenheit}
+ * @details Used for exhaust gas heat loss calculations in non-EAF electric furnaces.
+ */
+inline constexpr double kSpecificHeatAirCoeff = 0.000002556;
+
+/**
+ * @brief Base for air correction in exhaust gas heat loss calculations @unitb{\btu\per\pound}
+ * @details Used for exhaust gas heat loss calculations in non-EAF electric furnaces.
+ */
+inline constexpr double kAirCorrectionBase = -1.078913827;
+
 } // namespace physics::us
 
 /**
