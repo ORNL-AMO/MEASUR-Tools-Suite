@@ -58,7 +58,7 @@
  * @symtable
  * @symrow{VFR_{total}; Corrected volume flow rate; \ft\cubed\per\minute}
  * @symrow{VFR_{measured}; Measured volume flow rate; \ft\cubed\per\minute}
- * @symrow{T_{std}; Standard gas temperature (e.g., 60 °F); \degreeFahrenheit}
+ * @symrow{T_{std}; Standard gas temperature (520 °F); \degreeFahrenheit}
  * @symrow{T_{gas}; Exhaust gas temperature; \degreeFahrenheit}
  * @endsymtable
  */
