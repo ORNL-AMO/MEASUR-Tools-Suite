@@ -17,9 +17,7 @@ describe('Process Heat ExhaustGasEAF', function () {
         var vfr = 8000;
         var dustLoading = 0.001;
 
-        var exGasEAF = new moduleInstance.ExhaustGasEAF(offGasTemp, CO, H2, combustibleGases, vfr, dustLoading);
-        var totalHeatExhaust = exGasEAF.getTotalHeatExhaust();
-        exGasEAF.delete();
-        assert.equal(totalHeatExhaust, 12553119.018404908);
+        var totalHeatLoss = moduleInstance.exhaustGasEAFTotalHeatLoss(offGasTemp, CO, H2, combustibleGases, vfr, dustLoading);
+        assert.equal(totalHeatLoss, 12553119.018404908);
     });
 });

@@ -4,7 +4,7 @@
 #include "processHeat/losses/auxiliary_power_used.h"
 #include "processHeat/losses/energy_input_electric_arc_furnace.h"
 #include "processHeat/losses/energy_input_exhaust_gas_losses.h"
-#include "processHeat/losses/exhaust_gas_EAF.h"
+#include "processHeat/losses/exhaust_gas_heat_loss_electric_arc_furnace.h"
 #include "processHeat/losses/fixture_heat_loss.h"
 #include "processHeat/losses/gas_cooling_heat_loss.h"
 #include "processHeat/losses/gas_flue_gas_material.h"
@@ -58,7 +58,7 @@ EMSCRIPTEN_BINDINGS(fixture_heat_loss) {
 }
 
 // energyInputEAF
-EMSCRIPTEN_BINDINGS(energyInputEAF) {
+EMSCRIPTEN_BINDINGS(energy_input_electric_arc_furnace) {
     using namespace energy_input_electric_arc_furnace;
     // Parameters for energyInputEAFTotalChemicalEnergyInput:
     //   natural_gas_heat_input (MMBtu/hr), coal_carbon_injection (lb/hr), coal_heating_value (Btu/lb),
@@ -78,10 +78,16 @@ EMSCRIPTEN_BINDINGS(energyInputExhaustGasLosses) {
 }
 
 // exhaustGasEAF
-EMSCRIPTEN_BINDINGS(exhaustGasEAF) {
-    class_<ExhaustGasEAF>("ExhaustGasEAF")
-        .constructor<double, double, double, double, double, double>()
-        .function("getTotalHeatExhaust", &ExhaustGasEAF::getTotalHeatExhaust);
+EMSCRIPTEN_BINDINGS(exhaust_gas_heat_loss_electric_arc_furnace) {
+    // Parameters for exhaustGasEAFTotalHeatLoss:
+    //   off_gas_temp (°F),
+    //   co_percent (%),
+    //   h2_percent (%),
+    //   combustible_gases_percent (%),
+    //   volume_flow_rate (ft³/min),
+    //   dust_loading (lb/ft³)
+    using namespace exhaust_gas_heat_loss_electric_arc_furnace;
+    function("exhaustGasEAFTotalHeatLoss", &totalHeatLoss);
 }
 
 EMSCRIPTEN_BINDINGS(flueGasLosses) {

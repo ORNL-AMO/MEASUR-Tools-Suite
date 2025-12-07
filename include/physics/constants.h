@@ -46,6 +46,16 @@ namespace physics::us {
  */
 inline constexpr double kStefanBoltzmann = 1.713441e-9;
 
+/**
+ * @brief Standard gas temperature for exhaust calculations @unitb{\degreeFahrenheit}
+ */
+inline constexpr double kStandardGasTemperatureF = 520.0;
+
+/**
+ * @brief Ambient reference temperature for exhaust calculations @unitb{\degreeFahrenheit}
+ */
+inline constexpr double kAmbientTemperatureF = 60.0;
+
 } // namespace physics::us
 
 /**
@@ -59,6 +69,9 @@ inline constexpr double kFahrenheitToRankineOffset = 459.67;
 
 /// @brief Number of hours in a day.
 inline constexpr double kHoursPerDay = 24.0;
+
+/// @brief Number of minutes in an hour.
+inline constexpr double kMinutesPerHour = 60.0;
 
 /**
  * @brief Conversion factor from kilowatts to BTU/hr @unitb{\btu\per\hour\per\kilowatt}
