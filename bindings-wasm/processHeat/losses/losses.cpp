@@ -3,7 +3,7 @@
 #include "processHeat/losses/atmosphere_heat_loss.h"
 #include "processHeat/losses/auxiliary_power_used.h"
 #include "processHeat/losses/energy_input_electric_arc_furnace.h"
-#include "processHeat/losses/energy_input_exhaust_gas_losses.h"
+#include "processHeat/losses/energy_input_exhaust_gas_heat_loss.h"
 #include "processHeat/losses/exhaust_gas_heat_loss_electric_arc_furnace.h"
 #include "processHeat/losses/fixture_heat_loss.h"
 #include "processHeat/losses/gas_cooling_heat_loss.h"
@@ -70,11 +70,26 @@ EMSCRIPTEN_BINDINGS(energy_input_electric_arc_furnace) {
 
 // energyInputExhaustGasLosses
 EMSCRIPTEN_BINDINGS(energyInputExhaustGasLosses) {
-    class_<EnergyInputExhaustGasLosses>("EnergyInputExhaustGasLosses")
-        .constructor<double, double, double, double>()
-        .function("getHeatDelivered", &EnergyInputExhaustGasLosses::getHeatDelivered)
-        .function("getExhaustGasLosses", &EnergyInputExhaustGasLosses::getExhaustGasLosses)
-        .function("getAvailableHeat", &EnergyInputExhaustGasLosses::getAvailableHeat);
+    using namespace energy_input_exhaust_gas_heat_loss;
+    // Parameters for EnergyInputExhaustGasResult:
+    //   available_heat (%), heat_delivered (Btu/hr), exhaust_gas_losses (Btu/hr)
+    value_object<EnergyInputExhaustGasResult>("EnergyInputExhaustGasLossesResult")
+        .field("available_heat", &EnergyInputExhaustGasResult::available_heat)
+        .field("heat_delivered", &EnergyInputExhaustGasResult::heat_delivered)
+        .field("exhaust_gas_losses", &EnergyInputExhaustGasResult::exhaust_gas_losses);
+
+    // Parameters for energyInputExhaustGasLossesCalculate:
+    //   excess_air (%), combustion_air_temp (°F), exhaust_gas_temp (°F), total_heat_input (Btu/hr)
+    function("energyInputExhaustGasHeatLossCalculate", &calculate);
+    //parameters for availableHeat:
+    //   excess_air (%), combustion_air_temp (°F), exhaust_gas_temp (°F), total_heat_input (Btu/hr)
+    function("energyInputAvailableHeat", &availableHeat);
+    // parameters for heatDelivered:
+    //   available_heat (%), total_heat_input (Btu/hr)
+    function("energyInputHeatDelivered", &heatDelivered);
+    // parameters for totalHeatLoss:
+    //   heat_delivered (Btu/hr), available_heat (%)
+    function("energyInputTotalHeatLoss", &totalHeatLoss);
 }
 
 // exhaustGasEAF
@@ -163,7 +178,8 @@ EMSCRIPTEN_BINDINGS(flueGasLosses) {
 
 // gasCoolingLosses
 EMSCRIPTEN_BINDINGS(gas_cooling_heat_loss) {
-    //double flow_rate, double initial_temperature, double final_temperature, double specific_heat, double correction_factor, double gas_density
+    // double flow_rate, double initial_temperature, double final_temperature, double specific_heat, double
+    // correction_factor, double gas_density
     using namespace gas_cooling_heat_loss;
     function("gasCoolingTotalHeatLoss", &totalHeatLoss);
 }
@@ -193,7 +209,8 @@ EMSCRIPTEN_BINDINGS(leakage_heat_loss) {
 
 // liquidCoolingLosses
 EMSCRIPTEN_BINDINGS(liquid_cooling_heat_loss) {
-    //double flow_rate, double density, double initial_temperature, double outlet_temperature, double specific_heat, double correction_factor
+    // double flow_rate, double density, double initial_temperature, double outlet_temperature, double specific_heat,
+    // double correction_factor
     using namespace liquid_cooling_heat_loss;
     function("liquidCoolingTotalHeatLoss", &totalHeatLoss);
 }
@@ -224,7 +241,7 @@ EMSCRIPTEN_BINDINGS(liquidLoadChargeMaterial) {
 // openingLossesCircular
 // openingLossesQuad
 // viewFactorCalculation
-EMSCRIPTEN_BINDINGS(openingLosses) {    
+EMSCRIPTEN_BINDINGS(openingLosses) {
     using namespace opening_heat_loss;
     function("openingTotalHeatLossQuad", &totalHeatLossQuad);
     function("openingTotalHeatLossCircular", &totalHeatLossCircular);

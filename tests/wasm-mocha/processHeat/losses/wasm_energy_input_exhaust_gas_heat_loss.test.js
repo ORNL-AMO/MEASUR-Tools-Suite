@@ -14,9 +14,8 @@ describe('Process Heat EnergyInputExhaustGasLosses', function () {
         var excessAir = 65;
         var combustionAirTemp = 300;
         var exhaustGasTemp = 550;
-        var enInputExhaustGasLosses = new moduleInstance.EnergyInputExhaustGasLosses(excessAir, combustionAirTemp, exhaustGasTemp, totalHeatInput);
-        var heatDelivered = enInputExhaustGasLosses.getHeatDelivered();
-        enInputExhaustGasLosses.delete();
+        var enInputExhaustGasLosses = moduleInstance.energyInputExhaustGasHeatLossCalculate(excessAir, combustionAirTemp, exhaustGasTemp, totalHeatInput);
+        var heatDelivered = enInputExhaustGasLosses.heat_delivered;
         assert.equal(heatDelivered, 4136397.1199000007);
     });
 
@@ -25,9 +24,8 @@ describe('Process Heat EnergyInputExhaustGasLosses', function () {
         var excessAir = 65;
         var combustionAirTemp = 300;
         var exhaustGasTemp = 550;
-        var enInputExhaustGasLosses = new moduleInstance.EnergyInputExhaustGasLosses(excessAir, combustionAirTemp, exhaustGasTemp, totalHeatInput);
-        var exhaustGasLosses = enInputExhaustGasLosses.getExhaustGasLosses();
-        enInputExhaustGasLosses.delete();
+        var enInputExhaustGasLosses = moduleInstance.energyInputExhaustGasHeatLossCalculate(excessAir, combustionAirTemp, exhaustGasTemp, totalHeatInput);
+        var exhaustGasLosses = enInputExhaustGasLosses.exhaust_gas_losses;
         assert.equal(exhaustGasLosses, 863602.8800999995);
     });
 
@@ -36,9 +34,8 @@ describe('Process Heat EnergyInputExhaustGasLosses', function () {
         var excessAir = 65;
         var combustionAirTemp = 300;
         var exhaustGasTemp = 550;
-        var enInputExhaustGasLosses = new moduleInstance.EnergyInputExhaustGasLosses(excessAir, combustionAirTemp, exhaustGasTemp, totalHeatInput);
-        var availableHeat = enInputExhaustGasLosses.getAvailableHeat();
-        enInputExhaustGasLosses.delete();
+        var enInputExhaustGasLosses = moduleInstance.energyInputExhaustGasHeatLossCalculate(excessAir, combustionAirTemp, exhaustGasTemp, totalHeatInput);
+        var availableHeat = enInputExhaustGasLosses.available_heat;
         assert.equal(availableHeat, 82.72794239800001);
     });
 });
