@@ -17,12 +17,10 @@ namespace gas_load_charge_material_data {
 /**
  * @struct GasLoadChargeMaterial
  * @brief Struct to hold default gas load/charge material data
- * @param substance Name of substance
- * @param specific_heat_vapor Specific Heat of Vapor in Btu/(lb*°F)
  */
 struct GasLoadChargeMaterial {
-    std::string substance;
-    double specific_heat_vapor;
+    std::string substance; ///< Name of substance
+    double specific_heat_vapor; ///< Specific Heat of Vapor in Btu/(lb*°F)
 };
 
 /**
