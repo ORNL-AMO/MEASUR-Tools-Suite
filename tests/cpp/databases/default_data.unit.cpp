@@ -5,7 +5,6 @@
 using namespace Catch;
 
 #include "databases/GasFlueGasMaterialData.h"
-#include "databases/GasLoadChargeMaterialData.h"
 #include "databases/LiquidLoadChargeMaterialData.h"
 #include "databases/MotorData.h"
 #include "databases/SolidLiquidFlueGasMaterialData.h"
@@ -22,7 +21,6 @@ using namespace Catch;
 #include <other/lighting_data.h>
 #include "motorDriven/motor/MotorData.h"
 #include "processHeat/losses/gas_flue_gas_material.h"
-#include "processHeat/losses/gas_load_charge_material.h"
 #include "processHeat/losses/liquid_load_charge_material.h"
 #include "processHeat/losses/solid_liquid_flue_gas_material.h"
 #include "processHeat/losses/solid_load_charge_material.h"
@@ -50,25 +48,6 @@ TEST_CASE("DefaultData - getSolidLoadChargeMaterials", "[databases]") {
     }
 }
 
-TEST_CASE("DefaultData - getGasLoadChargeMaterials", "[databases]") {
-    auto defaultData = DefaultData();
-
-    {
-        auto const outputs = defaultData.getGasLoadChargeMaterials();
-        CHECK(outputs.size() == 10);
-    }
-
-    {
-        auto const output = defaultData.getGasLoadChargeMaterials()[0];
-
-        GasLoadChargeMaterial expected;
-        expected.setSubstance("Water vapor - Near Atm. Pressure");
-        expected.setSpecificHeatVapor(0.47);
-        expected.setID(1);
-
-        CHECK(expected == output);
-    }
-}
 
 TEST_CASE("DefaultData - getLiquidLoadChargeMaterials", "[databases]") {
     auto defaultData = DefaultData();

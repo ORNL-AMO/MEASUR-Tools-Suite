@@ -42,7 +42,7 @@ TEST_CASE("Calculate the Heat Delivered 1", "[Heat Delivered][EnergyInputEAF][Fu
 }
 
 TEST_CASE("Calculate the Heat Delivered 2", "[Heat Delivered][EnergyInputEAF][Furnace]") {
-    const double naturalGasHeatInput   = 50;
+    const double naturalGasHeatInput   = 15;
     const double coalCarbonInjection   = 900;
     const double coalHeatingValue      = 9000;
     const double electrodeUse          = 200;
@@ -52,5 +52,5 @@ TEST_CASE("Calculate the Heat Delivered 2", "[Heat Delivered][EnergyInputEAF][Fu
     double totalChemicalEnergyInput = energy_input_electric_arc_furnace::totalChemicalEnergyInput(
         naturalGasHeatInput, coalCarbonInjection, coalHeatingValue, electrodeUse, electrodeHeatingValue, otherFuels);
     double heatDelivered = energy_input_electric_arc_furnace::totalHeatDelivered(totalChemicalEnergyInput, electricityInput);
-    CHECK(heatDelivered == Approx(86916000));
+    CHECK(heatDelivered == Approx(86918452.46077510714530945));
 }

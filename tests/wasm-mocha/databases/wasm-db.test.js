@@ -33,24 +33,6 @@ describe('DB Default Data Test', function () {
             listItems.delete();
         }
 
-        function gasLoadChargeMaterialsLog(item){
-            logMessage(item.getID() + ', ' + item.getSubstance() + ', ' + item.getSpecificHeatVapor());
-        }
-
-        function gasLoadChargeMaterials(defaultData){
-            logMessage('Gas Load Charge Materials');
-
-            let listItems = defaultData.getGasLoadChargeMaterials();
-            let count = listItems.size();
-            assert.equal(count, 10, "Select All Default Data");
-
-            logMessage('Default Data (start - end):');
-            gasLoadChargeMaterialsLog(listItems.get(0));
-            gasLoadChargeMaterialsLog(listItems.get(count-1));
-
-            listItems.delete();
-        }
-
         function liquidLoadChargeMaterialsLog(item){
             logMessage(item.getID() + ', ' + item.getSubstance() + ', ' + item.getSpecificHeatLiquid() + ', ' +
                 item.getSpecificHeatVapor() + ', ' + item.getVaporizingTemperature()  + ', ' + item.getLatentHeat());
@@ -236,7 +218,6 @@ describe('DB Default Data Test', function () {
             let instance = new moduleInstance.DefaultData();
 
             solidLoadChargeMaterials(instance);
-            gasLoadChargeMaterials(instance);
             liquidLoadChargeMaterials(instance);
             solidLiquidFlueGasMaterials(instance);
             gasFlueGasMaterials(instance);
