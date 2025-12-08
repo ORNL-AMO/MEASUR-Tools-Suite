@@ -1,0 +1,77 @@
+/**
+ * @defgroup gas_load_charge_material_heat_required_calculator Gas Load Charge Material Heat Required Calculator
+ * @ingroup heat_loss_calculators
+ * @brief Calculates total heat required for a gas load/charge material.
+ * @details The following formulas describe the calculation of total heat required for a gas load/charge material, including sensible heat for gas and vapor, heat of reaction, and additional heat. Each step is documented with its own formula and symbol table.
+ *
+ * @heading{Total Heat Required}
+ * @copydoc gas_load_charge_material_total_heat_required_cpp_formula
+ *
+ * @heading{Sensible Heat for Gas}
+ * @copydoc gas_load_charge_material_sensible_heat_gas_cpp_formula
+ *
+ * @heading{Sensible Heat for Vapor}
+ * @copydoc gas_load_charge_material_sensible_heat_vapor_cpp_formula
+ *
+ * @heading{Heat of Reaction}
+ * @copydoc gas_load_charge_material_heat_of_reaction_cpp_formula
+ *
+ * @see gas_load_charge_material_data_database
+ */
+
+/**
+ * @defgroup gas_load_charge_material_total_heat_required_cpp_formula Total Heat Required Formula
+ * @ingroup gas_load_charge_material_heat_required_calculator
+ * @formula{gas-load-charge-material-total-heat-required-cpp; Q_{total} = Q_{gas} + Q_{vapor} + Q_{reaction} + Q_{additional}}
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{total}; Total heat required; \btu\per\hour}
+ * @symrow{Q_{gas}; Sensible heat for gas; \btu\per\hour}
+ * @symrow{Q_{vapor}; Sensible heat for vapor; \btu\per\hour}
+ * @symrow{Q_{reaction}; Heat of reaction; \btu\per\hour}
+ * @symrow{Q_{additional}; Additional heat required; \btu\per\hour}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup gas_load_charge_material_sensible_heat_gas_cpp_formula Sensible Heat for Gas Formula
+ * @ingroup gas_load_charge_material_heat_required_calculator
+ * @formula{gas-load-charge-material-sensible-heat-gas-cpp; Q_{gas} = (1 - f_{vapor}) \cdot m_{feed} \cdot C_{p,gas} \cdot (T_{discharge} - T_{initial})}
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{gas}; Sensible heat for gas; \btu\per\hour}
+ * @symrow{f_{vapor}; Fraction of vapor in gas mixture; 1}
+ * @symrow{m_{feed}; Feed rate for gas mixture; \pound\per\hour}
+ * @symrow{C_{p,gas}; Specific heat of gas; \btu\per\pound\degreeFahrenheit}
+ * @symrow{T_{discharge}; Discharge temperature; \degreeFahrenheit}
+ * @symrow{T_{initial}; Initial temperature; \degreeFahrenheit}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup gas_load_charge_material_sensible_heat_vapor_cpp_formula Sensible Heat for Vapor Formula
+ * @ingroup gas_load_charge_material_heat_required_calculator
+ * @formula{gas-load-charge-material-sensible-heat-vapor-cpp; Q_{vapor} = f_{vapor} \cdot m_{feed} \cdot C_{p,vapor} \cdot (T_{discharge} - T_{initial})}
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{vapor}; Sensible heat for vapor; \btu\per\hour}
+ * @symrow{f_{vapor}; Fraction of vapor in gas mixture; 1}
+ * @symrow{m_{feed}; Feed rate for gas mixture; \pound\per\hour}
+ * @symrow{C_{p,vapor}; Specific heat of vapor; \btu\per\pound\degreeFahrenheit}
+ * @symrow{T_{discharge}; Discharge temperature; \degreeFahrenheit}
+ * @symrow{T_{initial}; Initial temperature; \degreeFahrenheit}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup gas_load_charge_material_heat_of_reaction_cpp_formula Heat of Reaction Formula
+ * @ingroup gas_load_charge_material_heat_required_calculator
+ * @formula{gas-load-charge-material-heat-of-reaction-cpp; Q_{reaction} = \begin{cases} m_{feed} \cdot f_{reacted} \cdot H_{reaction} & \text{if endothermic} \\ 0 & \text{if exothermic or none} \end{cases}}
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{reaction}; Heat of reaction; \btu\per\hour}
+ * @symrow{m_{feed}; Feed rate for gas mixture; \pound\per\hour}
+ * @symrow{f_{reacted}; Fraction of feed gas reacted; 1}
+ * @symrow{H_{reaction}; Heat of reaction; \btu\per\pound}
+ * @endsymtable
+ */

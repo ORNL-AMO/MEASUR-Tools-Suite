@@ -2,8 +2,15 @@
 
 
 /**
+ * @ingroup gas_load_charge_material_data_database
+ * @file gas_load_charge_material_data.h
+ * @authors Mark Root
+ *
+ */
+/**
+ * @ingroup gas_load_charge_material_data_database
  * @namespace gas_load_charge_material_data
- * @brief Contains default data for gas load/charge materials.
+ * @copybrief gas_load_charge_material_data_database
  */
 namespace gas_load_charge_material_data {
 

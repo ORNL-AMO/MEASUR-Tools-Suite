@@ -1,0 +1,32 @@
+/**
+ * @defgroup gas_load_charge_material_data_database Gas Load Charge Material Database
+ * @ingroup databases
+ * @brief Contains default data for gas load/charge materials used in heat loss calculations.
+ * @details This database provides default values for the specific heat of vapor for common gas load/charge materials. The data is used in heat loss calculations for process heating systems.
+ *
+ * @heading{Default Gas Load/Charge Material Data}
+ * @copydoc gas_load_charge_material_data
+ */
+
+/**
+ * @defgroup gas_load_charge_material_data Default Gas Load/Charge Material Data
+ * @ingroup gas_load_charge_material_data_database
+ * The following table lists the default substances and their specific heat of vapor values:
+ *
+ * | Substance                              | Specific Heat of Vapor @unitb{\btu\per\pound\degreeFahrenheit} |
+ * |-----------------------------------------|---------------------------------------------------------------|
+ * | Water vapor - Near Atm. Pressure        | 0.47                                                        |
+ * | Steam - 50 PSIG, 400 degrees F          | 0.4901                                                      |
+ * | Steam - 150 PSIG, 500 degrees F         | 0.5099                                                      |
+ * | Steam - 600 PSIG, 700 degrees F         | 0.5899                                                      |
+ * | Air - Low Pressure                      | 0.245                                                       |
+ * | Nitrogen - Low Pressure                 | 0.2501                                                      |
+ * | Oxygen - Low Pressure                   | 0.23                                                        |
+ * | Carbon Dioxide - Low Pressure           | 0.24                                                        |
+ * | Carbon Monoxide - Low Pressure          | 0.2501                                                      |
+ * | Hydrogen - Low Pressure                 | 3.45                                                        |
+ *
+ * @note Values are representative and may vary with pressure and temperature.
+ *
+ * @see gas_load_charge_material_heat_required_calculator
+ */

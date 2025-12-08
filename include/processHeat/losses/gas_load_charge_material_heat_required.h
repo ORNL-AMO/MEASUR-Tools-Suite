@@ -19,18 +19,19 @@
 namespace gas_load_charge_material_heat_required {
 
 /**
+ * @ingroup gas_load_charge_material_heat_required_calculator
  * @brief Calculates the total heat required for a gas load/charge material.
- * @param thermic_reaction_type Thermic reaction type (endothermic, exothermic, or none)
- * @param specific_heat_gas Specific heat of gas @unitb{\btu\per\pound\degreeFahrenheit}
- * @param feed_rate Feed rate for gas mixture @unitb{\pound\per\hour}
- * @param percent_vapor Vapor in gas mixture (as percent, e.g., 10 for 10%)
- * @param initial_temperature Initial temperature @unitb{\degreeFahrenheit}
- * @param discharge_temperature Discharge temperature @unitb{\degreeFahrenheit}
- * @param specific_heat_vapor Specific heat of vapor @unitb{\btu\per\pound\degreeFahrenheit}
- * @param percent_reacted Feed gas reacted (as percent, e.g., 5 for 5%)
- * @param reaction_heat Heat of reaction @unitb{\btu\per\pound}
- * @param additional_heat Additional heat required @unitb{\btu\per\hour}
- * @return Total heat required in Btu/hr.
+ * @param[in] thermic_reaction_type Thermic reaction type (endothermic, exothermic, or none)
+ * @param[in] specific_heat_gas Specific heat of gas @unitb{\btu\per\pound\degreeFahrenheit}
+ * @param[in] feed_rate Feed rate for gas mixture @unitb{\pound\per\hour}
+ * @param[in] percent_vapor Vapor in gas mixture (as percent, e.g., 10 for 10%)
+ * @param[in] initial_temperature Initial temperature @unitb{\degreeFahrenheit}
+ * @param[in] discharge_temperature Discharge temperature @unitb{\degreeFahrenheit}
+ * @param[in] specific_heat_vapor Specific heat of vapor @unitb{\btu\per\pound\degreeFahrenheit}
+ * @param[in] percent_reacted Feed gas reacted (as percent, e.g., 5 for 5%)
+ * @param[in] reaction_heat Heat of reaction @unitb{\btu\per\pound}
+ * @param[in] additional_heat Additional heat required @unitb{\btu\per\hour}
+ * @return Total heat required @unitb{\btu\per\hour}.
  */
 double totalHeatRequired(
   LoadChargeMaterial::ThermicReactionType thermic_reaction_type,
