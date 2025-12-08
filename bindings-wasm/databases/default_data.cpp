@@ -13,16 +13,15 @@
 #include "databases/GasFlueGasMaterialData.h"
 #include "databases/gas_load_charge_material_data.h"
 #include "databases/lighting_data.h"
-#include "databases/LiquidLoadChargeMaterialData.h"
 #include "databases/MotorData.h"
 #include "databases/SolidLiquidFlueGasMaterialData.h"
 #include "databases/SolidLoadChargeMaterialData.h"
 #include "motorDriven/motor/MotorData.h"
 #include "other/lighting_data.h"
 #include "processHeat/losses/gas_flue_gas_material.h"
-#include "processHeat/losses/liquid_load_charge_material.h"
 #include "processHeat/losses/solid_liquid_flue_gas_material.h"
 #include "processHeat/losses/solid_load_charge_material.h"
+#include "databases/liquid_load_charge_material_data.h"
 
 using namespace emscripten;
 
@@ -31,7 +30,6 @@ EMSCRIPTEN_BINDINGS(db_class) {
     class_<DefaultData>("DefaultData")
         .constructor<>()
         .function("getSolidLoadChargeMaterials", &DefaultData::getSolidLoadChargeMaterials)
-        .function("getLiquidLoadChargeMaterials", &DefaultData::getLiquidLoadChargeMaterials)
         .function("getSolidLiquidFlueGasMaterials", &DefaultData::getSolidLiquidFlueGasMaterials)
         .function("getGasFlueGasMaterials", &DefaultData::getGasFlueGasMaterials)
         .function("getMotorData", &DefaultData::getMotorData)
@@ -53,4 +51,17 @@ EMSCRIPTEN_BINDINGS(gas_load_charge_material_data) {
 
     register_vector<GasLoadChargeMaterial>("GasLoadChargeMaterialV");
     function("getDefaultGasLoadChargeMaterials", &get_default_gas_load_charge_materials);
+}
+
+EMSCRIPTEN_BINDINGS(liquid_load_charge_material_data) {
+    using namespace liquid_load_charge_material_data;
+    value_object<LiquidLoadChargeMaterial>("LiquidLoadChargeMaterial")
+        .field("substance", &LiquidLoadChargeMaterial::substance)
+        .field("specificHeat", &LiquidLoadChargeMaterial::specific_heat)
+        .field("latentHeat", &LiquidLoadChargeMaterial::latent_heat)
+        .field("vaporSpecificHeat", &LiquidLoadChargeMaterial::vapor_specific_heat)
+        .field("boilingPoint", &LiquidLoadChargeMaterial::boiling_point);
+
+    register_vector<LiquidLoadChargeMaterial>("LiquidLoadChargeMaterialV");
+    function("getDefaultLiquidLoadChargeMaterials", &get_default_liquid_load_charge_materials);
 }

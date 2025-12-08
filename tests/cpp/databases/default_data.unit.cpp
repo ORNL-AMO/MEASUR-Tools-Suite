@@ -5,7 +5,6 @@
 using namespace Catch;
 
 #include "databases/GasFlueGasMaterialData.h"
-#include "databases/LiquidLoadChargeMaterialData.h"
 #include "databases/MotorData.h"
 #include "databases/SolidLiquidFlueGasMaterialData.h"
 #include "databases/SolidLoadChargeMaterialData.h"
@@ -21,7 +20,6 @@ using namespace Catch;
 #include <other/lighting_data.h>
 #include "motorDriven/motor/MotorData.h"
 #include "processHeat/losses/gas_flue_gas_material.h"
-#include "processHeat/losses/liquid_load_charge_material.h"
 #include "processHeat/losses/solid_liquid_flue_gas_material.h"
 #include "processHeat/losses/solid_load_charge_material.h"
 
@@ -42,30 +40,6 @@ TEST_CASE("DefaultData - getSolidLoadChargeMaterials", "[databases]") {
         expected.setLatentHeat(169);
         expected.setSpecificHeatLiquid(0.2601);
         expected.setMeltingPoint(1215);
-        expected.setID(1);
-
-        CHECK(expected == output);
-    }
-}
-
-
-TEST_CASE("DefaultData - getLiquidLoadChargeMaterials", "[databases]") {
-    auto defaultData = DefaultData();
-
-    {
-        auto const outputs = defaultData.getLiquidLoadChargeMaterials();
-        CHECK(outputs.size() == 13);
-    }
-
-    {
-        auto const output = defaultData.getLiquidLoadChargeMaterials()[0];
-
-        LiquidLoadChargeMaterial expected;
-        expected.setSubstance("Crude");
-        expected.setSpecificHeatLiquid(0.6501);
-        expected.setLatentHeat(105);
-        expected.setSpecificHeatVapor(0.55);
-        expected.setVaporizingTemperature(900);
         expected.setID(1);
 
         CHECK(expected == output);

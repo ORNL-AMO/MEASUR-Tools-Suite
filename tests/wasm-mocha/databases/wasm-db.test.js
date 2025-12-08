@@ -33,25 +33,6 @@ describe('DB Default Data Test', function () {
             listItems.delete();
         }
 
-        function liquidLoadChargeMaterialsLog(item){
-            logMessage(item.getID() + ', ' + item.getSubstance() + ', ' + item.getSpecificHeatLiquid() + ', ' +
-                item.getSpecificHeatVapor() + ', ' + item.getVaporizingTemperature()  + ', ' + item.getLatentHeat());
-        }
-
-        function liquidLoadChargeMaterials(defaultData){
-            logMessage('Liquid Load Charge Materials');
-
-            let listItems = defaultData.getLiquidLoadChargeMaterials();
-            let count = listItems.size();
-            assert.equal(count, 13, "Select All Default Data");
-
-            logMessage('Default Data (start - end):');
-            liquidLoadChargeMaterialsLog(listItems.get(0));
-            liquidLoadChargeMaterialsLog(listItems.get(count-1));
-
-            listItems.delete();
-        }
-
         function solidLiquidFlueGasMaterialsLog(item){
             logMessage(item.getID() + ', ' + item.getSubstance() + ', ' + item.getCarbon() + ', ' +
                 item.getHydrogen() + ', ' + item.getSulphur()  + ', ' + item.getInertAsh() + ', ' +
@@ -218,7 +199,6 @@ describe('DB Default Data Test', function () {
             let instance = new moduleInstance.DefaultData();
 
             solidLoadChargeMaterials(instance);
-            liquidLoadChargeMaterials(instance);
             solidLiquidFlueGasMaterials(instance);
             gasFlueGasMaterials(instance);
             motorData(instance);
