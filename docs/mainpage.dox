@@ -25,6 +25,7 @@
  * - @ref water_assessments
  * - @ref waste_water_assessments
  * - @ref treasure_hunt_calculators
+ * - @ref databases
  *
  * @defgroup compressed_air_assessments Compressed Air Assessments
  *
@@ -112,5 +113,15 @@
  * opportunities within a variety of systems, including pump, fan, process heating, steam, motors, compressed air, and
  * lighting systems. In addition, there are several general engineering calculators included to perform energy-related
  * calculations and conversions.
+ *
+ * @defgroup databases Databases
+ *
+ * The MEASUR software utilizes default data to pre-populate many of its calculator fields. These databases include:
+ *   - Load charge materials (solids, liquids, gases)
+ *   - Flue gases and combustion properties
+ *   - Compressor inventory items
+ *   - Lighting fixture properties
+ *
+ * These curated datasets ensure that users have access to reliable, industry-standard values for common materials and equipment, streamlining the setup and analysis process for a wide range of calculators and assessment tools.
  *
  */

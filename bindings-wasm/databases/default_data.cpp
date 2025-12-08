@@ -2,12 +2,7 @@
 
 #include <emscripten/bind.h>
 
-#include "databases/SolidLoadChargeMaterialData.h"
-#include "databases/GasLoadChargeMaterialData.h"
-#include "databases/LiquidLoadChargeMaterialData.h"
-#include "databases/SolidLiquidFlueGasMaterialData.h"
-#include "databases/GasFlueGasMaterialData.h"
-#include "databases/MotorData.h"
+#include "compressedAir/compressors_data.h"
 #include "databases/compressors_type1_data.h"
 #include "databases/compressors_type1_GT_100kW_data.h"
 #include "databases/compressors_type2_data.h"
@@ -15,23 +10,27 @@
 #include "databases/compressors_type4_data.h"
 #include "databases/compressors_type5_data.h"
 #include "databases/compressors_type6_data.h"
+#include "databases/GasFlueGasMaterialData.h"
+#include "databases/gas_load_charge_material_data.h"
 #include "databases/lighting_data.h"
-#include "processHeat/losses/solid_load_charge_material.h"
-#include "processHeat/losses/gas_load_charge_material.h"
+#include "databases/LiquidLoadChargeMaterialData.h"
+#include "databases/MotorData.h"
+#include "databases/SolidLiquidFlueGasMaterialData.h"
+#include "databases/SolidLoadChargeMaterialData.h"
+#include "motorDriven/motor/MotorData.h"
+#include "other/lighting_data.h"
+#include "processHeat/losses/gas_flue_gas_material.h"
 #include "processHeat/losses/liquid_load_charge_material.h"
 #include "processHeat/losses/solid_liquid_flue_gas_material.h"
-#include "processHeat/losses/gas_flue_gas_material.h"
-#include "motorDriven/motor/MotorData.h"
-#include "compressedAir/compressors_data.h"
-#include "other/lighting_data.h"
+#include "processHeat/losses/solid_load_charge_material.h"
 
 using namespace emscripten;
 
 EMSCRIPTEN_BINDINGS(db_class) {
+
     class_<DefaultData>("DefaultData")
         .constructor<>()
         .function("getSolidLoadChargeMaterials", &DefaultData::getSolidLoadChargeMaterials)
-        .function("getGasLoadChargeMaterials", &DefaultData::getGasLoadChargeMaterials)
         .function("getLiquidLoadChargeMaterials", &DefaultData::getLiquidLoadChargeMaterials)
         .function("getSolidLiquidFlueGasMaterials", &DefaultData::getSolidLiquidFlueGasMaterials)
         .function("getGasFlueGasMaterials", &DefaultData::getGasFlueGasMaterials)
@@ -44,4 +43,14 @@ EMSCRIPTEN_BINDINGS(db_class) {
         .function("getCompressorType5Data", &DefaultData::getCompressorType5Data)
         .function("getCompressorType6Data", &DefaultData::getCompressorType6Data)
         .function("getLightingData", &DefaultData::getLightingData);
+}
+
+EMSCRIPTEN_BINDINGS(gas_load_charge_material_data) {
+    using namespace gas_load_charge_material_data;
+    value_object<GasLoadChargeMaterial>("GasLoadChargeMaterial")
+        .field("substance", &GasLoadChargeMaterial::substance)
+        .field("specificHeatVapor", &GasLoadChargeMaterial::specific_heat_vapor);
+
+    register_vector<GasLoadChargeMaterial>("GasLoadChargeMaterialV");
+    function("getDefaultGasLoadChargeMaterials", &get_default_gas_load_charge_materials);
 }
