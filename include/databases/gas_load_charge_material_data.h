@@ -1,6 +1,6 @@
 #pragma once
-
-
+#include <string>
+#include <vector>
 /**
  * @ingroup gas_load_charge_material_data_database
  * @file gas_load_charge_material_data.h
