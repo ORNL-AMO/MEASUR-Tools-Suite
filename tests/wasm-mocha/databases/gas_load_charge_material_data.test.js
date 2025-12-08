@@ -15,7 +15,7 @@ describe('Gas Load Charge Material Data Test', function () {
         assert.equal(count, 10, "Select All Default Data");
     });
 
-    it('Gas Load Charge Materials Size', function () {
+    it('Gas Load Charge Materials First Entry', function () {
         let listItems = moduleInstance.getDefaultGasLoadChargeMaterials();
         let firstMaterial = listItems.get(0);
         assert.equal(firstMaterial.specificHeatVapor, 0.47, "Specific Heat Vapor");
