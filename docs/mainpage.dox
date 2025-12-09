@@ -61,6 +61,12 @@
  * @defgroup heat_loss_calculators Heat Loss Calculators
  * @ingroup process_heating_assessments
  *
+ * The heat loss calculators for process heating estimate energy losses from various components and operations in industrial heating systems. 
+ * These calculators help users quantify heat lost through fixtures, walls, exhaust gases, openings, liquid and gas load/charge materials, 
+ * and other sources. By modeling these losses, users can identify opportunities for energy savings, improve system efficiency, and optimize process conditions. 
+ * Each calculator is based on established engineering formulas and provides detailed documentation of calculation steps, required inputs, and physical principles.
+ * 
+ *
  * @defgroup pumping_system_assessments Pumping System Assessments
  *
  * This portion of MEASUR includes tools such as the Pump System Assessment Tool (PSAT) and related calculators.

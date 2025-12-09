@@ -1,0 +1,16 @@
+#include "processHeat/losses/liquid_load_charge_material_heat_required.h"
+
+#include "catch.hpp"
+#include "processHeat/losses/load_charge_material.h"
+
+using namespace Catch;
+using namespace liquid_load_charge_material_heat_required;
+
+TEST_CASE("Calculate Total Heat for Charge Material - Liquids", "[Total Heat][ChargeMaterial][Liquids]") {
+    CHECK(totalHeatRequired(LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC, 0.48, 240.0, 250.0, 0.25, 1000.0,
+                            70.0, 320.0, 100.0, 25.0, 50.0, 0) == Approx(364100));
+    CHECK(totalHeatRequired(LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC, 0.347026510628135, 129.992, 239.0,
+                            0.40004776689754, 10000.0, 50.0, 135.0, 100.0, 0.0, 0.0, 0) == Approx(2687628));
+    CHECK(totalHeatRequired(LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC, 0.347026510628135, 129.992, 239.0,
+                            0.40004776689754, 10000.0, 50.0, 130.0, 10.0, 0.0, 0.0, 0) == Approx(516622));
+}

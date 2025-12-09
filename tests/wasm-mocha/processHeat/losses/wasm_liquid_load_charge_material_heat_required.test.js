@@ -15,9 +15,7 @@ describe('Process Heat LiquidLoadChargeMaterial', function () {
             specificHeatVapor: 0.25, chargeFeedRate: 1000, initialTemperature: 70, dischargeTemperature: 320,
             percentVaporized: 100, percentReacted: 25, reactionHeat: 50, additionalHeat: 0
         };
-        var liquidLoadChargeMaterial = new moduleInstance.LiquidLoadChargeMaterial(moduleInstance.ThermicReactionType.ENDOTHERMIC, inp.specificHeatLiquid, inp.vaporizingTemperature, inp.latentHeat, inp.specificHeatVapor, inp.chargeFeedRate, inp.initialTemperature, inp.dischargeTemperature, inp.percentVaporized, inp.percentReacted, inp.reactionHeat, inp.additionalHeat);
-        var totalHeat = liquidLoadChargeMaterial.getTotalHeat()
+        var totalHeat = moduleInstance.liquidLoadChargeMaterialTotalHeatRequired(moduleInstance.ThermicReactionType.ENDOTHERMIC, inp.specificHeatLiquid, inp.vaporizingTemperature, inp.latentHeat, inp.specificHeatVapor, inp.chargeFeedRate, inp.initialTemperature, inp.dischargeTemperature, inp.percentVaporized, inp.percentReacted, inp.reactionHeat, inp.additionalHeat);
         assert.equal(totalHeat, 364100.0);
-        liquidLoadChargeMaterial.delete();
     });
 });

@@ -11,7 +11,7 @@
 #include "processHeat/losses/gas_load_charge_material_heat_required.h"
 #include "processHeat/losses/leakage_heat_loss.h"
 #include "processHeat/losses/liquid_cooling_heat_loss.h"
-#include "processHeat/losses/liquid_load_charge_material.h"
+#include "processHeat/losses/liquid_load_charge_material_heat_required.h"
 #include "processHeat/losses/load_charge_material.h"
 #include "processHeat/losses/opening_heat_loss.h"
 #include "processHeat/losses/slag_other_material_heat_loss.h"
@@ -217,25 +217,21 @@ EMSCRIPTEN_BINDINGS(liquid_cooling_heat_loss) {
 
 // liquidLoadChargeMaterial
 EMSCRIPTEN_BINDINGS(liquidLoadChargeMaterial) {
-    class_<LiquidLoadChargeMaterial>("LiquidLoadChargeMaterial")
-        .constructor<>()
-        .constructor<LoadChargeMaterial::ThermicReactionType, double, double, double, double, double, double, double,
-                     double, double, double, double>()
-        .function("getTotalHeat", &LiquidLoadChargeMaterial::getTotalHeat)
-        .function("getID", &LiquidLoadChargeMaterial::getID)
-        .function("getSubstance", &LiquidLoadChargeMaterial::getSubstance)
-        .function("getSpecificHeatLiquid", &LiquidLoadChargeMaterial::getSpecificHeatLiquid)
-        .function("getSpecificHeatVapor", &LiquidLoadChargeMaterial::getSpecificHeatVapor)
-        .function("getVaporizingTemperature", &LiquidLoadChargeMaterial::getVaporizingTemperature)
-        .function("getLatentHeat", &LiquidLoadChargeMaterial::getLatentHeat)
-        .function("setID", &LiquidLoadChargeMaterial::setID)
-        .function("setSubstance", &LiquidLoadChargeMaterial::setSubstance)
-        .function("setSpecificHeatLiquid", &LiquidLoadChargeMaterial::setSpecificHeatLiquid)
-        .function("setSpecificHeatVapor", &LiquidLoadChargeMaterial::setSpecificHeatVapor)
-        .function("setVaporizingTemperature", &LiquidLoadChargeMaterial::setVaporizingTemperature)
-        .function("setLatentHeat", &LiquidLoadChargeMaterial::setLatentHeat);
-
-    register_vector<LiquidLoadChargeMaterial>("LiquidLoadChargeMaterialV");
+    using namespace liquid_load_charge_material_heat_required;
+    // Parameters for liquidLoadChargeMaterialTotalHeatRequired:
+    //   thermic_reaction_type (enum: ENDOTHERMIC, EXOTHERMIC, NONE)
+    //   specific_heat_liquid (Btu/lb°F)
+    //   vaporizing_temperature (°F)
+    //   latent_heat (Btu/lb)
+    //   specific_heat_vapor (Btu/lb°F)
+    //   charge_feed_rate (lb/hr)
+    //   initial_temperature (°F)
+    //   discharge_temperature (°F)
+    //   percent_vaporized (% of total)
+    //   percent_reacted (% of total)
+    //   reaction_heat (Btu/lb)
+    //   additional_heat (Btu/hr)
+    function("liquidLoadChargeMaterialTotalHeatRequired", &totalHeatRequired);
 }
 
 // openingLossesCircular
