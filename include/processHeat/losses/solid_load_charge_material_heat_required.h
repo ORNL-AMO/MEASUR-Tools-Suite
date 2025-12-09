@@ -1,4 +1,4 @@
-
+#pragma once
 #include <string>
 #include "load_charge_material.h"
 
