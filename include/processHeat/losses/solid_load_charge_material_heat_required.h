@@ -18,22 +18,23 @@
 namespace solid_load_charge_material_heat_required {
 
 /**
+ * @ingroup solid_load_charge_material_heat_required_calculator
  * @brief Calculates the total heat required for a solid load/charge material.
- * @param thermic_reaction_type Thermic reaction type (endothermic, exothermic, or none)
- * @param specific_heat_solid Average specific heat of solid material (dry) @unitb{\btu\per\pound\degreeFahrenheit}
- * @param latent_heat Latent heat of fusion @unitb{\btu\per\pound}
- * @param specific_heat_liquid Specific heat of liquid from molten material @unitb{\btu\per\pound\degreeFahrenheit}
- * @param melting_point Melting point @unitb{\degreeFahrenheit}
- * @param charge_feed_rate Charge (wet) feed rate @unitb{\pound\per\hour}
- * @param water_content_charged Water content as charged (percent, e.g., 10 for 10%)
- * @param water_content_discharged Water content as discharged (percent, e.g., 5 for 5%)
- * @param initial_temperature Initial temperature @unitb{\degreeFahrenheit}
- * @param discharge_temperature Charge material discharge temperature @unitb{\degreeFahrenheit}
- * @param water_vapor_discharge_temperature Water vapor discharge temperature @unitb{\degreeFahrenheit}
- * @param charge_melted Charge melted (percent of dry charge, e.g., 10 for 10%)
- * @param charge_reacted Charge reacted (percent of dry charge, e.g., 5 for 5%)
- * @param reaction_heat Heat of reaction @unitb{\btu\per\pound}
- * @param additional_heat Additional heat required @unitb{\btu\per\hour}
+ * @param[in] thermic_reaction_type Thermic reaction type (endothermic, exothermic, or none)
+ * @param[in] specific_heat_solid Average specific heat of solid material (dry) @unitb{\btu\per\pound\degreeFahrenheit}
+ * @param[in] latent_heat Latent heat of fusion @unitb{\btu\per\pound}
+ * @param[in] specific_heat_liquid Specific heat of liquid from molten material @unitb{\btu\per\pound\degreeFahrenheit}
+ * @param[in] melting_point Melting point @unitb{\degreeFahrenheit}
+ * @param[in] charge_feed_rate Charge (wet) feed rate @unitb{\pound\per\hour}
+ * @param[in] water_content_charged Water content as charged (percent, e.g., 10 for 10%)
+ * @param[in] water_content_discharged Water content as discharged (percent, e.g., 5 for 5%)
+ * @param[in] initial_temperature Initial temperature @unitb{\degreeFahrenheit}
+ * @param[in] discharge_temperature Charge material discharge temperature @unitb{\degreeFahrenheit}
+ * @param[in] water_vapor_discharge_temperature Water vapor discharge temperature @unitb{\degreeFahrenheit}
+ * @param[in] charge_melted Charge melted (percent of dry charge, e.g., 10 for 10%)
+ * @param[in] charge_reacted Charge reacted (percent of dry charge, e.g., 5 for 5%)
+ * @param[in] reaction_heat Heat of reaction @unitb{\btu\per\pound}
+ * @param[in] additional_heat Additional heat required @unitb{\btu\per\hour}
  * @return Total heat required @unitb{\btu\per\hour}.
  */
 double totalHeatRequired(
