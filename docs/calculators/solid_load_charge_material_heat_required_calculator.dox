@@ -101,11 +101,12 @@
  * @defgroup solid_load_charge_material_sensible_heat_cpp_formula Solid Heating (Below melting point) Formula
  * @ingroup solid_load_charge_material_heat_required_calculator
  * @details The total heat required when discharge temperature is below melting point.
- * @formula{solid-load-charge-material-sensible-heat-cpp; Q_{solid} = m_{feed} \cdot C_{p,solid} \cdot (T_{discharge} - T_{initial})}
+ * @formula{solid-load-charge-material-sensible-heat-cpp; Q_{solid} = m_{feed} \cdot (1 - f_{charged}) \cdot C_{p,solid} \cdot (T_{discharge} - T_{initial})}
  * @subheading{Symbols}
  * @symtable
  * @symrow{Q_{solid}; Heat required for solid heating; \btu\per\hour}
  * @symrow{m_{feed}; Charge feed rate; \pound\per\hour}
+ * @symrow{f_{charged}; Fraction of water charged; \unitless}
  * @symrow{C_{p,solid}; Specific heat of solid; \btu\per\pound\degreeFahrenheit}
  * @symrow{T_{discharge}; Discharge temperature; \degreeFahrenheit}
  * @symrow{T_{initial}; Initial temperature; \degreeFahrenheit}
