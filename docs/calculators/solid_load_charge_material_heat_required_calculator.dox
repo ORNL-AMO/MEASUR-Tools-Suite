@@ -142,12 +142,14 @@
  * @defgroup solid_load_charge_material_heat_of_reaction_cpp_formula Heat of Reaction Formula
  * @ingroup solid_load_charge_material_heat_required_calculator
  * @details Heat required for endothermic reaction.
- * @formula{solid-load-charge-material-heat-of-reaction-cpp; Q_{reaction} = m_{feed} \cdot f_{reacted} \cdot H_{reaction}}
+ * @formula{solid-load-charge-material-heat-of-reaction-cpp; Q_{reaction} = m_{feed} \cdot (1 - f_{charged}) \cdot f_{reacted} \cdot H_{reaction}}
  * @subheading{Symbols}
  * @symtable
  * @symrow{Q_{reaction}; Heat of reaction; \btu\per\hour}
  * @symrow{m_{feed}; Charge feed rate; \pound\per\hour}
- * @symrow{f_{reacted}; Fraction of charge reacted; \unitless}
+ * @symrow{f_{charged}; Fraction of water charged; \unitless}
+ * @symrow{(1 - f_{charged}); Fraction of dry charge; \unitless}
+ * @symrow{f_{reacted}; Fraction of dry charge reacted; \unitless}
  * @symrow{H_{reaction}; Heat of reaction; \btu\per\pound}
  * @endsymtable
  */
