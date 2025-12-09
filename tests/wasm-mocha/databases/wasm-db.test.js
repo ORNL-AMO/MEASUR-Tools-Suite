@@ -14,25 +14,6 @@ describe('DB Default Data Test', function () {
             console.log(msg);
         }
 
-        function solidLoadChargeMaterialsLog(item){
-            logMessage(item.getID() + ', ' + item.getSubstance() + ', ' + item.getSpecificHeatSolid() + ', ' +
-                item.getLatentHeat() + ', ' + item.getSpecificHeatLiquid()  + ', ' + item.getMeltingPoint());
-        }
-
-        function solidLoadChargeMaterials(defaultData){
-            logMessage('Solid Load Charge Materials', true);
-
-            let listItems = defaultData.getSolidLoadChargeMaterials();
-            let count = listItems.size();
-            assert.equal(count, 40, "Select All Default Data");
-
-            logMessage('Default Data (start - end):');
-            solidLoadChargeMaterialsLog(listItems.get(0));
-            solidLoadChargeMaterialsLog(listItems.get(count-1));
-
-            listItems.delete();
-        }
-
         function solidLiquidFlueGasMaterialsLog(item){
             logMessage(item.getID() + ', ' + item.getSubstance() + ', ' + item.getCarbon() + ', ' +
                 item.getHydrogen() + ', ' + item.getSulphur()  + ', ' + item.getInertAsh() + ', ' +
@@ -197,8 +178,6 @@ describe('DB Default Data Test', function () {
             logMessage('DB Default Data Test:');
 
             let instance = new moduleInstance.DefaultData();
-
-            solidLoadChargeMaterials(instance);
             solidLiquidFlueGasMaterials(instance);
             gasFlueGasMaterials(instance);
             motorData(instance);

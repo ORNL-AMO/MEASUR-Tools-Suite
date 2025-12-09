@@ -16,7 +16,7 @@
 #include "processHeat/losses/opening_heat_loss.h"
 #include "processHeat/losses/slag_other_material_heat_loss.h"
 #include "processHeat/losses/solid_liquid_flue_gas_material.h"
-#include "processHeat/losses/solid_load_charge_material.h"
+#include "processHeat/losses/solid_load_charge_material_heat_required.h"
 #include "processHeat/losses/wall_heat_loss.h"
 #include "processHeat/losses/water_cooling_heat_loss.h"
 
@@ -252,26 +252,25 @@ EMSCRIPTEN_BINDINGS(slagOtherMaterialLosses) {
 }
 
 // solidLoadChargeMaterial
-EMSCRIPTEN_BINDINGS(solidLoadChargeMaterial) {
-    class_<SolidLoadChargeMaterial>("SolidLoadChargeMaterial")
-        .constructor<>()
-        .constructor<LoadChargeMaterial::ThermicReactionType, double, double, double, double, double, double, double,
-                     double, double, double, double, double, double, double>()
-        .function("getTotalHeat", &SolidLoadChargeMaterial::getTotalHeat)
-        .function("getID", &SolidLoadChargeMaterial::getID)
-        .function("getSubstance", &SolidLoadChargeMaterial::getSubstance)
-        .function("getSpecificHeatSolid", &SolidLoadChargeMaterial::getSpecificHeatSolid)
-        .function("getLatentHeat", &SolidLoadChargeMaterial::getLatentHeat)
-        .function("getSpecificHeatLiquid", &SolidLoadChargeMaterial::getSpecificHeatLiquid)
-        .function("getMeltingPoint", &SolidLoadChargeMaterial::getMeltingPoint)
-        .function("setID", &SolidLoadChargeMaterial::setID)
-        .function("setSubstance", &SolidLoadChargeMaterial::setSubstance)
-        .function("setSpecificHeatSolid", &SolidLoadChargeMaterial::setSpecificHeatSolid)
-        .function("setLatentHeat", &SolidLoadChargeMaterial::setLatentHeat)
-        .function("setSpecificHeatLiquid", &SolidLoadChargeMaterial::setSpecificHeatLiquid)
-        .function("setMeltingPoint", &SolidLoadChargeMaterial::setMeltingPoint);
-
-    register_vector<SolidLoadChargeMaterial>("SolidLoadChargeMaterialV");
+EMSCRIPTEN_BINDINGS(solid_load_charge_material_heat_required) {
+    using namespace solid_load_charge_material_heat_required;
+    // Parameters for solidLoadChargeMaterialTotalHeatRequired:
+    //   thermic_reaction_type (enum: ENDOTHERMIC, EXOTHERMIC, NONE)
+    //   specific_heat_solid (Btu/lb°F)
+    //   latent_heat (Btu/lb)
+    //   specific_heat_liquid (Btu/lb°F)
+    //   melting_point (°F)
+    //   charge_feed_rate (lb/hr)
+    //   water_content_charged (% of total)
+    //   water_content_discharged (% of total)
+    //   initial_temperature (°F)
+    //   discharge_temperature (°F)
+    //   water_vapor_discharge_temperature (°F)
+    //   charge_melted (% of dry charge)
+    //   charge_reacted (% of dry charge)
+    //   reaction_heat (Btu/lb)
+    //   additional_heat (Btu/hr)
+    function("solidLoadChargeMaterialTotalHeatRequired", &totalHeatRequired);
 }
 
 // Bindings for the wall_heat_loss namespace

@@ -15,13 +15,12 @@
 #include "databases/lighting_data.h"
 #include "databases/MotorData.h"
 #include "databases/SolidLiquidFlueGasMaterialData.h"
-#include "databases/SolidLoadChargeMaterialData.h"
 #include "motorDriven/motor/MotorData.h"
 #include "other/lighting_data.h"
 #include "processHeat/losses/gas_flue_gas_material.h"
 #include "processHeat/losses/solid_liquid_flue_gas_material.h"
-#include "processHeat/losses/solid_load_charge_material.h"
 #include "databases/liquid_load_charge_material_data.h"
+#include "databases/solid_load_charge_material_data.h"
 
 using namespace emscripten;
 
@@ -29,7 +28,6 @@ EMSCRIPTEN_BINDINGS(db_class) {
 
     class_<DefaultData>("DefaultData")
         .constructor<>()
-        .function("getSolidLoadChargeMaterials", &DefaultData::getSolidLoadChargeMaterials)
         .function("getSolidLiquidFlueGasMaterials", &DefaultData::getSolidLiquidFlueGasMaterials)
         .function("getGasFlueGasMaterials", &DefaultData::getGasFlueGasMaterials)
         .function("getMotorData", &DefaultData::getMotorData)
@@ -64,4 +62,17 @@ EMSCRIPTEN_BINDINGS(liquid_load_charge_material_data) {
 
     register_vector<LiquidLoadChargeMaterial>("LiquidLoadChargeMaterialV");
     function("getDefaultLiquidLoadChargeMaterials", &get_default_liquid_load_charge_materials);
+}
+
+EMSCRIPTEN_BINDINGS(solid_load_charge_material_data) {
+    using namespace solid_load_charge_material_data;
+    value_object<SolidLoadChargeMaterial>("SolidLoadChargeMaterial")
+        .field("substance", &SolidLoadChargeMaterial::substance)
+        .field("specificHeatSolid", &SolidLoadChargeMaterial::specific_heat_solid)
+        .field("latentHeat", &SolidLoadChargeMaterial::latent_heat)
+        .field("specificHeatLiquid", &SolidLoadChargeMaterial::specific_heat_liquid)
+        .field("meltingPoint", &SolidLoadChargeMaterial::melting_point);
+
+    register_vector<SolidLoadChargeMaterial>("SolidLoadChargeMaterialV");
+    function("getDefaultSolidLoadChargeMaterials", &get_default_solid_load_charge_materials);
 }

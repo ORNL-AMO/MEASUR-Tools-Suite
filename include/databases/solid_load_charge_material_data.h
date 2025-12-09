@@ -1,10 +1,36 @@
+
 #pragma once
+#include <string>
+#include <vector>
 
-#include "default_data.h"
+/**
+ * @namespace solid_load_charge_material_data
+ * @brief Contains default data for solid load/charge materials.
+ */
+namespace solid_load_charge_material_data {
 
-class SolidLoadChargeMaterial;
+/**
+ * @struct SolidLoadChargeMaterial
+ * @brief Struct to hold default solid load/charge material data
+ * @param substance Name of substance
+ * @param specific_heat_solid Specific heat in Btu/(lb*°F)
+ * @param latent_heat Latent heat in Btu/lb
+ * @param specific_heat_liquid Specific heat of liquid in Btu/(lb*°F)
+ * @param melting_point Melting point in °F
+ */
+struct SolidLoadChargeMaterial {
+    std::string substance;
+    double      specific_heat_solid;
+    double      latent_heat;
+    double      specific_heat_liquid;
+    double      melting_point;
+};
 
-std::vector<SolidLoadChargeMaterial> DefaultData::get_default_solid_load_charge_materials() {
+/**
+ * @brief Returns a vector of default solid load/charge materials.
+ * @return std::vector<SolidLoadChargeMaterial> Default materials
+ */
+inline std::vector<SolidLoadChargeMaterial> get_default_solid_load_charge_materials() {
     return {{"Aluminum", 0.247910198232625, 169, 0.2601, 1215},
             {"Babbitt, Lead Base", 0.0389300214951039, 26.2, 0.038, 462},
             {"Babbitt, Tin Base", 0.0709338428469071, 34.1, 0.0631, 464},
@@ -46,3 +72,5 @@ std::vector<SolidLoadChargeMaterial> DefaultData::get_default_solid_load_charge_
             {"Refractory", 0.250059708621925, 425, 0.26, 5000},
             {"Ladle Refractory", 0.250059708621925, 425, 0.26, 5000}};
 }
+
+} // namespace solid_load_charge_material_data

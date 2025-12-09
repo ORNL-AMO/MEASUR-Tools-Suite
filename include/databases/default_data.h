@@ -5,11 +5,9 @@
 #include "motorDriven/motor/MotorData.h"
 #include "processHeat/losses/gas_flue_gas_material.h"
 #include "processHeat/losses/solid_liquid_flue_gas_material.h"
-#include "processHeat/losses/solid_load_charge_material.h"
 #include "compressedAir/compressors_data.h"
 #include "other/lighting_data.h"
 
-class SolidLoadChargeMaterial;
 class GasCompositions;
 class SolidLiquidFlueGasMaterial;
 class MotorData;
@@ -21,15 +19,6 @@ public:
     DefaultData() = default;
 
     virtual ~DefaultData() = default;
-
-    std::vector<SolidLoadChargeMaterial> getSolidLoadChargeMaterials() {
-        std::vector<SolidLoadChargeMaterial> material = get_default_solid_load_charge_materials();
-        auto size = (int)material.size();
-        for (auto i = 0; i < size; i++) {
-            (material[i]).setID(i + 1);
-        }
-        return material;
-    }
 
     std::vector<SolidLiquidFlueGasMaterial> getSolidLiquidFlueGasMaterials() {
         std::vector<SolidLiquidFlueGasMaterial> material = get_default_solid_liquid_flue_gas_materials();
@@ -131,7 +120,6 @@ public:
     }
 
 private:
-    std::vector<SolidLoadChargeMaterial>    get_default_solid_load_charge_materials();
     std::vector<SolidLiquidFlueGasMaterial> get_default_solid_liquid_flue_gas_materials();
     std::vector<GasCompositions>            get_default_gas_flue_gas_materials();
     std::vector<MotorData>                  get_default_motor_data();

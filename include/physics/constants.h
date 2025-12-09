@@ -41,6 +41,21 @@ namespace physics::imperial {}
 namespace physics::us {
 
 /**
+ * @brief Boiling point of water @unitb{\degreeFahrenheit}
+ */
+inline constexpr double kWaterBoilingPointF = 212.0;
+
+/**
+ * @brief Specific heat of water vapor @unitb{\btu\per\pound\degreeFahrenheit}
+ */
+inline constexpr double kSpecificHeatWaterVapor = 0.481;
+
+/**
+ * @brief Latent heat of evaporation for water @unitb{\btu\per\pound}
+ */
+inline constexpr double kWaterEvaporation = 970.0;
+
+/**
  * @brief Stefan–Boltzmann constant @unitb{\btu\per\hour\foot\squared\degreeRankine\tothe{4}}
  * @details Source: @cite capehart2007guide
  */
