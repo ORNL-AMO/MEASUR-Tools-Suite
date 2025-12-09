@@ -117,10 +117,11 @@
  * @defgroup solid_load_charge_material_full_heat_cpp_formula Solid Heating (Above melting point) Formula
  * @ingroup solid_load_charge_material_heat_required_calculator
  * @details The total heat required when discharge temperature is above melting point.
- * @formula{solid-load-charge-material-full-heat-cpp; Q_{solid} = Q_{sens,solid} + Q_{melt} + Q_{sens,liquid}}
- * @formula{solid-load-charge-material-sensible-heat-to-melting-cpp; Q_{sens,solid} = m_{feed} \cdot C_{p,solid} \cdot (T_{melt} - T_{initial})}
- * @formula{solid-load-charge-material-melting-heat-cpp; Q_{melt} = m_{feed} \cdot f_{melted} \cdot H_{latent}}
- * @formula{solid-load-charge-material-sensible-heat-liquid-cpp; Q_{sens,liquid} = m_{feed} \cdot f_{melted} \cdot C_{p,liquid} \cdot (T_{discharge} - T_{melt})}
+ * @formula{solid-load-charge-material-full-heat-cpp; Q_{solid} = Q_{sens,solid} + Q_{melt} + Q_{sens,liquid} + Q_{sens,remaining}}
+ * @formula{solid-load-charge-material-sensible-heat-to-melting-cpp; Q_{sens,solid} = m_{feed} \cdot (1 - f_{charged}) \cdot C_{p,solid} \cdot (T_{melt} - T_{initial})}
+ * @formula{solid-load-charge-material-melting-heat-cpp; Q_{melt} = m_{feed} \cdot (1 - f_{charged}) \cdot f_{melted} \cdot H_{latent}}
+ * @formula{solid-load-charge-material-sensible-heat-liquid-cpp; Q_{sens,liquid} = m_{feed} \cdot (1 - f_{charged}) \cdot f_{melted} \cdot C_{p,liquid} \cdot (T_{discharge} - T_{melt})}
+ * @formula{solid-load-charge-material-sensible-heat-remaining-cpp; Q_{sens,remaining} = m_{feed} \cdot (1 - f_{charged}) \cdot (1 - f_{melted}) \cdot C_{p,solid} \cdot (T_{discharge} - T_{melt})}
  * @subheading{Symbols}
  * @symtable
  * @symrow{Q_{solid}; Heat required for solid heating/melting; \btu\per\hour}
