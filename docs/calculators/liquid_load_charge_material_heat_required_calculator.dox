@@ -35,6 +35,7 @@
 /**
  * @defgroup liquid_load_charge_material_sensible_heat_cpp_formula Sensible Heat (Below Vaporizing Temp) Formula
  * @ingroup liquid_load_charge_material_heat_required_calculator
+ * @details The total heat required when discharge temperature is below vaporizing temperature.
  * @formula{liquid-load-charge-material-sensible-heat-cpp; Q_{liq} = m_{feed} \cdot C_{p,liq} \cdot (T_{discharge} - T_{initial})}
  * @subheading{Symbols}
  * @symtable
@@ -49,22 +50,13 @@
 /**
  * @defgroup liquid_load_charge_material_full_heat_cpp_formula Full Heating (Above Vaporizing Temp) Formula
  * @ingroup liquid_load_charge_material_heat_required_calculator
- * @details The total heat required when discharge temperature is above vaporizing temperature is calculated in multiple steps:
+ * @details The total heat required when discharge temperature is above vaporizing temperature.
  *
- * Step 1: Sensible heat to vaporizing temperature:
- *   @formula{liquid-load-charge-material-sensible-heat-to-vaporizing-cpp; Q_{sens,liq} = m_{feed} \cdot C_{p,liq} \cdot (T_{vaporizing} - T_{initial})}
- *
- * Step 2: Vaporization heat for vaporized fraction:
- *   @formula{liquid-load-charge-material-vaporization-heat-cpp; Q_{vap} = m_{feed} \cdot f_{vaporized} \cdot H_{latent}}
- *
- * Step 3: Sensible heat for vaporized fraction (vapor):
- *   @formula{liquid-load-charge-material-sensible-heat-vapor-cpp; Q_{sens,vapor} = m_{feed} \cdot f_{vaporized} \cdot C_{p,vapor} \cdot (T_{discharge} - T_{vaporizing})}
- *
- * Step 4: Sensible heat for remaining liquid fraction:
- *   @formula{liquid-load-charge-material-sensible-heat-remaining-liq-cpp; Q_{sens,remliq} = m_{feed} \cdot (1-f_{vaporized}) \cdot C_{p,liq} \cdot (T_{discharge} - T_{vaporizing})}
- *
- * Step 5: Sum all heat contributions:
  *   @formula{liquid-load-charge-material-full-heat-cpp; Q_{liq} = Q_{sens,liq} + Q_{vap} + Q_{sens,vapor} + Q_{sens,remliq}}
+ *   @formula{liquid-load-charge-material-sensible-heat-to-vaporizing-cpp; Q_{sens,liq} = m_{feed} \cdot C_{p,liq} \cdot (T_{vaporizing} - T_{initial})}
+ *   @formula{liquid-load-charge-material-vaporization-heat-cpp; Q_{vap} = m_{feed} \cdot f_{vaporized} \cdot H_{latent}}
+ *   @formula{liquid-load-charge-material-sensible-heat-vapor-cpp; Q_{sens,vapor} = m_{feed} \cdot f_{vaporized} \cdot C_{p,vapor} \cdot (T_{discharge} - T_{vaporizing})}
+ *   @formula{liquid-load-charge-material-sensible-heat-remaining-liq-cpp; Q_{sens,remliq} = m_{feed} \cdot (1-f_{vaporized}) \cdot C_{p,liq} \cdot (T_{discharge} - T_{vaporizing})}
  *
  * @subheading{Symbols}
  * @symtable
