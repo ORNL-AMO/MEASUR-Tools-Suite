@@ -7,7 +7,6 @@ using namespace Catch;
 #include "databases/GasFlueGasMaterialData.h"
 #include "databases/MotorData.h"
 #include "databases/SolidLiquidFlueGasMaterialData.h"
-#include "databases/SolidLoadChargeMaterialData.h"
 #include "databases/compressors_type1_data.h"
 #include "databases/compressors_type1_GT_100kW_data.h"
 #include "databases/compressors_type2_data.h"
@@ -21,30 +20,7 @@ using namespace Catch;
 #include "motorDriven/motor/MotorData.h"
 #include "processHeat/losses/gas_flue_gas_material.h"
 #include "processHeat/losses/solid_liquid_flue_gas_material.h"
-#include "processHeat/losses/solid_load_charge_material.h"
 
-TEST_CASE("DefaultData - getSolidLoadChargeMaterials", "[databases]") {
-    auto defaultData = DefaultData();
-
-    {
-        auto const outputs = defaultData.getSolidLoadChargeMaterials();
-        CHECK(outputs.size() == 40);
-    }
-
-    {
-        auto const output = defaultData.getSolidLoadChargeMaterials()[0];
-
-        SolidLoadChargeMaterial expected;
-        expected.setSubstance("Aluminum");
-        expected.setSpecificHeatSolid(0.247910198232625);
-        expected.setLatentHeat(169);
-        expected.setSpecificHeatLiquid(0.2601);
-        expected.setMeltingPoint(1215);
-        expected.setID(1);
-
-        CHECK(expected == output);
-    }
-}
 
 TEST_CASE("DefaultData - getGasFlueGasMaterials", "[databases]") {
     auto defaultData = DefaultData();

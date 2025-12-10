@@ -17,9 +17,7 @@ describe('Process Heat SolidLoadChargeMaterial', function () {
             dischargeTemperature: 2200, waterVaporDischargeTemperature: 500, chargeMelted: 0, chargeReacted: 1,
             reactionHeat: 100, additionalHeat: 0
         };
-        var solidLoadChargeMaterial = new moduleInstance.SolidLoadChargeMaterial(moduleInstance.ThermicReactionType.EXOTHERMIC, inp.specificHeatSolid, inp.latentHeat, inp.specificHeatLiquid, inp.meltingPoint, inp.chargeFeedRate, inp.waterContentCharged, inp.waterContentDischarged, inp.initialTemperature, inp.dischargeTemperature, inp.waterVaporDischargeTemperature, inp.chargeMelted, inp.chargeReacted, inp.reactionHeat, inp.additionalHeat);
-        var totalHeat = solidLoadChargeMaterial.getTotalHeat()
+        var totalHeat = moduleInstance.solidLoadChargeMaterialTotalHeatRequired(moduleInstance.ThermicReactionType.EXOTHERMIC, inp.specificHeatSolid, inp.latentHeat, inp.specificHeatLiquid, inp.meltingPoint, inp.chargeFeedRate, inp.waterContentCharged, inp.waterContentDischarged, inp.initialTemperature, inp.dischargeTemperature, inp.waterVaporDischargeTemperature, inp.chargeMelted, inp.chargeReacted, inp.reactionHeat, inp.additionalHeat);
         assert.equal(totalHeat, 3204310.28);
-        solidLoadChargeMaterial.delete();
     });
 });
