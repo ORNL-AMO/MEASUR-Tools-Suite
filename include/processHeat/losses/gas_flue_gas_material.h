@@ -22,10 +22,10 @@ namespace gas_flue_gas_material {
  * @brief Calculates the total heat loss for flue gas using the provided parameters.
  * @param[in] stoich_air Stoichiometric air required for complete combustion (SCF air/SCF fuel)
  * @param[in] excess_air Percent Excess Air (e.g. 9 for 9%) @unitb{\unitless}
- * @param[in] available_heat Available heat from combustion @unitb{\Btu\per\hour}
- * @param[in] specific_heat Specific heat of the gas @unitb{\Btu\per\hour\per\degreeFahrenheit}
+ * @param[in] available_heat Available heat from combustion @unitb{\btu\per\hour}
+ * @param[in] specific_heat Specific heat of the gas @unitb{\btu\per\hour\per\degreeFahrenheit}
  * @param[in] total_generated Total mass generated @unitb{\pound\per\hour}
- * @param[in] heat_value_fuel Heating value of the fuel gas mixture @unitb{\Btu\per\hour}
+ * @param[in] heat_value_fuel Heating value of the fuel gas mixture @unitb{\btu\per\hour}
  * @param[in] flue_gas_o2 Oxygen in flue gas @unitb{\percent}
  */
 struct ProcessHeatProperties {
@@ -39,6 +39,7 @@ struct ProcessHeatProperties {
 };
 
 /**
+ * @ingroup gas_flue_gas_material_calculator
  * @brief Calculates process heat properties for the fuel gas mixture and operating conditions.
  * @param[in] compositions Instance of GasComposition representing the fuel gas mixture and its constituent properties
  * @param[in] flue_gas_temp Flue gas temperature @unitb{\degreeFahrenheit}
@@ -56,10 +57,10 @@ ProcessHeatProperties processHeatProperties(const GasComposition compositions, c
                                               const double comb_air_moisture = 0, const double excess_air = 0);
 
 /**
- * @ingroup process_heat_loss_calculator
+ * @ingroup gas_flue_gas_material_calculator
  * @brief Calculates the total heat loss for flue gas using the provided parameters.
  * @param[in] flue_gas_temperature Furnace Flue Gas Temperature @unitb{\degreeFahrenheit}
- * @param[in] excess_air_percentage Percent Excess Air (e.g. 9 for 9%) @unitb{\unitless}
+ * @param[in] excess_air_percentage Percent Excess Air (e.g. 9 for 9%) @unitb{\percent}
  * @param[in] combustion_air_temperature Combustion Air Temperature @unitb{\degreeFahrenheit}
  * @param[in] compositions Instance of GasComposition representing the fuel gas mixture and its constituent properties
  * @param[in] fuel_temperature Temperature of fuel @unitb{\degreeFahrenheit}

@@ -1,122 +1,140 @@
 /**
  * @defgroup gas_flue_gas_material_calculator Gas Flue Gas Material Calculator
  * @ingroup heat_loss_calculators
- * @brief Calculates process heat properties and available heat for flue gas materials.
- * @details The following formulas describe the calculation of process heat properties for flue gas materials, including excess air, constituent-specific heats, generated product weights/volumes, enthalpy, and available heat. Each step is documented with its own formula and symbol table.
+ * @brief Stepwise algorithm for calculating process heat properties and available heat for flue gas materials.
+ * @details This document presents the algorithm implemented in processHeatProperties (see gas_flue_gas_material.cpp), with each step annotated, formulae provided, and all symbols defined. The calculation covers excess air, flue gas O2, constituent Cp, generated product weights/volumes, enthalpy, and available heat. All variables use snake_case.
  *
- * @heading{Process Heat Properties}
- * @copydoc gas_flue_gas_material_process_heat_properties_cpp_formula
+ * @heading{Algorithm Steps}
+* @subheading{Step 1: Excess Air and Flue Gas O2}
+*   If excess air fraction (EA) is provided calculate @math{O_2}:
+*     @formula{gas-flue-gas-material-excess-air-cpp; O_2 = f_{O_2}(EA)}
+*   Else calculate excess air (EA) given @math{O_2}:
+*     @formula{gas-flue-gas-material-excess-air-cpp-2; EA = f_{EA}(O_2)}
+*   @symtable
+*     @symrow{EA; Excess air percent; \percent}
+*     @symrow{f_{O_2}(EA); @ref gas_composition_estimate_excess_air_from_o2_cpp_formula; \unitless}
+*     @symrow{O_2; Flue gas oxygen percentage; \percent}
+*     @symrow{f_{EA}(O_2); @ref gas_composition_o2_percentage_from_excess_air_cpp_formula; \unitless}
+*   @endsymtable
  *
- * @heading{Excess Air and Flue Gas O2}
- * @copydoc gas_flue_gas_material_excess_air_cpp_formula
+ * @subheading{Step 2: Temperature Conversion}
+ *   Convert input temperatures to absolute (Rankine) for specific heat calculations:
+ *     @formula{gas-flue-gas-material-temp-conv-cpp; T_{abs} = T_{F} + 460}
+ *   @symtable
+ *     @symrow{T_{abs}; Absolute temperature; \degreeRankine}
+ *     @symrow{T_{F}; Temperature in Fahrenheit; \degreeFahrenheit}
+ *   @endsymtable
  *
- * @heading{Constituent Specific Heats (Cp)}
- * @copydoc gas_flue_gas_material_specific_heat_cpp_formula
  *
- * @heading{Generated Product Weights and Volumes}
- * @copydoc gas_flue_gas_material_generated_products_cpp_formula
+* @subheading{Step 3: Constituent Specific Heats (Cp)}
+*   For each major constituent, calculate Cp at both initial and final temperature:
+*     @formula{gas-flue-gas-material-cp-o2-cpp; Cp_{O_2}(T) = 11.515 - \frac{172.0}{\sqrt{T}} + \frac{1530.0}{T}}
+*     @formula{gas-flue-gas-material-cp-n2-cpp; Cp_{N_2}(T) = 9.47 - \frac{3470.0}{T} + \frac{1.07 \times 10^6}{T^2}}
+*     @formula{gas-flue-gas-material-cp-h2o-cpp; Cp_{H_2O}(T) = 19.86 - \frac{597.0}{\sqrt{T}} + \frac{7500.0}{T}}
+*     @formula{gas-flue-gas-material-cp-co2-cpp; Cp_{CO_2}(T) = \frac{16.2 - \frac{6530.0}{T} + \frac{1.41 \times 10^6}{T^2}}{44.0}}
+*   where @math{T} is either the initial or final absolute temperature (Rankine).\n
+*    @formula{gas-flue-gas-avg-cp; \overline{Cp} = \frac{Cp(T_{initial}) + Cp(T_{final})}{2}}
+*   @symtable
+*     @symrow{Cp_{i}(T); Specific heat of constituent @math{i} at temperature @math{T}; \btu\per\pound\degreeFahrenheit}
+*     @symrow{T_{initial}, T_{final}; Initial and final absolute temperature (Rankine); \degreeRankine}
+*     @symrow{\overline{Cp}; Average specific heat over temperature range; \btu\per\pound\degreeFahrenheit}
+*   @endsymtable
  *
- * @heading{Enthalpy and Heat Content}
- * @copydoc gas_flue_gas_material_enthalpy_heat_content_cpp_formula
+* @subheading{Step 4: Mean Cp for Combustion Air}
+ *   Weighted average for O2, N2, H2O at initial and final temperatures.
+ *   Linear Cp coefficients for combustion air:
+ *     @formula{gas-flue-gas-material-cp-linear-cpp; Cp_{mean} = a + b \cdot T}
+ *   @symtable
+ *     @symrow{Cp_{mean}; Mean specific heat; \btu\per\pound\degreeFahrenheit}
+ *     @symrow{a, b; Linear coefficients; \unitless}
+ *     @symrow{T; Temperature; \degreeFahrenheit}
+ *   @endsymtable
  *
- * @heading{Available Heat}
- * @copydoc gas_flue_gas_material_available_heat_cpp_formula
+* @subheading{Step 5: Fuel and Product Aggregation}
+ *   Aggregate fuel heating value and generated weights:
+ *     @formula{gas-flue-gas-material-co2-gen-wt-cpp; W_{CO_2} = \sum_i x_i \cdot w_{CO_2,i}}
+ *     @formula{gas-flue-gas-material-h2o-gen-wt-cpp; W_{H_2O} = \sum_i x_i \cdot w_{H_2O,i} + \text{combustion air moisture}}
+ *     @formula{gas-flue-gas-material-o2-gen-wt-cpp; W_{O_2} = \text{from excess air}}
+ *     @formula{gas-flue-gas-material-n2-gen-wt-cpp; W_{N_2} = \text{from air fraction}}
+ *   @symtable
+ *     @symrow{W_{i}; Generated weight of constituent i; \pound\per\MMBtu}
+ *     @symrow{x_i; Volume fraction of fuel constituent i; \unitless}
+ *     @symrow{w_{i}; Weight generated per constituent i; \pound\per\cubicFoot}
+ *   @endsymtable
+ *
+* @subheading{Step 6: Generated Volumes and Unit Conversion}
+ *   Convert generated weights to volumes:
+ *     @formula{gas-flue-gas-material-co2-gen-vol-cpp; V_{CO_2} = W_{CO_2} \cdot 0.022722}
+ *     @formula{gas-flue-gas-material-h2o-gen-vol-cpp; V_{H_2O} = W_{H_2O} \cdot 0.055506}
+ *   @symtable
+ *     @symrow{V_{i}; Generated volume of constituent i; \cubicFoot\per\MMBtu}
+ *   @endsymtable
+ *
+* @subheading{Step 7: Stoichiometric Air and Moisture Correction}
+ *   Calculate stoichiometric air required:
+ *     @formula{gas-flue-gas-material-stoich-air-cpp; Air_{stoich} = W_{O_2} \cdot \left(1 + \frac{1 - f_{O_2}}{f_{O_2}}\right)}
+ *   Combustion air moisture correction:
+ *     @formula{gas-flue-gas-material-moisture-corr-cpp; Moisture_{corr} = (M_{perc} - 0.009) \cdot Air_{stoich} \cdot 0.0763}
+ *   @symtable
+ *     @symrow{Air_{stoich}; Stoichiometric air; \pound\per\MMBtu}
+ *     @symrow{M_{perc}; Combustion air moisture percent; \percent}
+ *   @endsymtable
+ *
+* @subheading{Step 8: Partial Pressure of Water Vapor}
+ *   @formula{gas-flue-gas-material-partial-pressure-h2o-cpp; P_{H_2O} = \frac{V_{H_2O}}{V_{CO_2} + V_{H_2O} + V_{O_2} + V_{N_2}}}
+ *   @symtable
+ *     @symrow{P_{H_2O}; Partial pressure of water vapor; \unitless}
+ *   @endsymtable
+ *
+* @subheading{Step 9: Enthalpy and Heat Content}
+ *   For each constituent:
+ *     @formula{gas-flue-gas-material-enthalpy-h2o-cpp; H_{H_2O} = (h_{sat} + Cp_{H_2O} \cdot (T_{fg} - T_{sat})) \cdot 100 \cdot W_{H_2O}}
+ *     @formula{gas-flue-gas-material-heat-content-co2-cpp; H_{CO_2} = Cp_{CO_2} \cdot \Delta T_{fg,amb} \cdot 100 \cdot W_{CO_2}}
+ *     @formula{gas-flue-gas-material-heat-content-n2-cpp; H_{N_2} = Cp_{N_2} \cdot \Delta T_{fg,amb} \cdot 100 \cdot W_{N_2}}
+ *     @formula{gas-flue-gas-material-heat-content-o2-cpp; H_{O_2} = Cp_{O_2} \cdot \Delta T_{fg,amb} \cdot 100 \cdot W_{O_2}}
+ *   @symtable
+ *     @symrow{H_{i}; Heat content of constituent i; \btu\per\hour}
+*     @symrow{h_{sat}; Enthalpy at saturation (see @ref gas_composition_calculate_enthalpy_at_saturation_cpp_formula); \btu\per\pound}
+*     @symrow{T_{sat}; Saturation temperature (see @ref gas_composition_calculate_saturation_temperature_cpp_formula); \degreeFahrenheit}
+*     @symrow{\Delta T_{fg,amb}; Flue gas temperature rise above ambient (@math{T_{fg} - T_{amb}}); \degreeFahrenheit}
+ *   @endsymtable
+ *
+ *
+ *
+* @subheading{Step 10: Preheated Combustion Air and Moisture Effects}
+ *   Heat in preheated combustion air:
+ *     @formula{gas-flue-gas-material-preheat-air-cpp; Q_{preheat,air} = Air_{stoich} \cdot (1 + EA) \cdot ((T_{mean}) \cdot b + a) \cdot (T_{comb} - T_{amb})}
+ *   Heat content of air moisture:
+ *     @formula{gas-flue-gas-material-preheat-moisture-cpp; Q_{preheat,moisture} = Moisture_{corr} \cdot Cp_{H_2O} \cdot (T_{fg} - T_{comb})}
+ *   @symtable
+ *     @symrow{Q_{preheat,air}; Heat in preheated combustion air; \btu\per\hour}
+ *     @symrow{Q_{preheat,moisture}; Heat content of air moisture; \btu\per\hour}
+ *     @symrow{T_{comb}; Combustion air temperature; \degreeFahrenheit}
+ *   @endsymtable
+ *
+* @subheading{Step 11: Total Generated Products and Weighted Cp}
+ *   Total generated products:
+ *     @formula{gas-flue-gas-material-total-gen-cpp; W_{prod} = W_{CO_2} + W_{H_2O} + W_{O_2} + W_{N_2}}
+ *   Weighted average specific heat:
+ *     @formula{gas-flue-gas-material-weighted-cp-cpp; Cp_{fg} = \frac{W_{CO_2} \cdot Cp_{CO_2} + W_{H_2O} \cdot Cp_{H_2O} + W_{O_2} \cdot Cp_{O_2} + W_{N_2} \cdot Cp_{N_2}}{W_{prod}}}
+ *   @symtable
+ *     @symrow{Cp_{fg}; Specific heat of flue gas; \btu\per\pound\degreeFahrenheit}
+ *     @symrow{W_{prod}; Total generated product weight; \pound\per\MMBtu}
+ *   @endsymtable
+ *
+* @subheading{Step 12: Sensible Heat of Fuel}
+ *   @formula{gas-flue-gas-material-sensible-heat-cpp; Q_{sens} = Cp_{fg} \cdot (T_{fuel} - T_{amb})}
+ *   @symtable
+ *     @symrow{Q_{sens}; Sensible heat of fuel; \btu\per\hour}
+ *     @symrow{T_{fuel}; Fuel temperature; \degreeFahrenheit}
+ *   @endsymtable
+ *
+* @subheading{Step 13: Available Heat Calculation}
+ *   @formula{gas-flue-gas-material-available-heat-cpp; Q_{avail} = \frac{100 \cdot (Q_{sens} + H_{fuel} + Q_{preheat,air} + Q_{preheat,moisture}) - (H_{H_2O} + H_{CO_2} + H_{N_2} + H_{O_2})}{100 \cdot H_{fuel}}}
+ *   @symtable
+ *     @symrow{Q_{avail}; Available heat; \btu\per\hour}
+ *     @symrow{H_{fuel}; Heating value of fuel; \btu\per\cubicFoot}
+ *   @endsymtable
  *
  * @see gas_flue_gas_material_data_database
  */
-
-/**
- * @defgroup gas_flue_gas_material_process_heat_properties_cpp_formula Process Heat Properties Formula
- * @ingroup gas_flue_gas_material_calculator
- * @formula{gas-flue-gas-material-process-heat-properties-cpp; \text{Properties calculated: excess air, flue gas O2, constituent Cp, generated weights/volumes, enthalpy, available heat}}
- * @subheading{Symbols}
- * @symtable
- * @symrow{Q_{avail}; Available heat; \btu\per\hour}
- * @symrow{Cp_{fg}; Specific heat of flue gas; \btu\per\pound\degreeFahrenheit}
- * @symrow{W_{prod}; Total generated product weight; \pound\per\MMBtu}
- * @symrow{V_{prod}; Total generated product volume; \ft^3\per\MMBtu}
- * @symrow{H_{fuel}; Heating value of fuel; \btu\per\ft^3}
- * @endsymtable
- */
-
-/**
- * @defgroup gas_flue_gas_material_excess_air_cpp_formula Excess Air and Flue Gas O2 Formula
- * @ingroup gas_flue_gas_material_calculator
- * @formula{gas-flue-gas-material-excess-air-cpp; \text{If excess air given:}}
- * @formulay{gas-flue-gas-material-excess-air-cpp-2; \quad O_2 = f_{O_2}(EA) \qquad \text{Else:} \quad EA = f_{EA}(O_2)}
- * @subheading{Symbols}
- * @symtable
- * @symrow{EA; Excess air fraction; \unitless}
- * @symrow{O_2; Flue gas oxygen percentage; \unitless}
- * @endsymtable
- */
-
-/**
- * @defgroup gas_flue_gas_material_specific_heat_cpp_formula Constituent Specific Heats (Cp) Formula
- * @ingroup gas_flue_gas_material_calculator
- * @details Specific heat for each major constituent is calculated as:
- * @formula{gas-flue-gas-material-cp-o2-cpp; Cp_{O_2} = 11.515 - \frac{172.0}{\sqrt{T}} + \frac{1530.0}{T}}
- * @formula{gas-flue-gas-material-cp-n2-cpp; Cp_{N_2} = 9.47 - \frac{3470.0}{T} + \frac{1.07 \times 10^6}{T^2}}
- * @formula{gas-flue-gas-material-cp-h2o-cpp; Cp_{H_2O} = 19.86 - \frac{597.0}{\sqrt{T}} + \frac{7500.0}{T}}
- * @formula{gas-flue-gas-material-cp-co2-cpp; Cp_{CO_2} = \frac{16.2 - \frac{6530.0}{T} + \frac{1.41 \times 10^6}{T^2}}{44.0}}
- * @subheading{Symbols}
- * @symtable
- * @symrow{Cp_{i}; Specific heat of constituent i; \btu\per\pound\degreeFahrenheit}
- * @symrow{T; Temperature (Rankine); \degreeRankine}
- * @endsymtable
- */
-
-/**
- * @defgroup gas_flue_gas_material_generated_products_cpp_formula Generated Product Weights and Volumes Formula
- * @ingroup gas_flue_gas_material_calculator
- * @details Generated weights and volumes for CO_2, H_2O, O_2, N_2 are calculated as:
- * @formula{gas-flue-gas-material-co2-gen-wt-cpp; W_{CO_2} = \sum_i x_i \cdot w_{CO_2,i}}
- * @formula{gas-flue-gas-material-h2o-gen-wt-cpp; W_{H_2O} = \sum_i x_i \cdot w_{H_2O,i} + \text{combustion air moisture}}
- * @formula{gas-flue-gas-material-o2-gen-wt-cpp; W_{O_2} = \text{from excess air}}
- * @formula{gas-flue-gas-material-n2-gen-wt-cpp; W_{N_2} = \text{from air fraction}}
- * @formula{gas-flue-gas-material-co2-gen-vol-cpp; V_{CO_2} = W_{CO_2} \cdot 0.022722}
- * @formula{gas-flue-gas-material-h2o-gen-vol-cpp; V_{H_2O} = W_{H_2O} \cdot 0.055506}
- * @subheading{Symbols}
- * @symtable
- * @symrow{W_{i}; Generated weight of constituent i; \pound\per\MMBtu}
- * @symrow{V_{i}; Generated volume of constituent i; \ft^3\per\MMBtu}
- * @symrow{x_i; Volume fraction of fuel constituent i; \unitless}
- * @symrow{w_{i}; Weight generated per constituent i; \pound\per\ft^3}
- * @endsymtable
- */
-
-/**
- * @defgroup gas_flue_gas_material_enthalpy_heat_content_cpp_formula Enthalpy and Heat Content Formula
- * @ingroup gas_flue_gas_material_calculator
- * @details Enthalpy and heat content for each constituent are calculated as:
- * @formula{gas-flue-gas-material-enthalpy-h2o-cpp; H_{H_2O} = (h_{sat} + Cp_{H_2O} \cdot (T_{fg} - T_{sat})) \cdot 100 \cdot W_{H_2O}}
- * @formula{gas-flue-gas-material-heat-content-co2-cpp; H_{CO_2} = Cp_{CO_2} \cdot \Delta T_{fg,amb} \cdot 100 \cdot W_{CO_2}}
- * @formula{gas-flue-gas-material-heat-content-n2-cpp; H_{N_2} = Cp_{N_2} \cdot \Delta T_{fg,amb} \cdot 100 \cdot W_{N_2}}
- * @formula{gas-flue-gas-material-heat-content-o2-cpp; H_{O_2} = Cp_{O_2} \cdot \Delta T_{fg,amb} \cdot 100 \cdot W_{O_2}}
- * @subheading{Symbols}
- * @symtable
- * @symrow{H_{i}; Heat content of constituent i; \btu\per\hour}
- * @symrow{h_{sat}; Enthalpy at saturation; \btu\per\pound}
- * @symrow{Cp_{i}; Specific heat of constituent i; \btu\per\pound\degreeFahrenheit}
- * @symrow{T_{fg}; Flue gas temperature; \degreeFahrenheit}
- * @symrow{T_{sat}; Saturation temperature; \degreeFahrenheit}
- * @symrow{\Delta T_{fg,amb}; Flue gas - ambient air temperature difference; \degreeFahrenheit}
- * @symrow{W_{i}; Generated weight of constituent i; \pound\per\MMBtu}
- * @endsymtable
- */
-
-/**
- * @defgroup gas_flue_gas_material_available_heat_cpp_formula Available Heat Formula
- * @ingroup gas_flue_gas_material_calculator
- * @formula{gas-flue-gas-material-available-heat-cpp; Q_{avail} = \frac{100 \cdot (Q_{sens} + H_{fuel} + Q_{preheat,air} + Q_{preheat,moisture}) - (H_{H_2O} + H_{CO_2} + H_{N_2} + H_{O_2})}{100 \cdot H_{fuel}}}
- * @subheading{Symbols}
- * @symtable
- * @symrow{Q_{avail}; Available heat; \btu\per\hour}
- * @symrow{Q_{sens}; Sensible heat of fuel; \btu\per\hour}
- * @symrow{H_{fuel}; Heating value of fuel; \btu\per\ft^3}
- * @symrow{Q_{preheat,air}; Heat in preheated combustion air; \btu\per\hour}
- * @symrow{Q_{preheat,moisture}; Heat content of air moisture; \btu\per\hour}
- * @symrow{H_{i}; Heat content of constituent i; \btu\per\hour}
- * @endsymtable
- */
-

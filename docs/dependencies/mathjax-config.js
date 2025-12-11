@@ -50,6 +50,7 @@ window.MathJax = {
             MathJax.tex2mml(String.raw`
                 \DeclareSIUnit{\britishThermalUnit}{Btu}
                 \DeclareSIUnit{\btu}{Btu}
+                \DeclareSIUnit{\MMBtu}{MMBtu}
 
                 \DeclareSIUnit{\degreeFahrenheit}{\degree F}
                 \DeclareSIUnit{\degreeF}{\degree F}

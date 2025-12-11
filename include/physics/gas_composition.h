@@ -116,35 +116,45 @@ class GasComposition {
     };
 
     /**
+     * @ingroup gas_composition_estimate_excess_air_from_o2_cpp_formula
      * @brief Calculates excess air percentage from flue gas oxygen percentage.
+     * @details See @ref gas_composition_estimate_excess_air_from_o2_cpp_formula for formula and symbols.
      * @param[in] flue_gas_o2_percentage Oxygen percentage in flue gas @unitb{\percent}
      * @return Excess air percentage @unitb{\percent}
      */
     double excessAirFromO2(double flue_gas_o2_percentage);
 
     /**
+     * @ingroup gas_composition_o2_percentage_from_excess_air_cpp_formula
      * @brief Calculates flue gas oxygen percentage from excess air percentage.
+     * @details See @ref gas_composition_o2_percentage_from_excess_air_cpp_formula for formula and symbols.
      * @param[in] excess_air Excess air percentage @unitb{\percent}
      * @return Oxygen percentage in flue gas @unitb{\percent}
      */
     double o2PercentageFromExcessAir(double excess_air);
 
     /**
+     * @ingroup gas_composition_estimate_excess_air_from_o2_cpp_formula
      * @brief Estimates excess air percentage from flue gas oxygen percentage.
+     * @details See @ref gas_composition_estimate_excess_air_from_o2_cpp_formula for formula and symbols.
      * @param[in] flue_gas_o2_percentage Oxygen percentage in flue gas @unitb{\percent}
      * @return Estimated excess air percentage @unitb{\percent}
      */
     double estimateExcessAirFromO2(double flue_gas_o2_percentage);
 
     /**
+     * @ingroup gas_composition_calculate_enthalpy_at_saturation_cpp_formula
      * @brief Calculates enthalpy at saturation for a given partial pressure of water vapor.
+     * @details See @ref gas_composition_calculate_enthalpy_at_saturation_cpp_formula for formula and symbols.
      * @param[in] partial_pressure_water_vapor Partial pressure of water vapor @unitb{\psia}
      * @return Enthalpy at saturation @unitb{\btu/\lb}
      */
     double calculateEnthalpyAtSaturation(double partial_pressure_water_vapor);
 
     /**
+     * @ingroup gas_composition_calculate_saturation_temperature_cpp_formula
      * @brief Calculates saturation temperature for a given partial pressure of water vapor.
+     * @details See @ref gas_composition_calculate_saturation_temperature_cpp_formula for formula and symbols.
      * @param[in] partial_pressure_water_vapor Partial pressure of water vapor @unitb{\psia}
      * @return Saturation temperature @unitb{\degreeFahrenheit}
      */
@@ -154,6 +164,14 @@ class GasComposition {
         return {&ch4, &c2h6, &n2, &h2, &c3h8, &c4h10_cnh2n, &h2o, &co, &co2, &so2, &o2};
     };
 
+    /**
+     * @ingroup gas_composition_adjusted_flue_gas_o2_for_calc_error_cpp_formula
+     * @brief Iteratively adjusts calculated flue gas O2 to minimize error with target excess air.
+     * @details See @ref gas_composition_adjusted_flue_gas_o2_for_calc_error_cpp_formula for formula and symbols.
+     * @param[in] excess_air Target excess air fraction @unitb{\unitless}
+     * @param[in] flue_gas_o2 Calculated flue gas oxygen percentage @unitb{\unitless}
+     * @return Adjusted flue gas oxygen percentage @unitb{\unitless}
+     */
     double adjustedFlueGasO2ForCalcError(double excess_air, double flue_gas_o2);
 
   private:

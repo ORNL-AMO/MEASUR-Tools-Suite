@@ -17,7 +17,7 @@
  * @copydoc gas_composition_calculate_enthalpy_at_saturation_cpp_formula
  *
  * @heading{Calculate Saturation Temperature Formula}
- * @copydoc gas_composition_adjusted_flue_gas_o2_for_calc_error_cpp_formula
+ * @copydoc gas_composition_calculate_saturation_temperature_cpp_formula
  *
  * @heading{Total Composition Weight Formula}
  * @copydoc gas_composition_set_total_composition_weight_cpp_formula 
