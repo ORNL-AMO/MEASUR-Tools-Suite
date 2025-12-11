@@ -109,7 +109,7 @@ EMSCRIPTEN_BINDINGS(exhaust_gas_heat_loss_electric_arc_furnace) {
 EMSCRIPTEN_BINDINGS(gas_composition) {
     using namespace gas_composition;
 
-    class_<GasComposition>("GasComposition")
+    class_<GasComposition>("GasCompositions")
         .constructor<std::string, double, double, double, double, double, double, double, double, double, double,
                      double>()
         .property("heatingValue", &GasComposition::heating_value)
@@ -135,38 +135,6 @@ EMSCRIPTEN_BINDINGS(gas_flue_gas_material) {
 }
 
 EMSCRIPTEN_BINDINGS(flueGasLosses) {
-    // class_<GasCompositions::ProcessHeatPropertiesResults>("ProcessHeatPropertiesResults")
-    //     .property("stoichAir", &GasCompositions::ProcessHeatPropertiesResults::stoichAir)
-    //     .property("excessAir", &GasCompositions::ProcessHeatPropertiesResults::excessAir)
-    //     .property("availableHeat", &GasCompositions::ProcessHeatPropertiesResults::availableHeat)
-    //     .property("specificHeat", &GasCompositions::ProcessHeatPropertiesResults::specificHeat)
-    //     .property("density", &GasCompositions::ProcessHeatPropertiesResults::density)
-    //     .property("flueGasO2", &GasCompositions::ProcessHeatPropertiesResults::flueGasO2);
-
-    // // flueGasByVolumeCalculateHeatingValue
-    // // flueGasCalculateExcessAir
-    // // flueGasCalculateO2
-    // class_<GasCompositions>("GasCompositions")
-    //     .constructor<std::string, double, double, double, double, double, double, double, double, double, double,
-    //                  double>()
-    //     .function("getProcessHeatProperties", &GasCompositions::getProcessHeatProperties)
-    //     .function("getHeatingValue", &GasCompositions::getHeatingValue)
-    //     .function("getHeatingValueVolume", &GasCompositions::getHeatingValueVolume)
-    //     .function("getSpecificGravity", &GasCompositions::getSpecificGravity)
-    //     .function("calculateExcessAir", &GasCompositions::calculateExcessAir)
-    //     .function("calculateO2", &GasCompositions::calculateO2)
-    //     .function("getID", &GasCompositions::getID)
-    //     .function("getSubstance", &GasCompositions::getSubstance)
-    //     .function("getGasByVol", &GasCompositions::getGasByVol)
-    //     .function("setID", &GasCompositions::setID);
-
-    // register_vector<GasCompositions>("GasCompositionsV");
-
-    // // flueGasLossesByVolume
-    // class_<GasFlueGasMaterial>("GasFlueGasMaterial")
-    //     .constructor<double, double, double, GasCompositions, double>()
-    //     .function("getHeatLoss", &GasFlueGasMaterial::getHeatLoss);
-
     // flueGasLossesByMass
     // flueGasByMassCalculateHeatingValue
     // flueGasByMassCalculateO2

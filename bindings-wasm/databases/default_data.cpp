@@ -28,7 +28,6 @@ EMSCRIPTEN_BINDINGS(db_class) {
     class_<DefaultData>("DefaultData")
         .constructor<>()
         .function("getSolidLiquidFlueGasMaterials", &DefaultData::getSolidLiquidFlueGasMaterials)
-        .function("getGasFlueGasMaterials", &DefaultData::getGasFlueGasMaterials)
         .function("getMotorData", &DefaultData::getMotorData)
         .function("getCompressorType1Data", &DefaultData::getCompressorType1Data)
         .function("getCompressorType1_GT100kWData", &DefaultData::getCompressorType1_GT100kWData)
