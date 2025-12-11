@@ -40,7 +40,7 @@ struct ProcessHeatProperties {
 
 /**
  * @brief Calculates process heat properties for the fuel gas mixture and operating conditions.
- * @param[in] compositions User defined gas compositions
+ * @param[in] compositions Instance of GasComposition representing the fuel gas mixture and its constituent properties
  * @param[in] flue_gas_temp Flue gas temperature @unitb{\degreeFahrenheit}
  * @param[in] flue_gas_o2 Oxygen percentage in flue gas @unitb{\percent}
  * @param[in] comb_air_temp Combustion air temperature @unitb{\degreeFahrenheit}
@@ -61,7 +61,7 @@ ProcessHeatProperties processHeatProperties(const GasComposition compositions, c
  * @param[in] flue_gas_temperature Furnace Flue Gas Temperature @unitb{\degreeFahrenheit}
  * @param[in] excess_air_percentage Percent Excess Air (e.g. 9 for 9%) @unitb{\unitless}
  * @param[in] combustion_air_temperature Combustion Air Temperature @unitb{\degreeFahrenheit}
- * @param[in] compositions User defined gas compositions
+ * @param[in] compositions Instance of GasComposition representing the fuel gas mixture and its constituent properties
  * @param[in] fuel_temperature Temperature of fuel @unitb{\degreeFahrenheit}
  * @return Total heat loss @unitb{\btu\per\hour}
  */

@@ -1,0 +1,163 @@
+/**
+ * @defgroup gas_composition Gas Composition
+ * @ingroup physics
+ * @brief Provides formulas and methods for calculating gas mixture properties, combustion air requirements, and flue gas analysis in engineering applications.
+ * @details The following documentation describes the formulas and algorithms used by the GasComposition class to compute gas mixture properties, combustion air requirements, and flue gas analysis. Each member function is documented with its formula and symbol table.
+ *
+ * @heading{Specific Gravity Formula}
+ * @copydoc gas_composition_set_specific_gravity_cpp_formula 
+ *
+ * @heading{Stoichometric Air Formula}
+ * @copydoc gas_composition_set_stoichometric_air_cpp_formula
+ *
+ * @heading{Estimate Excess Air From O2 Formula}
+ * @copydoc gas_composition_estimate_excess_air_from_o2_cpp_formula
+ *
+ * @heading{Calculate Enthalpy At Saturation Formula}
+ * @copydoc gas_composition_calculate_enthalpy_at_saturation_cpp_formula
+ *
+ * @heading{Calculate Saturation Temperature Formula}
+ * @copydoc gas_composition_adjusted_flue_gas_o2_for_calc_error_cpp_formula
+ *
+ * @heading{Total Composition Weight Formula}
+ * @copydoc gas_composition_set_total_composition_weight_cpp_formula 
+ *
+ * @heading{Heating Value Formula}
+ * @copydoc gas_composition_set_heating_value_cpp_formula 
+ *
+ * @heading{Heating Value Volume Formula}
+ * @copydoc gas_composition_set_heating_value_volume_cpp_formula 
+ */
+
+/**
+ * @defgroup gas_composition_set_total_composition_weight_cpp_formula Total Composition Weight Formula
+ * @ingroup gas_composition
+ * @brief Calculates the total composition weight and sets the weight fraction for each constituent.
+ * @formula{gas-composition-set-total-composition-weight-cpp; W_{total} = \sum_{i} W_{i} \qquad }
+ * @formula{gas-composition-weight-fraction; f_{i} = \frac{W_{i}}{W_{total}}}
+ * @symtable
+ * @symrow{W_{total}; Total composition weight; \pound}
+ * @symrow{W_{i}; Weight of constituent i; \pound}
+ * @symrow{f_{i}; Weight fraction of constituent i; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup gas_composition_set_heating_value_cpp_formula Heating Value Formula
+ * @ingroup gas_composition
+ * @brief Calculates the heating value of the mixture by summing weighted constituent heating values.
+ * @formula{gas-composition-set-heating-value-cpp; HV = \sum_{i} HV_{i} \cdot f_{i}}
+ * @symtable
+ * @symrow{HV; Heating value of mixture; \btu\per\pound}
+ * @symrow{HV_{i}; Heating value of constituent i; \btu\per\pound}
+ * @symrow{f_{i}; Weight fraction of constituent i; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup gas_composition_set_heating_value_volume_cpp_formula Heating Value Volume Formula
+ * @ingroup gas_composition
+ * @brief Calculates the volumetric heating value of the mixture.
+ * @formula{gas-composition-set-heating-value-volume-cpp; HV_{vol} = \sum_{i} HV_{vol,i} \cdot x_{i}}
+ * @symtable
+ * @symrow{HV_{vol}; Volumetric heating value of mixture; \btu\per\cubicFoot}
+ * @symrow{HV_{vol,i}; Volumetric heating value of constituent i; \btu\per\cubicFoot}
+ * @symrow{x_{i}; Volume fraction of constituent i; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup gas_composition_set_specific_gravity_cpp_formula Specific Gravity Formula
+ * @ingroup gas_composition
+ * @brief Calculates the specific gravity of the gas mixture.
+ * @formula{gas-composition-set-specific-gravity-cpp; SG = \frac{\sum_{i} MW_{i} \cdot x_{i}}{22.4 \cdot 1.205}}
+ * @symtable
+ * @symrow{SG; Specific gravity of mixture; \unitless}
+ * @symrow{MW_{i}; Molecular weight of constituent i; \gram\per\mole}
+ * @symrow{x_{i}; Volume fraction of constituent i; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup gas_composition_set_stoichometric_air_cpp_formula Stoichometric Air Formula
+ * @ingroup gas_composition
+ * @brief Calculates the stoichiometric air required for combustion.
+ * @formula{o2-required-air-cpp; O_{2,req} = \sum_{i} O_{2,gen,i} \cdot x_{i} \qquad}
+ * @formula{gas-composition-set-stoichometric-air-cpp; Air_{stoich} = O_{2,req} \cdot \left(1 + \frac{1 - k_{O_2}}{k_{O_2}}\right)}
+ * @symtable
+ * @symrow{O_{2,req}; Oxygen required for combustion; \pound}
+ * @symrow{O_{2,gen,i}; Oxygen generated per constituent i; \pound}
+ * @symrow{x_{i}; Volume fraction of constituent i; \unitless}
+ * @symrow{k_{O_2}; Volume fraction of O_2 in dry air; \unitless}
+ * @symrow{Air_{stoich}; Stoichiometric air required; \pound}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup gas_composition_o2_percentage_from_excess_air_cpp_formula O2 Percentage From Excess Air Formula
+ * @ingroup gas_composition
+ * @brief Calculates flue gas O2 percentage from excess air.
+ * @formula{gas-composition-o2-percentage-from-excess-air-cpp; O_2 = \frac{m_{O_2}}{m_{H_2O} + m_{CO_2} + m_{N_2} + m_{O_2} + m_{SO_2}}}
+ * @symtable
+ * @symrow{O_2; Flue gas oxygen percentage; \unitless}
+ * @symrow{m_{i}; Mass of constituent i in flue gas; \pound}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup gas_composition_estimate_excess_air_from_o2_cpp_formula Estimate Excess Air From O2 Formula
+ * @ingroup gas_composition
+ * @brief Empirical formula to estimate excess air from flue gas O2 percentage.
+ * @formula{gas-composition-estimate-excess-air-from-o2-cpp; EA = \frac{8.52381 \cdot O_2}{2 - (9.52381 \cdot O_2)}}
+ * @symtable
+ * @symrow{EA; Excess air fraction; \unitless}
+ * @symrow{O_2; Flue gas oxygen percentage; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup gas_composition_calculate_enthalpy_at_saturation_cpp_formula Calculate Enthalpy At Saturation Formula
+ * @ingroup gas_composition
+ * @brief Calculates enthalpy at saturation for water vapor.
+ * @formula{gas-composition-calculate-enthalpy-at-saturation-cpp; h_{sat} = 1096.7 \cdot (p_{H_2O} \cdot 29.926)^{0.013}}
+ * @symtable
+ * @symrow{h_{sat}; Enthalpy at saturation; \btu\per\pound}
+ * @symrow{p_{H_2O}; Partial pressure of water vapor; \atm}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup gas_composition_calculate_saturation_temperature_cpp_formula Calculate Saturation Temperature Formula
+ * @ingroup gas_composition
+ * @brief Calculates saturation temperature for water vapor.
+ * @formula{gas-composition-calculate-saturation-temperature-cpp; T_{sat} = 36.009 \cdot \ln(p_{H_2O} \cdot 29.926) + 81.054}
+ * @symtable
+ * @symrow{T_{sat}; Saturation temperature; \degreeFahrenheit}
+ * @symrow{p_{H_2O}; Partial pressure of water vapor; \atm}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup gas_composition_adjusted_flue_gas_o2_for_calc_error_cpp_formula Adjusted Flue Gas O2 For Calc Error Formula
+ * @ingroup gas_composition
+ * @brief Iteratively adjusts calculated flue gas O2 to minimize error with target excess air.
+ * @formula{gas-composition-adjusted-flue-gas-o2-for-calc-error-cpp; O_2^{adj} = f_{adj}(EA, O_2^{calc}) \quad \text{(iterative solution)}}
+ * @symtable
+ * @symrow{O_2^{adj}; Adjusted flue gas oxygen percentage; \unitless}
+ * @symrow{EA; Target excess air fraction; \unitless}
+ * @symrow{O_2^{calc}; Calculated flue gas oxygen percentage; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup gas_composition_get_mass_flue_gas_components_cpp_formula Get Mass Flue Gas Components Formula
+ * @ingroup gas_composition
+ * @brief Calculates mass of flue gas components for a given excess air.
+ * @formula{gas-composition-get-mass-flue-gas-components-cpp; m_{i} = \sum_{j} \frac{g_{i,j} \cdot f_{j}}{MW_{j}}}
+ * @symtable
+ * @symrow{m_{i}; Mass of flue gas constituent i; \pound}
+ * @symrow{g_{i,j}; Generated amount of constituent i from fuel j; \pound}
+ * @symrow{f_{j}; Weight fraction of fuel constituent j; \unitless}
+ * @symrow{MW_{j}; Molecular weight of fuel constituent j; \gram\per\mole}
+ * @endsymtable
+ */
