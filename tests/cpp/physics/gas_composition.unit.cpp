@@ -15,13 +15,7 @@ TEST_CASE("Calculate Gas compositions", "[Gas Composition]") {
     CHECK(composition.o2_percentage_from_excess_air(0.0231722) == Approx(0.0049367284));
     CHECK(composition.o2_percentage_from_excess_air(0.1552234) == Approx(0.0294793974));
     CHECK(composition.o2_percentage_from_excess_air(0.451975) == Approx(0.0690024841));
-
-    CHECK(composition.process_heat_properties(700, 0.0231722095, 125, 125, 60, 0).available_heat ==
-          Approx(0.7831351536));
-    CHECK(composition.process_heat_properties(700, 0.1552234415, 125, 125, 60, 0).available_heat ==
-          Approx(0.5615301965));
-    CHECK(composition.process_heat_properties(700, 0.09, 125, 125, 60, 0).available_heat == Approx(0.7264072116));
-
+    
     composition = GasComposition("Typical Natural Gas - US", 87, 8.5, 3.6, 0.4, 0, 0, 0, 0, 0.4, 0, 0.1);
     CHECK(composition.heating_value == Approx(22030.67089880065));
     CHECK(composition.heating_value_volume == Approx(1032.445));

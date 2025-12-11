@@ -13,6 +13,7 @@
  */
 
 #include "physics/gas_composition.h"
+#include "losses/gas_flue_gas_material.h"
 #include "losses/solid_liquid_flue_gas_material.h"
 
 class CascadeHeatHighToLow {
@@ -77,9 +78,9 @@ class CascadeHeatHighToLow {
           priCombAirTemperature(priCombAirTemperature), priOpHours(priOpHours), secFiringRate(secFiringRate),
           secExhaustTemperature(secExhaustTemperature), secExhaustO2(secExhaustO2),
           secCombAirTemperature(secCombAirTemperature), secOpHours(secOpHours) {
-        gas_composition::ProcessHeatProperties res =
-            gasCompositions.process_heat_properties(priExhaustTemperature, priExhaustO2, priCombAirTemperature,
-                                                     fuelTempF, ambientAirTempF, combAirMoisturePerc);
+        gas_flue_gas_material::ProcessHeatProperties res =
+            gas_flue_gas_material::process_heat_properties(gasCompositions, priExhaustTemperature, priExhaustO2, priCombAirTemperature,
+                                                           fuelTempF, ambientAirTempF, combAirMoisturePerc);
         stoichAirVolume  = res.stoich_air;
         priExcessAir     = res.excess_air;
         priAvailableHeat = res.available_heat;
@@ -87,9 +88,9 @@ class CascadeHeatHighToLow {
         //TODO: CHECK DENSITY VS TOTAL GENERATED
         priFlueDensity   = res.total_generated / 16.018463;
 
-        gas_composition::ProcessHeatProperties resSec =
-            gasCompositions.process_heat_properties(secExhaustTemperature, secExhaustO2, secCombAirTemperature,
-                                                     fuelTempF, ambientAirTempF, combAirMoisturePerc);
+        gas_flue_gas_material::ProcessHeatProperties resSec =
+            gas_flue_gas_material::process_heat_properties(gasCompositions, secExhaustTemperature, secExhaustO2, secCombAirTemperature,
+                                                           fuelTempF, ambientAirTempF, combAirMoisturePerc);
         secExcessAir     = resSec.excess_air;
         secAvailableHeat = resSec.available_heat;
     }

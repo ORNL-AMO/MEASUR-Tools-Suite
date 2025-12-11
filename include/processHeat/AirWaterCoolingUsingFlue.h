@@ -11,6 +11,8 @@
  */
 
 #include "physics/gas_composition.h"
+#include "processHeat/losses/gas_flue_gas_material.h"
+#include "processHeat/losses/gas_flue_gas_material.h"
 
 class AirWaterCoolingUsingFlue {
   public:
@@ -69,12 +71,13 @@ class AirWaterCoolingUsingFlue {
      * @param sensibleHeatRecovery double, units MM Btu / hr
      *
      */
-    Output calculate(gas_composition::GasComposition gasCompositions, const double heatInput, const double tempFlueGasInF,
-                     const double tempFlueGasOutF, const double tempCombAirF, const double fuelTempF,
-                     const double percO2, const double ambientAirTempF = 60, const double moistCombAir = 0) {
+    Output calculate(gas_composition::GasComposition gasCompositions, const double heatInput,
+                     const double tempFlueGasInF, const double tempFlueGasOutF, const double tempCombAirF,
+                     const double fuelTempF, const double percO2, const double ambientAirTempF = 60,
+                     const double moistCombAir = 0) {
 
-        gas_composition::ProcessHeatProperties res = gasCompositions.process_heat_properties(tempFlueGasInF, percO2, tempCombAirF, fuelTempF,
-                                                                    ambientAirTempF, moistCombAir);
+        gas_flue_gas_material::ProcessHeatProperties res = gas_flue_gas_material::process_heat_properties(
+            gasCompositions, tempFlueGasInF, percO2, tempCombAirF, fuelTempF, ambientAirTempF, moistCombAir);
         const double fracCondensed =
             (1 - (0.0000009 * pow(tempFlueGasOutF, 3.0136)) / (2.8082 - 0.1168 * percO2 * 100));
         const double effLH = (fracCondensed * 0.00935 * (1087 /*+ 0.467 * tempFlueGasOutF - tempCombAirF*/)) / 100;
@@ -87,4 +90,3 @@ class AirWaterCoolingUsingFlue {
                       res.available_heat + effLH, effLH, heatInput * effLH, sensibleHeatRecovery);
     }
 };
-

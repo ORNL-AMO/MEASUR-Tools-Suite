@@ -8,7 +8,7 @@
 #include "processHeat/losses/exhaust_gas_heat_loss_electric_arc_furnace.h"
 #include "processHeat/losses/fixture_heat_loss.h"
 #include "processHeat/losses/gas_cooling_heat_loss.h"
-#include "processHeat/losses/gas_flue_gas_material_heat_loss.h"
+#include "processHeat/losses/gas_flue_gas_material.h"
 #include "processHeat/losses/gas_load_charge_material_heat_required.h"
 #include "processHeat/losses/leakage_heat_loss.h"
 #include "processHeat/losses/liquid_cooling_heat_loss.h"
@@ -109,18 +109,9 @@ EMSCRIPTEN_BINDINGS(exhaust_gas_heat_loss_electric_arc_furnace) {
 EMSCRIPTEN_BINDINGS(gas_composition) {
     using namespace gas_composition;
 
-    value_object<ProcessHeatProperties>("ProcessHeatProperties")
-        .field("stoichAir", &ProcessHeatProperties::stoich_air)
-        .field("excessAir", &ProcessHeatProperties::excess_air)
-        .field("availableHeat", &ProcessHeatProperties::available_heat)
-        .field("specificHeat", &ProcessHeatProperties::specific_heat)
-        .field("density", &ProcessHeatProperties::total_generated)
-        .field("flueGasO2", &ProcessHeatProperties::flue_gas_o2);
-
     class_<GasComposition>("GasComposition")
         .constructor<std::string, double, double, double, double, double, double, double, double, double, double,
                      double>()
-        .function("getProcessHeatProperties", &GasComposition::process_heat_properties)
         .property("heatingValue", &GasComposition::heating_value)
         .property("heatingValueVolume", &GasComposition::heating_value_volume)
         .property("specificGravity", &GasComposition::specific_gravity)
@@ -130,9 +121,17 @@ EMSCRIPTEN_BINDINGS(gas_composition) {
     register_vector<GasComposition>("GasCompositionsV");
 }
 
-EMSCRIPTEN_BINDINGS(gas_flue_gas_material_heat_loss) {
-    using namespace gas_flue_gas_material_heat_loss;
+EMSCRIPTEN_BINDINGS(gas_flue_gas_material) {
+    using namespace gas_flue_gas_material;
+    value_object<ProcessHeatProperties>("ProcessHeatProperties")
+        .field("stoichAir", &ProcessHeatProperties::stoich_air)
+        .field("excessAir", &ProcessHeatProperties::excess_air)
+        .field("availableHeat", &ProcessHeatProperties::available_heat)
+        .field("specificHeat", &ProcessHeatProperties::specific_heat)
+        .field("density", &ProcessHeatProperties::total_generated)
+        .field("flueGasO2", &ProcessHeatProperties::flue_gas_o2);
     function("gasFlueGasMaterialTotalHeatLoss", &totalHeatLoss);
+    function("gasFlueGasMaterialProcessHeatProperties", &process_heat_properties);
 }
 
 EMSCRIPTEN_BINDINGS(flueGasLosses) {

@@ -9,6 +9,7 @@
 
 using namespace Catch;
 using namespace gas_composition;
+using namespace gas_flue_gas_material;
 TEST_CASE("Estimate maximum air flow that can be heated by using exhaust gas", "[processHeat]") {
     GasComposition gas("Gas", 94.0, 2.07, 1.41, 0.01, 0.42, 0.28, 0.0, 1.0, 0.71, 0, 0);
     auto            res = AirHeatingUsingExhaust(gas).calculate(400, 0.358, 8, 4000, 45, 0.85, 0.60, 4000);

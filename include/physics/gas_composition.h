@@ -22,27 +22,6 @@ using namespace gas_constants;
 
 namespace gas_composition {
 
-/**
- * @ingroup gas_composition
- * @brief Calculates the total heat loss for flue gas using the provided parameters.
- * @param[in] stoich_air Stoichiometric air required for complete combustion (SCF air/SCF fuel)
- * @param[in] excess_air Percent Excess Air (e.g. 9 for 9%) @unitb{\unitless}
- * @param[in] available_heat Available heat from combustion @unitb{\Btu\per\hour}
- * @param[in] specific_heat Specific heat of the gas @unitb{\Btu\per\hour\per\degreeFahrenheit}
- * @param[in] total_generated Total mass generated @unitb{\pound\per\hour}
- * @param[in] heat_value_fuel Heating value of the fuel gas mixture @unitb{\Btu\per\hour}
- * @param[in] flue_gas_o2 Oxygen in flue gas @unitb{\percent}
- */
-struct ProcessHeatProperties {
-    double stoich_air;
-    double excess_air;
-    double available_heat;
-    double specific_heat;
-    double total_generated;
-    double heat_value_fuel;
-    double flue_gas_o2;
-};
-
 struct GasFlueGasComponents {
     double mO2;
     double mN2;
@@ -171,21 +150,11 @@ class GasComposition {
      */
     double calculate_saturation_temperature(double partial_pressure_water_vapor);
 
-    /**
-     * @brief Calculates process heat properties for the fuel gas mixture and operating conditions.
-     * @param[in] flue_gas_temp Flue gas temperature @unitb{\degreeFahrenheit}
-     * @param[in] flue_gas_o2 Oxygen percentage in flue gas @unitb{\percent}
-     * @param[in] comb_air_temp Combustion air temperature @unitb{\degreeFahrenheit}
-     * @param[in] fuel_temp Fuel temperature @unitb{\degreeFahrenheit}
-     * @param[in] ambient_air_temp Ambient air temperature @unitb{\degreeFahrenheit} (default: 60)
-     * @param[in] comb_air_moisture Combustion air moisture @unitb{\percent} (default: 0)
-     * @param[in] excess_air Excess air percentage @unitb{\percent} (default: 0)
-     * @return ProcessHeatProperties struct with calculated properties
-     */
-    ProcessHeatProperties process_heat_properties(const double flue_gas_temp, const double flue_gas_o2,
-                                                  const double comb_air_temp, const double fuel_temp,
-                                                  const double ambient_air_temp  = 60,
-                                                  const double comb_air_moisture = 0, const double excess_air = 0);
+    std::array<GasProperties*, 11> get_constituents() {
+        return {&ch4, &c2h6, &n2, &h2, &c3h8, &c4h10_cnh2n, &h2o, &co, &co2, &so2, &o2};
+    };
+
+    double adjusted_flue_gas_o2_for_calc_error(double excess_air, double flue_gas_o2);
 
   private:
     void set_ch4(double composition_percent, double composition_by_volume) {
@@ -250,15 +219,11 @@ class GasComposition {
                            composition_by_volume, O2_O2_GENERATED, 0, 0, 0, 0);
     }
 
-    void                           set_total_composition_weight();
-    void                           set_heating_value();
-    void                           set_heating_value_volume();
-    void                           set_specific_gravity();
-    void                           set_stoichometric_air();
-    double                         adjusted_flue_gas_o2_for_calc_error(double excess_air, double flue_gas_o2);
-    GasFlueGasComponents           get_mass_flue_gas_components(double excess_air);
-    std::array<GasProperties*, 11> get_constituents() {
-        return {&ch4, &c2h6, &n2, &h2, &c3h8, &c4h10_cnh2n, &h2o, &co, &co2, &so2, &o2};
-    }
+    void                 set_total_composition_weight();
+    void                 set_heating_value();
+    void                 set_heating_value_volume();
+    void                 set_specific_gravity();
+    void                 set_stoichometric_air();
+    GasFlueGasComponents get_mass_flue_gas_components(double excess_air);
 };
 }; // namespace gas_composition

@@ -14,6 +14,7 @@
 #include "physics/gas_composition.h"
 #include "steamModeler/SaturatedProperties.h"
 #include "steamModeler/SteamProperties.h"
+#include "processHeat/losses/gas_flue_gas_material.h"
 
 WaterHeatingUsingFlue::Output
 WaterHeatingUsingFlue::calculate(gas_composition::GasComposition gasCompositions, const double tempFlueGasF,
@@ -27,8 +28,8 @@ WaterHeatingUsingFlue::calculate(gas_composition::GasComposition gasCompositions
     const double tempFWK      = TempFtoK(tempFW);
     const double tempFlueGasK = TempFtoK(tempFlueGasF);
 
-    gas_composition::ProcessHeatProperties res = gasCompositions.process_heat_properties(
-        tempFlueGasF, percO2, tempCombAirF, fuelTempF, tempAmbientAirF, moistCombAir);
+    gas_flue_gas_material::ProcessHeatProperties res = gas_flue_gas_material::process_heat_properties(
+        gasCompositions, tempFlueGasF, percO2, tempCombAirF, fuelTempF, tempAmbientAirF, moistCombAir);
     const double effBoiler      = res.available_heat;
     const double specificHeatFG = 4.1868 * res.specific_heat;
     //TODO: CHECK DENSITY VS TOTAL GENERATED
