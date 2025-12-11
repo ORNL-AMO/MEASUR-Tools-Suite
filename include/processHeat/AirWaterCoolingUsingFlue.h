@@ -76,7 +76,7 @@ class AirWaterCoolingUsingFlue {
                      const double fuelTempF, const double percO2, const double ambientAirTempF = 60,
                      const double moistCombAir = 0) {
 
-        gas_flue_gas_material::ProcessHeatProperties res = gas_flue_gas_material::process_heat_properties(
+        gas_flue_gas_material::ProcessHeatProperties res = gas_flue_gas_material::processHeatProperties(
             gasCompositions, tempFlueGasInF, percO2, tempCombAirF, fuelTempF, ambientAirTempF, moistCombAir);
         const double fracCondensed =
             (1 - (0.0000009 * pow(tempFlueGasOutF, 3.0136)) / (2.8082 - 0.1168 * percO2 * 100));

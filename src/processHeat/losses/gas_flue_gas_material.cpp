@@ -5,7 +5,7 @@ using namespace gas_composition;
 
 namespace gas_flue_gas_material {
 
-ProcessHeatProperties process_heat_properties(GasComposition compositions, const double flue_gas_temp_f,
+ProcessHeatProperties processHeatProperties(GasComposition compositions, const double flue_gas_temp_f,
                                               const double flue_gas_o2, const double comb_air_temperature_f,
                                               const double fuel_temp_f, const double ambient_air_temp_f,
                                               const double comb_air_moisture_perc, const double excess_air) {
@@ -18,11 +18,11 @@ ProcessHeatProperties process_heat_properties(GasComposition compositions, const
     // Determine excess air and flue gas O2
     if (excess_air != 0) {
         results.excess_air  = excess_air;
-        results.flue_gas_o2 = compositions.o2_percentage_from_excess_air(excess_air);
-        results.flue_gas_o2 = compositions.adjusted_flue_gas_o2_for_calc_error(excess_air, results.flue_gas_o2);
+        results.flue_gas_o2 = compositions.o2PercentageFromExcessAir(excess_air);
+        results.flue_gas_o2 = compositions.adjustedFlueGasO2ForCalcError(excess_air, results.flue_gas_o2);
     }
     else {
-        results.excess_air  = compositions.excess_air_from_o2(flue_gas_o2);
+        results.excess_air  = compositions.excessAirFromO2(flue_gas_o2);
         results.flue_gas_o2 = flue_gas_o2;
     }
 
@@ -82,7 +82,7 @@ ProcessHeatProperties process_heat_properties(GasComposition compositions, const
     double h2o_generated_wt = 0.0;
     double o2_generated_wt  = 0.0;
 
-    for (auto* compound : compositions.get_constituents()) {
+    for (auto* compound : compositions.getConstituents()) {
         results.heat_value_fuel += compound->composition_by_volume * compound->heating_value_volume;
         co2_generated_wt += compound->composition_by_volume * compound->co2_generated;
         h2o_generated_wt += compound->composition_by_volume * compound->h2o_generated;
@@ -125,8 +125,8 @@ ProcessHeatProperties process_heat_properties(GasComposition compositions, const
         h2o_generated_vol / (co2_generated_vol + h2o_generated_vol + o2_generated_vol + n2_generated_vol);
 
     // Calculate enthalpy and heat content for each constituent
-    const double enthalpy_at_saturation = compositions.calculate_enthalpy_at_saturation(partial_pressure_h2o);
-    const double saturation_temp        = compositions.calculate_saturation_temperature(partial_pressure_h2o);
+    const double enthalpy_at_saturation = compositions.calculateEnthalpyAtSaturation(partial_pressure_h2o);
+    const double saturation_temp        = compositions.calculateSaturationTemperature(partial_pressure_h2o);
 
     const double h2o_heat_content =
         (enthalpy_at_saturation + avg_cp_h2o * (flue_gas_temp_f - saturation_temp)) * 100.0 * h2o_generated_wt;
@@ -169,7 +169,7 @@ double totalHeatLoss(double flue_gas_temperature, double excess_air_percentage, 
     double                combustion_air_moisture = 60;
     double                excess_air              = 0;
     ProcessHeatProperties process_heat_properties_results =
-        process_heat_properties(compositions, flue_gas_temperature, excess_air_percentage / 100,
+        processHeatProperties(compositions, flue_gas_temperature, excess_air_percentage / 100,
                                 combustion_air_temperature, fuel_temperature, combustion_air_moisture, excess_air);
     return process_heat_properties_results.available_heat;
 }

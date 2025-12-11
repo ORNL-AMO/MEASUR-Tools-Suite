@@ -28,7 +28,7 @@ WaterHeatingUsingFlue::calculate(gas_composition::GasComposition gasCompositions
     const double tempFWK      = TempFtoK(tempFW);
     const double tempFlueGasK = TempFtoK(tempFlueGasF);
 
-    gas_flue_gas_material::ProcessHeatProperties res = gas_flue_gas_material::process_heat_properties(
+    gas_flue_gas_material::ProcessHeatProperties res = gas_flue_gas_material::processHeatProperties(
         gasCompositions, tempFlueGasF, percO2, tempCombAirF, fuelTempF, tempAmbientAirF, moistCombAir);
     const double effBoiler      = res.available_heat;
     const double specificHeatFG = 4.1868 * res.specific_heat;

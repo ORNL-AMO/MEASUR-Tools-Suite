@@ -115,8 +115,8 @@ EMSCRIPTEN_BINDINGS(gas_composition) {
         .property("heatingValue", &GasComposition::heating_value)
         .property("heatingValueVolume", &GasComposition::heating_value_volume)
         .property("specificGravity", &GasComposition::specific_gravity)
-        .function("calculateExcessAir", &GasComposition::excess_air_from_o2)
-        .function("calculateO2", &GasComposition::o2_percentage_from_excess_air);
+        .function("calculateExcessAir", &GasComposition::excessAirFromO2)
+        .function("calculateO2", &GasComposition::o2PercentageFromExcessAir);
 
     register_vector<GasComposition>("GasCompositionsV");
 }
@@ -131,7 +131,7 @@ EMSCRIPTEN_BINDINGS(gas_flue_gas_material) {
         .field("density", &ProcessHeatProperties::total_generated)
         .field("flueGasO2", &ProcessHeatProperties::flue_gas_o2);
     function("gasFlueGasMaterialTotalHeatLoss", &totalHeatLoss);
-    function("gasFlueGasMaterialProcessHeatProperties", &process_heat_properties);
+    function("gasFlueGasMaterialProcessHeatProperties", &processHeatProperties);
 }
 
 EMSCRIPTEN_BINDINGS(flueGasLosses) {

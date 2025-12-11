@@ -50,7 +50,7 @@ struct ProcessHeatProperties {
  * @param[in] excess_air Excess air percentage @unitb{\percent} (default: 0)
  * @return ProcessHeatProperties struct with calculated properties
  */
-ProcessHeatProperties process_heat_properties(const GasComposition compositions, const double flue_gas_temp,
+ProcessHeatProperties processHeatProperties(const GasComposition compositions, const double flue_gas_temp,
                                               const double flue_gas_o2, const double comb_air_temp,
                                               const double fuel_temp, const double ambient_air_temp = 60,
                                               const double comb_air_moisture = 0, const double excess_air = 0);

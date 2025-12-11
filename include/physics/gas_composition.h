@@ -97,22 +97,22 @@ class GasComposition {
           o2(specificHeatO2, 0, 0, 0, 0, 0, 0, 0, 0, 0) {
         double total_percent = ch4_percent + c2h6_percent + n2_percent + h2_percent + c3h8_percent +
                                c4h10_cnh2n_percent + h2o_percent + co_percent + co2_percent + so2_percent + o2_percent;
-        set_ch4(ch4_percent, ch4_percent / total_percent);
-        set_c2h6(c2h6_percent, c2h6_percent / total_percent);
-        set_n2(n2_percent, n2_percent / total_percent);
-        set_h2(h2_percent, h2_percent / total_percent);
-        set_c3h8(c3h8_percent, c3h8_percent / total_percent);
-        set_c4h10_cnh2n(c4h10_cnh2n_percent, c4h10_cnh2n_percent / total_percent);
-        set_h2o(h2o_percent, h2o_percent / total_percent);
-        set_co(co_percent, co_percent / total_percent);
-        set_co2(co2_percent, co2_percent / total_percent);
-        set_so2(so2_percent, so2_percent / total_percent);
-        set_o2(o2_percent, o2_percent / total_percent);
-        set_total_composition_weight();
-        set_heating_value();
-        set_heating_value_volume();
-        set_specific_gravity();
-        set_stoichometric_air();
+        setCH4(ch4_percent, ch4_percent / total_percent);
+        setC2H6(c2h6_percent, c2h6_percent / total_percent);
+        setN2(n2_percent, n2_percent / total_percent);
+        setH2(h2_percent, h2_percent / total_percent);
+        setC3H8(c3h8_percent, c3h8_percent / total_percent);
+        setC4H10CnH2n(c4h10_cnh2n_percent, c4h10_cnh2n_percent / total_percent);
+        setH2O(h2o_percent, h2o_percent / total_percent);
+        setCO(co_percent, co_percent / total_percent);
+        setCO2(co2_percent, co2_percent / total_percent);
+        setSO2(so2_percent, so2_percent / total_percent);
+        setO2(o2_percent, o2_percent / total_percent);
+        setTotalCompositionWeight();
+        setHeatingValue();
+        setHeatingValueVolume();
+        setSpecificGravity();
+        setStoichometricAir();
     };
 
     /**
@@ -120,110 +120,110 @@ class GasComposition {
      * @param[in] flue_gas_o2_percentage Oxygen percentage in flue gas @unitb{\percent}
      * @return Excess air percentage @unitb{\percent}
      */
-    double excess_air_from_o2(double flue_gas_o2_percentage);
+    double excessAirFromO2(double flue_gas_o2_percentage);
 
     /**
      * @brief Calculates flue gas oxygen percentage from excess air percentage.
      * @param[in] excess_air Excess air percentage @unitb{\percent}
      * @return Oxygen percentage in flue gas @unitb{\percent}
      */
-    double o2_percentage_from_excess_air(double excess_air);
+    double o2PercentageFromExcessAir(double excess_air);
 
     /**
      * @brief Estimates excess air percentage from flue gas oxygen percentage.
      * @param[in] flue_gas_o2_percentage Oxygen percentage in flue gas @unitb{\percent}
      * @return Estimated excess air percentage @unitb{\percent}
      */
-    double estimate_excess_air_from_o2(double flue_gas_o2_percentage);
+    double estimateExcessAirFromO2(double flue_gas_o2_percentage);
 
     /**
      * @brief Calculates enthalpy at saturation for a given partial pressure of water vapor.
      * @param[in] partial_pressure_water_vapor Partial pressure of water vapor @unitb{\psia}
      * @return Enthalpy at saturation @unitb{\btu/\lb}
      */
-    double calculate_enthalpy_at_saturation(double partial_pressure_water_vapor);
+    double calculateEnthalpyAtSaturation(double partial_pressure_water_vapor);
 
     /**
      * @brief Calculates saturation temperature for a given partial pressure of water vapor.
      * @param[in] partial_pressure_water_vapor Partial pressure of water vapor @unitb{\psia}
      * @return Saturation temperature @unitb{\degreeFahrenheit}
      */
-    double calculate_saturation_temperature(double partial_pressure_water_vapor);
+    double calculateSaturationTemperature(double partial_pressure_water_vapor);
 
-    std::array<GasProperties*, 11> get_constituents() {
+    std::array<GasProperties*, 11> getConstituents() {
         return {&ch4, &c2h6, &n2, &h2, &c3h8, &c4h10_cnh2n, &h2o, &co, &co2, &so2, &o2};
     };
 
-    double adjusted_flue_gas_o2_for_calc_error(double excess_air, double flue_gas_o2);
+    double adjustedFlueGasO2ForCalcError(double excess_air, double flue_gas_o2);
 
   private:
-    void set_ch4(double composition_percent, double composition_by_volume) {
+    void setCH4(double composition_percent, double composition_by_volume) {
         ch4 = GasProperties(specificHeatCH4, CH4_MOLECULAR_WEIGHT, CH4_SPECIFIC_WEIGHT, composition_percent,
                             composition_by_volume, CH4_O2_GENERATED, CH4_HEATING_VALUE, CH4_HEATING_VALUE_VOLUME,
                             CH4_H2O_GENERATED, CH4_CO2_GENERATED);
     }
 
-    void set_c2h6(double composition_percent, double composition_by_volume) {
+    void setC2H6(double composition_percent, double composition_by_volume) {
         c2h6 = GasProperties(specificHeatC2H6, C2H6_MOLECULAR_WEIGHT, C2H6_SPECIFIC_WEIGHT, composition_percent,
                              composition_by_volume, C2H6_O2_GENERATED, C2H6_HEATING_VALUE, C2H6_HEATING_VALUE_VOLUME,
                              C2H6_H2O_GENERATED, C2H6_CO2_GENERATED);
     }
 
-    void set_n2(double composition_percent, double composition_by_volume) {
+    void setN2(double composition_percent, double composition_by_volume) {
         n2 = GasProperties(specificHeatN2, N2_MOLECULAR_WEIGHT, N2_SPECIFIC_WEIGHT, composition_percent,
                            composition_by_volume, 0, 0, 0, 0, 0);
     }
 
-    void set_h2(double composition_percent, double composition_by_volume) {
+    void setH2(double composition_percent, double composition_by_volume) {
         h2 = GasProperties(specificHeatH2, H2_MOLECULAR_WEIGHT, H2_SPECIFIC_WEIGHT, composition_percent,
                            composition_by_volume, H2_O2_GENERATED, H2_HEATING_VALUE, H2_HEATING_VALUE_VOLUME,
                            H2_H2O_GENERATED, 0);
     }
 
-    void set_c3h8(double composition_percent, double composition_by_volume) {
+    void setC3H8(double composition_percent, double composition_by_volume) {
         c3h8 = GasProperties(specificHeatC3H8, C3H8_MOLECULAR_WEIGHT, C3H8_SPECIFIC_WEIGHT, composition_percent,
                              composition_by_volume, C3H8_O2_GENERATED, C3H8_HEATING_VALUE, C3H8_HEATING_VALUE_VOLUME,
                              C3H8_H2O_GENERATED, C3H8_CO2_GENERATED);
     }
 
-    void set_c4h10_cnh2n(double composition_percent, double composition_by_volume) {
+    void setC4H10CnH2n(double composition_percent, double composition_by_volume) {
         c4h10_cnh2n = GasProperties(specificHeatC4H10CnH2n, C4H10_CNH2N_MOLECULAR_WEIGHT, C4H10_CNH2N_SPECIFIC_WEIGHT,
                                     composition_percent, composition_by_volume, C4H10_CNH2N_O2_GENERATED,
                                     C4H10_CNH2N_HEATING_VALUE, C4H10_CNH2N_HEATING_VALUE_VOLUME,
                                     C4H10_CNH2N_H2O_GENERATED, C4H10_CNH2N_CO2_GENERATED);
     }
 
-    void set_h2o(double composition_percent, double composition_by_volume) {
+    void setH2O(double composition_percent, double composition_by_volume) {
         h2o = GasProperties(specificHeatH2O, H2O_MOLECULAR_WEIGHT, H2O_SPECIFIC_WEIGHT, composition_percent,
                             composition_by_volume, 0, 0, 0, H2O_H2O_GENERATED, 0);
     }
 
-    void set_co(double composition_percent, double composition_by_volume) {
+    void setCO(double composition_percent, double composition_by_volume) {
         co = GasProperties(specificHeatCO, CO_MOLECULAR_WEIGHT, CO_SPECIFIC_WEIGHT, composition_percent,
                            composition_by_volume, CO_O2_GENERATED, CO_HEATING_VALUE, CO_HEATING_VALUE_VOLUME, 0,
                            CO_CO2_GENERATED);
     }
 
-    void set_co2(double composition_percent, double composition_by_volume) {
+    void setCO2(double composition_percent, double composition_by_volume) {
         co2 = GasProperties(specificHeatCO2, CO2_MOLECULAR_WEIGHT, CO2_SPECIFIC_WEIGHT, composition_percent,
                             composition_by_volume, 0, 0, 0, 0, CO2_CO2_GENERATED);
     }
 
-    void set_so2(double composition_percent, double composition_by_volume) {
+    void setSO2(double composition_percent, double composition_by_volume) {
         so2 = GasProperties(specificHeatSO2, SO2_MOLECULAR_WEIGHT, SO2_SPECIFIC_WEIGHT, composition_percent,
                             composition_by_volume, 0, 0, 0, 0, 0);
     }
 
-    void set_o2(double composition_percent, double composition_by_volume) {
+    void setO2(double composition_percent, double composition_by_volume) {
         o2 = GasProperties(specificHeatO2, O2_MOLECULAR_WEIGHT, O2_SPECIFIC_WEIGHT, composition_percent,
                            composition_by_volume, O2_O2_GENERATED, 0, 0, 0, 0);
     }
 
-    void                 set_total_composition_weight();
-    void                 set_heating_value();
-    void                 set_heating_value_volume();
-    void                 set_specific_gravity();
-    void                 set_stoichometric_air();
-    GasFlueGasComponents get_mass_flue_gas_components(double excess_air);
+    void                 setTotalCompositionWeight();
+    void                 setHeatingValue();
+    void                 setHeatingValueVolume();
+    void                 setSpecificGravity();
+    void                 setStoichometricAir();
+    GasFlueGasComponents getMassFlueGasComponents(double excess_air);
 };
 }; // namespace gas_composition

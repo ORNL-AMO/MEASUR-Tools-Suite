@@ -79,7 +79,7 @@ class CascadeHeatHighToLow {
           secExhaustTemperature(secExhaustTemperature), secExhaustO2(secExhaustO2),
           secCombAirTemperature(secCombAirTemperature), secOpHours(secOpHours) {
         gas_flue_gas_material::ProcessHeatProperties res =
-            gas_flue_gas_material::process_heat_properties(gasCompositions, priExhaustTemperature, priExhaustO2, priCombAirTemperature,
+            gas_flue_gas_material::processHeatProperties(gasCompositions, priExhaustTemperature, priExhaustO2, priCombAirTemperature,
                                                            fuelTempF, ambientAirTempF, combAirMoisturePerc);
         stoichAirVolume  = res.stoich_air;
         priExcessAir     = res.excess_air;
@@ -89,7 +89,7 @@ class CascadeHeatHighToLow {
         priFlueDensity   = res.total_generated / 16.018463;
 
         gas_flue_gas_material::ProcessHeatProperties resSec =
-            gas_flue_gas_material::process_heat_properties(gasCompositions, secExhaustTemperature, secExhaustO2, secCombAirTemperature,
+            gas_flue_gas_material::processHeatProperties(gasCompositions, secExhaustTemperature, secExhaustO2, secCombAirTemperature,
                                                            fuelTempF, ambientAirTempF, combAirMoisturePerc);
         secExcessAir     = resSec.excess_air;
         secAvailableHeat = resSec.available_heat;

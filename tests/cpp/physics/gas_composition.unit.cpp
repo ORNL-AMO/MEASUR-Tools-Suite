@@ -8,14 +8,14 @@ using namespace gas_composition;
 TEST_CASE("Calculate Gas compositions", "[Gas Composition]") {
     GasComposition composition("unit test gas", 94.1, 2.4, 1.41, 0.03, 0.49, 0.29, 0, 0.42, 0.71, 0, 0);
 
-    CHECK(composition.excess_air_from_o2(0.005) == Approx(0.0231722095));
-    CHECK(composition.excess_air_from_o2(0.03) == Approx(0.1552234415));
-    CHECK(composition.excess_air_from_o2(0.07) == Approx(0.4519750365));
+    CHECK(composition.excessAirFromO2(0.005) == Approx(0.0231722095));
+    CHECK(composition.excessAirFromO2(0.03) == Approx(0.1552234415));
+    CHECK(composition.excessAirFromO2(0.07) == Approx(0.4519750365));
 
-    CHECK(composition.o2_percentage_from_excess_air(0.0231722) == Approx(0.0049367284));
-    CHECK(composition.o2_percentage_from_excess_air(0.1552234) == Approx(0.0294793974));
-    CHECK(composition.o2_percentage_from_excess_air(0.451975) == Approx(0.0690024841));
-    
+    CHECK(composition.o2PercentageFromExcessAir(0.0231722) == Approx(0.0049367284));
+    CHECK(composition.o2PercentageFromExcessAir(0.1552234) == Approx(0.0294793974));
+    CHECK(composition.o2PercentageFromExcessAir(0.451975) == Approx(0.0690024841));
+
     composition = GasComposition("Typical Natural Gas - US", 87, 8.5, 3.6, 0.4, 0, 0, 0, 0, 0.4, 0, 0.1);
     CHECK(composition.heating_value == Approx(22030.67089880065));
     CHECK(composition.heating_value_volume == Approx(1032.445));
