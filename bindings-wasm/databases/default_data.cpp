@@ -10,17 +10,16 @@
 #include "databases/compressors_type4_data.h"
 #include "databases/compressors_type5_data.h"
 #include "databases/compressors_type6_data.h"
-#include "databases/GasFlueGasMaterialData.h"
 #include "databases/gas_load_charge_material_data.h"
 #include "databases/lighting_data.h"
 #include "databases/MotorData.h"
 #include "databases/SolidLiquidFlueGasMaterialData.h"
 #include "motorDriven/motor/MotorData.h"
 #include "other/lighting_data.h"
-#include "processHeat/losses/gas_flue_gas_material.h"
 #include "processHeat/losses/solid_liquid_flue_gas_material.h"
 #include "databases/liquid_load_charge_material_data.h"
 #include "databases/solid_load_charge_material_data.h"
+#include "databases/gas_flue_gas_material_data.h"
 
 using namespace emscripten;
 
@@ -75,4 +74,27 @@ EMSCRIPTEN_BINDINGS(solid_load_charge_material_data) {
 
     register_vector<SolidLoadChargeMaterial>("SolidLoadChargeMaterialV");
     function("getDefaultSolidLoadChargeMaterials", &get_default_solid_load_charge_materials);
+}
+
+EMSCRIPTEN_BINDINGS(gas_flue_gas_material_data) {
+    using namespace gas_flue_gas_material_data;
+    value_object<GasFlueGasMaterial>("GasFlueGasMaterial")
+        .field("substance", &GasFlueGasMaterial::substance)
+        .field("ch4", &GasFlueGasMaterial::ch4)
+        .field("c2h6", &GasFlueGasMaterial::c2h6)
+        .field("n2", &GasFlueGasMaterial::n2)
+        .field("h2", &GasFlueGasMaterial::h2)
+        .field("c3h8", &GasFlueGasMaterial::c3h8)
+        .field("c4h10_cnh2n", &GasFlueGasMaterial::c4h10_cnh2n)
+        .field("h2o", &GasFlueGasMaterial::h2o)
+        .field("co", &GasFlueGasMaterial::co)
+        .field("co2", &GasFlueGasMaterial::co2)
+        .field("so2", &GasFlueGasMaterial::so2)
+        .field("o2", &GasFlueGasMaterial::o2)
+        .field("heatingValue", &GasFlueGasMaterial::heating_value)
+        .field("heatingValueVolume", &GasFlueGasMaterial::heating_value_volume)
+        .field("specificGravity", &GasFlueGasMaterial::specific_gravity);
+
+    register_vector<GasFlueGasMaterial>("GasFlueGasMaterialV");
+    function("getDefaultGasFlueGasMaterials", &get_default_gas_flue_gas_materials);
 }

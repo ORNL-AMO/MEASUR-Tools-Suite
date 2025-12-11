@@ -12,7 +12,7 @@
  *
  */
 
-#include "losses/gas_flue_gas_material.h"
+#include "physics/gas_composition.h"
 #include "losses/solid_liquid_flue_gas_material.h"
 
 class CascadeHeatHighToLow {
@@ -67,7 +67,7 @@ class CascadeHeatHighToLow {
      * @param secCombAirTemperature double, units F
      * @param secOpHours double, units hrs/yr
      */
-    CascadeHeatHighToLow(GasCompositions gasCompositions, double fuelHV, double fuelCost, double priFiringRate,
+    CascadeHeatHighToLow(gas_composition::GasComposition gasCompositions, double fuelHV, double fuelCost, double priFiringRate,
                          double priExhaustTemperature, double priExhaustO2, double priCombAirTemperature,
                          double priOpHours, double secFiringRate, double secExhaustTemperature, double secExhaustO2,
                          double secCombAirTemperature, double secOpHours, const double fuelTempF = 60,
@@ -77,20 +77,21 @@ class CascadeHeatHighToLow {
           priCombAirTemperature(priCombAirTemperature), priOpHours(priOpHours), secFiringRate(secFiringRate),
           secExhaustTemperature(secExhaustTemperature), secExhaustO2(secExhaustO2),
           secCombAirTemperature(secCombAirTemperature), secOpHours(secOpHours) {
-        const auto res =
-            gasCompositions.getProcessHeatProperties(priExhaustTemperature, priExhaustO2, priCombAirTemperature,
+        gas_composition::ProcessHeatProperties res =
+            gasCompositions.process_heat_properties(priExhaustTemperature, priExhaustO2, priCombAirTemperature,
                                                      fuelTempF, ambientAirTempF, combAirMoisturePerc);
-        stoichAirVolume  = res.stoichAir;
-        priExcessAir     = res.excessAir;
-        priAvailableHeat = res.availableHeat;
-        priFlueSpecHeat  = res.specificHeat;
-        priFlueDensity   = res.density / 16.018463;
+        stoichAirVolume  = res.stoich_air;
+        priExcessAir     = res.excess_air;
+        priAvailableHeat = res.available_heat;
+        priFlueSpecHeat  = res.specific_heat;
+        //TODO: CHECK DENSITY VS TOTAL GENERATED
+        priFlueDensity   = res.total_generated / 16.018463;
 
-        const auto resSec =
-            gasCompositions.getProcessHeatProperties(secExhaustTemperature, secExhaustO2, secCombAirTemperature,
+        gas_composition::ProcessHeatProperties resSec =
+            gasCompositions.process_heat_properties(secExhaustTemperature, secExhaustO2, secCombAirTemperature,
                                                      fuelTempF, ambientAirTempF, combAirMoisturePerc);
-        secExcessAir     = resSec.excessAir;
-        secAvailableHeat = resSec.availableHeat;
+        secExcessAir     = resSec.excess_air;
+        secAvailableHeat = resSec.available_heat;
     }
 
     /**

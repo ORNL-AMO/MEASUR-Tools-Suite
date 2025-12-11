@@ -12,6 +12,7 @@
 using namespace emscripten;
 
 EMSCRIPTEN_BINDINGS(processHeat_class) {
+    using namespace gas_composition;
     enum_<WaterHeatingUsingFlue::SteamCondition>("SteamConditionType")
         .value("Superheated", WaterHeatingUsingFlue::SteamCondition::Superheated)
         .value("Saturated", WaterHeatingUsingFlue::SteamCondition::Saturated);
@@ -86,7 +87,7 @@ EMSCRIPTEN_BINDINGS(processHeat_class) {
         .property("sensibleHeatRecovery", &AirWaterCoolingUsingFlue::Output::sensibleHeatRecovery);
 
     class_<AirHeatingUsingExhaust>("AirHeatingUsingExhaust")
-        .constructor<GasCompositions>()
+        .constructor<GasComposition>()
         .constructor<SolidLiquidFlueGasMaterial, bool>()
         .function("calculate", &AirHeatingUsingExhaust::calculate);
 
@@ -99,7 +100,7 @@ EMSCRIPTEN_BINDINGS(processHeat_class) {
         .function("calculate", &WaterHeatingUsingSteam::calculate);
 
     class_<CascadeHeatHighToLow>("CascadeHeatHighToLow")
-        .constructor<GasCompositions, double, double, double, double, double, double, double, double, double, double,
+        .constructor<GasComposition, double, double, double, double, double, double, double, double, double, double,
                      double, double, double, double, double>()
         .function("calculate", &CascadeHeatHighToLow::calculate);
 

@@ -11,7 +11,7 @@
  *
  */
 
-#include "losses/gas_flue_gas_material.h"
+#include "physics/gas_composition.h"
 
 class WaterHeatingUsingFlue {
   public:
@@ -94,7 +94,7 @@ class WaterHeatingUsingFlue {
      * @param costSavingsBoiler double, units $/yr
      *
      */
-    Output calculate(GasCompositions gasCompositions, const double tempFlueGasF, const double percO2,
+    Output calculate(gas_composition::GasComposition gasCompositions, const double tempFlueGasF, const double percO2,
                      const double tempCombAirF, const double moistCombAir, const double ratingBoiler,
                      const double prSteam, const double tempAmbientAirF, const double tempSteamF, const double tempFW,
                      const double percBlowDown, const double effHX, const double opHours, const double costFuel,

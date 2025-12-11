@@ -1,5 +1,6 @@
 #include <emscripten/bind.h>
 
+#include "physics/gas_composition.h"
 #include "processHeat/losses/atmosphere_heat_loss.h"
 #include "processHeat/losses/auxiliary_power_used.h"
 #include "processHeat/losses/energy_input_electric_arc_furnace.h"
@@ -7,7 +8,7 @@
 #include "processHeat/losses/exhaust_gas_heat_loss_electric_arc_furnace.h"
 #include "processHeat/losses/fixture_heat_loss.h"
 #include "processHeat/losses/gas_cooling_heat_loss.h"
-#include "processHeat/losses/gas_flue_gas_material.h"
+#include "processHeat/losses/gas_flue_gas_material_heat_loss.h"
 #include "processHeat/losses/gas_load_charge_material_heat_required.h"
 #include "processHeat/losses/leakage_heat_loss.h"
 #include "processHeat/losses/liquid_cooling_heat_loss.h"
@@ -81,8 +82,8 @@ EMSCRIPTEN_BINDINGS(energyInputExhaustGasLosses) {
     // Parameters for energyInputExhaustGasLossesCalculate:
     //   excess_air (%), combustion_air_temp (°F), exhaust_gas_temp (°F), total_heat_input (Btu/hr)
     function("energyInputExhaustGasHeatLossCalculate", &calculate);
-    //parameters for availableHeat:
-    //   excess_air (%), combustion_air_temp (°F), exhaust_gas_temp (°F), total_heat_input (Btu/hr)
+    // parameters for availableHeat:
+    //    excess_air (%), combustion_air_temp (°F), exhaust_gas_temp (°F), total_heat_input (Btu/hr)
     function("energyInputAvailableHeat", &availableHeat);
     // parameters for heatDelivered:
     //   available_heat (%), total_heat_input (Btu/hr)
@@ -105,38 +106,67 @@ EMSCRIPTEN_BINDINGS(exhaust_gas_heat_loss_electric_arc_furnace) {
     function("exhaustGasEAFTotalHeatLoss", &totalHeatLoss);
 }
 
-EMSCRIPTEN_BINDINGS(flueGasLosses) {
-    class_<GasCompositions::ProcessHeatPropertiesResults>("ProcessHeatPropertiesResults")
-        .property("stoichAir", &GasCompositions::ProcessHeatPropertiesResults::stoichAir)
-        .property("excessAir", &GasCompositions::ProcessHeatPropertiesResults::excessAir)
-        .property("availableHeat", &GasCompositions::ProcessHeatPropertiesResults::availableHeat)
-        .property("specificHeat", &GasCompositions::ProcessHeatPropertiesResults::specificHeat)
-        .property("density", &GasCompositions::ProcessHeatPropertiesResults::density)
-        .property("flueGasO2", &GasCompositions::ProcessHeatPropertiesResults::flueGasO2);
+EMSCRIPTEN_BINDINGS(gas_composition) {
+    using namespace gas_composition;
 
-    // flueGasByVolumeCalculateHeatingValue
-    // flueGasCalculateExcessAir
-    // flueGasCalculateO2
-    class_<GasCompositions>("GasCompositions")
+    value_object<ProcessHeatProperties>("ProcessHeatProperties")
+        .field("stoichAir", &ProcessHeatProperties::stoich_air)
+        .field("excessAir", &ProcessHeatProperties::excess_air)
+        .field("availableHeat", &ProcessHeatProperties::available_heat)
+        .field("specificHeat", &ProcessHeatProperties::specific_heat)
+        .field("density", &ProcessHeatProperties::total_generated)
+        .field("flueGasO2", &ProcessHeatProperties::flue_gas_o2);
+
+    class_<GasComposition>("GasComposition")
         .constructor<std::string, double, double, double, double, double, double, double, double, double, double,
                      double>()
-        .function("getProcessHeatProperties", &GasCompositions::getProcessHeatProperties)
-        .function("getHeatingValue", &GasCompositions::getHeatingValue)
-        .function("getHeatingValueVolume", &GasCompositions::getHeatingValueVolume)
-        .function("getSpecificGravity", &GasCompositions::getSpecificGravity)
-        .function("calculateExcessAir", &GasCompositions::calculateExcessAir)
-        .function("calculateO2", &GasCompositions::calculateO2)
-        .function("getID", &GasCompositions::getID)
-        .function("getSubstance", &GasCompositions::getSubstance)
-        .function("getGasByVol", &GasCompositions::getGasByVol)
-        .function("setID", &GasCompositions::setID);
+        .function("getProcessHeatProperties", &GasComposition::process_heat_properties)
+        .property("heatingValue", &GasComposition::heating_value)
+        .property("heatingValueVolume", &GasComposition::heating_value_volume)
+        .property("specificGravity", &GasComposition::specific_gravity)
+        .function("calculateExcessAir", &GasComposition::excess_air_from_o2)
+        .function("calculateO2", &GasComposition::o2_percentage_from_excess_air);
 
-    register_vector<GasCompositions>("GasCompositionsV");
+    register_vector<GasComposition>("GasCompositionsV");
+}
 
-    // flueGasLossesByVolume
-    class_<GasFlueGasMaterial>("GasFlueGasMaterial")
-        .constructor<double, double, double, GasCompositions, double>()
-        .function("getHeatLoss", &GasFlueGasMaterial::getHeatLoss);
+EMSCRIPTEN_BINDINGS(gas_flue_gas_material_heat_loss) {
+    using namespace gas_flue_gas_material_heat_loss;
+    function("gasFlueGasMaterialTotalHeatLoss", &totalHeatLoss);
+}
+
+EMSCRIPTEN_BINDINGS(flueGasLosses) {
+    // class_<GasCompositions::ProcessHeatPropertiesResults>("ProcessHeatPropertiesResults")
+    //     .property("stoichAir", &GasCompositions::ProcessHeatPropertiesResults::stoichAir)
+    //     .property("excessAir", &GasCompositions::ProcessHeatPropertiesResults::excessAir)
+    //     .property("availableHeat", &GasCompositions::ProcessHeatPropertiesResults::availableHeat)
+    //     .property("specificHeat", &GasCompositions::ProcessHeatPropertiesResults::specificHeat)
+    //     .property("density", &GasCompositions::ProcessHeatPropertiesResults::density)
+    //     .property("flueGasO2", &GasCompositions::ProcessHeatPropertiesResults::flueGasO2);
+
+    // // flueGasByVolumeCalculateHeatingValue
+    // // flueGasCalculateExcessAir
+    // // flueGasCalculateO2
+    // class_<GasCompositions>("GasCompositions")
+    //     .constructor<std::string, double, double, double, double, double, double, double, double, double, double,
+    //                  double>()
+    //     .function("getProcessHeatProperties", &GasCompositions::getProcessHeatProperties)
+    //     .function("getHeatingValue", &GasCompositions::getHeatingValue)
+    //     .function("getHeatingValueVolume", &GasCompositions::getHeatingValueVolume)
+    //     .function("getSpecificGravity", &GasCompositions::getSpecificGravity)
+    //     .function("calculateExcessAir", &GasCompositions::calculateExcessAir)
+    //     .function("calculateO2", &GasCompositions::calculateO2)
+    //     .function("getID", &GasCompositions::getID)
+    //     .function("getSubstance", &GasCompositions::getSubstance)
+    //     .function("getGasByVol", &GasCompositions::getGasByVol)
+    //     .function("setID", &GasCompositions::setID);
+
+    // register_vector<GasCompositions>("GasCompositionsV");
+
+    // // flueGasLossesByVolume
+    // class_<GasFlueGasMaterial>("GasFlueGasMaterial")
+    //     .constructor<double, double, double, GasCompositions, double>()
+    //     .function("getHeatLoss", &GasFlueGasMaterial::getHeatLoss);
 
     // flueGasLossesByMass
     // flueGasByMassCalculateHeatingValue
