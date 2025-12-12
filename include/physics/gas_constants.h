@@ -93,80 +93,80 @@ inline double specificHeatSO2(double t) {
 inline double specificHeatO2(double t) { return 11.515 - 172 / std::pow(t, 0.5) + 1530 / t; }
 
 // Methane (CH4)
-constexpr double CH4_MOLECULAR_WEIGHT     = 16.042;
-constexpr double CH4_SPECIFIC_WEIGHT      = 0.042417;
-constexpr double CH4_O2_GENERATED         = 64;
-constexpr double CH4_HEATING_VALUE        = 23875;
-constexpr double CH4_HEATING_VALUE_VOLUME = 1012;
-constexpr double CH4_H2O_GENERATED        = 36.032;
-constexpr double CH4_CO2_GENERATED        = 44.01;
+constexpr double kCh4MolecularWeight     = 16.042;
+constexpr double kCh4SpecificWeight      = 0.042417;
+constexpr double kCh4O2Generated         = 64;
+constexpr double kCh4HeatingValue        = 23875;
+constexpr double kCh4HeatingValueVolume = 1012;
+constexpr double kCh4H2oGenerated        = 36.032;
+constexpr double kCh4Co2Generated        = 44.01;
 
 // Ethane (C2H6)
-constexpr double C2H6_MOLECULAR_WEIGHT     = 30.068;
-constexpr double C2H6_SPECIFIC_WEIGHT      = 0.079503;
-constexpr double C2H6_O2_GENERATED         = 112;
-constexpr double C2H6_HEATING_VALUE        = 22323;
-constexpr double C2H6_HEATING_VALUE_VOLUME = 1773;
-constexpr double C2H6_H2O_GENERATED        = 54.048;
-constexpr double C2H6_CO2_GENERATED        = 88.02;
+constexpr double kC2h6MolecularWeight     = 30.068;
+constexpr double kC2h6SpecificWeight      = 0.079503;
+constexpr double kC2h6O2Generated         = 112;
+constexpr double kC2h6HeatingValue        = 22323;
+constexpr double kC2h6HeatingValueVolume = 1773;
+constexpr double kC2h6H2oGenerated        = 54.048;
+constexpr double kC2h6Co2Generated        = 88.02;
 
 // Nitrogen (N2)
-constexpr double N2_MOLECULAR_WEIGHT = 28.016;
-constexpr double N2_SPECIFIC_WEIGHT  = 0.074077;
+constexpr double kN2MolecularWeight = 28.016;
+constexpr double kN2SpecificWeight  = 0.074077;
 
 // Hydrogen (H2)
-constexpr double H2_MOLECULAR_WEIGHT     = 2.016;
-constexpr double H2_SPECIFIC_WEIGHT      = 0.005331;
-constexpr double H2_O2_GENERATED         = 16;
-constexpr double H2_HEATING_VALUE        = 61095;
-constexpr double H2_HEATING_VALUE_VOLUME = 325;
-constexpr double H2_H2O_GENERATED        = 18.016;
+constexpr double kH2MolecularWeight     = 2.016;
+constexpr double kH2SpecificWeight      = 0.005331;
+constexpr double kH2O2Generated         = 16;
+constexpr double kH2HeatingValue        = 61095;
+constexpr double kH2HeatingValueVolume = 325;
+constexpr double kH2H2oGenerated        = 18.016;
 
 // Propane (C3H8)
-constexpr double C3H8_MOLECULAR_WEIGHT     = 44.094;
-constexpr double C3H8_SPECIFIC_WEIGHT      = 0.116589;
-constexpr double C3H8_O2_GENERATED         = 160;
-constexpr double C3H8_HEATING_VALUE        = 21669;
-constexpr double C3H8_HEATING_VALUE_VOLUME = 2523;
-constexpr double C3H8_H2O_GENERATED        = 72.064;
-constexpr double C3H8_CO2_GENERATED        = 132.03;
+constexpr double kC3h8MolecularWeight     = 44.094;
+constexpr double kC3h8SpecificWeight      = 0.116589;
+constexpr double kC3h8O2Generated         = 160;
+constexpr double kC3h8HeatingValue        = 21669;
+constexpr double kC3h8HeatingValueVolume = 2523;
+constexpr double kC3h8H2oGenerated        = 72.064;
+constexpr double kC3h8Co2Generated        = 132.03;
 
 // Butane/Paraffins (C4H10/CnH2n)
-constexpr double C4H10_CNH2N_MOLECULAR_WEIGHT     = 58.12;
-constexpr double C4H10_CNH2N_SPECIFIC_WEIGHT      = 0.153675;
-constexpr double C4H10_CNH2N_O2_GENERATED         = 208;
-constexpr double C4H10_CNH2N_HEATING_VALUE        = 21321;
-constexpr double C4H10_CNH2N_HEATING_VALUE_VOLUME = 3270;
-constexpr double C4H10_CNH2N_H2O_GENERATED        = 90.08;
-constexpr double C4H10_CNH2N_CO2_GENERATED        = 176.04;
+constexpr double kC4h10Cnh2nMolecularWeight     = 58.12;
+constexpr double kC4h10Cnh2nSpecificWeight      = 0.153675;
+constexpr double kC4h10Cnh2nO2Generated         = 208;
+constexpr double kC4h10Cnh2nHeatingValue        = 21321;
+constexpr double kC4h10Cnh2nHeatingValueVolume = 3270;
+constexpr double kC4h10Cnh2nH2oGenerated        = 90.08;
+constexpr double kC4h10Cnh2nCo2Generated        = 176.04;
 
 // Water vapor (H2O)
-constexpr double H2O_MOLECULAR_WEIGHT = 18.016;
-constexpr double H2O_SPECIFIC_WEIGHT  = 0.047636;
-constexpr double H2O_H2O_GENERATED    = 18.016;
+constexpr double kH2oMolecularWeight = 18.016;
+constexpr double kH2oSpecificWeight  = 0.047636;
+constexpr double kH2oH2oGenerated    = 18.016;
 
 // Carbon monoxide (CO)
-constexpr double CO_MOLECULAR_WEIGHT     = 28.01;
-constexpr double CO_SPECIFIC_WEIGHT      = 0.074061;
-constexpr double CO_O2_GENERATED         = 16;
-constexpr double CO_HEATING_VALUE        = 4347;
-constexpr double CO_HEATING_VALUE_VOLUME = 321;
-constexpr double CO_CO2_GENERATED        = 44.01;
+constexpr double kCoMolecularWeight     = 28.01;
+constexpr double kCoSpecificWeight      = 0.074061;
+constexpr double kCoO2Generated         = 16;
+constexpr double kCoHeatingValue        = 4347;
+constexpr double kCoHeatingValueVolume = 321;
+constexpr double kCoCo2Generated        = 44.01;
 
 // Carbon dioxide (CO2)
-constexpr double CO2_MOLECULAR_WEIGHT = 44.01;
-constexpr double CO2_SPECIFIC_WEIGHT  = 0.116367;
-constexpr double CO2_CO2_GENERATED    = 44.01;
+constexpr double kCo2MolecularWeight = 44.01;
+constexpr double kCo2SpecificWeight  = 0.116367;
+constexpr double kCo2Co2Generated    = 44.01;
 
 // Sulphur dioxide (SO2)
-constexpr double SO2_MOLECULAR_WEIGHT = 64.06;
-constexpr double SO2_SPECIFIC_WEIGHT  = 0.169381;
+constexpr double kSo2MolecularWeight = 64.06;
+constexpr double kSo2SpecificWeight  = 0.169381;
 
 // Oxygen (O2)
-constexpr double O2_MOLECULAR_WEIGHT = 32.00;
-constexpr double O2_SPECIFIC_WEIGHT  = 0.084611;
-constexpr double O2_O2_GENERATED     = -32;
+constexpr double kO2MolecularWeight = 32.00;
+constexpr double kO2SpecificWeight  = 0.084611;
+constexpr double kO2O2Generated     = -32;
 
-constexpr double MOLAR_VOLUME_STP_L    = 22.414; // L/mol
-constexpr double AIR_DENSITY_STP_KG_M3 = 1.205; // kg/m3
+constexpr double kMolarVolumeStpL    = 22.414; // L/mol
+constexpr double kAirDensityStpKgM3 = 1.205; // kg/m3
 }; // namespace gas_constants
