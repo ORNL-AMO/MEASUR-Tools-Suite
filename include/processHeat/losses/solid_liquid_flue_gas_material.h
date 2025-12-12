@@ -1,259 +1,105 @@
 #pragma once
 
-#include <string>
+/**
+ * @ingroup solid_liquid_flue_gas_material_calculator
+ * @file solid_liquid_flue_gas_material.h
+ * @authors Gina Accawi, Preston Shires, Omer Aziz, Mark Root
+ *
+ * @copybrief solid_liquid_flue_gas_material
+ */
 
 /**
- * Solid Liquid Flue Gas Material class
- * Contains all of the properties of a solid or liquid flue gas material.
- * Used to calculateThermalResistance the heat loss caused by carrying the products of combustion out of the system
- * through the flue.
+ * @ingroup solid_liquid_flue_gas_material_calculator
+ * @namespace solid_liquid_flue_gas_material
+ * @brief Contains functions for flue gas material calculations.
  */
-class SolidLiquidFlueGasMaterial {
-  public:
-    /**
-     * Constructor for the SolidLiquidFlueGasMaterial losses with all inputs specified
-     *
-     * @param flueGasTemperature - double, Furnace Flue Gas Temperature in °F
-     * @param excessAir - double, Percent Excess Air, expressed in normal percentage (i.e. 9% as 9 instead of 0.09)
-     * @param combustionAirTemperature - double, Combustion Air Temperature in °F
-     * @param fuelTemperature - double, fuel Temperature in °F
-     * @param moistureInAirCombustion - double, moisture in Air Combustion as %
-     * @param ashDischargeTemperature - double, ash discharge Temperature in °F
-     * @param unburnedCarbonInAsh - double, unburned carbon in ash expressed as %
-     * @param carbon, hydrogen, sulphur, inertAsh, o2, moisture, nitrogen content in fuel (as percentage)
-     *
-     * */
-    SolidLiquidFlueGasMaterial(const double flueGasTemperature, const double excessAir,
-                               const double combustionAirTemperature, const double fuelTemperature,
-                               const double moistureInAirCombustion, const double ashDischargeTemperature,
-                               const double unburnedCarbonInAsh, const double carbon, const double hydrogen,
-                               const double sulphur, const double inertAsh, const double o2, const double moisture,
-                               const double nitrogen, const double ambientAirTempF = 60)
-        : flueGasTemperature(flueGasTemperature), excessAir(excessAir / 100.0),
-          combustionAirTemperature(combustionAirTemperature), fuelTemperature(fuelTemperature),
-          moistureInAirCombustion(moistureInAirCombustion), ashDischargeTemperature(ashDischargeTemperature),
-          unburnedCarbonInAsh(unburnedCarbonInAsh / 100.0), carbon(carbon / 100), hydrogen(hydrogen / 100),
-          sulphur(sulphur / 100), inertAsh(inertAsh / 100), o2(o2 / 100), moisture(moisture / 100),
-          nitrogen(nitrogen / 100), ambientAirTempF(ambientAirTempF) {
-        heatingValueFuel = calculateHeatingValueFuel(carbon, hydrogen, sulphur, inertAsh, o2, moisture, nitrogen);
-        stoichometricAir = calculateStoichAirFuel();
-    }
+namespace solid_liquid_flue_gas_material {
 
-    SolidLiquidFlueGasMaterial(std::string substance, const double carbon, const double hydrogen, const double sulphur,
-                               const double inertAsh, const double o2, const double moisture, const double nitrogen)
-        : substance(std::move(substance)), carbon(carbon / 100), hydrogen(hydrogen / 100), sulphur(sulphur / 100),
-          inertAsh(inertAsh / 100), o2(o2 / 100), moisture(moisture / 100), nitrogen(nitrogen / 100) {
-        heatingValueFuel = calculateHeatingValueFuel(carbon, hydrogen, sulphur, inertAsh, o2, moisture, nitrogen);
-        stoichometricAir = calculateStoichAirFuel();
-    }
+/**
+ * @ingroup solid_liquid_flue_gas_material_calculator
+ * @brief Calculates excess air percentage given flue gas O2 levels using iterative algorithm.
+ * @param[in] flue_gas_o2 O2 percentage in flue gas @unitb{\percent}
+ * @param[in] carbon Percent carbon in fuel @unitb{\percent}
+ * @param[in] hydrogen Percent hydrogen in fuel @unitb{\percent}
+ * @param[in] sulphur Percent sulphur in fuel @unitb{\percent}
+ * @param[in] inert_ash Percent inert ash in fuel @unitb{\percent}
+ * @param[in] o2 Percent oxygen in fuel @unitb{\percent}
+ * @param[in] moisture Percent moisture in fuel @unitb{\percent}
+ * @param[in] nitrogen Percent nitrogen in fuel @unitb{\percent}
+ * @param[in] moisture_in_air_combustion Percent moisture in combustion air @unitb{\percent}
+ * @return Calculated excess air percentage @unitb{\unitless}
+ */
+double calculateExcessAirFromFlueGasO2(double flue_gas_o2, double carbon, double hydrogen, double sulphur,
+                                       double inert_ash, double o2, double moisture, double nitrogen,
+                                       double moisture_in_air_combustion);
 
-    SolidLiquidFlueGasMaterial() = default;
+/**
+ * @ingroup solid_liquid_flue_gas_material_calculator
+ * @brief Calculates flue gas O2 fraction given excess air and fuel composition.
+ * @param[in] excess_air Excess air as fraction (e.g. 0.09 for 9%) @unitb{\unitless}
+ * @param[in] carbon Percent carbon in fuel @unitb{\percent}
+ * @param[in] hydrogen Percent hydrogen in fuel @unitb{\percent}
+ * @param[in] sulphur Percent sulphur in fuel @unitb{\percent}
+ * @param[in] inert_ash Percent inert ash in fuel @unitb{\percent}
+ * @param[in] o2 Percent oxygen in fuel @unitb{\percent}
+ * @param[in] moisture Percent moisture in fuel @unitb{\percent}
+ * @param[in] nitrogen Percent nitrogen in fuel @unitb{\percent}
+ * @param[in] moisture_in_air_combustion Percent moisture in combustion air @unitb{\percent}
+ * @return Calculated O2 fraction in flue gas @unitb{\unitless}
+ */
+double calculateFlueGasO2(double excess_air, double carbon, double hydrogen, double sulphur, double inert_ash,
+                          double o2, double moisture, double nitrogen, double moisture_in_air_combustion);
 
-    /**
-     * Calculates excess air percentage given flue gas O2 levels
-     * @return double, calculated excess air percentage
-     */
-    double calculateExcessAirFromFlueGasO2(double flueGasO2, double carbon, double hydrogen, double sulphur,
-                                           double inertAsh, double o2, double moisture, double nitrogen,
-                                           double moistureInAirCombustion);
+/**
+ * @ingroup solid_liquid_flue_gas_material_calculator
+ * @brief Calculates total heat loss for solid/liquid fuel flue gas.
+ * @param[in] flue_gas_temperature Flue gas temperature @unitb{\degreeFahrenheit}
+ * @param[in] excess_air Excess air as fraction (e.g. 0.09 for 9%) @unitb{\unitless}
+ * @param[in] combustion_air_temperature Combustion air temperature @unitb{\degreeFahrenheit}
+ * @param[in] fuel_temperature Fuel temperature @unitb{\degreeFahrenheit}
+ * @param[in] moisture_in_air_combustion Moisture in air combustion @unitb{\percent}
+ * @param[in] ash_discharge_temperature Ash discharge temperature @unitb{\degreeFahrenheit}
+ * @param[in] unburned_carbon_in_ash Unburned carbon in ash as fraction @unitb{\unitless}
+ * @param[in] carbon Percent carbon in fuel @unitb{\percent}
+ * @param[in] hydrogen Percent hydrogen in fuel @unitb{\percent}
+ * @param[in] sulphur Percent sulphur in fuel @unitb{\percent}
+ * @param[in] inert_ash Percent inert ash in fuel @unitb{\percent}
+ * @param[in] o2 Percent oxygen in fuel @unitb{\percent}
+ * @param[in] moisture Percent moisture in fuel @unitb{\percent}
+ * @param[in] nitrogen Percent nitrogen in fuel @unitb{\percent}
+ * @param[in] ambient_air_temp_f Ambient air temperature @unitb{\degreeFahrenheit} (default: 60)
+ * @return Total heat loss @unitb{\btu\per\hour}
+ */
+double totalHeatLoss(
+    const double flue_gas_temperature,
+    const double excess_air,
+    const double combustion_air_temperature,
+    const double fuel_temperature,
+    const double moisture_in_air_combustion,
+    const double ash_discharge_temperature,
+    const double unburned_carbon_in_ash,
+    const double carbon,
+    const double hydrogen,
+    const double sulphur,
+    const double inert_ash,
+    const double o2,
+    const double moisture,
+    const double nitrogen,
+    const double ambient_air_temp_f = 60);
 
-    /**
-     * Calculates excess air percentage given flue gas O2 levels
-     * @return double, calculated excess air percentage
-     */
-    double calculateFlueGasO2(double excessAir, double carbon, double hydrogen, double sulphur, double inertAsh,
-                              double o2, double moisture, double nitrogen, double moistureInAirCombustion);
+/**
+ * @ingroup solid_liquid_flue_gas_material_calculator
+ * @brief Calculates the heating value of the fuel based on composition.
+ * @param[in] carbon Percent carbon in fuel @unitb{\percent}
+ * @param[in] hydrogen Percent hydrogen in fuel @unitb{\percent}
+ * @param[in] sulphur Percent sulphur in fuel @unitb{\percent}
+ * @param[in] inert_ash Percent inert ash in fuel @unitb{\percent}
+ * @param[in] o2 Percent oxygen in fuel @unitb{\percent}
+ * @param[in] moisture Percent moisture in fuel @unitb{\percent}
+ * @param[in] nitrogen Percent nitrogen in fuel @unitb{\percent}
+ * @return Heating value of the fuel @unitb{\btu\per\pound}
+ */
+double calculateHeatingValueFuel(double carbon, double hydrogen, double sulphur, double inert_ash, double o2,
+                                 double moisture, double nitrogen);
 
-    /**
-     * Gets the total heat loss
-     * @return double, total heat loss in btu/hr
-     */
-    double getHeatLoss();
-
-    /**
-     * Gets the ID of substance
-     * @return int, ID of the substance
-     */
-    int getID() const { return id; }
-
-    /**
-     * Gets the name of the substance
-     * @return string, name of the substance
-     */
-    std::string getSubstance() const { return substance; }
-
-    /**
-     * Gets the furnace flue gas temperature
-     * @return double, cfurnace flue gas temperature in °F
-     */
-    double getFlueGasTemperature() const { return flueGasTemperature; }
-
-    /**
-     * Gets the excess air percentage
-     * @return double, excess air as %
-     */
-    double getExcessAir() const { return excessAir; }
-
-    /**
-     * Gets the combustion air temperature
-     * @return double, combustion air temperature in °F
-     */
-    double getCombustionAirTemperature() const { return combustionAirTemperature; }
-
-    /**
-     * Gets the fuel temperature
-     * @return double, fuel temperature in °F
-     */
-    double getFuelTemperature() const { return fuelTemperature; }
-
-    /**
-     * Gets the moisture in air combustion
-     * @return double, moisture in air combustion in %
-     */
-    double getMoistureInAirCombustion() const { return moistureInAirCombustion; }
-
-    /**
-     * Gets the ash discharge temperature
-     * @return double, ash discharge temperature in °F
-     */
-    double getAshDischargeTemperature() const { return ashDischargeTemperature; }
-
-    /**
-     * Gets the unburned carbon in ash
-     * @return double, % of unburned carbon in ash
-     */
-    double getUnburnedCarbonInAsh() const { return unburnedCarbonInAsh; }
-
-    /**
-     * Gets the percentage of carbon uin fuel
-     * @return double, % of carbon in fuel
-     */
-    double getCarbon() const { return carbon; }
-    void   setCarbon(const double carbon) { this->carbon = carbon; }
-
-    /**
-     * Gets the percentage of hydrogen in fuel
-     * @return double, % of hydrogen in fuel
-     */
-    double getHydrogen() const { return hydrogen; }
-    void   setHydrogen(const double hydrogen) { this->hydrogen = hydrogen; }
-
-    /**
-     * Gets the percentage of sulfer in fuel
-     * @return double, % of sulfer in fuel
-     */
-    double getSulphur() const { return sulphur; }
-    void   setSulphur(const double sulphur) { this->sulphur = sulphur; }
-
-    /**
-     * Gets the percentage of inert ash in fuel
-     * @return double, % of inert ash in fuel
-     */
-    double getInertAsh() const { return inertAsh; }
-    void   setInertAsh(const double inertAsh) { this->inertAsh = inertAsh; }
-
-    /**
-     * Gets the percentage of O2 in fuel
-     * @return double, % of O2 in fuel
-     */
-    double getO2() const { return o2; }
-    void   setO2(const double o2) { this->o2 = o2; }
-
-    /**
-     * Gets the percentage of moisture in fuel
-     * @return double, % of moisture in fuel
-     */
-    double getMoisture() const { return moisture; }
-    void   setMoisture(const double moisture) { this->moisture = moisture; }
-
-    /**
-     * Gets the percentage of nitrogen in fuel
-     * @return double, % of nitrogen in fuel
-     */
-    double getNitrogen() const { return nitrogen; }
-    void   setNitrogen(const double nitrogen) { this->nitrogen = nitrogen; }
-
-    /**
-     * Gets the ambientAirTempF
-     * @return double, units F
-     */
-    double getAmbientAirTempF() const { return ambientAirTempF; }
-    /**
-     * Set the ambientAirTempF
-     * @param ambientAirTempF double, units F
-     */
-    void setAmbientAirTempF(const double ambientAirTempF) { this->ambientAirTempF = ambientAirTempF; }
-
-    /**
-     * Sets the ID of substance
-     * @param id int, ID of substance
-     */
-    void setID(int const id) { this->id = id; }
-
-    /**
-     * Sets the name of substance
-     * @param substanceName string, name of substance
-     */
-    void setSubstance(std::string const& substanceName) { substance = substanceName; }
-
-    /**
-     * Sets the furnace flue gas temperature
-     * @param temperature double, flue gas temperature in °F
-     */
-    void setFlueGasTemperature(const double temperature) { flueGasTemperature = temperature; }
-
-    /**
-     * Sets the excess air percentage
-     * @param excessAir double, % of excess air
-     */
-    void setExcessAir(const double excessAir) { this->excessAir = excessAir; }
-
-    /**
-     * Sets the combustion air temperature
-     * @param temperature double, combustion air temperature in °F
-     */
-    void setCombustionAirTemperature(const double temperature) { combustionAirTemperature = temperature; }
-
-    /**
-     * Sets the fuel temperature
-     * @param temperature double, fuel temperature in °F
-     */
-    void setFuelTemperature(const double temperature) { fuelTemperature = temperature; }
-
-    /**
-     * Sets the moisture in air combustion
-     * @param moisture double, moisture in air combustion as %
-     */
-    void setMoistureInAirCombustion(const double moisture) { moistureInAirCombustion = moisture; }
-
-    /**
-     * Sets the ash discharge temperature
-     * @param temperature double, ash discharge temperature in °F
-     */
-    void setAshDischargeTemperature(const double temperature) { ashDischargeTemperature = temperature; }
-
-    /**
-     * Sets the percentage of unburned carbon in ash
-     * @param unburnedCarbon double, % of unburned carbon in ash
-     */
-    void setUnburnedCarbonInAsh(const double unburnedCarbon) { unburnedCarbonInAsh = unburnedCarbon; }
-
-    double calculateHeatingValueFuel(double carbon, double hydrogen, double sulphur, double inertAsh, double o2,
-                                     double moisture, double nitrogen);
-
-    double calculateStoichAirFuel();
-
-    double getStoichAirFuel() const { return stoichometricAir; };
-    double getHeatingValueFuel() const { return heatingValueFuel; };
-
-  private:
-    friend class DefaultData;
-
-    int         id        = 0;
-    std::string substance = "UndefinedSubstance";
-    double      flueGasTemperature, excessAir, combustionAirTemperature;
-    double      fuelTemperature, moistureInAirCombustion, ashDischargeTemperature, unburnedCarbonInAsh;
-    double      carbon, hydrogen, sulphur, inertAsh, o2, moisture, nitrogen;
-    double      heatingValueFuel = 0, stoichometricAir = 0, ambientAirTempF = 60;
-};
-
+}; // namespace solid_liquid_flue_gas_material

@@ -13,13 +13,13 @@
 #include "databases/gas_load_charge_material_data.h"
 #include "databases/lighting_data.h"
 #include "databases/MotorData.h"
-#include "databases/SolidLiquidFlueGasMaterialData.h"
 #include "motorDriven/motor/MotorData.h"
 #include "other/lighting_data.h"
 #include "processHeat/losses/solid_liquid_flue_gas_material.h"
 #include "databases/liquid_load_charge_material_data.h"
 #include "databases/solid_load_charge_material_data.h"
 #include "databases/gas_flue_gas_material_data.h"
+#include "databases/solid_liquid_flue_gas_material_data.h"
 
 using namespace emscripten;
 
@@ -27,7 +27,6 @@ EMSCRIPTEN_BINDINGS(db_class) {
 
     class_<DefaultData>("DefaultData")
         .constructor<>()
-        .function("getSolidLiquidFlueGasMaterials", &DefaultData::getSolidLiquidFlueGasMaterials)
         .function("getMotorData", &DefaultData::getMotorData)
         .function("getCompressorType1Data", &DefaultData::getCompressorType1Data)
         .function("getCompressorType1_GT100kWData", &DefaultData::getCompressorType1_GT100kWData)
@@ -96,4 +95,20 @@ EMSCRIPTEN_BINDINGS(gas_flue_gas_material_data) {
 
     register_vector<GasFlueGasMaterial>("GasFlueGasMaterialV");
     function("getDefaultGasFlueGasMaterials", &get_default_gas_flue_gas_materials);
+}
+
+EMSCRIPTEN_BINDINGS(solid_liquid_flue_gas_material_data) {
+    using namespace solid_liquid_flue_gas_material_data;
+    value_object<SolidLiquidFlueGasMaterial>("SolidLiquidFlueGasMaterial")
+        .field("substance", &SolidLiquidFlueGasMaterial::substance)
+        .field("carbon", &SolidLiquidFlueGasMaterial::carbon)
+        .field("hydrogen", &SolidLiquidFlueGasMaterial::hydrogen)
+        .field("sulfur", &SolidLiquidFlueGasMaterial::sulfur)
+        .field("oxygen", &SolidLiquidFlueGasMaterial::oxygen)
+        .field("nitrogen", &SolidLiquidFlueGasMaterial::nitrogen)
+        .field("moisture", &SolidLiquidFlueGasMaterial::moisture)
+        .field("inertAsh", &SolidLiquidFlueGasMaterial::inert_ash);
+
+    register_vector<SolidLiquidFlueGasMaterial>("SolidLiquidFlueGasMaterialV");
+    function("getDefaultSolidLiquidFlueGasMaterials", &get_default_solid_liquid_flue_gas_materials);
 }

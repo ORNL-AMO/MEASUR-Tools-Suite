@@ -134,43 +134,48 @@ EMSCRIPTEN_BINDINGS(gas_flue_gas_material) {
     function("gasFlueGasMaterialProcessHeatProperties", &processHeatProperties);
 }
 
-EMSCRIPTEN_BINDINGS(flueGasLosses) {
-    // flueGasLossesByMass
-    // flueGasByMassCalculateHeatingValue
-    // flueGasByMassCalculateO2
-    // flueGasByMassCalculateExcessAir
-    class_<SolidLiquidFlueGasMaterial>("SolidLiquidFlueGasMaterial")
-        .constructor<std::string, double, double, double, double, double, double, double>()
-        .constructor<double, double, double, double, double, double, double, double, double, double, double, double,
-                     double, double, double>()
-        .constructor()
-        .function("getHeatLoss", &SolidLiquidFlueGasMaterial::getHeatLoss)
-        .function("calculateHeatingValueFuel", &SolidLiquidFlueGasMaterial::calculateHeatingValueFuel)
-        .function("calculateFlueGasO2", &SolidLiquidFlueGasMaterial::calculateFlueGasO2)
-        .function("calculateExcessAirFromFlueGasO2", &SolidLiquidFlueGasMaterial::calculateExcessAirFromFlueGasO2)
-        .function("getID", &SolidLiquidFlueGasMaterial::getID)
-        .function("getSubstance", &SolidLiquidFlueGasMaterial::getSubstance)
-        .function("getCarbon", &SolidLiquidFlueGasMaterial::getCarbon)
-        .function("getHydrogen", &SolidLiquidFlueGasMaterial::getHydrogen)
-        .function("getSulphur", &SolidLiquidFlueGasMaterial::getSulphur)
-        .function("getInertAsh", &SolidLiquidFlueGasMaterial::getInertAsh)
-        .function("getO2", &SolidLiquidFlueGasMaterial::getO2)
-        .function("getMoisture", &SolidLiquidFlueGasMaterial::getMoisture)
-        .function("getNitrogen", &SolidLiquidFlueGasMaterial::getNitrogen)
-        .function("setID", &SolidLiquidFlueGasMaterial::setID)
-        .function("setSubstance", &SolidLiquidFlueGasMaterial::setSubstance)
-        .function("setCarbon", &SolidLiquidFlueGasMaterial::setCarbon)
-        .function("setHydrogen", &SolidLiquidFlueGasMaterial::setHydrogen)
-        .function("setSulphur", &SolidLiquidFlueGasMaterial::setSulphur)
-        .function("setInertAsh", &SolidLiquidFlueGasMaterial::setInertAsh)
-        .function("setO2", &SolidLiquidFlueGasMaterial::setO2)
-        .function("setMoisture", &SolidLiquidFlueGasMaterial::setMoisture)
-        .function("setNitrogen", &SolidLiquidFlueGasMaterial::setNitrogen)
-        .function("getAmbientAirTempF", &SolidLiquidFlueGasMaterial::getAmbientAirTempF)
-        .function("setAmbientAirTempF", &SolidLiquidFlueGasMaterial::setAmbientAirTempF)
-        .function("getHeatingValueFuel", &SolidLiquidFlueGasMaterial::getHeatingValueFuel);
+EMSCRIPTEN_BINDINGS(solid_liquid_flue_gas_material) {
+    // // flueGasLossesByMass
+    // // flueGasByMassCalculateHeatingValue
+    // // flueGasByMassCalculateO2
+    // // flueGasByMassCalculateExcessAir
+    // class_<SolidLiquidFlueGasMaterial>("SolidLiquidFlueGasMaterial")
+    //     .constructor<std::string, double, double, double, double, double, double, double>()
+    //     .constructor<double, double, double, double, double, double, double, double, double, double, double, double,
+    //                  double, double, double>()
+    //     .constructor()
+    //     .function("getHeatLoss", &SolidLiquidFlueGasMaterial::getHeatLoss)
+    //     .function("calculateHeatingValueFuel", &SolidLiquidFlueGasMaterial::calculateHeatingValueFuel)
+    //     .function("calculateFlueGasO2", &SolidLiquidFlueGasMaterial::calculateFlueGasO2)
+    //     .function("calculateExcessAirFromFlueGasO2", &SolidLiquidFlueGasMaterial::calculateExcessAirFromFlueGasO2)
+    //     .function("getID", &SolidLiquidFlueGasMaterial::getID)
+    //     .function("getSubstance", &SolidLiquidFlueGasMaterial::getSubstance)
+    //     .function("getCarbon", &SolidLiquidFlueGasMaterial::getCarbon)
+    //     .function("getHydrogen", &SolidLiquidFlueGasMaterial::getHydrogen)
+    //     .function("getSulphur", &SolidLiquidFlueGasMaterial::getSulphur)
+    //     .function("getInertAsh", &SolidLiquidFlueGasMaterial::getInertAsh)
+    //     .function("getO2", &SolidLiquidFlueGasMaterial::getO2)
+    //     .function("getMoisture", &SolidLiquidFlueGasMaterial::getMoisture)
+    //     .function("getNitrogen", &SolidLiquidFlueGasMaterial::getNitrogen)
+    //     .function("setID", &SolidLiquidFlueGasMaterial::setID)
+    //     .function("setSubstance", &SolidLiquidFlueGasMaterial::setSubstance)
+    //     .function("setCarbon", &SolidLiquidFlueGasMaterial::setCarbon)
+    //     .function("setHydrogen", &SolidLiquidFlueGasMaterial::setHydrogen)
+    //     .function("setSulphur", &SolidLiquidFlueGasMaterial::setSulphur)
+    //     .function("setInertAsh", &SolidLiquidFlueGasMaterial::setInertAsh)
+    //     .function("setO2", &SolidLiquidFlueGasMaterial::setO2)
+    //     .function("setMoisture", &SolidLiquidFlueGasMaterial::setMoisture)
+    //     .function("setNitrogen", &SolidLiquidFlueGasMaterial::setNitrogen)
+    //     .function("getAmbientAirTempF", &SolidLiquidFlueGasMaterial::getAmbientAirTempF)
+    //     .function("setAmbientAirTempF", &SolidLiquidFlueGasMaterial::setAmbientAirTempF)
+    //     .function("getHeatingValueFuel", &SolidLiquidFlueGasMaterial::getHeatingValueFuel);
 
-    register_vector<SolidLiquidFlueGasMaterial>("SolidLiquidFlueGasMaterialV");
+    // register_vector<SolidLiquidFlueGasMaterial>("SolidLiquidFlueGasMaterialV");
+    using namespace solid_liquid_flue_gas_material;
+    function("calculateExcessAirFromFlueGasO2", &calculateExcessAirFromFlueGasO2);
+    function("calculateFlueGasO2", &calculateFlueGasO2);
+    function("solidLiquidFlueGasMaterialTotalHeatLoss", &totalHeatLoss);
+    function("calculateHeatingValueFuel", &calculateHeatingValueFuel);
 }
 
 // gasCoolingLosses

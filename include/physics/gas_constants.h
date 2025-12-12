@@ -2,6 +2,21 @@
 #include <cmath>
 namespace gas_constants {
 
+// Shared combustion/stoichiometry constants
+constexpr double kCToCO2 = 44.0 / 12.0;
+constexpr double kHToH2O = 9.0;
+constexpr double kSToSO2 = 2.0;
+constexpr double kCToO2 = 32.0 / 12.0;
+constexpr double kHToO2 = 8.0;
+constexpr double kSToO2 = 1.0;
+constexpr double kN2O2Ratio = 76.85 / 23.15;
+constexpr double kSO2Cp = 17.472;
+constexpr double kSO2Mw = 64.06;
+constexpr double kO2Mw = 32.0;
+constexpr double kN2Mw = 28.016;
+constexpr double kCO2Mw = 44.01;
+constexpr double kH2OMw = 18.016;
+
 /**
  * @brief Specific heat for methane (CH4) as a function of temperature (°F).
  * @details Cp = 4.23 + 0.01177 * T @unitb{Btu/(lb·°F)}
