@@ -172,9 +172,43 @@ EMSCRIPTEN_BINDINGS(solid_liquid_flue_gas_material) {
 
     // register_vector<SolidLiquidFlueGasMaterial>("SolidLiquidFlueGasMaterialV");
     using namespace solid_liquid_flue_gas_material;
+    // Parameters for calculateExcessAirFromFlueGasO2:
+    //   flue_gas_o2 (percent, e.g., 5 for 5%)
+    //   excess_air (fraction, e.g., 0.2 for 20%)
     function("calculateExcessAirFromFlueGasO2", &calculateExcessAirFromFlueGasO2);
+    // Parameters for calculateFlueGasO2:
+    //   excess_air (fraction, e.g., 0.2 for 20%)
+    //   carbon (percent, e.g., 85 for 85%)
+    //   hydrogen (percent)
+    //   sulphur (percent)
+    //   inert_ash (percent)
+    //   o2 (percent)
+    //   moisture (percent)
+    //   nitrogen (percent)
     function("calculateFlueGasO2", &calculateFlueGasO2);
+    // Parameters for solidLiquidFlueGasMaterialTotalHeatLoss:
+    //   flue_gas_temp (°F)
+    //   excess_air (fraction, e.g., 0.2 for 20%)
+    //   carbon (percent)
+    //   hydrogen (percent)
+    //   sulphur (percent)
+    //   inert_ash (percent)
+    //   o2 (percent)
+    //   moisture (percent)
+    //   nitrogen (percent)
+    //   combustion_air_temp (°F)
+    //   fuel_temp (°F)
+    //   ambient_air_temp (°F)
+    //   heating_value_fuel (Btu/lb)
     function("solidLiquidFlueGasMaterialTotalHeatLoss", &totalHeatLoss);
+    // Parameters for calculateHeatingValueFuel:
+    //   carbon (percent)
+    //   hydrogen (percent)
+    //   sulphur (percent)
+    //   inert_ash (percent)
+    //   o2 (percent)
+    //   moisture (percent)
+    //   nitrogen (percent)
     function("calculateHeatingValueFuel", &calculateHeatingValueFuel);
 }
 
