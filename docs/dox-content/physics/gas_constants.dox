@@ -1,0 +1,103 @@
+/**
+ * @defgroup gas_constants Gas Constants
+ * @ingroup physics
+ * @brief Thermodynamic and stoichiometric constants for combustion and flue gas calculations.
+ * @details
+ * This page documents the physical and chemical constants used in combustion, flue gas, and process heat calculations. It includes:
+ *
+ * - **Stoichiometric Ratios:** Conversion factors for elemental combustion (e.g., C to CO2, H to H2O).
+ * - **Molecular and Specific Weights:** Standard values for major gases and fuels.
+ * - **Specific Heat Formulas:** Temperature-dependent Cp equations for key gases and fuels.
+ * - **Combustion Product Yields:** Constants for O2, CO2, H2O, SO2, and heating values per fuel.
+ *
+ * All constants are provided in SI or customary engineering units, with units annotated for clarity. These values are used throughout the MEASUR Tools Suite for energy, mass balance, and flue gas property calculations.
+ *
+ * @heading{Specific Heat Capacity Formulas}
+ * The following temperature-dependent specific heat (Cp) equations are used for major gases (T in \unitb{\degreeFahrenheit}):
+ *
+* @formula{cp-ch4; \text{Methane (CH}_4\text{):}\quad C_p = 4.23 + 0.01177 T}
+* @formula{cp-c2h6; \text{Ethane (C}_2\text{H}_6\text{):}\quad C_p = 4.04 + 0.01636 T}
+* @formula{cp-n2; \text{Nitrogen (N}_2\text{):}\quad C_p = 9.47 - \frac{3470}{T} + \frac{1.07\times10^6}{T^2}}
+* @formula{cp-h2; \text{Hydrogen (H}_2\text{):}\quad C_p = 5.76 + 0.578 \frac{T}{1000} + \frac{20}{\sqrt{T}}}
+* @formula{cp-c3h8; \text{Propane (C}_3\text{H}_8\text{):}\quad C_p = 17.108}
+* @formula{cp-c4h10-cnh2n; \text{Butane/Paraffins (C}_4\text{H}_{10}/\text{C}_n\text{H}_{2n}\text{):}\quad C_p = 22.202}
+* @formula{cp-h2o; \text{Water vapor (H}_2\text{O):}\quad C_p = 19.86 - \frac{597}{\sqrt{T}} + \frac{7500}{T}}
+* @formula{cp-co; \text{Carbon monoxide (CO):}\quad C_p = 9.46 - \frac{3290}{T} + \frac{1.07\times10^6}{T^2}}
+* @formula{cp-co2; \text{Carbon dioxide (CO}_2\text{):}\quad C_p = 16.2 - \frac{6530}{T} + \frac{1.41\times10^6}{T^2}}
+* @formula{cp-so2; \text{Sulphur dioxide (SO}_2\text{):}\quad C_p = 17.472}
+* @formula{cp-o2; \text{Oxygen (O}_2\text{):}\quad C_p = 11.515 - \frac{172}{\sqrt{T}} + \frac{1530}{T}}
+  * @heading{Constant Values Reference}
+ * The following table lists the key constants, their values, and units as used in the MEASUR Tools Suite:
+ *
+* | Constant Name                | Description                                      | Value         | Unit                                 |
+* |------------------------------|--------------------------------------------------|--------------|--------------------------------------|
+* | kCToCO2                      | Mass ratio: C to CO2 produced            | 3.6667       | @unitb{\pound\per\pound}            |
+* | kHToH2O                      | Mass ratio: H to H2O produced            | 9.0          | @unitb{\pound\per\pound}            |
+* | kSToSO2                      | Mass ratio: S to SO2 produced            | 2.0          | @unitb{\pound\per\pound}            |
+* | kCToO2                       | Mass ratio: C to O2 required             | 2.6667       | @unitb{\pound\per\pound}            |
+* | kHToO2                       | Mass ratio: H to O2 required             | 8.0          | @unitb{\pound\per\pound}            |
+* | kSToO2                       | Mass ratio: S to O2 required             | 1.0          | @unitb{\pound\per\pound}            |
+* | kN2O2Ratio                   | N2:O2 ratio in air                       | 3.318        | @unitb{\unitless}                    |
+* | kSO2Cp                       | Specific heat of SO2                     | 17.472       | @unitb{\btu\per\pound\degreeFahrenheit} |
+* | kSO2Mw                       | Molecular weight of SO2                  | 64.06        | @unitb{\pound\per\lbmol}            |
+* | kO2Mw                        | Molecular weight of O2                   | 32.0         | @unitb{\pound\per\lbmol}            |
+* | kN2Mw                        | Molecular weight of N2                   | 28.016       | @unitb{\pound\per\lbmol}            |
+* | kCO2Mw                       | Molecular weight of CO2                  | 44.01        | @unitb{\pound\per\lbmol}            |
+* | kH2OMw                       | Molecular weight of H2O                  | 18.016       | @unitb{\pound\per\lbmol}            |
+* | kMolarVolumeStpL             | Molar volume at STP                      | 22.414       | L/mol                                |
+* | kAirDensityStpKgM3           | Air density at STP                       | 1.205        | kg/m^3                               |
+* | kCh4MolecularWeight          | Methane molecular weight                 | 16.042       | @unitb{\pound\per\lbmol}            |
+* | kCh4SpecificWeight           | Methane specific weight                  | 0.042417     | @unitb{\pound\per\cubicFoot}        |
+* | kCh4O2Generated              | O2 generated per lbmol CH4               | 64           | @unitb{\pound\per\lbmol}            |
+* | kCh4HeatingValue             | Methane higher heating value             | 23875        | @unitb{\btu\per\pound}              |
+* | kCh4HeatingValueVolume       | Methane heating value per volume         | 1012         | @unitb{\btu\per\cubicFoot}          |
+* | kCh4H2oGenerated             | H2O generated per lbmol CH4              | 36.032       | @unitb{\pound\per\lbmol}            |
+* | kCh4Co2Generated             | CO2 generated per lbmol CH4              | 44.01        | @unitb{\pound\per\lbmol}            |
+* | kC2h6MolecularWeight         | Ethane molecular weight                  | 30.068       | @unitb{\pound\per\lbmol}            |
+* | kC2h6SpecificWeight          | Ethane specific weight                   | 0.079503     | @unitb{\pound\per\cubicFoot}        |
+* | kC2h6O2Generated             | O2 generated per lbmol C2H6              | 112          | @unitb{\pound\per\lbmol}            |
+* | kC2h6HeatingValue            | Ethane higher heating value              | 22323        | @unitb{\btu\per\pound}              |
+* | kC2h6HeatingValueVolume      | Ethane heating value per volume          | 1773         | @unitb{\btu\per\cubicFoot}          |
+* | kC2h6H2oGenerated            | H2O generated per lbmol C2H6             | 54.048       | @unitb{\pound\per\lbmol}            |
+* | kC2h6Co2Generated            | CO2 generated per lbmol C2H6             | 88.02        | @unitb{\pound\per\lbmol}            |
+* | kN2MolecularWeight           | Nitrogen molecular weight                | 28.016       | @unitb{\pound\per\lbmol}            |
+* | kN2SpecificWeight            | Nitrogen specific weight                 | 0.074077     | @unitb{\pound\per\cubicFoot}        |
+* | kH2MolecularWeight           | Hydrogen molecular weight                | 2.016        | @unitb{\pound\per\lbmol}            |
+* | kH2SpecificWeight            | Hydrogen specific weight                 | 0.005331     | @unitb{\pound\per\cubicFoot}        |
+* | kH2O2Generated               | O2 generated per lbmol H2                | 16           | @unitb{\pound\per\lbmol}            |
+* | kH2HeatingValue              | Hydrogen higher heating value            | 61095        | @unitb{\btu\per\pound}              |
+* | kH2HeatingValueVolume        | Hydrogen heating value per volume        | 325          | @unitb{\btu\per\cubicFoot}          |
+* | kH2H2oGenerated              | H2O generated per lbmol H2               | 18.016       | @unitb{\pound\per\lbmol}            |
+* | kC3h8MolecularWeight         | Propane molecular weight                 | 44.094       | @unitb{\pound\per\lbmol}            |
+* | kC3h8SpecificWeight          | Propane specific weight                  | 0.116589     | @unitb{\pound\per\cubicFoot}        |
+* | kC3h8O2Generated             | O2 generated per lbmol C3H8              | 160          | @unitb{\pound\per\lbmol}            |
+* | kC3h8HeatingValue            | Propane higher heating value             | 21669        | @unitb{\btu\per\pound}              |
+* | kC3h8HeatingValueVolume      | Propane heating value per volume         | 2523         | @unitb{\btu\per\cubicFoot}          |
+* | kC3h8H2oGenerated            | H2O generated per lbmol C3H8             | 72.064       | @unitb{\pound\per\lbmol}            |
+* | kC3h8Co2Generated            | CO2 generated per lbmol C3H8             | 132.03       | @unitb{\pound\per\lbmol}            |
+* | kC4h10Cnh2nMolecularWeight   | Butane/paraffins molecular weight        | 58.12        | @unitb{\pound\per\lbmol}            |
+* | kC4h10Cnh2nSpecificWeight    | Butane/paraffins specific weight         | 0.153675     | @unitb{\pound\per\cubicFoot}        |
+* | kC4h10Cnh2nO2Generated       | O2 generated per lbmol C4H10/CnH2n       | 208          | @unitb{\pound\per\lbmol}            |
+* | kC4h10Cnh2nHeatingValue      | Butane/paraffins higher heating value    | 21321        | @unitb{\btu\per\pound}              |
+* | kC4h10Cnh2nHeatingValueVolume | Butane/paraffins heating value per volume | 3270        | @unitb{\btu\per\cubicFoot}          |
+* | kC4h10Cnh2nH2oGenerated      | H2O generated per lbmol C4H10/CnH2n      | 90.08        | @unitb{\pound\per\lbmol}            |
+* | kC4h10Cnh2nCo2Generated      | CO2 generated per lbmol C4H10/CnH2n      | 176.04       | @unitb{\pound\per\lbmol}            |
+* | kH2oMolecularWeight          | Water vapor molecular weight             | 18.016       | @unitb{\pound\per\lbmol}            |
+* | kH2oSpecificWeight           | Water vapor specific weight              | 0.047636     | @unitb{\pound\per\cubicFoot}        |
+* | kH2oH2oGenerated             | H2O generated per lbmol H2O              | 18.016       | @unitb{\pound\per\lbmol}            |
+* | kCoMolecularWeight           | Carbon monoxide molecular weight         | 28.01        | @unitb{\pound\per\lbmol}            |
+* | kCoSpecificWeight            | Carbon monoxide specific weight          | 0.074061     | @unitb{\pound\per\cubicFoot}        |
+* | kCoO2Generated               | O2 generated per lbmol CO                | 16           | @unitb{\pound\per\lbmol}            |
+* | kCoHeatingValue              | Carbon monoxide higher heating value     | 4347         | @unitb{\btu\per\pound}              |
+* | kCoHeatingValueVolume        | Carbon monoxide heating value per volume | 321          | @unitb{\btu\per\cubicFoot}          |
+* | kCoCo2Generated              | CO2 generated per lbmol CO               | 44.01        | @unitb{\pound\per\lbmol}            |
+* | kCo2MolecularWeight          | Carbon dioxide molecular weight          | 44.01        | @unitb{\pound\per\lbmol}            |
+* | kCo2SpecificWeight           | Carbon dioxide specific weight           | 0.116367     | @unitb{\pound\per\cubicFoot}        |
+* | kCo2Co2Generated             | CO2 generated per lbmol CO2              | 44.01        | @unitb{\pound\per\lbmol}            |
+* | kSo2MolecularWeight          | Sulphur dioxide molecular weight         | 64.06        | @unitb{\pound\per\lbmol}            |
+* | kSo2SpecificWeight           | Sulphur dioxide specific weight          | 0.169381     | @unitb{\pound\per\cubicFoot}        |
+* | kO2MolecularWeight           | Oxygen molecular weight                  | 32.00        | @unitb{\pound\per\lbmol}            |
+* | kO2SpecificWeight            | Oxygen specific weight                   | 0.084611     | @unitb{\pound\per\cubicFoot}        |
+* | O2_O2_GENERATED              | O2 generated per lbmol O2 | -32          | @unitb{\pound\per\lbmol}            |
+ *
+ */

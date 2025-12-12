@@ -176,65 +176,65 @@ class GasComposition {
 
   private:
     void setCH4(double composition_percent, double composition_by_volume) {
-        ch4 = GasProperties(specificHeatCH4, CH4_MOLECULAR_WEIGHT, CH4_SPECIFIC_WEIGHT, composition_percent,
-                            composition_by_volume, CH4_O2_GENERATED, CH4_HEATING_VALUE, CH4_HEATING_VALUE_VOLUME,
-                            CH4_H2O_GENERATED, CH4_CO2_GENERATED);
+        ch4 = GasProperties(specificHeatCH4, kCh4MolecularWeight, kCh4SpecificWeight, composition_percent,
+                    composition_by_volume, kCh4O2Generated, kCh4HeatingValue, kCh4HeatingValueVolume,
+                    kCh4H2oGenerated, kCh4Co2Generated);
     }
 
     void setC2H6(double composition_percent, double composition_by_volume) {
-        c2h6 = GasProperties(specificHeatC2H6, C2H6_MOLECULAR_WEIGHT, C2H6_SPECIFIC_WEIGHT, composition_percent,
-                             composition_by_volume, C2H6_O2_GENERATED, C2H6_HEATING_VALUE, C2H6_HEATING_VALUE_VOLUME,
-                             C2H6_H2O_GENERATED, C2H6_CO2_GENERATED);
+        c2h6 = GasProperties(specificHeatC2H6, kC2h6MolecularWeight, kC2h6SpecificWeight, composition_percent,
+                     composition_by_volume, kC2h6O2Generated, kC2h6HeatingValue, kC2h6HeatingValueVolume,
+                     kC2h6H2oGenerated, kC2h6Co2Generated);
     }
 
     void setN2(double composition_percent, double composition_by_volume) {
-        n2 = GasProperties(specificHeatN2, N2_MOLECULAR_WEIGHT, N2_SPECIFIC_WEIGHT, composition_percent,
-                           composition_by_volume, 0, 0, 0, 0, 0);
+        n2 = GasProperties(specificHeatN2, kN2MolecularWeight, kN2SpecificWeight, composition_percent,
+                   composition_by_volume, 0, 0, 0, 0, 0);
     }
 
     void setH2(double composition_percent, double composition_by_volume) {
-        h2 = GasProperties(specificHeatH2, H2_MOLECULAR_WEIGHT, H2_SPECIFIC_WEIGHT, composition_percent,
-                           composition_by_volume, H2_O2_GENERATED, H2_HEATING_VALUE, H2_HEATING_VALUE_VOLUME,
-                           H2_H2O_GENERATED, 0);
+        h2 = GasProperties(specificHeatH2, kH2MolecularWeight, kH2SpecificWeight, composition_percent,
+                   composition_by_volume, kH2O2Generated, kH2HeatingValue, kH2HeatingValueVolume,
+                   kH2H2oGenerated, 0);
     }
 
     void setC3H8(double composition_percent, double composition_by_volume) {
-        c3h8 = GasProperties(specificHeatC3H8, C3H8_MOLECULAR_WEIGHT, C3H8_SPECIFIC_WEIGHT, composition_percent,
-                             composition_by_volume, C3H8_O2_GENERATED, C3H8_HEATING_VALUE, C3H8_HEATING_VALUE_VOLUME,
-                             C3H8_H2O_GENERATED, C3H8_CO2_GENERATED);
+        c3h8 = GasProperties(specificHeatC3H8, kC3h8MolecularWeight, kC3h8SpecificWeight, composition_percent,
+                     composition_by_volume, kC3h8O2Generated, kC3h8HeatingValue, kC3h8HeatingValueVolume,
+                     kC3h8H2oGenerated, kC3h8Co2Generated);
     }
 
     void setC4H10CnH2n(double composition_percent, double composition_by_volume) {
-        c4h10_cnh2n = GasProperties(specificHeatC4H10CnH2n, C4H10_CNH2N_MOLECULAR_WEIGHT, C4H10_CNH2N_SPECIFIC_WEIGHT,
-                                    composition_percent, composition_by_volume, C4H10_CNH2N_O2_GENERATED,
-                                    C4H10_CNH2N_HEATING_VALUE, C4H10_CNH2N_HEATING_VALUE_VOLUME,
-                                    C4H10_CNH2N_H2O_GENERATED, C4H10_CNH2N_CO2_GENERATED);
+        c4h10_cnh2n = GasProperties(specificHeatC4H10CnH2n, kC4h10Cnh2nMolecularWeight, kC4h10Cnh2nSpecificWeight,
+                        composition_percent, composition_by_volume, kC4h10Cnh2nO2Generated,
+                        kC4h10Cnh2nHeatingValue, kC4h10Cnh2nHeatingValueVolume,
+                        kC4h10Cnh2nH2oGenerated, kC4h10Cnh2nCo2Generated);
     }
 
     void setH2O(double composition_percent, double composition_by_volume) {
-        h2o = GasProperties(specificHeatH2O, H2O_MOLECULAR_WEIGHT, H2O_SPECIFIC_WEIGHT, composition_percent,
-                            composition_by_volume, 0, 0, 0, H2O_H2O_GENERATED, 0);
+        h2o = GasProperties(specificHeatH2O, kH2oMolecularWeight, kH2oSpecificWeight, composition_percent,
+                    composition_by_volume, 0, 0, 0, kH2oH2oGenerated, 0);
     }
 
     void setCO(double composition_percent, double composition_by_volume) {
-        co = GasProperties(specificHeatCO, CO_MOLECULAR_WEIGHT, CO_SPECIFIC_WEIGHT, composition_percent,
-                           composition_by_volume, CO_O2_GENERATED, CO_HEATING_VALUE, CO_HEATING_VALUE_VOLUME, 0,
-                           CO_CO2_GENERATED);
+        co = GasProperties(specificHeatCO, kCoMolecularWeight, kCoSpecificWeight, composition_percent,
+                   composition_by_volume, kCoO2Generated, kCoHeatingValue, kCoHeatingValueVolume, 0,
+                   kCoCo2Generated);
     }
 
     void setCO2(double composition_percent, double composition_by_volume) {
-        co2 = GasProperties(specificHeatCO2, CO2_MOLECULAR_WEIGHT, CO2_SPECIFIC_WEIGHT, composition_percent,
-                            composition_by_volume, 0, 0, 0, 0, CO2_CO2_GENERATED);
+        co2 = GasProperties(specificHeatCO2, kCo2MolecularWeight, kCo2SpecificWeight, composition_percent,
+                    composition_by_volume, 0, 0, 0, 0, kCo2Co2Generated);
     }
 
     void setSO2(double composition_percent, double composition_by_volume) {
-        so2 = GasProperties(specificHeatSO2, SO2_MOLECULAR_WEIGHT, SO2_SPECIFIC_WEIGHT, composition_percent,
-                            composition_by_volume, 0, 0, 0, 0, 0);
+        so2 = GasProperties(specificHeatSO2, kSo2MolecularWeight, kSo2SpecificWeight, composition_percent,
+                    composition_by_volume, 0, 0, 0, 0, 0);
     }
 
     void setO2(double composition_percent, double composition_by_volume) {
-        o2 = GasProperties(specificHeatO2, O2_MOLECULAR_WEIGHT, O2_SPECIFIC_WEIGHT, composition_percent,
-                           composition_by_volume, O2_O2_GENERATED, 0, 0, 0, 0);
+        o2 = GasProperties(specificHeatO2, kO2MolecularWeight, kO2SpecificWeight, composition_percent,
+                   composition_by_volume, kO2O2Generated, 0, 0, 0, 0);
     }
 
     void                 setTotalCompositionWeight();
