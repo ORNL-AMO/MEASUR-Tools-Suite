@@ -10,7 +10,9 @@
  *
  */
 
-#include "losses/gas_flue_gas_material.h"
+#include "physics/gas_composition.h"
+#include "processHeat/losses/gas_flue_gas_material.h"
+#include "processHeat/losses/gas_flue_gas_material.h"
 
 class AirWaterCoolingUsingFlue {
   public:
@@ -69,22 +71,22 @@ class AirWaterCoolingUsingFlue {
      * @param sensibleHeatRecovery double, units MM Btu / hr
      *
      */
-    Output calculate(GasCompositions gasCompositions, const double heatInput, const double tempFlueGasInF,
-                     const double tempFlueGasOutF, const double tempCombAirF, const double fuelTempF,
-                     const double percO2, const double ambientAirTempF = 60, const double moistCombAir = 0) {
+    Output calculate(gas_composition::GasComposition gasCompositions, const double heatInput,
+                     const double tempFlueGasInF, const double tempFlueGasOutF, const double tempCombAirF,
+                     const double fuelTempF, const double percO2, const double ambientAirTempF = 60,
+                     const double moistCombAir = 0) {
 
-        const auto   res = gasCompositions.getProcessHeatProperties(tempFlueGasInF, percO2, tempCombAirF, fuelTempF,
-                                                                    ambientAirTempF, moistCombAir);
+        gas_flue_gas_material::ProcessHeatProperties res = gas_flue_gas_material::processHeatProperties(
+            gasCompositions, tempFlueGasInF, percO2, tempCombAirF, fuelTempF, ambientAirTempF, moistCombAir);
         const double fracCondensed =
             (1 - (0.0000009 * pow(tempFlueGasOutF, 3.0136)) / (2.8082 - 0.1168 * percO2 * 100));
         const double effLH = (fracCondensed * 0.00935 * (1087 /*+ 0.467 * tempFlueGasOutF - tempCombAirF*/)) / 100;
         const double flowFlueGas =
-            heatInput * (0.0763 * (0.6 + (res.stoichAir * (1 + res.excessAir)))) * 1000000 / res.heatValueFuel;
+            heatInput * (0.0763 * (0.6 + (res.stoich_air * (1 + res.excess_air)))) * 1000000 / res.heat_value_fuel;
         const double sensibleHeatRecovery =
-            res.specificHeat * (tempFlueGasInF - tempFlueGasOutF) * flowFlueGas / 1000000;
+            res.specific_heat * (tempFlueGasInF - tempFlueGasOutF) * flowFlueGas / 1000000;
 
-        return Output(res.excessAir, flowFlueGas, res.specificHeat, fracCondensed, res.availableHeat,
-                      res.availableHeat + effLH, effLH, heatInput * effLH, sensibleHeatRecovery);
+        return Output(res.excess_air, flowFlueGas, res.specific_heat, fracCondensed, res.available_heat,
+                      res.available_heat + effLH, effLH, heatInput * effLH, sensibleHeatRecovery);
     }
 };
-

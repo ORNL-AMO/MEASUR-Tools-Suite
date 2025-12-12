@@ -11,24 +11,29 @@
 
 #include "processHeat/WaterHeatingUsingFlue.h"
 
+#include "physics/gas_composition.h"
 #include "steamModeler/SaturatedProperties.h"
 #include "steamModeler/SteamProperties.h"
+#include "processHeat/losses/gas_flue_gas_material.h"
 
-WaterHeatingUsingFlue::Output WaterHeatingUsingFlue::calculate(
-    GasCompositions gasCompositions, const double tempFlueGasF, const double percO2, const double tempCombAirF,
-    const double moistCombAir, const double ratingBoiler, const double prSteam, const double tempAmbientAirF,
-    const double tempSteamF, const double tempFW, const double percBlowDown, const double effHX, const double opHours,
-    const double costFuel, const double hhvFuel, const SteamCondition condSteam, const double fuelTempF) {
+WaterHeatingUsingFlue::Output
+WaterHeatingUsingFlue::calculate(gas_composition::GasComposition gasCompositions, const double tempFlueGasF,
+                                 const double percO2, const double tempCombAirF, const double moistCombAir,
+                                 const double ratingBoiler, const double prSteam, const double tempAmbientAirF,
+                                 const double tempSteamF, const double tempFW, const double percBlowDown,
+                                 const double effHX, const double opHours, const double costFuel, const double hhvFuel,
+                                 const SteamCondition condSteam, const double fuelTempF) {
     // Temp Conversion
     const double tempSteamK   = TempFtoK(tempSteamF);
     const double tempFWK      = TempFtoK(tempFW);
     const double tempFlueGasK = TempFtoK(tempFlueGasF);
 
-    const auto   res       = gasCompositions.getProcessHeatProperties(tempFlueGasF, percO2, tempCombAirF, fuelTempF,
-                                                                      tempAmbientAirF, moistCombAir);
-    const double effBoiler = res.availableHeat;
-    const double specificHeatFG = 4.1868 * res.specificHeat;
-    const double flowFlueGas    = 16.018463 * res.density * ratingBoiler * 1000000 / hhvFuel;
+    gas_flue_gas_material::ProcessHeatProperties res = gas_flue_gas_material::processHeatProperties(
+        gasCompositions, tempFlueGasF, percO2, tempCombAirF, fuelTempF, tempAmbientAirF, moistCombAir);
+    const double effBoiler      = res.available_heat;
+    const double specificHeatFG = 4.1868 * res.specific_heat;
+    //TODO: CHECK DENSITY VS TOTAL GENERATED
+    const double flowFlueGas    = 16.018463 * res.total_generated * ratingBoiler * 1000000 / hhvFuel;
 
     const double enthalpySteam =
         condSteam == SteamCondition::Saturated

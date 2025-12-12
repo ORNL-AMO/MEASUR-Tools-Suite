@@ -26,6 +26,7 @@
  * - @ref waste_water_assessments
  * - @ref treasure_hunt_calculators
  * - @ref databases
+ * - @ref physics
  *
  * @defgroup compressed_air_assessments Compressed Air Assessments
  *
@@ -130,4 +131,8 @@
  *
  * These curated datasets ensure that users have access to reliable, industry-standard values for common materials and equipment, streamlining the setup and analysis process for a wide range of calculators and assessment tools.
  *
+ *
+ * @defgroup physics Physics
+ * 
+ * A collection physical constants, gas property models, and calculation utilities needed for accurate process heating, combustion, and energy analysis across the suite.
  */

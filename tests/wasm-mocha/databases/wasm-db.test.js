@@ -34,36 +34,6 @@ describe('DB Default Data Test', function () {
             listItems.delete();
         }
 
-        function gasFlueGasMaterialsLog(item){
-            logMessage(item.getID() + ', ' + item.getSubstance() + ', ' +
-                item.getGasByVol("CH4") + ', ' +
-                item.getGasByVol("C2H6") + ', ' +
-                item.getGasByVol("N2") + ', ' +
-                item.getGasByVol("H2") + ', ' +
-                item.getGasByVol("C3H8") + ', ' +
-                item.getGasByVol("C4H10_CnH2n") + ', ' +
-                item.getGasByVol("H2O") + ', ' +
-                item.getGasByVol("CO") + ', ' +
-                item.getGasByVol("CO2") + ', ' +
-                item.getGasByVol("SO2") + ', ' +
-                item.getGasByVol("O2") + ', ' +
-                item.getHeatingValue() + ', ' + item.getHeatingValueVolume()  + ', ' + item.getSpecificGravity());
-        }
-
-        function gasFlueGasMaterials(defaultData){
-            logMessage('Gas Flue Gas Materials');
-
-            let listItems = defaultData.getGasFlueGasMaterials();
-            let count = listItems.size();
-            assert.equal(count, 4, "Select All Default Data");
-
-            logMessage('Default Data (start - end):');
-            gasFlueGasMaterialsLog(listItems.get(0));
-            gasFlueGasMaterialsLog(listItems.get(count-1));
-
-            listItems.delete();
-        }
-
         function motorDataLog(item){
             logMessage(item.getId() + ', ' + item.getHp() + ', ' + item.getSynchronousSpeed() + ', ' +
                 item.getPoles() + ', ' + item.getNominalEfficiency()  + ', ' + item.getEfficiencyClass().value + ', ' +
@@ -179,7 +149,6 @@ describe('DB Default Data Test', function () {
 
             let instance = new moduleInstance.DefaultData();
             solidLiquidFlueGasMaterials(instance);
-            gasFlueGasMaterials(instance);
             motorData(instance);
             compressorsData(instance);
             lightingData(instance);

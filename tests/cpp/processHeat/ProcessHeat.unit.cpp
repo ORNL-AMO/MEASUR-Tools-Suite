@@ -8,9 +8,10 @@
 #include "catch.hpp"
 
 using namespace Catch;
-
+using namespace gas_composition;
+using namespace gas_flue_gas_material;
 TEST_CASE("Estimate maximum air flow that can be heated by using exhaust gas", "[processHeat]") {
-    GasCompositions gas("Gas", 94.0, 2.07, 1.41, 0.01, 0.42, 0.28, 0.0, 1.0, 0.71, 0, 0);
+    GasComposition gas("Gas", 94.0, 2.07, 1.41, 0.01, 0.42, 0.28, 0.0, 1.0, 0.71, 0, 0);
     auto            res = AirHeatingUsingExhaust(gas).calculate(400, 0.358, 8, 4000, 45, 0.85, 0.60, 4000);
     CHECK(res.hxColdAir == Approx(197829.27));
     CHECK(res.hxOutletExhaust == Approx(187));
@@ -33,7 +34,7 @@ TEST_CASE("Estimate maximum air flow that can be heated by using exhaust gas", "
     CHECK(resChillerAbsorpEnergy.capacityChiller == Approx(69.7004));
     CHECK(resChillerAbsorpEnergy.electricalEnergy == Approx(167280.96));
 
-    GasCompositions gasCH("Gas", 94.0, 2.07, 1.41, 0.01, 0.42, 0.28, 0.0, 1.0, 0.71, 0, 0);
+    GasComposition gasCH("Gas", 94.0, 2.07, 1.41, 0.01, 0.42, 0.28, 0.0, 1.0, 0.71, 0, 0);
     auto            resCascadeHeatHighToLow =
         CascadeHeatHighToLow(gasCH, 1020, 5.00, 12.0, 1475, 0.07, 80, 8000, 9.50, 225, 17.5, 80, 7000, 60, 60, 0)
             .calculate();
@@ -74,7 +75,7 @@ TEST_CASE("Estimate maximum air flow that can be heated by using exhaust gas", "
     CHECK(resSteamEnergy.waterSaved == Approx(1057.44));
     CHECK(resSteamEnergy.heatGainRate == Approx(292841.3082));
 
-    GasCompositions gasFlue("Gas", 94.0, 2.07, 1.41, 0.01, 0.42, 0.28, 0.0, 1.0, 0.71, 0, 0);
+    GasComposition gasFlue("Gas", 94.0, 2.07, 1.41, 0.01, 0.42, 0.28, 0.0, 1.0, 0.71, 0, 0);
     auto            resFlueHeat =
         WaterHeatingUsingFlue().calculate(gasFlue, 725, 0.05, 80, 0.02, 55.88, 3.45, 60, 500, 225, 0.04, 0.625, 8000,
                                           5.21, 37706, WaterHeatingUsingFlue::Superheated, 60);
@@ -95,7 +96,7 @@ TEST_CASE("Estimate maximum air flow that can be heated by using exhaust gas", "
     CHECK(resFlueHeat.energySavingsBoiler == Approx(51704.6503757363));
     CHECK(resFlueHeat.costSavingsBoiler == Approx(269381.2284575859));
 
-    GasCompositions gasFlueCond("Gas", 94.1, 3.02, 1.41, 0.01, 0.42, 0.28, 0.0, 0.0, 0.7, 0, 0.01);
+    GasComposition gasFlueCond("Gas", 94.1, 3.02, 1.41, 0.01, 0.42, 0.28, 0.0, 0.0, 0.7, 0, 0.01);
     auto resHeatRecovery = AirWaterCoolingUsingFlue().calculate(gasFlueCond, 116, 300, 125, 70, 60, 0.04, 60, 0);
     CHECK(resHeatRecovery.excessAir == Approx(0.2169692841));
     CHECK(resHeatRecovery.flowFlueGas == Approx(107022.7016052115));

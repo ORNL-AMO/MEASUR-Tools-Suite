@@ -12,7 +12,7 @@
  *
  */
 
-#include "losses/gas_flue_gas_material.h"
+#include "physics/gas_composition.h"
 #include "losses/solid_liquid_flue_gas_material.h"
 
 class AirHeatingUsingExhaust {
@@ -29,8 +29,8 @@ class AirHeatingUsingExhaust {
 
     /**
      *
-     * @param gasCompositions
-     * Constructor for GasCompositions with which flue gas losses will be calculated. All molecule parameters are the
+     * @param gasComposition
+     * Constructor for GasComposition with which flue gas losses will be calculated. All molecule parameters are the
      * percentage of that molecule present in the fuel
      *
      * @param          substance name - string
@@ -47,9 +47,9 @@ class AirHeatingUsingExhaust {
      * @param          O2 % - double
      *
      */
-    AirHeatingUsingExhaust(GasCompositions gasCompositions) {
-        fuelHeatingValue = gasCompositions.getHeatingValueVolume();
-        stoichAir        = gasCompositions.getStoichometricAir();
+    AirHeatingUsingExhaust(gas_composition::GasComposition gasComposition) {
+        fuelHeatingValue = gasComposition.heating_value_volume;
+        stoichAir        = gasComposition.stoichometric_air;
     }
 
     /**
