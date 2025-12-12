@@ -88,6 +88,7 @@ window.MathJax = {
                 \DeclareSIUnit{\inchWaterColumn}{in\,WC}
                 \DeclareSIUnit{\kilowatt}{kW}
                 \DeclareSIUnit{\atm}{atm}
+                \DeclareSIUnit{\lbmol}{lbmol}
             `);
         }
     },
