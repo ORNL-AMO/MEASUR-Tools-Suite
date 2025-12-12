@@ -103,7 +103,7 @@ EMSCRIPTEN_BINDINGS(solid_liquid_flue_gas_material_data) {
         .field("substance", &SolidLiquidFlueGasMaterial::substance)
         .field("carbon", &SolidLiquidFlueGasMaterial::carbon)
         .field("hydrogen", &SolidLiquidFlueGasMaterial::hydrogen)
-        .field("sulfur", &SolidLiquidFlueGasMaterial::sulfur)
+        .field("sulphur", &SolidLiquidFlueGasMaterial::sulfur)
         .field("oxygen", &SolidLiquidFlueGasMaterial::oxygen)
         .field("nitrogen", &SolidLiquidFlueGasMaterial::nitrogen)
         .field("moisture", &SolidLiquidFlueGasMaterial::moisture)
