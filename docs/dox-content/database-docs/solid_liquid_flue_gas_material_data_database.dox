@@ -13,7 +13,7 @@
  * @ingroup solid_liquid_flue_gas_material_data_database
  * The following table lists the default substances and their properties:
  *
- * | Substance                    | Carbon (%) | Hydrogen (%) | Sulfur (%) | Oxygen (%) | Nitrogen (%) | Moisture (%) | Ash (%) |
+ * | Substance                    | Carbon (%) | Hydrogen (%) | Sulphur (%) | Oxygen (%) | Nitrogen (%) | Moisture (%) | Ash (%) |
  * |------------------------------|------------|--------------|------------|------------|--------------|--------------|---------|
  * | Typical Bituminous Coal - US | 70.3       | 4.9          | 2.2        | 8.7        | 7.5          | 4.9          | 1.5     |
  * | Typical Anthracite - US      | 77.7       | 1.8          | 0.7        | 9.8        | 2.1          | 7.1          | 0.8     |

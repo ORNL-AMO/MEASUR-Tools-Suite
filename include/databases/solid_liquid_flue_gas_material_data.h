@@ -21,7 +21,7 @@ struct SolidLiquidFlueGasMaterial {
     std::string substance; ///< Name of the material
     double      carbon;    ///< Carbon percent by mass
     double      hydrogen;  ///< Hydrogen percent by mass
-    double      sulfur;    ///< Sulfur percent by mass
+    double      sulphur;    ///< Sulphur percent by mass
     double      oxygen;    ///< Oxygen percent by mass
     double      nitrogen;  ///< Nitrogen percent by mass
     double      moisture;  ///< Moisture percent by mass

@@ -46,7 +46,7 @@ struct GasFlueGasComponents {
  * @param[in] h2o_percent Water vapor (H2O) percent by volume @unitb{\percent}
  * @param[in] co_percent Carbon monoxide (CO) percent by volume @unitb{\percent}
  * @param[in] co2_percent Carbon dioxide (CO2) percent by volume @unitb{\percent}
- * @param[in] so2_percent Sulfur dioxide (SO2) percent by volume @unitb{\percent}
+ * @param[in] so2_percent Sulphur dioxide (SO2) percent by volume @unitb{\percent}
  * @param[in] o2_percent Oxygen (O2) percent by volume @unitb{\percent}
  * @var substance Name of the fuel gas mixture
  * @var ch4 Properties for methane (CH4) constituent
@@ -58,7 +58,7 @@ struct GasFlueGasComponents {
  * @var h2o Properties for water vapor (H2O) constituent
  * @var co Properties for carbon monoxide (CO) constituent
  * @var co2 Properties for carbon dioxide (CO2) constituent
- * @var so2 Properties for sulfur dioxide (SO2) constituent
+ * @var so2 Properties for sulphur dioxide (SO2) constituent
  * @var o2 Properties for oxygen (O2) constituent
  * @var total_composition_weight Total composition weight of the gas mixture @unitb{\percent}
  * @var heating_value Heating value of the fuel gas mixture @unitb{\btu/\scf}

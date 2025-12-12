@@ -51,7 +51,7 @@ double totalHeatLoss(
     const double moisture,
     const double nitrogen,
     const double ambient_air_temp_f = 60);
-    
+
 /**
  * @ingroup solid_liquid_flue_gas_material_calculator
  * @brief Calculates excess air percentage given flue gas O2 levels using iterative algorithm.
@@ -64,7 +64,7 @@ double totalHeatLoss(
  * @param[in] moisture Percent moisture in fuel @unitb{\percent}
  * @param[in] nitrogen Percent nitrogen in fuel @unitb{\percent}
  * @param[in] moisture_in_air_combustion Percent moisture in combustion air @unitb{\percent}
- * @return Calculated excess air percentage @unitb{\unitless}
+ * @return Calculated excess air percentage @unitb{\percent}
  */
 double calculateExcessAirFromFlueGasO2(double flue_gas_o2, double carbon, double hydrogen, double sulphur,
                                        double inert_ash, double o2, double moisture, double nitrogen,

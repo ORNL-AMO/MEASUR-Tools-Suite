@@ -78,7 +78,7 @@ inline double specificHeatCO(double t) { return 9.46 - 3.29 * 1000 / t + 1.07 * 
 inline double specificHeatCO2(double t) { return 16.2 - 6.53 * 1000 / t + 1.41 * 1000000 / (t * t); }
 
 /**
- * @brief Specific heat for sulfur dioxide (SO2) as a function of temperature (°F).
+ * @brief Specific heat for sulphur dioxide (SO2) as a function of temperature (°F).
  * @details Cp = 17.472 @unitb{Btu/(lb·°F)}
  */
 inline double specificHeatSO2(double t) {
@@ -158,7 +158,7 @@ constexpr double CO2_MOLECULAR_WEIGHT = 44.01;
 constexpr double CO2_SPECIFIC_WEIGHT  = 0.116367;
 constexpr double CO2_CO2_GENERATED    = 44.01;
 
-// Sulfur dioxide (SO2)
+// Sulphur dioxide (SO2)
 constexpr double SO2_MOLECULAR_WEIGHT = 64.06;
 constexpr double SO2_SPECIFIC_WEIGHT  = 0.169381;
 

@@ -29,7 +29,7 @@ namespace gas_flue_gas_material_data {
  * @param h2o Water vapor (H2O) percent by volume
  * @param co Carbon monoxide (CO) percent by volume
  * @param co2 Carbon dioxide (CO2) percent by volume
- * @param so2 Sulfur dioxide (SO2) percent by volume
+ * @param so2 Sulphur dioxide (SO2) percent by volume
  * @param o2 Oxygen (O2) percent by volume
  * @param heating_value Heating value (Btu/SCF)
  * @param heating_value_volume Heating value (Btu/ft3)

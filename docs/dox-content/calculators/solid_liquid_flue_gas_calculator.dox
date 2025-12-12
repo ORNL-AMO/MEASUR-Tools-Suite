@@ -9,7 +9,7 @@
  * - **Total Heat Loss & Available Heat:** Calculates the total heat loss and available heat from combustion by accounting for fuel/air composition, enthalpy of reactants and products, stoichiometry, flue gas constituents, and all major loss mechanisms (sensible, latent, unburned carbon, and ash).
  * - **Excess Air Determination:** Provides an iterative method to estimate the fraction of excess air supplied to the combustion process based on measured flue gas oxygen and fuel composition.
  * - **Flue Gas Oxygen Calculation:** Computes the expected oxygen content in the flue gas for a given excess air level and fuel composition, using stoichiometric and mass balance relationships.
- * - **Fuel Heating Value:** Calculates the higher heating value of a solid or liquid fuel as a weighted sum of elemental contributions (carbon, hydrogen, sulfur).
+ * - **Fuel Heating Value:** Calculates the higher heating value of a solid or liquid fuel as a weighted sum of elemental contributions (carbon, hydrogen, sulphur).
  *
  * Each section presents stepwise formulas, symbol tables, and engineering context for practical application in combustion system analysis, energy auditing, and process optimization.
  *
