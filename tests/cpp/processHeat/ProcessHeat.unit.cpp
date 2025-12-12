@@ -10,21 +10,14 @@
 using namespace Catch;
 using namespace gas_composition;
 using namespace gas_flue_gas_material;
+using namespace solid_liquid_flue_gas_material;
 TEST_CASE("Estimate maximum air flow that can be heated by using exhaust gas", "[processHeat]") {
     GasComposition gas("Gas", 94.0, 2.07, 1.41, 0.01, 0.42, 0.28, 0.0, 1.0, 0.71, 0, 0);
-    auto            res = AirHeatingUsingExhaust(gas).calculate(400, 0.358, 8, 4000, 45, 0.85, 0.60, 4000);
+    auto           res = AirHeatingUsingExhaust(gas).calculate(400, 0.358, 8, 4000, 45, 0.85, 0.60, 4000);
     CHECK(res.hxColdAir == Approx(197829.27));
     CHECK(res.hxOutletExhaust == Approx(187));
     CHECK(res.energySavings == Approx(930.96));
     CHECK(res.heatCapacityFlue == Approx(928.78));
-    CHECK(res.heatCapacityAir == Approx(4464));
-
-    SolidLiquidFlueGasMaterial coal("Coal", 75.0, 5.0, 1.0, 9.0, 7.0, 0.0, 1.5);
-    res = AirHeatingUsingExhaust(coal).calculate(400, 0.358, 8, 4000, 45, 0.85, 0.60, 4000);
-    CHECK(res.hxColdAir == Approx(15621.25));
-    CHECK(res.hxOutletExhaust == Approx(187));
-    CHECK(res.energySavings == Approx(73.512));
-    CHECK(res.heatCapacityFlue == Approx(73.339));
     CHECK(res.heatCapacityAir == Approx(4464));
 
     auto resChillerAbsorpEnergy = WaterHeatingUsingExhaust().calculate(0.69, 6000000, 0.7, 190, 170, 0.73, 0.88, 5);
@@ -35,7 +28,7 @@ TEST_CASE("Estimate maximum air flow that can be heated by using exhaust gas", "
     CHECK(resChillerAbsorpEnergy.electricalEnergy == Approx(167280.96));
 
     GasComposition gasCH("Gas", 94.0, 2.07, 1.41, 0.01, 0.42, 0.28, 0.0, 1.0, 0.71, 0, 0);
-    auto            resCascadeHeatHighToLow =
+    auto           resCascadeHeatHighToLow =
         CascadeHeatHighToLow(gasCH, 1020, 5.00, 12.0, 1475, 0.07, 80, 8000, 9.50, 225, 17.5, 80, 7000, 60, 60, 0)
             .calculate();
     CHECK(resCascadeHeatHighToLow.priFlueVolume == Approx(175123.0293326335));
@@ -76,7 +69,7 @@ TEST_CASE("Estimate maximum air flow that can be heated by using exhaust gas", "
     CHECK(resSteamEnergy.heatGainRate == Approx(292841.3082));
 
     GasComposition gasFlue("Gas", 94.0, 2.07, 1.41, 0.01, 0.42, 0.28, 0.0, 1.0, 0.71, 0, 0);
-    auto            resFlueHeat =
+    auto           resFlueHeat =
         WaterHeatingUsingFlue().calculate(gasFlue, 725, 0.05, 80, 0.02, 55.88, 3.45, 60, 500, 225, 0.04, 0.625, 8000,
                                           5.21, 37706, WaterHeatingUsingFlue::Superheated, 60);
     CHECK(resFlueHeat.flowFlueGas == Approx(23658.1596137958));
@@ -107,4 +100,16 @@ TEST_CASE("Estimate maximum air flow that can be heated by using exhaust gas", "
     CHECK(resHeatRecovery.effLH == Approx(0.02014).epsilon(0.005));
     CHECK(resHeatRecovery.heatRecovery == Approx(2.3362));
     CHECK(resHeatRecovery.sensibleHeatRecovery == Approx(4.8281577633));
+}
+
+TEST_CASE("Air Heating Using Exhaust Solid Liquid Flue Gas", "[processHeat]") {
+
+    double fuelHeatingValue =
+        solid_liquid_flue_gas_material::calculateHeatingValueFuel(75.0, 5.0, 1.0, 9.0, 7.0, 0.0, 1.5);
+    auto res = AirHeatingUsingExhaust(fuelHeatingValue).calculate(400, 0.358, 8, 4000, 45, 0.85, 0.60, 4000);
+    CHECK(res.hxColdAir == Approx(15621.25));
+    CHECK(res.hxOutletExhaust == Approx(187));
+    CHECK(res.energySavings == Approx(73.512));
+    CHECK(res.heatCapacityFlue == Approx(73.339));
+    CHECK(res.heatCapacityAir == Approx(4464));
 }

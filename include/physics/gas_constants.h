@@ -2,6 +2,21 @@
 #include <cmath>
 namespace gas_constants {
 
+// Shared combustion/stoichiometry constants
+constexpr double kCToCO2 = 44.0 / 12.0;
+constexpr double kHToH2O = 9.0;
+constexpr double kSToSO2 = 2.0;
+constexpr double kCToO2 = 32.0 / 12.0;
+constexpr double kHToO2 = 8.0;
+constexpr double kSToO2 = 1.0;
+constexpr double kN2O2Ratio = 76.85 / 23.15;
+constexpr double kSO2Cp = 17.472;
+constexpr double kSO2Mw = 64.06;
+constexpr double kO2Mw = 32.0;
+constexpr double kN2Mw = 28.016;
+constexpr double kCO2Mw = 44.01;
+constexpr double kH2OMw = 18.016;
+
 /**
  * @brief Specific heat for methane (CH4) as a function of temperature (°F).
  * @details Cp = 4.23 + 0.01177 * T @unitb{Btu/(lb·°F)}
@@ -63,7 +78,7 @@ inline double specificHeatCO(double t) { return 9.46 - 3.29 * 1000 / t + 1.07 * 
 inline double specificHeatCO2(double t) { return 16.2 - 6.53 * 1000 / t + 1.41 * 1000000 / (t * t); }
 
 /**
- * @brief Specific heat for sulfur dioxide (SO2) as a function of temperature (°F).
+ * @brief Specific heat for sulphur dioxide (SO2) as a function of temperature (°F).
  * @details Cp = 17.472 @unitb{Btu/(lb·°F)}
  */
 inline double specificHeatSO2(double t) {
@@ -143,7 +158,7 @@ constexpr double CO2_MOLECULAR_WEIGHT = 44.01;
 constexpr double CO2_SPECIFIC_WEIGHT  = 0.116367;
 constexpr double CO2_CO2_GENERATED    = 44.01;
 
-// Sulfur dioxide (SO2)
+// Sulphur dioxide (SO2)
 constexpr double SO2_MOLECULAR_WEIGHT = 64.06;
 constexpr double SO2_SPECIFIC_WEIGHT  = 0.169381;
 

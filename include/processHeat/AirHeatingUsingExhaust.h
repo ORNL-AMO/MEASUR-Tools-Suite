@@ -13,7 +13,6 @@
  */
 
 #include "physics/gas_composition.h"
-#include "losses/solid_liquid_flue_gas_material.h"
 
 class AirHeatingUsingExhaust {
   public:
@@ -68,10 +67,12 @@ class AirHeatingUsingExhaust {
      * @param          carbon, hydrogen, sulphur, inertAsh, o2, moisture, nitrogen content in fuel (as percentage)
      *
      */
-    AirHeatingUsingExhaust(SolidLiquidFlueGasMaterial solidLiquidFlueGasMaterial, bool solids = true) {
+    AirHeatingUsingExhaust(double fuelHeatingValue, bool solids = true) {
         solids           = solids; // keep or fix unused variable
-        fuelHeatingValue = solidLiquidFlueGasMaterial.getHeatingValueFuel();
-        stoichAir        = solidLiquidFlueGasMaterial.getStoichAirFuel();
+        this->fuelHeatingValue = fuelHeatingValue;
+        //Previously used SolidLiquidFlueGasMaterial to get stoichAir
+        //this calculation had 333.333 hardcoded so we use that value here for now
+        this->stoichAir        = 333.333;
     }
 
     /**

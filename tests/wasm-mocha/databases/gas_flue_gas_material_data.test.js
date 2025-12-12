@@ -1,6 +1,6 @@
 import { assert } from 'chai';
 
-describe('Gas Load Charge Material Data Test', function () {
+describe('Gas Flue Gas Material Data Test', function () {
     let moduleInstance;
     before(async function () {
         const ToolsSuiteModule = (await import('../../../bin/client.js')).default;

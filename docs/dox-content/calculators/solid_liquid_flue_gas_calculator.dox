@@ -1,0 +1,254 @@
+
+/**
+ * @defgroup solid_liquid_flue_gas_material_calculator Solid/Liquid Flue Gas Material Calculator
+ * @ingroup heat_loss_calculators
+ * @brief Stepwise algorithm for calculating process heat properties and available heat for solid/liquid flue gas materials.
+ * @details
+ * This page documents the engineering algorithms for solid and liquid fuel flue gas analysis, including:
+ *
+ * - **Total Heat Loss & Available Heat:** Calculates the total heat loss and available heat from combustion by accounting for fuel/air composition, enthalpy of reactants and products, stoichiometry, flue gas constituents, and all major loss mechanisms (sensible, latent, unburned carbon, and ash).
+ * - **Excess Air Determination:** Provides an iterative method to estimate the fraction of excess air supplied to the combustion process based on measured flue gas oxygen and fuel composition.
+ * - **Flue Gas Oxygen Calculation:** Computes the expected oxygen content in the flue gas for a given excess air level and fuel composition, using stoichiometric and mass balance relationships.
+ * - **Fuel Heating Value:** Calculates the higher heating value of a solid or liquid fuel as a weighted sum of elemental contributions (carbon, hydrogen, sulphur).
+ *
+ * Each section presents stepwise formulas, symbol tables, and engineering context for practical application in combustion system analysis, energy auditing, and process optimization.
+ *
+ * @heading{Flue Gas Heat Loss Calculation}
+ * @copydoc solid_liquid_flue_gas_heat_loss_formula
+ * 
+ * @heading{Excess Air Calculation}
+ * @copydoc solid_liquid_flue_gas_excess_air_calc
+ *
+ * @heading{Flue Gas O2 Calculation}
+ * @copydoc solid_liquid_flue_gas_o2_calc
+ *
+ * @heading{Heating Value Calculation}
+ * @copydoc solid_liquid_flue_gas_hv_calc
+ */
+
+/**
+ * @defgroup solid_liquid_flue_gas_heat_loss_formula Total Solid/Liquid Flue Gas: Heat Loss
+ * @ingroup solid_liquid_flue_gas_material_calculator
+ * @brief Algorithm for calculating total heat loss and available heat for solid/liquid flue gas materials.
+ * @details This section documents the algorithm implemented in total heat loss of solid/liquid flue gas, including normalization, enthalpy calculations, stoichiometry, flue gas component analysis, and available heat computation. Each step is annotated with formulas and symbol tables for clarity.
+ * @subheading{Step 1: Normalize Fuel Composition}
+ *   Normalize all fuel composition inputs to fractions:
+ *     @formula{slfgm-norm-fuel; x_i = \frac{X_i}{\sum_j X_j}}
+ *   where @math{X_i} is the percent of constituent @math{i} in the fuel.
+ *   @symtable
+ *     @symrow{x_i; Normalized fraction of constituent i; \unitless}
+ *     @symrow{X_i; Percent of constituent i in fuel; \percent}
+ *   @endsymtable
+
+* @subheading{Step 2: Fuel and Combustion Air Enthalpy}
+*   Calculate the sensible enthalpy of both the fuel and the combustion air:
+*     @formula{slfgm-h-fuel; h_{fuel} = C_{pfuel} \cdot (1 - x_{moisture}) \cdot (T_{fuel} - T_{amb})}
+*     @formula{slfgm-cp-comb-air; C_{p,air} = a + b \cdot T_{comb}}
+*     @formula{slfgm-h-comb-air; h_{comb,air} = M_{comb,air} \cdot C_{p,air} \cdot (T_{comb} - T_{amb}) / \rho_{air}}
+*   @symtable
+*     @symrow{h_{fuel}; Sensible enthalpy of fuel; \btu\per\hour}
+*     @symrow{C_{pfuel}; Specific heat of fuel; \btu\per\pound\degreeFahrenheit}
+*     @symrow{x_{moisture}; Moisture fraction in fuel; \unitless}
+*     @symrow{T_{fuel}; Fuel temperature; \degreeFahrenheit}
+*     @symrow{T_{amb}; Ambient air temperature; \degreeFahrenheit}
+*     @symrow{C_{p,air}; Specific heat of combustion air; \btu\per\pound\degreeFahrenheit}
+*     @symrow{T_{comb}; Combustion air temperature; \degreeFahrenheit}
+*     @symrow{h_{comb,air}; Sensible enthalpy of combustion air; \btu\per\hour}
+*     @symrow{M_{comb,air}; Mass of combustion air; \pound}
+*     @symrow{\rho_{air}; Density of air; \pound\per\cubicFoot}
+*   @endsymtable
+ *
+ *
+ * @subheading{Step 3: Stoichiometric Air and Combustion Calculations}
+ *   Calculate stoichiometric air required for combustion:
+ *     @formula{slfgm-stoich-air; O2_{s,air} = x_C \cdot k_{C\to O_2} + x_H \cdot k_{H\to O_2} + x_S \cdot k_{S\to O_2} - x_{O_2}}
+ *     @formula{slfgm-n2s-air; N2_{s,air} = O2_{s,air} \cdot k_{N_2/O_2}}
+ *     @formula{slfgm-ms-air; M_{s,air} = O2_{s,air} + N2_{s,air}}
+ *     @formula{slfgm-m-comb-air; M_{comb,air} = M_{s,air} \cdot (1 + EA)}
+ *   @symtable
+ *     @symrow{O2_{s,air}; Stoichiometric O2 required; \unitless}
+ *     @symrow{N2_{s,air}; Stoichiometric N2 from air; \unitless}
+ *     @symrow{M_{s,air}; Stoichiometric air; \unitless}
+ *     @symrow{M_{comb,air}; Total combustion air; \unitless}
+ *     @symrow{EA; Excess air fraction; \unitless}
+ *   @endsymtable
+ *
+ * @subheading{Step 4: Flue Gas Components and Heating Value}
+ *   Calculate mass of each flue gas component:
+ *     @formula{slfgm-m-co2; m_{CO_2} = x_C \cdot k_{C\to CO_2}}
+ *     @formula{slfgm-m-h2o; m_{H_2O} = x_H \cdot k_{H\to H_2O} + x_{moisture} + (M_{comb,air} \cdot M_{air,moisture}/100)}
+ *     @formula{slfgm-m-so2; m_{SO_2} = x_S \cdot k_{S\to SO_2}}
+ *     @formula{slfgm-m-o2; m_{O_2} = O2_{s,air} \cdot EA}
+ *     @formula{slfgm-m-n2; m_{N_2} = N2_{s,air} \cdot (1 + EA)}
+ *   Heating value:
+ *     @formula{slfgm-hv; HV_{fuel} = x_C \cdot k_{HV,C} + x_H \cdot k_{HV,H} + x_S \cdot k_{HV,S}}
+ *   @symtable
+ *     @symrow{m_{i}; Mass of constituent i; \unitless}
+ *     @symrow{HV_{fuel}; Heating value of fuel; \btu\per\pound}
+ *   @endsymtable
+ *
+ * @subheading{Step 5: Partial Pressure of Water Vapor}
+ *   @formula{slfgm-pp-h2o; p_{H_2O} = \frac{m_{H_2O}/0.047636}{m_{CO_2}/0.116367 + m_{H_2O}/0.047636 + m_{N_2}/0.074077 + m_{O_2}/0.084611 + m_{SO_2}/0.169381}}
+ *   @symtable
+ *     @symrow{p_{H_2O}; Partial pressure of water vapor; \unitless}
+ *   @endsymtable
+ *
+ * @subheading{Step 6: Enthalpy of Saturated Steam}
+ *   @formula{slfgm-h-sat; h_{sat} = 1096.7 \cdot (p_{H_2O} \cdot 29.926)^{0.013}}
+ *   @symtable
+ *     @symrow{h_{sat}; Enthalpy of saturated steam; \btu\per\pound}
+ *     @symrow{p_{H_2O}; Partial pressure of water vapor; \unitless}
+ *   @endsymtable
+ *
+ * @subheading{Step 7: Sensible Heat of Flue Gas Components}
+ *   For each component:
+ *     @formula{slfgm-h-sensible-co2; h_{CO_2} = m_{CO_2} \cdot \frac{Cp_{CO_2}}{MW_{CO_2}} \cdot (T_{fg} - T_{ref})}
+ *     @formula{slfgm-h-sensible-h2o; h_{H_2O} = m_{H_2O,fuel} \cdot (h_{sat} + \frac{Cp_{H_2O}}{MW_{H_2O}} \cdot (T_{fg} - T_{ref})) + m_{H_2O,air} \cdot (\frac{Cp_{H_2O}}{MW_{H_2O}} \cdot (T_{fg} - T_{ref}))}
+ *     @formula{slfgm-h-sensible-so2; h_{SO_2} = m_{SO_2} \cdot \frac{Cp_{SO_2}}{MW_{SO_2}} \cdot (T_{fg} - T_{ref})}
+ *     @formula{slfgm-h-sensible-o2; h_{O_2} = m_{O_2} \cdot \frac{Cp_{O_2}}{MW_{O_2}} \cdot (T_{fg} - T_{ref})}
+ *     @formula{slfgm-h-sensible-n2; h_{N_2} = m_{N_2} \cdot \frac{Cp_{N_2}}{MW_{N_2}} \cdot (T_{fg} - T_{ref})}
+ *   Total sensible heat:
+ *     @formula{slfgm-h-fg; h_{fg} = h_{H_2O} + h_{CO_2} + h_{N_2} + h_{O_2} + h_{SO_2}}
+ *   @symtable
+ *     @symrow{h_{i}; Sensible heat of constituent i; \btu\per\hour}
+ *     @symrow{Cp_{i}; Specific heat of constituent i; \btu\per\pound\degreeFahrenheit}
+ *     @symrow{MW_{i}; Molecular weight of constituent i; \pound\per\lbmol}
+ *     @symrow{T_{fg}; Flue gas temperature; \degreeFahrenheit}
+ *     @symrow{T_{ref}; Reference temperature (ambient); \degreeFahrenheit}
+ *   @endsymtable
+ *
+ * @subheading{Step 8: Other Losses}
+ *   Moisture, unburned carbon, and ash losses:
+ *     @formula{slfgm-h-moisture; h_{moisture} = X_{moisture} \cdot (T_{fg} - T_{ref})}
+ *     @formula{slfgm-h-carbon; h_{carbon} = 14093.0 \cdot X_{unburned,carbon} \cdot (X_{ash}/x_{fuel})}
+ *     @formula{slfgm-h-ash; h_{ash} = (X_{ash}/x_{fuel}) \cdot 0.25 \cdot (1.8 \cdot T_{ash,discharge} + 32.0 - T_{ref})}
+ *   @symtable
+ *     @symrow{h_{moisture}; Heat loss due to moisture; \btu\per\hour}
+ *     @symrow{h_{carbon}; Heat loss due to unburned carbon; \btu\per\hour}
+ *     @symrow{h_{ash}; Heat loss due to ash; \btu\per\hour}
+ *     @symrow{X_{moisture}; Moisture percent in fuel; \percent}
+ *     @symrow{X_{unburned,carbon}; Unburned carbon in ash; \percent}
+ *     @symrow{X_{ash}; Ash percent in fuel; \percent}
+ *     @symrow{T_{ash,discharge}; Ash discharge temperature; \degreeFahrenheit}
+ *   @endsymtable
+ *
+ * @subheading{Step 9: Input Heat}
+ *   @formula{slfgm-h-in; h_{in} = h_{fuel} + h_{combustion,air} + HV_{fuel} + h_{moisture}}
+ *   @symtable
+ *     @symrow{h_{in}; Total input heat; \btu\per\hour}
+ *     @symrow{h_{fuel}; Sensible heat in fuel; \btu\per\hour}
+ *     @symrow{h_{combustion,air}; Sensible heat in combustion air; \btu\per\hour}
+ *   @endsymtable
+ *
+ * @subheading{Step 10: Available Heat Calculation}
+ *   @formula{slfgm-available-heat; Q_{avail} = \frac{h_{in} - h_{fg} - h_{ash} - h_{carbon}}{HV_{fuel}}}
+ *   @symtable
+ *     @symrow{Q_{avail}; Available heat fraction; \unitless}
+ *   @endsymtable
+ *
+ * @see solid_liquid_flue_gas_material_data_database
+*/
+ 
+/**
+ * @defgroup solid_liquid_flue_gas_excess_air_calc Solid/Liquid Flue Gas: Excess Air Calculation
+ * @ingroup solid_liquid_flue_gas_material_calculator
+ * @brief Algorithm for calculating excess air from flue gas O2 for solid/liquid fuels.
+ * @details Implements an iterative algorithm to estimate excess air given measured flue gas O2 and fuel composition.
+ *
+ * @subheading{Step 1: Normalize Fuel Composition}
+ *   Normalize all fuel composition inputs to fractions:
+ *     @formula{slfgm-norm-fuel-ea; x_i = \frac{X_i}{\sum_j X_j}}
+ *   @symtable
+ *     @symrow{x_i; Normalized fraction of constituent i; \unitless}
+ *     @symrow{X_i; Percent of constituent i in fuel; \percent}
+ *   @endsymtable
+ *
+ * @subheading{Step 2: Initial Estimate of Excess Air}
+ *   Compute initial excess air estimate from flue gas O2:
+ *     @formula{slfgm-ea-initial; EA_0 = \frac{a \cdot O_2}{b - (c \cdot O_2)}}
+ *   where @math{a}, @math{b}, @math{c} are empirical constants.
+ *   @symtable
+ *     @symrow{EA_0; Initial excess air estimate; \unitless}
+ *     @symrow{O_2; Flue gas oxygen percent; \percent}
+ *   @endsymtable
+ *
+ * @subheading{Step 3: Iterative Refinement}
+ *   Iteratively refine excess air estimate:
+ *     @formula{slfgm-ea-iter; EA_{n+1} = EA_n \pm (EA_n \cdot 0.01)}
+ *   until calculated O2 matches measured O2 within tolerance.
+ *   @symtable
+ *     @symrow{EA_n; Excess air at iteration n; \unitless}
+ *   @endsymtable
+ *
+ * @note Uses calculateFlueGasO2 for O2 calculation in each iteration.
+ */
+
+/**
+ * @defgroup solid_liquid_flue_gas_o2_calc Solid/Liquid Flue Gas: Flue Gas O2 Calculation
+ * @ingroup solid_liquid_flue_gas_material_calculator
+ * @brief Algorithm for calculating flue gas O2 fraction from excess air and fuel composition.
+ * @details Computes stoichiometric air, combustion air, and flue gas constituents to determine O2 fraction in flue gas.
+ *
+ * @subheading{Step 1: Normalize Fuel Composition}
+ *   Normalize all fuel composition inputs to fractions:
+ *     @formula{slfgm-norm-fuel-o2; x_i = \frac{X_i}{\sum_j X_j}}
+ *   @symtable
+ *     @symrow{x_i; Normalized fraction of constituent i; \unitless}
+ *     @symrow{X_i; Percent of constituent i in fuel; \percent}
+ *   @endsymtable
+ *
+ * @subheading{Step 2: Stoichiometric Air and Combustion Calculations}
+ *   Calculate stoichiometric O2 and N2 required:
+ *     @formula{slfgm-stoich-o2; O2_{s,air} = x_C \cdot k_{C\to O_2} + x_H \cdot k_{H\to O_2} + x_S \cdot k_{S\to O_2} - x_{O_2}}
+ *     @formula{slfgm-stoich-n2; N2_{s,air} = O2_{s,air} \cdot k_{N_2/O_2}}
+ *     @formula{slfgm-ms-air-o2; M_{s,air} = O2_{s,air} + N2_{s,air}}
+ *     @formula{slfgm-m-comb-air-o2; M_{comb,air} = M_{s,air} \cdot (1 + EA)}
+ *   @symtable
+ *     @symrow{O2_{s,air}; Stoichiometric O2 required; \unitless}
+ *     @symrow{N2_{s,air}; Stoichiometric N2 from air; \unitless}
+ *     @symrow{M_{s,air}; Stoichiometric air; \unitless}
+ *     @symrow{M_{comb,air}; Total combustion air; \unitless}
+ *     @symrow{EA; Excess air fraction; \unitless}
+ *   @endsymtable
+ *
+ * @subheading{Step 3: Flue Gas Components}
+ *   Calculate mass of each flue gas component:
+ *     @formula{slfgm-m-co2-o2; m_{CO_2} = x_C \cdot k_{C\to CO_2}}
+ *     @formula{slfgm-m-h2o-o2; m_{H_2O} = x_H \cdot k_{H\to H_2O} + x_{moisture} + (M_{comb,air} \cdot M_{air,moisture}/100)}
+ *     @formula{slfgm-m-so2-o2; m_{SO_2} = x_S \cdot k_{S\to SO_2}}
+ *     @formula{slfgm-m-o2-o2; m_{O_2} = O2_{s,air} \cdot EA}
+ *     @formula{slfgm-m-n2-o2; m_{N_2} = N2_{s,air} \cdot (1 + EA)}
+ *   @symtable
+ *     @symrow{m_{i}; Mass of constituent i; \unitless}
+ *   @endsymtable
+ *
+ * @subheading{Step 4: Calculate O2 Fraction in Flue Gas}
+ *   @formula{slfgm-o2-frac; O2_{fg} = \frac{m_{O_2}}{m_{CO_2} + m_{H_2O} + m_{N_2} + m_{O_2} + m_{SO_2}}}
+ *   @symtable
+ *     @symrow{O2_{fg}; O2 fraction in flue gas; \unitless}
+ *   @endsymtable
+ */
+
+/**
+ * @defgroup solid_liquid_flue_gas_hv_calc Solid/Liquid Flue Gas: Heating Value Calculation
+ * @ingroup solid_liquid_flue_gas_material_calculator
+ * @brief Algorithm for calculating heating value of solid/liquid fuel based on composition.
+ * @details Computes the heating value as a weighted sum of elemental contributions.
+ *
+ * @subheading{Step 1: Normalize Fuel Composition}
+ *   Normalize all fuel composition inputs to fractions:
+ *     @formula{slfgm-norm-fuel-hv; x_i = \frac{X_i}{\sum_j X_j}}
+ *   @symtable
+ *     @symrow{x_i; Normalized fraction of constituent i; \unitless}
+ *     @symrow{X_i; Percent of constituent i in fuel; \percent}
+ *   @endsymtable
+ *
+ * @subheading{Step 2: Weighted Heating Value}
+ *   Calculate heating value as weighted sum:
+ *     @formula{slfgm-hv-calc; HV_{fuel} = x_C \cdot k_{HV,C} + x_H \cdot k_{HV,H} + x_S \cdot k_{HV,S}}
+ *   @symtable
+ *     @symrow{HV_{fuel}; Heating value of fuel; \btu\per\pound}
+ *     @symrow{x_C, x_H, x_S; Normalized fractions of C, H, S; \unitless}
+ *     @symrow{k_{HV,C}, k_{HV,H}, k_{HV,S}; Heating value constants; \btu\per\pound}
+ *   @endsymtable
+ */

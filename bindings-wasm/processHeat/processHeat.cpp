@@ -88,7 +88,7 @@ EMSCRIPTEN_BINDINGS(processHeat_class) {
 
     class_<AirHeatingUsingExhaust>("AirHeatingUsingExhaust")
         .constructor<GasComposition>()
-        .constructor<SolidLiquidFlueGasMaterial, bool>()
+        .constructor<double, bool>()
         .function("calculate", &AirHeatingUsingExhaust::calculate);
 
     class_<WaterHeatingUsingExhaust>("WaterHeatingUsingExhaust")

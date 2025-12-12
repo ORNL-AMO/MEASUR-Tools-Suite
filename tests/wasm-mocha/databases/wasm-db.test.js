@@ -14,26 +14,6 @@ describe('DB Default Data Test', function () {
             console.log(msg);
         }
 
-        function solidLiquidFlueGasMaterialsLog(item){
-            logMessage(item.getID() + ', ' + item.getSubstance() + ', ' + item.getCarbon() + ', ' +
-                item.getHydrogen() + ', ' + item.getSulphur()  + ', ' + item.getInertAsh() + ', ' +
-                item.getO2() + ', ' + item.getMoisture()  + ', ' + item.getNitrogen());
-        }
-
-        function solidLiquidFlueGasMaterials(defaultData){
-            logMessage('Solid Liquid Flue Gas Materials');
-
-            let listItems = defaultData.getSolidLiquidFlueGasMaterials();
-            let count = listItems.size();
-            assert.equal(count, 6, "Select All Default Data");
-
-            logMessage('Default Data (start - end):');
-            solidLiquidFlueGasMaterialsLog(listItems.get(0));
-            solidLiquidFlueGasMaterialsLog(listItems.get(count-1));
-
-            listItems.delete();
-        }
-
         function motorDataLog(item){
             logMessage(item.getId() + ', ' + item.getHp() + ', ' + item.getSynchronousSpeed() + ', ' +
                 item.getPoles() + ', ' + item.getNominalEfficiency()  + ', ' + item.getEfficiencyClass().value + ', ' +
@@ -148,7 +128,6 @@ describe('DB Default Data Test', function () {
             logMessage('DB Default Data Test:');
 
             let instance = new moduleInstance.DefaultData();
-            solidLiquidFlueGasMaterials(instance);
             motorData(instance);
             compressorsData(instance);
             lightingData(instance);
