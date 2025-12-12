@@ -16,14 +16,6 @@ namespace solid_liquid_flue_gas_material_data {
 /**
  * @struct SolidLiquidFlueGasMaterial
  * @brief Struct to hold default solid/liquid flue gas material data.
- * @param substance Name of the material
- * @param carbon Carbon percent by mass
- * @param hydrogen Hydrogen percent by mass
- * @param sulfur Sulfur percent by mass
- * @param oxygen Oxygen percent by mass
- * @param nitrogen Nitrogen percent by mass
- * @param moisture Moisture percent by mass
- * @param ash Ash percent by mass
  */
 struct SolidLiquidFlueGasMaterial {
     std::string substance; ///< Name of the material
