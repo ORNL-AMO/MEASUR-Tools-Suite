@@ -2,19 +2,51 @@
  * @defgroup energy_input_electric_arc_furnace_calculator Energy Input Electric Arc Furnace Calculator
  * @ingroup heat_loss_calculators
  * @brief Calculates total energy input and heat delivered for electric arc furnaces (EAF).
- * @details This calculator estimates the total chemical energy input and total heat delivered to an EAF, including contributions from natural gas, coal/carbon injection, electrodes, other fuels, and electricity. It uses standard unit conversions and accounts for all major energy sources supplied to the furnace. Relevant formulas are documented below.
+ * @details This calculator estimates the total chemical energy input and total heat delivered to an EAF, including 
+ * contributions from natural gas, coal/carbon injection, electrodes, other fuels, and electricity. It uses standard 
+ * unit conversions and accounts for all major energy sources supplied to the furnace.
+ *
+ * The calculation follows a top-down approach:
+ * 1. **Total Heat Delivered** - Sum of chemical energy and electrical energy inputs
+ * 2. **Total Chemical Energy Input** - Sum of all chemical fuel sources (natural gas, coal, electrodes, other fuels)
+ *
+ * Relevant formulas are documented below.
+ *
+ * @heading{Total Heat Delivered}
+ * @copydoc energy_input_electric_arc_furnace_heat_delivered_formula
  *
  * @heading{Total Chemical Energy Input}
  * @copydoc energy_input_electric_arc_furnace_formula
  *
- * @heading{Total Heat Delivered}
- * @copydoc energy_input_electric_arc_furnace_heat_delivered_formula
+ * @see physics::conversions::kKilowattToBtuPerHour for electrical energy conversion
+ */
+
+/**
+ * @defgroup energy_input_electric_arc_furnace_heat_delivered_formula Energy Input Electric Arc Furnace Heat Delivered Formula
+ * @ingroup energy_input_electric_arc_furnace_calculator
+ * @brief Total heat delivered to the electric arc furnace.
+ * @details The total heat delivered is the sum of chemical energy from combustion and electrical energy supplied to the furnace.
+ * 
+ * @formula{eaf-heat-delivered; Q_\text{delivered} = Q_\text{chem} + Q_\text{elec}}
+ * 
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_\text{delivered}; Total heat delivered to EAF; \btu\per\hour}
+ * @symrow{Q_\text{chem}; Total chemical energy input; \btu\per\hour}
+ * @symrow{Q_\text{elec}; Electric power supplied; \btu\per\hour}
+ * @endsymtable
  */
 
 /**
  * @defgroup energy_input_electric_arc_furnace_formula Energy Input Electric Arc Furnace Formula
  * @ingroup energy_input_electric_arc_furnace_calculator
+ * @brief Total chemical energy input from all fuel sources.
+ * @details The total chemical energy is the sum of heat input from natural gas, coal/carbon injection, 
+ * electrode consumption, and other fuels. Each fuel contribution is calculated by multiplying mass flow 
+ * rate by its heating value.
+ * 
  * @formula{eaf-chemical-energy-input; Q_\text{chem} = Q_\text{ng} + m_\text{coal} c_\text{coal} + m_\text{elec} c_\text{elec} + Q_\text{other}}
+ * 
  * @subheading{Symbols}
  * @symtable
  * @symrow{Q_\text{chem}; Total chemical energy input; \btu\per\hour}
@@ -24,17 +56,5 @@
  * @symrow{m_\text{elec}; Electrode use; \pound\per\hour}
  * @symrow{c_\text{elec}; Electrode heating value; \btu\per\pound}
  * @symrow{Q_\text{other}; Other fuel heat input; \btu\per\hour}
- * @endsymtable
- */
-
-/**
- * @defgroup energy_input_electric_arc_furnace_heat_delivered_formula Energy Input Electric Arc Furnace Heat Delivered Formula
- * @ingroup energy_input_electric_arc_furnace_calculator
- * @formula{eaf-heat-delivered; Q_\text{delivered} = Q_\text{chem} + Q_\text{elec}}
- * @subheading{Symbols}
- * @symtable
- * @symrow{Q_\text{delivered}; Total heat delivered to EAF; \btu\per\hour}
- * @symrow{Q_\text{chem}; Total chemical energy input; \btu\per\hour}
- * @symrow{Q_\text{elec}; Electric power supplied; \kilowatt\hour\per\hour}
  * @endsymtable
  */
