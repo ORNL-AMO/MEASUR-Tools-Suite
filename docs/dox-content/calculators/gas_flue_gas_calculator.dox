@@ -137,4 +137,5 @@
  *   @endsymtable
  *
  * @see gas_flue_gas_material_data_database
+ * @see gas_constants for molecular weights, specific heat formulas, and stoichiometric constants
  */

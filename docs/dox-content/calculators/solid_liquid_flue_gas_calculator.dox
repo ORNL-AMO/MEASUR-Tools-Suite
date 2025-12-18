@@ -252,3 +252,8 @@
  *     @symrow{k_{HV,C}, k_{HV,H}, k_{HV,S}; Heating value constants; \btu\per\pound}
  *   @endsymtable
  */
+
+/**
+ * @see solid_liquid_flue_gas_material_data_database
+ * @see gas_constants for molecular weights, specific heat formulas, and stoichiometric constants
+ */
