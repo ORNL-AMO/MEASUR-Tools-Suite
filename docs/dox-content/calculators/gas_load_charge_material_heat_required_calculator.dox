@@ -2,7 +2,15 @@
  * @defgroup gas_load_charge_material_heat_required_calculator Gas Load Charge Material Heat Required Calculator
  * @ingroup heat_loss_calculators
  * @brief Calculates total heat required for a gas load/charge material.
- * @details The following formulas describe the calculation of total heat required for a gas load/charge material, including sensible heat for gas and vapor, heat of reaction, and additional heat. Each step is documented with its own formula and symbol table.
+ * @details The following formulas describe the calculation of total heat required for a gas load/charge material, 
+ * including sensible heat for gas and vapor, heat of reaction, and additional heat. Each step is documented with 
+ * its own formula and symbol table.
+ *
+ * The calculation follows a top-down approach:
+ * 1. **Total Heat Required** - Sum of sensible heat for gas, vapor, reaction heat, and additional heat
+ * 2. **Sensible Heat for Gas** - Heat required to raise temperature of non-vapor portion
+ * 3. **Sensible Heat for Vapor** - Heat required to raise temperature of vapor portion
+ * 4. **Heat of Reaction** - Endothermic reaction heat if applicable
  *
  * @heading{Total Heat Required}
  * @copydoc gas_load_charge_material_total_heat_required_cpp_formula
