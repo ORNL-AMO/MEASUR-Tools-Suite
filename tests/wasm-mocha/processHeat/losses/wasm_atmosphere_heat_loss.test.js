@@ -12,7 +12,7 @@ describe('Process Atmosphere Heat Loss', function () {
 
     // Test Atmosphere Gas Types
     it('should verify defined gas types are correct', function () {
-        const gasTypes = moduleInstance.atmosphereGasTypes();
+        const gasTypes = moduleInstance.getDefaultGasTypes();
 
         // Expected gas types
         const expected = [
