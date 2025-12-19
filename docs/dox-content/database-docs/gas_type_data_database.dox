@@ -1,0 +1,28 @@
+/**
+ * @defgroup gas_type_data_database Gas Type Database
+ * @ingroup databases
+ * @brief Contains default data for atmospheric gas types used in atmosphere heat loss calculations.
+ * @details This database provides default values for the specific heat of common atmospheric gases at a reference temperature of @qty{60;\degreeFahrenheit}. The data is used in atmosphere heat loss calculations for process heating systems.
+ *
+ * @heading{Default Gas Type Data}
+ * @copydoc gas_type_data
+ */
+
+/**
+ * @defgroup gas_type_data Default Gas Type Data
+ * @ingroup gas_type_data_database
+ * The following table lists the default gas types and their specific heat values:
+ *
+ * | Gas Description     | Specific Heat @unitb{\btu\per\standardCubicFeet\degreeFahrenheit} |
+ * |---------------------|-------------------------------------------------------------------|
+ * | Nitrogen            | 0.0185                                                            |
+ * | Hydrogen            | 0.0182                                                            |
+ * | Exothermic Gas      | 0.0185                                                            |
+ * | Endothermic Gas     | 0.0185                                                            |
+ * | Air                 | 0.0184                                                            |
+ * | Water Vapor         | 0.0212                                                            |
+ *
+ * @note Values are at a reference temperature of @qty{60;\degreeFahrenheit} and may vary with pressure and temperature.
+ *
+ * @see atmosphere_heat_loss_calculator
+ */

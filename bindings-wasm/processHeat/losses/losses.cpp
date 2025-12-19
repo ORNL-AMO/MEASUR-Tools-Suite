@@ -1,5 +1,7 @@
 #include <emscripten/bind.h>
 
+#include "databases/gas_type_data.h"
+#include "databases/wall_type_data.h"
 #include "physics/gas_composition.h"
 #include "processHeat/losses/atmosphere_heat_loss.h"
 #include "processHeat/losses/auxiliary_power_used.h"
@@ -33,14 +35,10 @@ EMSCRIPTEN_BINDINGS(losses_enums) {
 // Bindings for the atmosphere_heat_loss namespace
 EMSCRIPTEN_BINDINGS(atmosphere_heat_loss) {
     using namespace atmosphere_heat_loss;
+    using namespace gas_type_data;
 
-    value_object<GasType>("AtmosphereGasType")
-        .field("gasDescription", &GasType::gas_description)
-        .field("specificHeat", &GasType::specific_heat);
-
-    register_vector<GasType>("AtmosphereGasTypes");
-
-    function("atmosphereGasTypes", &gasTypes);
+    // Wrapper function for backward compatibility
+    function("atmosphereGasTypes", &get_default_gas_types);
     function("atmosphereTotalHeatLoss", &totalHeatLoss);
 }
 
@@ -278,14 +276,10 @@ EMSCRIPTEN_BINDINGS(solid_load_charge_material_heat_required) {
 // Bindings for the wall_heat_loss namespace
 EMSCRIPTEN_BINDINGS(wall_heat_loss) {
     using namespace wall_heat_loss;
+    using namespace wall_type_data;
 
-    value_object<WallType>("WallType")
-        .field("wallDescription", &WallType::wall_description)
-        .field("shapeFactor", &WallType::shape_factor);
-
-    register_vector<WallType>("WallTypes");
-
-    function("wallTypes", &wallTypes);
+    // Wrapper function for backward compatibility
+    function("wallTypes", &get_default_wall_types);
     function("wallTotalHeatLoss", &totalHeatLoss);
     function("wallConvectiveHeatLoss", &convectiveHeatLoss);
     function("wallRadiativeHeatLoss", &radiativeHeatLoss);
