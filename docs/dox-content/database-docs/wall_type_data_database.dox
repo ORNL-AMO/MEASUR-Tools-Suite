@@ -5,7 +5,8 @@
  * @details This database provides default values for shape factors associated with various wall types. The data is used in wall heat loss calculations for process heating systems.
  *
  * @heading{Default Wall Type Data}
- * @copydoc wall_type_data
+ * @copydoc wall_type_data 
+ * Source: @cite astmC680
  */
 
 /**
