@@ -2,7 +2,16 @@
  * @defgroup liquid_load_charge_material_heat_required_calculator Liquid Load Charge Material Heat Required Calculator
  * @ingroup heat_loss_calculators
  * @brief Calculates total heat required for a liquid load/charge material.
- * @details The following formulas describe the calculation of total heat required for a liquid load/charge material, including sensible heat, latent heat, vaporization, reaction heat, and additional heat. Each step is documented with its own formula and symbol table.
+ * @details The following formulas describe the calculation of total heat required for a liquid load/charge material, 
+ * including sensible heat, latent heat, vaporization, reaction heat, and additional heat. Each step is documented 
+ * with its own formula and symbol table.
+ *
+ * The calculation follows a top-down approach:
+ * 1. **Total Heat Required** - Sum of liquid heating/vaporization, reaction heat, and additional heat
+ * 2. **Liquid Heating** - Heat required to raise temperature of liquid (varies based on vaporization)
+ *    - Below vaporizing temp: Sensible heat only
+ *    - Above vaporizing temp: Sensible heat to vaporizing + latent heat + sensible heat of vapor and remaining liquid
+ * 3. **Heat of Reaction** - Endothermic reaction heat if applicable
  *
  * @heading{Total Heat Required}
  * @copydoc liquid_load_charge_material_total_heat_required_cpp_formula

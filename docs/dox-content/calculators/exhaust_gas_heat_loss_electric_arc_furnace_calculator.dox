@@ -2,7 +2,15 @@
  * @defgroup exhaust_gas_heat_loss_electric_arc_furnace_calculator Exhaust Gas Heat Loss Calculation (Electric Arc Furnace)
  * @ingroup heat_loss_calculators
  * @brief Calculates total heat loss from exhaust gas in electric arc furnaces (EAF).
- * @details The following formulas describe the calculation of heat loss from exhaust gases, including chemical heat, total heat value per unit volume, corrected volume flow rate, and total heat loss. Each step is documented with its own formula and symbol table.
+ * @details The following formulas describe the calculation of heat loss from exhaust gases, including chemical heat, 
+ * total heat value per unit volume, corrected volume flow rate, and total heat loss. Each step is documented with 
+ * its own formula and symbol table.
+ *
+ * The calculation follows a top-down approach:
+ * 1. **Total Heat Loss** - Calculate total heat carried away by exhaust gases
+ * 2. **Corrected Volume Flow Rate** - Adjust measured flow rate to standard conditions
+ * 3. **Total Heat Value per Unit Volume** - Sum of chemical heat and sensible heat content
+ * 4. **Chemical Heat** - Heat content from unburned combustibles in exhaust
  *
  * @heading{Total Heat Loss}
  * @copydoc exhaust_gas_total_heat_loss_cpp_formula
@@ -16,62 +24,86 @@
  * @heading{Chemical Heat}
  * @copydoc exhaust_gas_chemical_heat_cpp_formula
  *
+ * @see physics::us::kStandardGasTemperatureR for standard gas temperature
+ * @see physics::conversions::kFahrenheitToRankineOffset for temperature conversion
+ * @see physics::conversions::kMinutesPerHour for time conversion
  */
 
 /**
- * @defgroup exhaust_gas_chemical_heat_cpp_formula Chemical Heat Formula
+ * @defgroup exhaust_gas_total_heat_loss_cpp_formula Total Heat Loss Formula
  * @ingroup exhaust_gas_heat_loss_electric_arc_furnace_calculator
- * @formula{exhaust-gas-chemical-heat-cpp; Q_{chem} = \frac{CO \cdot 321 + H_{2} \cdot 325 + Combustibles \cdot 1020}{100}}
+ * @brief Total heat loss from exhaust gases.
+ * @details The total heat loss is calculated by multiplying the corrected volume flow rate, heat content per unit volume, 
+ * and conversion factor from minutes to hours.
+ * 
+ * @formula{exhaust-gas-total-heat-loss-cpp; Q_{total} = VFR_{total} \cdot Q_{flue} \cdot 60}
+ * 
  * @subheading{Symbols}
  * @symtable
- * @symrow{Q_{chem}; Chemical heat per unit volume; \btu}
- * @symrow{CO; Percent CO in exhaust gas; \percent}
- * @symrow{H_{2}; Percent @math{H_2} in exhaust gas; \percent}
- * @symrow{Combustibles; Percent other combustibles in exhaust gas; \percent}
- * @symrow{321; Heating value for CO; \btu\per\percent}
- * @symrow{325; Heating value for @math{H_2}; \btu\per\percent}
- * @symrow{1020; Heating value for other combustibles; \btu\per\percent}
- * @endsymtable
- */
-
-/**
- * @defgroup exhaust_gas_total_heat_value_cpp_formula Total Heat Value per Unit Volume Formula
- * @ingroup exhaust_gas_heat_loss_electric_arc_furnace_calculator
- * @formula{exhaust-gas-total-heat-value-cpp; Q_{flue} = Q_{chem} + 0.0225 \cdot (T_{gas} - T_{ambient}) + Dust_{loading} \cdot 0.25 \cdot (T_{gas} - T_{ambient})}
- * @subheading{Symbols}
- * @symtable
- * @symrow{Q_{flue}; Total heat value per unit volume; \btu}
- * @symrow{Q_{chem}; Chemical heat per unit volume; \btu}
- * @symrow{0.0225; Sensible heat factor; \btu\per\degreeFahrenheit}
- * @symrow{T_{gas}; Exhaust gas temperature; \degreeFahrenheit}
- * @symrow{T_{ambient}; Ambient/reference temperature; \degreeFahrenheit}
- * @symrow{Dust_{loading}; Dust loading in exhaust gas; \pound\per\cubic\foot}
- * @symrow{0.25; Dust heat factor; \btu\per\degreeFahrenheit}
+ * @symrow{Q_{total}; Total heat loss; \btu\per\hour}
+ * @symrow{VFR_{total}; Corrected volume flow rate; \cubicFoot\per\minute}
+ * @symrow{Q_{flue}; Total heat value per unit volume; \btu\per\cubicFoot}
+ * @symrow{60; Minutes per hour - see @ref physics::conversions::kMinutesPerHour; \minute\per\hour}
  * @endsymtable
  */
 
 /**
  * @defgroup exhaust_gas_total_vfr_cpp_formula Corrected Volume Flow Rate Formula
  * @ingroup exhaust_gas_heat_loss_electric_arc_furnace_calculator
+ * @brief Conversion of measured flow rate to standard conditions.
+ * @details The measured volume flow rate is corrected to standard temperature (520°R = 60°F) using the ideal gas law temperature correction.
+ * 
  * @formula{exhaust-gas-total-vfr-cpp; VFR_{total} = VFR_{measured} \cdot \frac{T_{std}}{460 + T_{gas}}}
+ * 
  * @subheading{Symbols}
  * @symtable
- * @symrow{VFR_{total}; Corrected volume flow rate; \ft\cubed\per\minute}
- * @symrow{VFR_{measured}; Measured volume flow rate; \ft\cubed\per\minute}
- * @symrow{T_{std}; Standard gas temperature (520 °F); \degreeFahrenheit}
+ * @symrow{VFR_{total}; Corrected volume flow rate; \cubicFoot\per\minute}
+ * @symrow{VFR_{measured}; Measured volume flow rate; \cubicFoot\per\minute}
+ * @symrow{T_{std}; Standard gas temperature - see @ref physics::us::kStandardGasTemperatureR; \degreeRankine}
+ * @symrow{460; Fahrenheit to Rankine offset - see @ref physics::conversions::kFahrenheitToRankineOffset; \degreeRankine}
  * @symrow{T_{gas}; Exhaust gas temperature; \degreeFahrenheit}
  * @endsymtable
  */
 
 /**
- * @defgroup exhaust_gas_total_heat_loss_cpp_formula Total Heat Loss Formula
+ * @defgroup exhaust_gas_total_heat_value_cpp_formula Total Heat Value per Unit Volume Formula
  * @ingroup exhaust_gas_heat_loss_electric_arc_furnace_calculator
- * @formula{exhaust-gas-total-heat-loss-cpp; Q_{total} = VFR_{total} \cdot Q_{flue} \cdot 60}
+ * @brief Heat content per unit volume of exhaust gas.
+ * @details The total heat value includes chemical heat from unburned combustibles plus sensible heat from the 
+ * temperature of the gas and entrained dust.
+ * 
+ * @formula{exhaust-gas-total-heat-value-cpp; Q_{flue} = Q_{chem} + 0.0225 \cdot (T_{gas} - T_{ambient}) + Dust_{loading} \cdot 0.25 \cdot (T_{gas} - T_{ambient})}
+ * 
  * @subheading{Symbols}
  * @symtable
- * @symrow{Q_{total}; Total heat loss; \btu\per\hour}
- * @symrow{VFR_{total}; Corrected volume flow rate; \ft\cubed\per\minute}
- * @symrow{Q_{flue}; Total heat value per unit volume; \btu}
- * @symrow{60; Minutes per hour; \minute\per\hour}
+ * @symrow{Q_{flue}; Total heat value per unit volume; \btu\per\cubicFoot}
+ * @symrow{Q_{chem}; Chemical heat per unit volume; \btu\per\cubicFoot}
+ * @symrow{0.0225; Sensible heat factor for gas; \btu\per\cubicFoot\degreeFahrenheit}
+ * @symrow{T_{gas}; Exhaust gas temperature; \degreeFahrenheit}
+ * @symrow{T_{ambient}; Ambient/reference temperature; \degreeFahrenheit}
+ * @symrow{Dust_{loading}; Dust loading in exhaust gas; \pound\per\cubicFoot}
+ * @symrow{0.25; Dust heat factor; \btu\per\pound\degreeFahrenheit}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup exhaust_gas_chemical_heat_cpp_formula Chemical Heat Formula
+ * @ingroup exhaust_gas_heat_loss_electric_arc_furnace_calculator
+ * @brief Chemical heat from unburned combustibles.
+ * @details The chemical heat represents the heating value of unburned combustibles (CO, H₂, and other combustibles) 
+ * in the exhaust gas. Each component is multiplied by its heating value and summed.
+ * 
+ * @formula{exhaust-gas-chemical-heat-cpp; Q_{chem} = \frac{CO \cdot 321 + H_{2} \cdot 325 + Combustibles \cdot 1020}{100}}
+ * 
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{chem}; Chemical heat per unit volume; \btu\per\cubicFoot}
+ * @symrow{CO; Percent CO in exhaust gas; \percent}
+ * @symrow{H_{2}; Percent @math{H_2} in exhaust gas; \percent}
+ * @symrow{Combustibles; Percent other combustibles in exhaust gas; \percent}
+ * @symrow{321; Heating value for CO; \btu\per\cubicFoot\per\percent}
+ * @symrow{325; Heating value for @math{H_2}; \btu\per\cubicFoot\per\percent}
+ * @symrow{1020; Heating value for other combustibles; \btu\per\cubicFoot\per\percent}
+ * @symrow{100; Percentage conversion factor; \unitless}
  * @endsymtable
  */

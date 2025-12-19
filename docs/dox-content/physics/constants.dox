@@ -1,0 +1,70 @@
+/**
+ * @defgroup physics_constants Physics Constants
+ * @ingroup physics
+ * @brief Physical constants used in process heating and thermodynamic calculations.
+ * @details
+ * This page documents the fundamental physical constants used throughout the MEASUR Tools Suite for heat transfer, 
+ * thermodynamic, and energy calculations. Constants are provided in both SI (Standard International) and 
+ * U.S. Customary units to support various engineering applications.
+ *
+ * The constants are organized by unit system and include:
+ * - **Radiation Constants:** Stefan-Boltzmann constant for thermal radiation calculations
+ * - **Water Properties:** Specific heat, latent heat, boiling point, and density
+ * - **Temperature Conversions:** Offsets and conversion factors between unit systems
+ * - **Energy Conversions:** Kilowatt to BTU/hr and other power unit conversions
+ *
+ * All constants are defined with appropriate units and source references where applicable.
+ *
+ * @heading{SI Unit System Constants}
+ * The following constants are defined in Standard International (SI) units:
+ *
+ * | Constant Name                      | Symbol | Value           | Unit                                 | Description |
+ * |------------------------------------|--------|-----------------|--------------------------------------|-------------|
+ * | Stefan-Boltzmann constant          | @math{\sigma} | @qty{5.670374419e-8; \watt\per\meter\squared\kelvin\tothe{4}} | physics::si::kStefanBoltzmann | Radiation heat transfer constant |
+ * | Standard water density at 4°C      | @math{\rho_w} | @qty{1000.0; \kilogram\per\meter\cubed} | physics::si::kWaterDensityBase | Base density for water property calculations |
+ *
+ * @heading{U.S. Customary Unit System Constants}
+ * The following constants are defined in U.S. Customary units:
+ *
+ * | Constant Name                      | Symbol | Value           | Unit                                 | Description |
+ * |------------------------------------|--------|-----------------|--------------------------------------|-------------|
+ * | Stefan-Boltzmann constant          | @math{\sigma} | @qty{1.713441e-9; \btu\per\hour\foot\squared\degreeRankine\tothe{4}} | physics::us::kStefanBoltzmann | Radiation heat transfer constant (see @cite capehart2007guide) |
+ * | Water boiling point                | @math{T_{boil}} | @qty{212.0; \degreeFahrenheit} | physics::us::kWaterBoilingPointF | Standard atmospheric pressure boiling point |
+ * | Specific heat of water vapor       | @math{C_{p,vapor}} | @qty{0.481; \btu\per\pound\degreeFahrenheit} | physics::us::kSpecificHeatWaterVapor | Specific heat capacity of water vapor |
+ * | Latent heat of evaporation         | @math{H_{evap}} | @qty{970.0; \btu\per\pound} | physics::us::kWaterEvaporation | Heat required for water phase change |
+ * | Standard gas temperature           | @math{T_{std}} | @qty{520.0; \degreeRankine} | physics::us::kStandardGasTemperatureR | Reference temperature (60°F + 460) for gas calculations |
+ * | Ambient reference temperature      | @math{T_{amb}} | @qty{60.0; \degreeFahrenheit} | physics::us::kAmbientTemperatureF | Standard ambient temperature for calculations |
+ * | Base specific heat of air          | @math{C_{p,air,base}} | @qty{0.017828518; \btu\per\pound\degreeFahrenheit} | physics::us::kSpecificHeatAirBase | Base value for exhaust gas calculations |
+ * | Specific heat temperature coefficient | @math{C_{p,air,coeff}} | @qty{0.000002556; \btu\per\pound\degreeFahrenheit\per\degreeFahrenheit} | physics::us::kSpecificHeatAirCoeff | Temperature-dependent coefficient |
+ * | Air correction base                | - | @qty{-1.078913827; \btu\per\pound} | physics::us::kAirCorrectionBase | Correction term for exhaust gas calculations |
+ *
+ * @heading{Unit Conversion Constants}
+ * The following constants are used for converting between different unit systems:
+ *
+ * | Constant Name                      | Symbol | Value           | Unit                                 | Description |
+ * |------------------------------------|--------|-----------------|--------------------------------------|-------------|
+ * | Fahrenheit to Rankine offset       | - | @qty{459.67; \degreeRankine} | physics::conversions::kFahrenheitToRankineOffset | Add to °F to get °R |
+ * | Hours per day                      | - | 24.0 | @unitb{\unitless} | physics::conversions::kHoursPerDay | Time conversion factor |
+ * | Minutes per hour                   | - | 60.0 | @unitb{\unitless} | physics::conversions::kMinutesPerHour | Time conversion factor |
+ * | Kilowatt to BTU/hr                 | - | @qty{3412.136247820839; \btu\per\hour\per\kilowatt} | physics::conversions::kKilowattToBtuPerHour | Energy conversion factor |
+ * | kg/m³ to lb/gal                    | - | @qty{0.0083454; \pound\per\gallon\per\kilogram\per\meter\cubed} | physics::conversions::kKgPerM3ToLbPerGal | Density conversion factor |
+ *
+ * @heading{Temperature Conversion Formulas}
+ * @subheading{Fahrenheit to Rankine}
+ * @formula{fahrenheit-to-rankine-const; T_R = T_F + 459.67}
+ * @subheading{Fahrenheit to Celsius}
+ * @formula{fahrenheit-to-celsius-const; T_C = \frac{5}{9}(T_F - 32)}
+ *
+ * @par Symbol Definitions
+ * @symtable
+ * @symrow{T_R; Temperature in degrees Rankine; \degreeRankine}
+ * @symrow{T_F; Temperature in degrees Fahrenheit; \degreeFahrenheit}
+ * @symrow{T_C; Temperature in degrees Celsius; \degreeCelsius}
+ * @endsymtable
+ *
+ * @note All constants are inline constexpr in C++ for compile-time optimization.
+ * @see physics::si Namespace for SI unit constants
+ * @see physics::us Namespace for U.S. Customary unit constants
+ * @see physics::conversions Namespace for unit conversion constants
+ * @see gas_constants for thermodynamic and stoichiometric constants
+ */

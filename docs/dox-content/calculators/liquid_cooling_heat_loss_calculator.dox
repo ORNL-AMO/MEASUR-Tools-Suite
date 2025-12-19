@@ -2,31 +2,40 @@
  * @defgroup liquid_cooling_heat_loss_calculator Liquid Cooling Heat Loss Calculator
  * @ingroup heat_loss_calculators
  * @brief Calculates heat loss due to liquid cooling in process heating equipment.
- * @details This calculator estimates the heat removed by liquid cooling systems, using flow rate, liquid density, inlet and outlet temperatures, specific heat, and a correction factor. The algorithm is suitable for modeling cooling losses in industrial furnaces, ovens, and similar systems, for liquids other than water.
+ * @details This calculator estimates the heat removed by liquid cooling systems, using flow rate, liquid density, 
+ * inlet and outlet temperatures, specific heat, and a correction factor. The algorithm is suitable for modeling 
+ * cooling losses in industrial furnaces, ovens, and similar systems, for liquids other than water.
+ *
+ * The calculation follows a top-down approach:
+ * 1. **Total Heat Loss** - Calculate heat removed by liquid based on flow rate, density, specific heat, and temperature rise
+ *
  * @note If the cooling liquid is water, use the @ref water_cooling_heat_loss_calculator instead for more accurate water property calculations.
  *
  * @heading{Total Liquid Cooling Heat Loss}
  * @copydoc liquid_cooling_heat_loss_formula
  *
- *
  * @note For heat losses due to gas cooling see @ref gas_cooling_heat_loss_calculator.
- *
- * @see Perry’s Chemical Engineers’ Handbook; NIST Engineering Statistics
+ * @see Perry's Chemical Engineers' Handbook; NIST Engineering Statistics
+ * @see physics::conversions::kMinutesPerHour for time conversion
  */
 
 /**
  * @defgroup liquid_cooling_heat_loss_formula Liquid Cooling Heat Loss Formula
  * @ingroup liquid_cooling_heat_loss_calculator
+ * @brief Total heat loss due to liquid cooling.
+ * @details The heat loss is calculated by multiplying the liquid flow rate, density, specific heat, temperature rise, 
+ * and correction factor. The factor of 60 converts from gallons per minute to gallons per hour.
+ * 
  * @formula{liquid-cooling-heat-loss; Q_\text{cool} = FR \cdot 60 \cdot \rho_{l,lb/ft^3} \cdot SH \cdot \Delta T \cdot CF}
+ * 
  * @subheading{Symbols}
  * @symtable
  * @symrow{Q_\text{cool}; Liquid cooling heat loss; \btu\per\hour}
  * @symrow{FR; Liquid flow rate; \gallon\per\minute}
- * @symrow{60; Minutes per hour (GPM to GPH conversion); \unitless}
- * @symrow{\rho_{l,lb/ft^3}; Liquid density; \pound\per\cubic\foot}
- * @symrow{SH; Specific heat of liquid; \btu\per\pound\per\degreeFahrenheit}
+ * @symrow{60; Minutes per hour (GPM to GPH conversion) - see @ref physics::conversions::kMinutesPerHour; \unitless}
+ * @symrow{\rho_{l,lb/ft^3}; Liquid density; \pound\per\cubicFoot}
+ * @symrow{SH; Specific heat of liquid; \btu\per\pound\degreeFahrenheit}
  * @symrow{\Delta T; Temperature rise (outlet - inlet); \degreeFahrenheit}
  * @symrow{CF; Correction factor; \unitless}
  * @endsymtable
- * @details The formula multiplies flow rate (GPM), minutes per hour, liquid density, specific heat, temperature rise, and correction factor to obtain total heat loss.
  */

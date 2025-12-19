@@ -7,16 +7,27 @@
  * temperature. These fixtures absorb heat from the furnace as they are heated from their initial temperature to the
  * final furnace temperature. The calculator computes the total heat loss based on the feed rate, specific heat of the
  * fixture material, initial and final temperatures, and a correction factor @cite trinks2003industrial. The calculation
- * assumes there is no melting or phase change of the fixture material involved. Relevant formulas are documented below.
+ * assumes there is no melting or phase change of the fixture material involved.
  *
- * @heading{Heat Loss}
+ * The calculation follows a top-down approach:
+ * 1. **Total Heat Loss** - Calculate sensible heat absorbed by fixtures as they are heated
+ *
+ * Relevant formulas are documented below.
+ *
+ * @heading{Total Heat Loss}
  * @copydoc fixture_heat_loss_formula
  */
 
 /**
  * @defgroup fixture_heat_loss_formula Fixture Heat Loss Formula
  * @ingroup fixture_heat_loss_calculator
+ * @brief Total heat loss due to fixture heating.
+ * @details The heat loss is the sensible heat required to raise the temperature of the fixture material from its 
+ * initial temperature to the final (furnace) temperature, adjusted by a correction factor. This represents energy 
+ * absorbed by the fixtures that is not available for the primary heating process.
+ * 
  * @formula{fixture-heat-loss; Q = \dot{m} \cdot c_p \cdot (T_\text{final} - T_\text{initial}) \cdot f_\text{corr}}
+ * 
  * @subheading{Symbols}
  * @symtable
  * @symrow{Q; Heat loss; \btu\per\hour}

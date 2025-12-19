@@ -2,7 +2,15 @@
  * @defgroup opening_heat_loss_calculator Opening Heat Loss Calculator
  * @ingroup heat_loss_calculators
  * @brief Calculates heat losses from process heating equipment openings to the ambient.
- * @details This calculator estimates radiative heat loss through circular and rectangular openings in process heating equipment. It uses empirical polynomial approximations for the radiative view factor, based on the geometry of the opening and wall thickness. The calculator is suitable for modeling heat loss from doors, ports, and other openings, and is based on standard heat transfer references and ASHRAE research.
+ * @details This calculator estimates radiative heat loss through circular and rectangular openings in process heating 
+ * equipment. It uses empirical polynomial approximations for the radiative view factor, based on the geometry of the 
+ * opening and wall thickness. The calculator is suitable for modeling heat loss from doors, ports, and other openings, 
+ * and is based on standard heat transfer references and ASHRAE research.
+ *
+ * The calculation follows a top-down approach:
+ * 1. **Total Opening Heat Loss** - Calculate radiative heat loss through opening based on Stefan-Boltzmann law
+ * 2. **View Factor** - Determine geometric view factor using empirical polynomial correlations
+ * 3. **Polynomial Coefficients** - Apply appropriate polynomial based on opening geometry and thickness ratio
  *
  * @heading{Total Opening Heat Loss}
  * @copydoc opening_total_heat_loss_formula
@@ -16,7 +24,8 @@
  * @heading{Symbols}
  * @copydoc opening_heat_loss_symbols
  *
- * @see Kays & Crawford, "Convective Heat and Mass Transfer"; Incropera & DeWitt, "Fundamentals of Heat and Mass Transfer"; Glicksman (ASHRAE Transactions, 1972); Perry’s Chemical Engineers’ Handbook
+ * @see Kays & Crawford, "Convective Heat and Mass Transfer"; Incropera & DeWitt, "Fundamentals of Heat and Mass Transfer"; Glicksman (ASHRAE Transactions, 1972); Perry's Chemical Engineers' Handbook
+ * @see physics::us::kStefanBoltzmann for the Stefan-Boltzmann constant
  */
 
 /**

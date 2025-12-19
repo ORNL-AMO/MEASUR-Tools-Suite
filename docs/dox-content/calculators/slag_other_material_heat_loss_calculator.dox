@@ -2,16 +2,30 @@
  * @defgroup slag_other_material_heat_loss_calculator Slag/Other Material Heat Loss Calculator
  * @ingroup heat_loss_calculators
  * @brief Calculates heat losses from slag and other waste materials in process heating equipment.
- * @details This calculator estimates the heat required to heat slag or other combustion byproducts in a furnace. It uses the discharged weight, specific heat, initial and final temperatures, and a correction factor. Assumes majority of slag is silicon and specific heat does not change with temperature. Glass structures in slag may significantly affect results. The calculation is relevant for electrotechnologies and does not account for melting or phase change. Relevant formulas are documented below.
+ * @details This calculator estimates the heat required to heat slag or other combustion byproducts in a furnace. 
+ * It uses the discharged weight, specific heat, initial and final temperatures, and a correction factor. Assumes 
+ * majority of slag is silicon and specific heat does not change with temperature. Glass structures in slag may 
+ * significantly affect results. The calculation is relevant for electrotechnologies and does not account for 
+ * melting or phase change.
  *
- * @heading{Heat Loss}
+ * The calculation follows a top-down approach:
+ * 1. **Total Heat Loss** - Calculate sensible heat absorbed by slag/waste material
+ *
+ * Relevant formulas are documented below.
+ *
+ * @heading{Total Heat Loss}
  * @copydoc slag_other_material_heat_loss_formula
  */
 
 /**
  * @defgroup slag_other_material_heat_loss_formula Slag/Other Material Heat Loss Formula
  * @ingroup slag_other_material_heat_loss_calculator
+ * @brief Total heat loss due to slag or other waste material heating.
+ * @details The heat loss is the sensible heat required to raise the temperature of the waste material from its 
+ * inlet temperature to the outlet temperature, adjusted by a correction factor.
+ * 
  * @formula{slag-other-material-heat-loss; Q = m \cdot c_p \cdot (T_\text{outlet} - T_\text{inlet}) \cdot f_\text{corr}}
+ * 
  * @subheading{Symbols}
  * @symtable
  * @symrow{Q; Heat loss; \btu}

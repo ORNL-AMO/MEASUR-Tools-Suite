@@ -5,10 +5,14 @@
  * @details This calculator is used to estimate heat losses of process heating equipment due to the introduction of
  * atmospheric gases (e.g., nitrogen, hydrogen, etc.). These gases absorb heat from the equipment and carry it away when
  * they exit the system. The calculator computes the total heat loss based on the flow rate, specific heat of the gas,
- * inlet and outlet temperatures, and a correction factor @cite trinks2003industrial. Relevant formulas and values are
- * documented below.
+ * inlet and outlet temperatures, and a correction factor @cite trinks2003industrial.
  *
- * @heading{Heat Loss}
+ * The calculation follows a top-down approach:
+ * 1. **Total Heat Loss** - Calculate the heat absorbed by atmospheric gases as they pass through the system
+ *
+ * Relevant formulas and values are documented below.
+ *
+ * @heading{Total Heat Loss}
  * @copydoc atmosphere_heat_loss_formula
  *
  * @heading{Specific Heat Values}
@@ -18,15 +22,20 @@
 /**
  * @defgroup atmosphere_heat_loss_formula Atmosphere Heat Loss Formula
  * @ingroup atmosphere_heat_loss_calculator
- * @formula{atmosphere-heat-loss; Q = \dot{v} \cdot c_p \cdot (T_\text{out} - T_\text{in}) \cdot
- * f_\text{corr}}
+ * @brief Total heat loss due to atmospheric gases.
+ * @details The heat loss is calculated by multiplying the volumetric flow rate, specific heat capacity, 
+ * temperature rise of the gas, and a correction factor. This represents the sensible heat absorbed by 
+ * the atmospheric gas as it passes through the heating equipment.
+ * 
+ * @formula{atmosphere-heat-loss; Q = \dot{v} \cdot c_p \cdot (T_\text{out} - T_\text{in}) \cdot f_\text{corr}}
+ * 
  * @subheading{Symbols}
  * @symtable
  * @symrow{Q; Heat loss; \btu\per\hour}
  * @symrow{\dot{v}; Flow rate of gas; \standardCubicFeet\per\hour}
  * @symrow{c_p; Specific heat of gas; \btu\per\standardCubicFeet\degreeFahrenheit}
  * @symrow{T_\text{out}; Outlet temperature of gas; \degreeFahrenheit}
- * @symrow{T_\text{in}; %Inlet temperature of gas; \degreeFahrenheit}
+ * @symrow{T_\text{in}; Inlet temperature of gas; \degreeFahrenheit}
  * @symrow{f_\text{corr}; Correction factor; \unitless}
  * @endsymtable
  */

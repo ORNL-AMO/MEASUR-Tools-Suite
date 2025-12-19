@@ -2,7 +2,19 @@
  * @defgroup solid_load_charge_material_heat_required_calculator Solid Load Charge Material Heat Required Calculator
  * @ingroup heat_loss_calculators
  * @brief Calculates total heat required for a solid load/charge material.
- * @details The following formulas describe the calculation of total heat required for a solid load/charge material, including sensible heat, latent heat, vaporization, reaction heat, and additional heat. Each step is documented with its own formula and symbol table.
+ * @details The following formulas describe the calculation of total heat required for a solid load/charge material, 
+ * including sensible heat, latent heat, vaporization, reaction heat, and additional heat. Each step is documented 
+ * with its own formula and symbol table.
+ *
+ * The calculation follows a top-down approach:
+ * 1. **Total Heat Required** - Sum of moisture removal, solid heating, reaction heat, and additional heat
+ * 2. **Moisture Removal** - Heat to evaporate water content (varies based on discharge temperature)
+ *    - Below boiling: Sensible heat only
+ *    - Above boiling: Sensible heat to boiling + latent heat + sensible heat of vapor
+ * 3. **Solid Heating** - Heat to raise temperature of dry solid (varies based on melting)
+ *    - Below melting: Sensible heat only
+ *    - Above melting: Sensible heat to melting + latent heat + sensible heat of liquid/remaining solid
+ * 4. **Heat of Reaction** - Endothermic reaction heat if applicable
  *
  * @heading{Total Heat Required}
  * @copydoc solid_load_charge_material_total_heat_required_cpp_formula
@@ -10,7 +22,7 @@
  * @heading{Moisture Removal (Below boiling point)}
  * @copydoc solid_load_charge_material_moisture_removal_cpp_formula
  *
-* @heading{Moisture Removal (Above boiling point)}
+ * @heading{Moisture Removal (Above boiling point)}
  * @copydoc solid_load_charge_material_moisture_removal_above_boiling_cpp_formula
  *
  * @heading{Heat for Remaining Moisture}
@@ -19,15 +31,17 @@
  * @heading{Solid Heating (Below melting point)}
  * @copydoc solid_load_charge_material_sensible_heat_cpp_formula
  *
-* @heading{Solid Heating (Above melting point)}
+ * @heading{Solid Heating (Above melting point)}
  * @copydoc solid_load_charge_material_full_heat_cpp_formula
  *
  * @heading{Heat of Reaction}
  * @copydoc solid_load_charge_material_heat_of_reaction_cpp_formula
  *
  * @see solid_load_charge_material_data_database
+ * @see physics::us::kWaterBoilingPointF for water boiling point
+ * @see physics::us::kWaterEvaporation for latent heat of evaporation
+ * @see physics::us::kSpecificHeatWaterVapor for water vapor specific heat
  */
-
 /**
  * @defgroup solid_load_charge_material_total_heat_required_cpp_formula Total Heat Required Formula
  * @ingroup solid_load_charge_material_heat_required_calculator
