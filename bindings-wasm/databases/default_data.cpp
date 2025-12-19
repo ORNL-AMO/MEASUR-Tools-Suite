@@ -11,8 +11,10 @@
 #include "databases/compressors_type5_data.h"
 #include "databases/compressors_type6_data.h"
 #include "databases/gas_load_charge_material_data.h"
+#include "databases/gas_type_data.h"
 #include "databases/lighting_data.h"
 #include "databases/MotorData.h"
+#include "databases/wall_type_data.h"
 #include "motorDriven/motor/MotorData.h"
 #include "other/lighting_data.h"
 #include "processHeat/losses/solid_liquid_flue_gas_material.h"
@@ -111,4 +113,24 @@ EMSCRIPTEN_BINDINGS(solid_liquid_flue_gas_material_data) {
 
     register_vector<SolidLiquidFlueGasMaterial>("SolidLiquidFlueGasMaterialV");
     function("getDefaultSolidLiquidFlueGasMaterials", &get_default_solid_liquid_flue_gas_materials);
+}
+
+EMSCRIPTEN_BINDINGS(wall_type_data) {
+    using namespace wall_type_data;
+    value_object<WallType>("WallType")
+        .field("wallDescription", &WallType::wall_description)
+        .field("shapeFactor", &WallType::shape_factor);
+
+    register_vector<WallType>("WallTypeV");
+    function("getDefaultWallTypes", &get_default_wall_types);
+}
+
+EMSCRIPTEN_BINDINGS(gas_type_data) {
+    using namespace gas_type_data;
+    value_object<GasType>("AtmosphereGasType")
+        .field("gasDescription", &GasType::gas_description)
+        .field("specificHeat", &GasType::specific_heat);
+
+    register_vector<GasType>("AtmosphereGasTypeV");
+    function("getDefaultGasTypes", &get_default_gas_types);
 }

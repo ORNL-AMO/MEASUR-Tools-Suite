@@ -11,7 +11,7 @@ describe('Process Wall Heat Loss', function () {
     });
 
     it('should verify defined wall types are correct', function () {
-        const wallTypes = moduleInstance.wallTypes();
+        const wallTypes = moduleInstance.getDefaultWallTypes();
 
         // Expected wall types and their shape factors
         const expected = [

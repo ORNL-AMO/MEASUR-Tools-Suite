@@ -33,14 +33,6 @@ EMSCRIPTEN_BINDINGS(losses_enums) {
 // Bindings for the atmosphere_heat_loss namespace
 EMSCRIPTEN_BINDINGS(atmosphere_heat_loss) {
     using namespace atmosphere_heat_loss;
-
-    value_object<GasType>("AtmosphereGasType")
-        .field("gasDescription", &GasType::gas_description)
-        .field("specificHeat", &GasType::specific_heat);
-
-    register_vector<GasType>("AtmosphereGasTypes");
-
-    function("atmosphereGasTypes", &gasTypes);
     function("atmosphereTotalHeatLoss", &totalHeatLoss);
 }
 
@@ -278,14 +270,6 @@ EMSCRIPTEN_BINDINGS(solid_load_charge_material_heat_required) {
 // Bindings for the wall_heat_loss namespace
 EMSCRIPTEN_BINDINGS(wall_heat_loss) {
     using namespace wall_heat_loss;
-
-    value_object<WallType>("WallType")
-        .field("wallDescription", &WallType::wall_description)
-        .field("shapeFactor", &WallType::shape_factor);
-
-    register_vector<WallType>("WallTypes");
-
-    function("wallTypes", &wallTypes);
     function("wallTotalHeatLoss", &totalHeatLoss);
     function("wallConvectiveHeatLoss", &convectiveHeatLoss);
     function("wallRadiativeHeatLoss", &radiativeHeatLoss);

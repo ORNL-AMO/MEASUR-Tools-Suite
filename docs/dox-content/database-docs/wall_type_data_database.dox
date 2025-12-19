@@ -1,0 +1,30 @@
+/**
+ * @defgroup wall_type_data_database Wall Type Database
+ * @ingroup databases
+ * @brief Contains default data for wall types used in wall heat loss calculations.
+ * @details This database provides default values for shape factors associated with various wall types. The data is used in wall heat loss calculations for process heating systems.
+ *
+ * @heading{Default Wall Type Data}
+ * @copydoc wall_type_data 
+ * Source: @cite astmC680
+ */
+
+/**
+ * @defgroup wall_type_data Default Wall Type Data
+ * @ingroup wall_type_data_database
+ * The following table lists the default wall types and their shape factor values:
+ *
+ * | Wall Description                                     | Shape Factor @unitb{\unitless} |
+ * |------------------------------------------------------|--------------------------------|
+ * | Horizontal cylinders                                 | 1.016                          |
+ * | Longer vertical cylinders                            | 1.235                          |
+ * | Vertical plates                                      | 1.394                          |
+ * | Horizontal plate facing up, warmer than air          | 1.79                           |
+ * | Horizontal plate facing down, warmer than air        | 0.89                           |
+ * | Horizontal plate facing up, cooler than air          | 0.89                           |
+ * | Horizontal plate facing down, cooler than air        | 1.79                           |
+ *
+ * @note Shape factors are used to account for the effect of surface orientation on convective heat transfer.
+ *
+ * @see wall_heat_loss_calculator
+ */

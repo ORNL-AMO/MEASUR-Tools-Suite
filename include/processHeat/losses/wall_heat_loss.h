@@ -7,7 +7,6 @@
  * @copybrief wall_heat_loss_calculator
  */
 
-#include <array>
 #include <string>
 #include <vector>
 
@@ -17,41 +16,6 @@
  * @copybrief wall_heat_loss_calculator
  */
 namespace wall_heat_loss {
-
-/**
- * @ingroup wall_heat_loss_calculator
- * @struct WallType
- * @brief Represents a wall type and its associated shape factor used in heat loss calculations.
- * @see wall_shape_factors
- */
-struct WallType {
-    std::string wall_description; ///< Description of the wall type.
-    double      shape_factor;     ///< Shape factor associated with the wall type @unitb{\unitless}
-};
-
-/**
- * @ingroup wall_heat_loss_calculator
- * @brief Predefined shape factors for various wall types.
- * @see wall_shape_factors
- */
-inline const std::array<WallType, 7> kWallTypes {{{"Horizontal cylinders", 1.016},
-                                                  {"Longer vertical cylinders", 1.235},
-                                                  {"Vertical plates", 1.394},
-                                                  {"Horizontal plate facing up, warmer than air", 1.79},
-                                                  {"Horizontal plate facing down, warmer than air", 0.89},
-                                                  {"Horizontal plate facing up, cooler than air", 0.89},
-                                                  {"Horizontal plate facing down, cooler than air", 1.79}}};
-
-/**
- * @ingroup wall_heat_loss_calculator
- * @brief Retrieves the predefined shape factors for various wall types.
- * @return A vector of WallType structures containing wall descriptions and their corresponding shape factors.
- * @see wall_shape_factors
- */
-inline const std::vector<WallType>& wallTypes() {
-    static const std::vector<WallType> wall_types_vector(kWallTypes.begin(), kWallTypes.end());
-    return wall_types_vector;
-}
 
 /**
  * @ingroup wall_heat_loss_calculator
