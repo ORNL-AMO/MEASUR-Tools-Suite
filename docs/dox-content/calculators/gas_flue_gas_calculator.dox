@@ -15,7 +15,7 @@
  * 5. **Excess Air and Flue Gas O2** - Determine excess air from O2 measurement or vice versa
  * 6. **Temperature Conversion** - Convert temperatures to absolute scale for thermodynamic calculations
  *
- * All variables use snake_case. Each step is documented with formulas and complete symbol tables.
+ * Each step is documented with formulas and complete symbol tables.
  *
  * @heading{Available Heat Calculation}
  * @copydoc gas_flue_gas_material_available_heat_formula
