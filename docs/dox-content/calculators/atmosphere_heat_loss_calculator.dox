@@ -16,7 +16,8 @@
  * @copydoc atmosphere_heat_loss_formula
  *
  * @heading{Specific Heat Values}
- * @copydoc atmosphere_specific_heat_values
+ * @copydoc gas_type_data
+ * see gas_type_data
  */
 
 /**
@@ -38,18 +39,4 @@
  * @symrow{T_\text{in}; Inlet temperature of gas; \degreeFahrenheit}
  * @symrow{f_\text{corr}; Correction factor; \unitless}
  * @endsymtable
- */
-
-/**
- * @defgroup atmosphere_specific_heat_values Atmosphere Specific Heat Values
- * @ingroup atmosphere_heat_loss_calculator
- * Reference temperature: @qty{60; \degreeFahrenheit}
- * | Gas Type        | Specific Heat @unitb{\btu\per\standardCubicFeet\degreeFahrenheit} |
- * | --------------- | ----------------------------------------------------------------- |
- * | Nitrogen        | 0.0185                                                            |
- * | Hydrogen        | 0.0182                                                            |
- * | Exothermic Gas  | 0.0185                                                            |
- * | Endothermic Gas | 0.0185                                                            |
- * | Air             | 0.0184                                                            |
- * | Water Vapor     | 0.0212                                                            |
  */
