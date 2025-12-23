@@ -1,0 +1,129 @@
+/**
+ * @defgroup cascade_heat_low_to_high_calculator Cascade Heat Low-to-High Calculator
+ * @ingroup process_heat_calculators
+ * @brief Calculates energy and cost savings from cascading heat from a low-temperature process to a high-temperature process.
+ * @details This calculator estimates the benefit of using waste heat from a low-temperature process to supply heat to a high-temperature process. The calculation uses flue gas properties, process firing rates, exhaust temperatures, available heat, and fuel cost. The method is based on standard industrial practice for process heat recovery.
+ *
+ * The calculation follows a top-down approach:
+ * 1. **Total Energy Savings** - Calculate total energy savings from cascading heat
+ * 2. **Hourly Energy Savings** - Determine hourly energy savings based on supply and demand
+ * 3. **Equivalent Energy Supply** - Calculate energy supplied to the high-temperature process
+ * 4. **Heat Exchanger Energy Rate** - Compute energy transfer rate through the heat exchanger
+ * 5. **Primary Flue Gas Volume** - Calculate flue gas volume from the low-temperature process
+ * 6. **Flue Gas Properties** - Compute flue gas properties for both processes
+ *
+ * Relevant formulas and symbol definitions are documented below.
+ *
+ * @heading{Total Energy Savings}
+ * @copydoc cascade_heat_low_to_high_total_energy_savings_formula
+ *
+ * @heading{Hourly Energy Savings}
+ * @copydoc cascade_heat_low_to_high_hourly_energy_savings_formula
+ *
+ * @heading{Equivalent Energy Supply}
+ * @copydoc cascade_heat_low_to_high_eq_energy_supply_formula
+ *
+ * @heading{Heat Exchanger Energy Rate}
+ * @copydoc cascade_heat_low_to_high_hx_energy_rate_formula
+ *
+ * @heading{Primary Flue Gas Volume}
+ * @copydoc cascade_heat_low_to_high_flue_volume_formula
+ *
+ * @heading{Flue Gas Properties}
+ * @copydoc cascade_heat_low_to_high_flue_gas_properties
+ */
+
+/**
+ * @defgroup cascade_heat_low_to_high_total_energy_savings_formula Total Energy Savings Formula
+ * @ingroup cascade_heat_low_to_high_calculator
+ * @brief Total energy savings from cascading heat.
+ * @details The total energy savings is calculated by multiplying the hourly energy savings by the effective operating hours.
+ *
+ * @formula{cascade-low-to-high-total-energy-savings; E_{savings} = E_{hourly} \cdot H_{eff}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{E_{savings}; Total energy savings; \MMBtu\per\year}
+ * @symrow{E_{hourly}; Hourly energy savings; \MMBtu\per\hour}
+ * @symrow{H_{eff}; Effective operating hours; \hour\per\year}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup cascade_heat_low_to_high_hourly_energy_savings_formula Hourly Energy Savings Formula
+ * @ingroup cascade_heat_low_to_high_calculator
+ * @brief Hourly energy savings from cascading heat.
+ * @details The hourly energy savings is the minimum of the equivalent energy supply and the high-temperature process firing rate.
+ *
+ * @formula{cascade-low-to-high-hourly-energy-savings; E_{hourly} = \min(E_{supply}, F_{high})}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{E_{hourly}; Hourly energy savings; \MMBtu\per\hour}
+ * @symrow{E_{supply}; Equivalent energy supply; \MMBtu\per\hour}
+ * @symrow{F_{high}; High-temperature process firing rate; \MMBtu\per\hour}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup cascade_heat_low_to_high_eq_energy_supply_formula Equivalent Energy Supply Formula
+ * @ingroup cascade_heat_low_to_high_calculator
+ * @brief Equivalent energy supply to the high-temperature process.
+ * @details The equivalent energy supply is calculated by dividing the heat exchanger energy rate by the available heat of the high-temperature process.
+ *
+ * @formula{cascade-low-to-high-eq-energy-supply; E_{supply} = \frac{Q_{hx}}{AH_{high}}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{E_{supply}; Equivalent energy supply; \MMBtu\per\hour}
+ * @symrow{Q_{hx}; Heat exchanger energy rate; \MMBtu\per\hour}
+ * @symrow{AH_{high}; Available heat of high-temp process; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup cascade_heat_low_to_high_hx_energy_rate_formula Heat Exchanger Energy Rate Formula
+ * @ingroup cascade_heat_low_to_high_calculator
+ * @brief Energy transfer rate through the heat exchanger.
+ * @details The heat exchanger energy rate is calculated by multiplying the flue gas volume, specific heat, density, and temperature difference, then dividing by the conversion factor.
+ *
+ * @formula{cascade-low-to-high-hx-energy-rate; Q_{hx} = \frac{V_{flue} \cdot C_{p} \cdot \rho_{flue} \cdot \Delta T}{CF}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{hx}; Heat exchanger energy rate; \MMBtu\per\hour}
+ * @symrow{V_{flue}; Flue gas volume; \scf\per\hour}
+ * @symrow{C_{p}; Specific heat of flue gas; \btu\per\pound\degreeFahrenheit}
+ * @symrow{\rho_{flue}; Flue gas density; \pound\per\scf}
+ * @symrow{\Delta T; Temperature difference; \degreeFahrenheit}
+ * @symrow{CF; Conversion factor (e.g., 1,000,000 for MMBtu); \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup cascade_heat_low_to_high_flue_volume_formula Primary Flue Gas Volume Formula
+ * @ingroup cascade_heat_low_to_high_calculator
+ * @brief Flue gas volume from the low-temperature process.
+ * @details The flue gas volume is calculated using the firing rate, stoichiometric air volume, excess air, and fuel heating value.
+ *
+ * @formula{cascade-low-to-high-flue-volume; V_{flue} = \frac{F_{low} \cdot SAV_{low} \cdot (1 + EA_{low}) \cdot CF}{HV_{fuel}} + \frac{F_{low} \cdot CF}{HV_{fuel}}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{V_{flue}; Flue gas volume; \scf\per\hour}
+ * @symrow{F_{low}; Low-temperature process firing rate; \MMBtu\per\hour}
+ * @symrow{SAV_{low}; Stoichiometric air volume; \scf\per\MMBtu}
+ * @symrow{EA_{low}; Excess air (fraction); \unitless}
+ * @symrow{CF; Conversion factor (e.g., 1,000,000 for MMBtu); \unitless}
+ * @symrow{HV_{fuel}; Fuel heating value; \btu\per\scf}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup cascade_heat_low_to_high_flue_gas_properties Flue Gas Properties
+ * @ingroup cascade_heat_low_to_high_calculator
+ * @brief Flue gas properties for both processes.
+ * @details Flue gas properties such as stoichiometric air volume, excess air, available heat, specific heat, and density are calculated for both the low-temperature and high-temperature processes using standard methods.
+ *
+ * @note See @ref gas_flue_gas_material_calculator for details on property calculations.
+ */
