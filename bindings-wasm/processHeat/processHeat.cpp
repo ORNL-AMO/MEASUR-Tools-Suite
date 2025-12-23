@@ -4,7 +4,6 @@
 
 #include "processHeat/AirHeatingUsingExhaust.h"
 #include "processHeat/AirWaterCoolingUsingFlue.h"
-#include "processHeat/CascadeHeatHighToLow.h"
 #include "processHeat/WaterHeatingUsingExhaust.h"
 #include "processHeat/WaterHeatingUsingFlue.h"
 #include "processHeat/WaterHeatingUsingSteam.h"
@@ -43,19 +42,6 @@ EMSCRIPTEN_BINDINGS(processHeat_class) {
         .property("energySavedBoiler", &WaterHeatingUsingSteam::Output::energySavedBoiler)
         .property("waterSaved", &WaterHeatingUsingSteam::Output::waterSaved)
         .property("heatGainRate", &WaterHeatingUsingSteam::Output::heatGainRate);
-
-    class_<CascadeHeatHighToLow::Output>("CascadeHeatHighToLowOutput")
-        .property("priFlueVolume", &CascadeHeatHighToLow::Output::priFlueVolume)
-        .property("hxEnergyRate", &CascadeHeatHighToLow::Output::hxEnergyRate)
-        .property("eqEnergySupply", &CascadeHeatHighToLow::Output::eqEnergySupply)
-        .property("effOpHours", &CascadeHeatHighToLow::Output::effOpHours)
-        .property("energySavings", &CascadeHeatHighToLow::Output::energySavings)
-        .property("costSavings", &CascadeHeatHighToLow::Output::costSavings)
-        .property("hourlySavings", &CascadeHeatHighToLow::Output::hourlySavings)
-        .property("priExcessAir", &CascadeHeatHighToLow::Output::priExcessAir)
-        .property("priAvailableHeat", &CascadeHeatHighToLow::Output::priAvailableHeat)
-        .property("secExcessAir", &CascadeHeatHighToLow::Output::secExcessAir)
-        .property("secAvailableHeat", &CascadeHeatHighToLow::Output::secAvailableHeat);
 
     class_<WaterHeatingUsingFlue::Output>("WaterHeatingUsingFlueOutput")
         .property("flowFlueGas", &WaterHeatingUsingFlue::Output::flowFlueGas)
@@ -99,11 +85,6 @@ EMSCRIPTEN_BINDINGS(processHeat_class) {
         .constructor<>()
         .function("calculate", &WaterHeatingUsingSteam::calculate);
 
-    class_<CascadeHeatHighToLow>("CascadeHeatHighToLow")
-        .constructor<GasComposition, double, double, double, double, double, double, double, double, double, double,
-                     double, double, double, double, double>()
-        .function("calculate", &CascadeHeatHighToLow::calculate);
-
     class_<WaterHeatingUsingFlue>("WaterHeatingUsingFlue")
         .constructor<>()
         .function("calculate", &WaterHeatingUsingFlue::calculate);
@@ -112,3 +93,5 @@ EMSCRIPTEN_BINDINGS(processHeat_class) {
         .constructor<>()
         .function("calculate", &AirWaterCoolingUsingFlue::calculate);
 }
+
+
