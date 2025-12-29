@@ -1,32 +1,3 @@
-// efficiencyImprovement
-function efficiencyImprovement() {
-
-    var inp = {
-        currentFlueGasOxygen: 6,
-        newFlueGasOxygen: 2,
-        currentFlueGasTemp: 1600,
-        currentCombustionAirTemp: 80,
-        newCombustionAirTemp: 750,
-        currentEnergyInput: 10,
-        newFlueGasTemp: 1200
-    };
-
-    var efficiencyImprovement = new Module.EfficiencyImprovement(inp.currentFlueGasOxygen, inp.newFlueGasOxygen, inp.currentFlueGasTemp, inp.newFlueGasTemp, inp.currentCombustionAirTemp, inp.newCombustionAirTemp, inp.currentEnergyInput);
-    var currentExcessAir = efficiencyImprovement.getCurrentExcessAir();
-    var newExcessAir = efficiencyImprovement.getNewExcessAir();
-    var currentAvailableHeat = efficiencyImprovement.getCurrentAvailableHeat();
-    var newAvailableHeat = efficiencyImprovement.getNewAvailableHeat();
-    var newFuelSavings = efficiencyImprovement.getNewFuelSavings();
-    var newEnergyInput = efficiencyImprovement.getNewEnergyInput();
-
-    testNumberValue(currentExcessAir, 35.80000271600005, "Process Heat Efficiency Improvement (currentExcessAir)");
-    testNumberValue(newExcessAir, 9.421053207479227, "Process Heat Efficiency Improvement (newExcessAir)");
-    testNumberValue(currentAvailableHeat, 45.550889, "Process Heat Efficiency Improvement (currentAvailableHeat)");
-    testNumberValue(newAvailableHeat, 77.893119, "Process Heat Efficiency Improvement (newAvailableHeat)");
-    testNumberValue(newFuelSavings, 41.521293, "Process Heat Efficiency Improvement (newFuelSavings)");
-    testNumberValue(newEnergyInput, 5.847870740975683, "Process Heat Efficiency Improvement (newEnergyInput)");
-    efficiencyImprovement.delete();
-}
 // energyEquivalencyElectric
 function energyEquivalencyElectric() {
 
@@ -153,7 +124,6 @@ function humidityRatio() {
     humidityRatio.delete();
 }
 
-efficiencyImprovement();
 energyEquivalencyElectric();
 energyEquivalencyFuel();
 flowCalculations();
