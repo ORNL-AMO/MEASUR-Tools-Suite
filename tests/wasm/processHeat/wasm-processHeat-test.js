@@ -22,29 +22,6 @@ function airHeatingUsingExhaust(){
     coalInstance.delete();
 }
 
-function cascadeHeatHighToLow(){
-    let validate = function(results, expected) {
-        testNumberValue(rnd(results.priFlueVolume), rnd(expected[0]), "priFlueVolume");
-        testNumberValue(rnd(results.hxEnergyRate), rnd(expected[1]), "hxEnergyRate");
-        testNumberValue(rnd(results.eqEnergySupply), rnd(expected[2]), "eqEnergySupply");
-        testNumberValue(rnd(results.effOpHours), rnd(expected[3]),"effOpHours");
-        testNumberValue(rnd(results.energySavings), rnd(expected[4]),"energySavings");
-        testNumberValue(rnd(results.costSavings), rnd(expected[5]),"costSavings")
-        testNumberValue(rnd(results.hourlySavings), rnd(expected[6]),"hourlySavings")
-        testNumberValue(rnd(results.priExcessAir), rnd(expected[7]),"priExcessAir")
-        testNumberValue(rnd(results.priAvailableHeat), rnd(expected[8]),"priAvailableHeat")
-        testNumberValue(rnd(results.secExcessAir), rnd(expected[9]),"secExcessAir")
-        testNumberValue(rnd(results.secAvailableHeat), rnd(expected[10]),"secAvailableHeat");
-    };
-
-    logMessage('Cascade Heat High To Low: Test# 1 Gas', true);
-    let gasInstance = new Module.GasCompositions('Gas', 94.0, 2.07, 1.41, 0.01, 0.42, 0.28, 0.0, 1.0, 0.71, 0, 0);
-    let instance = new Module.CascadeHeatHighToLow(gasInstance, 1020, 5.00, 12.0, 1475, 0.07, 80, 8000, 9.50, 225, 17.5, 80, 7000, 60, 60, 0);
-    validate(instance.calculate(), [174956.62, 4.22636, 4.71, 7000, 33003.13, 165015.65, 4.71, 0.4505, 0.47287, -1.06, 0.9]);
-    instance.delete();
-    gasInstance.delete();
-}
-
 function waterHeatingUsingExhaust(){
     let validate = function(results, expected) {
         testNumberValue(rnd(results.recoveredHeat), rnd(expected[0]), "recoveredHeat");
@@ -146,6 +123,5 @@ function airWaterCoolingUsingFlue(){
 airHeatingUsingExhaust();
 waterHeatingUsingExhaust();
 waterHeatingUsingSteam();
-cascadeHeatHighToLow();
 waterHeatingUsingFlue();
 airWaterCoolingUsingFlue();

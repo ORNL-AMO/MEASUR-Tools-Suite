@@ -63,7 +63,8 @@ inline constexpr double kStefanBoltzmann = 1.713441e-9;
 
 /**
  * @brief Standard gas temperature for exhaust calculations @unitb{\degreeRankine}
- * @details This is an absolute temperature (520°R = 60°F + 460), commonly used as the reference for gas property calculations in U.S. customary units.
+ * @details This is an absolute temperature (520°R = 60°F + 460), commonly used as the reference for gas property
+ * calculations in U.S. customary units.
  */
 inline constexpr double kStandardGasTemperatureR = 520.0;
 
@@ -113,13 +114,12 @@ inline constexpr double kMinutesPerHour = 60.0;
  */
 inline constexpr double kKilowattToBtuPerHour = 3412.136247820839;
 
-
 /**
- * @brief Conversion factor from kilograms per cubic meter to pounds per gallon @unitb{\pound\per\gallon\per\kilogram\per\meter\cubed}
+ * @brief Conversion factor from kilograms per cubic meter to pounds per gallon
+ * @unitb{\pound\per\gallon\per\kilogram\per\meter\cubed}
  * @details Multiplies water density in kg/m^3 to obtain lb/gal. Source: NIST, CRC Handbook of Chemistry and Physics.
  */
 inline constexpr double kKgPerM3ToLbPerGal = 0.0083454;
-
 
 /**
  * @brief Convert Fahrenheit to Rankine.
@@ -157,7 +157,14 @@ constexpr double fahrenheitToRankine(double fahrenheit) { return fahrenheit + kF
  */
 constexpr double fahrenheitToCelsius(double fahrenheit) { return (fahrenheit - 32.0) / 1.8; }
 
+/// @brief Conversion factor: 1 MMBtu = 1,000,000 Btu
+inline constexpr double kMMBtuToBtu = 1'000'000.0;
 
-
+/**
+ * @brief Conversion factor: 1 pound per cubic foot = 16.018463 kilograms per cubic meter
+ * @unitb{\kilogram\per\meter\cubed\per\pound\per\foot\cubed}
+ * @details Use this to convert a mass density from lb/ft^3 to kg/m^3.
+ */
+inline constexpr double kLbPerFt3ToKgPerM3 = 16.018463;
 
 } // namespace physics::conversions

@@ -17,6 +17,7 @@
  *
  * - @ref process_heating_assessments
  *   - @ref heat_loss_calculators
+ *   - @ref process_heat_calculators
  * - @ref compressed_air_assessments
  * - @ref fan_system_assessments
  * - @ref process_cooling_assessments
@@ -58,6 +59,14 @@
  * Industrial users can survey process heating equipment consuming fuel or electricity, and identify the most
  * energy-intensive equipment. This tool can be used to perform a heat balance that identifies major areas of energy use
  * under various operating conditions and test "what-if" scenarios for various options to reduce energy use.
+ *
+ * @defgroup process_heat_calculators Process Heat Calculators
+ * @ingroup process_heating_assessments
+ *
+ * The Process Heat Calculators module provides a suite of tools for evaluating energy flows, heat recovery opportunities, and process optimization in furnaces, kilns, ovens, 
+ * and other process heating equipment. These calculators focus on modeling phenomena such as flue gas heat recovery, cascade heat exchange, and energy savings from process integration.
+ * Each calculator implements industry-standard algorithms and provides detailed documentation of formulas, units, and symbol definitions for transparency and reproducibility. 
+ * Calculators specifically for heat losses are documented separately in the Heat Loss Calculators section.
  *
  * @defgroup heat_loss_calculators Heat Loss Calculators
  * @ingroup process_heating_assessments

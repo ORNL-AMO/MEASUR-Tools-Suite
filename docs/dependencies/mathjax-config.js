@@ -89,6 +89,7 @@ window.MathJax = {
                 \DeclareSIUnit{\kilowatt}{kW}
                 \DeclareSIUnit{\atm}{atm}
                 \DeclareSIUnit{\lbmol}{lbmol}
+                \DeclareSIUnit{\year}{yr}
             `);
         }
     },
