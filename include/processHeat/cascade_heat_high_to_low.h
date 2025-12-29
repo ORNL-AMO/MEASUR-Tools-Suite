@@ -2,26 +2,24 @@
 #pragma once
 
 /**
- * @ingroup process_heat
+ * @ingroup cascade_heat_high_to_low_calculator
  * @file cascade_heat_high_to_low.h
- * @authors Omer Aziz (omerb)
- * @brief Functions to calculate energy savings from using exhaust gas (waste) of high temperature to supply heat to low temperature equipment.
- * @details Provides a function-based API for cascade heat recovery calculations.
- * @bug No known bugs.
+ * 
+ * @copybrief cascade_heat_high_to_low
  */
 
 #include "physics/gas_composition.h"
 #include "losses/gas_flue_gas_material.h"
 
 /**
- * @ingroup process_heat
+ * @ingroup cascade_heat_high_to_low_calculator
  * @namespace cascade_heat_high_to_low
  * @brief Cascade heat recovery calculations for process heating systems.
  */
 namespace cascade_heat_high_to_low {
 
 /**
- * @ingroup process_heat
+ * @ingroup cascade_heat_high_to_low_calculator
  * @struct CascadeHeatHighToLowResults
  * @brief Results of the cascade heat high-to-low calculation.
  * @details Contains all output values from the cascade heat recovery calculation.
@@ -41,6 +39,7 @@ struct CascadeHeatHighToLowResults {
 };
 
 /**
+ * @ingroup cascade_heat_high_to_low_calculator
  * @brief Calculates the energy and cost savings from cascading heat from a high-temperature to a low-temperature process.
  * @details Uses flue gas properties and process parameters to estimate the benefit of using waste heat from a primary (high-temp) process to supply heat to a secondary (low-temp) process.
  *

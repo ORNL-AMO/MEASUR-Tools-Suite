@@ -1,0 +1,169 @@
+/**
+ * @defgroup process_heat_efficiency_improvement_calculator Process Heat Efficiency Improvement Calculator
+ * @ingroup process_heat_calculators
+ * @brief Calculates efficiency improvement and fuel savings for a fuel-fired furnace.
+ * @details This calculator estimates the benefit of efficiency improvements in a fuel-fired furnace by computing excess air, heat input, air properties, available heat, fuel savings, and new energy input. The calculation is based on standard thermodynamic relationships and is implemented in the @ref processHeatEfficiencyImprovement function.
+ *
+ * The calculation follows a top-down approach:
+ * 1. **Excess Air Calculation**: Compute current and new excess air from flue gas oxygen and air multipliers.
+ * 2. **Heat Input Calculation**: Compute current and new heat input from flue gas temperature and coefficients.
+ * 3. **Air Specific Heat Calculation**: Compute current and new air specific heat from combustion air temperature and coefficients.
+ * 4. **Air Correction Calculation**: Compute current and new air correction using air specific heat, flue gas temperature, and excess air.
+ * 5. **Combustion Air Correction Calculation**: Compute current and new combustion air correction using air specific heat, combustion air temperature, and excess air.
+ * 6. **Available Heat Calculation**: Compute current and new available heat as the sum of heat input, air correction, and combustion air correction.
+ * 7. **Fuel Savings Calculation**: Compute new fuel savings as the percent improvement in available heat.
+ * 8. **New Energy Input Calculation**: Compute new energy input based on current energy input and fuel savings.
+ *
+ * @heading{Excess Air Calculation}
+ * @copydoc pheic_excess_air_step
+ *
+ * @heading{Heat Input Calculation}
+ * @copydoc pheic_heat_input_step
+ *
+ * @heading{Air Specific Heat Calculation}
+ * @copydoc pheic_air_specific_heat_step
+ *
+ * @heading{Air Correction Calculation}
+ * @copydoc pheic_air_correction_step
+ *
+ * @heading{Combustion Air Correction Calculation}
+ * @copydoc pheic_combustion_air_correction_step
+ *
+ * @heading{Available Heat Calculation}
+ * @copydoc pheic_available_heat_step
+ *
+ * @heading{Fuel Savings Calculation}
+ * @copydoc pheic_fuel_savings_step
+ *
+ * @heading{New Energy Input Calculation}
+ * @copydoc pheic_new_energy_input_step
+ */
+
+/**
+ * @defgroup pheic_excess_air_step Excess Air Calculation
+ * @ingroup process_heat_efficiency_improvement_calculator
+ * @brief Calculates current and new excess air.
+ * @details Computes the excess air percentage for both current and improved conditions based on measured flue gas oxygen and process-specific multipliers. Excess air is a key indicator of combustion efficiency and impacts fuel usage.
+ *
+ * @formula{pheic-excess-air; EA = \frac{100 \cdot S_A \cdot (\frac{O_2}{100})}{D_B - O_2M \cdot (\frac{O_2}{100})}}
+ *
+ * @symtable
+ *   @symrow{EA; Excess air; \percent}
+ *   @symrow{S_A; Stoichiometric air multiplier (8.52381); \unitless}
+ *   @symrow{O_2; Flue gas oxygen (dry); \percent}
+ *   @symrow{D_B; Denominator base (2.0); \unitless}
+ *   @symrow{O_2M; O2 denominator multiplier (9.52381); \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup pheic_heat_input_step Heat Input Calculation
+ * @ingroup process_heat_efficiency_improvement_calculator
+ * @brief Calculates current and new heat input.
+ * @details Calculates the effective heat input to the process for both current and improved conditions, using flue gas temperature and empirical coefficients. Heat input reflects the energy delivered to the system.
+ *
+ * @formula{pheic-heat-input; HI = H_B + H_C \cdot T_{FG}}
+ *
+ * @symtable
+ *   @symrow{HI; Heat input; \degreeFahrenheit}
+ *   @symrow{H_B; Heat input base (95.0); \degreeFahrenheit}
+ *   @symrow{H_C; Heat input temp coeff (-0.025); \degreeFahrenheit}
+ *   @symrow{T_{FG}; Flue gas temperature; \degreeFahrenheit}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup pheic_air_specific_heat_step Air Specific Heat Calculation
+ * @ingroup process_heat_efficiency_improvement_calculator
+ * @brief Calculates current and new air specific heat.
+ * @details Determines the specific heat capacity of combustion air for both current and improved conditions, as a function of air temperature. This value is important for quantifying the energy required to heat the combustion air.
+ *
+ * @formula{pheic-air-specific-heat; C_{p,air} = C_B + C_C \cdot T_{CA}}
+ *
+ * @symtable
+ *   @symrow{C_{p,air}; Air specific heat; \btu\per\pound\degreeFahrenheit}
+ *   @symrow{C_B; Air specific heat base (0.017828518); \btu\per\pound\degreeFahrenheit}
+ *   @symrow{C_C; Air specific heat temp coeff (0.000002556); \btu\per\pound\degreeFahrenheit}
+ *   @symrow{T_{CA}; Combustion air temperature; \degreeFahrenheit}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup pheic_air_correction_step Air Correction Calculation
+ * @ingroup process_heat_efficiency_improvement_calculator
+ * @brief Calculates current and new air correction.
+ * @details Calculates the energy correction associated with heating excess air, for both current and improved conditions. This correction accounts for the energy lost to heating air that does not participate in combustion.
+ *
+ * @formula{pheic-air-correction; AC = -\left(A_B + C_{p,air} \cdot T_{FG}\right) \cdot \frac{EA}{100}}
+ *
+ * @symtable
+ *   @symrow{AC; Air correction; \btu}
+ *   @symrow{A_B; Air correction base (-1.07891327); \btu}
+ *   @symrow{C_{p,air}; Air specific heat; \btu\per\pound\degreeFahrenheit}
+ *   @symrow{T_{FG}; Flue gas temperature; \degreeFahrenheit}
+ *   @symrow{EA; Excess air; \percent}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup pheic_combustion_air_correction_step Combustion Air Correction Calculation
+ * @ingroup process_heat_efficiency_improvement_calculator
+ * @brief Calculates current and new combustion air correction.
+ * @details Computes the energy correction for heating the total combustion air (including excess air), for both current and improved conditions. This step quantifies the energy required to bring all combustion air to the desired temperature.
+ *
+ * @formula{pheic-combustion-air-correction; CAC = \left(CA_B + C_{p,air} \cdot T_{CA}\right) \cdot \left(1 + \frac{EA}{100}\right)}
+ *
+ * @symtable
+ *   @symrow{CAC; Combustion air correction; \btu}
+ *   @symrow{CA_B; Combustion air correction base (-1.078913827); \btu}
+ *   @symrow{C_{p,air}; Air specific heat; \btu\per\pound\degreeFahrenheit}
+ *   @symrow{T_{CA}; Combustion air temperature; \degreeFahrenheit}
+ *   @symrow{EA; Excess air; \percent}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup pheic_available_heat_step Available Heat Calculation
+ * @ingroup process_heat_efficiency_improvement_calculator
+ * @brief Calculates current and new available heat.
+ * @details Sums the heat input and both air corrections to determine the available heat for the process, for both current and improved conditions. Available heat represents the fraction of input energy that is actually usable for the process.
+ *
+ * @formula{pheic-available-heat; AH = HI + AC + CAC}
+ *
+ * @symtable
+ *   @symrow{AH; Available heat; \percent}
+ *   @symrow{HI; Heat input; \degreeFahrenheit}
+ *   @symrow{AC; Air correction; \btu}
+ *   @symrow{CAC; Combustion air correction; \btu}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup pheic_fuel_savings_step Fuel Savings Calculation
+ * @ingroup process_heat_efficiency_improvement_calculator
+ * @brief Calculates new fuel savings.
+ * @details Calculates the percentage of fuel saved by implementing the efficiency improvement, based on the increase in available heat. This value quantifies the benefit of the improvement in terms of reduced fuel consumption.
+ *
+ * @formula{pheic-fuel-savings; FS = \frac{AH_{new} - AH_{current}}{AH_{new}} \cdot 100}
+ *
+ * @symtable
+ *   @symrow{FS; Fuel savings; \percent}
+ *   @symrow{AH_{new}; New available heat; \percent}
+ *   @symrow{AH_{current}; Current available heat; \percent}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup pheic_new_energy_input_step New Energy Input Calculation
+ * @ingroup process_heat_efficiency_improvement_calculator
+ * @brief Calculates new energy input.
+ * @details Determines the new required energy input to the process after efficiency improvements, accounting for the calculated fuel savings. This step provides the expected reduction in energy demand.
+ *
+ * @formula{pheic-new-energy-input; EI_{new} = EI_{current} \cdot \left(1 - \frac{FS}{100}\right)}
+ *
+ * @symtable
+ *   @symrow{EI_{new}; New energy input; \MMBtu\per\hour}
+ *   @symrow{EI_{current}; Current energy input; \MMBtu\per\hour}
+ *   @symrow{FS; Fuel savings; \percent}
+ * @endsymtable
+ */
