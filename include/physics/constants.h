@@ -160,7 +160,11 @@ constexpr double fahrenheitToCelsius(double fahrenheit) { return (fahrenheit - 3
 /// @brief Conversion factor: 1 MMBtu = 1,000,000 Btu
 inline constexpr double kMMBtuToBtu = 1'000'000.0;
 
-/// @brief Conversion factor: 1 SCF = 16.018463 cubic meters
-inline constexpr double kSCFToCubicMeter = 16.018463;
+/**
+ * @brief Conversion factor: 1 pound per cubic foot = 16.018463 kilograms per cubic meter
+ * @unitb{\kilogram\per\meter\cubed\per\pound\per\foot\cubed}
+ * @details Use this to convert a mass density from lb/ft^3 to kg/m^3.
+ */
+inline constexpr double kLbPerFt3ToKgPerM3 = 16.018463;
 
 } // namespace physics::conversions

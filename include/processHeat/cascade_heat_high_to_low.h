@@ -27,7 +27,7 @@ namespace cascade_heat_high_to_low {
  * @details Contains all output values from the cascade heat recovery calculation.
  */
 struct CascadeHeatHighToLowResults {
-    double pri_flue_volume = 0;      ///< Primary flue gas volume @unitb{SCF}
+    double pri_flue_volume = 0;      ///< Primary flue gas volume @unitb{SCF/hr}
     double hx_energy_rate = 0;       ///< Heat exchanger energy rate @unitb{MMBtu/hr}
     double eq_energy_supply = 0;     ///< Equivalent energy supply @unitb{MMBtu/hr}
     double eff_op_hours = 0;         ///< Effective operating hours @unitb{hr/yr}

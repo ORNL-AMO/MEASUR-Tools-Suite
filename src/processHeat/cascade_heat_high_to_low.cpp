@@ -33,8 +33,8 @@ CascadeHeatHighToLowResults calculateCascadeHeatHighToLow(
     const double primary_excess_air = pri_flue_props.excess_air;        // fraction
     const double primary_available_heat = pri_flue_props.available_heat;// fraction
     const double primary_flue_specific_heat = pri_flue_props.specific_heat; // Btu/lb-°F
-    // Convert total generated flue gas from SCF to lb using density
-    const double primary_flue_density = pri_flue_props.total_generated / kSCFToCubicMeter; // lb/SCF
+    // Convert mass-based total_generated (lb/hr per MMBtu fuel) to flue gas density (lb/SCF)
+    const double primary_flue_density = pri_flue_props.total_generated / kLbPerFt3ToKgPerM3; // lb/SCF
 
     // --- Step 2: Calculate flue gas properties for the secondary (low-temp) process ---
     gas_flue_gas_material::ProcessHeatProperties sec_flue_props = gas_flue_gas_material::processHeatProperties(
