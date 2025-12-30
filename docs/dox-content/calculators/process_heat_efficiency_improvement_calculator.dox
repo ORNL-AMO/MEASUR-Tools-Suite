@@ -81,9 +81,9 @@
  * @formula{pheic-air-specific-heat; C_{p,air} = C_B + C_C \cdot T_{CA}}
  *
  * @symtable
- *   @symrow{C_{p,air}; Air specific heat; \btu\per\pound\degreeFahrenheit}
- *   @symrow{C_B; Air specific heat base (0.017828518); \btu\per\pound\degreeFahrenheit}
- *   @symrow{C_C; Air specific heat temp coeff (0.000002556); \btu\per\pound\degreeFahrenheit}
+ *   @symrow{C_{p,air}; Air specific heat; \btu\per\pound\per\degreeFahrenheit}
+ *   @symrow{C_B; Air specific heat base (0.017828518); \btu\per\pound\per\degreeFahrenheit}
+ *   @symrow{C_C; Air specific heat temp coeff (0.000002556); \btu\per\pound\per\degreeFahrenheit}
  *   @symrow{T_{CA}; Combustion air temperature; \degreeFahrenheit}
  * @endsymtable
  */
@@ -99,7 +99,7 @@
  * @symtable
  *   @symrow{AC; Air correction; \btu}
  *   @symrow{A_B; Air correction base (-1.07891327); \btu}
- *   @symrow{C_{p,air}; Air specific heat; \btu\per\pound\degreeFahrenheit}
+ *   @symrow{C_{p,air}; Air specific heat; \btu\per\pound\per\degreeFahrenheit}
  *   @symrow{T_{FG}; Flue gas temperature; \degreeFahrenheit}
  *   @symrow{EA; Excess air; \percent}
  * @endsymtable
@@ -116,7 +116,7 @@
  * @symtable
  *   @symrow{CAC; Combustion air correction; \btu}
  *   @symrow{CA_B; Combustion air correction base (-1.078913827); \btu}
- *   @symrow{C_{p,air}; Air specific heat; \btu\per\pound\degreeFahrenheit}
+ *   @symrow{C_{p,air}; Air specific heat; \btu\per\pound\per\degreeFahrenheit}
  *   @symrow{T_{CA}; Combustion air temperature; \degreeFahrenheit}
  *   @symrow{EA; Excess air; \percent}
  * @endsymtable
