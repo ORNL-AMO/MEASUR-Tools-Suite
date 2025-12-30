@@ -64,7 +64,7 @@ ProcessHeatEfficiencyImprovementResults processHeatEfficiencyImprovement(
     results.current_excess_air = calculateExcessAir(current_flue_gas_oxygen, stoich_air_multiplier, excess_air_denominator_base, excess_air_o2_multiplier);
     results.new_excess_air = calculateExcessAir(new_flue_gas_oxygen, stoich_air_multiplier, excess_air_denominator_base, excess_air_o2_multiplier);
 
-    // Step 2: Calculate current and new heat input (°F)
+    // Step 2: Calculate current and new heat input (%)
     results.current_heat_input = calculateHeatInput(current_flue_gas_temp, heat_input_base, heat_input_temp_coeff);
     results.new_heat_input = calculateHeatInput(new_flue_gas_temp, heat_input_base, heat_input_temp_coeff);
 

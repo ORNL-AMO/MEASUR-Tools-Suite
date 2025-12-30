@@ -65,9 +65,9 @@
  * @formula{pheic-heat-input; HI = H_B + H_C \cdot T_{FG}}
  *
  * @symtable
- *   @symrow{HI; Heat input; \degreeFahrenheit}
- *   @symrow{H_B; Heat input base (95.0); \degreeFahrenheit}
- *   @symrow{H_C; Heat input temp coeff (-0.025); \degreeFahrenheit}
+ *   @symrow{HI; Heat input; \percent}
+ *   @symrow{H_B; Heat input base (95.0); \percent}
+ *   @symrow{H_C; Heat input temp coeff (-0.025); \percent\per\degreeFahrenheit}
  *   @symrow{T_{FG}; Flue gas temperature; \degreeFahrenheit}
  * @endsymtable
  */
@@ -132,7 +132,7 @@
  *
  * @symtable
  *   @symrow{AH; Available heat; \percent}
- *   @symrow{HI; Heat input; \degreeFahrenheit}
+ *   @symrow{HI; Heat input; \percent}
  *   @symrow{AC; Air correction; \btu}
  *   @symrow{CAC; Combustion air correction; \btu}
  * @endsymtable
