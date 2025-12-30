@@ -90,11 +90,11 @@ double calculateAirSpecificHeat(double combustion_air_temp, double air_specific_
 /**
  * @ingroup process_heat_efficiency_improvement_calculator
  * @brief Calculates air correction.
- * @param[in] air_correction_base Base for air correction @unitb{\btu}.
+ * @param[in] air_correction_base Base for air correction @unitb{\percent}.
  * @param[in] air_specific_heat Air specific heat @unitb{\btu\per\pound\per\degreeFahrenheit}.
  * @param[in] flue_gas_temp Flue gas temperature @unitb{\degreeFahrenheit}.
  * @param[in] excess_air Excess air @unitb{\percent}.
- * @return Air correction @unitb{\btu}.
+ * @return Air correction @unitb{\percent}.
  */
 double calculateAirCorrection(double air_correction_base, double air_specific_heat, double flue_gas_temp,
                               double excess_air);
@@ -102,11 +102,11 @@ double calculateAirCorrection(double air_correction_base, double air_specific_he
 /**
  * @ingroup process_heat_efficiency_improvement_calculator
  * @brief Calculates combustion air correction.
- * @param[in] combustion_air_correction_base Base for combustion air correction @unitb{\btu}.
+ * @param[in] combustion_air_correction_base Base for combustion air correction @unitb{\percent}.
  * @param[in] air_specific_heat Air specific heat @unitb{\btu\per\pound\per\degreeFahrenheit}.
  * @param[in] combustion_air_temp Combustion air temperature @unitb{\degreeFahrenheit}.
  * @param[in] excess_air Excess air @unitb{\percent}.
- * @return Combustion air correction @unitb{\btu}.
+ * @return Combustion air correction @unitb{\percent}.
  */
 double calculateCombustionAirCorrection(double combustion_air_correction_base, double air_specific_heat,
                                         double combustion_air_temp, double excess_air);
@@ -115,8 +115,8 @@ double calculateCombustionAirCorrection(double combustion_air_correction_base, d
  * @ingroup process_heat_efficiency_improvement_calculator
  * @brief Calculates available heat.
  * @param[in] heat_input Heat input @unitb{\percent}.
- * @param[in] air_correction Air correction @unitb{\btu}.
- * @param[in] combustion_air_correction Combustion air correction @unitb{\btu}.
+ * @param[in] air_correction Air correction @unitb{\percent}.
+ * @param[in] combustion_air_correction Combustion air correction @unitb{\percent}.
  * @return Available heat @unitb{\percent} of HHV.
  */
 double calculateAvailableHeat(double heat_input, double air_correction, double combustion_air_correction);
