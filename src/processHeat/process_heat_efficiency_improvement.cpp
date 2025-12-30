@@ -72,11 +72,11 @@ ProcessHeatEfficiencyImprovementResults processHeatEfficiencyImprovement(
     results.current_air_specific_heat = calculateAirSpecificHeat(current_combustion_air_temp, air_specific_heat_base, air_specific_heat_coeff);
     results.new_air_specific_heat = calculateAirSpecificHeat(new_combustion_air_temp, air_specific_heat_base, air_specific_heat_coeff);
 
-    // Step 4: Calculate current and new air correction (Btu)
+    // Step 4: Calculate current and new air correction (% of HHV)
     results.current_air_correction = calculateAirCorrection(air_correction_base, results.current_air_specific_heat, current_flue_gas_temp, results.current_excess_air);
     results.new_air_correction = calculateAirCorrection(air_correction_base, results.new_air_specific_heat, new_flue_gas_temp, results.new_excess_air);
 
-    // Step 5: Calculate current and new combustion air correction (Btu)
+    // Step 5: Calculate current and new combustion air correction (% of HHV)
     results.current_combustion_air_correction = calculateCombustionAirCorrection(combustion_air_correction_base, results.current_air_specific_heat, current_combustion_air_temp, results.current_excess_air);
     results.new_combustion_air_correction = calculateCombustionAirCorrection(combustion_air_correction_base, results.new_air_specific_heat, new_combustion_air_temp, results.new_excess_air);
 
