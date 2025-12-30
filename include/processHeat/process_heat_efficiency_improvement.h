@@ -115,8 +115,8 @@ double calculateCombustionAirCorrection(double combustion_air_correction_base, d
  * @ingroup process_heat_efficiency_improvement_calculator
  * @brief Calculates available heat.
  * @param[in] heat_input Heat input @unitb{\percent}.
- * @param[in] air_correction Air correction @unitb{\btu}.
- * @param[in] combustion_air_correction Combustion air correction @unitb{\btu}.
+ * @param[in] air_correction Air correction @unitb{\percent} of HHV.
+ * @param[in] combustion_air_correction Combustion air correction @unitb{\percent} of HHV.
  * @return Available heat @unitb{\percent} of HHV.
  */
 double calculateAvailableHeat(double heat_input, double air_correction, double combustion_air_correction);
