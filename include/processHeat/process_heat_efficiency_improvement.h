@@ -90,11 +90,11 @@ double calculateAirSpecificHeat(double combustion_air_temp, double air_specific_
 /**
  * @ingroup process_heat_efficiency_improvement_calculator
  * @brief Calculates air correction.
- * @param[in] air_correction_base Base for air correction @unitb{\btu}.
+ * @param[in] air_correction_base Base for air correction @unitb{\btu\per\pound}.
  * @param[in] air_specific_heat Air specific heat @unitb{\btu\per\pound\per\degreeFahrenheit}.
  * @param[in] flue_gas_temp Flue gas temperature @unitb{\degreeFahrenheit}.
  * @param[in] excess_air Excess air @unitb{\percent}.
- * @return Air correction @unitb{\btu}.
+ * @return Air correction as @unitb{\percent} of HHV.
  */
 double calculateAirCorrection(double air_correction_base, double air_specific_heat, double flue_gas_temp,
                               double excess_air);
@@ -102,11 +102,11 @@ double calculateAirCorrection(double air_correction_base, double air_specific_he
 /**
  * @ingroup process_heat_efficiency_improvement_calculator
  * @brief Calculates combustion air correction.
- * @param[in] combustion_air_correction_base Base for combustion air correction @unitb{\btu}.
+ * @param[in] combustion_air_correction_base Base for combustion air correction @unitb{\btu\per\pound}.
  * @param[in] air_specific_heat Air specific heat @unitb{\btu\per\pound\per\degreeFahrenheit}.
  * @param[in] combustion_air_temp Combustion air temperature @unitb{\degreeFahrenheit}.
  * @param[in] excess_air Excess air @unitb{\percent}.
- * @return Combustion air correction @unitb{\btu}.
+ * @return Combustion air correction as @unitb{\percent} of HHV.
  */
 double calculateCombustionAirCorrection(double combustion_air_correction_base, double air_specific_heat,
                                         double combustion_air_temp, double excess_air);
