@@ -27,10 +27,10 @@ struct ProcessHeatEfficiencyImprovementResults {
     double new_heat_input                    = 0.0; ///< New heat input as %
     double current_air_specific_heat         = 0.0; ///< Current specific heat of air in Btu/(lb*°F)
     double new_air_specific_heat             = 0.0; ///< New specific heat of air in Btu/(lb*°F)
-    double current_air_correction            = 0.0; ///< Current air correction in Btu
-    double new_air_correction                = 0.0; ///< New air correction in Btu
-    double current_combustion_air_correction = 0.0; ///< Current combustion air correction in Btu
-    double new_combustion_air_correction     = 0.0; ///< New combustion air correction in Btu
+    double current_air_correction            = 0.0; ///< Current air correction as % of HHV
+    double new_air_correction                = 0.0; ///< New air correction as % of HHV
+    double current_combustion_air_correction = 0.0; ///< Current combustion air correction as % of HHV
+    double new_combustion_air_correction     = 0.0; ///< New combustion air correction as % of HHV
     double current_available_heat            = 0.0; ///< Current available heat as % of HHV
     double new_available_heat                = 0.0; ///< New available heat as % of HHV
     double new_fuel_savings                  = 0.0; ///< New fuel savings as %
