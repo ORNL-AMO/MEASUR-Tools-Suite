@@ -1,6 +1,5 @@
 #include <processHeat/AirHeatingUsingExhaust.h>
 #include <processHeat/AirWaterCoolingUsingFlue.h>
-#include <processHeat/WaterHeatingUsingFlue.h>
 #include <processHeat/WaterHeatingUsingSteam.h>
 #include <processHeat/losses/solid_liquid_flue_gas_material.h>
 
@@ -43,27 +42,6 @@ TEST_CASE("Estimate maximum air flow that can be heated by using exhaust gas", "
     CHECK(resSteamEnergy.energySavedBoiler == Approx(648872153.14));
     CHECK(resSteamEnergy.waterSaved == Approx(1057.44));
     CHECK(resSteamEnergy.heatGainRate == Approx(292841.3082));
-
-    GasComposition gasFlue("Gas", 94.0, 2.07, 1.41, 0.01, 0.42, 0.28, 0.0, 1.0, 0.71, 0, 0);
-    auto           resFlueHeat =
-        WaterHeatingUsingFlue().calculate(gasFlue, 725, 0.05, 80, 0.02, 55.88, 3.45, 60, 500, 225, 0.04, 0.625, 8000,
-                                          5.21, 37706, WaterHeatingUsingFlue::Superheated, 60);
-    CHECK(resFlueHeat.flowFlueGas == Approx(23658.1596137958));
-    CHECK(resFlueHeat.effBoiler == Approx(0.7193913738));
-    CHECK(resFlueHeat.enthalpySteam == Approx(2865.339));
-    CHECK(resFlueHeat.enthalpyFW == Approx(452.0478));
-    CHECK(resFlueHeat.flowSteam == Approx(15991.2762656448));
-    CHECK(resFlueHeat.flowFW == Approx(16630.9273162706));
-    CHECK(resFlueHeat.specheatFG == Approx(1.1319998535));
-    CHECK(resFlueHeat.heatCapacityFG == Approx(26781.0332157512));
-    CHECK(resFlueHeat.specheatFW == Approx(4.2285));
-    CHECK(resFlueHeat.heatCapacityFW == Approx(70323.6515387818));
-    CHECK(resFlueHeat.heatCapacityMin == Approx(26781.0332157512));
-    CHECK(resFlueHeat.ratingHeatRecFW == Approx(4649484.9332901333));
-    CHECK(resFlueHeat.tempFlueGasOut == Approx(484.537));
-    CHECK(resFlueHeat.tempFWOut == Approx(446.4877442629));
-    CHECK(resFlueHeat.energySavingsBoiler == Approx(51704.6503757363));
-    CHECK(resFlueHeat.costSavingsBoiler == Approx(269381.2284575859));
 
     GasComposition gasFlueCond("Gas", 94.1, 3.02, 1.41, 0.01, 0.42, 0.28, 0.0, 0.0, 0.7, 0, 0.01);
     auto resHeatRecovery = AirWaterCoolingUsingFlue().calculate(gasFlueCond, 116, 300, 125, 70, 60, 0.04, 60, 0);

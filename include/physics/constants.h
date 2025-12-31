@@ -106,6 +106,27 @@ constexpr double kWaterDensity = 8.335;
  */
 namespace physics::conversions {
 
+/**
+ * @brief Conversion factor from Btu/(lb·°F) to kJ/(kg·K).
+ * @details 1 Btu/(lb·°F) = 4.1868 kJ/(kg·K)
+ */
+inline constexpr double kBtuPerLbFToKJPerKgK = 4.1868;
+
+/**
+ * @brief Convert Fahrenheit to Kelvin.
+ * @details Converts a temperature from degrees Fahrenheit to Kelvin:
+ * @par Relation
+ * @formula{fahrenheit-to-kelvin; T_K = (T_F - 32) / 1.8 + 273.15}
+ * @par Symbols
+ * @symtable
+ * @symrow{T_K; Temperature in Kelvin; \kelvin}
+ * @symrow{T_F; Temperature in degrees Fahrenheit; \degreeFahrenheit}
+ * @endsymtable
+ * @param[in] fahrenheit Temperature in degrees Fahrenheit @unitb{\degreeFahrenheit}
+ * @return Temperature in Kelvin @unitb{\kelvin}
+ */
+constexpr double fahrenheitToKelvin(double fahrenheit) { return ((fahrenheit - 32.0) / 1.8) + 273.15; }
+
 /// @brief Offset to convert Fahrenheit to Rankine.
 inline constexpr double kFahrenheitToRankineOffset = 459.67;
 
