@@ -4,7 +4,6 @@
 
 #include "processHeat/AirHeatingUsingExhaust.h"
 #include "processHeat/AirWaterCoolingUsingFlue.h"
-#include "processHeat/WaterHeatingUsingExhaust.h"
 #include "processHeat/WaterHeatingUsingFlue.h"
 #include "processHeat/WaterHeatingUsingSteam.h"
 
@@ -22,13 +21,6 @@ EMSCRIPTEN_BINDINGS(processHeat_class) {
         .property("energySavings", &AirHeatingUsingExhaust::Output::energySavings)
         .property("heatCapacityFlue", &AirHeatingUsingExhaust::Output::heatCapacityFlue)
         .property("heatCapacityAir", &AirHeatingUsingExhaust::Output::heatCapacityAir);
-
-    class_<WaterHeatingUsingExhaust::Output>("WaterHeatingUsingExhaustOutput")
-        .property("recoveredHeat", &WaterHeatingUsingExhaust::Output::recoveredHeat)
-        .property("hotWaterFlow", &WaterHeatingUsingExhaust::Output::hotWaterFlow)
-        .property("tonsRefrigeration", &WaterHeatingUsingExhaust::Output::tonsRefrigeration)
-        .property("capacityChiller", &WaterHeatingUsingExhaust::Output::capacityChiller)
-        .property("electricalEnergy", &WaterHeatingUsingExhaust::Output::electricalEnergy);
 
     class_<WaterHeatingUsingSteam::Output>("WaterHeatingUsingSteamOutput")
         .property("tempWaterOut", &WaterHeatingUsingSteam::Output::tempWaterOut)
@@ -76,10 +68,6 @@ EMSCRIPTEN_BINDINGS(processHeat_class) {
         .constructor<GasComposition>()
         .constructor<double, bool>()
         .function("calculate", &AirHeatingUsingExhaust::calculate);
-
-    class_<WaterHeatingUsingExhaust>("WaterHeatingUsingExhaust")
-        .constructor<>()
-        .function("calculate", &WaterHeatingUsingExhaust::calculate);
 
     class_<WaterHeatingUsingSteam>("WaterHeatingUsingSteam")
         .constructor<>()

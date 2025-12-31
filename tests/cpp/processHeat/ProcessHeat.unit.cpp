@@ -1,6 +1,5 @@
 #include <processHeat/AirHeatingUsingExhaust.h>
 #include <processHeat/AirWaterCoolingUsingFlue.h>
-#include <processHeat/WaterHeatingUsingExhaust.h>
 #include <processHeat/WaterHeatingUsingFlue.h>
 #include <processHeat/WaterHeatingUsingSteam.h>
 #include <processHeat/losses/solid_liquid_flue_gas_material.h>
@@ -19,16 +18,7 @@ TEST_CASE("Estimate maximum air flow that can be heated by using exhaust gas", "
     CHECK(res.energySavings == Approx(930.96));
     CHECK(res.heatCapacityFlue == Approx(928.78));
     CHECK(res.heatCapacityAir == Approx(4464));
-
-    auto resChillerAbsorpEnergy = WaterHeatingUsingExhaust().calculate(0.69, 6000000, 0.7, 190, 170, 0.73, 0.88, 5);
-    CHECK(resChillerAbsorpEnergy.recoveredHeat == Approx(1302000));
-    CHECK(resChillerAbsorpEnergy.hotWaterFlow == Approx(7810.437912));
-    CHECK(resChillerAbsorpEnergy.tonsRefrigeration == Approx(79.205));
-    CHECK(resChillerAbsorpEnergy.capacityChiller == Approx(69.7004));
-    CHECK(resChillerAbsorpEnergy.electricalEnergy == Approx(167280.96));
-
-
-
+    
     auto resSteamEnergy =
         WaterHeatingUsingSteam().calculate(0.1565, 340.2, 285.93, 0.5150, 2.7255, 285.93, 0.2048, 0.72, 0.8, 7000);
     CHECK(resSteamEnergy.tempWaterOut == Approx(352.304));

@@ -91,6 +91,13 @@ inline constexpr double kSpecificHeatAirCoeff = 0.000002556;
  */
 inline constexpr double kAirCorrectionBase = -1.078913827;
 
+
+/**
+ * @brief Water density @unitb{lb/gal}
+ * @details Used for water flow calculations in process heating systems. Source: CRC Handbook of Chemistry and Physics.
+ */
+constexpr double kWaterDensity = 8.335;
+
 } // namespace physics::us
 
 /**
@@ -166,5 +173,12 @@ inline constexpr double kMMBtuToBtu = 1'000'000.0;
  * @details Use this to convert a mass density from lb/ft^3 to kg/m^3.
  */
 inline constexpr double kLbPerFt3ToKgPerM3 = 16.018463;
+
+
+/**
+ * @brief BTU per ton of refrigeration @unitb{Btu/Ton}
+ * @details Used for refrigeration capacity calculations. Source: ASHRAE Handbook.
+ */
+constexpr double kBtuPerTonRefrigeration = 12000.0;
 
 } // namespace physics::conversions
