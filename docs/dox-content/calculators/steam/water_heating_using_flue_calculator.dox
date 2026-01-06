@@ -62,7 +62,7 @@
  * @symrow{\rho_{conv}; Density conversion factor - see @ref physics::conversions::kLbPerFt3ToKgPerM3; \kilogram\per\meter\cubed\per\pound\per\foot\cubed}
  * @symrow{Q_{gen}; Total generated flue gas from combustion; \pound\per\foot\cubed}
  * @symrow{R_{boiler}; Boiler rating; \giga\joule\per\hour}
- * @symrow{HHV_{fuel}; Fuel higher heating value; \kilo\joule\per\normalcubicmeter}
+ * @symrow{HHV_{fuel}; Fuel higher heating value; \kilo\joule\per\normalCubicMeter}
  * @endsymtable
  */
 
@@ -77,7 +77,7 @@
  * @subheading{Symbols}
  * @symtable
  * @symrow{\dot{m}_{steam}; Steam mass flow rate; \kilogram\per\hour}
- * @symrow{R_{boiler}; Boiler rating; \giga\joule\per\hour}
+ * @symrow{R_{boiler}; boiler rating; \giga\joule\per\hour}
  * @symrow{AH; Available heat fraction; \unitless}
  * @symrow{BD; Blowdown percentage (fraction); \unitless}
  * @symrow{h_{steam}; Steam specific enthalpy; \kilo\joule\per\kilogram}
