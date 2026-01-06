@@ -24,8 +24,8 @@ namespace water_heating_using_exhaust {
 struct WaterHeatingUsingExhaustResults {
     double recovered_heat = 0;        ///< Recovered heat @unitb{Btu/hr}
     double hot_water_flow = 0;        ///< Hot water flow @unitb{gal/hr}
-    double tons_refrigeration = 0;    ///< Tons of refrigeration @unitb{Tons}
-    double capacity_chiller = 0;      ///< Chiller capacity @unitb{Tons}
+    double tons_refrigeration = 0;    ///< Tons of refrigeration @unitb{tons}
+    double capacity_chiller = 0;      ///< Chiller capacity @unitb{tons}
     double electrical_energy = 0;     ///< Electrical energy @unitb{Btu/hr}
 };
 
