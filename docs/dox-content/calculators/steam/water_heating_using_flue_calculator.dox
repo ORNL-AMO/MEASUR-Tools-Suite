@@ -77,7 +77,7 @@
  * @subheading{Symbols}
  * @symtable
  * @symrow{\dot{m}_{steam}; Steam mass flow rate; \kilogram\per\hour}
- * @symrow{R_{boiler}; boiler rating; \giga\joule\per\hour}
+ * @symrow{R_{boiler}; Boiler rating; \giga\joule\per\hour}
  * @symrow{AH; Available heat fraction; \unitless}
  * @symrow{BD; Blowdown percentage (fraction); \unitless}
  * @symrow{h_{steam}; Steam specific enthalpy; \kilo\joule\per\kilogram}
