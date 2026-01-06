@@ -26,6 +26,12 @@ inline constexpr double kStefanBoltzmann = 5.670374419e-8;
  */
 inline constexpr double kWaterDensityBase = 1000.0;
 
+/**
+ * @brief Specific heat of liquid water at standard conditions @unitb{\kilo\joule\per\kilogram\per\kelvin}
+ * @details 4.1796 kJ/(kg·K) is the widely accepted value for the specific heat capacity of water at room temperature (15–25°C).
+ */
+inline constexpr double kSpecificHeatWater = 4.1796;
+
 } // namespace physics::si
 
 /**
@@ -111,6 +117,7 @@ namespace physics::conversions {
  * @details 1 Btu/(lb·°F) = 4.1868 kJ/(kg·K)
  */
 inline constexpr double kBtuPerLbFToKJPerKgK = 4.1868;
+
 
 /**
  * @brief Convert Fahrenheit to Kelvin.

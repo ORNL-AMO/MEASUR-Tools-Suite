@@ -33,5 +33,4 @@ describe('Steam water heating using flue', function () {
         assert.approximately(results.energySavingsBoiler, 51704.6503757363, 0.01, "energySavingsBoiler");
         assert.approximately(results.costSavingsBoiler, 269381.2284575859, 0.01, "costSavingsBoiler");
     });
-
 });
