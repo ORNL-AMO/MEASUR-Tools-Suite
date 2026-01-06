@@ -29,7 +29,7 @@
  * @subheading{Symbols}
  * @symtable
  * @symrow{Q_\text{aux}; Auxiliary power used; \btu\per\hour}
- * @symrow{P; Motor phase; \unitless}
+ * @symrow{P; Number of motor phases; \unitless}
  * @symrow{V; Supply voltage; \volt}
  * @symrow{I; Average current; \ampere}
  * @symrow{PF; Power factor; \unitless}
