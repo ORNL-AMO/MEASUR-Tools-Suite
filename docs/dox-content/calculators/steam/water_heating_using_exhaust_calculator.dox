@@ -58,7 +58,7 @@
  * @symtable
  * @symrow{\dot{m}_{water}; Hot water flow rate; \gallon\per\hour}
  * @symrow{Q_{rec}; Recovered heat; \btu\per\hour}
- * @symrow{\Delta T; Temperature difference (inlet - outlet); \degreeFahrenheit}
+ * @symrow{\Delta T; Temperature difference (chiller inlet - chiller outlet); \degreeFahrenheit}
  * @symrow{\rho_{water}; Water density - see @ref physics::us::kWaterDensity; \pound\per\gallon}
  * @endsymtable
  */
@@ -67,7 +67,7 @@
  * @defgroup water_heating_using_exhaust_tons_refrigeration_formula Tons of Refrigeration Formula
  * @ingroup water_heating_using_exhaust_calculator
  * @brief Refrigeration capacity using chiller coefficient of performance.
- * @details The tons of refrigeration is calculated by multiplying the recovered heat by the chiller COP and dividing by the BTU per ton conversion factor. The conversion factor is @ref physics::conversions::kBtuPerTonRefrigeration (12,000 Btu/Ton).
+ * @details The tons of refrigeration is calculated by multiplying the recovered heat by the chiller COP and dividing by the BTU per ton conversion factor. The conversion factor is @ref physics::conversions::kBtuPerTonRefrigeration (12,000 Btu/hr per Ton).
  *
  * @formula{water-heating-exhaust-tons-refrigeration; TR = \frac{Q_{rec} \cdot COP_{chiller}}{CF_{ton}}}
  *
