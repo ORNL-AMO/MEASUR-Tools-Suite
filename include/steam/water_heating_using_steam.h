@@ -23,7 +23,7 @@ struct WaterHeatingUsingSteamResults {
     double temp_water_out = 0;         ///< Outlet water temperature @unitb{K}
     double bp_temp_water_out = 0;      ///< Boiling point temp of water out @unitb{K}
     bool bp_temp_warning_flag = false; ///< Warning if outlet water at/above boiling point
-    double flow_bypass_steam = 0;      ///< Bypass steam flow @unitb{m3/hr}
+    double flow_bypass_steam = 0;      ///< Bypass steam flow @unitb{kg/hr}
     double enthalpy_steam_in = 0;      ///< Inlet steam enthalpy @unitb{kJ/kg}
     double enthalpy_steam_out = 0;     ///< Outlet steam enthalpy @unitb{kJ/kg}
     double enthalpy_makeup_water = 0;  ///< Makeup water enthalpy @unitb{kJ/kg}
