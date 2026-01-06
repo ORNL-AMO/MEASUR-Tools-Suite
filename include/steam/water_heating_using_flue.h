@@ -9,14 +9,14 @@
 namespace water_heating_using_flue {
 
 /**
- * @ingroup process_heat
+ * @ingroup water_heating_using_flue_calculator
  * @enum SteamCondition
  * @brief Steam condition for calculation (Superheated or Saturated).
  */
 enum class SteamCondition { Superheated, Saturated };
 
 /**
- * @ingroup process_heat
+ * @ingroup water_heating_using_flue_calculator
  * @struct WaterHeatingUsingFlueResults
  * @brief Results of the water heating using flue calculation.
  * @details Contains all output values from the water heating using flue calculation.
@@ -41,6 +41,7 @@ struct WaterHeatingUsingFlueResults {
 };
 
 /**
+ * @ingroup water_heating_using_flue_calculator
  * @brief Calculates energy and cost savings from using flue gas (waste) heat to heat boiler feed water using a non-condensing heat exchanger.
  * @details Uses process parameters to estimate the benefit of using waste heat for water heating and boiler operation.
  *
@@ -57,7 +58,7 @@ struct WaterHeatingUsingFlueResults {
  * @param[in] perc_blow_down Blowdown percentage (fraction)
  * @param[in] eff_hx Heat exchanger efficiency (fraction)
  * @param[in] op_hours Operating hours @unitb{hr}
- * @param[in] cost_fuel Fuel cost @unitb{$/GJ}
+ * @param[in] cost_fuel Fuel cost @unitb{dollar/GJ}
  * @param[in] hhv_fuel Fuel higher heating value @unitb{kJ/Nm3}
  * @param[in] cond_steam Steam condition (Superheated or Saturated)
  * @param[in] fuel_temp_f Fuel temperature @unitb{\degreeFahrenheit} (default: 60)
