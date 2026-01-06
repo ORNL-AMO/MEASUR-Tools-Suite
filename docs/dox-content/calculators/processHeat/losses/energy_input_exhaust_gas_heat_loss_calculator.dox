@@ -21,6 +21,9 @@
  * @heading{Available Heat}
  * @copydoc energy_input_exhaust_gas_available_heat_cpp_formula
  *
+ * @heading{Base Heat}
+ * @copydoc energy_input_exhaust_gas_base_heat_cpp_formula
+ *
  * @heading{Air Correction}
  * @copydoc energy_input_exhaust_gas_air_correction_cpp_formula
  *
@@ -78,18 +81,37 @@
  * @details The available heat represents the fraction of input energy that remains available for useful work 
  * after accounting for exhaust gas temperature, excess air, and combustion air preheat.
  * 
- * @formula{energy-input-exhaust-gas-available-heat-cpp; AH = 95 - 0.025 \cdot T_{exh} + AC + CAC}
+ * @formula{energy-input-exhaust-gas-available-heat-cpp; AH = BH + AC + CAC}
  * 
  * @subheading{Symbols}
  * @symtable
  * @symrow{AH; Available heat percent; \percent}
- * @symrow{95; Base available heat at zero exhaust temperature; \percent}
- * @symrow{0.025; Exhaust temperature loss coefficient; \percent\per\degreeFahrenheit}
- * @symrow{T_{exh}; Exhaust gas temperature; \degreeFahrenheit}
+ * @symrow{BH; Base heat percentage; \percent}
  * @symrow{AC; Air correction; \percent}
  * @symrow{CAC; Combustion air correction; \percent}
  * @endsymtable
  */
+
+
+/**
+ * @defgroup energy_input_exhaust_gas_base_heat_cpp_formula Base Heat Formula
+ * @ingroup energy_input_exhaust_gas_heat_loss_calculator
+ * @brief Base available heat before corrections.
+ * @details The base heat formula calculates the starting percentage of input heat available for useful work, before accounting for losses due to excess air and combustion air preheat. 
+ * It is determined by subtracting the exhaust temperature loss from a model-specific base value (95%). 
+ * This step isolates the effect of exhaust gas temperature on available heat, prior to applying air corrections.
+ *
+ * @formula{energy-input-exhaust-gas-base-heat-cpp; BH = 95 - 0.025 \cdot T_{exh}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{BH; Base heat percentage; \percent}
+ * @symrow{95; Base available heat at zero exhaust temperature; \percent}
+ * @symrow{0.025; Exhaust temperature loss coefficient; \percent\per\degreeFahrenheit}
+ * @symrow{T_{exh}; Exhaust gas temperature; \degreeFahrenheit}
+ * @endsymtable
+ */
+
 
 /**
  * @defgroup energy_input_exhaust_gas_air_correction_cpp_formula Air Correction Formula
