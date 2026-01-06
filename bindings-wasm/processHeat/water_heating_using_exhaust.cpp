@@ -1,6 +1,6 @@
 #include <string>
 #include <emscripten/bind.h>
-#include "steam/water_heating_using_exhaust.h"
+#include "processHeat/water_heating_using_exhaust.h"
 
 using namespace emscripten;
 using namespace water_heating_using_exhaust;

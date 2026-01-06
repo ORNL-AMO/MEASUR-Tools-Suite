@@ -4,6 +4,8 @@
  * @brief Calculates energy and water savings from using vent steam to heat water through a steam-to-liquid heat exchanger.
  * @details This calculator estimates the benefit of using vent steam for water heating applications. The calculation uses steam and water properties, flow rates, pressures, temperatures, and system efficiencies. The method is based on standard industrial practice for waste heat recovery in steam systems.
  *
+ * @image html assets/water-heating-diagram.png "Water Heating Using Steam Diagram"*
+ *
  * The calculation follows a top-down approach:
  * 1. **Steam and Water Properties** - Determine steam enthalpies at inlet conditions and saturation properties, boiling point temperature, and makeup water enthalpy
  * 2. **Outlet Water Temperature** - Calculate heated water outlet temperature based on energy balance

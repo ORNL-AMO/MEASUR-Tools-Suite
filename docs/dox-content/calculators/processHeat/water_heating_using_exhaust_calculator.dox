@@ -1,6 +1,6 @@
 /**
  * @defgroup water_heating_using_exhaust_calculator Water Heating Using Exhaust Calculator
- * @ingroup steam_system_assessments
+ * @ingroup process_heat_calculators
  * @brief Calculates energy savings from using exhaust gas (waste heat) to provide energy for an absorption chiller in place of a compressor.
  * @details This calculator estimates the benefit of using waste heat from exhaust gas for water heating and chiller operation. The calculation uses available heat fraction, heat input, heat exchanger efficiency, chiller temperatures, and performance coefficients. The method is based on standard industrial practice for waste heat recovery in process heating and cooling systems.
  *

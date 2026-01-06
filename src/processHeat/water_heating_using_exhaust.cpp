@@ -1,5 +1,5 @@
 
-#include "steam/water_heating_using_exhaust.h"
+#include "processHeat/water_heating_using_exhaust.h"
 #include "physics/constants.h"
 
 namespace water_heating_using_exhaust {
