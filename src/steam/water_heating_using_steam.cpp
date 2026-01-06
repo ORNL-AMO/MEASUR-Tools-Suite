@@ -59,7 +59,7 @@ WaterHeatingUsingSteamResults waterHeatingUsingSteam(
     results.temp_water_out = temp_water_out;                   // K
     results.bp_temp_water_out = bp_temp_water_out;             // K
     results.bp_temp_warning_flag = bp_temp_warning_flag;       // true if boiling point exceeded
-    results.flow_bypass_steam = flow_bypass_steam;             // m3/hr
+    results.flow_bypass_steam = flow_bypass_steam;             // kg/hr
     results.enthalpy_steam_in = enthalpy_steam_in;             // kJ/kg
     results.enthalpy_steam_out = enthalpy_steam_out;           // kJ/kg
     results.enthalpy_makeup_water = enthalpy_makeup_water;     // kJ/kg
