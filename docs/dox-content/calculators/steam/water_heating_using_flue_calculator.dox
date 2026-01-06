@@ -1,0 +1,235 @@
+/**
+ * @defgroup water_heating_using_flue_calculator Water Heating Using Flue Calculator
+ * @ingroup steam_system_assessments
+ * @brief Calculates energy and cost savings from using flue gas (waste heat) to preheat boiler feedwater using a non-condensing heat exchanger.
+ * @details This calculator estimates the benefit of using waste heat from flue gas to preheat boiler feedwater through a heat exchanger. The calculation uses flue gas properties, steam system parameters, heat exchanger efficiency, and operating costs. The method is based on standard industrial practice for waste heat recovery in boiler systems utilizing the effectiveness-NTU heat exchanger method.
+ *
+ * The calculation follows a top-down approach:
+ * 1. **Flue Gas Properties** - Determine flue gas mass flow, specific heat, and available heat from combustion
+ * 2. **Steam and Feedwater Properties** - Calculate steam and feedwater enthalpies and mass flows
+ * 3. **Heat Capacity Calculations** - Compute heat capacities for flue gas and feedwater streams
+ * 4. **Recovered Heat** - Calculate heat recovered using minimum heat capacity and heat exchanger efficiency
+ * 5. **Exit Temperatures** - Determine exit temperatures for both flue gas and feedwater streams
+ * 6. **Annual Energy and Cost Savings** - Calculate annual energy savings and cost benefits
+ *
+ * Relevant formulas and symbol definitions are documented below.
+ *
+ * @heading{Flue Gas Mass Flow}
+ * @copydoc water_heating_using_flue_gas_mass_flow_formula
+ *
+ * @heading{Steam Mass Flow}
+ * @copydoc water_heating_using_flue_steam_mass_flow_formula
+ *
+ * @heading{Feedwater Mass Flow}
+ * @copydoc water_heating_using_flue_feedwater_mass_flow_formula
+ *
+ * @heading{Flue Gas Heat Capacity}
+ * @copydoc water_heating_using_flue_gas_heat_capacity_formula
+ *
+ * @heading{Feedwater Heat Capacity}
+ * @copydoc water_heating_using_flue_feedwater_heat_capacity_formula
+ *
+ * @heading{Minimum Heat Capacity}
+ * @copydoc water_heating_using_flue_min_heat_capacity_formula
+ *
+ * @heading{Recovered Heat}
+ * @copydoc water_heating_using_flue_recovered_heat_formula
+ *
+ * @heading{Flue Gas Exit Temperature}
+ * @copydoc water_heating_using_flue_gas_exit_temp_formula
+ *
+ * @heading{Feedwater Exit Temperature}
+ * @copydoc water_heating_using_flue_feedwater_exit_temp_formula
+ *
+ * @heading{Annual Energy Savings}
+ * @copydoc water_heating_using_flue_annual_energy_savings_formula
+ *
+ * @heading{Annual Cost Savings}
+ * @copydoc water_heating_using_flue_annual_cost_savings_formula
+ */
+
+/**
+ * @defgroup water_heating_using_flue_gas_mass_flow_formula Flue Gas Mass Flow Formula
+ * @ingroup water_heating_using_flue_calculator
+ * @brief Flue gas mass flow rate based on boiler rating and fuel properties.
+ * @details The flue gas mass flow rate is calculated using the total generated flue gas (from gas composition and combustion analysis), boiler rating, and fuel higher heating value. The density conversion factor @ref physics::conversions::kLbPerFt3ToKgPerM3 (16.0185 kg/m³ per lb/ft³) is applied.
+ *
+ * @formula{water-heating-flue-gas-mass-flow; \dot{m}_{flue} = \rho_{conv} \cdot Q_{gen} \cdot R_{boiler} \cdot \frac{10^6}{HHV_{fuel}}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{\dot{m}_{flue}; Flue gas mass flow rate; \kilogram\per\hour}
+ * @symrow{\rho_{conv}; Density conversion factor - see @ref physics::conversions::kLbPerFt3ToKgPerM3; \kilogram\per\meter\cubed\per\pound\per\foot\cubed}
+ * @symrow{Q_{gen}; Total generated flue gas from combustion; \pound\per\foot\cubed}
+ * @symrow{R_{boiler}; Boiler rating; \giga\joule\per\hour}
+ * @symrow{HHV_{fuel}; Fuel higher heating value; \kilo\joule\per\normalcubicmeter}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup water_heating_using_flue_steam_mass_flow_formula Steam Mass Flow Formula
+ * @ingroup water_heating_using_flue_calculator
+ * @brief Steam mass flow rate based on boiler rating and enthalpy difference.
+ * @details The steam mass flow rate is calculated using the boiler rating, available heat fraction, blowdown percentage, and the enthalpy difference between steam and feedwater. Available heat accounts for losses in the combustion process.
+ *
+ * @formula{water-heating-flue-steam-mass-flow; \dot{m}_{steam} = \frac{R_{boiler} \cdot 10^6 \cdot AH \cdot (1 - BD)}{h_{steam} - h_{fw}}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{\dot{m}_{steam}; Steam mass flow rate; \kilogram\per\hour}
+ * @symrow{R_{boiler}; Boiler rating; \giga\joule\per\hour}
+ * @symrow{AH; Available heat fraction; \unitless}
+ * @symrow{BD; Blowdown percentage (fraction); \unitless}
+ * @symrow{h_{steam}; Steam specific enthalpy; \kilo\joule\per\kilogram}
+ * @symrow{h_{fw}; Feedwater specific enthalpy; \kilo\joule\per\kilogram}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup water_heating_using_flue_feedwater_mass_flow_formula Feedwater Mass Flow Formula
+ * @ingroup water_heating_using_flue_calculator
+ * @brief Feedwater mass flow rate accounting for steam production and blowdown.
+ * @details The feedwater mass flow rate is calculated by adding the blowdown fraction to the steam mass flow. Blowdown is the water deliberately discharged from the boiler to control dissolved solids concentration.
+ *
+ * @formula{water-heating-flue-feedwater-mass-flow; \dot{m}_{fw} = \dot{m}_{steam} \cdot (1 + BD)}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{\dot{m}_{fw}; Feedwater mass flow rate; \kilogram\per\hour}
+ * @symrow{\dot{m}_{steam}; Steam mass flow rate; \kilogram\per\hour}
+ * @symrow{BD; Blowdown percentage (fraction); \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup water_heating_using_flue_gas_heat_capacity_formula Flue Gas Heat Capacity Formula
+ * @ingroup water_heating_using_flue_calculator
+ * @brief Heat capacity rate of the flue gas stream.
+ * @details The flue gas heat capacity rate is the product of the mass flow rate and specific heat. This represents the thermal capacity of the flue gas stream to transfer heat.
+ *
+ * @formula{water-heating-flue-gas-heat-capacity; \dot{C}_{flue} = C_{p,flue} \cdot \dot{m}_{flue}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{\dot{C}_{flue}; Flue gas heat capacity rate; \kilo\joule\per\hour\kelvin}
+ * @symrow{C_{p,flue}; Flue gas specific heat; \kilo\joule\per\kilogram\kelvin}
+ * @symrow{\dot{m}_{flue}; Flue gas mass flow rate; \kilogram\per\hour}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup water_heating_using_flue_feedwater_heat_capacity_formula Feedwater Heat Capacity Formula
+ * @ingroup water_heating_using_flue_calculator
+ * @brief Heat capacity rate of the feedwater stream.
+ * @details The feedwater heat capacity rate is the product of the mass flow rate and specific heat. The feedwater specific heat is calculated using an empirical polynomial fit in @ref gas_constants::specificHeatFeedwater.
+ *
+ * @formula{water-heating-flue-feedwater-heat-capacity; \dot{C}_{fw} = C_{p,fw} \cdot \dot{m}_{fw}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{\dot{C}_{fw}; Feedwater heat capacity rate; \kilo\joule\per\hour\kelvin}
+ * @symrow{C_{p,fw}; Feedwater specific heat; \kilo\joule\per\kilogram\kelvin}
+ * @symrow{\dot{m}_{fw}; Feedwater mass flow rate; \kilogram\per\hour}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup water_heating_using_flue_min_heat_capacity_formula Minimum Heat Capacity Formula
+ * @ingroup water_heating_using_flue_calculator
+ * @brief Minimum heat capacity rate between the two streams.
+ * @details The minimum heat capacity rate determines the maximum possible heat transfer in a heat exchanger. It is the smaller of the flue gas and feedwater heat capacity rates.
+ *
+ * @formula{water-heating-flue-min-heat-capacity; \dot{C}_{min} = \min(\dot{C}_{flue}, \dot{C}_{fw})}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{\dot{C}_{min}; Minimum heat capacity rate; \kilo\joule\per\hour\kelvin}
+ * @symrow{\dot{C}_{flue}; Flue gas heat capacity rate; \kilo\joule\per\hour\kelvin}
+ * @symrow{\dot{C}_{fw}; Feedwater heat capacity rate; \kilo\joule\per\hour\kelvin}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup water_heating_using_flue_recovered_heat_formula Recovered Heat Formula
+ * @ingroup water_heating_using_flue_calculator
+ * @brief Heat recovered through the heat exchanger using effectiveness-NTU method.
+ * @details The recovered heat is calculated using the heat exchanger efficiency (effectiveness), minimum heat capacity rate, and temperature difference between the flue gas inlet and feedwater inlet. This represents the actual heat transferred from the flue gas to the feedwater.
+ *
+ * @formula{water-heating-flue-recovered-heat; Q_{rec} = \eta_{hx} \cdot \dot{C}_{min} \cdot (T_{flue,in} - T_{fw,in})}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{rec}; Recovered heat; \kilo\joule\per\hour}
+ * @symrow{\eta_{hx}; Heat exchanger efficiency (effectiveness); \unitless}
+ * @symrow{\dot{C}_{min}; Minimum heat capacity rate; \kilo\joule\per\hour\kelvin}
+ * @symrow{T_{flue,in}; Flue gas inlet temperature; \kelvin}
+ * @symrow{T_{fw,in}; Feedwater inlet temperature; \kelvin}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup water_heating_using_flue_gas_exit_temp_formula Flue Gas Exit Temperature Formula
+ * @ingroup water_heating_using_flue_calculator
+ * @brief Exit temperature of flue gas after heat exchanger.
+ * @details The flue gas exit temperature is calculated by subtracting the heat lost (recovered heat) divided by the flue gas heat capacity rate from the inlet temperature. This represents the cooled flue gas temperature leaving the heat exchanger.
+ *
+ * @formula{water-heating-flue-gas-exit-temp; T_{flue,out} = T_{flue,in} - \frac{Q_{rec}}{\dot{C}_{flue}}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{T_{flue,out}; Flue gas exit temperature; \kelvin}
+ * @symrow{T_{flue,in}; Flue gas inlet temperature; \kelvin}
+ * @symrow{Q_{rec}; Recovered heat; \kilo\joule\per\hour}
+ * @symrow{\dot{C}_{flue}; Flue gas heat capacity rate; \kilo\joule\per\hour\kelvin}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup water_heating_using_flue_feedwater_exit_temp_formula Feedwater Exit Temperature Formula
+ * @ingroup water_heating_using_flue_calculator
+ * @brief Exit temperature of feedwater after heat exchanger.
+ * @details The feedwater exit temperature is calculated by adding the heat gained (recovered heat) divided by the feedwater heat capacity rate to the inlet temperature. This represents the preheated feedwater temperature leaving the heat exchanger.
+ *
+ * @formula{water-heating-flue-feedwater-exit-temp; T_{fw,out} = T_{fw,in} + \frac{Q_{rec}}{\dot{C}_{fw}}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{T_{fw,out}; Feedwater exit temperature; \kelvin}
+ * @symrow{T_{fw,in}; Feedwater inlet temperature; \kelvin}
+ * @symrow{Q_{rec}; Recovered heat; \kilo\joule\per\hour}
+ * @symrow{\dot{C}_{fw}; Feedwater heat capacity rate; \kilo\joule\per\hour\kelvin}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup water_heating_using_flue_annual_energy_savings_formula Annual Energy Savings Formula
+ * @ingroup water_heating_using_flue_calculator
+ * @brief Annual energy savings from using waste heat recovery.
+ * @details The annual energy savings is calculated by dividing the recovered heat by the available heat fraction and multiplying by the operating hours. This is then converted to GJ/yr by dividing by 1,000,000. The division by available heat fraction accounts for the boiler efficiency to determine the fuel energy savings.
+ *
+ * @formula{water-heating-flue-annual-energy-savings; E_{annual} = \frac{Q_{rec}}{AH} \cdot t_{op} \cdot \frac{1}{10^6}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{E_{annual}; Annual energy savings; \giga\joule\per\year}
+ * @symrow{Q_{rec}; Recovered heat; \kilo\joule\per\hour}
+ * @symrow{AH; Available heat fraction; \unitless}
+ * @symrow{t_{op}; Operating hours; \hour\per\year}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup water_heating_using_flue_annual_cost_savings_formula Annual Cost Savings Formula
+ * @ingroup water_heating_using_flue_calculator
+ * @brief Annual cost savings from using waste heat recovery.
+ * @details The annual cost savings is calculated by multiplying the annual energy savings by the fuel cost. This represents the monetary benefit of implementing the waste heat recovery system.
+ *
+ * @formula{water-heating-flue-annual-cost-savings; C_{annual} = E_{annual} \cdot C_{fuel}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{C_{annual}; Annual cost savings; \dollar\per\year}
+ * @symrow{E_{annual}; Annual energy savings; \giga\joule\per\year}
+ * @symrow{C_{fuel}; Fuel cost; \dollar\per\giga\joule}
+ * @endsymtable
+ */
