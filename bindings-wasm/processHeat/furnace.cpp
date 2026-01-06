@@ -3,7 +3,6 @@
 #include "processHeat/EfficiencyImprovement.h"
 #include "processHeat/EnergyEquivalency.h"
 #include "processHeat/FlowCalculationsEnergyUse.h"
-#include "processHeat/HumidityRatio.h"
 #include "processHeat/O2Enrichment.h"
 
 using namespace emscripten;
@@ -74,12 +73,4 @@ EMSCRIPTEN_BINDINGS(o2Enrichment) {
         .function("getAvailableHeatEnriched", &O2Enrichment::getAvailableHeatEnriched)
         .function("getFuelSavingsEnriched", &O2Enrichment::getFuelSavingsEnriched)
         .function("getFuelConsumptionEnriched", &O2Enrichment::getFuelConsumptionEnriched);
-}
-
-// humidityRatio
-EMSCRIPTEN_BINDINGS(humidityRatio) {
-    class_<HumidityRatio>("HumidityRatio")
-        .constructor<double, double, double, double>()
-        .function("getHumidityRatioUsingRH", &HumidityRatio::getHumidityRatioUsingRH)
-        .function("getHumidityRatioUsingWBT", &HumidityRatio::getHumidityRatioUsingWBT);
 }

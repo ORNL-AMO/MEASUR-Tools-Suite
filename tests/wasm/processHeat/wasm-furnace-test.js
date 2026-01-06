@@ -137,25 +137,8 @@ function o2Enrichment() {
     testNumberValue(fuelConsumptionEnriched, 7.40074184, "Process Heat O2 Enrichment (fuelConsumptionEnriched-4)");
     o2Enrichment.delete();
 }
-// humidityRatio
-function humidityRatio() {
-    var inp = {
-        atmosphericPressure: 0.8,
-        dryBulbTemp: 120,
-        relativeHumidity: 30,
-        wetBulbTemp: 85
-    };
-    var humidityRatio = new Module.HumidityRatio(inp.atmosphericPressure, inp.dryBulbTemp, inp.relativeHumidity, inp.wetBulbTemp);
-    var humidityRatioUsingRH = humidityRatio.getHumidityRatioUsingRH();
-    var humidityRatioUsingWBT = humidityRatio.getHumidityRatioUsingWBT();
-    testNumberValue(humidityRatioUsingRH, 0.028113628942036617, "Process Heat Humidity Ratio (humidityRatioUsingRH)");
-    testNumberValue(humidityRatioUsingWBT, 0.024579434176341366, "Process Heat Humidity Ratio (humidityRatioUsingWBT)");
-    humidityRatio.delete();
-}
-
 efficiencyImprovement();
 energyEquivalencyElectric();
 energyEquivalencyFuel();
 flowCalculations();
 o2Enrichment();
-humidityRatio();
