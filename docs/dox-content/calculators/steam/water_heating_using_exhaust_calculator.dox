@@ -1,0 +1,115 @@
+/**
+ * @defgroup water_heating_using_exhaust_calculator Water Heating Using Exhaust Calculator
+ * @ingroup steam_calculators
+ * @brief Calculates energy savings from using exhaust gas (waste heat) to provide energy for an absorption chiller in place of a compressor.
+ * @details This calculator estimates the benefit of using waste heat from exhaust gas for water heating and chiller operation. The calculation uses available heat fraction, heat input, heat exchanger efficiency, chiller temperatures, and performance coefficients. The method is based on standard industrial practice for waste heat recovery in process heating and cooling systems.
+ *
+ * The calculation follows a top-down approach:
+ * 1. **Recovered Heat** - Calculate heat recovered from exhaust gas through the heat exchanger
+ * 2. **Hot Water Flow** - Determine hot water flow rate based on temperature difference
+ * 3. **Tons of Refrigeration** - Calculate refrigeration capacity using chiller COP
+ * 4. **Chiller Capacity** - Compute effective chiller capacity accounting for efficiency
+ * 5. **Electrical Energy** - Determine equivalent electrical energy saved from compressor operation
+ *
+ * Relevant formulas and symbol definitions are documented below.
+ *
+ * @heading{Recovered Heat}
+ * @copydoc water_heating_using_exhaust_recovered_heat_formula
+ *
+ * @heading{Hot Water Flow}
+ * @copydoc water_heating_using_exhaust_hot_water_flow_formula
+ *
+ * @heading{Tons of Refrigeration}
+ * @copydoc water_heating_using_exhaust_tons_refrigeration_formula
+ *
+ * @heading{Chiller Capacity}
+ * @copydoc water_heating_using_exhaust_chiller_capacity_formula
+ *
+ * @heading{Electrical Energy}
+ * @copydoc water_heating_using_exhaust_electrical_energy_formula
+ */
+
+/**
+ * @defgroup water_heating_using_exhaust_recovered_heat_formula Recovered Heat Formula
+ * @ingroup water_heating_using_exhaust_calculator
+ * @brief Heat recovered from exhaust gas through the heat exchanger.
+ * @details The recovered heat is calculated by multiplying the unavailable heat (waste heat) by the heat input and heat exchanger efficiency. The unavailable heat is the complement of the available heat fraction.
+ *
+ * @formula{water-heating-exhaust-recovered-heat; Q_{rec} = (1 - AH) \cdot Q_{in} \cdot \eta_{hx}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{rec}; Recovered heat; \btu\per\hour}
+ * @symrow{AH; Available heat fraction; \unitless}
+ * @symrow{Q_{in}; Heat input; \btu\per\hour}
+ * @symrow{\eta_{hx}; Heat exchanger efficiency; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup water_heating_using_exhaust_hot_water_flow_formula Hot Water Flow Formula
+ * @ingroup water_heating_using_exhaust_calculator
+ * @brief Hot water flow rate based on recovered heat and temperature difference.
+ * @details The hot water flow rate is calculated by dividing the recovered heat by the product of temperature difference and water density. Water density is @ref physics::us::kWaterDensity (8.335 lb/gal).
+ *
+ * @formula{water-heating-exhaust-hot-water-flow; \dot{m}_{water} = \frac{Q_{rec}}{\Delta T \cdot \rho_{water}}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{\dot{m}_{water}; Hot water flow rate; \gallon\per\hour}
+ * @symrow{Q_{rec}; Recovered heat; \btu\per\hour}
+ * @symrow{\Delta T; Temperature difference (inlet - outlet); \degreeFahrenheit}
+ * @symrow{\rho_{water}; Water density - see @ref physics::us::kWaterDensity; \pound\per\gallon}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup water_heating_using_exhaust_tons_refrigeration_formula Tons of Refrigeration Formula
+ * @ingroup water_heating_using_exhaust_calculator
+ * @brief Refrigeration capacity using chiller coefficient of performance.
+ * @details The tons of refrigeration is calculated by multiplying the recovered heat by the chiller COP and dividing by the BTU per ton conversion factor. The conversion factor is @ref physics::conversions::kBtuPerTonRefrigeration (12,000 Btu/Ton).
+ *
+ * @formula{water-heating-exhaust-tons-refrigeration; TR = \frac{Q_{rec} \cdot COP_{chiller}}{CF_{ton}}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{TR; Tons of refrigeration; tons}
+ * @symrow{Q_{rec}; Recovered heat; \btu\per\hour}
+ * @symrow{COP_{chiller}; Coefficient of performance for chiller; \unitless}
+ * @symrow{CF_{ton}; BTU per ton conversion factor - see @ref physics::conversions::kBtuPerTonRefrigeration; \btu\per ton}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup water_heating_using_exhaust_chiller_capacity_formula Chiller Capacity Formula
+ * @ingroup water_heating_using_exhaust_calculator
+ * @brief Effective chiller capacity accounting for efficiency.
+ * @details The chiller capacity is calculated by multiplying the tons of refrigeration by the chiller efficiency. This represents the actual cooling capacity available after accounting for system inefficiencies.
+ *
+ * @formula{water-heating-exhaust-chiller-capacity; C_{chiller} = TR \cdot \eta_{chiller}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{C_{chiller}; Chiller capacity; tons}
+ * @symrow{TR; Tons of refrigeration; tons}
+ * @symrow{\eta_{chiller}; Chiller efficiency; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup water_heating_using_exhaust_electrical_energy_formula Electrical Energy Formula
+ * @ingroup water_heating_using_exhaust_calculator
+ * @brief Equivalent electrical energy saved from compressor operation.
+ * @details The electrical energy is calculated by multiplying the recovered heat, chiller COP, and chiller efficiency, then dividing by the compressor COP. This represents the electrical energy that would have been required to achieve the same cooling effect using a compressor-based system.
+ *
+ * @formula{water-heating-exhaust-electrical-energy; E_{elec} = \frac{Q_{rec} \cdot COP_{chiller} \cdot \eta_{chiller}}{COP_{comp}}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{E_{elec}; Electrical energy; \btu\per\hour}
+ * @symrow{Q_{rec}; Recovered heat; \btu\per\hour}
+ * @symrow{COP_{chiller}; Coefficient of performance for chiller; \unitless}
+ * @symrow{\eta_{chiller}; Chiller efficiency; \unitless}
+ * @symrow{COP_{comp}; Coefficient of performance for compressor; \unitless}
+ * @endsymtable
+ */
