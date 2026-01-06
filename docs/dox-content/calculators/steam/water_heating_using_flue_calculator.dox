@@ -52,9 +52,9 @@
  * @defgroup water_heating_using_flue_gas_mass_flow_formula Flue Gas Mass Flow Formula
  * @ingroup water_heating_using_flue_calculator
  * @brief Flue gas mass flow rate based on boiler rating and fuel properties.
- * @details The flue gas mass flow rate is calculated using the total generated flue gas (from gas composition and combustion analysis), boiler rating, and fuel higher heating value. The density conversion factor @ref physics::conversions::kLbPerFt3ToKgPerM3 (16.0185 kg/m³ per lb/ft³) is applied.
+ * @details The flue gas mass flow rate is calculated using the total generated flue gas (from gas composition and combustion analysis), boiler rating, and fuel higher heating value. The density conversion factor @ref physics::conversions::kLbPerFt3ToKgPerM3 (16.018463 kg/m³ per lb/ft³) is applied.
  *
- * @formula{water-heating-flue-gas-mass-flow; \dot{m}_{flue} = \rho_{conv} \cdot Q_{gen} \cdot R_{boiler} \cdot \frac{10^6}{HHV_{fuel}}}
+ * @formula{water-heating-flue-gas-mass-flow; \dot{m}_{flue} = \rho_{conv} \cdot Q_{gen} \cdot R_{boiler} \cdot \frac{10^{6}}{HHV_{fuel}}}
  *
  * @subheading{Symbols}
  * @symtable
@@ -72,7 +72,7 @@
  * @brief Steam mass flow rate based on boiler rating and enthalpy difference.
  * @details The steam mass flow rate is calculated using the boiler rating, available heat fraction, blowdown percentage, and the enthalpy difference between steam and feedwater. Available heat accounts for losses in the combustion process.
  *
- * @formula{water-heating-flue-steam-mass-flow; \dot{m}_{steam} = \frac{R_{boiler} \cdot 10^6 \cdot AH \cdot (1 - BD)}{h_{steam} - h_{fw}}}
+ * @formula{water-heating-flue-steam-mass-flow; \dot{m}_{steam} = \frac{R_{boiler} \cdot 10^{6} \cdot AH \cdot (1 - BD)}{h_{steam} - h_{fw}}}
  *
  * @subheading{Symbols}
  * @symtable
@@ -207,7 +207,7 @@
  * @brief Annual energy savings from using waste heat recovery.
  * @details The annual energy savings is calculated by dividing the recovered heat by the available heat fraction and multiplying by the operating hours. This is then converted to GJ/yr by dividing by 1,000,000. The division by available heat fraction accounts for the boiler efficiency to determine the fuel energy savings.
  *
- * @formula{water-heating-flue-annual-energy-savings; E_{annual} = \frac{Q_{rec}}{AH} \cdot t_{op} \cdot \frac{1}{10^6}}
+ * @formula{water-heating-flue-annual-energy-savings; E_{annual} = \frac{Q_{rec}}{AH} \cdot t_{op} \cdot \frac{1}{10^{6}}}
  *
  * @subheading{Symbols}
  * @symtable
