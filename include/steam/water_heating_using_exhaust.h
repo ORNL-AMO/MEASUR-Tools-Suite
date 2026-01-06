@@ -16,7 +16,7 @@
 namespace water_heating_using_exhaust {
 
 /**
- * @ingroup process_heat
+ * @ingroup water_heating_using_exhaust_calculator
  * @struct WaterHeatingUsingExhaustResults
  * @brief Results of the water heating using exhaust calculation.
  * @details Contains all output values from the water heating using exhaust calculation.
@@ -30,6 +30,7 @@ struct WaterHeatingUsingExhaustResults {
 };
 
 /**
+ * @ingroup water_heating_using_exhaust_calculator
  * @brief Calculates energy savings from using exhaust gas (waste) heat to provide energy for an absorption chiller in place of a compressor.
  * @details Uses process parameters to estimate the benefit of using waste heat for water heating and chiller operation.
  *

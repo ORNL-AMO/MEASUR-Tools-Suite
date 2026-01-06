@@ -90,6 +90,7 @@ window.MathJax = {
                 \DeclareSIUnit{\atm}{atm}
                 \DeclareSIUnit{\lbmol}{lbmol}
                 \DeclareSIUnit{\year}{yr}
+                \DeclareSIUnit{\ton}{ton}
             `);
         }
     },
