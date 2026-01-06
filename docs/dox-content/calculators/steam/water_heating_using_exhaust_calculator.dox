@@ -76,7 +76,7 @@
  * @symrow{TR; Tons of refrigeration; tons}
  * @symrow{Q_{rec}; Recovered heat; \btu\per\hour}
  * @symrow{COP_{chiller}; Coefficient of performance for chiller; \unitless}
- * @symrow{CF_{ton}; BTU per ton conversion factor (12,000) - see @ref physics::conversions::kBtuPerTonRefrigeration; \btu\per\ton}
+ * @symrow{CF_{ton}; Btu per ton conversion factor (12,000) - see @ref physics::conversions::kBtuPerTonRefrigeration; \btu\per\hour\per\ton}
  * @endsymtable
  */
 
