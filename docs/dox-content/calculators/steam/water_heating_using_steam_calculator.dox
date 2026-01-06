@@ -1,0 +1,185 @@
+/**
+ * @defgroup water_heating_using_steam_calculator Water Heating Using Steam Calculator
+ * @ingroup steam_system_assessments
+ * @brief Calculates energy and water savings from using vent steam to heat water through a steam-to-liquid heat exchanger.
+ * @details This calculator estimates the benefit of using vent steam for water heating applications. The calculation uses steam and water properties, flow rates, pressures, temperatures, and system efficiencies. The method is based on standard industrial practice for waste heat recovery in steam systems.
+ *
+ * The calculation follows a top-down approach:
+ * 1. **Steam and Water Properties** - Determine steam enthalpies at inlet conditions and saturation properties, boiling point temperature, and makeup water enthalpy
+ * 2. **Outlet Water Temperature** - Calculate heated water outlet temperature based on energy balance
+ * 3. **Boiling Point Check** - Verify outlet water temperature is below safe boiling point threshold
+ * 4. **Bypass Steam Flow** - Calculate bypass steam flow if boiling point is exceeded (conditional)
+ * 5. **Heat Gain Rate** - Determine the rate of heat transfer to the water
+ * 6. **Energy Saved in Domestic Water Heater** - Calculate annual energy savings in the water heating system
+ * 7. **Energy Saved in Boiler** - Calculate annual energy savings from reduced boiler makeup water heating
+ * 8. **Water Saved** - Calculate annual water savings from condensate return
+ *
+ * Relevant formulas and symbol definitions are documented below.
+ *
+ * @heading{Outlet Water Temperature}
+ * @copydoc water_heating_using_steam_outlet_temp_formula
+ *
+ * @heading{Safe Boiling Point Temperature}
+ * @copydoc water_heating_using_steam_safe_boiling_point_formula
+ *
+ * @heading{Heat Gain Rate}
+ * @copydoc water_heating_using_steam_heat_gain_rate_formula
+ *
+ * @heading{Adjusted Heat Gain Rate (If Boiling Point Exceeded)}
+ * @copydoc water_heating_using_steam_adjusted_heat_gain_rate_formula
+ *
+ * @heading{Bypass Steam Flow}
+ * @copydoc water_heating_using_steam_bypass_steam_flow_formula
+ *
+ * @heading{Energy Saved in Domestic Water Heater}
+ * @copydoc water_heating_using_steam_energy_saved_dwh_formula
+ *
+ * @heading{Energy Saved in Boiler}
+ * @copydoc water_heating_using_steam_energy_saved_boiler_formula
+ *
+ * @heading{Water Saved}
+ * @copydoc water_heating_using_steam_water_saved_formula
+ */
+
+/**
+ * @defgroup water_heating_using_steam_outlet_temp_formula Outlet Water Temperature Formula
+ * @ingroup water_heating_using_steam_calculator
+ * @brief Outlet water temperature based on energy balance between steam and water.
+ * @details The outlet water temperature is calculated by adding the temperature rise to the inlet water temperature. The temperature rise is determined by the energy transferred from the condensing steam (enthalpy difference) divided by the heat capacity of the water. Water specific heat is @ref physics::si::kSpecificHeatWater (4.1796 kJ/(kg·K)).
+ *
+ * @formula{water-heating-steam-outlet-temp; T_{w,out} = T_{w,in} + \frac{(h_{s,in} - h_{s,out}) \cdot \dot{m}_{steam}}{C_{p,w} \cdot 1000 \cdot \dot{V}_{water}}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{T_{w,out}; Outlet water temperature; \kelvin}
+ * @symrow{T_{w,in}; Inlet water temperature; \kelvin}
+ * @symrow{h_{s,in}; Inlet steam specific enthalpy (saturated vapor); \kilo\joule\per\kilogram}
+ * @symrow{h_{s,out}; Outlet steam specific enthalpy (saturated liquid/condensate); \kilo\joule\per\kilogram}
+ * @symrow{\dot{m}_{steam}; Steam mass flow rate; \kilogram\per\hour}
+ * @symrow{C_{p,w}; Water specific heat - see @ref physics::si::kSpecificHeatWater; \kilo\joule\per\kilogram\kelvin}
+ * @symrow{\dot{V}_{water}; Water volumetric flow rate; \meter\cubed\per\hour}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup water_heating_using_steam_safe_boiling_point_formula Safe Boiling Point Temperature Formula
+ * @ingroup water_heating_using_steam_calculator
+ * @brief Safe operating temperature threshold to prevent boiling.
+ * @details The safe boiling point temperature is calculated as 96.328% of the saturation temperature at the outlet water pressure. This safety margin prevents the outlet water from reaching the boiling point, which could cause operational issues in the heat exchanger. The saturation temperature is determined from steam tables based on the outlet water pressure.
+ *
+ * @formula{water-heating-steam-safe-boiling-point; T_{bp,safe} = 0.96328 \cdot T_{sat}(P_{w,out})}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{T_{bp,safe}; Safe boiling point temperature; \kelvin}
+ * @symrow{T_{sat}; Saturation temperature at outlet pressure; \kelvin}
+ * @symrow{P_{w,out}; Outlet water pressure; \mega\pascal\abs}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup water_heating_using_steam_heat_gain_rate_formula Heat Gain Rate Formula
+ * @ingroup water_heating_using_steam_calculator
+ * @brief Rate of heat transfer from steam to water (normal operation).
+ * @details The heat gain rate is calculated as the product of the steam mass flow rate and the enthalpy difference between inlet steam (saturated vapor) and outlet condensate (saturated liquid). This represents the latent heat of condensation transferred to the water. This formula is used when the outlet water temperature is below the safe boiling point.
+ *
+ * @formula{water-heating-steam-heat-gain-rate; \dot{Q}_{gain} = (h_{s,in} - h_{s,out}) \cdot \dot{m}_{steam}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{\dot{Q}_{gain}; Heat gain rate; \kilo\joule\per\hour}
+ * @symrow{h_{s,in}; Inlet steam specific enthalpy (saturated vapor); \kilo\joule\per\kilogram}
+ * @symrow{h_{s,out}; Outlet steam specific enthalpy (saturated liquid/condensate); \kilo\joule\per\kilogram}
+ * @symrow{\dot{m}_{steam}; Steam mass flow rate; \kilogram\per\hour}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup water_heating_using_steam_adjusted_heat_gain_rate_formula Adjusted Heat Gain Rate Formula
+ * @ingroup water_heating_using_steam_calculator
+ * @brief Rate of heat transfer when boiling point is exceeded.
+ * @details If the calculated outlet water temperature exceeds the safe boiling point, the heat gain rate is recalculated based on the temperature rise limited to the safe boiling point. The adjusted heat gain rate uses the water heat capacity, temperature difference, and volumetric flow rate. The factor of 1000 converts the water density from kg/m³ to proper units.
+ *
+ * @formula{water-heating-steam-adjusted-heat-gain-rate; \dot{Q}_{gain,adj} = 1000 \cdot C_{p,w} \cdot (T_{bp,safe} - T_{w,in}) \cdot \dot{V}_{water}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{\dot{Q}_{gain,adj}; Adjusted heat gain rate; \kilo\joule\per\hour}
+ * @symrow{C_{p,w}; Water specific heat - see @ref physics::si::kSpecificHeatWater; \kilo\joule\per\kilogram\kelvin}
+ * @symrow{T_{bp,safe}; Safe boiling point temperature; \kelvin}
+ * @symrow{T_{w,in}; Inlet water temperature; \kelvin}
+ * @symrow{\dot{V}_{water}; Water volumetric flow rate; \meter\cubed\per\hour}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup water_heating_using_steam_bypass_steam_flow_formula Bypass Steam Flow Formula
+ * @ingroup water_heating_using_steam_calculator
+ * @brief Excess steam flow that must be bypassed to prevent boiling.
+ * @details When the outlet water temperature would exceed the safe boiling point, some steam must be bypassed around the heat exchanger to limit the heat transfer. The bypass steam flow is calculated as the difference between the total steam flow and the steam flow required to achieve the safe boiling point temperature. This is only calculated when the boiling point warning flag is triggered.
+ *
+ * @formula{water-heating-steam-bypass-steam-flow; \dot{m}_{bypass} = \dot{m}_{steam} - \frac{\dot{Q}_{gain,adj}}{h_{s,in} - h_{s,out}}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{\dot{m}_{bypass}; Bypass steam flow; \kilogram\per\hour}
+ * @symrow{\dot{m}_{steam}; Total steam mass flow rate; \kilogram\per\hour}
+ * @symrow{\dot{Q}_{gain,adj}; Adjusted heat gain rate; \kilo\joule\per\hour}
+ * @symrow{h_{s,in}; Inlet steam specific enthalpy (saturated vapor); \kilo\joule\per\kilogram}
+ * @symrow{h_{s,out}; Outlet steam specific enthalpy (saturated liquid/condensate); \kilo\joule\per\kilogram}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup water_heating_using_steam_energy_saved_dwh_formula Energy Saved in Domestic Water Heater Formula
+ * @ingroup water_heating_using_steam_calculator
+ * @brief Annual energy savings in the domestic water heating system.
+ * @details The energy saved in the domestic water heater (DWH) is calculated by multiplying the heat gain rate by the annual operating hours and dividing by the water heater efficiency. The division by efficiency accounts for the fuel energy that would have been required to provide the same amount of useful heat. This represents the primary energy savings from using waste steam instead of conventional water heating.
+ *
+ * @formula{water-heating-steam-energy-saved-dwh; E_{saved,DWH} = \frac{\dot{Q}_{gain} \cdot t_{op}}{\eta_{heater}}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{E_{saved,DWH}; Annual energy saved in domestic water heater; \kilo\joule\per\year}
+ * @symrow{\dot{Q}_{gain}; Heat gain rate; \kilo\joule\per\hour}
+ * @symrow{t_{op}; Operating hours per year; \hour\per\year}
+ * @symrow{\eta_{heater}; Water heater efficiency (fraction); \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup water_heating_using_steam_energy_saved_boiler_formula Energy Saved in Boiler Formula
+ * @ingroup water_heating_using_steam_calculator
+ * @brief Annual energy savings in the boiler from condensate return.
+ * @details The energy saved in the boiler is calculated from the condensate returned to the boiler system. By returning hot condensate instead of using cold makeup water, less energy is needed to generate steam. The calculation multiplies the net steam flow (excluding bypass), the enthalpy difference between condensate and makeup water, and the operating hours, then divides by the boiler efficiency. The net steam flow accounts for the usable condensate that can be returned to the boiler.
+ *
+ * @formula{water-heating-steam-energy-saved-boiler; E_{saved,boiler} = \frac{(\dot{m}_{steam} - \dot{m}_{bypass}) \cdot (h_{s,out} - h_{makeup}) \cdot t_{op}}{\eta_{boiler}}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{E_{saved,boiler}; Annual energy saved in boiler; \kilo\joule\per\year}
+ * @symrow{\dot{m}_{steam}; Steam mass flow rate; \kilogram\per\hour}
+ * @symrow{\dot{m}_{bypass}; Bypass steam flow; \kilogram\per\hour}
+ * @symrow{h_{s,out}; Outlet steam specific enthalpy (saturated liquid/condensate); \kilo\joule\per\kilogram}
+ * @symrow{h_{makeup}; Makeup water specific enthalpy; \kilo\joule\per\kilogram}
+ * @symrow{t_{op}; Operating hours per year; \hour\per\year}
+ * @symrow{\eta_{boiler}; Boiler efficiency (fraction); \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup water_heating_using_steam_water_saved_formula Water Saved Formula
+ * @ingroup water_heating_using_steam_calculator
+ * @brief Annual water savings from condensate return.
+ * @details The water saved is calculated from the condensate that can be returned to the boiler instead of being discharged. This is the net steam flow (excluding bypass) converted to volumetric flow and multiplied by the operating hours. The division by 1000 converts the mass flow (kg/hr) to volumetric flow (m³/hr) assuming water density of 1000 kg/m³. Returning condensate reduces the need for makeup water and provides both water conservation and energy savings benefits.
+ *
+ * @formula{water-heating-steam-water-saved; V_{saved} = \frac{(\dot{m}_{steam} - \dot{m}_{bypass}) \cdot t_{op}}{1000}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{V_{saved}; Annual water saved; \meter\cubed\per\year}
+ * @symrow{\dot{m}_{steam}; Steam mass flow rate; \kilogram\per\hour}
+ * @symrow{\dot{m}_{bypass}; Bypass steam flow; \kilogram\per\hour}
+ * @symrow{t_{op}; Operating hours per year; \hour\per\year}
+ * @endsymtable
+ */
