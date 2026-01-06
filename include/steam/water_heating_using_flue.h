@@ -1,4 +1,4 @@
-
+#pragma once
 #include "physics/gas_composition.h"
 
 /**

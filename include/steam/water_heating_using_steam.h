@@ -1,4 +1,4 @@
-
+#pragma once
 /**
  * @ingroup water_heating_using_steam_calculator
  * @file water_heating_using_steam.h
