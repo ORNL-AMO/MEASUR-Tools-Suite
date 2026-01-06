@@ -14,7 +14,7 @@
 namespace water_heating_using_steam {
 
 /**
- * @ingroup process_heat
+ * @ingroup water_heating_using_steam_calculator
  * @struct WaterHeatingUsingSteamResults
  * @brief Results of the water heating using steam calculation.
  * @details Contains all output values from the water heating using steam calculation.
@@ -34,6 +34,7 @@ struct WaterHeatingUsingSteamResults {
 };
 
 /**
+ * @ingroup water_heating_using_steam_calculator
  * @brief Calculates energy savings from using vent steam to heat water using a steam to liquid heat exchanger.
  * @details Uses process parameters to estimate the benefit of using vent steam for water heating and boiler operation.
  *

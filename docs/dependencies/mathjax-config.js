@@ -48,6 +48,7 @@ window.MathJax = {
         ready() {
             MathJax.startup.defaultReady();
             MathJax.tex2mml(String.raw`
+                \DeclareSIUnit{\abs}{abs}
                 \DeclareSIUnit{\dollar}{$}
                 \DeclareSIUnit{\britishThermalUnit}{Btu}
                 \DeclareSIUnit{\btu}{Btu}
