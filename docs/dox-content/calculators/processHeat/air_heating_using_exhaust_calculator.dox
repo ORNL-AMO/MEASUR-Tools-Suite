@@ -42,9 +42,11 @@
  * @symrow{C_{flue}; Heat capacity of flue gas; \btu\per\degreeFahrenheit}
  * @symrow{Q_{fire}; Firing rate; \mega\btu\per\hour}
  * @symrow{EA; Excess air fraction; \unitless}
- * @symrow{A_{stoich}; Stoichiometric air requirement; \cubicfeet\per\cubicfeet (for gas) or \cubicfeet\per\pound (for solid/liquid)}
+ * @symrow{A_{stoich}; Stoichiometric air requirement (gas); \cubicFoot\per\cubicFoot}
+ * @symrow{A_{stoich}; Stoichiometric air requirement (solid/liquid); \cubicFoot\per\pound}
  * @symrow{T_{flue}; Flue gas temperature; \degreeFahrenheit}
- * @symrow{HV_{fuel}; Fuel heating value; \btu\per\cubicfeet (for gas) or \btu\per\pound (for solid/liquid)}
+* @symrow{HV_{fuel}; Fuel heating value (gas); \btu\per\cubicFoot}
+* @symrow{HV_{fuel}; Fuel heating value (solid/liquid); \btu\per\pound}
  * @symrow{0.021; Empirical factor for flue gas heat capacity; \unitless}
  * @symrow{32; Empirical divisor for stoichiometric air calculation; \unitless}
  * @endsymtable
@@ -61,7 +63,7 @@
  * @subheading{Symbols}
  * @symtable
  * @symrow{C_{air}; Heat capacity of air; \btu\per\degreeFahrenheit}
- * @symrow{\dot{V}_{air}; Air flow rate; \standardcubicfeet\per\minute}
+ * @symrow{\dot{V}_{air}; Air flow rate; \standardCubicFeet\per\minute}
  * @symrow{0.0186; Empirical factor for air heat capacity; \unitless}
  * @symrow{60; Conversion factor from minutes to hours - see @ref physics::conversions::kMinutesPerHour; \minute\per\hour}
  * @endsymtable
