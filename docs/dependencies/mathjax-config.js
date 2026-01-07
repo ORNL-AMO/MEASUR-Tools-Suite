@@ -48,6 +48,7 @@ window.MathJax = {
         ready() {
             MathJax.startup.defaultReady();
             MathJax.tex2mml(String.raw`
+                \DeclareSIUnit{\poundFuel}{lb_{fuel}}
                 \DeclareSIUnit{\abs}{abs}
                 \DeclareSIUnit{\dollar}{$}
                 \DeclareSIUnit{\britishThermalUnit}{Btu}
@@ -95,6 +96,7 @@ window.MathJax = {
                 \DeclareSIUnit{\lbmol}{lbmol}
                 \DeclareSIUnit{\year}{yr}
                 \DeclareSIUnit{\ton}{ton}
+                \DeclareSIUnit{\inchMercury}{inHg}
             `);
         }
     },

@@ -90,14 +90,14 @@
  * @par Symbols
  * @symtable
  * @symrow{h_{i}; Sensible heat of constituent i; \btu\per\pound}
- * @symrow{m_{i}; Mass of constituent i; \pound\per\pound\;fuel}
+ * @symrow{m_{i}; Mass of constituent i; \pound\per\poundFuel}
  * @symrow{Cp_{i}; Specific heat of constituent i - see @ref gas_constants; \btu\per\pound\degreeFahrenheit}
  * @symrow{MW_{i}; Molecular weight of constituent i - see @ref gas_constants; \pound\per\lbmol}
  * @symrow{T_{fg}; Flue gas temperature; \degreeFahrenheit}
  * @symrow{T_{ref}; Reference temperature (ambient); \degreeFahrenheit}
  * @symrow{h_{sat}; Enthalpy of saturated steam; \btu\per\pound}
- * @symrow{m_{H_2O,fuel}; Water from fuel moisture and combustion; \pound\per\pound\;fuel}
- * @symrow{m_{H_2O,air}; Water from combustion air moisture; \pound\per\pound\;fuel}
+ * @symrow{m_{H_2O,fuel}; Water from fuel moisture and combustion; \pound\per\poundFuel}
+ * @symrow{m_{H_2O,air}; Water from combustion air moisture; \pound\per\poundFuel}
  * @symrow{h_{fg}; Total sensible heat in flue gas; \btu\per\pound}
  * @endsymtable
  *
@@ -127,7 +127,7 @@
  * @par Symbols
  * @symtable
  * @symrow{p_{H_2O}; Partial pressure (mole fraction) of water vapor; \unitless}
- * @symrow{m_{i}; Mass of constituent i; \pound\per\pound\;fuel}
+ * @symrow{m_{i}; Mass of constituent i; \pound\per\poundFuel}
  * @symrow{0.047636; H2O specific weight - see @ref gas_constants; \pound\per\cubicFoot}
  * @symrow{0.116367; CO2 specific weight - see @ref gas_constants; \pound\per\cubicFoot}
  * @symrow{0.074077; N2 specific weight - see @ref gas_constants; \pound\per\cubicFoot}
@@ -177,7 +177,7 @@
  *
  * @par Symbols
  * @symtable
- * @symrow{m_{i}; Mass of constituent i per unit fuel; \pound\per\pound\;fuel}
+ * @symrow{m_{i}; Mass of constituent i per unit fuel; \pound\per\poundFuel}
  * @symrow{x_C; Carbon mass fraction in fuel; \unitless}
  * @symrow{x_H; Hydrogen mass fraction in fuel; \unitless}
  * @symrow{x_S; Sulfur mass fraction in fuel; \unitless}
@@ -185,10 +185,10 @@
  * @symrow{k_{C\to CO_2}; Carbon to CO2 stoichiometric ratio - see @ref gas_constants; \pound\per\pound}
  * @symrow{k_{H\to H_2O}; Hydrogen to H2O stoichiometric ratio - see @ref gas_constants; \pound\per\pound}
  * @symrow{k_{S\to SO_2}; Sulfur to SO2 stoichiometric ratio - see @ref gas_constants; \pound\per\pound}
- * @symrow{M_{comb,air}; Total combustion air; \pound\per\pound\;fuel}
+ * @symrow{M_{comb,air}; Total combustion air; \pound\per\poundFuel}
  * @symrow{M_{air,moisture}; Moisture percent in combustion air; \percent}
- * @symrow{O2_{s,air}; Stoichiometric O2 required; \pound\per\pound\;fuel}
- * @symrow{N2_{s,air}; Stoichiometric N2 from air; \pound\per\pound\;fuel}
+ * @symrow{O2_{s,air}; Stoichiometric O2 required; \pound\per\poundFuel}
+ * @symrow{N2_{s,air}; Stoichiometric N2 from air; \pound\per\poundFuel}
  * @symrow{EA; Excess air fraction; \unitless}
  * @symrow{HV_{fuel}; Heating value of fuel; \btu\per\pound}
  * @symrow{k_{HV,C}; Heating value of carbon; \btu\per\pound}
@@ -210,10 +210,10 @@
  *
  * @par Symbols
  * @symtable
- * @symrow{O2_{s,air}; Stoichiometric O2 required; \pound\per\pound\;fuel}
- * @symrow{N2_{s,air}; Stoichiometric N2 from air; \pound\per\pound\;fuel}
- * @symrow{M_{s,air}; Stoichiometric air; \pound\per\pound\;fuel}
- * @symrow{M_{comb,air}; Total combustion air; \pound\per\pound\;fuel}
+ * @symrow{O2_{s,air}; Stoichiometric O2 required; \pound\per\poundFuel}
+ * @symrow{N2_{s,air}; Stoichiometric N2 from air; \pound\per\poundFuel}
+ * @symrow{M_{s,air}; Stoichiometric air; \pound\per\poundFuel}
+ * @symrow{M_{comb,air}; Total combustion air; \pound\per\poundFuel}
  * @symrow{x_C; Carbon mass fraction in fuel; \unitless}
  * @symrow{x_H; Hydrogen mass fraction in fuel; \unitless}
  * @symrow{x_S; Sulfur mass fraction in fuel; \unitless}
@@ -246,7 +246,7 @@
  * @symrow{b; Temperature coefficient for air specific heat; \btu\per\pound\degreeFahrenheit\squared}
  * @symrow{T_{comb}; Combustion air temperature; \degreeFahrenheit}
  * @symrow{h_{comb,air}; Sensible enthalpy of combustion air; \btu\per\pound}
- * @symrow{M_{comb,air}; Mass of combustion air; \pound\per\pound\;fuel}
+ * @symrow{M_{comb,air}; Mass of combustion air; \pound\per\poundFuel}
  * @symrow{\rho_{air}; Density of air; \pound\per\cubicFoot}
  * @endsymtable
  *
