@@ -43,7 +43,7 @@
  * @symrow{Q_{fire}; Firing rate; \mega\btu\per\hour}
  * @symrow{EA; Excess air fraction; \unitless}
  * @symrow{A_{stoich}; Stoichiometric air requirement (gas); \cubicFoot\per\cubicFoot}
- * @symrow{A_{stoich}; Stoichiometric air requirement (solid/liquid); \cubicFoot\per\pound}
+ * @symrow{A_{stoich}; Stoichiometric air requirement (solid/liquid); \pound\per\pound}
  * @symrow{T_{flue}; Flue gas temperature; \degreeFahrenheit}
  * @symrow{HV_{fuel}; Fuel heating value (gas); \btu\per\cubicFoot}
  * @symrow{HV_{fuel}; Fuel heating value (solid/liquid); \btu\per\pound}
