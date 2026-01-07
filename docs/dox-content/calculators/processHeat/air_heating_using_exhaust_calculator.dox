@@ -1,0 +1,122 @@
+/**
+ * @defgroup air_heating_using_exhaust_calculator Air Heating Using Exhaust Calculator
+ * @ingroup process_heat_calculators
+ * @brief Calculates energy savings from using exhaust gas (waste heat) to preheat combustion air for process heating systems.
+ * @details This calculator estimates the benefit of using waste heat from exhaust gas to preheat incoming combustion air through a heat exchanger. The calculation uses fuel properties, flue gas temperature, excess air, firing rate, airflow, and heat exchanger efficiency. The method is based on standard industrial practice for waste heat recovery in process heating systems.
+ *
+ * The calculation follows a top-down approach:
+ * 1. **Heat Capacity of Flue Gas** - Calculate the heat capacity of exhaust flue gas based on fuel properties and combustion parameters
+ * 2. **Heat Capacity of Air** - Determine the heat capacity of incoming air to be preheated
+ * 3. **Heat Recovered by Cold Air** - Calculate the actual heat transferred from exhaust to cold air through the heat exchanger
+ * 4. **Outlet Exhaust Temperature** - Compute the exhaust gas temperature after heat recovery
+ * 5. **Annual Energy Savings** - Determine the total energy savings over the operating period
+ *
+ * Relevant formulas and symbol definitions are documented below.
+ *
+ * @heading{Heat Capacity of Flue Gas}
+ * @copydoc air_heating_using_exhaust_heat_capacity_flue_formula
+ *
+ * @heading{Heat Capacity of Air}
+ * @copydoc air_heating_using_exhaust_heat_capacity_air_formula
+ *
+ * @heading{Heat Recovered by Cold Air}
+ * @copydoc air_heating_using_exhaust_heat_recovered_formula
+ *
+ * @heading{Outlet Exhaust Temperature}
+ * @copydoc air_heating_using_exhaust_outlet_temperature_formula
+ *
+ * @heading{Annual Energy Savings}
+ * @copydoc air_heating_using_exhaust_energy_savings_formula
+ */
+
+/**
+ * @defgroup air_heating_using_exhaust_heat_capacity_flue_formula Heat Capacity of Flue Gas Formula
+ * @ingroup air_heating_using_exhaust_calculator
+ * @brief Heat capacity of exhaust flue gas based on fuel properties and combustion parameters.
+ * @details The heat capacity of flue gas is calculated based on the firing rate, stoichiometric air requirement, excess air, flue gas temperature, and fuel heating value. An empirical factor of 0.021 is applied to account for the specific heat properties of typical flue gas compositions.
+ *
+ * @formula{air-heating-exhaust-heat-capacity-flue; C_{flue} = \frac{Q_{fire} \cdot 10^6 \cdot \left(\frac{(1 + EA) \cdot A_{stoich}}{32} + 1\right) \cdot T_{flue}}{HV_{fuel} \cdot 1000} \cdot 0.021}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{C_{flue}; Heat capacity of flue gas; \btu\per\degreeFahrenheit}
+ * @symrow{Q_{fire}; Firing rate; \mega\btu\per\hour}
+ * @symrow{EA; Excess air fraction; \unitless}
+ * @symrow{A_{stoich}; Stoichiometric air requirement; \cubicfeet\per\cubicfeet (for gas) or \cubicfeet\per\pound (for solid/liquid)}
+ * @symrow{T_{flue}; Flue gas temperature; \degreeFahrenheit}
+ * @symrow{HV_{fuel}; Fuel heating value; \btu\per\cubicfeet (for gas) or \btu\per\pound (for solid/liquid)}
+ * @symrow{0.021; Empirical factor for flue gas heat capacity; \unitless}
+ * @symrow{32; Empirical divisor for stoichiometric air calculation; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup air_heating_using_exhaust_heat_capacity_air_formula Heat Capacity of Air Formula
+ * @ingroup air_heating_using_exhaust_calculator
+ * @brief Heat capacity of incoming air to be preheated.
+ * @details The heat capacity of air is calculated from the volumetric airflow rate converted to an hourly basis. An empirical factor of 0.0186 is applied to account for the specific heat of air at typical combustion conditions.
+ *
+ * @formula{air-heating-exhaust-heat-capacity-air; C_{air} = 0.0186 \cdot \dot{V}_{air} \cdot 60}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{C_{air}; Heat capacity of air; \btu\per\degreeFahrenheit}
+ * @symrow{\dot{V}_{air}; Air flow rate; \standardcubicfeet\per\minute}
+ * @symrow{0.0186; Empirical factor for air heat capacity; \unitless}
+ * @symrow{60; Conversion factor from minutes to hours - see @ref physics::conversions::kMinutesPerHour; \minute\per\hour}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup air_heating_using_exhaust_heat_recovered_formula Heat Recovered by Cold Air Formula
+ * @ingroup air_heating_using_exhaust_calculator
+ * @brief Heat transferred from exhaust to cold air through the heat exchanger.
+ * @details The heat recovered is determined by the limiting heat capacity (minimum of air or flue gas), the heat exchanger efficiency, and the temperature difference between the flue gas and inlet air. The limiting capacity ensures the calculation respects thermodynamic constraints.
+ *
+ * @formula{air-heating-exhaust-heat-recovered; Q_{recovered} = \eta_{hx} \cdot \min(C_{air}, C_{flue}) \cdot (T_{flue} - T_{inlet})}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{recovered}; Heat recovered by cold air; \btu\per\hour}
+ * @symrow{\eta_{hx}; Heat exchanger efficiency; \unitless}
+ * @symrow{C_{air}; Heat capacity of air; \btu\per\degreeFahrenheit}
+ * @symrow{C_{flue}; Heat capacity of flue gas; \btu\per\degreeFahrenheit}
+ * @symrow{T_{flue}; Flue gas temperature; \degreeFahrenheit}
+ * @symrow{T_{inlet}; Inlet air temperature; \degreeFahrenheit}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup air_heating_using_exhaust_outlet_temperature_formula Outlet Exhaust Temperature Formula
+ * @ingroup air_heating_using_exhaust_calculator
+ * @brief Exhaust gas temperature after heat recovery.
+ * @details The outlet exhaust temperature is calculated by subtracting the temperature drop in the flue gas from the inlet flue gas temperature. The temperature drop is the ratio of heat recovered to the heat capacity of the flue gas.
+ *
+ * @formula{air-heating-exhaust-outlet-temperature; T_{outlet} = T_{flue} - \frac{Q_{recovered}}{C_{flue}}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{T_{outlet}; Outlet exhaust temperature; \degreeFahrenheit}
+ * @symrow{T_{flue}; Flue gas temperature; \degreeFahrenheit}
+ * @symrow{Q_{recovered}; Heat recovered by cold air; \btu\per\hour}
+ * @symrow{C_{flue}; Heat capacity of flue gas; \btu\per\degreeFahrenheit}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup air_heating_using_exhaust_energy_savings_formula Annual Energy Savings Formula
+ * @ingroup air_heating_using_exhaust_calculator
+ * @brief Total energy savings over the operating period.
+ * @details The annual energy savings is calculated by multiplying the operating hours by the heat recovered, then dividing by the heater efficiency and converting from Btu to MMBtu. The heater efficiency accounts for the fact that the recovered heat reduces the fuel input needed by the heating system.
+ *
+ * @formula{air-heating-exhaust-energy-savings; E_{savings} = \frac{t_{op} \cdot Q_{recovered}}{\eta_{heater} \cdot 10^6}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{E_{savings}; Annual energy savings; \mega\btu\per\year}
+ * @symrow{t_{op}; Annual operating hours; \hour\per\year}
+ * @symrow{Q_{recovered}; Heat recovered by cold air; \btu\per\hour}
+ * @symrow{\eta_{heater}; Heater efficiency; \unitless}
+ * @symrow{10^6; Conversion factor from Btu to MMBtu - see @ref physics::conversions::kMMBtuToBtu; \btu\per\mega\btu}
+ * @endsymtable
+ */
