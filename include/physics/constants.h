@@ -26,6 +26,12 @@ inline constexpr double kStefanBoltzmann = 5.670374419e-8;
  */
 inline constexpr double kWaterDensityBase = 1000.0;
 
+/**
+ * @brief Specific heat of liquid water at standard conditions @unitb{\kilo\joule\per\kilogram\per\kelvin}
+ * @details 4.1796 kJ/(kg·K) is the widely accepted value for the specific heat capacity of water at room temperature (15–25°C).
+ */
+inline constexpr double kSpecificHeatWater = 4.1796;
+
 } // namespace physics::si
 
 /**
@@ -91,6 +97,13 @@ inline constexpr double kSpecificHeatAirCoeff = 0.000002556;
  */
 inline constexpr double kAirCorrectionBase = -1.078913827;
 
+
+/**
+ * @brief Water density @unitb{lb/gal}
+ * @details Used for water flow calculations in process heating systems. Source: CRC Handbook of Chemistry and Physics.
+ */
+constexpr double kWaterDensity = 8.335;
+
 } // namespace physics::us
 
 /**
@@ -98,6 +111,28 @@ inline constexpr double kAirCorrectionBase = -1.078913827;
  * @brief Factors and functions for unit conversions.
  */
 namespace physics::conversions {
+
+/**
+ * @brief Conversion factor from Btu/(lb·°F) to kJ/(kg·K).
+ * @details 1 Btu/(lb·°F) = 4.1868 kJ/(kg·K)
+ */
+inline constexpr double kBtuPerLbFToKJPerKgK = 4.1868;
+
+
+/**
+ * @brief Convert Fahrenheit to Kelvin.
+ * @details Converts a temperature from degrees Fahrenheit to Kelvin:
+ * @par Relation
+ * @formula{fahrenheit-to-kelvin; T_K = (T_F - 32) / 1.8 + 273.15}
+ * @par Symbols
+ * @symtable
+ * @symrow{T_K; Temperature in Kelvin; \kelvin}
+ * @symrow{T_F; Temperature in degrees Fahrenheit; \degreeFahrenheit}
+ * @endsymtable
+ * @param[in] fahrenheit Temperature in degrees Fahrenheit @unitb{\degreeFahrenheit}
+ * @return Temperature in Kelvin @unitb{\kelvin}
+ */
+constexpr double fahrenheitToKelvin(double fahrenheit) { return ((fahrenheit - 32.0) / 1.8) + 273.15; }
 
 /// @brief Offset to convert Fahrenheit to Rankine.
 inline constexpr double kFahrenheitToRankineOffset = 459.67;
@@ -166,5 +201,12 @@ inline constexpr double kMMBtuToBtu = 1'000'000.0;
  * @details Use this to convert a mass density from lb/ft^3 to kg/m^3.
  */
 inline constexpr double kLbPerFt3ToKgPerM3 = 16.018463;
+
+
+/**
+ * @brief BTU per ton of refrigeration @unitb{Btu/Ton}
+ * @details Used for refrigeration capacity calculations. Source: ASHRAE Handbook.
+ */
+constexpr double kBtuPerTonRefrigeration = 12000.0;
 
 } // namespace physics::conversions
