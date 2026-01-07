@@ -5,7 +5,7 @@
 
 using namespace Catch;
 using namespace gas_composition;
-TEST_CASE("Estimate maximum air flow that can be heated by using exhaust gas", "[processHeat]") {
+TEST_CASE("Air Water Cooling Using Flue", "[processHeat]") {
 
     GasComposition gasFlueCond("Gas", 94.1, 3.02, 1.41, 0.01, 0.42, 0.28, 0.0, 0.0, 0.7, 0, 0.01);
     auto resHeatRecovery = AirWaterCoolingUsingFlue().calculate(gasFlueCond, 116, 300, 125, 70, 60, 0.04, 60, 0);
