@@ -141,8 +141,8 @@
  * in ash, and sensible heat carried away by hot ash.
  *
  * @formula{slfgm-h-moisture; h_{moisture} = X_{moisture} \cdot (T_{fg} - T_{ref})}
-* @formula{slfgm-h-carbon; h_{carbon} = 14093.0 \cdot X_{unburned,carbon} \cdot \left(\frac{X_{ash}}{x_{fuel}}\right)}
-* @formula{slfgm-h-ash; h_{ash} = \left(\frac{X_{ash}}{x_{fuel}}\right) \cdot 0.25 \cdot (1.8 \cdot T_{ash,discharge} + 32.0 - T_{ref})}
+ * @formula{slfgm-h-carbon; h_{carbon} = 14093.0 \cdot X_{unburned,carbon} \cdot (X_{ash}/x_{fuel})}
+ * @formula{slfgm-h-ash; h_{ash} = (X_{ash}/x_{fuel}) \cdot 0.25 \cdot (1.8 \cdot T_{ash,discharge} + 32.0 - T_{ref})}
  *
  * @par Symbols
  * @symtable
