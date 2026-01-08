@@ -49,17 +49,21 @@
  * @defgroup o2_enrichment_excess_air_formula Excess Air Formula
  * @ingroup o2_enrichment_calculator
  * @brief Excess air calculated from oxygen concentration in flue gas.
- * @details The excess air is determined from the oxygen concentration in the flue gas using stoichiometric relationships. The calculation accounts for the fact that excess oxygen in flue gas indicates incomplete combustion air utilization. The formula uses empirical factors derived from combustion stoichiometry for typical fuels.
+ * @details The excess air is determined from the oxygen concentration in the flue gas using stoichiometric 
+ * relationships. This calculation uses the shared @ref process_heat::calculateExcessAir function from the 
+ * @ref process_heat namespace, which provides a consistent implementation across all process heat calculators.
  *
- * @formula{o2-enrichment-excess-air; EA = \frac{k_1 \cdot O_{2,flue}}{2 - k_2 \cdot O_{2,flue}}}
+ * The formula uses empirical factors derived from combustion stoichiometry for typical fuels to account for 
+ * the fact that excess oxygen in flue gas indicates incomplete combustion air utilization.
  *
- * @subheading{Symbols}
- * @symtable
- * @symrow{EA; Excess air; \unitless}
- * @symrow{O_{2,flue}; Oxygen in flue gas; \unitless}
- * @symrow{k_1; Stoichiometric air factor (8.52381); \unitless}
- * @symrow{k_2; Oxygen flue gas factor (9.52381); \unitless}
- * @endsymtable
+ * @par Implementation
+ * See @ref process_heat_excess_air_formula for the complete formula, symbol definitions, and implementation details.
+ *
+ * @code{.cpp}
+ * // Oxygen inputs are in percent, converted to fractions for calculation
+ * double o2_flue_gas_frac = o2_flue_gas / 100.0;
+ * results.excess_air = process_heat::calculateExcessAir(o2_flue_gas_frac);
+ * @endcode
  */
 
 /**
