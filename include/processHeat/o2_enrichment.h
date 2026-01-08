@@ -59,13 +59,6 @@ O2EnrichmentResults calculateO2Enrichment(
 );
 
 /**
- * @brief Calculates excess air from O2 in flue gas.
- * @param[in] o2_flue_gas O2 in flue gas (fraction)
- * @return Excess air (fraction)
- */
-double calculateExcessAir(double o2_flue_gas);
-
-/**
  * @brief Calculates heat input from flue gas temperature.
  * @param[in] flue_gas_temp Flue gas temperature @unitb{\degreeFahrenheit}
  * @return Heat input @unitb{\degreeFahrenheit}
