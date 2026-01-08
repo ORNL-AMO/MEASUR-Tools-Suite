@@ -46,8 +46,8 @@ namespace physics::imperial {}
 namespace physics::us {
 
 /**
- * @brief Orifice area factor for volumetric flow calculations @unitb{(in^2)^{-1}}
- * @details Empirical factor used in U.S. customary orifice meter equations to convert orifice diameter (in) squared to effective area for volumetric flow (scfh).
+ * @brief Orifice area factor for volumetric flow calculations @unitb{\dimensionless}
+ * @details Empirical, effectively dimensionless factor used in U.S. customary orifice meter equations to convert orifice diameter (in) squared to effective area for volumetric flow (scfh).
  * @note Standard value for fuel-fired furnace gas flow calculations.
  */
 inline constexpr double kOrificeAreaFactor = 1300.0;
