@@ -21,8 +21,8 @@ namespace energy_equivalency {
  * @details Uses the fuel-fired heat input and efficiencies to determine the equivalent electrical input.
  *
  * @param[in] fuel_fired_heat_input Fuel-fired heat input @unitb{MMBtu/hr}
- * @param[in] fuel_fired_efficiency Fuel-fired furnace efficiency (fraction)
- * @param[in] electrically_heated_efficiency Electrically heated furnace efficiency (fraction)
+ * @param[in] fuel_fired_efficiency Fuel-fired furnace efficiency @unitb{\percent}
+ * @param[in] electrically_heated_efficiency Electrically heated furnace efficiency @unitb{\percent}
  * @return Equivalent electrical heat input @unitb{kW}
  */
 double calculateElectricalEquivalentHeatInput(
@@ -37,8 +37,8 @@ double calculateElectricalEquivalentHeatInput(
  * @details Uses the electrical heat input and efficiencies to determine the equivalent fuel-fired input.
  *
  * @param[in] electrical_heat_input Electrical heat input @unitb{kW}
- * @param[in] electrically_heated_efficiency Electrically heated furnace efficiency (fraction)
- * @param[in] fuel_fired_efficiency Fuel-fired furnace efficiency (fraction)
+ * @param[in] electrically_heated_efficiency Electrically heated furnace efficiency @unitb{\percent}
+ * @param[in] fuel_fired_efficiency Fuel-fired furnace efficiency @unitb{\percent}
  * @return Equivalent fuel-fired heat input @unitb{MMBtu/hr}
  */
 double calculateFuelFiredEquivalentHeatInput(
