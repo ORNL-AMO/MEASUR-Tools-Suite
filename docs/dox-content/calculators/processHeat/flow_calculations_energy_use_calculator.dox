@@ -80,7 +80,7 @@
  * @subheading{Symbols}
  * @symtable
  * @symrow{A; Orifice area; \squareInch}
- * @symrow{k_{area}; Orifice area factor (1300) - empirical constant for flow calculations, see @ref physics::us::kOrificeAreaFactor; \per\squareInch}
+ * @symrow{k_{area}; Orifice area factor (1300) - empirical constant for flow calculations, see @ref physics::us::kOrificeAreaFactor; \unitless}
  * @symrow{d_{orifice}; Orifice diameter; \inch}
  * @endsymtable
  */
