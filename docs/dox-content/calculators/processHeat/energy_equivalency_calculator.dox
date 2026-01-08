@@ -29,8 +29,8 @@
  * @symtable
  * @symrow{P_{elec}; Equivalent electrical heat input; \kilo\watt}
  * @symrow{P_{fuel}; Fuel-fired heat input; \mega\btu\per\hour}
- * @symrow{\eta_{fuel}; Fuel-fired furnace efficiency; \unitless}
- * @symrow{\eta_{elec}; Electrically heated furnace efficiency; \unitless}
+ * @symrow{\eta_{fuel}; Fuel-fired furnace efficiency; \percent}
+ * @symrow{\eta_{elec}; Electrically heated furnace efficiency; \percent}
  * @endsymtable
  *
  * @note The result is converted from MMBtu/hr to kW using the factor 1 MMBtu/hr = 293.07107 kW.
@@ -48,8 +48,8 @@
  * @symtable
  * @symrow{P_{fuel}; Equivalent fuel-fired heat input; \mega\btu\per\hour}
  * @symrow{P_{elec}; Electrical heat input; \kilo\watt}
- * @symrow{\eta_{elec}; Electrically heated furnace efficiency; \unitless}
- * @symrow{\eta_{fuel}; Fuel-fired furnace efficiency; \unitless}
+ * @symrow{\eta_{elec}; Electrically heated furnace efficiency; \percent}
+ * @symrow{\eta_{fuel}; Fuel-fired furnace efficiency; \percent}
  * @endsymtable
  *
  * @note The result is converted from kW to MMBtu/hr using the factor 1 kW = 0.003412142 MMBtu/hr.
