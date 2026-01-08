@@ -2,7 +2,6 @@
 
 /**
  * @file constants.h
- * @authors Liam White
  * @brief Defines physical constants and unit conversions.
  * @details https://physics.nist.gov/cuu/Constants/index.html
  */
@@ -208,5 +207,43 @@ inline constexpr double kLbPerFt3ToKgPerM3 = 16.018463;
  * @details Used for refrigeration capacity calculations. Source: ASHRAE Handbook.
  */
 constexpr double kBtuPerTonRefrigeration = 12000.0;
+
+/**
+ * @brief Converts power from MMBtu/hr to kW.
+ * @details 1 MMBtu/hr = 293.07107 kW.
+ *
+ * @par Relation
+ * @formula{mmbtu-per-hr-to-kw; P_\mathrm{kW} = P_\mathrm{MMBtu/hr} \times 293.07107}
+ *
+ * @par Symbols
+ * @symtable
+ * @symrow{P_\mathrm{kW}; Power in kilowatts; \kilo\watt}
+ * @symrow{P_\mathrm{MMBtu/hr}; Power in MMBtu/hr; \mega\btu\per\hour}
+ * @endsymtable
+ *
+ * @param[in] mmbtu_per_hr Power in MMBtu/hr @unitb{\mega\btu\per\hour}
+ * @return Power in kilowatts (kW) @unitb{\kilo\watt}
+ */
+constexpr double mmbtuPerHrToKW(double mmbtu_per_hr) { return mmbtu_per_hr * 293.07107; }
+
+/**
+ * @brief Converts power from kW to MMBtu/hr.
+ * @details 1 kW = 0.003412142 MMBtu/hr.
+ *
+ * @par Relation
+ * @formula{kw-to-mmbtu-per-hr; P_\mathrm{MMBtu/hr} = P_\mathrm{kW} \times 0.003412142}
+ *
+ * @par Symbols
+ * @symtable
+ * @symrow{P_\mathrm{MMBtu/hr}; Power in MMBtu/hr; \mega\btu\per\hour}
+ * @symrow{P_\mathrm{kW}; Power in kilowatts; \kilo\watt}
+ * @endsymtable
+ *
+ * @param[in] kw Power in kilowatts (kW) @unitb{\kilo\watt}
+ * @return Power in MMBtu/hr @unitb{\mega\btu\per\hour}
+ */
+constexpr double kWToMMBtuPerHr(double kw) { return kw * 0.003412142; }
+
+
 
 } // namespace physics::conversions
