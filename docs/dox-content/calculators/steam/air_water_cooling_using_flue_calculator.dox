@@ -85,7 +85,7 @@
  * @symtable
  * @symrow{f_{cond}; Fraction of water vapor condensed; \unitless}
  * @symrow{T_{out}; Flue gas outlet temperature; \degreeFahrenheit}
- * @symrow{O_{2}; Oxygen percentage in flue gas (as percentage, e.g., 3 for 3\%); \percent}
+ * @symrow{O_{2}; Oxygen content in flue gas (as fraction, e.g., 0.03 for 3\%); \unitless}
  * @endsymtable
  *
  * @note The empirical coefficients 0.0000009, 3.0136, 2.8082, and 0.1168 are derived from experimental data for flue gas condensation behavior.
