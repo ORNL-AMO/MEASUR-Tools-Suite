@@ -5,6 +5,7 @@
 #include <string>
 
 #include "physics/gas_constants.h"
+#include "processHeat/process_heat.h"
 namespace gas_composition {
 
 void GasComposition::setTotalCompositionWeight() {
@@ -78,7 +79,7 @@ double GasComposition::o2PercentageFromExcessAir(double excess_air) {
 
 // TODO: address magic numbers?
 double GasComposition::estimateExcessAirFromO2(double flue_gas_o2_percentage) {
-    return (8.52381 * flue_gas_o2_percentage) / (2 - (9.52381 * flue_gas_o2_percentage));
+    return process_heat::calculateExcessAir(flue_gas_o2_percentage);
 }
 
 double GasComposition::calculateEnthalpyAtSaturation(double partial_pressure_water_vapor) {

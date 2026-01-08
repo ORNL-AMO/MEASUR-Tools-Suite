@@ -2,7 +2,6 @@
 
 #include "processHeat/EfficiencyImprovement.h"
 #include "processHeat/FlowCalculationsEnergyUse.h"
-#include "processHeat/O2Enrichment.h"
 
 using namespace emscripten;
 
@@ -49,14 +48,4 @@ EMSCRIPTEN_BINDINGS(flowCalculations) {
         .function("getFlow", &FlowCalculationsEnergyUse::getFlow)
         .function("getHeatInput", &FlowCalculationsEnergyUse::getHeatInput)
         .function("getTotalFlow", &FlowCalculationsEnergyUse::getTotalFlow);
-}
-
-// o2Enrichment
-EMSCRIPTEN_BINDINGS(o2Enrichment) {
-    class_<O2Enrichment>("O2Enrichment")
-        .constructor<double, double, double, double, double, double, double, double, double>()
-        .function("getAvailableHeat", &O2Enrichment::getAvailableHeat)
-        .function("getAvailableHeatEnriched", &O2Enrichment::getAvailableHeatEnriched)
-        .function("getFuelSavingsEnriched", &O2Enrichment::getFuelSavingsEnriched)
-        .function("getFuelConsumptionEnriched", &O2Enrichment::getFuelConsumptionEnriched);
 }

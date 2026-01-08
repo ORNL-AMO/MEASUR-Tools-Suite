@@ -1,0 +1,50 @@
+/**
+ * @defgroup process_heat Process Heat Utilities
+ * @ingroup process_heat_calculators
+ * @brief Common utility functions for process heating calculations.
+ * @details This module provides reusable functions and helpers for process heating calculations, such as excess air, 
+ * available heat, and other shared logic. These functions are used across multiple process heat calculators to 
+ * ensure consistent calculations and reduce code duplication.
+ *
+ * @heading{Excess Air Calculation}
+ * @copydoc process_heat_excess_air_formula
+ *
+ * @see o2_enrichment_calculator
+ * @see solid_liquid_flue_gas_material_calculator
+ */
+
+/**
+ * @defgroup process_heat_excess_air_formula Excess Air from Flue Gas O2
+ * @ingroup process_heat
+ * @brief Calculate excess air from oxygen concentration in flue gas.
+ * @details The excess air is determined from the oxygen concentration in the flue gas using stoichiometric 
+ * relationships. The calculation accounts for the fact that excess oxygen in flue gas indicates incomplete 
+ * combustion air utilization. The formula uses empirical factors derived from combustion stoichiometry for 
+ * typical fuels.
+ *
+ * This calculation is a fundamental component used throughout process heat calculations, including:
+ * - O2 enrichment analysis (@ref o2_enrichment_calculator)
+ * - Solid/liquid flue gas material calculations (@ref solid_liquid_flue_gas_material_calculator)
+ *
+ * The formula provides a quick estimate of excess air based on measured flue gas oxygen content. For more 
+ * complex fuel compositions, iterative refinement may be applied (as in 
+ * @ref solid_liquid_flue_gas_material::calculateExcessAirFromFlueGasO2).
+ *
+ * @formula{process-heat-excess-air; EA = \frac{k_1 \cdot O_{2,flue}}{2 - k_2 \cdot O_{2,flue}}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{EA; Excess air; \unitless}
+ * @symrow{O_{2,flue}; Oxygen in flue gas; \unitless}
+ * @symrow{k_1; Stoichiometric air factor (8.52381); \unitless}
+ * @symrow{k_2; Oxygen flue gas factor (9.52381); \unitless}
+ * @endsymtable
+ *
+ * @subheading{Implementation}
+ * The function is implemented in the @ref process_heat namespace:
+ * @code{.cpp}
+ * double excess_air = process_heat::calculateExcessAir(o2_flue_gas_fraction);
+ * @endcode
+ *
+ * @note Input oxygen should be provided as a fraction (not percentage). For example, 3% O2 should be passed as 0.03.
+ */
