@@ -35,22 +35,12 @@ namespace solid_liquid_flue_gas_material {
  * @param[in] ambient_air_temp_f Ambient air temperature @unitb{\degreeFahrenheit} (default: 60)
  * @return Total heat loss @unitb{\btu\per\hour}
  */
-double totalHeatLoss(
-    const double flue_gas_temperature,
-    const double excess_air,
-    const double combustion_air_temperature,
-    const double fuel_temperature,
-    const double moisture_in_air_combustion,
-    const double ash_discharge_temperature,
-    const double unburned_carbon_in_ash,
-    const double carbon,
-    const double hydrogen,
-    const double sulphur,
-    const double inert_ash,
-    const double o2,
-    const double moisture,
-    const double nitrogen,
-    const double ambient_air_temp_f = 60);
+double totalHeatLoss(const double flue_gas_temperature, const double excess_air,
+                     const double combustion_air_temperature, const double fuel_temperature,
+                     const double moisture_in_air_combustion, const double ash_discharge_temperature,
+                     const double unburned_carbon_in_ash, const double carbon, const double hydrogen,
+                     const double sulphur, const double inert_ash, const double o2, const double moisture,
+                     const double nitrogen, const double ambient_air_temp_f = 60);
 
 /**
  * @ingroup solid_liquid_flue_gas_material_calculator
@@ -101,5 +91,22 @@ double calculateFlueGasO2(double excess_air, double carbon, double hydrogen, dou
  */
 double calculateHeatingValueFuel(double carbon, double hydrogen, double sulphur, double inert_ash, double o2,
                                  double moisture, double nitrogen);
+
+/**
+ * @ingroup solid_liquid_flue_gas_material_calculator
+ * @brief Calculates the stoichiometric air required for complete combustion of the given fuel composition.
+ * @details Uses the fuel composition (percent by mass) to compute the theoretical air required for complete combustion.
+ *
+ * @param[in] carbon Percent carbon in fuel @unitb{\percent}
+ * @param[in] hydrogen Percent hydrogen in fuel @unitb{\percent}
+ * @param[in] sulphur Percent sulphur in fuel @unitb{\percent}
+ * @param[in] inert_ash Percent inert ash in fuel @unitb{\percent}
+ * @param[in] o2 Percent oxygen in fuel @unitb{\percent}
+ * @param[in] moisture Percent moisture in fuel @unitb{\percent}
+ * @param[in] nitrogen Percent nitrogen in fuel @unitb{\percent}
+ * @return Stoichiometric air required @unitb{\pound\per\poundFuel}
+ */
+double calculateStoichiometricAir(double carbon, double hydrogen, double sulphur, double inert_ash, double o2,
+                                  double moisture, double nitrogen);
 
 }; // namespace solid_liquid_flue_gas_material

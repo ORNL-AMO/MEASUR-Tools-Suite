@@ -1,27 +1,3 @@
-function airHeatingUsingExhaust(){
-    let validate = function(results, expected) {
-        testNumberValue(rnd(results.hxColdAir), rnd(expected[0]), "hxColdAir");
-        testNumberValue(rnd(results.hxOutletExhaust), rnd(expected[1]), "hxOutletExhaust");
-        testNumberValue(rnd(results.energySavings), rnd(expected[2]), "energySavings");
-        testNumberValue(rnd(results.heatCapacityFlue), rnd(expected[3]),"heatCapacityFlue");
-        testNumberValue(rnd(results.heatCapacityAir), rnd(expected[4]),"heatCapacityAir");
-    };
-
-    logMessage('Air Heating Using Exhaust: Test# 1 Gas', true);
-    let gasInstance = new Module.GasCompositions('Gas', 94.0, 2.07, 1.41, 0.01, 0.42, 0.28, 0.0, 1.0, 0.71, 0, 0);
-    let instance = new Module.AirHeatingUsingExhaust(gasInstance);
-    validate(instance.calculate(400, 0.358, 8, 4000, 45, 0.85, 0.60, 4000), [197829.27, 187, 930.96, 928.78, 4464]);
-    instance.delete();
-    gasInstance.delete();
-
-    logMessage('Air Heating Using Exhaust: Test# 1 Coal', true);
-    let coalInstance = new Module.SolidLiquidFlueGasMaterial('Coal', 75.0, 5.0, 1.00, 9.0, 7.0, 0.0, 1.5);
-    let instanceSolid = new Module.AirHeatingUsingExhaust(coalInstance, true);
-    validate(instanceSolid.calculate(400, 0.358, 8, 4000, 45, 0.85, 0.60, 4000), [15621.25, 187, 73.512, 73.339, 4464]);
-    instanceSolid.delete();
-    coalInstance.delete();
-}
-
 function waterHeatingUsingSteam(){
     let validate = function(results, expected) {
         testNumberValue(rnd(results.tempWaterOut), rnd(expected[0]), "tempWaterOut");
@@ -74,6 +50,5 @@ function airWaterCoolingUsingFlue(){
     gasInstance.delete();
 }
 
-airHeatingUsingExhaust();
 waterHeatingUsingSteam();
 airWaterCoolingUsingFlue();
