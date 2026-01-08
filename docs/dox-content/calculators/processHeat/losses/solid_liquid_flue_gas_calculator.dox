@@ -283,17 +283,6 @@
  *    and adjusts excess air until convergence (error < 2%).
  * 3. **Convergence**: Iteration continues until the calculated O2 matches the measured O2 within tolerance.
  *
- * @code{.cpp}
- * // Initial estimate using shared function
- * double excess_air = process_heat::calculateExcessAir(flue_gas_o2);
- * 
- * // Iterative refinement based on fuel composition
- * for (int i = 0; i < 100; ++i) {
- *     double o2_calc = calculateFlueGasO2(excess_air, ...);
- *     if (error < 0.02) break;
- *     // Adjust excess_air based on error direction
- * }
- * @endcode
  *
  * @par Symbols
  * @symtable

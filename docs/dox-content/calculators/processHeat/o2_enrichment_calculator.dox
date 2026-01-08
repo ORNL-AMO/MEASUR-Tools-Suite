@@ -59,11 +59,6 @@
  * @par Implementation
  * See @ref process_heat_excess_air_formula for the complete formula, symbol definitions, and implementation details.
  *
- * @code{.cpp}
- * // Oxygen inputs are in percent, converted to fractions for calculation
- * double o2_flue_gas_frac = o2_flue_gas / 100.0;
- * results.excess_air = process_heat::calculateExcessAir(o2_flue_gas_frac);
- * @endcode
  */
 
 /**
