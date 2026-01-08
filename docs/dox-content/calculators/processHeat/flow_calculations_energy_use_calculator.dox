@@ -185,7 +185,7 @@
  * @symrow{\dot{V}; Volumetric flow rate; \scf\per\hour}
  * @symrow{HHV; Higher heating value of gas; \btu\per\scf}
  * @symrow{t_{op}; Operating time; \hour}
- * @symrow{CF_{MMBtu}; Conversion factor (1,000,000) - see @ref physics::conversions::kMMBtuToBtu; \btu\per\MMBtu}
+ * @symrow{CF_{MMBtu}; Conversion factor from Btu to MMBtu (1,000,000) - see @ref physics::conversions::kMMBtuToBtu; \btu\per\MMBtu}
  * @endsymtable
  *
  * @note If HHV ≤ 0, then Q_{input} = 0.
