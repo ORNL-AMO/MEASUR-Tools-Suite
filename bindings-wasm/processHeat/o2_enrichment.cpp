@@ -25,12 +25,12 @@ EMSCRIPTEN_BINDINGS(o2_enrichment_class) {
         .field("fuelSavingsEnriched", &O2EnrichmentResults::fuel_savings_enriched);
 
     // Parameters for calculateO2Enrichment:
-    //   o2_comb_air (fraction)
-    //   o2_comb_air_enriched (fraction)
+    //   o2_comb_air (percent)
+    //   o2_comb_air_enriched (percent)
     //   flue_gas_temp (°F)
     //   flue_gas_temp_enriched (°F)
-    //   o2_flue_gas (fraction)
-    //   o2_flue_gas_enriched (fraction)
+    //   o2_flue_gas (percent)
+    //   o2_flue_gas_enriched (percent)
     //   comb_air_temp (°F)
     //   comb_air_temp_enriched (°F)
     //   fuel_consumption (MMBtu/hr)
