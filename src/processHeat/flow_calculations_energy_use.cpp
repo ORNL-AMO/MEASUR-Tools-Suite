@@ -39,7 +39,7 @@ flowCalculationsEnergyUse(double specific_gravity, double orifice_diameter, doub
     }
     else {
         double heat_input_btu = flow * gas_heating_value; // Btu/hr
-        results.heat_input = (heat_input_btu * operating_time) / kMMBtuToBtu; // MMBtu/hr
+        results.heat_input = (heat_input_btu * operating_time) / kMMBtuToBtu; // MMBtu
     }
     // Calculate total flow
     results.total_flow = flow * operating_time;
