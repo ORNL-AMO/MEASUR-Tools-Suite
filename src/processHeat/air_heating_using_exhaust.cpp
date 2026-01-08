@@ -6,7 +6,6 @@
 
 namespace air_heating_using_exhaust {
 
-
 /**
  * @brief Calculates air heating using exhaust for gaseous fuels.
  * @details Uses gas composition to determine fuel heating value and stoichiometric air, then estimates heat recovery.
@@ -30,7 +29,6 @@ AirHeatingUsingExhaustResults airHeatingUsingExhaustWithGasComposition(
     return airHeatingUsingExhaust(stoich_air, fuel_heating_value, flue_temperature, excess_air, fire_rate, airflow,
                                   inlet_temperature, heater_efficiency, hx_efficiency, operating_hours);
 }
-
 
 /**
  * @brief Calculates air heating using exhaust for solid/liquid fuels.
@@ -71,8 +69,6 @@ AirHeatingUsingExhaustResults airHeatingUsingExhaustWithSolidLiquidFlueGasMateri
  * 2. Calculate heat recovered by cold air
  * 3. Calculate outlet exhaust temperature
  * 4. Calculate annual energy savings
- *
- * All constants are defined in physics::constants.h for clarity and maintainability.
  */
 AirHeatingUsingExhaustResults airHeatingUsingExhaust(
     double stoich_air,
