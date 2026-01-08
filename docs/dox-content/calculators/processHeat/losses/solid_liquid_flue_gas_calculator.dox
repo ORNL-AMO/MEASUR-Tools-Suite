@@ -272,15 +272,37 @@
  * estimates the fraction of excess air supplied to the combustion process. The calculation uses stoichiometric 
  * relationships and mass balance.
  *
+ * The implementation uses the shared @ref process_heat::calculateExcessAir function from the @ref process_heat 
+ * namespace as the initial estimate, then iteratively refines it based on the fuel composition and measured 
+ * flue gas properties.
+ *
  * @subheading{Iterative Procedure}
- * The excess air is estimated by iterating on the relationship between O2 content and excess air until convergence.
- * See the source code implementation for the detailed iterative algorithm.
+ * 1. **Initial Estimate**: Uses @ref process_heat::calculateExcessAir to get a starting excess air value based 
+ *    on measured flue gas O2. See @ref process_heat_excess_air_formula for the formula.
+ * 2. **Iterative Refinement**: Calculates expected O2 using @ref solid_liquid_flue_gas_material::calculateFlueGasO2
+ *    and adjusts excess air until convergence (error < 2%).
+ * 3. **Convergence**: Iteration continues until the calculated O2 matches the measured O2 within tolerance.
+ *
+ * @code{.cpp}
+ * // Initial estimate using shared function
+ * double excess_air = process_heat::calculateExcessAir(flue_gas_o2);
+ * 
+ * // Iterative refinement based on fuel composition
+ * for (int i = 0; i < 100; ++i) {
+ *     double o2_calc = calculateFlueGasO2(excess_air, ...);
+ *     if (error < 0.02) break;
+ *     // Adjust excess_air based on error direction
+ * }
+ * @endcode
  *
  * @par Symbols
  * @symtable
  * @symrow{EA; Excess air fraction; \unitless}
  * @symrow{O_2; Measured flue gas oxygen percentage; \percent}
  * @endsymtable
+ *
+ * @see process_heat::calculateExcessAir for the initial excess air estimate formula
+ * @see solid_liquid_flue_gas_material::calculateFlueGasO2 for O2 calculation during iteration
  */
 
 /**
