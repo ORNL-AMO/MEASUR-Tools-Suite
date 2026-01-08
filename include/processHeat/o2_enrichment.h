@@ -21,8 +21,8 @@ struct O2EnrichmentResults {
     double enriched_air_specific_heat = 0;  ///< Enriched air specific heat @unitb{Btu/(lb\cdot\degreeFahrenheit)}
     double air_correction = 0;              ///< Air correction @unitb{Btu}
     double enriched_air_correction = 0;     ///< Enriched air correction @unitb{Btu}
-    double combustion_air_correction = 0;   ///< Combustion air correction @unitb{Btu}
-    double combustion_air_correction_enriched = 0; ///< Combustion air correction with O2 enrichment @unitb{Btu}
+    double combustion_air_correction = 0;   ///< Combustion air correction (percent)
+    double combustion_air_correction_enriched = 0; ///< Combustion air correction with O2 enrichment (percent)
     double std_available_heat = 0;          ///< Standard available heat (fraction)
     double std_available_heat_enriched = 0; ///< Standard available heat with O2 enrichment (fraction)
     double available_heat = 0;              ///< Available heat (fraction)
