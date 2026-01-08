@@ -15,32 +15,32 @@ namespace o2_enrichment {
 struct O2EnrichmentResults {
     double excess_air = 0;                  ///< Excess air (fraction)
     double excess_air_enriched = 0;         ///< Excess air with O2 enrichment (fraction)
-    double heat_input = 0;                  ///< Heat input @unitb{\degreeFahrenheit}
-    double heat_input_enriched = 0;         ///< Heat input with O2 enrichment @unitb{\degreeFahrenheit}
+    double heat_input = 0;                  ///< Heat input @unitb{percent}
+    double heat_input_enriched = 0;         ///< Heat input with O2 enrichment @unitb{percent}
     double air_specific_heat = 0;           ///< Air specific heat @unitb{Btu/(lb\cdot\degreeFahrenheit)}
     double enriched_air_specific_heat = 0;  ///< Enriched air specific heat @unitb{Btu/(lb\cdot\degreeFahrenheit)}
-    double air_correction = 0;              ///< Air correction @unitb{Btu}
+    double air_correction = 0;              ///< Air correction @unitb{percent}
     double enriched_air_correction = 0;     ///< Enriched air correction @unitb{Btu}
-    double combustion_air_correction = 0;   ///< Combustion air correction (percent)
-    double combustion_air_correction_enriched = 0; ///< Combustion air correction with O2 enrichment (percent)
+    double combustion_air_correction = 0;   ///< Combustion air correction @unitb{percent}
+    double combustion_air_correction_enriched = 0; ///< Combustion air correction with O2 enrichment @unitb{percent}
     double std_available_heat = 0;          ///< Standard available heat (fraction)
     double std_available_heat_enriched = 0; ///< Standard available heat with O2 enrichment (fraction)
     double available_heat = 0;              ///< Available heat (fraction)
     double available_heat_enriched = 0;     ///< Available heat with O2 enrichment (fraction)
     double fuel_consumption_enriched = 0;   ///< Fuel consumption with O2 enrichment @unitb{MMBtu/hr}
-    double fuel_savings_enriched = 0;       ///< Fuel savings with O2 enrichment (percent)
+    double fuel_savings_enriched = 0;       ///< Fuel savings with O2 enrichment @unitb{percent}
 };
 
 /**
  * @brief Calculates the O2 enrichment results for a fuel-fired furnace.
  * @details Uses process and enrichment parameters to estimate available heat, fuel consumption, and fuel savings.
  *
- * @param[in] o2_comb_air O2 in combustion air (percent)
- * @param[in] o2_comb_air_enriched O2 in enriched combustion air (percent)
+ * @param[in] o2_comb_air O2 in combustion air @unitb{percent}
+ * @param[in] o2_comb_air_enriched O2 in enriched combustion air @unitb{percent}
  * @param[in] flue_gas_temp Flue gas temperature @unitb{\degreeFahrenheit}
  * @param[in] flue_gas_temp_enriched Flue gas temperature with O2 enrichment @unitb{\degreeFahrenheit}
- * @param[in] o2_flue_gas O2 in flue gas (percent)
- * @param[in] o2_flue_gas_enriched O2 in flue gas with O2 enrichment (percent)
+ * @param[in] o2_flue_gas O2 in flue gas @unitb{percent}
+ * @param[in] o2_flue_gas_enriched O2 in flue gas with O2 enrichment @unitb{percent}
  * @param[in] comb_air_temp Combustion air preheat temperature @unitb{\degreeFahrenheit}
  * @param[in] comb_air_temp_enriched Combustion air preheat temperature with O2 enrichment @unitb{\degreeFahrenheit}
  * @param[in] fuel_consumption Fuel consumption @unitb{MMBtu/hr}
