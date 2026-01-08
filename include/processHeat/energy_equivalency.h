@@ -2,15 +2,21 @@
 #pragma once
 
 /**
- * @ingroup process_heat
+ * @ingroup energy_equivalency_calculator
  * @file energy_equivalency.h
- * @brief Functions to calculate energy equivalency for electrotechnology and fuel fired furnaces.
- * @details Provides functions for energy equivalency calculations for process heating systems.
+ * 
+ * @copybrief energy_equivalency
  */
 
+/**
+ * @ingroup energy_equivalency_calculator
+ * @namespace energy_equivalency
+ * @brief Energy equivalency calculations for process heating systems.
+ */
 namespace energy_equivalency {
 
 /**
+ * @ingroup energy_equivalency_calculator
  * @brief Calculates the equivalent electrical heat input required to replace a fuel-fired furnace.
  * @details Uses the fuel-fired heat input and efficiencies to determine the equivalent electrical input.
  *
@@ -26,6 +32,7 @@ double calculateElectricalEquivalentHeatInput(
 );
 
 /**
+ * @ingroup energy_equivalency_calculator
  * @brief Calculates the equivalent fuel-fired heat input required to replace an electrically heated furnace.
  * @details Uses the electrical heat input and efficiencies to determine the equivalent fuel-fired input.
  *

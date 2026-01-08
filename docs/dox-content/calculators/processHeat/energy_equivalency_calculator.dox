@@ -1,0 +1,56 @@
+/**
+ * @defgroup energy_equivalency_calculator Energy Equivalency Calculator
+ * @ingroup process_heat_calculators
+ * @brief Calculates equivalent heat input for electrical and fuel-fired furnaces.
+ * @details This calculator estimates the equivalent heat input required when switching between fuel-fired and electrically heated furnaces. The calculation uses process heat input and equipment efficiencies. Methods are based on standard industrial practice for process heating systems.
+ *
+ * The calculation follows:
+ * 1. **Electrical Equivalent Heat Input** - Calculate the electrical heat input required to replace a fuel-fired furnace
+ * 2. **Fuel-Fired Equivalent Heat Input** - Calculate the fuel-fired heat input required to replace an electrically heated furnace
+ *
+ * Relevant formulas and symbol definitions are documented below.
+ *
+ * @heading{Electrical Equivalent Heat Input}
+ * @copydoc energy_equivalency_electrical_formula
+ *
+ * @heading{Fuel-Fired Equivalent Heat Input}
+ * @copydoc energy_equivalency_fuel_fired_formula
+ */
+
+/**
+ * @defgroup energy_equivalency_electrical_formula Electrical Equivalent Heat Input Formula
+ * @ingroup energy_equivalency_calculator
+ * @brief Calculates the electrical heat input required to replace a fuel-fired furnace.
+ * @details The equivalent electrical heat input is calculated as:
+ *
+ * @formula{energy-equivalency-electrical; P_{elec} = \frac{P_{fuel} \cdot \eta_{fuel}}{\eta_{elec}}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{P_{elec}; Equivalent electrical heat input; \kilo\watt}
+ * @symrow{P_{fuel}; Fuel-fired heat input; \mega\btu\per\hour}
+ * @symrow{\eta_{fuel}; Fuel-fired furnace efficiency; \unitless}
+ * @symrow{\eta_{elec}; Electrically heated furnace efficiency; \unitless}
+ * @endsymtable
+ *
+ * @note The result is converted from MMBtu/hr to kW using the factor 1 MMBtu/hr = 293.07107 kW.
+ */
+
+/**
+ * @defgroup energy_equivalency_fuel_fired_formula Fuel-Fired Equivalent Heat Input Formula
+ * @ingroup energy_equivalency_calculator
+ * @brief Calculates the fuel-fired heat input required to replace an electrically heated furnace.
+ * @details The equivalent fuel-fired heat input is calculated as:
+ *
+ * @formula{energy-equivalency-fuel-fired; P_{fuel} = \frac{P_{elec} \cdot \eta_{elec}}{\eta_{fuel}}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{P_{fuel}; Equivalent fuel-fired heat input; \mega\btu\per\hour}
+ * @symrow{P_{elec}; Electrical heat input; \kilo\watt}
+ * @symrow{\eta_{elec}; Electrically heated furnace efficiency; \unitless}
+ * @symrow{\eta_{fuel}; Fuel-fired furnace efficiency; \unitless}
+ * @endsymtable
+ *
+ * @note The result is converted from kW to MMBtu/hr using the factor 1 kW = 0.003412142 MMBtu/hr.
+ */
