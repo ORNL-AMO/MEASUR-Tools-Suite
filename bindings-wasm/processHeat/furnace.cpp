@@ -1,7 +1,6 @@
 #include <emscripten/bind.h>
 
 #include "processHeat/EfficiencyImprovement.h"
-#include "processHeat/EnergyEquivalency.h"
 #include "processHeat/FlowCalculationsEnergyUse.h"
 #include "processHeat/O2Enrichment.h"
 
@@ -40,19 +39,6 @@ EMSCRIPTEN_BINDINGS(efficiencyImprovement) {
         .function("getNewAvailableHeat", &EfficiencyImprovement::getNewAvailableHeat)
         .function("getNewFuelSavings", &EfficiencyImprovement::getNewFuelSavings)
         .function("getNewEnergyInput", &EfficiencyImprovement::getNewEnergyInput);
-}
-// energyEquivalencyElectric
-EMSCRIPTEN_BINDINGS(energyEquivalencyElectric) {
-    class_<ElectricalEnergyEquivalency>("ElectricalEnergyEquivalency")
-        .constructor<double, double, double>()
-        .function("getElectricalHeatInput", &ElectricalEnergyEquivalency::getElectricalHeatInput);
-}
-
-// energyEquivalencyFuel
-EMSCRIPTEN_BINDINGS(energyEquivalencyFuel) {
-    class_<FuelFiredEnergyEquivalency>("FuelFiredEnergyEquivalency")
-        .constructor<double, double, double>()
-        .function("getFuelFiredHeatInput", &FuelFiredEnergyEquivalency::getFuelFiredHeatInput);
 }
 
 // flowCalculations
