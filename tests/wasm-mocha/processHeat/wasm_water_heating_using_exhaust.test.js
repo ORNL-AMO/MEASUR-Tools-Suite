@@ -1,6 +1,6 @@
 import { assert } from 'chai';
 
-describe('Steam water heating using exhaust', function () {
+describe('Process heat water heating using exhaust', function () {
     let moduleInstance;
     before(async function () {
         const ToolsSuiteModule = (await import('../../../bin/client.js')).default;

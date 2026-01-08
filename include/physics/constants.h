@@ -46,6 +46,20 @@ namespace physics::imperial {}
 namespace physics::us {
 
 /**
+ * @brief Orifice area factor for volumetric flow calculations @unitb{(in^2)^{-1}}
+ * @details Empirical factor used in U.S. customary orifice meter equations to convert orifice diameter (in) squared to effective area for volumetric flow (scfh).
+ * @note Standard value for fuel-fired furnace gas flow calculations.
+ */
+inline constexpr double kOrificeAreaFactor = 1300.0;
+
+/**
+ * @brief Standard atmospheric pressure at sea level @unitb{psia}
+ * @details Used as the reference pressure for gas property and flow calculations in U.S. customary units.
+ * @note 1 atmosphere = 14.7 psia (pounds per square inch absolute).
+ */
+inline constexpr double kAtmosphericPressurePsi = 14.7;
+
+/**
  * @brief Boiling point of water @unitb{\degreeFahrenheit}
  */
 inline constexpr double kWaterBoilingPointF = 212.0;
@@ -102,6 +116,8 @@ inline constexpr double kAirCorrectionBase = -1.078913827;
  * @details Used for water flow calculations in process heating systems. Source: CRC Handbook of Chemistry and Physics.
  */
 constexpr double kWaterDensity = 8.335;
+
+
 
 } // namespace physics::us
 

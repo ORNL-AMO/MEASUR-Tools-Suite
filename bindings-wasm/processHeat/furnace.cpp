@@ -1,32 +1,8 @@
 #include <emscripten/bind.h>
 
 #include "processHeat/EfficiencyImprovement.h"
-#include "processHeat/FlowCalculationsEnergyUse.h"
 
 using namespace emscripten;
-
-EMSCRIPTEN_BINDINGS(furnace_enums) {
-    enum_<FlowCalculationsEnergyUse::Gas>("Gas")
-        .value("AIR", FlowCalculationsEnergyUse::Gas::AIR)
-        .value("AMMONIA_DISSOCIATED", FlowCalculationsEnergyUse::Gas::AMMONIA_DISSOCIATED)
-        .value("ARGON", FlowCalculationsEnergyUse::Gas::ARGON)
-        .value("BUTANE", FlowCalculationsEnergyUse::Gas::BUTANE)
-        .value("ENDOTHERMIC_AMMONIA", FlowCalculationsEnergyUse::Gas::ENDOTHERMIC_AMMONIA)
-        .value("EXOTHERMIC_CRACKED_LEAN", FlowCalculationsEnergyUse::Gas::EXOTHERMIC_CRACKED_LEAN)
-        .value("EXOTHERMIC_CRACKED_RICH", FlowCalculationsEnergyUse::Gas::EXOTHERMIC_CRACKED_RICH)
-        .value("HELIUM", FlowCalculationsEnergyUse::Gas::HELIUM)
-        .value("HYDROGEN", FlowCalculationsEnergyUse::Gas::HYDROGEN)
-        .value("NATURAL_GAS", FlowCalculationsEnergyUse::Gas::NATURAL_GAS)
-        .value("NITROGEN", FlowCalculationsEnergyUse::Gas::NITROGEN)
-        .value("OXYGEN", FlowCalculationsEnergyUse::Gas::OXYGEN)
-        .value("PROPANE", FlowCalculationsEnergyUse::Gas::PROPANE)
-        .value("OTHER", FlowCalculationsEnergyUse::Gas::OTHER);
-
-    enum_<FlowCalculationsEnergyUse::Section>("Section")
-        .value("SQUARE_EDGE", FlowCalculationsEnergyUse::Section::SQUARE_EDGE)
-        .value("SHARP_EDGE", FlowCalculationsEnergyUse::Section::SHARP_EDGE)
-        .value("VENTURI", FlowCalculationsEnergyUse::Section::VENTURI);
-}
 
 // efficiencyImprovement
 EMSCRIPTEN_BINDINGS(efficiencyImprovement) {
@@ -38,14 +14,4 @@ EMSCRIPTEN_BINDINGS(efficiencyImprovement) {
         .function("getNewAvailableHeat", &EfficiencyImprovement::getNewAvailableHeat)
         .function("getNewFuelSavings", &EfficiencyImprovement::getNewFuelSavings)
         .function("getNewEnergyInput", &EfficiencyImprovement::getNewEnergyInput);
-}
-
-// flowCalculations
-EMSCRIPTEN_BINDINGS(flowCalculations) {
-    class_<FlowCalculationsEnergyUse>("FlowCalculationsEnergyUse")
-        .constructor<FlowCalculationsEnergyUse::Gas, double, double, double, FlowCalculationsEnergyUse::Section, double,
-                     double, double, double, double, double>()
-        .function("getFlow", &FlowCalculationsEnergyUse::getFlow)
-        .function("getHeatInput", &FlowCalculationsEnergyUse::getHeatInput)
-        .function("getTotalFlow", &FlowCalculationsEnergyUse::getTotalFlow);
 }
