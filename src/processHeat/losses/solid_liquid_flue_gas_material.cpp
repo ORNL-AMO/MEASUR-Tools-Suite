@@ -1,11 +1,11 @@
 
 
 #include "processHeat/losses/solid_liquid_flue_gas_material.h"
-
 #include <cmath>
 #include <iostream>
-
 #include "physics/gas_constants.h"
+#include "processHeat/process_heat.h"
+
 namespace solid_liquid_flue_gas_material {
 
 /**
@@ -28,7 +28,7 @@ double calculateExcessAirFromFlueGasO2(double flue_gas_o2, double carbon, double
     const double moisture_frac      = moisture / percent_total_fuel;
 
     // --- Initial estimate for excess air ---
-    double excess_air = (8.52381 * flue_gas_o2) / (2.0 - (9.52381 * flue_gas_o2));
+    double excess_air = process_heat::calculateExcessAir(flue_gas_o2);
     if (excess_air == 0.0) {
         return 0.0;
     }

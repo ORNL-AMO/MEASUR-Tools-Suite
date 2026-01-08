@@ -1,5 +1,7 @@
 
 #include "processHeat/o2_enrichment.h"
+#include "physics/constants.h"
+#include "processHeat/process_heat.h"
 
 namespace o2_enrichment {
 
@@ -16,8 +18,8 @@ O2EnrichmentResults calculateO2Enrichment(double o2_comb_air, double o2_comb_air
     double o2_flue_gas_enriched_frac = o2_flue_gas_enriched / 100.0;
 
     // --- Step 1: Calculate excess air (fraction) ---
-    results.excess_air          = calculateExcessAir(o2_flue_gas_frac);
-    results.excess_air_enriched = calculateExcessAir(o2_flue_gas_enriched_frac);
+    results.excess_air          = process_heat::calculateExcessAir(o2_flue_gas_frac);
+    results.excess_air_enriched = process_heat::calculateExcessAir(o2_flue_gas_enriched_frac);
 
     // --- Step 2: Calculate heat input (°F) ---
 
@@ -66,12 +68,6 @@ O2EnrichmentResults calculateO2Enrichment(double o2_comb_air, double o2_comb_air
 
 // --- Helper Functions for O2 Enrichment Calculation Steps ---
 
-double calculateExcessAir(double o2_flue_gas) {
-    constexpr double kStoichAirFactor = 8.52381;
-    constexpr double kO2FlueGasFactor = 9.52381;
-    return kStoichAirFactor * o2_flue_gas / (2.0 - kO2FlueGasFactor * o2_flue_gas);
-}
-
 double calculateHeatInput(double flue_gas_temp) {
     constexpr double kHeatInputIntercept = 95.0;
     constexpr double kHeatInputSlope     = -0.025;
@@ -79,9 +75,8 @@ double calculateHeatInput(double flue_gas_temp) {
 }
 
 double calculateAirSpecificHeat(double comb_air_temp) {
-    constexpr double kAirSpecificHeatBase  = 0.017828518;
-    constexpr double kAirSpecificHeatCoeff = 0.000002556;
-    return kAirSpecificHeatBase + kAirSpecificHeatCoeff * comb_air_temp;
+    using namespace physics::us;
+    return kSpecificHeatAirBase + kSpecificHeatAirCoeff * comb_air_temp;
 }
 
 double calculateAirCorrection(double air_specific_heat, double flue_gas_temp, double excess_air) {
@@ -91,8 +86,8 @@ double calculateAirCorrection(double air_specific_heat, double flue_gas_temp, do
 }
 
 double calculateCombustionAirCorrection(double air_specific_heat, double comb_air_temp, double excess_air) {
-    constexpr double kCombAirCorrectionBase         = -1.078913827;
-    double           combustion_air_correction_term = kCombAirCorrectionBase + air_specific_heat * comb_air_temp;
+    using namespace physics::us;
+    double           combustion_air_correction_term = kAirCorrectionBase + air_specific_heat * comb_air_temp;
     return combustion_air_correction_term * (1.0 + excess_air);
 }
 
