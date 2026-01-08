@@ -1,0 +1,163 @@
+/**
+ * @defgroup air_water_cooling_using_flue_calculator Air/Water Cooling Using Flue Calculator
+ * @ingroup steam_system_assessments
+ * @brief Calculates heat recovery from flue gas using a condensing heat exchanger for air and water cooling applications.
+ * @details This calculator estimates heat recovery from flue gas through a condensing heat exchanger, accounting for both sensible and latent heat recovery. The calculation uses gas composition, combustion parameters, and operating temperatures to determine recoverable heat from the flue gas stream. The method is based on standard industrial practice for waste heat recovery with condensation, particularly relevant for low-temperature heat recovery applications where moisture condensation can occur.
+ *
+ * The calculation follows a top-down approach:
+ * 1. **Flue Gas Properties** - Calculate excess air, specific heat, and available heat from combustion analysis
+ * 2. **Flue Gas Flow** - Determine flue gas mass flow rate based on fuel properties and heat input
+ * 3. **Fraction Condensed** - Estimate the fraction of water vapor condensed in the heat exchanger
+ * 4. **Latent Heat Fraction** - Calculate the fraction of heat available from moisture condensation
+ * 5. **Sensible Heat Recovery** - Determine sensible heat recovered from cooling flue gas
+ * 6. **Latent Heat Recovery** - Calculate latent heat recovered from water vapor condensation
+ * 7. **Total Available Heat** - Compute total available heat including both sensible and latent components
+ *
+ * Relevant formulas and symbol definitions are documented below.
+ *
+ * @heading{Flue Gas Properties}
+ * @copydoc air_water_cooling_using_flue_properties_description
+ *
+ * @heading{Flue Gas Flow}
+ * @copydoc air_water_cooling_using_flue_gas_flow_formula
+ *
+ * @heading{Fraction Condensed}
+ * @copydoc air_water_cooling_using_flue_fraction_condensed_formula
+ *
+ * @heading{Latent Heat Fraction}
+ * @copydoc air_water_cooling_using_flue_latent_heat_fraction_formula
+ *
+ * @heading{Sensible Heat Recovery}
+ * @copydoc air_water_cooling_using_flue_sensible_heat_recovery_formula
+ *
+ * @heading{Latent Heat Recovery}
+ * @copydoc air_water_cooling_using_flue_latent_heat_recovery_formula
+ *
+ * @heading{Total Available Heat Fraction}
+ * @copydoc air_water_cooling_using_flue_total_available_heat_formula
+ */
+
+/**
+ * @defgroup air_water_cooling_using_flue_properties_description Flue Gas Properties
+ * @ingroup air_water_cooling_using_flue_calculator
+ * @brief Flue gas properties from combustion analysis.
+ * @details The flue gas properties (excess air, specific heat, and available heat) are calculated using the @ref gas_flue_gas_material::processHeatProperties function. This function analyzes the fuel gas composition and operating conditions to determine key combustion parameters needed for heat recovery calculations.
+ *
+ * @subheading{Computed Properties}
+ * @symtable
+ * @symrow{EA; Excess air fraction; \unitless}
+ * @symrow{C_{p,flue}; Specific heat of flue gas; \btu\per\pound\degreeFahrenheit}
+ * @symrow{AH; Available heat fraction (sensible only); \unitless}
+ * @symrow{SA_{req}; Stoichiometric air required; \standardCubicFeet\per\standardCubicFeet}
+ * @symrow{HHV_{fuel}; Higher heating value of fuel; \btu\per\standardCubicFeet}
+ * @endsymtable
+ *
+ * @note These properties are calculated by the @ref gas_flue_gas_material::processHeatProperties function using gas composition, flue gas temperature, oxygen percentage, combustion air temperature, fuel temperature, ambient air temperature, and moisture in combustion air.
+ */
+
+/**
+ * @defgroup air_water_cooling_using_flue_gas_flow_formula Flue Gas Flow Formula
+ * @ingroup air_water_cooling_using_flue_calculator
+ * @brief Flue gas mass flow rate based on fuel properties and heat input.
+ * @details The flue gas mass flow rate is calculated using the heat input, stoichiometric air requirement, excess air, and fuel heating value. The empirical coefficient 0.0763 represents the density relationship, and 0.6 is a base flow factor. The result is converted from MMBtu/hr to Btu/hr by multiplying by 1,000,000.
+ *
+ * @formula{air-water-cooling-flue-gas-flow; \dot{m}_{flue} = \frac{Q_{in} \cdot 0.0763 \cdot (0.6 + SA_{req} \cdot (1 + EA)) \cdot 10^{6}}{HHV_{fuel}}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{\dot{m}_{flue}; Flue gas mass flow rate; \pound\per\hour}
+ * @symrow{Q_{in}; Heat input; \mega\btu\per\hour}
+ * @symrow{SA_{req}; Stoichiometric air required; \standardCubicFeet\per\standardCubicFeet}
+ * @symrow{EA; Excess air fraction; \unitless}
+ * @symrow{HHV_{fuel}; Higher heating value of fuel; \btu\per\standardCubicFeet}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup air_water_cooling_using_flue_fraction_condensed_formula Fraction Condensed Formula
+ * @ingroup air_water_cooling_using_flue_calculator
+ * @brief Fraction of water vapor condensed in the heat exchanger.
+ * @details The fraction condensed is calculated using an empirical correlation based on the outlet flue gas temperature and oxygen content. The correlation accounts for the saturation characteristics of water vapor at different temperatures and oxygen concentrations. This represents the fraction of water vapor in the flue gas that condenses as the gas is cooled.
+ *
+ * @formula{air-water-cooling-flue-fraction-condensed; f_{cond} = 1 - \frac{0.0000009 \cdot T_{out}^{3.0136}}{2.8082 - 0.1168 \cdot O_{2}}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{f_{cond}; Fraction of water vapor condensed; \unitless}
+ * @symrow{T_{out}; Flue gas outlet temperature; \degreeFahrenheit}
+ * @symrow{O_{2}; Oxygen content in flue gas (as fraction, e.g., 0.03 for 3\%); \unitless}
+ * @endsymtable
+ *
+ * @note The empirical coefficients 0.0000009, 3.0136, 2.8082, and 0.1168 are derived from experimental data for flue gas condensation behavior.
+ */
+
+/**
+ * @defgroup air_water_cooling_using_flue_latent_heat_fraction_formula Latent Heat Fraction Formula
+ * @ingroup air_water_cooling_using_flue_calculator
+ * @brief Fraction of heat available from water vapor condensation.
+ * @details The latent heat fraction is calculated by multiplying the fraction condensed by the moisture content factor (0.00935) and the latent heat of vaporization of water (1087 Btu/lb), then converting to a percentage by dividing by 100. The moisture content factor 0.00935 represents the typical water vapor content per unit fuel combusted, and 1087 Btu/lb is the approximate latent heat of vaporization at typical flue gas dewpoint conditions.
+ *
+ * @formula{air-water-cooling-flue-latent-heat-fraction; f_{latent} = \frac{f_{cond} \cdot 0.00935 \cdot 1087}{100}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{f_{latent}; Latent heat fraction; \unitless}
+ * @symrow{f_{cond}; Fraction of water vapor condensed; \unitless}
+ * @symrow{0.00935; Moisture content factor (typical water vapor per fuel unit); \pound\per\pound}
+ * @symrow{1087; Latent heat of vaporization at dewpoint; \btu\per\pound}
+ * @endsymtable
+ *
+ * @note The constant 1087 Btu/lb is the latent heat of vaporization of water at typical flue gas dewpoint temperatures (approximately 140°F).
+ */
+
+/**
+ * @defgroup air_water_cooling_using_flue_sensible_heat_recovery_formula Sensible Heat Recovery Formula
+ * @ingroup air_water_cooling_using_flue_calculator
+ * @brief Sensible heat recovered from cooling the flue gas.
+ * @details The sensible heat recovery is calculated by multiplying the specific heat of the flue gas by the temperature difference (inlet minus outlet) and the mass flow rate. The result is divided by 1,000,000 to convert from Btu/hr to MMBtu/hr. This represents the heat recovered by cooling the flue gas without phase change.
+ *
+ * @formula{air-water-cooling-flue-sensible-heat-recovery; Q_{sensible} = \frac{C_{p,flue} \cdot (T_{in} - T_{out}) \cdot \dot{m}_{flue}}{10^{6}}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{sensible}; Sensible heat recovery; \mega\btu\per\hour}
+ * @symrow{C_{p,flue}; Specific heat of flue gas; \btu\per\pound\degreeFahrenheit}
+ * @symrow{T_{in}; Flue gas inlet temperature; \degreeFahrenheit}
+ * @symrow{T_{out}; Flue gas outlet temperature; \degreeFahrenheit}
+ * @symrow{\dot{m}_{flue}; Flue gas mass flow rate; \pound\per\hour}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup air_water_cooling_using_flue_latent_heat_recovery_formula Latent Heat Recovery Formula
+ * @ingroup air_water_cooling_using_flue_calculator
+ * @brief Latent heat recovered from water vapor condensation.
+ * @details The latent heat recovery is calculated by multiplying the heat input by the latent heat fraction. This represents the additional heat recovered when water vapor in the flue gas condenses to liquid water, releasing its latent heat of vaporization.
+ *
+ * @formula{air-water-cooling-flue-latent-heat-recovery; Q_{latent} = Q_{in} \cdot f_{latent}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{latent}; Latent heat recovery; \mega\btu\per\hour}
+ * @symrow{Q_{in}; Heat input; \mega\btu\per\hour}
+ * @symrow{f_{latent}; Latent heat fraction; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup air_water_cooling_using_flue_total_available_heat_formula Total Available Heat Fraction Formula
+ * @ingroup air_water_cooling_using_flue_calculator
+ * @brief Total fraction of heat available including sensible and latent components.
+ * @details The total available heat fraction is calculated by adding the available heat fraction (sensible only) to the latent heat fraction. This represents the total fraction of input heat that can be recovered through the condensing heat exchanger, accounting for both cooling the flue gas and condensing water vapor.
+ *
+ * @formula{air-water-cooling-flue-total-available-heat; AH_{total} = AH + f_{latent}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{AH_{total}; Total available heat fraction (sensible + latent); \unitless}
+ * @symrow{AH; Available heat fraction (sensible only); \unitless}
+ * @symrow{f_{latent}; Latent heat fraction; \unitless}
+ * @endsymtable
+ *
+ * @note This total available heat fraction is always greater than the standard available heat fraction because it includes the additional benefit of latent heat recovery from condensation.
+ */
