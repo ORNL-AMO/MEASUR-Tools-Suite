@@ -19,7 +19,7 @@ EMSCRIPTEN_BINDINGS(air_water_cooling_using_flue_class) {
 
     // Parameters for airWaterCoolingUsingFlue:
     //   gas_compositions (Fuel gas composition for flue gas calculations)
-    //   heat_input (Heat input, MBtu/hr)
+    //   heat_input (Heat input, MMBtu/hr)
     //   temp_flue_gas_in (Flue gas inlet temperature, °F)
     //   temp_flue_gas_out (Flue gas outlet temperature, °F)
     //   temp_comb_air (Combustion air temperature, °F)
