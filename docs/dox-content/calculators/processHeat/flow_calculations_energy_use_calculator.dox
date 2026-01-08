@@ -40,8 +40,8 @@
  * @heading{Total Flow}
  * @copydoc flow_calculations_total_flow_formula
  *
- * @heading{Legacy Gas Type Default Values}
- * The following table shows the default specific gravity values that were previously mapped to gas types in legacy code. These mappings are no longer used in the current implementation but are provided for reference.
+ * @heading{Gas Type Default Values}
+ * The following table shows the default specific gravity values. Provided for reference.
  *
  * | Gas Type | Specific Gravity (unitless) |
  * |----------|---------------------------|
@@ -58,10 +58,9 @@
  * | Nitrogen | 0.96 |
  * | Oxygen | 1.11 |
  * | Propane | 1.52 |
- * | Other | 0.0 (user-specified) |
  *
- * @heading{Legacy Section Type Default Values}
- * The following table shows the default discharge coefficient values that were previously mapped to section types in legacy code. These mappings are no longer used in the current implementation but are provided for reference.
+ * @heading{Section Type Default Values}
+ * The following table shows the default discharge coefficient values. Provided for reference.
  *
  * | Section Type | Discharge Coefficient (unitless) |
  * |-------------|----------------------------------|
@@ -80,8 +79,8 @@
  *
  * @subheading{Symbols}
  * @symtable
- * @symrow{A; Orifice area; \inch\squared}
- * @symrow{k_{area}; Orifice area factor (1300) - empirical constant for flow calculations, see @ref physics::us::kOrificeAreaFactor; \per\inch\squared}
+ * @symrow{A; Orifice area; \squareInch}
+ * @symrow{k_{area}; Orifice area factor (1300) - empirical constant for flow calculations, see @ref physics::us::kOrificeAreaFactor; \per\squareInch}
  * @symrow{d_{orifice}; Orifice diameter; \inch}
  * @endsymtable
  */
@@ -113,7 +112,7 @@
  *
  * @subheading{Symbols}
  * @symtable
- * @symrow{\Delta P_{norm}; Normalized pressure drop; \sqrt{\inchWaterColumn}}
+ * @symrow{\Delta P_{norm}; Normalized pressure drop; \inchWaterColumn}
  * @symrow{\Delta P_{orifice}; Orifice pressure drop; \inchWaterColumn}
  * @symrow{SG; Gas specific gravity (relative to air); \unitless}
  * @endsymtable
@@ -125,13 +124,16 @@
  * @brief Temperature correction factor for flow to standard conditions.
  * @details The temperature adjustment converts actual volumetric flow at operating temperature to standard conditions (60°F or 520°R). Gas volume is inversely proportional to the square root of absolute temperature.
  *
+ * @formula{flow-calculations-convert-temperature; T_{gas} = T_{gas,F} + 459.67}
  * @formula{flow-calculations-temperature-adj; f_T = \sqrt{\frac{T_{std}}{T_{gas}}}}
  *
  * @subheading{Symbols}
  * @symtable
  * @symrow{f_T; Temperature adjustment factor; \unitless}
  * @symrow{T_{std}; Standard gas temperature (520) - see @ref physics::us::kStandardGasTemperatureR; \degreeRankine}
- * @symrow{T_{gas}; Actual gas temperature in Rankine (T_{gas,F} + 459.67) - see @ref physics::conversions::fahrenheitToRankine; \degreeRankine}
+ * @symrow{T_{gas}; Actual gas temperature in Rankine; \degreeRankine}
+ * @symrow{T_{gas,F}; Actual gas temperature in Fahrenheit; \degreeFahrenheit}
+ * @symrow{459.67; Fahrenheit to Rankine conversion factor - see @ref physics::conversions::fahrenheitToRankine; \degreeRankine}
  * @endsymtable
  */
 
@@ -141,12 +143,13 @@
  * @brief Pressure correction factor for flow to standard conditions.
  * @details The pressure adjustment converts actual volumetric flow at operating pressure (gauge) to standard atmospheric pressure. Gas volume is proportional to the square root of absolute pressure.
  *
+ * @formula{flow-calculations-abs-gas-pressure; P_{gas,abs} = P_{gas,gauge} + P_{atm}}
  * @formula{flow-calculations-pressure-adj; f_P = \sqrt{\frac{P_{gas,abs}}{P_{atm}}}}
  *
  * @subheading{Symbols}
  * @symtable
  * @symrow{f_P; Pressure adjustment factor; \unitless}
- * @symrow{P_{gas,abs}; Absolute gas pressure (P_{gas,gauge} + P_{atm}); psia}
+ * @symrow{P_{gas,abs}; Absolute gas pressure; psia}
  * @symrow{P_{gas,gauge}; Gauge gas pressure; psig}
  * @symrow{P_{atm}; Atmospheric pressure (14.7) - see @ref physics::us::kAtmosphericPressurePsi; psia}
  * @endsymtable
@@ -163,9 +166,9 @@
  * @subheading{Symbols}
  * @symtable
  * @symrow{\dot{V}; Volumetric flow rate; \scf\per\hour}
- * @symrow{A; Orifice area; \inch\squared}
+ * @symrow{A; Orifice area; \squareInch}
  * @symrow{C_{d,adj}; Adjusted discharge coefficient; \unitless}
- * @symrow{\Delta P_{norm}; Normalized pressure drop; \sqrt{\inchWaterColumn}}
+ * @symrow{\Delta P_{norm}; Normalized pressure drop; \inchWaterColumn}
  * @symrow{f_T; Temperature adjustment factor; \unitless}
  * @symrow{f_P; Pressure adjustment factor; \unitless}
  * @endsymtable
@@ -188,7 +191,7 @@
  * @symrow{CF_{MMBtu}; Conversion factor to convert from Btu to MMBtu (1,000,000 Btu/MMBtu) - see @ref physics::conversions::kMMBtuToBtu; \btu\per\MMBtu}
  * @endsymtable
  *
- * @note If HHV ≤ 0, then Q_{input} = 0.
+ * @note If HHV ≤ 0, then @math{Q_{input}} = 0.
  */
 
 /**

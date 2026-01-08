@@ -95,6 +95,7 @@ window.MathJax = {
                 \DeclareSIUnit{\lbmol}{lbmol}
                 \DeclareSIUnit{\year}{yr}
                 \DeclareSIUnit{\ton}{ton}
+                \DeclareSIUnit{\squareInch}{in^2}
             `);
         }
     },
