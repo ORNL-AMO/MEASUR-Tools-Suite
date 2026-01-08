@@ -80,8 +80,8 @@ double calculateAirSpecificHeat(double comb_air_temp) {
 }
 
 double calculateAirCorrection(double air_specific_heat, double flue_gas_temp, double excess_air) {
-    constexpr double kAirCorrectionBase  = -1.07891327;
-    double           air_correction_term = kAirCorrectionBase + air_specific_heat * flue_gas_temp;
+    using namespace physics::us;
+    double air_correction_term = kAirCorrectionBase + air_specific_heat * flue_gas_temp;
     return -air_correction_term * excess_air;
 }
 
