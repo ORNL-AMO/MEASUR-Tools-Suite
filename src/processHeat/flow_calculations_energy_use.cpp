@@ -21,7 +21,7 @@ flowCalculationsEnergyUse(double specific_gravity, double orifice_diameter, doub
     }
     else {
         adjusted_discharge_coefficient = discharge_coefficient;
-    };
+    }
     // Calculate pressure drop
     double pressure_drop = std::sqrt(orifice_pressure_drop / specific_gravity);
     // Calculate adjusted gas temperature
