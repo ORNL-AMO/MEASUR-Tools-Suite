@@ -1,0 +1,208 @@
+/**
+ * @defgroup flow_calculations_energy_use_calculator Flow Calculations Energy Use Calculator
+ * @ingroup process_heat_calculators
+ * @brief Calculates flow rate and heat input of a fuel-fired furnace using orifice flow measurement.
+ * @details This calculator estimates gas flow rate and energy consumption in fuel-fired furnaces by measuring pressure drop across an orifice. The calculation uses orifice geometry, gas properties, operating conditions, and discharge coefficients to determine volumetric flow and thermal input. The method is based on standard industrial practice for orifice flow measurement in combustion systems.
+ *
+ * The calculation follows a top-down approach:
+ * 1. **Orifice Area** - Calculate effective orifice cross-sectional area
+ * 2. **Adjusted Discharge Coefficient** - Correct discharge coefficient for diameter ratio effects
+ * 3. **Pressure Drop Term** - Calculate normalized pressure drop accounting for specific gravity
+ * 4. **Temperature Adjustment** - Correct flow for actual gas temperature vs. standard conditions
+ * 5. **Pressure Adjustment** - Correct flow for actual gas pressure vs. atmospheric
+ * 6. **Flow Rate** - Calculate volumetric flow rate at standard conditions
+ * 7. **Heat Input** - Calculate thermal input based on flow and heating value
+ * 8. **Total Flow** - Calculate total gas volume consumed over operating period
+ *
+ * Relevant formulas and symbol definitions are documented below.
+ *
+ * @heading{Orifice Area}
+ * @copydoc flow_calculations_orifice_area_formula
+ *
+ * @heading{Adjusted Discharge Coefficient}
+ * @copydoc flow_calculations_adjusted_discharge_coefficient_formula
+ *
+ * @heading{Pressure Drop Term}
+ * @copydoc flow_calculations_pressure_drop_formula
+ *
+ * @heading{Temperature Adjustment}
+ * @copydoc flow_calculations_temperature_adjustment_formula
+ *
+ * @heading{Pressure Adjustment}
+ * @copydoc flow_calculations_pressure_adjustment_formula
+ *
+ * @heading{Flow Rate}
+ * @copydoc flow_calculations_flow_rate_formula
+ *
+ * @heading{Heat Input}
+ * @copydoc flow_calculations_heat_input_formula
+ *
+ * @heading{Total Flow}
+ * @copydoc flow_calculations_total_flow_formula
+ *
+ * @heading{Legacy Gas Type Default Values}
+ * The following table shows the default specific gravity values that were previously mapped to gas types in legacy code. These mappings are no longer used in the current implementation but are provided for reference.
+ *
+ * | Gas Type | Specific Gravity (unitless) |
+ * |----------|---------------------------|
+ * | Air | 1.0 |
+ * | Ammonia (Dissociated) | 0.3 |
+ * | Argon | 1.38 |
+ * | Butane | 2.02 |
+ * | Endothermic Ammonia | 0.59 |
+ * | Exothermic (Cracked Lean) | 1.0 |
+ * | Exothermic (Cracked Rich) | 0.85 |
+ * | Helium | 0.14 |
+ * | Hydrogen | 0.07 |
+ * | Natural Gas | 0.65 |
+ * | Nitrogen | 0.96 |
+ * | Oxygen | 1.11 |
+ * | Propane | 1.52 |
+ * | Other | 0.0 (user-specified) |
+ *
+ * @heading{Legacy Section Type Default Values}
+ * The following table shows the default discharge coefficient values that were previously mapped to section types in legacy code. These mappings are no longer used in the current implementation but are provided for reference.
+ *
+ * | Section Type | Discharge Coefficient (unitless) |
+ * |-------------|----------------------------------|
+ * | Square Edge | 0.5 |
+ * | Sharp Edge | 0.6 |
+ * | Venturi | 0.8 |
+ */
+
+/**
+ * @defgroup flow_calculations_orifice_area_formula Orifice Area Formula
+ * @ingroup flow_calculations_energy_use_calculator
+ * @brief Effective cross-sectional area of the orifice.
+ * @details The orifice area is calculated using an empirical factor and the square of the orifice diameter. This factor accounts for the conversion from diameter in inches to effective area for volumetric flow calculations in standard cubic feet per hour.
+ *
+ * @formula{flow-calculations-orifice-area; A = k_{area} \cdot d_{orifice}^2}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{A; Orifice area; \inch\squared}
+ * @symrow{k_{area}; Orifice area factor (1300) - empirical constant for flow calculations, see @ref physics::us::kOrificeAreaFactor; \per\inch\squared}
+ * @symrow{d_{orifice}; Orifice diameter; \inch}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup flow_calculations_adjusted_discharge_coefficient_formula Adjusted Discharge Coefficient Formula
+ * @ingroup flow_calculations_energy_use_calculator
+ * @brief Discharge coefficient corrected for diameter ratio effects.
+ * @details When the orifice diameter is smaller than the pipe diameter, the discharge coefficient must be adjusted to account for the velocity of approach and contraction effects. If the diameters are equal, no adjustment is needed.
+ *
+ * @formula{flow-calculations-adjusted-discharge-coeff; C_{d,adj} = \begin{cases} \frac{C_d}{\sqrt{1 - \left(\frac{d_{orifice}}{d_{pipe}}\right)^4}} & \text{if } d_{orifice} < d_{pipe} \\ C_d & \text{otherwise} \end{cases}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{C_{d,adj}; Adjusted discharge coefficient; \unitless}
+ * @symrow{C_d; Discharge coefficient; \unitless}
+ * @symrow{d_{orifice}; Orifice diameter; \inch}
+ * @symrow{d_{pipe}; Inside pipe diameter; \inch}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup flow_calculations_pressure_drop_formula Pressure Drop Term Formula
+ * @ingroup flow_calculations_energy_use_calculator
+ * @brief Normalized pressure drop term accounting for gas specific gravity.
+ * @details The pressure drop term represents the driving force for flow through the orifice, normalized by the gas specific gravity. This accounts for the fact that lighter gases will flow faster for the same pressure drop.
+ *
+ * @formula{flow-calculations-pressure-drop; \Delta P_{norm} = \sqrt{\frac{\Delta P_{orifice}}{SG}}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{\Delta P_{norm}; Normalized pressure drop; \sqrt{\inchWaterColumn}}
+ * @symrow{\Delta P_{orifice}; Orifice pressure drop; \inchWaterColumn}
+ * @symrow{SG; Gas specific gravity (relative to air); \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup flow_calculations_temperature_adjustment_formula Temperature Adjustment Formula
+ * @ingroup flow_calculations_energy_use_calculator
+ * @brief Temperature correction factor for flow to standard conditions.
+ * @details The temperature adjustment converts actual volumetric flow at operating temperature to standard conditions (60°F or 520°R). Gas volume is inversely proportional to the square root of absolute temperature.
+ *
+ * @formula{flow-calculations-temperature-adj; f_T = \sqrt{\frac{T_{std}}{T_{gas}}}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{f_T; Temperature adjustment factor; \unitless}
+ * @symrow{T_{std}; Standard gas temperature (520) - see @ref physics::us::kStandardGasTemperatureR; \degreeRankine}
+ * @symrow{T_{gas}; Actual gas temperature in Rankine (T_{gas,F} + 459.67) - see @ref physics::conversions::fahrenheitToRankine; \degreeRankine}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup flow_calculations_pressure_adjustment_formula Pressure Adjustment Formula
+ * @ingroup flow_calculations_energy_use_calculator
+ * @brief Pressure correction factor for flow to standard conditions.
+ * @details The pressure adjustment converts actual volumetric flow at operating pressure (gauge) to standard atmospheric pressure. Gas volume is proportional to the square root of absolute pressure.
+ *
+ * @formula{flow-calculations-pressure-adj; f_P = \sqrt{\frac{P_{gas,abs}}{P_{atm}}}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{f_P; Pressure adjustment factor; \unitless}
+ * @symrow{P_{gas,abs}; Absolute gas pressure (P_{gas,gauge} + P_{atm}); psia}
+ * @symrow{P_{gas,gauge}; Gauge gas pressure; psig}
+ * @symrow{P_{atm}; Atmospheric pressure (14.7) - see @ref physics::us::kAtmosphericPressurePsi; psia}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup flow_calculations_flow_rate_formula Flow Rate Formula
+ * @ingroup flow_calculations_energy_use_calculator
+ * @brief Volumetric flow rate at standard conditions.
+ * @details The flow rate is calculated by combining the orifice area, adjusted discharge coefficient, and all correction factors. This represents the gas flow rate at standard conditions (60°F, 1 atm).
+ *
+ * @formula{flow-calculations-flow-rate; \dot{V} = A \cdot C_{d,adj} \cdot \Delta P_{norm} \cdot f_T \cdot f_P}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{\dot{V}; Volumetric flow rate; \scf\per\hour}
+ * @symrow{A; Orifice area; \inch\squared}
+ * @symrow{C_{d,adj}; Adjusted discharge coefficient; \unitless}
+ * @symrow{\Delta P_{norm}; Normalized pressure drop; \sqrt{\inchWaterColumn}}
+ * @symrow{f_T; Temperature adjustment factor; \unitless}
+ * @symrow{f_P; Pressure adjustment factor; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup flow_calculations_heat_input_formula Heat Input Formula
+ * @ingroup flow_calculations_energy_use_calculator
+ * @brief Thermal energy input over operating period.
+ * @details The heat input is calculated by multiplying the volumetric flow rate by the heating value of the gas and the operating time. The result is converted from Btu to MMBtu. If the heating value is zero or negative, the heat input is zero.
+ *
+ * @formula{flow-calculations-heat-input; Q_{input} = \frac{\dot{V} \cdot HHV \cdot t_{op}}{CF_{MMBtu}}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{input}; Heat input over operating period; \MMBtu}
+ * @symrow{\dot{V}; Volumetric flow rate; \scf\per\hour}
+ * @symrow{HHV; Higher heating value of gas; \btu\per\scf}
+ * @symrow{t_{op}; Operating time; \hour}
+ * @symrow{CF_{MMBtu}; Conversion factor to convert from Btu to MMBtu (1,000,000 Btu/MMBtu) - see @ref physics::conversions::kMMBtuToBtu; \btu\per\MMBtu}
+ * @endsymtable
+ *
+ * @note If HHV ≤ 0, then Q_{input} = 0.
+ */
+
+/**
+ * @defgroup flow_calculations_total_flow_formula Total Flow Formula
+ * @ingroup flow_calculations_energy_use_calculator
+ * @brief Total gas volume consumed over operating period.
+ * @details The total flow is calculated by multiplying the volumetric flow rate at standard conditions by the operating time. This represents the total volume of gas consumed during the operating period.
+ *
+ * @formula{flow-calculations-total-flow; V_{total} = \dot{V} \cdot t_{op}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{V_{total}; Total gas volume consumed; \scf}
+ * @symrow{\dot{V}; Volumetric flow rate; \scf\per\hour}
+ * @symrow{t_{op}; Operating time; \hour}
+ * @endsymtable
+ */
