@@ -25,7 +25,7 @@ namespace flow_calculations_energy_use {
  */
 struct FlowCalculationsEnergyUseResults {
     double flow_per_hour = 0; ///< Flow rate @unitb{SCF/hr}
-    double heat_input    = 0; ///< Heat input @unitb{MMBtu/hr}
+    double heat_input    = 0; ///< Heat input @unitb{MMBtu}
     double total_flow    = 0; ///< Total flow @unitb{SCF}
 };
 
