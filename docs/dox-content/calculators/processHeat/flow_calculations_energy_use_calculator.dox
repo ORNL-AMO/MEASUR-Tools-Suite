@@ -40,7 +40,7 @@
  * @heading{Total Flow}
  * @copydoc flow_calculations_total_flow_formula
  *
- * @heading{Gas Type Default Values}
+ * @heading{Gas Type Specific Gravity Values}
  * The following table shows the default specific gravity values. Provided for reference.
  *
  * | Gas Type | Specific Gravity (unitless) |
@@ -59,7 +59,7 @@
  * | Oxygen | 1.11 |
  * | Propane | 1.52 |
  *
- * @heading{Section Type Default Values}
+ * @heading{Section Type Discharge Coefficients}
  * The following table shows the default discharge coefficient values. Provided for reference.
  *
  * | Section Type | Discharge Coefficient (unitless) |
