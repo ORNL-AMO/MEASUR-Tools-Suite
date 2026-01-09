@@ -26,6 +26,15 @@
  * - O2 enrichment analysis (@ref o2_enrichment_calculator)
  * - Solid/liquid flue gas material calculations (@ref solid_liquid_flue_gas_material_calculator)
  *
+ * @copydoc process_heat_excess_air_formula_doc
+ *
+ * @note Input oxygen should be provided as a fraction (not percentage). For example, 3% O2 should be passed as 0.03.
+ */
+
+
+/**
+ * @defgroup process_heat_excess_air_formula_doc
+ *
  * The formula provides a quick estimate of excess air based on measured flue gas oxygen content. For more 
  * complex fuel compositions, iterative refinement may be applied (as in 
  * @ref solid_liquid_flue_gas_material::calculateExcessAirFromFlueGasO2).
@@ -40,11 +49,4 @@
  * @symrow{k_2; Oxygen flue gas factor (9.52381); \unitless}
  * @endsymtable
  *
- * @subheading{Implementation}
- * The function is implemented in the @ref process_heat namespace:
- * @code{.cpp}
- * double excess_air = process_heat::calculateExcessAir(o2_flue_gas_fraction);
- * @endcode
- *
- * @note Input oxygen should be provided as a fraction (not percentage). For example, 3% O2 should be passed as 0.03.
- */
+*/

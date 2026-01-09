@@ -11,6 +11,7 @@
 namespace process_heat {
 
 /**
+ * @ingroup process_heat
  * @brief Calculates excess air from O2 in flue gas.
  * @param[in] o2_flue_gas O2 in flue gas (fraction)
  * @return Excess air (fraction)
