@@ -1,6 +1,6 @@
-#include "processHeat/losses/solid_load_charge_material_heat_required.h"
 #include <emscripten/bind.h>
 
+#include "processHeat/losses/solid_load_charge_material_heat_required.h"
 using namespace emscripten;
 using namespace solid_load_charge_material_heat_required;
 
