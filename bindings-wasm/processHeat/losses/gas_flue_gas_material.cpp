@@ -1,6 +1,6 @@
-#include "processHeat/losses/gas_flue_gas_material.h"
 #include <emscripten/bind.h>
 
+#include "processHeat/losses/gas_flue_gas_material.h"
 using namespace emscripten;
 using namespace gas_flue_gas_material;
 
