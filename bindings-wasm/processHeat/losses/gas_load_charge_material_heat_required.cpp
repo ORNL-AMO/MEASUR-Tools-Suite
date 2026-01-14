@@ -6,7 +6,6 @@ using namespace gas_load_charge_material_heat_required;
 
 // gasLoadChargeMaterial
 EMSCRIPTEN_BINDINGS(gas_load_charge_material_heat_required) {
-    using namespace gas_load_charge_material_heat_required;
     // Parameters for gasLoadChargeMaterialTotalHeatRequired:
     //   thermic_reaction_type (enum: ENDOTHERMIC, EXOTHERMIC, NONE)
     //   specific_heat_gas (Btu/lb°F)
