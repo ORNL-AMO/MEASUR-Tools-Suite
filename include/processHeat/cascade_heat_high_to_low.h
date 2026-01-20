@@ -4,8 +4,9 @@
 /**
  * @ingroup cascade_heat_high_to_low_calculator
  * @file cascade_heat_high_to_low.h
- * 
- * @copybrief cascade_heat_high_to_low
+ * @brief Functions to calculate energy savings from using exhaust gas (waste) of high temperature to supply heat to low temperature equipment.
+ * @details Provides a function-based API for cascade heat recovery calculations.
+ * @bug No known bugs.
  */
 
 #include "physics/gas_composition.h"

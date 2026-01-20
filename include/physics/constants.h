@@ -2,7 +2,6 @@
 
 /**
  * @file constants.h
- * @authors Liam White
  * @brief Defines physical constants and unit conversions.
  * @details https://physics.nist.gov/cuu/Constants/index.html
  */
@@ -26,6 +25,12 @@ inline constexpr double kStefanBoltzmann = 5.670374419e-8;
  */
 inline constexpr double kWaterDensityBase = 1000.0;
 
+/**
+ * @brief Specific heat of liquid water at standard conditions @unitb{\kilo\joule\per\kilogram\per\kelvin}
+ * @details 4.1796 kJ/(kg·K) is the widely accepted value for the specific heat capacity of water at room temperature (15–25°C).
+ */
+inline constexpr double kSpecificHeatWater = 4.1796;
+
 } // namespace physics::si
 
 /**
@@ -39,6 +44,20 @@ namespace physics::imperial {}
  * @brief Physical constants defined in U.S. Customary units.
  */
 namespace physics::us {
+
+/**
+ * @brief Orifice area factor for volumetric flow calculations @unitb{\dimensionless}
+ * @details Empirical, effectively dimensionless factor used in U.S. customary orifice meter equations to convert orifice diameter (in) squared to effective area for volumetric flow (scfh).
+ * @note Standard value for fuel-fired furnace gas flow calculations.
+ */
+inline constexpr double kOrificeAreaFactor = 1300.0;
+
+/**
+ * @brief Standard atmospheric pressure at sea level @unitb{psia}
+ * @details Used as the reference pressure for gas property and flow calculations in U.S. customary units.
+ * @note 1 atmosphere = 14.7 psia (pounds per square inch absolute).
+ */
+inline constexpr double kAtmosphericPressurePsi = 14.7;
 
 /**
  * @brief Boiling point of water @unitb{\degreeFahrenheit}
@@ -91,6 +110,15 @@ inline constexpr double kSpecificHeatAirCoeff = 0.000002556;
  */
 inline constexpr double kAirCorrectionBase = -1.078913827;
 
+
+/**
+ * @brief Water density @unitb{lb/gal}
+ * @details Used for water flow calculations in process heating systems. Source: CRC Handbook of Chemistry and Physics.
+ */
+constexpr double kWaterDensity = 8.335;
+
+
+
 } // namespace physics::us
 
 /**
@@ -98,6 +126,28 @@ inline constexpr double kAirCorrectionBase = -1.078913827;
  * @brief Factors and functions for unit conversions.
  */
 namespace physics::conversions {
+
+/**
+ * @brief Conversion factor from Btu/(lb·°F) to kJ/(kg·K).
+ * @details 1 Btu/(lb·°F) = 4.1868 kJ/(kg·K)
+ */
+inline constexpr double kBtuPerLbFToKJPerKgK = 4.1868;
+
+
+/**
+ * @brief Convert Fahrenheit to Kelvin.
+ * @details Converts a temperature from degrees Fahrenheit to Kelvin:
+ * @par Relation
+ * @formula{fahrenheit-to-kelvin; T_K = (T_F - 32) / 1.8 + 273.15}
+ * @par Symbols
+ * @symtable
+ * @symrow{T_K; Temperature in Kelvin; \kelvin}
+ * @symrow{T_F; Temperature in degrees Fahrenheit; \degreeFahrenheit}
+ * @endsymtable
+ * @param[in] fahrenheit Temperature in degrees Fahrenheit @unitb{\degreeFahrenheit}
+ * @return Temperature in Kelvin @unitb{\kelvin}
+ */
+constexpr double fahrenheitToKelvin(double fahrenheit) { return ((fahrenheit - 32.0) / 1.8) + 273.15; }
 
 /// @brief Offset to convert Fahrenheit to Rankine.
 inline constexpr double kFahrenheitToRankineOffset = 459.67;
@@ -166,5 +216,50 @@ inline constexpr double kMMBtuToBtu = 1'000'000.0;
  * @details Use this to convert a mass density from lb/ft^3 to kg/m^3.
  */
 inline constexpr double kLbPerFt3ToKgPerM3 = 16.018463;
+
+
+/**
+ * @brief BTU per ton of refrigeration @unitb{Btu/Ton}
+ * @details Used for refrigeration capacity calculations. Source: ASHRAE Handbook.
+ */
+constexpr double kBtuPerTonRefrigeration = 12000.0;
+
+/**
+ * @brief Converts power from MMBtu/hr to kW.
+ * @details 1 MMBtu/hr = 293.07107 kW.
+ *
+ * @par Relation
+ * @formula{mmbtu-per-hr-to-kw; P_\mathrm{kW} = P_\mathrm{MMBtu/hr} \times 293.07107}
+ *
+ * @par Symbols
+ * @symtable
+ * @symrow{P_\mathrm{kW}; Power in kilowatts; \kilo\watt}
+ * @symrow{P_\mathrm{MMBtu/hr}; Power in MMBtu/hr; \mega\btu\per\hour}
+ * @endsymtable
+ *
+ * @param[in] mmbtu_per_hr Power in MMBtu/hr @unitb{\mega\btu\per\hour}
+ * @return Power in kilowatts (kW) @unitb{\kilo\watt}
+ */
+constexpr double mmbtuPerHrToKW(double mmbtu_per_hr) { return mmbtu_per_hr * 293.07107; }
+
+/**
+ * @brief Converts power from kW to MMBtu/hr.
+ * @details 1 kW = 0.003412142 MMBtu/hr.
+ *
+ * @par Relation
+ * @formula{kw-to-mmbtu-per-hr; P_\mathrm{MMBtu/hr} = P_\mathrm{kW} \times 0.003412142}
+ *
+ * @par Symbols
+ * @symtable
+ * @symrow{P_\mathrm{MMBtu/hr}; Power in MMBtu/hr; \mega\btu\per\hour}
+ * @symrow{P_\mathrm{kW}; Power in kilowatts; \kilo\watt}
+ * @endsymtable
+ *
+ * @param[in] kw Power in kilowatts (kW) @unitb{\kilo\watt}
+ * @return Power in MMBtu/hr @unitb{\mega\btu\per\hour}
+ */
+constexpr double kWToMMBtuPerHr(double kw) { return kw * 0.003412142; }
+
+
 
 } // namespace physics::conversions

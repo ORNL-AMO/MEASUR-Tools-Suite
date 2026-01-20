@@ -1,0 +1,201 @@
+/**
+ * @defgroup o2_enrichment_calculator O2 Enrichment Calculator
+ * @ingroup process_heat_calculators
+ * @brief Calculates fuel consumption and savings from oxygen enrichment in fuel-fired furnaces.
+ * @details This calculator estimates the benefit of enriching combustion air with oxygen to improve combustion efficiency and reduce fuel consumption. The calculation uses combustion air properties, flue gas temperatures, oxygen concentrations, and fuel consumption data. The method is based on standard industrial practice for oxygen enrichment in process heating systems.
+ *
+ * The calculation follows a top-down approach:
+ * 1. **Excess Air** - Calculate excess air from oxygen concentration in flue gas
+ * 2. **Heat Input** - Determine heat input based on flue gas temperature
+ * 3. **Air Specific Heat** - Calculate specific heat of combustion air based on preheat temperature
+ * 4. **Air Correction** - Compute correction factor for excess air heat losses
+ * 5. **Combustion Air Correction** - Calculate correction factor for combustion air preheat
+ * 6. **Standard Available Heat** - Determine standard available heat from heat input and corrections
+ * 7. **Available Heat** - Calculate available heat accounting for oxygen enrichment effects
+ * 8. **Fuel Consumption with O2 Enrichment** - Compute fuel consumption with oxygen enrichment
+ * 9. **Fuel Savings with O2 Enrichment** - Determine fuel savings as a percentage
+ *
+ * Relevant formulas and symbol definitions are documented below.
+ *
+ * @heading{Excess Air}
+ * @copydoc o2_enrichment_excess_air_formula
+ *
+ * @heading{Heat Input}
+ * @copydoc o2_enrichment_heat_input_formula
+ *
+ * @heading{Air Specific Heat}
+ * @copydoc o2_enrichment_air_specific_heat_formula
+ *
+ * @heading{Air Correction}
+ * @copydoc o2_enrichment_air_correction_formula
+ *
+ * @heading{Combustion Air Correction}
+ * @copydoc o2_enrichment_combustion_air_correction_formula
+ *
+ * @heading{Standard Available Heat}
+ * @copydoc o2_enrichment_standard_available_heat_formula
+ *
+ * @heading{Available Heat}
+ * @copydoc o2_enrichment_available_heat_formula
+ *
+ * @heading{Fuel Consumption with O2 Enrichment}
+ * @copydoc o2_enrichment_fuel_consumption_formula
+ *
+ * @heading{Fuel Savings with O2 Enrichment}
+ * @copydoc o2_enrichment_fuel_savings_formula
+ */
+
+/**
+ * @defgroup o2_enrichment_excess_air_formula Excess Air Formula
+ * @ingroup o2_enrichment_calculator
+ *
+ * @copydoc process_heat_excess_air_formula_doc
+ *
+ * @par Implementation
+ * See @ref process_heat_excess_air_formula for the complete formula, symbol definitions, and implementation details.
+ *
+ */
+
+/**
+ * @defgroup o2_enrichment_heat_input_formula Heat Input Formula
+ * @ingroup o2_enrichment_calculator
+ * @brief Heat input calculated based on flue gas temperature.
+ * @details The heat input is estimated from the flue gas temperature using an empirical linear relationship. Higher flue gas temperatures indicate greater heat losses, resulting in lower available heat for the process. The relationship is based on typical industrial furnace operating conditions.
+ *
+ * @formula{o2-enrichment-heat-input; Q_{in} = 95 - 0.025 \cdot T_{flue}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{in}; Heat input; \percent}
+ * @symrow{T_{flue}; Flue gas temperature; \degreeFahrenheit}
+ * @symrow{95; Heat input intercept constant; \percent}
+ * @symrow{0.025; Heat input slope constant; \percent\per\degreeFahrenheit}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup o2_enrichment_air_specific_heat_formula Air Specific Heat Formula
+ * @ingroup o2_enrichment_calculator
+ * @brief Specific heat of combustion air calculated based on preheat temperature.
+ * @details The specific heat of air varies with temperature according to an empirical linear relationship. This accounts for the temperature-dependent thermodynamic properties of air. The base specific heat and temperature coefficient are referenced from @ref physics::us::kSpecificHeatAirBase and @ref physics::us::kSpecificHeatAirCoeff.
+ *
+ * @formula{o2-enrichment-air-specific-heat; C_{p,air} = C_{p,base} + k_{temp} \cdot T_{air}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{C_{p,air}; Air specific heat; \btu\per\pound\per\degreeFahrenheit}
+ * @symrow{C_{p,base}; Base specific heat of air (0.017828518) - see @ref physics::us::kSpecificHeatAirBase; \btu\per\pound\per\degreeFahrenheit}
+ * @symrow{k_{temp}; Temperature coefficient (0.000002556) - see @ref physics::us::kSpecificHeatAirCoeff; \btu\per\pound\per\degreeFahrenheit\per\degreeFahrenheit}
+ * @symrow{T_{air}; Combustion air preheat temperature; \degreeFahrenheit}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup o2_enrichment_air_correction_formula Air Correction Formula
+ * @ingroup o2_enrichment_calculator
+ * @brief Correction factor for excess air heat losses.
+ * @details The air correction accounts for heat losses due to excess air being heated and discharged with the flue gas. The correction is proportional to the excess air fraction, flue gas temperature, and air specific heat. The base constant is referenced from @ref physics::us::kAirCorrectionBase.
+ *
+ * @formula{o2-enrichment-air-correction; AC = -(k_{base} + C_{p,air} \cdot T_{flue}) \cdot EA}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{AC; Air correction; \percent}
+ * @symrow{k_{base}; Air correction base constant (-1.078913827) - see @ref physics::us::kAirCorrectionBase; \btu\per\pound}
+ * @symrow{C_{p,air}; Air specific heat; \btu\per\pound\per\degreeFahrenheit}
+ * @symrow{T_{flue}; Flue gas temperature; \degreeFahrenheit}
+ * @symrow{EA; Excess air; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup o2_enrichment_combustion_air_correction_formula Combustion Air Correction Formula
+ * @ingroup o2_enrichment_calculator
+ * @brief Correction factor for combustion air preheat.
+ * @details The combustion air correction accounts for the heat credit from preheating combustion air. Higher preheat temperatures reduce fuel consumption by providing sensible heat to the combustion process. The correction is applied to both stoichiometric and excess air. The base constant is the same as the air correction base.
+ *
+ * @formula{o2-enrichment-combustion-air-correction; CAC = (k_{base} + C_{p,air} \cdot T_{air}) \cdot (1 + EA)}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{CAC; Combustion air correction; \percent}
+ * @symrow{k_{base}; Combustion air correction base constant (-1.078913827); \btu\per\pound}
+ * @symrow{C_{p,air}; Air specific heat; \btu\per\pound\per\degreeFahrenheit}
+ * @symrow{T_{air}; Combustion air preheat temperature; \degreeFahrenheit}
+ * @symrow{EA; Excess air; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup o2_enrichment_standard_available_heat_formula Standard Available Heat Formula
+ * @ingroup o2_enrichment_calculator
+ * @brief Standard available heat from heat input and correction factors.
+ * @details The standard available heat represents the net heat available for the process after accounting for flue gas losses and combustion air preheat. It is the sum of the heat input, air correction (negative for losses), and combustion air correction (positive for preheat credit).
+ *
+ * @formula{o2-enrichment-standard-available-heat; AH_{std} = Q_{in} + AC + CAC}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{AH_{std}; Standard available heat; \percent}
+ * @symrow{Q_{in}; Heat input; \percent}
+ * @symrow{AC; Air correction; \percent}
+ * @symrow{CAC; Combustion air correction; \percent}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup o2_enrichment_available_heat_formula Available Heat Formula
+ * @ingroup o2_enrichment_calculator
+ * @brief Available heat accounting for oxygen enrichment effects.
+ * @details The available heat is adjusted from the standard available heat to account for the benefits of oxygen enrichment. Enriching the combustion air with oxygen reduces the nitrogen content, which decreases sensible heat losses in the flue gas. The correction is proportional to the oxygen enrichment level, flue gas temperature, and the difference from ambient conditions.
+ *
+ * @formula{o2-enrichment-available-heat; AH = AH_{std} + 100 \cdot k_O \cdot \frac{O_{2,air} - 0.21}{O_{2,air}} \cdot 0.02 \cdot \frac{T_{flue} - 60}{980}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{AH; Available heat with enrichment; \percent}
+ * @symrow{AH_{std}; Standard available heat; \percent}
+ * @symrow{k_O; Oxygen enrichment factor (9.38); \unitless}
+ * @symrow{O_{2,air}; Oxygen in combustion air; \unitless}
+ * @symrow{0.21; Reference oxygen fraction in air; \unitless}
+ * @symrow{0.02; Available heat fraction factor; \unitless}
+ * @symrow{T_{flue}; Flue gas temperature; \degreeFahrenheit}
+ * @symrow{60; Ambient reference temperature; \degreeFahrenheit}
+ * @symrow{980; Available heat temperature divisor; \degreeFahrenheit}
+ * @symrow{100; Conversion factor to percentage; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup o2_enrichment_fuel_consumption_formula Fuel Consumption with O2 Enrichment Formula
+ * @ingroup o2_enrichment_calculator
+ * @brief Fuel consumption with oxygen enrichment.
+ * @details The fuel consumption with oxygen enrichment is calculated by adjusting the baseline fuel consumption based on the ratio of standard available heat to the available heat with enrichment. As the available heat increases with enrichment, less fuel is required to deliver the same process heat.
+ *
+ * @formula{o2-enrichment-fuel-consumption; FC_{enriched} = FC_{base} \cdot \frac{AH_{std}}{AH_{enriched}}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{FC_{enriched}; Fuel consumption with O2 enrichment; \mega\btu\per\hour}
+ * @symrow{FC_{base}; Baseline fuel consumption; \mega\btu\per\hour}
+ * @symrow{AH_{std}; Standard available heat (baseline); \percent}
+ * @symrow{AH_{enriched}; Available heat with O2 enrichment; \percent}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup o2_enrichment_fuel_savings_formula Fuel Savings with O2 Enrichment Formula
+ * @ingroup o2_enrichment_calculator
+ * @brief Fuel savings with oxygen enrichment as a percentage.
+ * @details The fuel savings represents the percentage reduction in fuel consumption achieved through oxygen enrichment. It is calculated as the difference between baseline and enriched fuel consumption divided by the baseline, expressed as a percentage.
+ *
+ * @formula{o2-enrichment-fuel-savings; FS = \frac{FC_{base} - FC_{enriched}}{FC_{base}} \cdot 100}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{FS; Fuel savings with O2 enrichment; \percent}
+ * @symrow{FC_{base}; Baseline fuel consumption; \mega\btu\per\hour}
+ * @symrow{FC_{enriched}; Fuel consumption with O2 enrichment; \mega\btu\per\hour}
+ * @symrow{100; Conversion factor to percentage; \unitless}
+ * @endsymtable
+ */
