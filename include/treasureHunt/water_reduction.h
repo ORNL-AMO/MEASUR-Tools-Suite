@@ -123,7 +123,7 @@ WaterReductionOutput bucketReduction(const BucketMethodData& data, int operating
 /**
  * @brief Calculates water use and cost for the "other" method.
  * @param[in] data WaterOtherMethodData struct with annual water consumption in gallons per year (gal/year).
- * @param[in] operating_hours Annual operating hours (unitless - not used in this method).
+ * @param[in] operating_hours Annual operating hours, hours per year (hours/year). Not used in this calculation method.
  * @param[in] water_cost Cost of water, dollars per gallon ($/gal).
  * @return WaterReductionOutput struct with calculated annual water use (gal/year) and cost ($/year).
  */
