@@ -20,7 +20,7 @@ namespace water_reduction {
  * @brief Input data for the metered flow method.
  */
 struct MeteredFlowMethodData {
-    double meter_reading = 0.0; ///< Meter reading value
+    double meter_reading = 0.0; ///< Meter reading value, gallons per minute (gal/min)
 };
 
 /**
@@ -28,9 +28,9 @@ struct MeteredFlowMethodData {
  * @brief Input data for the volume meter method.
  */
 struct VolumeMeterMethodData {
-    double final_meter_reading = 0.0;
-    double initial_meter_reading = 0.0;
-    double elapsed_time = 0.0;
+    double final_meter_reading = 0.0; ///< Final meter reading, gallons (gal)
+    double initial_meter_reading = 0.0; ///< Initial meter reading, gallons (gal)
+    double elapsed_time = 0.0; ///< Elapsed time between readings, minutes (min)
 };
 
 /**
@@ -38,8 +38,8 @@ struct VolumeMeterMethodData {
  * @brief Input data for the bucket method.
  */
 struct BucketMethodData {
-    double bucket_volume = 0.0;
-    double bucket_fill_time = 0.0;
+    double bucket_volume = 0.0; ///< Volume of bucket, gallons (gal)
+    double bucket_fill_time = 0.0; ///< Time to fill bucket, seconds (s)
 };
 
 /**
@@ -47,7 +47,7 @@ struct BucketMethodData {
  * @brief Input data for the "other" method.
  */
 struct WaterOtherMethodData {
-    double consumption = 0.0;
+    double consumption = 0.0; ///< Annual water consumption, gallons per year (gal/year)
 };
 
 /**
@@ -66,13 +66,13 @@ enum class WaterReductionMeasurementMethod {
  * @brief Input data for a single water reduction measure.
  */
 struct WaterReductionInput {
-    int operating_hours = 0;
-    double water_cost = 0.0;
-    WaterReductionMeasurementMethod measurement_method = WaterReductionMeasurementMethod::Metered;
-    MeteredFlowMethodData metered_flow_method_data;
-    VolumeMeterMethodData volume_meter_method_data;
-    BucketMethodData bucket_method_data;
-    WaterOtherMethodData other_method_data;
+    int operating_hours = 0; ///< Annual operating hours, hours per year (hours/year)
+    double water_cost = 0.0; ///< Cost of water, dollars per gallon ($/gal)
+    WaterReductionMeasurementMethod measurement_method = WaterReductionMeasurementMethod::Metered; ///< Selected measurement method
+    MeteredFlowMethodData metered_flow_method_data; ///< Data for metered flow method
+    VolumeMeterMethodData volume_meter_method_data; ///< Data for volume meter method
+    BucketMethodData bucket_method_data; ///< Data for bucket method
+    WaterOtherMethodData other_method_data; ///< Data for other method
 };
 
 /**
@@ -80,52 +80,52 @@ struct WaterReductionInput {
  * @brief Output data for water reduction calculation.
  */
 struct WaterReductionOutput {
-    double water_use = 0.0;
-    double water_cost = 0.0;
+    double water_use = 0.0; ///< Annual water use or savings, gallons per year (gal/year)
+    double water_cost = 0.0; ///< Annual water cost or savings, dollars per year ($/year)
 };
 
 /**
  * @ingroup water_reduction
  * @brief Calculates water use and cost savings for a set of water reduction measures.
- * @param[in] input_vec Vector of WaterReductionInput structs.
- * @return WaterReductionOutput struct with calculated results.
+ * @param[in] input_vec Vector of WaterReductionInput structs containing measurement data for each water reduction measure.
+ * @return WaterReductionOutput struct with calculated annual water use (gal/year) and cost ($/year).
  */
 WaterReductionOutput waterReduction(const std::vector<WaterReductionInput>& input_vec);
 
 
 /**
  * @brief Calculates water use and cost for the metered flow method.
- * @param[in] data MeteredFlowMethodData struct with input values.
- * @param[in] operating_hours Number of operating hours.
- * @param[in] water_cost Cost per unit of water.
- * @return WaterReductionOutput struct with calculated water use and cost.
+ * @param[in] data MeteredFlowMethodData struct with meter reading in gallons per minute (gal/min).
+ * @param[in] operating_hours Annual operating hours, hours per year (hours/year).
+ * @param[in] water_cost Cost of water, dollars per gallon ($/gal).
+ * @return WaterReductionOutput struct with calculated annual water use (gal/year) and cost ($/year).
  */
 WaterReductionOutput meteredFlowReduction(const MeteredFlowMethodData& data, int operating_hours, double water_cost);
 
 /**
  * @brief Calculates water use and cost for the volume meter method.
- * @param[in] data VolumeMeterMethodData struct with input values.
- * @param[in] operating_hours Number of operating hours.
- * @param[in] water_cost Cost per unit of water.
- * @return WaterReductionOutput struct with calculated water use and cost.
+ * @param[in] data VolumeMeterMethodData struct with initial and final meter readings in gallons (gal) and elapsed time in minutes (min).
+ * @param[in] operating_hours Annual operating hours, hours per year (hours/year).
+ * @param[in] water_cost Cost of water, dollars per gallon ($/gal).
+ * @return WaterReductionOutput struct with calculated annual water use (gal/year) and cost ($/year).
  */
 WaterReductionOutput volumeMeterReduction(const VolumeMeterMethodData& data, int operating_hours, double water_cost);
 
 /**
  * @brief Calculates water use and cost for the bucket method.
- * @param[in] data BucketMethodData struct with input values.
- * @param[in] operating_hours Number of operating hours.
- * @param[in] water_cost Cost per unit of water.
- * @return WaterReductionOutput struct with calculated water use and cost.
+ * @param[in] data BucketMethodData struct with bucket volume in gallons (gal) and fill time in seconds (s).
+ * @param[in] operating_hours Annual operating hours, hours per year (hours/year).
+ * @param[in] water_cost Cost of water, dollars per gallon ($/gal).
+ * @return WaterReductionOutput struct with calculated annual water use (gal/year) and cost ($/year).
  */
 WaterReductionOutput bucketReduction(const BucketMethodData& data, int operating_hours, double water_cost);
 
 /**
  * @brief Calculates water use and cost for the "other" method.
- * @param[in] data WaterOtherMethodData struct with input values.
- * @param[in] operating_hours Number of operating hours.
- * @param[in] water_cost Cost per unit of water.
- * @return WaterReductionOutput struct with calculated water use and cost.
+ * @param[in] data WaterOtherMethodData struct with annual water consumption in gallons per year (gal/year).
+ * @param[in] operating_hours Annual operating hours (unitless - not used in this method).
+ * @param[in] water_cost Cost of water, dollars per gallon ($/gal).
+ * @return WaterReductionOutput struct with calculated annual water use (gal/year) and cost ($/year).
  */
 WaterReductionOutput otherReduction(const WaterOtherMethodData& data, int operating_hours, double water_cost);
 
