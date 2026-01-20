@@ -114,15 +114,9 @@
  * @formula{pheic-combustion-air-correction; CAC = \left(CA_B + C_{p,air} \cdot T_{CA}\right) \cdot \left(1 + \frac{EA}{100}\right)}
  *
  * @symtable
-<<<<<<< Updated upstream
- *   @symrow{CAC; Combustion air correction; \btu}
- *   @symrow{CA_B; Combustion air correction base (-1.078913827); \btu}
- *   @symrow{C_{p,air}; Air specific heat; \btu\per\pound\per\degreeFahrenheit}
-=======
  *   @symrow{CAC; Combustion air correction; \percent}
  *   @symrow{CA_B; Combustion air correction base (-1.078913827); \unitless}
  *   @symrow{C_{p,air}; Air specific heat; \btu\per\pound\degreeFahrenheit}
->>>>>>> Stashed changes
  *   @symrow{T_{CA}; Combustion air temperature; \degreeFahrenheit}
  *   @symrow{EA; Excess air; \percent}
  * @endsymtable
