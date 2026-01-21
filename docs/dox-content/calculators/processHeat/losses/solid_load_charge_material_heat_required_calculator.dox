@@ -1,0 +1,170 @@
+/**
+ * @defgroup solid_load_charge_material_heat_required_calculator Solid Load Charge Material Heat Required Calculator
+ * @ingroup heat_loss_calculators
+ * @brief Calculates total heat required for a solid load/charge material.
+ * @details The following formulas describe the calculation of total heat required for a solid load/charge material, 
+ * including sensible heat, latent heat, vaporization, reaction heat, and additional heat. Each step is documented 
+ * with its own formula and symbol table.
+ *
+ * The calculation follows a top-down approach:
+ * 1. **Total Heat Required** - Sum of moisture removal, solid heating, reaction heat, and additional heat
+ * 2. **Moisture Removal** - Heat to evaporate water content (varies based on discharge temperature)
+ *    - Below boiling: Sensible heat only
+ *    - Above boiling: Sensible heat to boiling + latent heat + sensible heat of vapor
+ * 3. **Solid Heating** - Heat to raise temperature of dry solid (varies based on melting)
+ *    - Below melting: Sensible heat only
+ *    - Above melting: Sensible heat to melting + latent heat + sensible heat of liquid/remaining solid
+ * 4. **Heat of Reaction** - Endothermic reaction heat if applicable
+ *
+ * @heading{Total Heat Required}
+ * @copydoc solid_load_charge_material_total_heat_required_cpp_formula
+ *
+ * @heading{Moisture Removal (Below boiling point)}
+ * @copydoc solid_load_charge_material_moisture_removal_cpp_formula
+ *
+ * @heading{Moisture Removal (Above boiling point)}
+ * @copydoc solid_load_charge_material_moisture_removal_above_boiling_cpp_formula
+ *
+ * @heading{Heat for Remaining Moisture}
+ * @copydoc solid_load_charge_material_remaining_moisture_cpp_formula
+ *
+ * @heading{Solid Heating (Below melting point)}
+ * @copydoc solid_load_charge_material_sensible_heat_cpp_formula
+ *
+ * @heading{Solid Heating (Above melting point)}
+ * @copydoc solid_load_charge_material_full_heat_cpp_formula
+ *
+ * @heading{Heat of Reaction}
+ * @copydoc solid_load_charge_material_heat_of_reaction_cpp_formula
+ *
+ * @see solid_load_charge_material_data_database
+ * @see physics::us::kWaterBoilingPointF for water boiling point
+ * @see physics::us::kWaterEvaporation for latent heat of evaporation
+ * @see physics::us::kSpecificHeatWaterVapor for water vapor specific heat
+ */
+/**
+ * @defgroup solid_load_charge_material_total_heat_required_cpp_formula Total Heat Required Formula
+ * @ingroup solid_load_charge_material_heat_required_calculator
+ * @formula{solid-load-charge-material-total-heat-required-cpp; Q_{total} = Q_{moisture} + Q_{solid} + Q_{reaction} + Q_{additional}}
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{total}; Total heat required; \btu\per\hour}
+ * @symrow{Q_{moisture}; Heat required for moisture removal; \btu\per\hour}
+ * @symrow{Q_{solid}; Heat required for solid heating/melting; \btu\per\hour}
+ * @symrow{Q_{reaction}; Heat of reaction; \btu\per\hour}
+ * @symrow{Q_{additional}; Additional heat required; \btu\per\hour}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup solid_load_charge_material_moisture_removal_cpp_formula Moisture Removal (Below boiling point) Formula
+ * @ingroup solid_load_charge_material_heat_required_calculator
+ * @details The total heat required when water vapor discharge temperature is below boiling point.
+ * @formula{solid-load-charge-material-moisture-removal-cpp; Q_{moisture} = m_{feed} \cdot f_{charged} \cdot (T_{vapor,discharge} - T_{initial})}
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{moisture}; Heat required for moisture removal; \btu\per\hour}
+ * @symrow{m_{feed}; Charge feed rate; \pound\per\hour}
+ * @symrow{f_{charged}; Fraction of water charged; \unitless}
+ * @symrow{T_{vapor,discharge}; Water vapor discharge temperature; \degreeFahrenheit}
+ * @symrow{T_{initial}; Initial temperature; \degreeFahrenheit}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup solid_load_charge_material_moisture_removal_above_boiling_cpp_formula Moisture Removal (Above boiling point) Formula
+ * @ingroup solid_load_charge_material_heat_required_calculator
+ * @details The total heat required when water vapor discharge temperature is above boiling point.
+ * @formula{solid-load-charge-material-moisture-removal-above-boiling-cpp; Q_{moisture} = Q_{sens,boil} + Q_{vap} + Q_{sens,vapor}}
+ * @formula{solid-load-charge-material-sensible-heat-to-boiling-cpp; Q_{sens,boil} = m_{feed} \cdot f_{charged} \cdot (T_{boil} - T_{initial})}
+ * @formula{solid-load-charge-material-vaporization-heat-cpp; Q_{vap} = m_{feed} \cdot (f_{charged} - f_{discharged}) \cdot H_{evap}}
+ * @formula{solid-load-charge-material-sensible-heat-vapor-cpp; Q_{sens,vapor} = m_{feed} \cdot (f_{charged} - f_{discharged}) \cdot C_{p,vapor} \cdot (T_{vapor,discharge} - T_{boil})}
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{moisture}; Heat required for moisture removal; \btu\per\hour}
+ * @symrow{Q_{sens,boil}; Sensible heat to boiling point; \btu\per\hour}
+ * @symrow{Q_{vap}; Vaporization heat; \btu\per\hour}
+ * @symrow{Q_{sens,vapor}; Sensible heat for vapor above boiling; \btu\per\hour}
+ * @symrow{m_{feed}; Charge feed rate; \pound\per\hour}
+ * @symrow{f_{charged}; Fraction of water charged; \unitless}
+ * @symrow{f_{discharged}; Fraction of water discharged; \unitless}
+ * @symrow{H_{evap}; Latent heat of evaporation; \btu\per\pound}
+ * @symrow{C_{p,vapor}; Specific heat of water vapor; \btu\per\pound\degreeFahrenheit}
+ * @symrow{T_{vapor,discharge}; Water vapor discharge temperature; \degreeFahrenheit}
+ * @symrow{T_{boil}; Boiling point of water; \degreeFahrenheit}
+ * @symrow{T_{initial}; Initial temperature; \degreeFahrenheit}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup solid_load_charge_material_remaining_moisture_cpp_formula Heat for Remaining Moisture Formula
+ * @ingroup solid_load_charge_material_heat_required_calculator
+ * @details Heat required for moisture remaining in the solid after discharge.
+ * @formula{solid-load-charge-material-remaining-moisture-cpp; Q_{moisture,rem} = m_{feed} \cdot f_{discharged} \cdot (T_{vapor,discharge} - T_{boil})}
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{moisture,rem}; Heat for remaining moisture; \btu\per\hour}
+ * @symrow{m_{feed}; Charge feed rate; \pound\per\hour}
+ * @symrow{f_{discharged}; Fraction of water discharged; \unitless}
+ * @symrow{T_{vapor,discharge}; Water vapor discharge temperature; \degreeFahrenheit}
+* @symrow{T_{boil}; Boiling point; \degreeFahrenheit}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup solid_load_charge_material_sensible_heat_cpp_formula Solid Heating (Below melting point) Formula
+ * @ingroup solid_load_charge_material_heat_required_calculator
+ * @details The total heat required when discharge temperature is below melting point.
+ * @formula{solid-load-charge-material-sensible-heat-cpp; Q_{solid} = m_{feed} \cdot (1 - f_{charged}) \cdot C_{p,solid} \cdot (T_{discharge} - T_{initial})}
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{solid}; Heat required for solid heating; \btu\per\hour}
+ * @symrow{m_{feed}; Charge feed rate; \pound\per\hour}
+ * @symrow{f_{charged}; Fraction of water charged; \unitless}
+ * @symrow{C_{p,solid}; Specific heat of solid; \btu\per\pound\degreeFahrenheit}
+ * @symrow{T_{discharge}; Discharge temperature; \degreeFahrenheit}
+ * @symrow{T_{initial}; Initial temperature; \degreeFahrenheit}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup solid_load_charge_material_full_heat_cpp_formula Solid Heating (Above melting point) Formula
+ * @ingroup solid_load_charge_material_heat_required_calculator
+ * @details The total heat required when discharge temperature is above melting point.
+ * @formula{solid-load-charge-material-full-heat-cpp; Q_{solid} = Q_{sens,solid} + Q_{melt} + Q_{sens,liquid} + Q_{sens,remaining}}
+ * @formula{solid-load-charge-material-sensible-heat-to-melting-cpp; Q_{sens,solid} = m_{feed} \cdot (1 - f_{charged}) \cdot C_{p,solid} \cdot (T_{melt} - T_{initial})}
+ * @formula{solid-load-charge-material-melting-heat-cpp; Q_{melt} = m_{feed} \cdot (1 - f_{charged}) \cdot f_{melted} \cdot H_{latent}}
+ * @formula{solid-load-charge-material-sensible-heat-liquid-cpp; Q_{sens,liquid} = m_{feed} \cdot (1 - f_{charged}) \cdot f_{melted} \cdot C_{p,liquid} \cdot (T_{discharge} - T_{melt})}
+ * @formula{solid-load-charge-material-sensible-heat-remaining-cpp; Q_{sens,remaining} = m_{feed} \cdot (1 - f_{charged}) \cdot (1 - f_{melted}) \cdot C_{p,solid} \cdot (T_{discharge} - T_{melt})}
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{solid}; Heat required for solid heating/melting; \btu\per\hour}
+ * @symrow{Q_{sens,solid}; Sensible heat to melting point; \btu\per\hour}
+ * @symrow{Q_{melt}; Melting heat; \btu\per\hour}
+ * @symrow{Q_{sens,liquid}; Sensible heat for melted fraction; \btu\per\hour}
+ * @symrow{m_{feed}; Charge feed rate; \pound\per\hour}
+ * @symrow{f_{melted}; Fraction of charge melted; \unitless}
+ * @symrow{C_{p,solid}; Specific heat of solid; \btu\per\pound\degreeFahrenheit}
+ * @symrow{C_{p,liquid}; Specific heat of liquid; \btu\per\pound\degreeFahrenheit}
+ * @symrow{H_{latent}; Latent heat of melting; \btu\per\pound}
+ * @symrow{T_{discharge}; Discharge temperature; \degreeFahrenheit}
+ * @symrow{T_{melt}; Melting point; \degreeFahrenheit}
+ * @symrow{T_{initial}; Initial temperature; \degreeFahrenheit}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup solid_load_charge_material_heat_of_reaction_cpp_formula Heat of Reaction Formula
+ * @ingroup solid_load_charge_material_heat_required_calculator
+ * @details Heat required for endothermic reaction.
+ * @formula{solid-load-charge-material-heat-of-reaction-cpp; Q_{reaction} = m_{feed} \cdot (1 - f_{charged}) \cdot f_{reacted} \cdot H_{reaction}}
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{reaction}; Heat of reaction; \btu\per\hour}
+ * @symrow{m_{feed}; Charge feed rate; \pound\per\hour}
+ * @symrow{f_{charged}; Fraction of water charged; \unitless}
+ * @symrow{(1 - f_{charged}); Fraction of dry charge; \unitless}
+ * @symrow{f_{reacted}; Fraction of dry charge reacted; \unitless}
+ * @symrow{H_{reaction}; Heat of reaction; \btu\per\pound}
+ * @endsymtable
+ */

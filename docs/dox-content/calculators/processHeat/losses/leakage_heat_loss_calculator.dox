@@ -1,0 +1,118 @@
+/**
+ * @defgroup leakage_heat_loss_calculator Leakage Heat Loss Calculator
+ * @ingroup heat_loss_calculators
+ * @brief Calculates heat losses from hot gas leakage in process heating equipment.
+ * @details This calculator estimates the heat loss due to hot gases escaping from a furnace through openings 
+ * other than the flue, under positive pressure conditions. The calculation uses furnace draft pressure, opening area, 
+ * gas and ambient temperatures, a coefficient of discharge, specific gravity, and a correction factor. The method is 
+ * based on standard industrial practice and is suitable for furnaces operating at positive pressure.
+ *
+ * The calculation follows a top-down approach:
+ * 1. **Total Heat Loss** - Calculate heat carried away by leaking gases
+ * 2. **Standard Cubic Feet per Hour (SCFH)** - Convert actual flow to standard conditions
+ * 3. **Cubic Feet per Hour (CFH)** - Calculate leakage flow rate from pressure and opening area
+ * 4. **Specific Heat** - Compute temperature-dependent specific heat of gas
+ *
+ * Relevant formulas and symbol definitions are documented below.
+ *
+ * @heading{Total Leakage Heat Loss}
+ * @copydoc leakage_heat_loss_formula
+ *
+ * @heading{Standard Cubic Feet per Hour}
+ * @copydoc leakage_scfh_formula
+ *
+ * @heading{Cubic Feet per Hour}
+ * @copydoc leakage_cfh_formula
+ *
+ * @heading{Specific Heat Calculations}
+ * @copydoc leakage_specific_heat_formulas
+ */
+
+/**
+ * @defgroup leakage_heat_loss_formula Leakage Heat Loss Formula
+ * @ingroup leakage_heat_loss_calculator
+ * @brief Total heat loss due to hot gas leakage.
+ * @details The heat loss is calculated by multiplying the specific heat at average temperature, the leakage flow rate 
+ * at standard conditions, and the temperature difference between leaking gas and ambient.
+ * 
+ * @formula{leakage-heat-loss; Q = c_{psv} \cdot \text{SCFH} \cdot (T_{\text{leak}} - T_{\text{amb}})}
+ * 
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q; Heat loss; \btu\per\hour}
+ * @symrow{c_{psv}; Specific heat of gas at average temperature; \btu\per\cubicFoot\degreeFahrenheit}
+ * @symrow{\text{SCFH}; Standard cubic feet per hour of leakage; \cubicFoot\per\hour}
+ * @symrow{T_{\text{leak}}; Temperature of leaking gases; \degreeFahrenheit}
+ * @symrow{T_{\text{amb}}; Ambient temperature; \degreeFahrenheit}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup leakage_scfh_formula Standard Cubic Feet per Hour Formula
+ * @ingroup leakage_heat_loss_calculator
+ * @brief Conversion of actual flow rate to standard conditions.
+ * @details The standard cubic feet per hour is calculated by adjusting the actual volumetric flow rate for 
+ * temperature to obtain flow at standard conditions (60°F, 1 atm).
+ * 
+ * @formula{leakage-scfh; \text{SCFH} = \text{CFH} \cdot \sqrt{\frac{520}{460 + T_{\text{leak}}}}}
+ * 
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{\text{SCFH}; Standard cubic feet per hour of leakage; \cubicFoot\per\hour}
+ * @symrow{\text{CFH}; Volumetric flow rate of leakage; \cubicFoot\per\hour}
+ * @symrow{520; Standard gas temperature - see @ref physics::us::kStandardGasTemperatureR; \degreeRankine}
+ * @symrow{460; Fahrenheit to Rankine offset - see @ref physics::conversions::kFahrenheitToRankineOffset; \degreeRankine}
+ * @symrow{T_{\text{leak}}; Temperature of leaking gases; \degreeFahrenheit}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup leakage_cfh_formula Cubic Feet per Hour Formula
+ * @ingroup leakage_heat_loss_calculator
+ * @brief Leakage flow rate from opening area and pressure.
+ * @details The volumetric flow rate is calculated from the opening area, furnace draft pressure, specific gravity of gas, 
+ * coefficient of discharge, and correction factor using standard orifice flow equations.
+ * 
+ * @formula{leakage-cfh; \text{CFH} = 1655 \cdot C_{d} \cdot f_{\text{corr}} \cdot (A \cdot 144) \cdot \sqrt{\frac{P}{SG}}}
+ * 
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{\text{CFH}; Volumetric flow rate of leakage; \cubicFoot\per\hour}
+ * @symrow{1655; Flow constant for orifice equation; \unitless}
+ * @symrow{C_{d}; Coefficient of discharge or flow coefficient; \unitless}
+ * @symrow{f_{\text{corr}}; Correction factor; \unitless}
+ * @symrow{A; Opening area; \foot\squared}
+ * @symrow{144; Conversion factor (square feet to square inches); \inch\squared\per\foot\squared}
+ * @symrow{P; Furnace draft pressure; \inchWaterColumn}
+ * @symrow{SG; Specific gravity of gas; \unitless}
+ * @endsymtable
+ * 
+ * @note The coefficient of discharge depends on the angle of convergence in degrees. (Source: Eclipse Combustion Engineering Guide, 1986, Chapter 1, Page #6) [PDF link](https://www.mathscinotes.com/wp-content/uploads/2014/12/Eclipse-Engineering-Guide.pdf)
+ */
+
+/**
+ * @defgroup leakage_specific_heat_formulas Specific Heat Calculations
+ * @ingroup leakage_heat_loss_calculator
+ * @brief Temperature-dependent specific heat formulas.
+ * @details The specific heat of the gas varies with temperature and is calculated using polynomial correlations. 
+ * The specific heat per standard volume is derived from the mass-based specific heat.
+ * 
+ * @subheading{Specific Heat per Standard Volume}
+ * @formula{leakage-cpsv; c_{psv} = 0.0793 \cdot c_{pm}}
+ * 
+ * @subheading{Mass-Based Specific Heat}
+ * @formula{leakage-cpm; c_{pm} = 0.2371 - 9 \times 10^{-6} \cdot T_{\text{midpoint}} + 7 \times 10^{-8} \cdot T_{\text{midpoint}}^2 - 3 \times 10^{-11} \cdot T_{\text{midpoint}}^3}
+ * 
+ * @subheading{Midpoint Temperature}
+ * @formula{leakage-midpoint; T_{\text{midpoint}} = \frac{T_{\text{leak}} + T_{\text{amb}}}{2}}
+ * 
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{c_{psv}; Specific heat of gas at average temperature; \btu\per\cubicFoot\degreeFahrenheit}
+ * @symrow{c_{pm}; Specific heat of gas at midpoint temperature; \btu\per\pound\degreeFahrenheit}
+ * @symrow{T_{\text{midpoint}}; Midpoint temperature; \degreeFahrenheit}
+ * @symrow{T_{\text{leak}}; Temperature of leaking gases; \degreeFahrenheit}
+ * @symrow{T_{\text{amb}}; Ambient temperature; \degreeFahrenheit}
+ * @symrow{0.0793; Conversion factor from mass-based to volume-based specific heat; \unitless}
+ * @endsymtable
+ */

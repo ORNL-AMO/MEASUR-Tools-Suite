@@ -15,16 +15,19 @@
  * analysis alongside simple equipment and property calculators. Both the system assessment tools and the simple
  * calculators can be used as stand-alone tools for more focused analysis.
  *
+ * - @ref process_heating_assessments
+ *   - @ref heat_loss_calculators
+ *   - @ref process_heat_calculators
  * - @ref compressed_air_assessments
  * - @ref fan_system_assessments
  * - @ref process_cooling_assessments
- * - @ref process_heating_assessments
  * - @ref pumping_system_assessments
  * - @ref steam_system_assessments
  * - @ref water_assessments
  * - @ref waste_water_assessments
  * - @ref treasure_hunt_calculators
- * - @ref heat_loss_calculators
+ * - @ref databases
+ * - @ref physics
  *
  * @defgroup compressed_air_assessments Compressed Air Assessments
  *
@@ -57,8 +60,22 @@
  * energy-intensive equipment. This tool can be used to perform a heat balance that identifies major areas of energy use
  * under various operating conditions and test "what-if" scenarios for various options to reduce energy use.
  *
+ * @defgroup process_heat_calculators Process Heat Calculators
+ * @ingroup process_heating_assessments
+ *
+ * The Process Heat Calculators module provides a suite of tools for evaluating energy flows, heat recovery opportunities, and process optimization in furnaces, kilns, ovens, 
+ * and other process heating equipment. These calculators focus on modeling phenomena such as flue gas heat recovery, cascade heat exchange, and energy savings from process integration.
+ * Each calculator implements industry-standard algorithms and provides detailed documentation of formulas, units, and symbol definitions for transparency and reproducibility. 
+ * Calculators specifically for heat losses are documented separately in the Heat Loss Calculators section.
+ *
  * @defgroup heat_loss_calculators Heat Loss Calculators
  * @ingroup process_heating_assessments
+ *
+ * The heat loss calculators for process heating estimate energy losses from various components and operations in industrial heating systems. 
+ * These calculators help users quantify heat lost through fixtures, walls, exhaust gases, openings, liquid and gas load/charge materials, 
+ * and other sources. By modeling these losses, users can identify opportunities for energy savings, improve system efficiency, and optimize process conditions. 
+ * Each calculator is based on established engineering formulas and provides detailed documentation of calculation steps, required inputs, and physical principles.
+ * 
  *
  * @defgroup pumping_system_assessments Pumping System Assessments
  *
@@ -113,4 +130,18 @@
  * lighting systems. In addition, there are several general engineering calculators included to perform energy-related
  * calculations and conversions.
  *
+ * @defgroup databases Databases
+ *
+ * The MEASUR software utilizes default data to pre-populate many of its calculator fields. These databases include:
+ *   - Load charge materials (solids, liquids, gases)
+ *   - Flue gases and combustion properties
+ *   - Compressor inventory items
+ *   - Lighting fixture properties
+ *
+ * These curated datasets ensure that users have access to reliable, industry-standard values for common materials and equipment, streamlining the setup and analysis process for a wide range of calculators and assessment tools.
+ *
+ *
+ * @defgroup physics Physics
+ * 
+ * A collection physical constants, gas property models, and calculation utilities needed for accurate process heating, combustion, and energy analysis across the suite.
  */

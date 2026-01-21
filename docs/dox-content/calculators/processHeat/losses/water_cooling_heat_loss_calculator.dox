@@ -1,0 +1,64 @@
+/**
+ * @defgroup water_cooling_heat_loss_calculator Water Cooling Heat Loss Calculator
+ * @ingroup heat_loss_calculators
+ * @brief Calculates heat loss due to water cooling in process heating equipment.
+ * @details This calculator estimates the heat removed by water cooling systems, using flow rate, inlet and outlet 
+ * temperatures, and a correction factor. It accounts for water density variation with temperature and converts between 
+ * SI and U.S. Customary units as needed. The algorithm is suitable for modeling cooling losses in industrial furnaces, 
+ * ovens, and similar systems.
+ *
+ * The calculation follows a top-down approach:
+ * 1. **Total Heat Loss** - Calculate heat removed by water based on flow rate and temperature rise
+ * 2. **Water Density** - Compute temperature-dependent water density for accurate mass flow calculation
+ *
+ * @heading{Total Water Cooling Heat Loss}
+ * @copydoc water_cooling_heat_loss_formula
+ *
+ * @heading{Water Density Calculation}
+ * @copydoc water_density_formula
+ *
+ * @note For heat losses due to liquid cooling see @ref liquid_cooling_heat_loss_calculator or for gas cooling see @ref gas_cooling_heat_loss_calculator.
+ * @see Perry's Chemical Engineers' Handbook; NIST Engineering Statistics; Tanaka et al. (2001)
+ * @see physics::si::kWaterDensityBase for the base water density constant
+ * @see physics::conversions::kMinutesPerHour for time conversion
+ * @see physics::conversions::kKgPerM3ToLbPerGal for density unit conversion
+ */
+
+/**
+ * @defgroup water_cooling_heat_loss_formula Water Cooling Heat Loss Formula
+ * @ingroup water_cooling_heat_loss_calculator
+ * @brief Total heat loss due to water cooling.
+ * @details The heat loss is calculated by multiplying the water flow rate, water density, temperature rise, 
+ * and correction factor. Water density is temperature-dependent and calculated using the Tanaka correlation. 
+ * The factor of 60 converts from gallons per minute to gallons per hour.
+ * 
+ * @formula{water-cooling-heat-loss; Q_\text{cool} = FR \cdot 60 \cdot \rho_{w,lb/gal} \cdot \Delta T \cdot CF}
+ * 
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_\text{cool}; Water cooling heat loss; \btu\per\hour}
+ * @symrow{FR; Water flow rate; \gallon\per\minute}
+ * @symrow{60; Minutes per hour (GPM to GPH conversion) - see @ref physics::conversions::kMinutesPerHour; \unitless}
+ * @symrow{\rho_{w,lb/gal}; Water density; \pound\per\gallon}
+ * @symrow{\Delta T; Temperature rise (outlet - inlet); \degreeFahrenheit}
+ * @symrow{CF; Correction factor; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup water_density_formula Water Density Calculation Formula
+ * @ingroup water_cooling_heat_loss_calculator
+ * @brief Temperature-dependent water density calculation.
+ * @details This formula from Tanaka et al. (2001) calculates the density of water as a function of temperature. 
+ * The base density of 1000 kg/m³ (see @ref physics::si::kWaterDensityBase) is adjusted by a temperature-dependent 
+ * correction factor. The result is converted to lb/gal using @ref physics::conversions::kKgPerM3ToLbPerGal.
+ * 
+ * @formula{water-density-tanaka; \rho_w = 1000 \left[1 - \frac{(T_C + 288.9414)}{508929.2 (T_C + 68.12963)} (T_C - 3.9863)^2 \right]}
+ * 
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{\rho_w; Water density; \kilogram\per\meter\cubed}
+ * @symrow{T_C; Average water temperature; \degreeCelsius}
+ * @symrow{1000; Base water density - see @ref physics::si::kWaterDensityBase; \kilogram\per\meter\cubed}
+ * @endsymtable
+ */

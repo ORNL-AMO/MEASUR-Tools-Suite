@@ -1,0 +1,99 @@
+/**
+ * @defgroup liquid_load_charge_material_heat_required_calculator Liquid Load Charge Material Heat Required Calculator
+ * @ingroup heat_loss_calculators
+ * @brief Calculates total heat required for a liquid load/charge material.
+ * @details The following formulas describe the calculation of total heat required for a liquid load/charge material, 
+ * including sensible heat, latent heat, vaporization, reaction heat, and additional heat. Each step is documented 
+ * with its own formula and symbol table.
+ *
+ * The calculation follows a top-down approach:
+ * 1. **Total Heat Required** - Sum of liquid heating/vaporization, reaction heat, and additional heat
+ * 2. **Liquid Heating** - Heat required to raise temperature of liquid (varies based on vaporization)
+ *    - Below vaporizing temp: Sensible heat only
+ *    - Above vaporizing temp: Sensible heat to vaporizing + latent heat + sensible heat of vapor and remaining liquid
+ * 3. **Heat of Reaction** - Endothermic reaction heat if applicable
+ *
+ * @heading{Total Heat Required}
+ * @copydoc liquid_load_charge_material_total_heat_required_cpp_formula
+ *
+ * @heading{Sensible Heat (Below Vaporizing Temp)}
+ * @copydoc liquid_load_charge_material_sensible_heat_cpp_formula
+ *
+ * @heading{Full Heating (Above Vaporizing Temp)}
+ * @copydoc liquid_load_charge_material_full_heat_cpp_formula
+ *
+ * @heading{Heat of Reaction}
+ * @copydoc liquid_load_charge_material_heat_of_reaction_cpp_formula
+ *
+ * @see liquid_load_charge_material_data_database
+ */
+
+/**
+ * @defgroup liquid_load_charge_material_total_heat_required_cpp_formula Total Heat Required Formula
+ * @ingroup liquid_load_charge_material_heat_required_calculator
+ * @formula{liquid-load-charge-material-total-heat-required-cpp; Q_{total} = Q_{liq} + Q_{reaction} + Q_{additional}}
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{total}; Total heat required; \btu\per\hour}
+ * @symrow{Q_{liq}; Heat required for liquid heating/vaporization; \btu\per\hour}
+ * @symrow{Q_{reaction}; Heat of reaction; \btu\per\hour}
+ * @symrow{Q_{additional}; Additional heat required; \btu\per\hour}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup liquid_load_charge_material_sensible_heat_cpp_formula Sensible Heat (Below Vaporizing Temp) Formula
+ * @ingroup liquid_load_charge_material_heat_required_calculator
+ * @details The total heat required when discharge temperature is below vaporizing temperature.
+ * @formula{liquid-load-charge-material-sensible-heat-cpp; Q_{liq} = m_{feed} \cdot C_{p,liq} \cdot (T_{discharge} - T_{initial})}
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{liq}; Heat required for liquid heating; \btu\per\hour}
+ * @symrow{m_{feed}; Charge (liquid) feed rate; \pound\per\hour}
+ * @symrow{C_{p,liq}; Specific heat of liquid; \btu\per\pound\degreeFahrenheit}
+ * @symrow{T_{discharge}; Discharge temperature; \degreeFahrenheit}
+ * @symrow{T_{initial}; Initial temperature; \degreeFahrenheit}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup liquid_load_charge_material_full_heat_cpp_formula Full Heating (Above Vaporizing Temp) Formula
+ * @ingroup liquid_load_charge_material_heat_required_calculator
+ * @details The total heat required when discharge temperature is above vaporizing temperature.
+ *
+ *   @formula{liquid-load-charge-material-full-heat-cpp; Q_{liq} = Q_{sens,liq} + Q_{vap} + Q_{sens,vapor} + Q_{sens,remliq}}
+ *   @formula{liquid-load-charge-material-sensible-heat-to-vaporizing-cpp; Q_{sens,liq} = m_{feed} \cdot C_{p,liq} \cdot (T_{vaporizing} - T_{initial})}
+ *   @formula{liquid-load-charge-material-vaporization-heat-cpp; Q_{vap} = m_{feed} \cdot f_{vaporized} \cdot H_{latent}}
+ *   @formula{liquid-load-charge-material-sensible-heat-vapor-cpp; Q_{sens,vapor} = m_{feed} \cdot f_{vaporized} \cdot C_{p,vapor} \cdot (T_{discharge} - T_{vaporizing})}
+ *   @formula{liquid-load-charge-material-sensible-heat-remaining-liq-cpp; Q_{sens,remliq} = m_{feed} \cdot (1-f_{vaporized}) \cdot C_{p,liq} \cdot (T_{discharge} - T_{vaporizing})}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{liq}; Heat required for liquid heating/vaporization; \btu\per\hour}
+ * @symrow{Q_{sens,liq}; Sensible heat to vaporizing temperature; \btu\per\hour}
+ * @symrow{Q_{vap}; Vaporization heat; \btu\per\hour}
+ * @symrow{Q_{sens,vapor}; Sensible heat for vaporized fraction; \btu\per\hour}
+ * @symrow{Q_{sens,remliq}; Sensible heat for remaining liquid; \btu\per\hour}
+ * @symrow{m_{feed}; Charge (liquid) feed rate; \pound\per\hour}
+ * @symrow{C_{p,liq}; Specific heat of liquid; \btu\per\pound\degreeFahrenheit}
+ * @symrow{T_{vaporizing}; Vaporizing temperature; \degreeFahrenheit}
+ * @symrow{T_{initial}; Initial temperature; \degreeFahrenheit}
+ * @symrow{f_{vaporized}; Fraction of charge vaporized; \unitless}
+ * @symrow{H_{latent}; Latent heat of vaporization; \btu\per\pound}
+ * @symrow{C_{p,vapor}; Specific heat of vapor; \btu\per\pound\degreeFahrenheit}
+ * @symrow{T_{discharge}; Discharge temperature; \degreeFahrenheit}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup liquid_load_charge_material_heat_of_reaction_cpp_formula Heat of Reaction Formula
+ * @ingroup liquid_load_charge_material_heat_required_calculator
+ * @formula{liquid-load-charge-material-heat-of-reaction-cpp; Q_{reaction} = \begin{cases} m_{feed} \cdot f_{reacted} \cdot H_{reaction} & \text{if endothermic} \\ 0 & \text{if exothermic or none} \end{cases}}
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{reaction}; Heat of reaction; \btu\per\hour}
+ * @symrow{m_{feed}; Charge (liquid) feed rate; \pound\per\hour}
+ * @symrow{f_{reacted}; Fraction of charge reacted; \unitless}
+ * @symrow{H_{reaction}; Heat of reaction; \btu\per\pound}
+ * @endsymtable
+ */

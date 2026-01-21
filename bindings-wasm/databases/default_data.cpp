@@ -2,12 +2,7 @@
 
 #include <emscripten/bind.h>
 
-#include "databases/SolidLoadChargeMaterialData.h"
-#include "databases/GasLoadChargeMaterialData.h"
-#include "databases/LiquidLoadChargeMaterialData.h"
-#include "databases/SolidLiquidFlueGasMaterialData.h"
-#include "databases/GasFlueGasMaterialData.h"
-#include "databases/MotorData.h"
+#include "compressedAir/compressors_data.h"
 #include "databases/compressors_type1_data.h"
 #include "databases/compressors_type1_GT_100kW_data.h"
 #include "databases/compressors_type2_data.h"
@@ -15,26 +10,25 @@
 #include "databases/compressors_type4_data.h"
 #include "databases/compressors_type5_data.h"
 #include "databases/compressors_type6_data.h"
+#include "databases/gas_load_charge_material_data.h"
+#include "databases/gas_type_data.h"
 #include "databases/lighting_data.h"
-#include "processHeat/losses/solid_load_charge_material.h"
-#include "processHeat/losses/gas_load_charge_material.h"
-#include "processHeat/losses/liquid_load_charge_material.h"
-#include "processHeat/losses/solid_liquid_flue_gas_material.h"
-#include "processHeat/losses/gas_flue_gas_material.h"
+#include "databases/MotorData.h"
+#include "databases/wall_type_data.h"
 #include "motorDriven/motor/MotorData.h"
-#include "compressedAir/compressors_data.h"
 #include "other/lighting_data.h"
+#include "processHeat/losses/solid_liquid_flue_gas_material.h"
+#include "databases/liquid_load_charge_material_data.h"
+#include "databases/solid_load_charge_material_data.h"
+#include "databases/gas_flue_gas_material_data.h"
+#include "databases/solid_liquid_flue_gas_material_data.h"
 
 using namespace emscripten;
 
 EMSCRIPTEN_BINDINGS(db_class) {
+
     class_<DefaultData>("DefaultData")
         .constructor<>()
-        .function("getSolidLoadChargeMaterials", &DefaultData::getSolidLoadChargeMaterials)
-        .function("getGasLoadChargeMaterials", &DefaultData::getGasLoadChargeMaterials)
-        .function("getLiquidLoadChargeMaterials", &DefaultData::getLiquidLoadChargeMaterials)
-        .function("getSolidLiquidFlueGasMaterials", &DefaultData::getSolidLiquidFlueGasMaterials)
-        .function("getGasFlueGasMaterials", &DefaultData::getGasFlueGasMaterials)
         .function("getMotorData", &DefaultData::getMotorData)
         .function("getCompressorType1Data", &DefaultData::getCompressorType1Data)
         .function("getCompressorType1_GT100kWData", &DefaultData::getCompressorType1_GT100kWData)
@@ -44,4 +38,99 @@ EMSCRIPTEN_BINDINGS(db_class) {
         .function("getCompressorType5Data", &DefaultData::getCompressorType5Data)
         .function("getCompressorType6Data", &DefaultData::getCompressorType6Data)
         .function("getLightingData", &DefaultData::getLightingData);
+}
+
+EMSCRIPTEN_BINDINGS(gas_load_charge_material_data) {
+    using namespace gas_load_charge_material_data;
+    value_object<GasLoadChargeMaterial>("GasLoadChargeMaterial")
+        .field("substance", &GasLoadChargeMaterial::substance)
+        .field("specificHeatVapor", &GasLoadChargeMaterial::specific_heat_vapor);
+
+    register_vector<GasLoadChargeMaterial>("GasLoadChargeMaterialV");
+    function("getDefaultGasLoadChargeMaterials", &get_default_gas_load_charge_materials);
+}
+
+EMSCRIPTEN_BINDINGS(liquid_load_charge_material_data) {
+    using namespace liquid_load_charge_material_data;
+    value_object<LiquidLoadChargeMaterial>("LiquidLoadChargeMaterial")
+        .field("substance", &LiquidLoadChargeMaterial::substance)
+        .field("specificHeat", &LiquidLoadChargeMaterial::specific_heat)
+        .field("latentHeat", &LiquidLoadChargeMaterial::latent_heat)
+        .field("vaporSpecificHeat", &LiquidLoadChargeMaterial::vapor_specific_heat)
+        .field("boilingPoint", &LiquidLoadChargeMaterial::boiling_point);
+
+    register_vector<LiquidLoadChargeMaterial>("LiquidLoadChargeMaterialV");
+    function("getDefaultLiquidLoadChargeMaterials", &get_default_liquid_load_charge_materials);
+}
+
+EMSCRIPTEN_BINDINGS(solid_load_charge_material_data) {
+    using namespace solid_load_charge_material_data;
+    value_object<SolidLoadChargeMaterial>("SolidLoadChargeMaterial")
+        .field("substance", &SolidLoadChargeMaterial::substance)
+        .field("specificHeatSolid", &SolidLoadChargeMaterial::specific_heat_solid)
+        .field("latentHeat", &SolidLoadChargeMaterial::latent_heat)
+        .field("specificHeatLiquid", &SolidLoadChargeMaterial::specific_heat_liquid)
+        .field("meltingPoint", &SolidLoadChargeMaterial::melting_point);
+
+    register_vector<SolidLoadChargeMaterial>("SolidLoadChargeMaterialV");
+    function("getDefaultSolidLoadChargeMaterials", &get_default_solid_load_charge_materials);
+}
+
+EMSCRIPTEN_BINDINGS(gas_flue_gas_material_data) {
+    using namespace gas_flue_gas_material_data;
+    value_object<GasFlueGasMaterial>("GasFlueGasMaterial")
+        .field("substance", &GasFlueGasMaterial::substance)
+        .field("CH4", &GasFlueGasMaterial::ch4)
+        .field("C2H6", &GasFlueGasMaterial::c2h6)
+        .field("N2", &GasFlueGasMaterial::n2)
+        .field("H2", &GasFlueGasMaterial::h2)
+        .field("C3H8", &GasFlueGasMaterial::c3h8)
+        .field("C4H10_CnH2n", &GasFlueGasMaterial::c4h10_cnh2n)
+        .field("H2O", &GasFlueGasMaterial::h2o)
+        .field("CO", &GasFlueGasMaterial::co)
+        .field("CO2", &GasFlueGasMaterial::co2)
+        .field("SO2", &GasFlueGasMaterial::so2)
+        .field("O2", &GasFlueGasMaterial::o2)
+        .field("heatingValue", &GasFlueGasMaterial::heating_value)
+        .field("heatingValueVolume", &GasFlueGasMaterial::heating_value_volume)
+        .field("specificGravity", &GasFlueGasMaterial::specific_gravity);
+
+    register_vector<GasFlueGasMaterial>("GasFlueGasMaterialV");
+    function("getDefaultGasFlueGasMaterials", &get_default_gas_flue_gas_materials);
+}
+
+EMSCRIPTEN_BINDINGS(solid_liquid_flue_gas_material_data) {
+    using namespace solid_liquid_flue_gas_material_data;
+    value_object<SolidLiquidFlueGasMaterial>("SolidLiquidFlueGasMaterial")
+        .field("substance", &SolidLiquidFlueGasMaterial::substance)
+        .field("carbon", &SolidLiquidFlueGasMaterial::carbon)
+        .field("hydrogen", &SolidLiquidFlueGasMaterial::hydrogen)
+        .field("sulphur", &SolidLiquidFlueGasMaterial::sulphur)
+        .field("oxygen", &SolidLiquidFlueGasMaterial::oxygen)
+        .field("nitrogen", &SolidLiquidFlueGasMaterial::nitrogen)
+        .field("moisture", &SolidLiquidFlueGasMaterial::moisture)
+        .field("inertAsh", &SolidLiquidFlueGasMaterial::inert_ash);
+
+    register_vector<SolidLiquidFlueGasMaterial>("SolidLiquidFlueGasMaterialV");
+    function("getDefaultSolidLiquidFlueGasMaterials", &get_default_solid_liquid_flue_gas_materials);
+}
+
+EMSCRIPTEN_BINDINGS(wall_type_data) {
+    using namespace wall_type_data;
+    value_object<WallType>("WallType")
+        .field("wallDescription", &WallType::wall_description)
+        .field("shapeFactor", &WallType::shape_factor);
+
+    register_vector<WallType>("WallTypeV");
+    function("getDefaultWallTypes", &get_default_wall_types);
+}
+
+EMSCRIPTEN_BINDINGS(gas_type_data) {
+    using namespace gas_type_data;
+    value_object<GasType>("AtmosphereGasType")
+        .field("gasDescription", &GasType::gas_description)
+        .field("specificHeat", &GasType::specific_heat);
+
+    register_vector<GasType>("AtmosphereGasTypeV");
+    function("getDefaultGasTypes", &get_default_gas_types);
 }

@@ -1,0 +1,40 @@
+/**
+ * @defgroup auxiliary_power_used_calculator Auxiliary Power Used Calculator
+ * @ingroup heat_loss_calculators
+ * @brief Calculates auxiliary power usage for electrical systems in process heating equipment.
+ * @details This calculator estimates the energy use of motors and auxiliary systems associated with process heating 
+ * equipment. It uses electrical parameters and operating time to compute total power consumption, converting 
+ * electrical power from kW to BTU/hr using a physical constant. The algorithm is suitable for modeling auxiliary 
+ * energy losses in industrial furnaces, ovens, and similar systems.
+ *
+ * The calculation follows a top-down approach:
+ * 1. **Total Auxiliary Power** - Calculate electrical power consumption and convert to BTU/hr
+ *
+ * @heading{Total Auxiliary Power Used}
+ * @copydoc auxiliary_power_used_formula
+ *
+ * @see Perry's Chemical Engineers' Handbook; NIST Engineering Statistics; ASHRAE Handbook
+ * @see physics::conversions::kKilowattToBtuPerHour for the conversion constant
+ */
+
+/**
+ * @defgroup auxiliary_power_used_formula Auxiliary Power Used Formula
+ * @ingroup auxiliary_power_used_calculator
+ * @brief Total auxiliary power consumption.
+ * @details The formula calculates the electrical power in kilowatts based on voltage, current, power factor, and phase, 
+ * adjusts for operating time, then converts to BTU/hr using the conversion constant.
+ * 
+ * @formula{aux-power-used; Q_\text{aux} = \sqrt{P} \cdot V \cdot I \cdot PF \cdot OT \cdot \frac{1}{1000} \cdot k_{\text{kW}\to\text{BTU/hr}}}
+ * 
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_\text{aux}; Auxiliary power used; \btu\per\hour}
+ * @symrow{P; Number of motor phases; \unitless}
+ * @symrow{V; Supply voltage; \volt}
+ * @symrow{I; Average current; \ampere}
+ * @symrow{PF; Power factor; \unitless}
+ * @symrow{OT; Operating time (fraction, 0-1); \unitless}
+ * @symrow{1000; Conversion from watts to kilowatts; \watt\per\kilowatt}
+ * @symrow{k_{\text{kW}\to\text{BTU/hr}}; Conversion factor - see @ref physics::conversions::kKilowattToBtuPerHour; \btu\per\hour\per\kilowatt}
+ * @endsymtable
+ */

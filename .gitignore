@@ -904,3 +904,5 @@ flycheck_*.el
 
 ## CPack Packages
 _CPack_Packages/
+# Doxygen generated citation lists
+/docs/citelist.*

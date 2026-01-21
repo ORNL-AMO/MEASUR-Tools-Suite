@@ -1,0 +1,26 @@
+/**
+ * @defgroup gas_flue_gas_material_data_database Gas Flue Gas Material Database
+ * @ingroup databases
+ * @brief Contains default data for flue gas materials used in process heat calculations.
+ * @details This database provides default values for the composition and properties of common flue gas materials. The data is used in process heat and combustion calculations for engineering analysis.
+ *
+ * @heading{Default Flue Gas Material Data}
+ * @copydoc gas_flue_gas_material_data
+ */
+
+/**
+ * @defgroup gas_flue_gas_material_data Default Flue Gas Material Data
+ * @ingroup gas_flue_gas_material_data_database
+ * The following table lists the default substances and their properties:
+ *
+ * | Substance                | CH4 (%) | C2H6 (%) | N2 (%) | H2 (%) | C3H8 (%) | C4H10/CnH2n (%) | H2O (%) | CO (%) | CO2 (%) | SO2 (%) | O2 (%) | Heating Value @unitb{\btu\per\scf} | Heating Value @unitb{\btu\per\cubicFoot} | Specific Gravity |
+ * |--------------------------|---------|----------|--------|--------|----------|-----------------|---------|--------|---------|---------|--------|-------------------------------|-----------------------------------|------------------|
+ * | Typical Natural Gas - US | 87      | 8.5      | 3.6    | 0.4    | 0        | 0               | 0       | 0      | 0.4     | 0       | 0.1    | 22030.67                      | 1032.45                          | 0.657            |
+ * | Coke Oven Gas            | 33.9    | 5.2      | 3.7    | 47.9   | 0        | 0               | 0       | 6.1    | 2.6     | 0       | 0.6    | 19185.93                      | 610.52                           | 0.446            |
+ * | Blast Furnace Gas        | 0.1     | 0        | 56.4   | 2.4    | 0        | 0               | 3.4     | 23.3   | 14.4    | 0       | 0      | 1080.68                       | 83.61                            | 1.087            |
+ * | Hydrogen                 | 0       | 0        | 0      | 100    | 0        | 0               | 0       | 0      | 0       | 0       | 0      | 61095.0                        | 325                               | 0.075            |
+ *
+ * @note Values are representative and may vary with source and measurement conditions.
+ *
+ * @see gas_flue_gas_material_calculator
+ */

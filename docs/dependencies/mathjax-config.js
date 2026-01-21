@@ -48,8 +48,12 @@ window.MathJax = {
         ready() {
             MathJax.startup.defaultReady();
             MathJax.tex2mml(String.raw`
+                \DeclareSIUnit{\poundFuel}{lb_{fuel}}
+                \DeclareSIUnit{\abs}{abs}
+                \DeclareSIUnit{\dollar}{$}
                 \DeclareSIUnit{\britishThermalUnit}{Btu}
                 \DeclareSIUnit{\btu}{Btu}
+                \DeclareSIUnit{\MMBtu}{MMBtu}
 
                 \DeclareSIUnit{\degreeFahrenheit}{\degree F}
                 \DeclareSIUnit{\degreeF}{\degree F}
@@ -84,7 +88,16 @@ window.MathJax = {
                 \DeclareSIUnit{\standardCubicFeet}{scf}
                 \DeclareSIUnit{\scf}{scf}
                 \DeclareSIUnit{\cubicFoot}{ft^3}
+                \DeclareSIUnit{\normalCubicMeter}{Nm^3}
+                \DeclareSIUnit{\NmCubed}{Nm^3}
                 \DeclareSIUnit{\inchWaterColumn}{in\,WC}
+                \DeclareSIUnit{\kilowatt}{kW}
+                \DeclareSIUnit{\atm}{atm}
+                \DeclareSIUnit{\lbmol}{lbmol}
+                \DeclareSIUnit{\year}{yr}
+                \DeclareSIUnit{\ton}{ton}
+                \DeclareSIUnit{\squareInch}{in^2}
+                \DeclareSIUnit{\inchMercury}{inHg}
             `);
         }
     },

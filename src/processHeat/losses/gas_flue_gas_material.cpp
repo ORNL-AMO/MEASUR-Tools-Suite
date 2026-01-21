@@ -1,334 +1,211 @@
-/**
- * @file
- * @brief Contains the implementation of the flue gas loss calculations.
- *
- * @author Gina Accawi (accawigk) & Preston Shires (pshires) & Omer Aziz (omerb)
- * @bug No known bugs.
- *
- */
-
 #include "processHeat/losses/gas_flue_gas_material.h"
 
-#include <array>
+#include "physics/gas_composition.h"
+using namespace gas_composition;
 
-std::string GasCompositions::getSubstance() const { return substance; }
+namespace gas_flue_gas_material {
 
-// used for calculating excess air in flue gas given O2 levels
-double GasCompositions::calculateExcessAir(const double flueGasO2) {
-    calculateCompByWeight();
-    double excessAir = getExcessAir(flueGasO2);
-    if (excessAir == 0)
-        return 0;
 
-    for (auto i = 0; i < 100; i++) {
-        calculateMassFlueGasComponents(excessAir);
-        auto const O2i   = mO2 / (mH2O + mCO2 + mN2 + mO2 + mSO2);
-        auto const error = std::fabs((flueGasO2 - O2i) / flueGasO2);
-        if (error < 0.02)
-            break;
-        if (O2i > flueGasO2) {
-            excessAir -= (excessAir * 0.01);
-        }
-        else {
-            excessAir += (excessAir * 0.01);
-        }
-    }
-    return excessAir;
-}
+/**
+ * @brief Calculates process heat properties for a given gas composition and operating conditions.
+ * @details This function computes available heat, specific heat, and other process heat properties
+ *          using constituent gas properties and thermodynamic relationships.
+ *
+ * Algorithm steps:
+ * 1. Determine excess air and flue gas O2.
+ * 2. Convert input temperatures to absolute (Rankine).
+ * 3. Calculate temperature difference between flue gas and ambient air.
+ * 4. Calculate average specific heat (Cp) for major flue gas constituents (O2, N2, H2O, CO2).
+ * 5. Compute mean Cp for combustion air at initial and final temperatures.
+ * 6. Calculate linear Cp coefficients for combustion air.
+ * 7. Aggregate fuel and product properties from gas composition.
+ * 8. Convert generated weights to volumes and adjust units.
+ * 9. Calculate stoichiometric air required.
+ * 10. Apply combustion air moisture correction.
+ * 11. Calculate generated volumes for O2 and N2.
+ * 12. Convert generated volumes to weights.
+ * 13. Calculate partial pressure of water vapor in flue gas.
+ * 14. Calculate enthalpy and heat content for each constituent.
+ * 15. Compute heat in preheated combustion air and air moisture.
+ * 16. Calculate total generated products and weighted average specific heat.
+ * 17. Compute sensible heat of fuel.
+ * 18. Calculate available heat fraction.
+ *
+ * Each step is documented inline for clarity and traceability.
+ *
+ * @param[in] compositions           GasComposition object describing fuel/air mixture.
+ * @param[in] flue_gas_temp_f        Flue gas temperature [°F].
+ * @param[in] flue_gas_o2            Flue gas O2 [% by vol].
+ * @param[in] comb_air_temperature_f Combustion air temperature [°F].
+ * @param[in] fuel_temp_f            Fuel temperature [°F].
+ * @param[in] ambient_air_temp_f     Ambient air temperature [°F].
+ * @param[in] comb_air_moisture_perc Combustion air moisture [% by vol].
+ * @param[in] excess_air             Excess air percentage [%].
+ * @return ProcessHeatProperties struct with all calculated properties.
+ */
+ProcessHeatProperties processHeatProperties(GasComposition compositions, const double flue_gas_temp_f,
+                                              const double flue_gas_o2, const double comb_air_temperature_f,
+                                              const double fuel_temp_f, const double ambient_air_temp_f,
+                                              const double comb_air_moisture_perc, const double excess_air) {
+    ProcessHeatProperties results;
 
-double GasCompositions::getExcessAir(const double flueGasO2) const {
-    return (8.52381 * flueGasO2) / (2 - (9.52381 * flueGasO2));
-}
-
-double GasCompositions::getEnthalpyAtSaturation(const double ppH2O) const {
-    return 1096.7 * pow(ppH2O * 29.926, 0.013);
-}
-
-double GasCompositions::getSaturationTemperature(const double ppH2O) const {
-    return 36.009 * log(ppH2O * 29.926) + 81.054;
-}
-
-GasCompositions::ProcessHeatPropertiesResults GasCompositions::getProcessHeatProperties(
-    const double flueGasTempF, const double flueGasO2, const double combAirTemperatureF, const double fuelTempF,
-    const double ambientAirTempF, const double combAirMoisturePerc, const double excessAir) {
-    double exsAir = 0;
-    double flueO2 = 0;
-    if (excessAir != 0) {
-        exsAir = excessAir;
-        flueO2 = calculateO2(exsAir);
-        flueGasO2AdjustForCalcError(excessAir, flueO2);
+    // Step 1: Determine excess air and flue gas O2
+    if (excess_air != 0) {
+        results.excess_air  = excess_air;
+        results.flue_gas_o2 = compositions.o2PercentageFromExcessAir(excess_air);
+        results.flue_gas_o2 = compositions.adjustedFlueGasO2ForCalcError(excess_air, results.flue_gas_o2);
     }
     else {
-        exsAir = calculateExcessAir(flueGasO2);
-        flueO2 = flueGasO2;
+        results.excess_air  = compositions.excessAirFromO2(flue_gas_o2);
+        results.flue_gas_o2 = flue_gas_o2;
     }
 
-    const double initialTemp = (460 + combAirTemperatureF);
-    const double finalTemp   = (460 + flueGasTempF);
+    // Step 2: Convert input temperatures to absolute (Rankine)
+    const double initial_temp = 460.0 + comb_air_temperature_f;
+    const double final_temp   = 460.0 + flue_gas_temp_f;
 
-    // Begin - calculateThermalResistance average Cp across temperature range of combustion air to flue gas
-    const double initialTempCpO2    = (11.515 - 172 / pow(initialTemp, 0.5) + 1530 / initialTemp);
-    const double finalTempCpO2      = (11.515 - 172 / pow(finalTemp, 0.5) + 1530 / finalTemp);
-    const double initialTempCpSCFO2 = initialTempCpO2 / 378.2;
-    const double finalTempCpSCFO2   = finalTempCpO2 / 378.2;
-    const double avgCpO2            = (initialTempCpO2 + finalTempCpO2) / 2 / 32;
+    // Step 3: Calculate temperature difference between flue gas and ambient air
+    const double delta_temp_flue_ambient = flue_gas_temp_f - ambient_air_temp_f;
 
-    const double initialTempCpN2    = (9.47 - 3.47 * 1000 / initialTemp + 1.07 * 1000000 / pow(initialTemp, 2));
-    const double finalTempCpN2      = (9.47 - 3.47 * 1000 / finalTemp + 1.07 * 1000000 / pow(finalTemp, 2));
-    const double initialTempCpSCFN2 = initialTempCpN2 / 378.2;
-    const double finalTempCpSCFN2   = finalTempCpN2 / 378.2;
-    const double avgCpN2            = (initialTempCpN2 + finalTempCpN2) / 2 / 28;
+    // Step 4: Calculate average specific heat (Cp) for major flue gas constituents
+    // Oxygen
+    const double initial_cp_o2     = 11.515 - 172.0 / std::sqrt(initial_temp) + 1530.0 / initial_temp;
+    const double final_cp_o2       = 11.515 - 172.0 / std::sqrt(final_temp) + 1530.0 / final_temp;
+    const double initial_cp_scf_o2 = initial_cp_o2 / 378.2;
+    const double final_cp_scf_o2   = final_cp_o2 / 378.2;
+    const double avg_cp_o2         = (initial_cp_o2 + final_cp_o2) / 2.0 / 32.0;
 
-    const double initialTempCpH2O    = (19.86 - 597 / pow(initialTemp, 0.5) + 7500 / initialTemp);
-    const double finalTempCpH2O      = (19.86 - 597 / pow(finalTemp, 0.5) + 7500 / finalTemp);
-    const double initialTempCpSCFH2O = initialTempCpH2O / 378.2;
-    const double finalTempCpSCFH2O   = finalTempCpH2O / 378.2;
-    const double avgCpH2O            = (initialTempCpH2O + finalTempCpH2O) / 2 / 18;
+    // Nitrogen
+    const double initial_cp_n2     = 9.47 - 3470.0 / initial_temp + 1.07e6 / (initial_temp * initial_temp);
+    const double final_cp_n2       = 9.47 - 3470.0 / final_temp + 1.07e6 / (final_temp * final_temp);
+    const double initial_cp_scf_n2 = initial_cp_n2 / 378.2;
+    const double final_cp_scf_n2   = final_cp_n2 / 378.2;
+    const double avg_cp_n2         = (initial_cp_n2 + final_cp_n2) / 2.0 / 28.0;
 
-    const double initialTempCpCO2 = (16.2 - 6.53 * 1000 / initialTemp + 1.41 * 1000000 / pow(initialTemp, 2)) / 44;
-    const double finalTempCpCO2   = (16.2 - 6.53 * 1000 / finalTemp + 1.41 * 1000000 / pow(finalTemp, 2)) / 44;
-    const double avgCpCO2         = (initialTempCpCO2 + finalTempCpCO2) / 2;
+    // Water vapor
+    const double initial_cp_h2o     = 19.86 - 597.0 / std::sqrt(initial_temp) + 7500.0 / initial_temp;
+    const double final_cp_h2o       = 19.86 - 597.0 / std::sqrt(final_temp) + 7500.0 / final_temp;
+    const double initial_cp_scf_h2o = initial_cp_h2o / 378.2;
+    const double final_cp_scf_h2o   = final_cp_h2o / 378.2;
+    const double avg_cp_h2o         = (initial_cp_h2o + final_cp_h2o) / 2.0 / 18.0;
 
-    const double stdO2PercVol  = 20.7;
-    const double stdN2PercVol  = 78.3;
-    const double stdH2OPercVol = 1;
-    const double initialTempMeanCP =
-        (stdO2PercVol * initialTempCpSCFO2 + stdN2PercVol * initialTempCpSCFN2 + stdH2OPercVol * initialTempCpSCFH2O) /
-        100;
-    const double finalTempMeanCP =
-        (stdO2PercVol * finalTempCpSCFO2 + stdN2PercVol * finalTempCpSCFN2 + stdH2OPercVol * finalTempCpSCFH2O) / 100;
-    const double cpB = (finalTempMeanCP - initialTempMeanCP) / (flueGasTempF - ambientAirTempF);
-    const double cpA = finalTempMeanCP - cpB / flueGasTempF;
-    // End - calculateThermalResistance average Cp across temperature range of combustion air to flue gas
+    // Carbon dioxide
+    const double initial_cp_co2 = (16.2 - 6530.0 / initial_temp + 1.41e6 / (initial_temp * initial_temp)) / 44.0;
+    const double final_cp_co2   = (16.2 - 6530.0 / final_temp + 1.41e6 / (final_temp * final_temp)) / 44.0;
+    const double avg_cp_co2     = (initial_cp_co2 + final_cp_co2) / 2.0;
 
-    double heatValueFuel  = 0;
-    double CO2GeneratedWt = 0;
-    double H20GeneratedWt = 0;
-    double O2GeneratedWt  = 0;
-    for (auto const& compound : gasses) {
-        heatValueFuel += compound.second->compAdjByVol * compound.second->heatingValueVolume;
-        CO2GeneratedWt += compound.second->compAdjByVol * compound.second->co2Generated;
-        H20GeneratedWt += compound.second->compAdjByVol * compound.second->h2oGenerated;
-        O2GeneratedWt += compound.second->compAdjByVol * compound.second->o2Generated;
+    // Step 5: Standard dry air volume fractions
+    constexpr double k_std_o2_vol  = 20.7;
+    constexpr double k_std_n2_vol  = 78.3;
+    constexpr double k_std_h2o_vol = 1.0;
+
+    // Step 6: Mean Cp for combustion air at initial and final temperatures
+    const double initial_mean_cp =
+        (k_std_o2_vol * initial_cp_scf_o2 + k_std_n2_vol * initial_cp_scf_n2 + k_std_h2o_vol * initial_cp_scf_h2o) /
+        100.0;
+    const double final_mean_cp =
+        (k_std_o2_vol * final_cp_scf_o2 + k_std_n2_vol * final_cp_scf_n2 + k_std_h2o_vol * final_cp_scf_h2o) / 100.0;
+
+    // Step 7: Linear Cp coefficients for combustion air
+    const double cp_b = (final_mean_cp - initial_mean_cp) / delta_temp_flue_ambient;
+    const double cp_a = final_mean_cp - cp_b / flue_gas_temp_f;
+
+    // Step 8: Aggregate fuel and product properties
+    results.heat_value_fuel = 0.0;
+    double co2_generated_wt = 0.0;
+    double h2o_generated_wt = 0.0;
+    double o2_generated_wt  = 0.0;
+
+    for (auto* compound : compositions.getConstituents()) {
+        results.heat_value_fuel += compound->composition_by_volume * compound->heating_value_volume;
+        co2_generated_wt += compound->composition_by_volume * compound->co2_generated;
+        h2o_generated_wt += compound->composition_by_volume * compound->h2o_generated;
+        o2_generated_wt += compound->composition_by_volume * compound->o2_generated;
     }
 
-    const double CO2GeneratedVol = CO2GeneratedWt * 0.022722;
-    const double H20GeneratedVol = H20GeneratedWt * 0.055506;
+    // Step 9: Convert generated weights to volumes (ft^3/lb)
+    const double co2_generated_vol = co2_generated_wt * 0.022722;
+    const double h2o_generated_vol = h2o_generated_wt * 0.055506;
 
-    CO2GeneratedWt *= 0.0026365;
-    O2GeneratedWt /= 32;
-    const double stoichAir = O2GeneratedWt * (1 + (1 - 0.209) / 0.209);
-    const double combAirMoisture =
-        combAirMoisturePerc <= 0.009 ? 0 : ((combAirMoisturePerc - 0.009) * (stoichAir * (1 + exsAir)) * 0.0763);
-    H20GeneratedWt *= 0.0026365;
-    H20GeneratedWt += combAirMoisture;
+    // Step 10: Convert weights to lb/MMBtu
+    co2_generated_wt *= 0.0026365;
+    o2_generated_wt /= 32.0;
 
-    const double O2GeneratedVol = exsAir * O2GeneratedWt;
-    const double N2GeneratedVol = (1 + exsAir) * O2GeneratedWt * (1 - 0.209) / 0.209;
+    // Step 11: Calculate stoichiometric air required
+    constexpr double k_dry_air_o2_vol_frac = 0.209;
+    results.stoich_air = o2_generated_wt * (1.0 + (1.0 - k_dry_air_o2_vol_frac) / k_dry_air_o2_vol_frac);
 
-    const double N2GeneratedWt = N2GeneratedVol * 0.0744;
-    O2GeneratedWt              = O2GeneratedVol * 0.0846;
+    // Step 12: Combustion air moisture correction
+    double comb_air_moisture = 0.0;
+    if (comb_air_moisture_perc > 0.009) {
+        comb_air_moisture =
+            (comb_air_moisture_perc - 0.009) * (results.stoich_air * (1.0 + results.excess_air)) * 0.0763;
+    }
 
-    const double partialPressureH2O =
-        H20GeneratedVol / (CO2GeneratedVol + H20GeneratedVol + O2GeneratedVol + N2GeneratedVol);
+    h2o_generated_wt *= 0.0026365;
+    h2o_generated_wt += comb_air_moisture;
 
-    const double H2OHeatContent = (getEnthalpyAtSaturation(partialPressureH2O) +
-                                   avgCpH2O * (flueGasTempF - getSaturationTemperature(partialPressureH2O))) *
-                                  100 * H20GeneratedWt;
-    const double CO2HeatContent = avgCpCO2 * (flueGasTempF - ambientAirTempF) * 100 * CO2GeneratedWt;
-    const double N2HeatContent  = avgCpN2 * (flueGasTempF - ambientAirTempF) * 100 * N2GeneratedWt;
-    const double O2HeatContent  = avgCpO2 * (flueGasTempF - ambientAirTempF) * 100 * O2GeneratedWt;
+    // Step 13: Calculate generated volumes for O2 and N2
+    const double o2_generated_vol = results.excess_air * o2_generated_wt;
+    const double n2_generated_vol =
+        (1.0 + results.excess_air) * o2_generated_wt * (1.0 - k_dry_air_o2_vol_frac) / k_dry_air_o2_vol_frac;
 
-    // heat in preheated combustion air
-    const double preHeatedAirEff = stoichAir * (1 + exsAir) *
-                                   (((combAirTemperatureF + ambientAirTempF) / 2) * cpB + cpA) *
-                                   (combAirTemperatureF - ambientAirTempF);
-    // heat content of air moisture
-    const double preHeatedAirMoistureEff = combAirMoisture * avgCpH2O * (flueGasTempF - combAirTemperatureF);
+    // Step 14: Convert generated volumes to weights
+    const double n2_generated_wt = n2_generated_vol * 0.0744;
+    o2_generated_wt              = o2_generated_vol * 0.0846;
 
-    const double totalGenerated = CO2GeneratedWt + H20GeneratedWt + O2GeneratedWt + N2GeneratedWt;
+    // Step 15: Calculate partial pressure of water vapor in flue gas
+    const double partial_pressure_h2o =
+        h2o_generated_vol / (co2_generated_vol + h2o_generated_vol + o2_generated_vol + n2_generated_vol);
 
-    const double specificHeat =
-        (CO2GeneratedWt * avgCpCO2 + H20GeneratedWt * avgCpH2O + O2GeneratedWt * avgCpO2 + N2GeneratedWt * avgCpN2) /
-        totalGenerated;
-    const double sensibleHeat  = 1 * specificHeat * (fuelTempF - ambientAirTempF);
-    const double availableHeat = (100 * (sensibleHeat + heatValueFuel + preHeatedAirEff + preHeatedAirMoistureEff) -
-                                  (H2OHeatContent + CO2HeatContent + N2HeatContent + O2HeatContent)) /
-                                 (100 * heatValueFuel);
+    // Step 16: Calculate enthalpy and heat content for each constituent
+    const double enthalpy_at_saturation = compositions.calculateEnthalpyAtSaturation(partial_pressure_h2o);
+    const double saturation_temp        = compositions.calculateSaturationTemperature(partial_pressure_h2o);
 
-    return ProcessHeatPropertiesResults(stoichAir, exsAir, availableHeat, specificHeat, totalGenerated, heatValueFuel,
-                                        flueO2);
+    const double h2o_heat_content =
+        (enthalpy_at_saturation + avg_cp_h2o * (flue_gas_temp_f - saturation_temp)) * 100.0 * h2o_generated_wt;
+    const double co2_heat_content = avg_cp_co2 * delta_temp_flue_ambient * 100.0 * co2_generated_wt;
+    const double n2_heat_content  = avg_cp_n2 * delta_temp_flue_ambient * 100.0 * n2_generated_wt;
+    const double o2_heat_content  = avg_cp_o2 * delta_temp_flue_ambient * 100.0 * o2_generated_wt;
+
+    // Step 17: Heat in preheated combustion air
+    const double preheated_air_effect = results.stoich_air * (1.0 + results.excess_air) *
+                                        (((comb_air_temperature_f + ambient_air_temp_f) / 2.0) * cp_b + cp_a) *
+                                        (comb_air_temperature_f - ambient_air_temp_f);
+
+    // Step 18: Heat content of air moisture
+    const double preheated_air_moisture_effect =
+        comb_air_moisture * avg_cp_h2o * (flue_gas_temp_f - comb_air_temperature_f);
+
+    // Step 19: Total generated products (lb/MMBtu)
+    results.total_generated = co2_generated_wt + h2o_generated_wt + o2_generated_wt + n2_generated_wt;
+
+    // Step 20: Weighted average specific heat of flue gas
+    results.specific_heat = (co2_generated_wt * avg_cp_co2 + h2o_generated_wt * avg_cp_h2o +
+                             o2_generated_wt * avg_cp_o2 + n2_generated_wt * avg_cp_n2) /
+                            results.total_generated;
+
+    // Step 21: Sensible heat of fuel
+    const double delta_temp_fuel_ambient = fuel_temp_f - ambient_air_temp_f;
+    const double sensible_heat           = results.specific_heat * delta_temp_fuel_ambient;
+
+    // Step 22: Calculate available heat fraction
+    results.available_heat =
+        (100.0 * (sensible_heat + results.heat_value_fuel + preheated_air_effect + preheated_air_moisture_effect) -
+         (h2o_heat_content + co2_heat_content + n2_heat_content + o2_heat_content)) /
+        (100.0 * results.heat_value_fuel);
+
+    return results;
 }
 
-void GasCompositions::flueGasO2AdjustForCalcError(const double excessAir, double& flueO2) const {
-    if (flueO2 > 0) {
-        for (auto i = 0; i < 100; i++) {
-            flueO2              = (double)((int)(flueO2 * 1000 + .5)) / 1000;
-            double excessAirNew = getExcessAir(flueO2);
-            if (fabs(1 - excessAirNew / excessAir) < 0.02)
-                break;
-            flueO2 *= excessAirNew > excessAir ? 0.99 : 1.01;
-        }
-    }
+double totalHeatLoss(double flue_gas_temperature, double excess_air_percentage, double combustion_air_temperature,
+                     GasComposition& compositions, double fuel_temperature) {
+    double                combustion_air_moisture = 60;
+    double                excess_air              = 0;
+    ProcessHeatProperties process_heat_properties_results =
+        processHeatProperties(compositions, flue_gas_temperature, excess_air_percentage / 100,
+                                combustion_air_temperature, fuel_temperature, combustion_air_moisture, excess_air);
+    return process_heat_properties_results.available_heat;
 }
 
-// used for calculating O2 in flue gas given excess air as a decimal
-double GasCompositions::calculateO2(const double excessAir) {
-    calculateCompByWeight();
-    calculateMassFlueGasComponents(excessAir);
-    return mO2 / (mH2O + mCO2 + mN2 + mO2 + mSO2);
-}
-
-void GasCompositions::calculateCompByWeight() {
-    double summationDenom = 0;
-    for (auto const& compound : gasses) {
-        summationDenom += compound.second->compAdjByVol * compound.second->specificWeight;
-    }
-
-    for (auto& comp : gasses) {
-        comp.second->compByWeight = (comp.second->compAdjByVol * comp.second->specificWeight) / summationDenom;
-    }
-}
-
-double GasCompositions::calculateSensibleHeat(const double fuelTemp) {
-    double specificHeatFuel = 0;
-    for (auto const& comp : gasses) {
-        specificHeatFuel += comp.second->compByWeight * (comp.second->specificHeat(520) / comp.second->molecularWeight);
-    }
-
-    return 1 * specificHeatFuel * (fuelTemp - 32);
-}
-
-double GasCompositions::calculateHeatCombustionAir(const double combustionAirTemp, const double excessAir) {
-    double o2Air = 0;
-    for (auto const& comp : gasses) {
-        o2Air += comp.second->compByWeight * (comp.second->o2Generated / comp.second->molecularWeight);
-    }
-
-    double      mAir           = o2Air / 0.231;
-    double      mCombustionAir = mAir * (1 + excessAir);
-    double      rAir           = combustionAirTemp + 460;
-    auto const& O2             = gasses["O2"];
-    auto const& N2             = gasses["N2"];
-
-    double cpCombustionAir =
-        0.231 * (O2->specificHeat(rAir) / O2->molecularWeight) + 0.769 * (N2->specificHeat(rAir) / N2->molecularWeight);
-
-    return mCombustionAir * cpCombustionAir * (combustionAirTemp - 32);
-}
-
-double GasCompositions::calculateSpecificGravity() {
-    double summationNumerator = 0;
-    for (auto const& compound : gasses) {
-        summationNumerator += compound.second->compAdjByVol * compound.second->molecularWeight;
-    }
-    return summationNumerator / (22.4 * 1.205);
-}
-
-double GasCompositions::calculateStoichometricAir() {
-    double o2Required = 0;
-    for (auto const& compound : gasses) {
-        o2Required += compound.second->compAdjByVol * compound.second->o2Generated;
-    }
-    return o2Required * (1 + (1 - 0.209) / 0.209);
-}
-
-double GasCompositions::calculateHeatingValueFuel() {
-    double heatValueFuel = 0;
-    for (auto const& comp : gasses) {
-        heatValueFuel += comp.second->compByWeight * comp.second->heatingValue;
-    }
-    return heatValueFuel;
-}
-
-double GasCompositions::calculateHeatingValueFuelVolume() {
-    double heatValueFuel = 0;
-    for (auto const& comp : gasses) {
-        heatValueFuel += comp.second->compAdjByVol * comp.second->heatingValueVolume;
-    }
-    return heatValueFuel;
-}
-
-void GasCompositions::calculateMassFlueGasComponents(const double excessAir) {
-    mH2O = 0, mCO2 = 0, mO2 = 0, mN2 = 0, mSO2 = 0;
-    for (auto const& comp : gasses) {
-        mH2O += (comp.second->h2oGenerated * comp.second->compByWeight) / comp.second->molecularWeight;
-        mCO2 += (comp.second->co2Generated * comp.second->compByWeight) / comp.second->molecularWeight;
-        mO2 += (comp.second->o2Generated * comp.second->compByWeight) / comp.second->molecularWeight;
-    }
-    mO2 *= excessAir;
-
-    auto const& N2 = gasses["N2"];
-    for (auto const& comp : gasses) {
-        auto const& c = comp.second;
-        mN2 += ((c->o2Generated * c->compByWeight) / c->molecularWeight);
-    }
-
-    mN2 = ((1 - 0.231) / 0.231) * mN2 + mO2 * (1 - 0.231) / 0.231 + N2->compByWeight;
-
-    for (auto const& comp : gasses) {
-        mSO2 += comp.second->so2Generated * comp.second->compByWeight / comp.second->molecularWeight;
-    }
-}
-
-void GasCompositions::calculateEnthalpy() {
-    auto const& H2O = gasses["H2O"];
-    auto const& CO2 = gasses["CO2"];
-    auto const& N2  = gasses["N2"];
-    auto const& O2  = gasses["O2"];
-    auto const& SO2 = gasses["SO2"];
-
-    const double ppH2O = (mH2O / H2O->specificWeight) /
-                         (mCO2 / CO2->specificWeight + mH2O / H2O->specificWeight + mN2 / N2->specificWeight +
-                          mO2 / O2->specificWeight + mSO2 / SO2->specificWeight);
-
-    hH2Osat = getEnthalpyAtSaturation(ppH2O);
-    tH2Osat = getSaturationTemperature(ppH2O);
-}
-
-double GasCompositions::calculateTotalHeatContentFlueGas(const double flueGasTemp) {
-    auto const& H2O = gasses["H2O"];
-
-    const double hH2O = mH2O * (hH2Osat + 0.5 *
-                                              ((H2O->specificHeat(flueGasTemp + 460) / H2O->molecularWeight) +
-                                               (H2O->specificHeat(520) / H2O->molecularWeight)) *
-                                              (flueGasTemp - tH2Osat));
-
-    std::array<std::tuple<std::shared_ptr<GasProperties>, const double>, 4> gasArray = {
-        {std::make_tuple(gasses["CO2"], mCO2), std::make_tuple(gasses["N2"], mN2), std::make_tuple(gasses["O2"], mO2),
-         std::make_tuple(gasses["SO2"], mSO2)}};
-
-    double result = 0.0;
-    for (auto const& gas : gasArray) {
-        //	    auto const & tup = gas;
-        auto const&  c    = std::get<0>(gas);
-        const double mass = std::get<1>(gas);
-        result +=
-            mass *
-            (0.5 *
-             ((c->specificHeat(flueGasTemp + 460) / c->molecularWeight) + (c->specificHeat(520) / c->molecularWeight)) *
-             (flueGasTemp - 32));
-    }
-
-    return hH2O + result;
-}
-
-double GasFlueGasMaterial::getHeatLoss() {
-    return compositions
-        .getProcessHeatProperties(flueGasTemperature, excessAirPercentage / 100, combustionAirTemperature,
-                                  fuelTemperature, 60, 0)
-        .availableHeat;
-
-    // This is old method use the improved method, called above
-    /*compositions.calculateCompByWeight();
-    const double heatInFlueGasses = compositions.calculateSensibleHeat(fuelTemperature);
-    const double hCombustionAir = compositions.calculateHeatCombustionAir(combustionAirTemperature,
-    excessAirPercentage); const double hValueFuel = compositions.calculateHeatingValueFuel();
-    compositions.calculateMassFlueGasComponents(excessAirPercentage);
-    compositions.calculateEnthalpy();
-    const double totalHeatContentFlueGas = compositions.calculateTotalHeatContentFlueGas(flueGasTemperature);
-
-    const double heatInput = heatInFlueGasses + hCombustionAir + hValueFuel;
-
-    return (heatInput - totalHeatContentFlueGas) / hValueFuel;*/
-}
+} // namespace gas_flue_gas_material

@@ -1,0 +1,40 @@
+/**
+ * @defgroup fixture_heat_loss_calculator Fixture Heat Loss Calculator
+ * @ingroup heat_loss_calculators
+ * @brief Calculates heat losses from fixtures, trays, and conveyors in process heating equipment.
+ * @details This calculator is used to estimate heat losses of process heating equipment due to fixtures, trays,
+ * conveyor belts, and similar equipment that enter the furnace at lower temperatures and are heated to the furnace
+ * temperature. These fixtures absorb heat from the furnace as they are heated from their initial temperature to the
+ * final furnace temperature. The calculator computes the total heat loss based on the feed rate, specific heat of the
+ * fixture material, initial and final temperatures, and a correction factor @cite trinks2003industrial. The calculation
+ * assumes there is no melting or phase change of the fixture material involved.
+ *
+ * The calculation follows a top-down approach:
+ * 1. **Total Heat Loss** - Calculate sensible heat absorbed by fixtures as they are heated
+ *
+ * Relevant formulas are documented below.
+ *
+ * @heading{Total Heat Loss}
+ * @copydoc fixture_heat_loss_formula
+ */
+
+/**
+ * @defgroup fixture_heat_loss_formula Fixture Heat Loss Formula
+ * @ingroup fixture_heat_loss_calculator
+ * @brief Total heat loss due to fixture heating.
+ * @details The heat loss is the sensible heat required to raise the temperature of the fixture material from its 
+ * initial temperature to the final (furnace) temperature, adjusted by a correction factor. This represents energy 
+ * absorbed by the fixtures that is not available for the primary heating process.
+ * 
+ * @formula{fixture-heat-loss; Q = \dot{m} \cdot c_p \cdot (T_\text{final} - T_\text{initial}) \cdot f_\text{corr}}
+ * 
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q; Heat loss; \btu\per\hour}
+ * @symrow{\dot{m}; Feed rate of fixture material; \pound\per\hour}
+ * @symrow{c_p; Specific heat of fixture material; \btu\per\pound\degreeFahrenheit}
+ * @symrow{T_\text{final}; Final temperature of fixture; \degreeFahrenheit}
+ * @symrow{T_\text{initial}; Initial temperature of fixture; \degreeFahrenheit}
+ * @symrow{f_\text{corr}; Correction factor; \unitless}
+ * @endsymtable
+ */
