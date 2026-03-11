@@ -70,17 +70,18 @@ class ProcessCooling {
          * @param hours array of double, @unit{\hours}
          * @param power array of double, @unit{\kW}
          * @param energy array of double, @unit{\kWh}
+         * @param ariEfficiencyProfile array of double, @unit{\kW\ton}, efficiency profile based on ARI data, size corresponding to the # of chillers and 11 % load bins
          */
-                ChillerOutput(vector<vector<double>> efficiency, vector<vector<double>> hours, vector<vector<double>> power,
-                                            vector<vector<double>> energy, vector<vector<double>> ariEfficiencyProfile)
-                        : efficiency(std::move(efficiency)), hours(std::move(hours)), power(std::move(power)),
-                            energy(std::move(energy)), ariEfficiencyProfile(std::move(ariEfficiencyProfile)) {}
+        ChillerOutput(vector<vector<double>> efficiency, vector<vector<double>> hours, vector<vector<double>> power,
+                      vector<vector<double>> energy, vector<vector<double>> ariEfficiencyProfile)
+            : efficiency(std::move(efficiency)), hours(std::move(hours)), power(std::move(power)),
+              energy(std::move(energy)), ariEfficiencyProfile(std::move(ariEfficiencyProfile)) {}
 
-                vector<vector<double>> efficiency;
-                vector<vector<double>> hours;
-                vector<vector<double>> power;
-                vector<vector<double>> energy;
-                vector<vector<double>> ariEfficiencyProfile;
+        vector<vector<double>> efficiency;
+        vector<vector<double>> hours;
+        vector<vector<double>> power;
+        vector<vector<double>> energy;
+        vector<vector<double>> ariEfficiencyProfile;
     };
 
     struct ChillerPumpingEnergyOutput {

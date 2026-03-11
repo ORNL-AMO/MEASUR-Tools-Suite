@@ -431,6 +431,7 @@ void ProcessCooling::annualChillerEfficiencyProfileARI() {
                                             {375, 12.0 / 9.3, 0.0, 0.0, 0.0, 0.7642, -0.1199, 0.6474},
                                             {400, 12.0 / 9.3, 0.0, 0.0, 0.0, 0.7331, -0.0961, 0.6528}};
 
+    // TODO: See src/processCooling/CWSAT_ported_improvements.md 
     vector<int> capacityIndex(31, 0);
     for (int c = 0; c < numChillers; ++c) { // gvg for custom chiller
         // Method 1 CentrifugalFan / Water-Cooled
@@ -514,6 +515,7 @@ void ProcessCooling::annualChillerEfficiencyProfileARI() {
             }
         }
         else {
+            // TODO: See src/processCooling/CWSAT_ported_improvements.md §1 — capacityIndex[c] is always 0.
             int idx = capacityIndex[c];
             if (coolingType == CoolingSystemType::Water) {
                 if (chillers[c].chillerType == ChillerCompressorType::Centrifugal) {
