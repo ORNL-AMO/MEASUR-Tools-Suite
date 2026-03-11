@@ -1251,6 +1251,10 @@ TEST_CASE("Process Fluid Cooling Energy Calculations:", "[processCooling]") {
     INFO("Chiller Output: ");
     auto chillerOutput = pc.calculateChillerEnergy();
     validateArrays(chillerOutput.efficiency[0], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0628001});
+
+    REQUIRE(chillerOutput.ariEfficiencyProfile[0].size() == 11);
+    // manually calculated: eff = ageFactor * poly(x) * fullLoadEff / x
+    validateArrays(chillerOutput.ariEfficiencyProfile[0], {0.11044, 0.11044, 0.10538, 0.10334, 0.10212, 0.10136, 0.10085, 0.10033, 0.09988, 0.09947, 0.101}); 
     validateArrays(chillerOutput.hours[0], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8760});
     validateArrays(chillerOutput.power[0], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.57});
     validateArrays(chillerOutput.energy[0], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13753.2});
@@ -1270,6 +1274,10 @@ TEST_CASE("Process Fluid Cooling Energy Calculations:", "[processCooling]") {
     INFO("Chiller Output: ");
     chillerOutput = pc.calculateChillerEnergy();
     validateArrays(chillerOutput.efficiency[0], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.062114349});
+    // Same chiller/coefficients as Test #1 — ariEfficiencyProfile is unaffected by the different operating schedule.
+    REQUIRE(chillerOutput.ariEfficiencyProfile[0].size() == 11);
+    // manually calculated: eff = ageFactor * poly(x) * fullLoadEff / x
+    validateArrays(chillerOutput.ariEfficiencyProfile[0], {0.11044, 0.11044, 0.10538, 0.10334, 0.10212, 0.10136, 0.10085, 0.10033, 0.09988, 0.09947, 0.101});
     validateArrays(chillerOutput.hours[0], {4380, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4380});
     validateArrays(chillerOutput.power[0], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.5528587244});
     validateArrays(chillerOutput.energy[0], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6801.5212129796});
@@ -1289,6 +1297,10 @@ TEST_CASE("Process Fluid Cooling Energy Calculations:", "[processCooling]") {
     INFO("Chiller Output: ");
     chillerOutput = pc.calculateChillerEnergy();
     validateArrays(chillerOutput.efficiency[0], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0602286673});
+    // Same chiller/coefficients as Test #1 — ariEfficiencyProfile is unaffected by the Feb-Nov operating schedule.
+    REQUIRE(chillerOutput.ariEfficiencyProfile[0].size() == 11);
+    // manually calculated: eff = ageFactor * poly(x) * fullLoadEff / x
+    validateArrays(chillerOutput.ariEfficiencyProfile[0], {0.11044, 0.11044, 0.10538, 0.10334, 0.10212, 0.10136, 0.10085, 0.10033, 0.09988, 0.09947, 0.101});
     validateArrays(chillerOutput.hours[0], {5124, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3636});
     validateArrays(chillerOutput.power[0], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.5057166823});
     validateArrays(chillerOutput.energy[0], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5474.7858568695});
@@ -1312,6 +1324,9 @@ TEST_CASE("Process Fluid Cooling Energy Calculations:", "[processCooling]") {
     auto chillerOutputWC = pcWC.calculateChillerEnergy();
     validateArrays(chillerOutputWC.efficiency[0], {0, 0.0681387, 0.0816758, 0.0889593, 0.0946793, 0.099774, 0.102496,
                                                    0.104067, 0.104464, 0.103633, 0.101});
+    REQUIRE(chillerOutputWC.ariEfficiencyProfile[0].size() == 11);
+    // manually calculated: eff = ageFactor * poly(x) * fullLoadEff / x
+    validateArrays(chillerOutputWC.ariEfficiencyProfile[0], {0.05649, 0.05649, 0.06771, 0.07375, 0.07845, 0.08272, 0.08665, 0.09050, 0.09422, 0.09786, 0.101}); 
     validateArrays(chillerOutputWC.hours[0], {444, 437, 873, 880, 873, 873, 881, 873, 880, 873, 873});
     validateArrays(chillerOutputWC.power[0],
                    {0, 0.136277, 0.326703, 0.533756, 0.757435, 0.99774, 1.22995, 1.45694, 1.67143, 1.86539, 2.02});
@@ -1320,6 +1335,9 @@ TEST_CASE("Process Fluid Cooling Energy Calculations:", "[processCooling]") {
     INFO("Chiller #2 Output: ");
     chillerOutputWC = pcWC.calculateChillerEnergy();
     validateArrays(chillerOutputWC.efficiency[1], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.202});
+    REQUIRE(chillerOutputWC.ariEfficiencyProfile[1].size() == 11);
+    // manually calculated: eff = ageFactor * poly(x) * fullLoadEff / x
+    validateArrays(chillerOutputWC.ariEfficiencyProfile[1], {0.36912, 0.36912, 0.21872, 0.17504, 0.15873, 0.15441, 0.15687, 0.16384, 0.17423, 0.18739, 0.202}); 
     validateArrays(chillerOutputWC.hours[1], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8760});
     validateArrays(chillerOutputWC.power[1], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10.1});
     validateArrays(chillerOutputWC.energy[1], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 88476});
@@ -1349,6 +1367,9 @@ TEST_CASE("Process Fluid Cooling Energy Calculations:", "[processCooling]") {
     INFO("Chiller #1 Output: ");
     chillerOutputWC = pcWCRR.calculateChillerEnergy();
     validateArrays(chillerOutputWC.efficiency[0], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.103244});
+    REQUIRE(chillerOutputWC.ariEfficiencyProfile[0].size() == 11);
+    // manually calculated: eff = ageFactor * poly(x) * fullLoadEff / x
+    validateArrays(chillerOutputWC.ariEfficiencyProfile[0], {0.18456, 0.18456, 0.10936, 0.08752, 0.07936, 0.07721, 0.07843, 0.08192, 0.08711, 0.09370, 0.101}); 
     validateArrays(chillerOutputWC.hours[0], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8760});
     validateArrays(chillerOutputWC.power[0], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2.06488});
     validateArrays(chillerOutputWC.energy[0], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18088.4});
@@ -1378,6 +1399,8 @@ TEST_CASE("Process Fluid Cooling Energy Calculations:", "[processCooling]") {
     INFO("Chiller #1 Output: ");
     chillerOutputWC = pcWCCC.calculateChillerEnergy();
     validateArrays(chillerOutputWC.efficiency[0], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.1817});
+    REQUIRE(chillerOutputWC.ariEfficiencyProfile[0].size() == 11);
+    REQUIRE(chillerOutputWC.ariEfficiencyProfile[0][10] == Approx(1.1817).epsilon(0.005));
     validateArrays(chillerOutputWC.hours[0], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8760});
     validateArrays(chillerOutputWC.power[0], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 118.17});
     validateArrays(chillerOutputWC.energy[0], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1035169.2});
@@ -1408,6 +1431,8 @@ TEST_CASE("Process Fluid Cooling Energy Calculations:", "[processCooling]") {
     INFO("Chiller #1 Output: ");
     chillerOutputWC = pcWCCCRR.calculateChillerEnergy();
     validateArrays(chillerOutputWC.efficiency[0], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.2079570023});
+    REQUIRE(chillerOutputWC.ariEfficiencyProfile[0].size() == 11);
+    REQUIRE(chillerOutputWC.ariEfficiencyProfile[0][10] == Approx(1.1817).epsilon(0.005));
     validateArrays(chillerOutputWC.hours[0], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8760});
     validateArrays(chillerOutputWC.power[0], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 120.7957002283});
     validateArrays(chillerOutputWC.energy[0], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1058170.33});

@@ -71,15 +71,16 @@ class ProcessCooling {
          * @param power array of double, @unit{\kW}
          * @param energy array of double, @unit{\kWh}
          */
-        ChillerOutput(vector<vector<double>> efficiency, vector<vector<double>> hours, vector<vector<double>> power,
-                      vector<vector<double>> energy)
-            : efficiency(std::move(efficiency)), hours(std::move(hours)), power(std::move(power)),
-              energy(std::move(energy)) {}
+                ChillerOutput(vector<vector<double>> efficiency, vector<vector<double>> hours, vector<vector<double>> power,
+                                            vector<vector<double>> energy, vector<vector<double>> ariEfficiencyProfile)
+                        : efficiency(std::move(efficiency)), hours(std::move(hours)), power(std::move(power)),
+                            energy(std::move(energy)), ariEfficiencyProfile(std::move(ariEfficiencyProfile)) {}
 
-        vector<vector<double>> efficiency;
-        vector<vector<double>> hours;
-        vector<vector<double>> power;
-        vector<vector<double>> energy;
+                vector<vector<double>> efficiency;
+                vector<vector<double>> hours;
+                vector<vector<double>> power;
+                vector<vector<double>> energy;
+                vector<vector<double>> ariEfficiencyProfile;
     };
 
     struct ChillerPumpingEnergyOutput {
@@ -562,10 +563,14 @@ class ProcessCooling {
     vector<vector<double>> chillerHourlyEfficiencyARI;
     vector<vector<double>> chillerHourlyEfficiency;
     vector<vector<double>> chillerHourlyPower;
+    vector<vector<double>> chillerEfficiencyData;
+    vector<vector<double>> chillerEfficiencyARIProfile;
 
     void annualChillerLoadProfile();
 
     void annualChillerEfficiencyProfileARI();
+
+    void buildChillerEfficiencyARIProfile();
 
     void annualChillerEfficiencyProfile();
 

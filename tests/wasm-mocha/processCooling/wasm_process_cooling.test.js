@@ -118,6 +118,10 @@ describe('Process Cooling Tests', function () {
             validateArrays(chillerOutput.power.get(0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.57], chillerBins);
             logMessage('Energy @ Load : ', true);
             validateArrays(chillerOutput.energy.get(0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13753.22], chillerBins);
+            assert.equal(chillerOutput.ariEfficiencyProfile.size(), 1, 'ariEfficiencyProfile should have 1 chiller');
+            assert.equal(chillerOutput.ariEfficiencyProfile.get(0).size(), 11, 'ariEfficiencyProfile[0] should have 11 load bins');
+            // manually calculated: eff = ageFactor * poly(x) * fullLoadEff / x
+            validateArrays(chillerOutput.ariEfficiencyProfile.get(0), [0.11044, 0.11044, 0.10538, 0.10334, 0.10212, 0.10136, 0.10085, 0.10033, 0.09988, 0.09947, 0.101], chillerBins); 
 
             logMessage('Pump #1 Output: ', true);
             let pumpInputA = new moduleInstance.PumpInput(true, 2.4, 0.75, 1, 0.85);
@@ -173,6 +177,9 @@ describe('Process Cooling Tests', function () {
             validateArrays(chillerOutput.power.get(0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.5528587244], chillerBins);
             logMessage('Energy @ Load : ', true);
             validateArrays(chillerOutput.energy.get(0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6801.5212129796], chillerBins);
+            assert.equal(chillerOutput.ariEfficiencyProfile.get(0).size(), 11, 'ariEfficiencyProfile[0] should have 11 load bins');
+            // manually calculated: eff = ageFactor * poly(x) * fullLoadEff / x
+            validateArrays(chillerOutput.ariEfficiencyProfile.get(0), [0.11044, 0.11044, 0.10538, 0.10334, 0.10212, 0.10136, 0.10085, 0.10033, 0.09988, 0.09947, 0.101], chillerBins); 
 
             logMessage('Pump #1 Output: ', true);
             let pumpInputA = new moduleInstance.PumpInput(true, 2.4, 0.75, 1, 0.85);
@@ -229,6 +236,9 @@ describe('Process Cooling Tests', function () {
             validateArrays(chillerOutput.power.get(0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.5057166823], chillerBins);
             logMessage('Energy @ Load : ', true);
             validateArrays(chillerOutput.energy.get(0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5474.7858568695], chillerBins);
+            assert.equal(chillerOutput.ariEfficiencyProfile.get(0).size(), 11, 'ariEfficiencyProfile[0] should have 11 load bins');
+            // manually calculated: eff = ageFactor * poly(x) * fullLoadEff / x
+            validateArrays(chillerOutput.ariEfficiencyProfile.get(0), [0.11044, 0.11044, 0.10538, 0.10334, 0.10212, 0.10136, 0.10085, 0.10033, 0.09988, 0.09947, 0.101], chillerBins); 
 
             logMessage('Pump #1 Output: ', true);
             let pumpInputA = new moduleInstance.PumpInput(true, 2.4, 0.75, 1, 0.85);
@@ -268,6 +278,9 @@ describe('Process Cooling Tests', function () {
             validateArrays(chillerOutput.power.get(0), [0, 0.136277, 0.326703, 0.533756, 0.757435, 0.99774, 1.22995, 1.45694, 1.67143, 1.86539, 2.02], chillerBins);
             logMessage('Energy @ Load : ', true);
             validateArrays(chillerOutput.energy.get(0), [0, 59.5532, 285.212, 469.70, 661.24, 871.027, 1083.59, 1271.91, 1470.86, 1628.49, 1763.46], chillerBins);
+            assert.equal(chillerOutput.ariEfficiencyProfile.get(0).size(), 11, 'ariEfficiencyProfile[0] should have 11 load bins');
+            // manually calculated: eff = ageFactor * poly(x) * fullLoadEff / x
+            validateArrays(chillerOutput.ariEfficiencyProfile.get(0), [0.05649, 0.05649, 0.06771, 0.07375, 0.07845, 0.08272, 0.08665, 0.09050, 0.09422, 0.09786, 0.101], chillerBins);
 
             logMessage('Chiller #2 Output: ', true);
             chillerOutput = pcW.calculateChillerEnergy();
@@ -279,6 +292,9 @@ describe('Process Cooling Tests', function () {
             validateArrays(chillerOutput.power.get(1), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10.1], chillerBins);
             logMessage('Energy @ Load : ', true);
             validateArrays(chillerOutput.energy.get(1), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 88476], chillerBins);
+            assert.equal(chillerOutput.ariEfficiencyProfile.get(1).size(), 11, 'ariEfficiencyProfile[1] should have 11 load bins');
+            // manually calculated: eff = ageFactor * poly(x) * fullLoadEff / x
+            validateArrays(chillerOutput.ariEfficiencyProfile.get(1), [0.36912, 0.36912, 0.21872, 0.17504, 0.15873, 0.15441, 0.15687, 0.16384, 0.17423, 0.18739, 0.202], chillerBins); 
 
             logMessage('Pump # 1 Output: ', true);
             let pumpInputW = new moduleInstance.PumpInput(true, 2.4, 0.75, 1, 0.85);
@@ -331,6 +347,9 @@ describe('Process Cooling Tests', function () {
             validateArrays(chillerOutput.power.get(0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2.06488], chillerBins);
             logMessage('Energy @ Load : ', true);
             validateArrays(chillerOutput.energy.get(0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18088.38], chillerBins);
+            assert.equal(chillerOutput.ariEfficiencyProfile.get(0).size(), 11, 'ariEfficiencyProfile[0] should have 11 load bins');
+            // manually calculated: eff = ageFactor * poly(x) * fullLoadEff / x
+            validateArrays(chillerOutput.ariEfficiencyProfile.get(0), [0.18456, 0.18456, 0.10936, 0.08752, 0.07936, 0.07721, 0.07843, 0.08192, 0.08711, 0.09370, 0.101], chillerBins); 
 
             logMessage('Pump # 1 Output: ', true);
             let pumpInputW = new moduleInstance.PumpInput(true, 2.4, 0.75, 1, 0.85);
@@ -393,6 +412,8 @@ describe('Process Cooling Tests', function () {
             validateArrays(chillerOutput.power.get(0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 118.17], chillerBins);
             logMessage('Energy @ Load : ', true);
             validateArrays(chillerOutput.energy.get(0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1035169.2], chillerBins);
+            assert.equal(chillerOutput.ariEfficiencyProfile.get(0).size(), 11, 'ariEfficiencyProfile[0] should have 11 load bins');
+            assert.approximately(chillerOutput.ariEfficiencyProfile.get(0).get(10), 1.1817, 0.005, 'bin 10 should equal ageFactor*fullLoadEff');
 
             logMessage('Pump # 1 Output: ', true);
             let pumpInputW = new moduleInstance.PumpInput(true, 2.4, 0.75, 1, 0.85);
@@ -455,6 +476,9 @@ describe('Process Cooling Tests', function () {
             validateArrays(chillerOutput.power.get(0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 120.8], chillerBins);
             logMessage('Energy @ Load : ', true);
             validateArrays(chillerOutput.energy.get(0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1058170.33], chillerBins);
+            // Same custom chiller as Test #4 — ARI profile is identical; refrigerant replacement does not affect it.
+            assert.equal(chillerOutput.ariEfficiencyProfile.get(0).size(), 11, 'ariEfficiencyProfile[0] should have 11 load bins');
+            assert.approximately(chillerOutput.ariEfficiencyProfile.get(0).get(10), 1.1817, 0.005, 'bin 10 should equal ageFactor*fullLoadEff');
 
             logMessage('Pump # 1 Output: ', true);
             let pumpInputW = new moduleInstance.PumpInput(true, 2.4, 0.75, 1, 0.85);

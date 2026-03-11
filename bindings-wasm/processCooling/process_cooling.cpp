@@ -50,7 +50,8 @@ EMSCRIPTEN_BINDINGS(processCooling_class) {
         .property("efficiency", &ProcessCooling::ChillerOutput::efficiency)
         .property("hours", &ProcessCooling::ChillerOutput::hours)
         .property("power", &ProcessCooling::ChillerOutput::power)
-        .property("energy", &ProcessCooling::ChillerOutput::energy);
+        .property("energy", &ProcessCooling::ChillerOutput::energy)
+        .property("ariEfficiencyProfile", &ProcessCooling::ChillerOutput::ariEfficiencyProfile);
 
     class_<ProcessCooling::ChillerPumpingEnergyOutput>("ChillerPumpingEnergyOutput")
         .property("chillerPumpingEnergy", &ProcessCooling::ChillerPumpingEnergyOutput::chillerPumpingEnergy);

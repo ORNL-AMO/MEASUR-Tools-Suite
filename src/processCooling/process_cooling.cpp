@@ -87,9 +87,12 @@ ProcessCooling::ProcessCooling(const vector<int>&          systemOperationAnnual
     chillerHourlyEfficiencyARI.resize(numChillers, vector<double>(HOURS_IN_YEAR, 0));
     chillerHourlyEfficiency.resize(numChillers, vector<double>(HOURS_IN_YEAR, 0));
     chillerHourlyPower.resize(numChillers, vector<double>(HOURS_IN_YEAR, 0));
+    chillerEfficiencyData.resize(numChillers, vector<double>(7, 0));
+    chillerEfficiencyARIProfile.resize(numChillers, vector<double>(LOAD_NUM, 0));
 
     annualChillerLoadProfile();
     annualChillerEfficiencyProfileARI();
+    buildChillerEfficiencyARIProfile();
     annualChillerEfficiencyProfile();
     annualChillerPowerProfile();
 }
@@ -139,7 +142,7 @@ ProcessCooling::ChillerOutput ProcessCooling::calculateChillerEnergy() {
         for (int j = 0; j < HOURS_IN_YEAR; ++j) {
             int l = static_cast<int>(chillerHourlyLoad[c][j] / 10);
             chillerEnergy[c][l] += chillerHourlyPower[c][j];
-
+            
             if (chillerHourlyLoad[c][j] > 0) {
                 chillerPower[c][l] += chillerHourlyPower[c][j];
                 chillerEff[c][l] += chillerHourlyEfficiency[c][j];
@@ -153,8 +156,7 @@ ProcessCooling::ChillerOutput ProcessCooling::calculateChillerEnergy() {
             }
         }
     }
-
-    return {chillerEff, chillerHourlyLoadOperational, chillerPower, chillerEnergy};
+    return {chillerEff, chillerHourlyLoadOperational, chillerPower, chillerEnergy, chillerEfficiencyARIProfile};
 }
 
 ProcessCooling::ChillerPumpingEnergyOutput ProcessCooling::calculatePumpEnergy(PumpInput pump) {
@@ -429,9 +431,7 @@ void ProcessCooling::annualChillerEfficiencyProfileARI() {
                                             {375, 12.0 / 9.3, 0.0, 0.0, 0.0, 0.7642, -0.1199, 0.6474},
                                             {400, 12.0 / 9.3, 0.0, 0.0, 0.0, 0.7331, -0.0961, 0.6528}};
 
-    vector<int>            capacityIndex(31, 0);
-    vector<vector<double>> efficiencyData(
-        numChillers, vector<double>(7, 0)); // 7 columns for each chiller. Dummy array for chiller values
+    vector<int> capacityIndex(31, 0);
     for (int c = 0; c < numChillers; ++c) { // gvg for custom chiller
         // Method 1 CentrifugalFan / Water-Cooled
         if (chillers[c].chillerType == ChillerCompressorType::Centrifugal && coolingType == CoolingSystemType::Water) {
@@ -456,36 +456,36 @@ void ProcessCooling::annualChillerEfficiencyProfileARI() {
         if (chillers[c].isFullLoadEffKnown) {
             if (chillers[c].isCustomChiller) {
                 for (int i = 0; i < 4; i++) {
-                    efficiencyData[c][i] = chillers[c].customCoeffs[i];
+                    chillerEfficiencyData[c][i] = chillers[c].customCoeffs[i];
                 }
             }
             else {
                 if (coolingType == CoolingSystemType::Water) {
                     if (chillers[c].chillerType == ChillerCompressorType::Centrifugal) {
                         for (int i = 0; i < 4; i++) {
-                            efficiencyData[c][i] = ArrayMethod2[0][i];
+                            chillerEfficiencyData[c][i] = ArrayMethod2[0][i];
                         }
                     }
                     else if (chillers[c].chillerType == ChillerCompressorType::Reciprocating) {
                         for (int i = 0; i < 4; i++) {
-                            efficiencyData[c][i] = ArrayMethod2[1][i];
+                            chillerEfficiencyData[c][i] = ArrayMethod2[1][i];
                         }
                     }
                     else if (chillers[c].chillerType == ChillerCompressorType::Screw) {
                         for (int i = 0; i < 4; i++) {
-                            efficiencyData[c][i] = ArrayMethod2[2][i];
+                            chillerEfficiencyData[c][i] = ArrayMethod2[2][i];
                         }
                     }
                 }
                 else if (coolingType == CoolingSystemType::Air) {
                     if (chillers[c].chillerType == ChillerCompressorType::Reciprocating) {
                         for (int i = 0; i < 4; i++) {
-                            efficiencyData[c][i] = ArrayMethod2[3][i];
+                            chillerEfficiencyData[c][i] = ArrayMethod2[3][i];
                         }
                     }
                     else if (chillers[c].chillerType == ChillerCompressorType::Screw) {
                         for (int i = 0; i < 4; i++) {
-                            efficiencyData[c][i] = ArrayMethod2[4][i];
+                            chillerEfficiencyData[c][i] = ArrayMethod2[4][i];
                         }
                     }
                 }
@@ -497,8 +497,8 @@ void ProcessCooling::annualChillerEfficiencyProfileARI() {
                 if (load == 0) {
                     chillerHourlyEfficiencyARI[c][j] =
                         (1 + chillers[c].age / 100.0f) *
-                        (efficiencyData[c][0] * pow(1.0f / 10, 3) + efficiencyData[c][1] * pow(1.0f / 10, 2) +
-                         efficiencyData[c][2] * (1.0f / 10) + efficiencyData[c][3]) *
+                        (chillerEfficiencyData[c][0] * pow(1.0f / 10, 3) + chillerEfficiencyData[c][1] * pow(1.0f / 10, 2) +
+                         chillerEfficiencyData[c][2] * (1.0f / 10) + chillerEfficiencyData[c][3]) *
                         chillers[c].fullLoadEff / 1.0f / (1.0f / 10);
                 }
                 else if (load == 100) {
@@ -507,8 +507,8 @@ void ProcessCooling::annualChillerEfficiencyProfileARI() {
                 else {
                     chillerHourlyEfficiencyARI[c][j] =
                         (1 + chillers[c].age / 100.0f) *
-                        (efficiencyData[c][0] * pow(load / 100.0f, 3) + efficiencyData[c][1] * pow(load / 100.0f, 2) +
-                         efficiencyData[c][2] * (load / 100.0f) + efficiencyData[c][3]) *
+                        (chillerEfficiencyData[c][0] * pow(load / 100.0f, 3) + chillerEfficiencyData[c][1] * pow(load / 100.0f, 2) +
+                         chillerEfficiencyData[c][2] * (load / 100.0f) + chillerEfficiencyData[c][3]) *
                         chillers[c].fullLoadEff / 1.0f / (load / 100.0f);
                 }
             }
@@ -517,51 +517,51 @@ void ProcessCooling::annualChillerEfficiencyProfileARI() {
             int idx = capacityIndex[c];
             if (coolingType == CoolingSystemType::Water) {
                 if (chillers[c].chillerType == ChillerCompressorType::Centrifugal) {
-                    efficiencyData[c][0] = ArrayCDataWater[idx][2];
-                    efficiencyData[c][1] = ArrayCDataWater[idx][3];
-                    efficiencyData[c][2] = ArrayCDataWater[idx][4];
-                    efficiencyData[c][3] = ArrayCDataWater[idx][5];
-                    efficiencyData[c][4] = ArrayCDataWater[idx][6];
-                    efficiencyData[c][5] = ArrayCDataWater[idx][7];
-                    efficiencyData[c][6] = ArrayCDataWater[idx][1];
+                    chillerEfficiencyData[c][0] = ArrayCDataWater[idx][2];
+                    chillerEfficiencyData[c][1] = ArrayCDataWater[idx][3];
+                    chillerEfficiencyData[c][2] = ArrayCDataWater[idx][4];
+                    chillerEfficiencyData[c][3] = ArrayCDataWater[idx][5];
+                    chillerEfficiencyData[c][4] = ArrayCDataWater[idx][6];
+                    chillerEfficiencyData[c][5] = ArrayCDataWater[idx][7];
+                    chillerEfficiencyData[c][6] = ArrayCDataWater[idx][1];
                 }
                 else if (chillers[c].chillerType == ChillerCompressorType::Reciprocating) {
-                    efficiencyData[c][0] = ArrayRDataWater[idx][2];
-                    efficiencyData[c][1] = ArrayRDataWater[idx][3];
-                    efficiencyData[c][2] = ArrayRDataWater[idx][4];
-                    efficiencyData[c][3] = ArrayRDataWater[idx][5];
-                    efficiencyData[c][4] = ArrayRDataWater[idx][6];
-                    efficiencyData[c][5] = ArrayRDataWater[idx][7];
-                    efficiencyData[c][6] = ArrayRDataWater[idx][1];
+                    chillerEfficiencyData[c][0] = ArrayRDataWater[idx][2];
+                    chillerEfficiencyData[c][1] = ArrayRDataWater[idx][3];
+                    chillerEfficiencyData[c][2] = ArrayRDataWater[idx][4];
+                    chillerEfficiencyData[c][3] = ArrayRDataWater[idx][5];
+                    chillerEfficiencyData[c][4] = ArrayRDataWater[idx][6];
+                    chillerEfficiencyData[c][5] = ArrayRDataWater[idx][7];
+                    chillerEfficiencyData[c][6] = ArrayRDataWater[idx][1];
                 }
                 else if (chillers[c].chillerType == ChillerCompressorType::Screw) {
-                    efficiencyData[c][0] = ArraySDataWater[idx][2];
-                    efficiencyData[c][1] = ArraySDataWater[idx][3];
-                    efficiencyData[c][2] = ArraySDataWater[idx][4];
-                    efficiencyData[c][3] = ArraySDataWater[idx][5];
-                    efficiencyData[c][4] = ArraySDataWater[idx][6];
-                    efficiencyData[c][5] = ArraySDataWater[idx][7];
-                    efficiencyData[c][6] = ArraySDataWater[idx][1];
+                    chillerEfficiencyData[c][0] = ArraySDataWater[idx][2];
+                    chillerEfficiencyData[c][1] = ArraySDataWater[idx][3];
+                    chillerEfficiencyData[c][2] = ArraySDataWater[idx][4];
+                    chillerEfficiencyData[c][3] = ArraySDataWater[idx][5];
+                    chillerEfficiencyData[c][4] = ArraySDataWater[idx][6];
+                    chillerEfficiencyData[c][5] = ArraySDataWater[idx][7];
+                    chillerEfficiencyData[c][6] = ArraySDataWater[idx][1];
                 }
             }
             else if (coolingType == CoolingSystemType::Air) {
                 if (chillers[c].chillerType == ChillerCompressorType::Reciprocating) {
-                    efficiencyData[c][0] = ArrayRDataAir[idx][2];
-                    efficiencyData[c][1] = ArrayRDataAir[idx][3];
-                    efficiencyData[c][2] = ArrayRDataAir[idx][4];
-                    efficiencyData[c][3] = ArrayRDataAir[idx][5];
-                    efficiencyData[c][4] = ArrayRDataAir[idx][6];
-                    efficiencyData[c][5] = ArrayRDataAir[idx][7];
-                    efficiencyData[c][6] = ArrayRDataAir[idx][1];
+                    chillerEfficiencyData[c][0] = ArrayRDataAir[idx][2];
+                    chillerEfficiencyData[c][1] = ArrayRDataAir[idx][3];
+                    chillerEfficiencyData[c][2] = ArrayRDataAir[idx][4];
+                    chillerEfficiencyData[c][3] = ArrayRDataAir[idx][5];
+                    chillerEfficiencyData[c][4] = ArrayRDataAir[idx][6];
+                    chillerEfficiencyData[c][5] = ArrayRDataAir[idx][7];
+                    chillerEfficiencyData[c][6] = ArrayRDataAir[idx][1];
                 }
                 else if (chillers[c].chillerType == ChillerCompressorType::Screw) {
-                    efficiencyData[c][0] = ArraySDataAir[idx][2];
-                    efficiencyData[c][1] = ArraySDataAir[idx][3];
-                    efficiencyData[c][2] = ArraySDataAir[idx][4];
-                    efficiencyData[c][3] = ArraySDataAir[idx][5];
-                    efficiencyData[c][4] = ArraySDataAir[idx][6];
-                    efficiencyData[c][5] = ArraySDataAir[idx][7];
-                    efficiencyData[c][6] = ArraySDataAir[idx][1];
+                    chillerEfficiencyData[c][0] = ArraySDataAir[idx][2];
+                    chillerEfficiencyData[c][1] = ArraySDataAir[idx][3];
+                    chillerEfficiencyData[c][2] = ArraySDataAir[idx][4];
+                    chillerEfficiencyData[c][3] = ArraySDataAir[idx][5];
+                    chillerEfficiencyData[c][4] = ArraySDataAir[idx][6];
+                    chillerEfficiencyData[c][5] = ArraySDataAir[idx][7];
+                    chillerEfficiencyData[c][6] = ArraySDataAir[idx][1];
                 }
             }
 
@@ -571,36 +571,123 @@ void ProcessCooling::annualChillerEfficiencyProfileARI() {
                 if (load == 0) {
                     chillerHourlyEfficiencyARI[c][j] =
                         (1 + chillers[c].age / 100.0f) *
-                            (efficiencyData[c][0] * pow(1.0f / 10, 5) + efficiencyData[c][1] * pow(1.0f / 10, 4) +
-                             efficiencyData[c][2] * pow(1.0f / 10, 3) + efficiencyData[c][3] * pow(1.0f / 10, 2) +
-                             efficiencyData[c][4] * (1.0f / 10) + efficiencyData[c][5]) *
+                            (chillerEfficiencyData[c][0] * pow(1.0f / 10, 5) + chillerEfficiencyData[c][1] * pow(1.0f / 10, 4) +
+                             chillerEfficiencyData[c][2] * pow(1.0f / 10, 3) + chillerEfficiencyData[c][3] * pow(1.0f / 10, 2) +
+                             chillerEfficiencyData[c][4] * (1.0f / 10) + chillerEfficiencyData[c][5]) *
                             2 -
                         (1 + chillers[c].age / 100.0f) *
-                            (efficiencyData[c][0] * pow(2.0f / 10, 5) + efficiencyData[c][1] * pow(2.0f / 10, 4) +
-                             efficiencyData[c][2] * pow(2.0f / 10, 3) + efficiencyData[c][3] * pow(2.0f / 10, 2) +
-                             efficiencyData[c][4] * (2.0f / 10) + efficiencyData[c][5]);
+                            (chillerEfficiencyData[c][0] * pow(2.0f / 10, 5) + chillerEfficiencyData[c][1] * pow(2.0f / 10, 4) +
+                             chillerEfficiencyData[c][2] * pow(2.0f / 10, 3) + chillerEfficiencyData[c][3] * pow(2.0f / 10, 2) +
+                             chillerEfficiencyData[c][4] * (2.0f / 10) + chillerEfficiencyData[c][5]);
                 }
                 else if (load == 100) {
-                    chillerHourlyEfficiencyARI[c][j] = (1 + chillers[c].age / 100.0f) * efficiencyData[c][6];
+                    chillerHourlyEfficiencyARI[c][j] = (1 + chillers[c].age / 100.0f) * chillerEfficiencyData[c][6];
                 }
                 else {
                     chillerHourlyEfficiencyARI[c][j] =
                         (1 + chillers[c].age / 100.0f) *
-                        (efficiencyData[c][0] * pow(load / 100.0f, 5) + efficiencyData[c][1] * pow(load / 100.0f, 4) +
-                         efficiencyData[c][2] * pow(load / 100.0f, 3) + efficiencyData[c][3] * pow(load / 100.0f, 2) +
-                         efficiencyData[c][4] * (load / 100.0f) + efficiencyData[c][5]);
+                        (chillerEfficiencyData[c][0] * pow(load / 100.0f, 5) + chillerEfficiencyData[c][1] * pow(load / 100.0f, 4) +
+                         chillerEfficiencyData[c][2] * pow(load / 100.0f, 3) + chillerEfficiencyData[c][3] * pow(load / 100.0f, 2) +
+                         chillerEfficiencyData[c][4] * (load / 100.0f) + chillerEfficiencyData[c][5]);
                 }
 
                 if (load <= 40) {
                     double tempEff = (1 + chillers[c].age / 100.0f) *
-                                     (efficiencyData[c][0] * pow((load / 100.0f + 0.1f), 5) +
-                                      efficiencyData[c][1] * pow((load / 100.0f + 0.1f), 4) +
-                                      efficiencyData[c][2] * pow((load / 100.0f + 0.1f), 3) +
-                                      efficiencyData[c][3] * pow((load / 100.0f + 0.1f), 2) +
-                                      efficiencyData[c][4] * (load / 100.0f + 0.1f) + efficiencyData[c][5]);
+                                     (chillerEfficiencyData[c][0] * pow((load / 100.0f + 0.1f), 5) +
+                                      chillerEfficiencyData[c][1] * pow((load / 100.0f + 0.1f), 4) +
+                                      chillerEfficiencyData[c][2] * pow((load / 100.0f + 0.1f), 3) +
+                                      chillerEfficiencyData[c][3] * pow((load / 100.0f + 0.1f), 2) +
+                                      chillerEfficiencyData[c][4] * (load / 100.0f + 0.1f) + chillerEfficiencyData[c][5]);
 
                     if (chillerHourlyEfficiencyARI[c][j] < tempEff) {
                         chillerHourlyEfficiencyARI[c][j] = tempEff * 1.1f;
+                    }
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Evaluates the ARI polynomial directly at loads 0,10,...,100% per chiller — unadjusted by
+ * operational schedule or environment (unlike chillerHourlyEfficiencyARI, which is schedule-driven).
+ *
+ * NOTE: Must be called after annualChillerEfficiencyProfileARI() (populates chillerEfficiencyData)
+ * and before annualChillerEfficiencyProfile() (applies operational adjustments).
+ * annualChillerEfficiencyProfileARI() could be refactored to return the raw coefficients in the future.
+ */
+void ProcessCooling::buildChillerEfficiencyARIProfile() {
+    for (int c = 0; c < numChillers; ++c) {
+        const double ageFactor = 1 + chillers[c].age / 100.0;
+
+        for (int l = 0; l < LOAD_NUM; ++l) {
+            const double loadPct = static_cast<double>(l * 10);
+
+            if (chillers[c].isFullLoadEffKnown) {
+                if (loadPct == 0) {
+                    chillerEfficiencyARIProfile[c][l] =
+                        ageFactor *
+                        (chillerEfficiencyData[c][0] * pow(1.0 / 10, 3) +
+                         chillerEfficiencyData[c][1] * pow(1.0 / 10, 2) +
+                         chillerEfficiencyData[c][2] * (1.0 / 10) + chillerEfficiencyData[c][3]) *
+                        chillers[c].fullLoadEff / (1.0 / 10);
+                }
+                else if (loadPct == 100) {
+                    chillerEfficiencyARIProfile[c][l] = ageFactor * chillers[c].fullLoadEff;
+                }
+                else {
+                    chillerEfficiencyARIProfile[c][l] =
+                        ageFactor *
+                        (chillerEfficiencyData[c][0] * pow(loadPct / 100.0, 3) +
+                         chillerEfficiencyData[c][1] * pow(loadPct / 100.0, 2) +
+                         chillerEfficiencyData[c][2] * (loadPct / 100.0) + chillerEfficiencyData[c][3]) *
+                        chillers[c].fullLoadEff / (loadPct / 100.0);
+                }
+            }
+            else {
+                if (loadPct == 0) {
+                    chillerEfficiencyARIProfile[c][l] =
+                        ageFactor *
+                            (chillerEfficiencyData[c][0] * pow(1.0 / 10, 5) +
+                             chillerEfficiencyData[c][1] * pow(1.0 / 10, 4) +
+                             chillerEfficiencyData[c][2] * pow(1.0 / 10, 3) +
+                             chillerEfficiencyData[c][3] * pow(1.0 / 10, 2) +
+                             chillerEfficiencyData[c][4] * (1.0 / 10) + chillerEfficiencyData[c][5]) *
+                            2 -
+                        ageFactor *
+                            (chillerEfficiencyData[c][0] * pow(2.0 / 10, 5) +
+                             chillerEfficiencyData[c][1] * pow(2.0 / 10, 4) +
+                             chillerEfficiencyData[c][2] * pow(2.0 / 10, 3) +
+                             chillerEfficiencyData[c][3] * pow(2.0 / 10, 2) +
+                             chillerEfficiencyData[c][4] * (2.0 / 10) + chillerEfficiencyData[c][5]);
+                }
+                else if (loadPct == 100) {
+                    chillerEfficiencyARIProfile[c][l] = ageFactor * chillerEfficiencyData[c][6];
+                }
+                else {
+                    chillerEfficiencyARIProfile[c][l] =
+                        ageFactor *
+                        (chillerEfficiencyData[c][0] * pow(loadPct / 100.0, 5) +
+                         chillerEfficiencyData[c][1] * pow(loadPct / 100.0, 4) +
+                         chillerEfficiencyData[c][2] * pow(loadPct / 100.0, 3) +
+                         chillerEfficiencyData[c][3] * pow(loadPct / 100.0, 2) +
+                         chillerEfficiencyData[c][4] * (loadPct / 100.0) + chillerEfficiencyData[c][5]);
+                }
+
+                // Mirror the <=40% adjustment from the hourly ARI calculation:
+                // if the curve would be lower than the next bin's value, clamp it upward.
+                if (loadPct <= 40) {
+                    const double loadNorm = loadPct / 100.0;
+                    const double tempEff  = ageFactor *
+                                          (chillerEfficiencyData[c][0] * pow(loadNorm + 0.1, 5) +
+                                           chillerEfficiencyData[c][1] * pow(loadNorm + 0.1, 4) +
+                                           chillerEfficiencyData[c][2] * pow(loadNorm + 0.1, 3) +
+                                           chillerEfficiencyData[c][3] * pow(loadNorm + 0.1, 2) +
+                                           chillerEfficiencyData[c][4] * (loadNorm + 0.1) +
+                                           chillerEfficiencyData[c][5]);
+
+                    if (chillerEfficiencyARIProfile[c][l] < tempEff) {
+                        chillerEfficiencyARIProfile[c][l] = tempEff * 1.1;
                     }
                 }
             }
