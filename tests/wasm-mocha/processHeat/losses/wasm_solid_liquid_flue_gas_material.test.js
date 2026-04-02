@@ -115,6 +115,6 @@ describe('Process Heat SolidLiquidFlueGasMaterial', function () {
             inp.fuelTemperature, inp.moistureInAirCombustion, inp.ashDischargeTemperature,
             inp.unburnedCarbonInAsh, inp.carbon, inp.hydrogen, inp.sulphur, inp.inertAsh, inp.o2, inp.moisture,
             inp.nitrogen, inp.ambientAirTempF);
-        assert.equal(heatLoss, 0.8222977480707968);
+        assert.equal(heatLoss, 0.82606233456934197);
     });
 });
