@@ -1,8 +1,10 @@
 
 
 #include "processHeat/losses/solid_liquid_flue_gas_material.h"
+
 #include <cmath>
 #include <iostream>
+
 #include "physics/gas_constants.h"
 #include "processHeat/process_heat.h"
 
@@ -101,7 +103,7 @@ double calculateHeatingValueFuel(double carbon, double hydrogen, double sulphur,
     constexpr double kHvH = 61100.0; // Btu/lb for hydrogen
     constexpr double kHvS = 3980.0;  // Btu/lb for sulphur
 
-    const double percent_total_fuel = carbon  + hydrogen + sulphur + inert_ash + o2 + moisture + nitrogen;
+    const double percent_total_fuel = carbon + hydrogen + sulphur + inert_ash + o2 + moisture + nitrogen;
     const double carbon_frac        = carbon / percent_total_fuel;
     const double hydrogen_frac      = hydrogen / percent_total_fuel;
     const double sulphur_frac       = sulphur / percent_total_fuel;
@@ -117,7 +119,6 @@ double totalHeatLoss(const double flue_gas_temperature, const double excess_air,
                      const double sulphur, const double inert_ash, const double o2, const double moisture,
                      const double nitrogen, const double ambient_air_temp_f) {
     using namespace gas_constants;
-
     // --- Constants ---
     constexpr double kHfuel = 0.24;
     constexpr double kHvC   = 14100.0;
@@ -137,7 +138,7 @@ double totalHeatLoss(const double flue_gas_temperature, const double excess_air,
     const double inert_ash_frac       = inert_ash / 100.0;
 
     // --- Step 2 & 3: Fuel and combustion air enthalpy ---
-    const double h_fuel            = kHfuel * (1.0 - moisture_frac) * (fuel_temperature - ambient_air_temp_f);
+    const double h_fuel = kHfuel * (1.0 - moisture_frac) * (fuel_temperature - ambient_air_temp_f);
     const double cp_combustion_air = 0.01788166862315 + 0.0000016704748 * combustion_air_temperature;
     const double o2s_air           = carbon_frac * (32.0 / 12.0) + hydrogen_frac * 8.0 + sulphur_frac - o2_frac;
     const double n2s_air           = o2s_air * (76.85 / 23.15);
@@ -163,61 +164,51 @@ double totalHeatLoss(const double flue_gas_temperature, const double excess_air,
     // --- Step 6: Sensible heat of flue gas components (expanded for clarity) ---
     const double absolute_flue_gas_temp = flue_gas_temperature + 460.0; // Rankine
 
+    const double delta_t = flue_gas_temperature - ambient_air_temp_f;
     // CO2 sensible heat
     const double cp_co2         = specificHeatCO2(absolute_flue_gas_temp); // Btu/lb-mol-R
-    const double delta_t_co2    = flue_gas_temperature - ambient_air_temp_f;
     const double moles_co2      = carbon_frac * kCToCO2;
-    const double h_sensible_co2 = moles_co2 * (cp_co2 / kCO2Mw) * delta_t_co2;
-
+    const double h_sensible_co2 = moles_co2 * (cp_co2 / kCO2Mw) * delta_t;
     // H2O sensible heat (from fuel and moisture)
     const double cp_h2o              = specificHeatH2O(absolute_flue_gas_temp); // Btu/lb-mol-R
-    const double delta_t_h2o         = flue_gas_temperature - ambient_air_temp_f;
     const double moles_h2o_fuel      = hydrogen_frac * kHToH2O + moisture_frac;
     const double moles_h2o_air       = (moisture_in_air_combustion / 100.0) * m_combustion_air;
-    const double h_sensible_h2o_fuel = moles_h2o_fuel * (h_sat + (cp_h2o / kH2OMw) * delta_t_h2o);
-    const double h_sensible_h2o_air  = moles_h2o_air * (cp_h2o / kH2OMw) * delta_t_h2o;
+    const double h_sensible_h2o_fuel = moles_h2o_fuel * (h_sat + (cp_h2o / kH2OMw) * delta_t);
+    const double h_sensible_h2o_air  = moles_h2o_air * (cp_h2o / kH2OMw) * delta_t;
     const double h_sensible_h2o      = h_sensible_h2o_fuel + h_sensible_h2o_air;
-
     // SO2 sensible heat
     const double cp_so2         = kSO2Cp; // Btu/lb-mol-R
-    const double delta_t_so2    = flue_gas_temperature - ambient_air_temp_f;
     const double moles_so2      = sulphur_frac * kSToSO2;
-    const double h_sensible_so2 = moles_so2 * (cp_so2 / kSO2Mw) * delta_t_so2;
-
+    const double h_sensible_so2 = moles_so2 * (cp_so2 / kSO2Mw) * delta_t;
     // O2 sensible heat
     const double cp_o2         = specificHeatO2(absolute_flue_gas_temp); // Btu/lb-mol-R
-    const double delta_t_o2    = flue_gas_temperature - ambient_air_temp_f;
-    const double h_sensible_o2 = m_o2 * (cp_o2 / kO2Mw) * delta_t_o2;
-
+    const double h_sensible_o2 = m_o2 * (cp_o2 / kO2Mw) * delta_t;
     // N2 sensible heat
     const double cp_n2         = specificHeatN2(absolute_flue_gas_temp); // Btu/lb-mol-R
-    const double delta_t_n2    = flue_gas_temperature - ambient_air_temp_f;
-    const double h_sensible_n2 = m_n2 * (cp_n2 / kN2Mw) * delta_t_n2;
-
+    const double h_sensible_n2 = m_n2 * (cp_n2 / kN2Mw) * delta_t;
     // Total sensible heat of flue gas
     const double h_fg = h_sensible_h2o + h_sensible_co2 + h_sensible_n2 + h_sensible_o2 + h_sensible_so2;
-
     // --- Step 7, 8, 9: Other losses ---
-    const double h_moisture = moisture * (flue_gas_temperature - ambient_air_temp_f);
+    const double h_moisture = (moisture / 100.0) * delta_t;
     const double h_carbon   = 14093.0 * unburned_carbon_frac * (inert_ash_frac / percent_total_fuel);
     const double h_ash =
         (inert_ash_frac / percent_total_fuel) * 0.25 * (1.8 * ash_discharge_temperature + 32.0 - ambient_air_temp_f);
     const double h_in = h_fuel + h_combustion_air + heating_value_fuel + h_moisture;
-
     // --- Final available heat percent ---
     const double available_heat_percent = (h_in - h_fg - h_ash - h_carbon) / heating_value_fuel;
     return available_heat_percent;
 }
 
-double calculateStoichiometricAir(double carbon, double hydrogen, double sulphur, double inert_ash, double o2, double moisture, double nitrogen) {
+double calculateStoichiometricAir(double carbon, double hydrogen, double sulphur, double inert_ash, double o2,
+                                  double moisture, double nitrogen) {
     return 333.333; // Placeholder implementation from legacy code
-    //This below code was generated by copilot. Math is being check by engineering team and will be updated.
-    // Normalize fuel composition (percent to fraction)
+    // This below code was generated by copilot. Math is being check by engineering team and will be updated.
+    //  Normalize fuel composition (percent to fraction)
     const double percent_total_fuel = carbon + hydrogen + sulphur + inert_ash + o2 + moisture + nitrogen;
-    const double carbon_frac   = carbon / percent_total_fuel;
-    const double hydrogen_frac = hydrogen / percent_total_fuel;
-    const double sulphur_frac  = sulphur / percent_total_fuel;
-    const double o2_frac       = o2 / percent_total_fuel;
+    const double carbon_frac        = carbon / percent_total_fuel;
+    const double hydrogen_frac      = hydrogen / percent_total_fuel;
+    const double sulphur_frac       = sulphur / percent_total_fuel;
+    const double o2_frac            = o2 / percent_total_fuel;
 
     // Stoichiometric O2 required (lb O2/lb fuel)
     // O2_s,air = x_C * kCToO2 + x_H * kHToO2 + x_S * kSToO2 - x_O2

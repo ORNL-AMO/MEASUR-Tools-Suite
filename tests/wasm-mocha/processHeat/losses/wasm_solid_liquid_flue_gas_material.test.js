@@ -85,4 +85,36 @@ describe('Process Heat SolidLiquidFlueGasMaterial', function () {
         var excessAir = moduleInstance.calculateExcessAirFromFlueGasO2(inp.o2InFlueGas, inp.carbon, inp.hydrogen, inp.sulphur, inp.inertAsh, inp.o2, inp.moisture, inp.nitrogen, inp.moistureInAirCombustion) * 100;
         assert.equal(excessAir, 44.75000361875009);
     });
+
+    it('should calculate heatLoss correctly', function () {
+        var inp = {
+            "gasTypeId": 1,
+            "flueGasTemperature": 600,
+            "oxygenCalculationMethod": "Excess Air",
+            "excessAirPercentage": 20,
+            "o2InFlueGas": 3.573146432264344,
+            "ambientAirTemp": 65,
+            "combustionAirTemperature": 65,
+            "fuelTemperature": 65,
+            "ashDischargeTemperature": 400,
+            "moistureInAirCombustion": 0.0077,
+            "unburnedCarbonInAsh": 1,
+            "carbon": 70.3,
+            "hydrogen": 4.9,
+            "sulphur": 2.2,
+            "inertAsh": 1.5,
+            "o2": 8.7,
+            "moisture": 4.9,
+            "nitrogen": 7.5,
+            "heatInput": 10,
+            "ambientAirTempF": 65,
+            "combAirMoisturePerc": 0.0077
+        };
+
+        var heatLoss = moduleInstance.solidLiquidFlueGasMaterialTotalHeatLoss(inp.flueGasTemperature, inp.excessAirPercentage, inp.combustionAirTemperature,
+            inp.fuelTemperature, inp.moistureInAirCombustion, inp.ashDischargeTemperature,
+            inp.unburnedCarbonInAsh, inp.carbon, inp.hydrogen, inp.sulphur, inp.inertAsh, inp.o2, inp.moisture,
+            inp.nitrogen, inp.ambientAirTempF);
+        assert.equal(heatLoss, 0.82606233456934197);
+    });
 });
