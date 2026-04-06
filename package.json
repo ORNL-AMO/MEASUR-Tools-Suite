@@ -7,7 +7,8 @@
   },
   "scripts": {
     "test:browser": "karma start",
-    "tests": "npx karma start --browsers ChromeHeadlessNoSandbox --auto-watch false"
+    "tests": "npx karma start --browsers ChromeHeadlessNoSandbox --auto-watch false",
+    "test-modeler": "npx karma start --auto-watch false --files tests/wasm-mocha/steam/assessment/wasm_steam_modeler_bug.test.js"
   },
   "description": "Calculation library for the Department of Energy Advanced Manufacturing and Materials Technologies Office and the Industrial Efficiency & Decarbonization Office (DOE AMMTO IEDO)  suite of tools",
   "author": "Gina Accawi <accawigk@ornl.gov>",
