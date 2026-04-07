@@ -3,12 +3,14 @@
 std::vector<Inlet> InletFactory::make(const Boiler& boiler) const {
     const std::string methodName = std::string("InletFactory::") + std::string(__func__) + ": ";
 
-    // std::cout << methodName << "making inlet from boiler" << std::endl;
+    std::cout << methodName << "making inlet from boiler" << std::endl;
 
     double                                 pressure      = boiler.getSteamPressure();
     SteamProperties::ThermodynamicQuantity quantityType  = SteamProperties::ThermodynamicQuantity::ENTHALPY;
     double                                 quantityValue = boiler.getSteamProperties().specificEnthalpy;
     double                                 massFlow      = boiler.getSteamMassFlow();
+    std::cout << "MASS FLOW FROM BOILER=" << massFlow << std::endl;
+    std::cout << "PRESSURE FROM BOILER=" << pressure << std::endl;
 
     const Inlet inlet = {pressure, quantityType, quantityValue, massFlow};
     // std::cout << methodName << "inlet=" << inlet << std::endl;

@@ -18,10 +18,10 @@ double SteamUseCalculator::calc(const int headerCountInput, const HeaderWithHigh
         condensingTurbineInput.isUseTurbine() ? condensingTurbine->getMassFlow() : 0;
 
     const double steamUse = processSteamUsage + deaeratorInletSteamMassFlow + condensingTurbineMassFlow;
-    // std::cout << methodName << "processSteamUsage=" << processSteamUsage
-    //   << " + deaeratorInletSteamMassFlow=" << deaeratorInletSteamMassFlow
-    //   << " + condensingTurbineMassFlow=" << condensingTurbineMassFlow
-    //   << ": steamUse=" << steamUse << std::endl;
+    std::cout << "processSteamUsage=" << processSteamUsage << std::endl;
+    std::cout << "deaeratorInletSteamMassFlow=" << deaeratorInletSteamMassFlow << std::endl;
+    std::cout << "condensingTurbineMassFlow=" << condensingTurbineMassFlow << std::endl;
+    std::cout << "steamUse=" << steamUse << std::endl;
 
     return steamUse;
 }

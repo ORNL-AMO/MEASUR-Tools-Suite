@@ -4,6 +4,7 @@ Boiler BoilerFactory::make(const HeaderInput& headerInput, const BoilerInput& bo
     double                                 deaeratorPressure    = boilerInput.getDeaeratorPressure();
     double                                 combustionEfficiency = boilerInput.getCombustionEfficiency();
     double                                 blowdownRate         = boilerInput.getBlowdownRate();
+    //I think we locked the steam pressure in the high pressure header to the boiler pressure
     double                                 steamPressure        = headerInput.getHighPressureHeader().getPressure();
     SteamProperties::ThermodynamicQuantity quantityType         = SteamProperties::ThermodynamicQuantity::TEMPERATURE;
     double                                 quantityValue        = boilerInput.getSteamTemperature();

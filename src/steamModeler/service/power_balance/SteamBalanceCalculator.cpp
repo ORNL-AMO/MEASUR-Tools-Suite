@@ -26,8 +26,8 @@ double SteamBalanceCalculator::calc(
 
     // steam balance = difference between use and production (we want 0!)
     double steamBalance = steamUse - steamProduction;
-    //     std::cout << methodName
-    //               << "steamUse=" << steamUse << " - steamProduction=" << steamProduction
-    //               << ": steamBalance=" << steamBalance << std::endl;
+        std::cout << methodName
+                  << "steamUse=" << steamUse << " - steamProduction=" << steamProduction
+                  << ": steamBalance=" << steamBalance << std::endl;
     return steamBalance;
 }

@@ -30,6 +30,10 @@ std::ostream& operator<<(std::ostream& stream, const Boiler& boiler) {
 }
 
 void Boiler::calculateProperties() {
+    std::cout << "THIS IS WHERE WE NEED 1...?" << std::endl;
+    std::cout << "Quantity Type: " << static_cast<int>(quantityType) << std::endl;
+    std::cout << "Quantity Value: " << quantityValue << std::endl;
+    std::cout << "BOILER STEAM MASS FLOW: " << steamMassFlow << std::endl;
     auto sp                 = SteamProperties(steamPressure, quantityType, quantityValue).calculate();
     steamProperties         = {steamMassFlow, sp.specificEnthalpy * steamMassFlow, sp};
     steamProperties.quality = 1; // TODO question tell UI guys that there needs to be a warning

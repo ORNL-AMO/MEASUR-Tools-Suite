@@ -41,15 +41,13 @@ describe('Steam Modeler Bug', function () {
                 "blowdownRate": 8,
                 "blowdownFlashed": true,
                 "preheatMakeupWater": false,
-                "steamQuality": 0,
+                "steamQuality": 1,
                 "pressureOrTemperature": 0,
-                "saturatedPressure": 105,
+                "saturatedPressure": 0.82527519301388,
                 "steamTemperature": 444.81666666666666,
                 "deaeratorVentRate": 10,
                 "deaeratorPressure": 0.10132539296661526,
-                "approachTemperature": 61.11111111111106,
-                "blowdownConductivity": 2500,
-                "feedwaterConductivity": 10
+                "approachTemperature": 61.11111111111106
             },
             "headerInput": {
                 "numberOfHeaders": 1,

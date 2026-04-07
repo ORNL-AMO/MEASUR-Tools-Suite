@@ -22,15 +22,15 @@ PowerBalanceCheckerCalculationsDomain PowerBalanceChecker::check(
         condensingTurbineInput, boiler, blowdownFlashTank, deaeratorInletSteamMassFlow,
         highPressureHeaderCalculationsDomain, mediumPressureHeaderCalculationsDomain,
         lowPressureHeaderCalculationsDomain);
-    // std::cout << methodName << "steamBalance=" << steamBalance << std::endl;
+    std::cout << methodName << "steamBalance=" << steamBalance << std::endl;
 
     std::shared_ptr<LowPressureVentedSteamCalculationsDomain> lowPressureVentedSteamCalculationsDomainPtr = nullptr;
     std::shared_ptr<SteamSystemModelerTool::FluidProperties>  lowPressureVentedSteamPtr                   = nullptr;
 
     // TODO refactor this
     if (headerCountInput > 1 && steamBalance < 0) {
-        // std::cout << methodName << "headerCountInput > 1 and steamBalance < 0 so calculating lowPressureVentedSteam"
-        //      << std::endl;
+        std::cout << methodName << "headerCountInput > 1 and steamBalance < 0 so calculating lowPressureVentedSteam"
+             << std::endl;
 
         double deaeratorInletSteamMassFlowUpdated = deaeratorInletSteamMassFlow;
 
@@ -54,16 +54,16 @@ PowerBalanceCheckerCalculationsDomain PowerBalanceChecker::check(
                 lowPressureVentedSteamCalculationsDomain.deaerator.getInletSteamProperties().massFlow;
 
             steamBalance += lowPressureVentedSteam;
-            // std::cout << methodName << "updated steamBalance=" << steamBalance
-            //  << " (added lowPressureVentedSteam=" << lowPressureVentedSteam << " to it)" << std::endl;
+            std::cout << methodName << "updated steamBalance=" << steamBalance
+             << " (added lowPressureVentedSteam=" << lowPressureVentedSteam << " to it)" << std::endl;
         }
 
         // Steam balance will be positive, vented steam amount ends up negative.
         // If it gets it close enough to zero then venting the steam will result in a balanced system.
         const double absSteamBalance = fabs(steamBalance);
         if (absSteamBalance < 1e-2) {
-            // std::cout << methodName << "steamBalance < " << 1e-2 << " so calculating lowPressureVentedSteam again"
-            //  << " with recalcMakeupWaterAndMassFlow" << std::endl;
+            std::cout << methodName << "steamBalance < " << 1e-2 << " so calculating lowPressureVentedSteam again"
+             << " with recalcMakeupWaterAndMassFlow" << std::endl;
             const bool                               recalcMakeupWaterAndMassFlow = true;
             LowPressureVentedSteamCalculationsDomain lowPressureVentedSteamCalculationsDomain =
                 lowPressureVentedSteamCalculator.calc(
@@ -77,8 +77,8 @@ PowerBalanceCheckerCalculationsDomain PowerBalanceChecker::check(
             lowPressureVentedSteamCalculationsDomainPtr =
                 std::make_shared<LowPressureVentedSteamCalculationsDomain>(lowPressureVentedSteamCalculationsDomain);
 
-            // std::cout << methodName << "calculating final lowPressureVentedSteam"
-            //  << " from lowPressureHeaderOutput and lowPressureVentedSteam" << std::endl;
+            std::cout << methodName << "calculating final lowPressureVentedSteam"
+             << " from lowPressureHeaderOutput and lowPressureVentedSteam" << std::endl;
             const SteamSystemModelerTool::FluidProperties& lowPressureHeaderOutput =
                 lowPressureHeaderCalculationsDomain->lowPressureHeaderOutput;
             const double lowPressureVentedSteamAmount = lowPressureVentedSteamCalculationsDomain.lowPressureVentedSteam;
@@ -90,7 +90,7 @@ PowerBalanceCheckerCalculationsDomain PowerBalanceChecker::check(
     }
     else {
         // std::cout << methodName << "condition not true (headerCountInput > 1 and steamBalance < 0)"
-        //  << ", so skip calculating lowPressureVentedSteam" << std::endl;
+        //      << ", so skip calculating lowPressureVentedSteam" << std::endl;
     }
 
     restarter.restartIfNotEnoughSteam(steamBalance, boiler);

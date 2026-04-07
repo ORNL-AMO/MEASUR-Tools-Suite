@@ -15,16 +15,15 @@ DeaeratorFactory::make(const BoilerInput& boilerInput, const double feedwaterMas
     SteamProperties::ThermodynamicQuantity steamQuantityType  = SteamProperties::ThermodynamicQuantity::ENTHALPY;
     double                                 steamQuantityValue = inletHeaderOutput.specificEnthalpy;
 
-    // std::cout << methodName << "deaerator inputs: "
-    //           << "deaeratorPressure=" << deaeratorPressure
-    //           << ", ventRate=" << ventRate
-    //           << ", waterPressure=" << waterPressure
-    //           //    << ", waterQuantityType=" << waterQuantityType
-    //           << ", waterQuantityValue=" << waterQuantityValue
-    //           << ", steamPressure=" << steamPressure
-    //           //    << ", steamQuantityType=" << steamQuantityType
-    //           << ", steamQuantityValue=" << steamQuantityValue
-    //           << std::endl;
+    std::cout << methodName << "deaerator inputs: " << std::endl;
+    std::cout << "deaeratorPressure=" << deaeratorPressure << std::endl;
+    std::cout << "ventRate=" << ventRate << std::endl;
+    std::cout << "waterPressure=" << waterPressure << std::endl;
+    // std::cout << "waterQuantityType=" << waterQuantityType << std::endl;
+    std::cout << "waterQuantityValue=" << waterQuantityValue << std::endl;
+    std::cout << "steamPressure=" << steamPressure << std::endl;
+    // std::cout << "steamQuantityType=" << steamQuantityType << std::endl;
+    std::cout << "steamQuantityValue=" << steamQuantityValue << std::endl;
 
     const Deaerator& deaerator = {deaeratorPressure, ventRate,          feedwaterMassFlow,
                                   waterPressure,     waterQuantityType, waterQuantityValue,
