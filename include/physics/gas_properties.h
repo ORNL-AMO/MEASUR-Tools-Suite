@@ -24,7 +24,8 @@ class GasProperties {
           composition_percent(composition_percent), composition_by_volume(composition_by_volume),
           o2_generated(o2_generated), heating_value(heating_value), heating_value_volume(heating_value_volume),
           h2o_generated(h2o_generated), co2_generated(co2_generated),
-          composition_weight(composition_by_volume * specific_weight) {};
+          composition_weight(composition_by_volume * specific_weight),
+          composition_weight_fraction(0.0) {};
 
     void setCompositionWeightFraction(double total_weight) {
         composition_weight_fraction = composition_weight / total_weight;
