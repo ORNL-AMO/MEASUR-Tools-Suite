@@ -5,6 +5,24 @@
 
 using namespace Catch;
 
+auto validateHeatCapacity = [](const double pressure, const double temperature,
+    const SteamSystemModelerTool::SteamPropertiesOutput& expected) {
+    const auto steamProperties = SteamProperties(pressure, SteamProperties::ThermodynamicQuantity::TEMPERATURE, temperature).calculate();
+    CHECK(steamProperties.temperature == Approx(expected.temperature));
+    CHECK(steamProperties.pressure == Approx(expected.pressure));
+
+    CHECK(steamProperties.specificVolume == Approx(expected.specificVolume));
+    CHECK(steamProperties.density == Approx(expected.density));
+    CHECK(steamProperties.specificEnthalpy == Approx(expected.specificEnthalpy));
+    CHECK(steamProperties.specificEntropy == Approx(expected.specificEntropy));
+    CHECK(steamProperties.internalEnergy == Approx(expected.internalEnergy));
+
+    CHECK(steamProperties.specificIsobaricHeatCapacity_cp == Approx(expected.specificIsobaricHeatCapacity_cp));
+    CHECK(steamProperties.specificIsochoricHeatCapacity_cv == Approx(expected.specificIsochoricHeatCapacity_cv));
+    CHECK(steamProperties.speedOfSound_w == Approx(expected.speedOfSound_w));
+    CHECK(steamProperties.isentropicExponent == Approx(expected.isentropicExponent));
+};
+
 // TEST_CASE( "region 1", "[region 1]") {
 //	auto result = SteamSystemModelerTool::region1(300, 15);
 //	CHECK( result.pressure == Approx(15.0));
@@ -315,4 +333,48 @@ TEST_CASE("Calculate Steam Properties using Pressure and Entropy", "[waterProper
     CHECK(result.specificVolume == Approx(0.0042610579));
     CHECK(result.specificEnthalpy == Approx(3335.9653473966));
     CHECK(result.specificEntropy == Approx(5.75));
+}
+
+TEST_CASE("Calculate Steam Properties using Pressure and Temperature", "[HeatCapacityCpCvIsentropicExponent]") {
+    INFO("Region 1: ");
+    validateHeatCapacity(3, 300,
+        SteamSystemModelerTool::SteamPropertiesOutput(300, 3, 0,
+            0.00100215, 997.853, 115.331, 0.392295, 0,
+            4.17301, 4.1212, 1507.74, 1.25));
+    validateHeatCapacity(80, 300,
+        SteamSystemModelerTool::SteamPropertiesOutput(300, 80, 0,
+            0.000971181, 1029.67, 184.143, 0.368564, 0,
+            4.01009, 3.91737, 1634.69, 1.25));
+    validateHeatCapacity(3, 500,
+        SteamSystemModelerTool::SteamPropertiesOutput(500, 3, 0,
+            0.00120242, 831.658, 975.542, 2.58042, 0,
+            4.65581, 3.22139, 1240.71, 1.25));
+
+    INFO("Region 2: ");
+    validateHeatCapacity(0.0035, 300,
+        SteamSystemModelerTool::SteamPropertiesOutput(300, 0.0035, 1,
+            39.4914, 0.025322, 2549.91, 8.52239, -119.803,
+            1.913, 1.44133, 427.92, 1.3248));
+    validateHeatCapacity(0.0035, 700,
+        SteamSystemModelerTool::SteamPropertiesOutput(700, 0.0035, 1,
+            92.3016, 0.010834, 3335.68, 10.175, -312.731,
+            2.08141, 1.61978, 644.289, 1.28494));
+    validateHeatCapacity(30, 700,
+        SteamSystemModelerTool::SteamPropertiesOutput(700, 30, 1,
+            0.00542947, 184.18, 2631.49, 5.1754, -154.739,
+            10.3505, 2.97554, 480.387, 1.34));
+
+    INFO("Region 3: ");
+    validateHeatCapacity(25.5837018, 650,
+        SteamSystemModelerTool::SteamPropertiesOutput(650, 25.5837, 0,
+            0.002, 500, 1863.43, 4.05427, 1812.26,
+            13.8936, 3.19132, 502.006, 1.25));
+    validateHeatCapacity(22.2930643, 650,
+        SteamSystemModelerTool::SteamPropertiesOutput(650, 22.2931, 0,
+            0.005, 200, 2375.12, 4.85439, 2263.66,
+            44.6579, 4.04118, 383.445, 1.31906));
+    validateHeatCapacity(78.3095639, 750,
+        SteamSystemModelerTool::SteamPropertiesOutput(750, 78.3096, 0,
+            0.002, 500, 2258.69, 4.46972, 2102.07,
+            6.34165, 2.71702, 760.696, 1.25));
 }

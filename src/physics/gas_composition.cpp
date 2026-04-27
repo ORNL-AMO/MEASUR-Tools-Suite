@@ -124,7 +124,7 @@ GasFlueGasComponents GasComposition::getMassFlueGasComponents(double excess_air)
     }
     components.mO2 *= excess_air;
 
-    auto const& N2 = n2;
+    // auto const& N2 = n2;
     for (auto* c : getConstituents()) {
         components.mN2 += ((c->o2_generated * c->composition_weight_fraction) / c->molecular_weight);
     }

@@ -22,12 +22,12 @@ double calculateExcessAirFromFlueGasO2(double flue_gas_o2, double carbon, double
                                        double inert_ash, double o2, double moisture, double nitrogen,
                                        double moisture_in_air_combustion) {
     // --- Normalize fuel composition ---
-    const double percent_total_fuel = carbon + hydrogen + sulphur + inert_ash + o2 + moisture + nitrogen;
-    const double carbon_frac        = carbon / percent_total_fuel;
-    const double hydrogen_frac      = hydrogen / percent_total_fuel;
-    const double sulphur_frac       = sulphur / percent_total_fuel;
-    const double o2_frac            = o2 / percent_total_fuel;
-    const double moisture_frac      = moisture / percent_total_fuel;
+    // const double percent_total_fuel = carbon + hydrogen + sulphur + inert_ash + o2 + moisture + nitrogen;
+    // const double carbon_frac        = carbon / percent_total_fuel;
+    // const double hydrogen_frac      = hydrogen / percent_total_fuel;
+    // const double sulphur_frac       = sulphur / percent_total_fuel;
+    // const double o2_frac            = o2 / percent_total_fuel;
+    // const double moisture_frac      = moisture / percent_total_fuel;
 
     // --- Initial estimate for excess air ---
     double excess_air = process_heat::calculateExcessAir(flue_gas_o2);

@@ -4,9 +4,14 @@
 
 #include <steamModeler/SteamSystemModelerTool.h>
 
+void SteamSystemModelerTool::checkIsentropicExponentLimits(double& k) {
+    if (k < 1.25) k = 1.25;
+    else if (k > 1.34 && k < 1.67) k = 1.34;
+    else if (k >= 1.67) k = 1.25;
+}
+
 // where t is temperature and p is pressure
 SteamSystemModelerTool::SteamPropertiesOutput SteamSystemModelerTool::region1(const double t, const double p) {
-
     static const std::array<double, 34> n = {
         {0.14632971213167,      -0.84548187169114,    -0.37563603672040e1,   0.33855169168385e1,
          -0.95791963387872,     0.15772038513228,     -0.16616417199501e-1,  0.81214629983568e-3,
@@ -28,28 +33,41 @@ SteamSystemModelerTool::SteamPropertiesOutput SteamSystemModelerTool::region1(co
     auto const inversedReducedTemp = 1386.0 / t;
 
     double gibbs   = 0;
-    double gibbsPi = 0;
-    double gibbsT  = 0;
+    double gibbsPi = 0, gibbsPT = 0, gibbsPP = 0;
+    double gibbsT  = 0, gibbsTT = 0;
 
     for (std::size_t k = 0; k < n.size(); k++) {
         gibbs += n[k] * pow((7.1 - reducedPressure), i[k]) * pow((inversedReducedTemp - 1.222), j[k]);
         gibbsPi += -n[k] * i[k] * pow((7.1 - reducedPressure), i[k] - 1) * pow((inversedReducedTemp - 1.222), j[k]);
         gibbsT += n[k] * pow((7.1 - reducedPressure), i[k]) * j[k] * pow((inversedReducedTemp - 1.222), j[k] - 1);
+        gibbsTT += n[k] * pow((7.1 - reducedPressure), i[k]) * j[k] * (j[k]-1) * pow((inversedReducedTemp - 1.222), j[k] - 2);
+        gibbsPP += n[k] * i[k] * (i[k]-1) * pow((7.1 - reducedPressure), i[k] - 2) * pow((inversedReducedTemp - 1.222), j[k]);
+        gibbsPT += -n[k] * i[k] * pow((7.1 - reducedPressure), i[k] - 1) * j[k] * pow((inversedReducedTemp - 1.222), j[k]-1);
     }
 
     auto const r = 0.461526;
+
+    double cp = -inversedReducedTemp * inversedReducedTemp * gibbsTT * r;
+    double cvn = gibbsPi - inversedReducedTemp * gibbsPT;
+    double cv = cp + cvn * cvn / gibbsPP * r;
+    double sv = reducedPressure * gibbsPi * t * r / p / 1000.0;
+    double wd1 = gibbsPi - inversedReducedTemp*gibbsPT;
+    double w = std::pow(gibbsPi*gibbsPi / (wd1*wd1/(inversedReducedTemp*inversedReducedTemp*gibbsTT) - gibbsPP) * r * t * 1000, 0.5);
+    double k = w*w / (p*sv) / 1000000;
+    checkIsentropicExponentLimits(k);
+
     return {t,
             p,
             0,
-            reducedPressure * gibbsPi * t * r / p / 1000.0,
+            sv,
             1 / (reducedPressure * gibbsPi * t * r / p / 1000.0),
             inversedReducedTemp * gibbsT * t * r,
-            (inversedReducedTemp * gibbsT - gibbs) * r};
+            (inversedReducedTemp * gibbsT - gibbs) * r,
+            0, cp, cv, w, k};
 }
 
 // where t is temperature in K and p is pressure in MPa
 SteamSystemModelerTool::SteamPropertiesOutput SteamSystemModelerTool::region2(const double t, const double p) {
-
     static const std::array<double, 9>  n0 = {{-0.96927686500217E+01, 0.10086655968018E+02, -0.56087911283020E-02,
                                                0.71452738081455E-01, -0.40710498223928E+00, 0.14240819171444E+01,
                                                -0.43839511319450E+01, -0.28408632460772E+00, 0.21268463753307E-01}};
@@ -88,22 +106,40 @@ SteamSystemModelerTool::SteamPropertiesOutput SteamSystemModelerTool::region2(co
 
     double gibbs1   = 0;
     double gibbsPi1 = 0;
-    double gibbsT1  = 0;
+    double gibbsT1  = 0, gibbsTT1 = 0, gibbsPT1 = 0, gibbsPP1 = 0;
 
     for (std::size_t k = 0; k < n1.size(); k++) {
         gibbs1 += n1[k] * std::pow(reducedPressure, i1[k]) * std::pow((inverseReducedTemp - 0.5), j1[k]);
         gibbsPi1 += n1[k] * i1[k] * std::pow(reducedPressure, i1[k] - 1) * std::pow((inverseReducedTemp - 0.5), j1[k]);
         gibbsT1 += n1[k] * std::pow(reducedPressure, i1[k]) * j1[k] * std::pow((inverseReducedTemp - 0.5), j1[k] - 1);
+        gibbsTT1 += n1[k] * std::pow(reducedPressure, i1[k]) * j1[k]  * (j1[k]-1) * std::pow((inverseReducedTemp - 0.5), j1[k] - 2);
+        gibbsPT1 += n1[k] * i1[k] * std::pow(reducedPressure, i1[k]-1) * j1[k] * std::pow((inverseReducedTemp - 0.5), j1[k]-1);
+        gibbsPP1 += n1[k] * i1[k] * (i1[k] -1) * std::pow(reducedPressure, i1[k]-2) * std::pow((inverseReducedTemp - 0.5), j1[k]);
     }
     auto const r = 0.461526;
+
+    double cp = -inverseReducedTemp * inverseReducedTemp * (gibbsTT0 + gibbsTT1) * r;
+    double cvn = 1 + reducedPressure * gibbsPi1 - inverseReducedTemp * reducedPressure * gibbsPT1;
+    double cvd = 1 - reducedPressure * reducedPressure * gibbsPP1;
+    double cv = cp - cvn * cvn / cvd * r;
+    double sv = reducedPressure * (gibbsPi0 + gibbsPi1) * t * r / p / 1000.0;
+    double wn = 1 + 2*reducedPressure*gibbsPi1 + reducedPressure*reducedPressure*gibbsPi1*gibbsPi1;
+    double wd1 = 1 - reducedPressure*reducedPressure*gibbsPP1;
+    double wdn = 1 + reducedPressure*gibbsPi1 - inverseReducedTemp*reducedPressure*gibbsPT1;
+    double wdd = inverseReducedTemp*inverseReducedTemp * (gibbsTT0 + gibbsTT1);
+    double w = std::pow(wn / (wd1 + wdn*wdn / wdd) * r * t * 1000, 0.5);
+    double k = w*w / (p*sv) / 1000000;
+    checkIsentropicExponentLimits(k);
+
     return {t,
             p,
             1,
-            reducedPressure * (gibbsPi0 + gibbsPi1) * t * r / p / 1000.0,
+            sv,
             1 / (reducedPressure * (gibbsPi0 + gibbsPi1) * t * r / p / 1000.0),
             inverseReducedTemp * (gibbsT0 + gibbsT1) * t * r,
             ((inverseReducedTemp * (gibbsT0 + gibbsT1)) - (gibbs0 + gibbs1)) * r,
-            inverseReducedTemp * (gibbsT0 + gibbsT1) - reducedPressure * (gibbsPi0 + gibbsPi1) * t * r};
+            inverseReducedTemp * (gibbsT0 + gibbsT1) - reducedPressure * (gibbsPi0 + gibbsPi1) * t * r,
+            cp, cv, w, k};
 }
 
 SteamSystemModelerTool::SteamPropertiesOutput SteamSystemModelerTool::region3(const double t, const double p) {
@@ -149,7 +185,6 @@ SteamSystemModelerTool::SteamPropertiesOutput SteamSystemModelerTool::region3(co
 }
 
 SteamSystemModelerTool::SteamPropertiesOutput SteamSystemModelerTool::region3Density(const double d, const double t) {
-
     static const std::array<double, 40> n = {
         {0.10658070028513E+01,  -0.15732845290239E+02, 0.20944396974307E+02,  -0.76867707878716E+01,
          0.26185947787954E+01,  -0.28080781148620E+01, 0.12053369696517E+01,  -0.84566812812502E-02,
@@ -170,25 +205,39 @@ SteamSystemModelerTool::SteamPropertiesOutput SteamSystemModelerTool::region3Den
     auto const inverseReducedTemp = 647.096 / t;
     auto       helmholtz          = n[0] * std::log(reducedDensity);
     auto       helmholtzS         = n[0] / reducedDensity;
-    double     helmholtzT         = 0;
+    double     helmholtzSS              = -n[0] / (reducedDensity*reducedDensity);
+    double     helmholtzT = 0, helmholtzTT = 0, helmholtzST = 0;
 
     for (std::size_t k = 1; k < n.size(); k++) {
         helmholtz += n[k] * std::pow(reducedDensity, i[k]) * std::pow(inverseReducedTemp, j[k]);
         helmholtzS += n[k] * i[k] * std::pow(reducedDensity, i[k] - 1.0) * std::pow(inverseReducedTemp, j[k]);
         helmholtzT += n[k] * std::pow(reducedDensity, i[k]) * j[k] * std::pow(inverseReducedTemp, j[k] - 1);
+        helmholtzTT += n[k] * std::pow(reducedDensity, i[k]) * j[k] * (j[k]-1) * std::pow(inverseReducedTemp, j[k]-2);
+        helmholtzST += n[k] * i[k] * std::pow(reducedDensity, i[k]-1) * j[k] * std::pow(inverseReducedTemp, j[k]-1);
+        helmholtzSS += n[k] * i[k] * (i[k]-1) * std::pow(reducedDensity, i[k]-2) * std::pow(inverseReducedTemp, j[k]);
     }
 
     auto const r = 0.461526;
 
+    double cv = -inverseReducedTemp * inverseReducedTemp * helmholtzTT * r;
+    double cpn = reducedDensity * helmholtzS - reducedDensity * inverseReducedTemp * helmholtzST;
+    double cpd = 2 * reducedDensity * helmholtzS + reducedDensity * reducedDensity * helmholtzSS;
+    double cp = cv + cpn * cpn / cpd * r;
+    double p = reducedDensity * helmholtzS * d * t * r / 1000.0;
+    double w = std::pow((2*reducedDensity*helmholtzS + reducedDensity*reducedDensity*helmholtzSS - cpn*cpn/(inverseReducedTemp*inverseReducedTemp*helmholtzTT))* r * t * 1000, 0.5);
+    double k = w*w / (p/d) / 1000000;
+    checkIsentropicExponentLimits(k);
+
     // TODO determine what quality should be in this region - Quality question
     return {t,
-            reducedDensity * helmholtzS * d * t * r / 1000.0,
+            p,
             1,
             1 / d,
             d,
             (inverseReducedTemp * helmholtzT + reducedDensity * helmholtzS) * t * r,
             (inverseReducedTemp * helmholtzT - helmholtz) * r,
-            inverseReducedTemp * helmholtzT * t * r};
+            inverseReducedTemp * helmholtzT * t * r,
+            cp, cv, w, k};
 }
 
 double SteamSystemModelerTool::backwardRegion3Exact(const double pressure, const double X,
@@ -593,7 +642,11 @@ std::ostream& operator<<(std::ostream& stream, const SteamSystemModelerTool::Ste
     stream << "SteamPropertiesOutput[" << "temperature=" << props.temperature << ", pressure=" << props.pressure
            << ", quality=" << props.quality << ", specificVolume=" << props.specificVolume
            << ", density=" << props.density << ", specificEnthalpy=" << props.specificEnthalpy
-           << ", specificEntropy=" << props.specificEntropy << ", internalEnergy=" << props.internalEnergy << "]";
+           << ", specificEntropy=" << props.specificEntropy << ", internalEnergy=" << props.internalEnergy
+           << ", specificIsobaricHeatCapacity_cp=" << props.specificIsobaricHeatCapacity_cp
+           << ", specificIsochoricHeatCapacity_cv=" << props.specificIsochoricHeatCapacity_cv
+           << ", speedOfSound_w=" << props.speedOfSound_w
+           << ", isentropicExponent=" << props.isentropicExponent << "]";
     return stream;
 }
 
