@@ -14,7 +14,7 @@ auto validateSteamLeaks = [](SteamLeakSurvey::SteamLeakSurveyResults const& resu
 
 TEST_CASE("Steam Leak of a boiler system:", "[steamLeakSurvey]") {
     INFO("Estimate Steam Leak from Plume Length: ");
-    CHECK(QuantifySteamLeakByPlumeLength::Estimate(300, 8, 80) == Approx(447.426));
+    CHECK(QuantifySteamLeakByPlumeLength::estimate(300, 8, 80) == Approx(447.426));
 
     const auto steamLeakElectric = SteamLeakSurvey(8760, 500, 300, 0.1, 200, 400, 70, 80, 75);
     INFO("Cost of Steam (Electricity): ");

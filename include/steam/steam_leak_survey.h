@@ -206,7 +206,7 @@ public:
      * leakCost MMBtu/lb-MCF
      */
     SteamLeakSurveyResults plumeMethodCalc(const double turbineEfficiency, const double plumeLength, const double ambTemp) const {
-        const double leakRate = QuantifySteamLeakByPlumeLength::Estimate(steamPressure, plumeLength, ambTemp);    // lb/hr
+        const double leakRate = QuantifySteamLeakByPlumeLength::estimate(steamPressure, plumeLength, ambTemp);    // lb/hr
 
         return calculate(leakRate, turbineEfficiency);
     }

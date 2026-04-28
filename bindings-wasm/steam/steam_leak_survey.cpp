@@ -9,7 +9,7 @@ EMSCRIPTEN_BINDINGS(steam_leak_survey_class) {
     //   Plume Length (feet)
     //   Ambient Temp (F)
     class_<QuantifySteamLeakByPlumeLength>("QuantifySteamLeakByPlumeLength")
-        .class_function("Estimate", &QuantifySteamLeakByPlumeLength::Estimate);
+        .class_function("estimate", &QuantifySteamLeakByPlumeLength::estimate);
 
     enum_<SteamLeakSurvey::UtilityType>("UtilityType")
         .value("steam", SteamLeakSurvey::UtilityType::steam)

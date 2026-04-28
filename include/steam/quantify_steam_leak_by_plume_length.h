@@ -24,7 +24,7 @@ class QuantifySteamLeakByPlumeLength {
      *
      * @return double value of amount of Steam Loss in lb/hr
      */
-    static double Estimate(const double pressure, const double plumeLength, const double ambTemp) {
+    static double estimate(const double pressure, const double plumeLength, const double ambTemp) {
         if (pressure < 115 || pressure > 415) {
             throw std::runtime_error("Steam Leak with Plume length method, Header pressure / steam pressure has to be "
                 "in the range of 115 and 415 psig, provided value is " +

@@ -14,10 +14,12 @@ describe('Steam Leak Survey', function () {
         assert.approximately(results.steamLoss, expected.steamLoss, .01, "steamLoss");
         assert.approximately(results.energyLoss, expected.energyLoss, .01, "energyLoss");
         assert.approximately(results.leakCost, expected.leakCost, .01, "leakCost");
+
+        results.delete();
     }
 
     it('calculates Steam Leaks', function () {
-        assert.approximately(moduleInstance.QuantifySteamLeakByPlumeLength.Estimate(300, 8, 80), 447.426, .01, "Quantify Steam Leak from Plume Length");
+        assert.approximately(moduleInstance.QuantifySteamLeakByPlumeLength.estimate(300, 8, 80), 447.426, .01, "Quantify Steam Leak from Plume Length");
 
         let steamLeakElectric = new moduleInstance.SteamLeakSurvey(8760, 500, 300, 0.1, 200, 400, 70, 80, 75);
         assert.approximately(steamLeakElectric.costOfSteam(), 0.059492, .01, "costOfSteam");
