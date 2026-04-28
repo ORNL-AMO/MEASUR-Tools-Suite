@@ -19,6 +19,7 @@
  *
  */
 
+#include <algorithm>
 #include <cmath>
 #include <fstream>
 #include <iostream>
@@ -331,7 +332,7 @@ class ProcessCooling {
          * @param monthlyLoads double, 12x11 array of 11 %load bins (0,10,20,30,40,50,60,70,80,90,100) for 12 calendar
          * months In case of non varying monthly loads expects a 1X11 array of 11 %load bins
          *
-         * @param loadAtPercent double array, % loading
+         * @param loadAtPercent double array, % loading in ascending order (25, 50, 75, 100)
          * @param kwPerTonLoads double array, kW/ton at the corresponding % loading
          */
         ChillerInput(ChillerCompressorType chillerType, double capacity, bool isFullLoadEffKnown, double fullLoadEff,
@@ -361,7 +362,7 @@ class ProcessCooling {
          * @param monthlyLoads double, 12x11 array of 11 %load bins (0,10,20,30,40,50,60,70,80,90,100) for 12 calendar
          * months In case of non varying monthly loads expects a 1X11 array of 11 %load bins
          *
-         * @param loadAtPercent double array, % loading
+         * @param loadAtPercent double array, % loading in ascending order (25, 50, 75, 100)
          * @param kwPerTonLoads double array, kW/ton at the corresponding % loading
          *
          * @param currentRefrig Enumeration RefrigerantType
@@ -411,12 +412,20 @@ class ProcessCooling {
         }
 
         void SetCustomCoefficient() {
-            auto           size = static_cast<int>(loadAtPercent.size());
+            auto size = static_cast<int>(loadAtPercent.size());
+
+            // % loading in ascending order (25, 50, 75, 100)
+            if (loadAtPercent[0] > loadAtPercent[size-1]) {
+                ranges::reverse(loadAtPercent);
+                ranges::reverse(kwPerTonLoads);
+            }
+
             vector<double> x(size, 0);
             vector<double> y(size, 0);
+            const auto maxKwPerTonLoads = kwPerTonLoads[size-1];
             for (int i = 0; i < size; i++) {
-                x[i] = loadAtPercent[i];
-                y[i] = kwPerTonLoads[i] * loadAtPercent[i] / kwPerTonLoads[0];
+                x[i] = loadAtPercent[i]/100.0;
+                y[i] = kwPerTonLoads[i] * x[i] / maxKwPerTonLoads;
             }
             vector<double> coeff = solveForCoefficients(x, y);
 
