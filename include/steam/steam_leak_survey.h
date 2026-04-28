@@ -14,6 +14,10 @@
  *
  */
 
+#include <cmath>
+#include <stdexcept>
+#include <string>
+
 #include "quantify_steam_leak_by_plume_length.h"
 #include "physics/constants.h"
 #include "steamModeler/SteamProperties.h"
