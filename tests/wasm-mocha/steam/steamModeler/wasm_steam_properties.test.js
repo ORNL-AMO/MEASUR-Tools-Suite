@@ -10,23 +10,24 @@ describe('Steam Properties', function () {
     });
 
     function validateSteamProperties(pressure, temperature, expected) {
-        let steamProperties = new moduleInstance.SteamProperties(pressure, moduleInstance.ThermodynamicQuantity.TEMPERATURE, temperature).calculate();
+        let steamProperties = new moduleInstance.SteamProperties(pressure, moduleInstance.ThermodynamicQuantity.TEMPERATURE, temperature);
+        let steamPropertiesRes = steamProperties.calculate();
 
-        assert.approximately(steamProperties.temperature, expected.temperature, .01, "temperature");
-        assert.approximately(steamProperties.pressure, expected.pressure, .01, "pressure");
+        assert.approximately(steamPropertiesRes.temperature, expected.temperature, .01, "temperature");
+        assert.approximately(steamPropertiesRes.pressure, expected.pressure, .01, "pressure");
 
-        assert.approximately(steamProperties.specificVolume, expected.specificVolume, .01, "specificVolume");
-        assert.approximately(steamProperties.density, expected.density, .01, "density");
-        assert.approximately(steamProperties.specificEnthalpy, expected.specificEnthalpy, .01, "specificEnthalpy");
-        assert.approximately(steamProperties.specificEntropy, expected.specificEntropy, .01, "specificEntropy");
-        assert.approximately(steamProperties.internalEnergy, expected.internalEnergy, .01, "internalEnergy");
+        assert.approximately(steamPropertiesRes.specificVolume, expected.specificVolume, .01, "specificVolume");
+        assert.approximately(steamPropertiesRes.density, expected.density, .01, "density");
+        assert.approximately(steamPropertiesRes.specificEnthalpy, expected.specificEnthalpy, .01, "specificEnthalpy");
+        assert.approximately(steamPropertiesRes.specificEntropy, expected.specificEntropy, .01, "specificEntropy");
+        assert.approximately(steamPropertiesRes.internalEnergy, expected.internalEnergy, .01, "internalEnergy");
 
-        assert.approximately(steamProperties.specificIsobaricHeatCapacity_cp, expected.specificIsobaricHeatCapacity_cp, .01, "specificIsobaricHeatCapacity_cp");
-        assert.approximately(steamProperties.specificIsochoricHeatCapacity_cv, expected.specificIsochoricHeatCapacity_cv, .01, "specificIsochoricHeatCapacity_cv");
-        assert.approximately(steamProperties.speedOfSound_w, expected.speedOfSound_w, .01, "speedOfSound_w");
-        assert.approximately(steamProperties.isentropicExponent, expected.isentropicExponent, .01, "isentropicExponent");
+        assert.approximately(steamPropertiesRes.specificIsobaricHeatCapacity_cp, expected.specificIsobaricHeatCapacity_cp, .01, "specificIsobaricHeatCapacity_cp");
+        assert.approximately(steamPropertiesRes.specificIsochoricHeatCapacity_cv, expected.specificIsochoricHeatCapacity_cv, .01, "specificIsochoricHeatCapacity_cv");
+        assert.approximately(steamPropertiesRes.speedOfSound_w, expected.speedOfSound_w, .01, "speedOfSound_w");
+        assert.approximately(steamPropertiesRes.isentropicExponent, expected.isentropicExponent, .01, "isentropicExponent");
 
-        steamProperties.delete();
+        steamPropertiesRes.delete();
     }
 
     it('Calculates Steam Properties', function () {
@@ -43,13 +44,13 @@ describe('Steam Properties', function () {
 
         // Region 2
         validateSteamProperties(0.0035, 300, {temperature:300, pressure:0.0035, quality:1,
-            specificVolume:39.4914, density:0.025322, specificEnthalpy:2549.91, specificEntropy:8.52239, internalEnergy:-119.803,
+            specificVolume:39.4914, density:0.025322, specificEnthalpy:2549.91, specificEntropy:8.52239, internalEnergy:2411.69,
             specificIsobaricHeatCapacity_cp:1.913, specificIsochoricHeatCapacity_cv:1.44133, speedOfSound_w:427.92, isentropicExponent:1.3248});
         validateSteamProperties(0.0035, 700, {temperature:700, pressure:0.0035, quality:1,
-            specificVolume:92.3016, density:0.010834, specificEnthalpy:3335.68, specificEntropy:10.175, internalEnergy:-312.731,
+            specificVolume:92.3016, density:0.010834, specificEnthalpy:3335.68, specificEntropy:10.175, internalEnergy:3012.63,
             specificIsobaricHeatCapacity_cp:2.08141, specificIsochoricHeatCapacity_cv:1.61978, speedOfSound_w:644.289, isentropicExponent:1.28494});
         validateSteamProperties(30, 700, {temperature:700, pressure:30, quality:1,
-            specificVolume:0.00542947, density:184.18, specificEnthalpy:2631.49, specificEntropy:5.1754, internalEnergy:-154.739,
+            specificVolume:0.00542947, density:184.18, specificEnthalpy:2631.49, specificEntropy:5.1754, internalEnergy:2468.61,
             specificIsobaricHeatCapacity_cp:10.3505, specificIsochoricHeatCapacity_cv:2.97554, speedOfSound_w:480.387, isentropicExponent:1.34});
 
         // Region 3

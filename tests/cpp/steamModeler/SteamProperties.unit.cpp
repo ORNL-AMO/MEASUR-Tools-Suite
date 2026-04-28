@@ -353,15 +353,15 @@ TEST_CASE("Calculate Steam Properties using Pressure and Temperature", "[HeatCap
     INFO("Region 2: ");
     validateHeatCapacity(0.0035, 300,
         SteamSystemModelerTool::SteamPropertiesOutput(300, 0.0035, 1,
-            39.4914, 0.025322, 2549.91, 8.52239, -119.803,
+            39.4914, 0.025322, 2549.91, 8.52239, 2411.69,
             1.913, 1.44133, 427.92, 1.3248));
     validateHeatCapacity(0.0035, 700,
         SteamSystemModelerTool::SteamPropertiesOutput(700, 0.0035, 1,
-            92.3016, 0.010834, 3335.68, 10.175, -312.731,
+            92.3016, 0.010834, 3335.68, 10.175, 3012.63,
             2.08141, 1.61978, 644.289, 1.28494));
     validateHeatCapacity(30, 700,
         SteamSystemModelerTool::SteamPropertiesOutput(700, 30, 1,
-            0.00542947, 184.18, 2631.49, 5.1754, -154.739,
+            0.00542947, 184.18, 2631.49, 5.1754, 2468.61,
             10.3505, 2.97554, 480.387, 1.34));
 
     INFO("Region 3: ");

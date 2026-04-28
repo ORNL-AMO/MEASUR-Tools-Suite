@@ -138,7 +138,7 @@ SteamSystemModelerTool::SteamPropertiesOutput SteamSystemModelerTool::region2(co
             1 / (reducedPressure * (gibbsPi0 + gibbsPi1) * t * r / p / 1000.0),
             inverseReducedTemp * (gibbsT0 + gibbsT1) * t * r,
             ((inverseReducedTemp * (gibbsT0 + gibbsT1)) - (gibbs0 + gibbs1)) * r,
-            inverseReducedTemp * (gibbsT0 + gibbsT1) - reducedPressure * (gibbsPi0 + gibbsPi1) * t * r,
+            (inverseReducedTemp * (gibbsT0 + gibbsT1) - reducedPressure * (gibbsPi0 + gibbsPi1)) * t * r,
             cp, cv, w, k};
 }
 

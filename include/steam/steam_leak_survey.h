@@ -79,8 +79,8 @@ public:
      * @param leakPressure double, leak pressure in psig
      * @param leakTemp double, leak temperature F
      * @param feedwaterTemp double, feedwater temperature in F (must be bellow boiling point of water, max 212F)
-     * @param boilerEfficiency double, boiler efficiency percentage (0 - 100 %)
-     * @param systemEfficiency double, system efficiency percentage (0 - 100 %)
+     * @param boilerEfficiency double, boiler efficiency percentage (1 - 100 %)
+     * @param systemEfficiency double, system efficiency percentage (1 - 100 %)
      * @param fuelCost double, per MCF (unit cost of fuel for the boiler system), when utility type Natural Gas
      * @param fuelEnergyFactor double, MMBtu/MCF (energy content for a given volume of fuel, when unit is in $/volume)
      */
@@ -153,7 +153,7 @@ public:
     /**
      * @param leakRate double, lb/hr
      *
-     * @return SteamLeakSurvey::Output, leakRate lb/hr, leakEnthalpy btu/lb, steamLoss klb/yr, energyLoss MMBtu/yr, leakCost MMBtu/lb-MCF
+     * @return SteamLeakSurvey::Output, leakRate lb/hr, steamLoss klb/yr, energyLoss MMBtu/yr, leakCost MMBtu/lb-MCF
      */
     SteamLeakSurveyResults estimateMethodPRVCalc(const double leakRate) const {
         return calculate(leakRate);
@@ -173,7 +173,7 @@ public:
      * @param turbineEfficiency double, system efficiency percentage (0 - 100 %)
      * @param holeSize double, estimated diameter of orifice through which steam is leaking in inches
      * @param dischargeCoef double, discharge coefficient used to capture the effect of the shape of the leak rate as fraction (0 - 1)
-     * @param atmPressure double, atmospheric temperature (standard pressure is 14.7 psia, range 0 - 20)
+     * @param atmPressure double, atmospheric pressure (standard pressure is 14.7 psia, range 0 - 20)
      *
      * @return SteamLeakSurvey::Output, leakRate lb/hr, leakEnthalpy btu/lb, steamLoss klb/yr, energyLoss MMBtu/yr, leakCost MMBtu/lb-MCF
      */
