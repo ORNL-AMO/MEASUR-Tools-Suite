@@ -412,6 +412,10 @@ class ProcessCooling {
         }
 
         void SetCustomCoefficient() {
+            if (loadAtPercent.empty() || kwPerTonLoads.empty() || loadAtPercent.size() != kwPerTonLoads.size()) {
+                throw std::runtime_error("Invalid input provided for loadAtPercent or kwPerTonLoads, should be non empty and have same number of elements.");
+            }
+
             auto size = static_cast<int>(loadAtPercent.size());
 
             // % loading in ascending order (25, 50, 75, 100)
@@ -422,10 +426,15 @@ class ProcessCooling {
 
             vector<double> x(size, 0);
             vector<double> y(size, 0);
-            const auto maxKwPerTonLoads = kwPerTonLoads[size-1];
+            const auto kwPerTonLoadAtMaxLoad = kwPerTonLoads[size-1];
+
+            if (kwPerTonLoadAtMaxLoad == 0) {
+                throw std::runtime_error("% loading @ 100 % cannot be zero.");
+            }
+
             for (int i = 0; i < size; i++) {
                 x[i] = loadAtPercent[i]/100.0;
-                y[i] = kwPerTonLoads[i] * x[i] / maxKwPerTonLoads;
+                y[i] = kwPerTonLoads[i] * x[i] / kwPerTonLoadAtMaxLoad;
             }
             vector<double> coeff = solveForCoefficients(x, y);
 
