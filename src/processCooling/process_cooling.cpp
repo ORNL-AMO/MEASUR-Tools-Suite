@@ -54,13 +54,13 @@ ProcessCooling::ProcessCooling(const vector<int>&            systemOperationAnnu
     if (systemOperationAnnualHours.size() != HOURS_IN_YEAR ||
         systemOperationAnnualHours.size() != weatherDryBulbHourlyTemp.size() ||
         systemOperationAnnualHours.size() != weatherWetBulbHourlyTemp.size() || chillerInputList.empty()) {
-        throw invalid_argument("Invalid input, requires weather and operation data of size " +
+        throw runtime_error("Invalid input, requires weather and operation data of size " +
                                to_string(HOURS_IN_YEAR) + " and at least one chiller.");
     }
 
     if ((airCooledSystemInput.isAirCooled && waterCooledSystemInput.isWaterCooled) ||
         (!airCooledSystemInput.isAirCooled && !waterCooledSystemInput.isWaterCooled)) {
-        throw invalid_argument("Invalid cooling system.");
+        throw runtime_error("Invalid cooling system.");
     }
 
     systemOperationAnnual = systemOperationAnnualHours;
@@ -216,7 +216,7 @@ ProcessCooling::ChillerPumpingEnergyOutput ProcessCooling::calculatePumpEnergy(P
 
 vector<double> ProcessCooling::getChillerEfficiencyCoeffs(const int chillerIndex) const {
     if (numChillers == 0 || chillerIndex < 0 || chillerIndex >= numChillers) {
-        throw invalid_argument("Invalid chiller index or chillers count, should match the number of chillers provided in the input.");
+        throw runtime_error("Invalid chiller index or chillers count, should match the number of chillers provided in the input.");
     }
 
     const int coeffsCount = chillers[chillerIndex].isFullLoadEffKnown || chillers[chillerIndex].isCustomChiller ? 4 : 7;
@@ -230,13 +230,16 @@ vector<double> ProcessCooling::getChillerEfficiencyCoeffs(const int chillerIndex
 
 vector<double> ProcessCooling::getChillerEnergyEfficiency(const int chillerIndex, const vector<double>& loadAtPercent) const {
     if (numChillers == 0 || chillerIndex < 0 || chillerIndex >= numChillers) {
-        throw invalid_argument("Invalid chiller index or chillers count, should match the number of chillers provided in the input.");
+        throw runtime_error("Invalid chiller index or chillers count, should match the number of chillers provided in the input.");
     }
 
     const int loadCounts = static_cast<int>(loadAtPercent.size());
     vector<double> energyEfficiency(loadCounts,0);
 
     for (int i = 0; i < loadCounts; i++) {
+        if (loadAtPercent[i] < 0.0 || loadAtPercent[i] > 100.0) {
+            throw runtime_error("Invalid chiller load percentage, must be between 0 and 100 inclusive.");
+        }
         energyEfficiency[i] = getChillerEffAtLoad(chillerIndex, loadAtPercent[i], chillers[chillerIndex].isFullLoadEffKnown);
     }
 

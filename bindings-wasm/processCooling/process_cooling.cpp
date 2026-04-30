@@ -28,7 +28,8 @@ EMSCRIPTEN_BINDINGS(processCooling_class) {
 
     enum_<ProcessCooling::TowerSizedBy>("TowerSizedBy")
         .value("Tonnage", ProcessCooling::TowerSizedBy::Tonnage)
-        .value("Fan_HP", ProcessCooling::TowerSizedBy::Fan_HP);
+        .value("Fan_HP", ProcessCooling::TowerSizedBy::Fan_HP)
+        .value("Unknown", ProcessCooling::TowerSizedBy::Unknown);
 
     enum_<ProcessCooling::ChillerCompressorType>("ChillerCompressorType")
         .value("Centrifugal", ProcessCooling::ChillerCompressorType::Centrifugal)
@@ -79,10 +80,10 @@ EMSCRIPTEN_BINDINGS(processCooling_class) {
 
     class_<ProcessCooling>("ProcessCooling")
         .constructor<const vector<int>&, const vector<double>&, const vector<double>&,
-                     const vector<ProcessCooling::ChillerInput>&, ProcessCooling::TowerInput,
-                     ProcessCooling::WaterCooledSystemInput>()
+                     const vector<ProcessCooling::ChillerInput>&, const ProcessCooling::TowerInput&,
+                     const ProcessCooling::WaterCooledSystemInput&>()
         .constructor<const vector<int>&, const vector<double>&, const vector<double>&,
-                     const vector<ProcessCooling::ChillerInput>&, ProcessCooling::AirCooledSystemInput>()
+                     const vector<ProcessCooling::ChillerInput>&, const ProcessCooling::AirCooledSystemInput&>()
         .function("calculateTowerEnergy", &ProcessCooling::calculateTowerEnergy)
         .function("calculateChillerEnergy", &ProcessCooling::calculateChillerEnergy)
         .function("calculatePumpEnergy", &ProcessCooling::calculatePumpEnergy)
