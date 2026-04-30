@@ -22,12 +22,17 @@ describe('Process Cooling Tests', function () {
             else console.log(msg);
         }
 
+        let validateResults = function (results, expected) {
+            for (let i = 0; i < expected.length; i++) {
+                assert.equal(rnd(results.get(i)), rnd(expected[i]), "");
+            }
+        };
+
         let validateArrays = function (results, expected, bin) {
             for (let i = 0; i < expected.length; i++) {
                 assert.equal(rnd(results.get(i)), rnd(expected[i]), bin[i]);
             }
         };
-        
         
         // *  expected results already in correct precision - use thousandths rounding and keep precision from original CWSAT vals
         const validateArraysCWSAT = function (results, expected, bin) {
@@ -393,6 +398,14 @@ describe('Process Cooling Tests', function () {
             validateArrays(chillerOutput.power.get(0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 118.17], chillerBins);
             logMessage('Energy @ Load : ', true);
             validateArrays(chillerOutput.energy.get(0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1035169.2], chillerBins);
+
+            logMessage('Chiller #1 Energy Efficiency: ', true);
+            let chillerEnergyEfficiency = pcW.getChillerEnergyEfficiency(0, loadPercent);
+            validateResults(chillerEnergyEfficiency, [1.1817, 0.986643, 0.903321, 1.12092]);
+
+            logMessage('Chiller #1 Energy Coeff: ', true);
+            let chillerEnergyCoeff = pcW.getChillerEfficiencyCoeffs(0);
+            validateResults(chillerEnergyCoeff, [0.329501, 0.297098, 0.213301, 0.1601]);
 
             logMessage('Pump # 1 Output: ', true);
             let pumpInputW = new moduleInstance.PumpInput(true, 2.4, 0.75, 1, 0.85);

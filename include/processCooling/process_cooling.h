@@ -22,17 +22,16 @@
 #include <algorithm>
 #include <cmath>
 #include <fstream>
-#include <iostream>
-#include <sstream>
 #include <string>
 #include <utility>
 #include <vector>
 
 using namespace std;
 
-const int MONTHS        = 12;
-const int LOAD_NUM      = 11;
-const int HOURS_IN_YEAR = 8760;
+constexpr int MONTHS             = 12;
+constexpr int LOAD_NUM           = 11;
+constexpr int HOURS_IN_YEAR      = 8760;
+constexpr int CHILLER_COEFFS_CNT = 7; // 7 columns for each chiller, polynomial to either 3rd (for FullLoadEffKnown or custom chiller) or 5th degree
 
 /**
  * @class ProcessCooling
@@ -56,7 +55,7 @@ class ProcessCooling {
 
     enum CellFanType { AxialFan, CentrifugalFan };
 
-    enum TowerSizedBy { Tonnage, Fan_HP };
+    enum TowerSizedBy { Tonnage, Fan_HP, Unknown };
 
     enum ChillerCompressorType { Centrifugal, Screw, Reciprocating };
 
@@ -88,7 +87,7 @@ class ProcessCooling {
          *
          * @returns array of double (Pumps Energy), size corresponding to the # of chillers
          *
-         * @param chillerPumpingEnergy double, @unit{\kWh}
+         * @param pumpingEnergy double, @unit{\kWh}
          */
         explicit ChillerPumpingEnergyOutput(vector<double> pumpingEnergy)
             : chillerPumpingEnergy(std::move(pumpingEnergy)) {}
@@ -107,7 +106,6 @@ class ProcessCooling {
          *
          * @returns arrays of double corresponding to 6 wet bulb temp bins => <35, 35-44, 45-54, 55-64, 65-74, >=75;
          *
-         * @param tempBins, constant array  {35, 45, 55, 65, 75, 75}
          * @param hours array of double, @unit{\hours}
          * @param energy array of double, @unit{\kWh}
          */
@@ -188,7 +186,7 @@ class ProcessCooling {
          * @param variableFlow boolean
          * @param flowRate double, @unit{\gpm\ton}
          * @param efficiency double, percentage as fraction
-         * @param motorSize double, @unit{\hp}
+         * @param motorSize double, @unit{\hp}, if size is unknown set size to 0, and it will be estimated based on flow rate and efficiency
          * @param motorEfficiency double, percentage as fraction
          */
         PumpInput(bool variableFlow, double flowRate, double efficiency, double motorSize, double motorEfficiency)
@@ -214,21 +212,24 @@ class ProcessCooling {
          * @param numTower integer, # of Towers
          * @param numFanPerTower_Cells integer, # Cells
          * @param fanSpeedType Enumeration FanMotorSpeedType
-         * @param towerSizing Enumeration TowerSizedBy, sized by tonnage or fan hp
-         * @param towerCellFanType Enumeration CellFanType
+         * @param towerSizing Enumeration TowerSizedBy, sized by tonnage or fan hp,
+         *          if unknown
+         *              use tonnage and set tonnage to sum of all chillers capacity
+         *              or set to unknown, and it will be sized to match the capacity of chillers by the calculator
+         * @param towerCellFanType Enumeration CellFanType, axial or centrifugal, if unknown assume axial
          * @param cellFanHP double, @unit{\hp}, 1 -100 hp
          * @param tonnage double, @unit{\ton}, 20 - 3000
          */
         TowerInput(int numTower, int numFanPerTower_Cells, FanMotorSpeedType fanSpeedType, TowerSizedBy towerSizing,
                    CellFanType towerCellFanType, double cellFanHP, double tonnage)
-            : numTower(numTower), numFanPerTower_Cells(numFanPerTower_Cells), fanSpeedType(fanSpeedType),
-              fanHP(cellFanHP), tonnage(tonnage) {
-            fanHP = getFanHP(tonnage, towerSizing, numFanPerTower_Cells, towerCellFanType, fanHP);
-        }
+            : numTower(numTower), numFanPerTower_Cells(numFanPerTower_Cells), fanSpeedType(fanSpeedType), towerSizing(towerSizing),
+              towerCellFanType(towerCellFanType), fanHP(cellFanHP), tonnage(tonnage) {}
 
         int               numTower;
         int               numFanPerTower_Cells;
         FanMotorSpeedType fanSpeedType;
+        TowerSizedBy      towerSizing;
+        CellFanType       towerCellFanType;
         double            fanHP;
         double            tonnage;
     };
@@ -274,6 +275,7 @@ class ProcessCooling {
          * @param monthlyLoads double, 12x11 array of 11 %load bins (0,10,20,30,40,50,60,70,80,90,100) for 12 calendar
          * months In case of non varying monthly loads expects a 1X11 array of 11 %load bins
          *
+         * @param changeRefrig boolean
          * @param currentRefrig Enumeration RefrigerantType
          * @param proposedRefrig Enumeration RefrigerantType
          */
@@ -420,8 +422,8 @@ class ProcessCooling {
 
             // % loading in ascending order (25, 50, 75, 100)
             if (loadAtPercent[0] > loadAtPercent[size-1]) {
-                ranges::reverse(loadAtPercent);
-                ranges::reverse(kwPerTonLoads);
+                std::reverse(loadAtPercent.begin(), loadAtPercent.end());
+                std::reverse(kwPerTonLoads.begin(), kwPerTonLoads.end());
             }
 
             vector<double> x(size, 0);
@@ -445,11 +447,11 @@ class ProcessCooling {
             }
         }
 
-        static vector<double> solveForCoefficients(vector<double> x, vector<double> y) {
+        static vector<double> solveForCoefficients(const vector<double>& x, vector<double> y) {
             if (x.empty() || x.size() != y.size())
                 return {};
 
-            const int n = (int)x.size();
+            const int n = static_cast<int>(x.size());
 
             vector<vector<double>> a(n, vector<double>(n, 0));
             for (int i = 0; i < n; ++i) {
@@ -502,7 +504,7 @@ class ProcessCooling {
      */
     ProcessCooling(const vector<int>& systemOperationAnnualHours, const vector<double>& weatherDryBulbHourlyTemp,
                    const vector<double>& weatherWetBulbHourlyTemp, const vector<ChillerInput>& chillerInputList,
-                   TowerInput towerInput, WaterCooledSystemInput waterCooledSystemInput)
+                   const TowerInput& towerInput, const WaterCooledSystemInput& waterCooledSystemInput)
         : ProcessCooling(systemOperationAnnualHours, weatherDryBulbHourlyTemp, weatherWetBulbHourlyTemp,
                          chillerInputList, {}, towerInput, waterCooledSystemInput) {}
 
@@ -519,7 +521,7 @@ class ProcessCooling {
      */
     ProcessCooling(const vector<int>& systemOperationAnnualHours, const vector<double>& weatherDryBulbHourlyTemp,
                    const vector<double>& weatherWetBulbHourlyTemp, const vector<ChillerInput>& chillerInputList,
-                   AirCooledSystemInput airCooledSystemInput)
+                   const AirCooledSystemInput& airCooledSystemInput)
         : ProcessCooling(systemOperationAnnualHours, weatherDryBulbHourlyTemp, weatherWetBulbHourlyTemp,
                          chillerInputList, airCooledSystemInput, {}, {}) {}
 
@@ -540,7 +542,7 @@ class ProcessCooling {
      * @param pump PumpInput
      * @return ChillerPumpingEnergyOutput
      */
-    ChillerPumpingEnergyOutput calculatePumpEnergy(PumpInput pump);
+    ChillerPumpingEnergyOutput calculatePumpEnergy(PumpInput pump) const;
 
     /**
      *
@@ -549,17 +551,36 @@ class ProcessCooling {
      * @param weeklyOpStartHour integer array of 7 with hours of the day of the week with start hour of operation (0-23)
      * @param weeklyOpStopHour integer array of 7 with hours of the day of the week with stop hour of operation (0-24)
      * @param monthlyOpMaxHour integer array of 12 with months of the year with max operation hours in that month (0-744)
-     * 0 for no operation for that month. If monthlyOpMaxHour exceeds the total hours for a month, it will be capped to the max hours in that month and ending hour for that month will be set to non operational after the max hours is reached.
+     * 0 for no operation for that month. If monthlyOpMaxHour exceeds the total hours for a month, it will be capped to the max hours in that month and ending hour for that month will be set to non-operational after the max hours is reached.
      *
      * @return integer array of 8760 hours of the year with values as 0 or 1 set based on weekly and monthly schedules
      */
     static vector<int> getSysOpAnnualHours(const vector<int>& weeklyOpStartHour, const vector<int>& weeklyOpStopHour, const vector<int>& monthlyOpMaxHour);
 
+    /**
+     *
+     * @param chillerIndex integer, zero based index of chiller from the chillers input provided
+     *
+     * @return an array of coefficients
+     *          4 for 3rd degree polynomial(for FullLoadEffKnown or custom chiller) or
+     *          7 for 5th degree polynomial
+     */
+    vector<double> getChillerEfficiencyCoeffs(int chillerIndex) const;
+
+    /**
+     *
+     * @param chillerIndex integer, zero based index of chiller from the chillers input provided
+     * @param loadAtPercent double array, % loading, between 0 and 100, can be either ascending or descending or in any order
+     *
+     * @return an array of energy efficiency values for % loads, corresponding to the same order of input loadAtPercent array
+     */
+    vector<double> getChillerEnergyEfficiency(int chillerIndex, const vector<double>& loadAtPercent) const;
+
   private:
     ProcessCooling(const vector<int>& systemOperationAnnualHours, const vector<double>& weatherDryBulbHourlyTemp,
                    const vector<double>& weatherWetBulbHourlyTemp, const vector<ChillerInput>& chillerInputList,
-                   AirCooledSystemInput airCooledSystemInput, TowerInput towerInput,
-                   WaterCooledSystemInput waterCooledSystemInput);
+                   const AirCooledSystemInput& airCooledSystemInput, const TowerInput& towerInput,
+                   const WaterCooledSystemInput& waterCooledSystemInput);
 
     vector<int>    systemOperationAnnual;
     vector<double> dryBulbHourlyTemp;
@@ -577,9 +598,14 @@ class ProcessCooling {
     vector<ChillerInput>   chillers;
     vector<vector<double>> chillerHourlyLoad;
     vector<vector<double>> chillerHourlyLoadOperational;
+    vector<vector<double>> chillerEfficiencyCoeffs;
     vector<vector<double>> chillerHourlyEfficiencyARI;
     vector<vector<double>> chillerHourlyEfficiency;
     vector<vector<double>> chillerHourlyPower;
+
+    int getChillerCapacityIndex(ChillerCompressorType chillerType, double capacity) const;
+
+    double getChillerEffAtLoad(int c, double load, bool isFullLoadEffKnown) const;
 
     void annualChillerLoadProfile();
 
@@ -589,25 +615,24 @@ class ProcessCooling {
 
     void annualChillerPowerProfile();
 
-    static double getFanHP(double tonnage, TowerSizedBy towerSizing, int fanNum, CellFanType fanType, double fanHP);
+    void setTowerFanHPTonnage();
 
     double getPercentFanPower(double wetBulbTemp, double percentWaterFlow, double range, double desiredApproach,
                               int yearHourIndex);
 
-    double getPercentWaterFlow(int yearHourIndex);
+    double getPercentWaterFlow(int yearHourIndex) const;
 
-    double getRange(int yearHourIndex);
+    double getRange(int yearHourIndex) const;
 
-    double getApproach(double wetBulbTemp, double minToChillersTemp) const;
+    double getApproach(double wetBulbTemp) const;
 
     double modifyPercentFanPower(double percentFanPower) const;
 
-    double getWeightedAverageChillerLoad(int yearHourIndex);
+    double getWeightedAverageChillerLoad(int yearHourIndex) const;
 
-    double getChillerTonnageTotal();
+    double getChillerTonnageTotal() const;
 
     static double getCubeRoot(double number);
 
     static double getPumpHP(double power);
 };
-
