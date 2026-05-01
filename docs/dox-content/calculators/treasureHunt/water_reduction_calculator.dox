@@ -1,0 +1,132 @@
+/**
+ * @defgroup water_reduction_calculator Water Reduction Calculator
+ * @ingroup treasure_hunt_calculators
+ * @brief Calculates annual water use and cost for water reduction measures using multiple measurement methods.
+ * @details This calculator estimates annual water use and associated cost for a set of water reduction
+ * measures identified during an energy treasure hunt or water efficiency assessment. It supports four
+ * measurement methods — metered flow, volume meter, bucket, and other (direct consumption) — and
+ * accumulates the results across all measures in a single pass.
+ *
+ * The calculation follows these steps for each measure:
+ * 1. **Metered Flow** — Compute annual water use from a continuous flow meter reading and operating hours
+ * 2. **Volume Meter** — Derive a flow rate from initial and final meter readings over a timed interval, then scale to annual use
+ * 3. **Bucket** — Derive a flow rate from the time required to fill a bucket of known volume, then scale to annual use
+ * 4. **Other** — Accept a direct consumption value (no flow-rate conversion required)
+ * 5. **Water Cost** — For every method, multiply the annual water use by the water cost rate to obtain annual water cost
+ * 6. **Totals** — Sum water use and water cost across all measures to produce the aggregate output
+ *
+ * Relevant formulas and symbol definitions are documented below.
+ *
+ * @heading{Metered Flow Water Use}
+ * @copydoc water_reduction_metered_flow_formula
+ *
+ * @heading{Volume Meter Water Use}
+ * @copydoc water_reduction_volume_meter_formula
+ *
+ * @heading{Bucket Method Water Use}
+ * @copydoc water_reduction_bucket_formula
+ *
+ * @heading{Other Method Water Use}
+ * @copydoc water_reduction_other_formula
+ *
+ * @heading{Water Cost}
+ * @copydoc water_reduction_water_cost_formula
+ */
+
+/**
+ * @defgroup water_reduction_metered_flow_formula Metered Flow Water Use Formula
+ * @ingroup water_reduction_calculator
+ * @brief Annual water use derived from a continuous flow meter reading and operating hours.
+ * @details The metered flow method uses the instantaneous flow rate reported by a water meter together
+ * with the annual operating hours to obtain total annual water consumption. The factor of 60 converts
+ * the meter reading from gallons per minute to gallons per hour before multiplying by the annual
+ * operating hours.
+ *
+ * @formula{water-reduction-metered-flow; W_{use} = \dot{V}_{meter} \cdot 60 \cdot t_{op}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{W_{use}; Annual water use; \gallon\per\year}
+ * @symrow{\dot{V}_{meter}; Meter reading (instantaneous flow rate); \gallon\per\minute}
+ * @symrow{60; Conversion factor from minutes to hours; \minute\per\hour}
+ * @symrow{t_{op}; Annual operating hours; \hour\per\year}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup water_reduction_volume_meter_formula Volume Meter Water Use Formula
+ * @ingroup water_reduction_calculator
+ * @brief Annual water use derived from the change in a volume meter over a timed interval.
+ * @details The volume meter method records the initial and final readings of a totalizing water meter
+ * over a measured elapsed time. The difference in readings gives the volume consumed during the test
+ * interval. Dividing by the elapsed time (converted to hours) yields the average flow rate, which is
+ * then multiplied by the annual operating hours to obtain total annual water consumption.
+ *
+ * @formula{water-reduction-volume-meter; W_{use} = \frac{(V_{final} - V_{initial}) \cdot 60}{t_{elapsed}} \cdot t_{op}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{W_{use}; Annual water use; \gallon\per\year}
+ * @symrow{V_{final}; Final meter reading; \gallon}
+ * @symrow{V_{initial}; Initial meter reading; \gallon}
+ * @symrow{t_{elapsed}; Elapsed time of measurement interval; \minute}
+ * @symrow{60; Conversion factor from minutes to hours; \minute\per\hour}
+ * @symrow{t_{op}; Annual operating hours; \hour\per\year}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup water_reduction_bucket_formula Bucket Method Water Use Formula
+ * @ingroup water_reduction_calculator
+ * @brief Annual water use derived from the time required to fill a bucket of known volume.
+ * @details The bucket method measures flow rate by recording the time needed to fill a container of
+ * known volume. Dividing the bucket volume by the fill time (converted to hours) yields the flow rate
+ * in gallons per hour, which is then multiplied by the annual operating hours to obtain total annual
+ * water consumption.
+ *
+ * @formula{water-reduction-bucket; W_{use} = \frac{V_{bucket} \cdot 3600}{t_{fill}} \cdot t_{op}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{W_{use}; Annual water use; \gallon\per\year}
+ * @symrow{V_{bucket}; Volume of the bucket used for measurement; \gallon}
+ * @symrow{t_{fill}; Time to fill the bucket; \second}
+ * @symrow{3600; Conversion factor from seconds to hours; \second\per\hour}
+ * @symrow{t_{op}; Annual operating hours; \hour\per\year}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup water_reduction_other_formula Other Method Water Use Formula
+ * @ingroup water_reduction_calculator
+ * @brief Annual water use supplied as a direct consumption value.
+ * @details The other method accepts a pre-calculated or independently determined annual water
+ * consumption value. No flow-rate conversion is applied; the consumption figure is used directly as
+ * the annual water use.
+ *
+ * @formula{water-reduction-other; W_{use} = C_{other}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{W_{use}; Annual water use; \gallon\per\year}
+ * @symrow{C_{other}; Direct annual water consumption; \gallon\per\year}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup water_reduction_water_cost_formula Water Cost Formula
+ * @ingroup water_reduction_calculator
+ * @brief Annual water cost calculated from annual water use and the water cost rate.
+ * @details Regardless of the measurement method used to determine annual water use, the annual water
+ * cost is obtained by multiplying the water use by the cost per unit volume of water. This formula
+ * applies uniformly to the metered flow, volume meter, bucket, and other methods.
+ *
+ * @formula{water-reduction-water-cost; C_{water} = r_{water} \cdot W_{use}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{C_{water}; Annual water cost; \$\per\year}
+ * @symrow{r_{water}; Water cost rate; \$\per\gallon}
+ * @symrow{W_{use}; Annual water use; \gallon\per\year}
+ * @endsymtable
+ */
