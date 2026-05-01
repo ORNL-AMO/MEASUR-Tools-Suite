@@ -45,7 +45,7 @@ public:
      * @param costOfElectricity double, $/kWh, default 0
      * @param leakPressure double, leak pressure in psig
      * @param leakTemp double, leak temperature F
-     * @param feedwaterTemp double, feedwater temperature in F (must be bellow boiling point of water, max 212F)
+     * @param feedwaterTemp double, feedwater temperature in F (must be below boiling point of water, max 212F)
      * @param steamCost double, $/lb
      */
     SteamLeakSurvey(const double operatingTime, const double steamTemp, const double steamPressure, const double costOfElectricity,
@@ -63,7 +63,7 @@ public:
      * @param costOfElectricity double, $/kWh, default 0
      * @param leakPressure double, leak pressure in psig
      * @param leakTemp double, leak temperature F
-     * @param feedwaterTemp double, feedwater temperature in F (must be bellow boiling point of water, max 212F)
+     * @param feedwaterTemp double, feedwater temperature in F (must be below boiling point of water, max 212F)
      * @param boilerEfficiency double, boiler efficiency percentage (0 - 100 %)
      * @param systemEfficiency double, system efficiency percentage (0 - 100 %)
      */
@@ -82,7 +82,7 @@ public:
      * @param costOfElectricity double, $/kWh, default 0
      * @param leakPressure double, leak pressure in psig
      * @param leakTemp double, leak temperature F
-     * @param feedwaterTemp double, feedwater temperature in F (must be bellow boiling point of water, max 212F)
+     * @param feedwaterTemp double, feedwater temperature in F (must be below boiling point of water, max 212F)
      * @param boilerEfficiency double, boiler efficiency percentage (1 - 100 %)
      * @param systemEfficiency double, system efficiency percentage (1 - 100 %)
      * @param fuelCost double, per MCF (unit cost of fuel for the boiler system), when utility type Natural Gas
@@ -104,7 +104,7 @@ public:
      * @param costOfElectricity double, $/kWh, default 0
      * @param leakPressure double, leak pressure in psig
      * @param leakTemp double, leak temperature F
-     * @param feedwaterTemp double, feedwater temperature in F (must be bellow boiling point of water, max 212F)
+     * @param feedwaterTemp double, feedwater temperature in F (must be below boiling point of water, max 212F)
      * @param boilerEfficiency double, boiler efficiency percentage (0 - 100 %)
      * @param systemEfficiency double, system efficiency percentage (0 - 100 %)
      * @param utilityType utility type enumeration
@@ -120,7 +120,7 @@ public:
         constexpr auto feedWaterPressureMPa = (14.6 + 14.7)  * 0.00689476;     // psig -> MPa
         const auto steamPressureMPa = (steamPressure + 14.7) * 0.00689476;     // psig -> MPa
         const auto leakPressureMPa = (leakPressure + 14.7)   * 0.00689476;     // psig -> MPa
-        const auto steamTempK =physics::conversions::fahrenheitToKelvin(steamTemp);
+        const auto steamTempK = physics::conversions::fahrenheitToKelvin(steamTemp);
         const auto leakTempK = physics::conversions::fahrenheitToKelvin(leakTemp);
         const auto feedwaterTempK = physics::conversions::fahrenheitToKelvin(feedwaterTemp);
 
@@ -145,7 +145,7 @@ public:
             case UtilityType::natural_gas:
                 this->steamCost = fuelCost * fuelEnergyFactor * (steamSpecificEnthalpy - feedwaterEnthalpy) / 1000000 / (boilerEfficiency/100) / (systemEfficiency/100);
                 break;
-                case UtilityType::electric:
+            case UtilityType::electric:
                 this->steamCost = costOfElectricity * 293.071 * (steamSpecificEnthalpy - feedwaterEnthalpy) / 1000000 / (boilerEfficiency/100) / (systemEfficiency/100);
                 break;
             case UtilityType::steam :
