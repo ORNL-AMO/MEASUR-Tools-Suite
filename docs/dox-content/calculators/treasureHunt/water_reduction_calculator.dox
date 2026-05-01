@@ -125,8 +125,8 @@
  *
  * @subheading{Symbols}
  * @symtable
- * @symrow{C_{water}; Annual water cost; \$\per\year}
- * @symrow{r_{water}; Water cost rate; \$\per\gallon}
+ * @symrow{C_{water}; Annual water cost; \dollar\per\year}
+ * @symrow{r_{water}; Water cost rate; \dollar\per\gallon}
  * @symrow{W_{use}; Annual water use; \gallon\per\year}
  * @endsymtable
  */

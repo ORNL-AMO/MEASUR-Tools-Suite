@@ -94,7 +94,7 @@ enum class WaterReductionMeasurementMethod {
  */
 struct WaterReductionInput {
     int    operating_hours     = 0;                                          ///< Annual operating hours @unitb{\hour\per\year}
-    double water_cost          = 0.0;                                        ///< Water cost rate @unitb{\$\per\gallon}
+    double water_cost          = 0.0;                                        ///< Water cost rate @unitb{\dollar\per\gallon}
     WaterReductionMeasurementMethod measurement_method = WaterReductionMeasurementMethod::Metered; ///< Measurement method to apply
     MeteredFlowMethodData metered_flow_method_data;                          ///< Data for the metered flow method
     VolumeMeterMethodData volume_meter_method_data;                          ///< Data for the volume meter method
@@ -111,7 +111,7 @@ struct WaterReductionInput {
  */
 struct WaterReductionOutput {
     double water_use  = 0.0; ///< Annual water use @unitb{\gallon\per\year}
-    double water_cost = 0.0; ///< Annual water cost @unitb{\$\per\year}
+    double water_cost = 0.0; ///< Annual water cost @unitb{\dollar\per\year}
 };
 
 /**
@@ -124,7 +124,7 @@ struct WaterReductionOutput {
  *
  * @param[in] input_vec  Vector of @ref WaterReductionInput structs, one per measure.
  * @return @ref WaterReductionOutput with the summed annual water use @unitb{\gallon\per\year}
- *         and annual water cost @unitb{\$\per\year} across all measures.
+ *         and annual water cost @unitb{\dollar\per\year} across all measures.
  */
 WaterReductionOutput waterReduction(const std::vector<WaterReductionInput>& input_vec);
 
@@ -138,9 +138,9 @@ WaterReductionOutput waterReduction(const std::vector<WaterReductionInput>& inpu
  *
  * @param[in] data            @ref MeteredFlowMethodData with the meter reading @unitb{\gallon\per\minute}.
  * @param[in] operating_hours Annual operating hours @unitb{\hour\per\year}.
- * @param[in] water_cost      Water cost rate @unitb{\$\per\gallon}.
+ * @param[in] water_cost      Water cost rate @unitb{\dollar\per\gallon}.
  * @return @ref WaterReductionOutput with annual water use @unitb{\gallon\per\year}
- *         and annual water cost @unitb{\$\per\year}.
+ *         and annual water cost @unitb{\dollar\per\year}.
  */
 WaterReductionOutput meteredFlowReduction(const MeteredFlowMethodData& data, int operating_hours, double water_cost);
 
@@ -155,9 +155,9 @@ WaterReductionOutput meteredFlowReduction(const MeteredFlowMethodData& data, int
  * @param[in] data            @ref VolumeMeterMethodData with initial/final meter readings @unitb{\gallon}
  *                            and elapsed time @unitb{\minute}.
  * @param[in] operating_hours Annual operating hours @unitb{\hour\per\year}.
- * @param[in] water_cost      Water cost rate @unitb{\$\per\gallon}.
+ * @param[in] water_cost      Water cost rate @unitb{\dollar\per\gallon}.
  * @return @ref WaterReductionOutput with annual water use @unitb{\gallon\per\year}
- *         and annual water cost @unitb{\$\per\year}.
+ *         and annual water cost @unitb{\dollar\per\year}.
  */
 WaterReductionOutput volumeMeterReduction(const VolumeMeterMethodData& data, int operating_hours, double water_cost);
 
@@ -172,9 +172,9 @@ WaterReductionOutput volumeMeterReduction(const VolumeMeterMethodData& data, int
  * @param[in] data            @ref BucketMethodData with bucket volume @unitb{\gallon}
  *                            and fill time @unitb{\second}.
  * @param[in] operating_hours Annual operating hours @unitb{\hour\per\year}.
- * @param[in] water_cost      Water cost rate @unitb{\$\per\gallon}.
+ * @param[in] water_cost      Water cost rate @unitb{\dollar\per\gallon}.
  * @return @ref WaterReductionOutput with annual water use @unitb{\gallon\per\year}
- *         and annual water cost @unitb{\$\per\year}.
+ *         and annual water cost @unitb{\dollar\per\year}.
  */
 WaterReductionOutput bucketReduction(const BucketMethodData& data, int operating_hours, double water_cost);
 
@@ -188,9 +188,9 @@ WaterReductionOutput bucketReduction(const BucketMethodData& data, int operating
  * @param[in] data            @ref WaterOtherMethodData with the annual water consumption @unitb{\gallon\per\year}.
  * @param[in] operating_hours Annual operating hours @unitb{\hour\per\year} (not used in the water-use
  *                            calculation for this method, retained for API consistency).
- * @param[in] water_cost      Water cost rate @unitb{\$\per\gallon}.
+ * @param[in] water_cost      Water cost rate @unitb{\dollar\per\gallon}.
  * @return @ref WaterReductionOutput with annual water use @unitb{\gallon\per\year}
- *         and annual water cost @unitb{\$\per\year}.
+ *         and annual water cost @unitb{\dollar\per\year}.
  */
 WaterReductionOutput otherReduction(const WaterOtherMethodData& data, int operating_hours, double water_cost);
 
