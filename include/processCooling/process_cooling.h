@@ -3,7 +3,7 @@
 /**
  * @file Header file for Process Fluid Cooling Energy Calculations
  *
- * @brief Originally (CWSAT) writen in VB by University of Massachusetts - Amherst with funding from the U.S. Department
+ * @brief Originally (CWSAT) written in VB by University of Massachusetts - Amherst with funding from the U.S. Department
  * of Energy Calculator estimates energy consumption of operating Chillers, Pumps and Towers in a cooling system (both
  * air & water). Allows: Input multiple & varying capacity and types of Chillers that are operating together. Flexible
  * input for operating schedule for each Chiller. Apply changes ( improvements / measures) and compare & examine,

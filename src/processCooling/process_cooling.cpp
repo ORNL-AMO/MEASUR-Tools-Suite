@@ -1,6 +1,6 @@
 /**
  * @file Implementation of Process Fluid Cooling Energy Calculations
- * Originally (CWSAT) writen in VB by University of Massachusetts - Amherst with funding from the U.S. Department of
+ * Originally (CWSAT) written in VB by University of Massachusetts - Amherst with funding from the U.S. Department of
  * Energy
  * @author Converted by Omer Aziz from VB to C++ (omerb).
  */
@@ -1097,7 +1097,7 @@ double ProcessCooling::getApproach(double wetBulbTemp) const {
             approach = waterCooledSystem.CWT - wetBulbTemp;
         }
         else {
-            double followDiffTemp = coolingType == Water ? waterCooledSystem.CWVariableFlow : airCooledSystem.CWTFollow;
+            const double followDiffTemp = coolingType == Water ? waterCooledSystem.CWTFollow : airCooledSystem.CWTFollow;
             if (wetBulbTemp < (minToChillersTemp - followDiffTemp)) {
                 approach = minToChillersTemp - wetBulbTemp;
             }
