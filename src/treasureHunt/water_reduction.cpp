@@ -69,10 +69,10 @@ WaterReductionOutput bucketReduction(const BucketMethodData& bucket_data, int op
     return WaterReductionOutput {tmp_water_use, tmp_water_cost};
 }
 
-WaterReductionOutput otherReduction(const WaterOtherMethodData& other_data, int operating_hours, double water_cost) {
+WaterReductionOutput otherReduction(const WaterOtherMethodData& other_data, int, double water_cost) {
     double tmp_water_use  = other_data.consumption;
     double tmp_water_cost = water_cost * tmp_water_use;
     return WaterReductionOutput {tmp_water_use, tmp_water_cost};
-};
+}
 
 } // namespace water_reduction
