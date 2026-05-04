@@ -47,6 +47,10 @@ WaterReductionOutput meteredFlowReduction(const MeteredFlowMethodData& metered_d
 
 WaterReductionOutput volumeMeterReduction(const VolumeMeterMethodData& volume_data, int operating_hours,
                                           double water_cost) {
+    if (volume_data.elapsed_time <= 0.0) {
+        return WaterReductionOutput {0.0, 0.0};
+    }
+
     double tmp_water_use = ((volume_data.final_meter_reading - volume_data.initial_meter_reading) /
                             (volume_data.elapsed_time * (1.0 / 60.0))) *
                            operating_hours;
