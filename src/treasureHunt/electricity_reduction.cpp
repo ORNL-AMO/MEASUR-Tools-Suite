@@ -73,7 +73,7 @@ ElectricityReductionOutput powerMeterReduction(const PowerMeterData& data, int o
 ElectricityReductionOutput otherReduction(const ElectricityOtherMethodData& data, double electricity_cost) {
     double tmp_energy_use  = data.energy;
     double tmp_energy_cost = tmp_energy_use * electricity_cost;
-    return ElectricityReductionOutput{tmp_energy_use, tmp_energy_cost, tmp_energy_use};
+    return ElectricityReductionOutput{tmp_energy_use, tmp_energy_cost, 0.0};
 }
 
 } // namespace electricity_reduction
