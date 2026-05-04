@@ -28,7 +28,7 @@ WaterReductionOutput waterReduction(const std::vector<WaterReductionInput>& inpu
             case WaterReductionMeasurementMethod::Other:
             default: {
                 // Other method: uses direct consumption value and water cost.
-                tmp_output = otherReduction(input.other_method_data, input.operating_hours, input.water_cost);
+                tmp_output = otherReduction(input.other_method_data, input.water_cost);
                 break;
             }
         }
