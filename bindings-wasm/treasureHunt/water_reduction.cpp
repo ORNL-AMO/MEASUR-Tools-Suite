@@ -69,9 +69,8 @@ EMSCRIPTEN_BINDINGS(waterReduction_module) {
     //   returns: WaterReductionOutput struct
     function("bucketReduction", &bucketReduction);
 
-    // otherReduction(data: WaterOtherMethodData, operating_hours: int, water_cost: double) -> WaterReductionOutput
+    // otherReduction(data: WaterOtherMethodData, water_cost: double) -> WaterReductionOutput
     //   data: WaterOtherMethodData struct
-    //   operating_hours: number of operating hours
     //   water_cost: cost per unit of water
     //   returns: WaterReductionOutput struct
     function("otherReduction", &otherReduction);

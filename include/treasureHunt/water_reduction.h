@@ -1,4 +1,4 @@
-
+#pragma once
 #include <vector>
 
 /**
@@ -186,13 +186,11 @@ WaterReductionOutput bucketReduction(const BucketMethodData& data, int operating
  * @see water_reduction_other_formula
  *
  * @param[in] data            @ref WaterOtherMethodData with the annual water consumption @unitb{\gallon\per\year}.
- * @param[in] operating_hours Annual operating hours @unitb{\hour\per\year} (not used in the water-use
- *                            calculation for this method, retained for API consistency).
  * @param[in] water_cost      Water cost rate @unitb{\dollar\per\gallon}.
  * @return @ref WaterReductionOutput with annual water use @unitb{\gallon\per\year}
  *         and annual water cost @unitb{\dollar\per\year}.
  */
-WaterReductionOutput otherReduction(const WaterOtherMethodData& data, int operating_hours, double water_cost);
+WaterReductionOutput otherReduction(const WaterOtherMethodData& data, double water_cost);
 
 } // namespace water_reduction
 
