@@ -59,6 +59,10 @@ WaterReductionOutput volumeMeterReduction(const VolumeMeterMethodData& volume_da
 }
 
 WaterReductionOutput bucketReduction(const BucketMethodData& bucket_data, int operating_hours, double water_cost) {
+    if (bucket_data.bucket_fill_time <= 0.0) {
+        return WaterReductionOutput {0.0, 0.0};
+    }
+
     double tmp_water_use =
         (bucket_data.bucket_volume / (bucket_data.bucket_fill_time * (1.0 / 3600.0))) * operating_hours;
     double tmp_water_cost = water_cost * tmp_water_use;
