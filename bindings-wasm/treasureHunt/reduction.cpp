@@ -8,7 +8,6 @@
 #include "treasureHunt/InsulatedTankReduction.h"
 #include "treasureHunt/NaturalGasReduction.h"
 #include "treasureHunt/SteamReduction.h"
-#include "treasureHunt/WaterReduction.h"
 #include "vector"
 
 using namespace emscripten;
@@ -110,32 +109,6 @@ EMSCRIPTEN_BINDINGS(compressedAirPressureReduction_class) {
     class_<CompressedAirPressureReduction>("CompressedAirPressureReduction")
         .constructor<std::vector<CompressedAirPressureReductionInput>>()
         .function("calculate", &CompressedAirPressureReduction::calculate);
-}
-
-EMSCRIPTEN_BINDINGS(waterReduction_class) {
-    class_<MeteredFlowMethodData>("MeteredFlowMethodData").constructor<double>();
-
-    class_<VolumeMeterMethodData>("VolumeMeterMethodData").constructor<double, double, double>();
-
-    class_<BucketMethodData>("BucketMethodData").constructor<double, double>();
-
-    class_<WaterOtherMethodData>("WaterOtherMethodData").constructor<double>();
-
-    class_<WaterReductionInput>("WaterReductionInput")
-        .constructor<int, double, int, MeteredFlowMethodData, VolumeMeterMethodData, BucketMethodData,
-                     WaterOtherMethodData>();
-
-    register_vector<WaterReductionInput>("WaterReductionInputV");
-
-    class_<WaterReduction::Output>("WaterReductionOutput")
-        .property("waterUse", &WaterReduction::Output::waterUse)
-        .property("waterCost", &WaterReduction::Output::waterCost)
-        .property("annualWaterSavings", &WaterReduction::Output::annualWaterSavings)
-        .property("costSavings", &WaterReduction::Output::costSavings);
-
-    class_<WaterReduction>("WaterReduction")
-        .constructor<std::vector<WaterReductionInput>>()
-        .function("calculate", &WaterReduction::calculate);
 }
 
 EMSCRIPTEN_BINDINGS(steamReduction_class) {
