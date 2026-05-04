@@ -22,10 +22,6 @@
 #include "physics/constants.h"
 #include "steamModeler/SteamProperties.h"
 
-#ifndef M_PI
-    #define M_PI 3.14159265358979323846
-#endif
-
 class SteamLeakSurvey {
 public:
     enum class UtilityType { steam, electric, natural_gas };
@@ -117,9 +113,9 @@ public:
         const double boilerEfficiency, const double systemEfficiency, const UtilityType utilityType,
         const double fuelCost = 0, const double fuelEnergyFactor = 1, const double steamCost = 0) :
     operatingTime(operatingTime), steamPressure(steamPressure), leakPressure(leakPressure), costOfElectricity(costOfElectricity) {
-        constexpr auto feedWaterPressureMPa = (14.6 + 14.7)  * 0.00689476;     // psig -> MPa
-        const auto steamPressureMPa = (steamPressure + 14.7) * 0.00689476;     // psig -> MPa
-        const auto leakPressureMPa = (leakPressure + 14.7)   * 0.00689476;     // psig -> MPa
+        constexpr auto feedWaterPressureMPa = physics::conversions::psigToMPa(physics::conversions::kWaterSurfacePressure);
+        const auto steamPressureMPa = physics::conversions::psigToMPa(steamPressure);
+        const auto leakPressureMPa = physics::conversions::psigToMPa(leakPressure);
         const auto steamTempK = physics::conversions::fahrenheitToKelvin(steamTemp);
         const auto leakTempK = physics::conversions::fahrenheitToKelvin(leakTemp);
         const auto feedwaterTempK = physics::conversions::fahrenheitToKelvin(feedwaterTemp);
@@ -132,13 +128,13 @@ public:
         feedwaterEnthalpy = SteamProperties(feedWaterPressureMPa, SteamProperties::ThermodynamicQuantity::TEMPERATURE, feedwaterTempK).calculate().specificEnthalpy;
 
         double leakSpecificVolume = SteamProperties(leakPressureMPa, SteamProperties::ThermodynamicQuantity::TEMPERATURE, leakTempK).calculate().specificVolume;
-        leakSpecificVolume *= 16.0185;         // m3/kg -> ft3/lb
-        leakSpecificVolume *= 1728;            // ft3/lb -> in3/lb
+        leakSpecificVolume *= physics::conversions::kM3PerKgToFt3PerLb;
+        leakSpecificVolume *= physics::conversions::kFt3ToIn3;
 
-        feedwaterEnthalpy *= 0.429923;         // kJ/kg -> btu/lb
-        steamSpecificEnthalpy *= 0.429923;     // kJ/kg -> btu/lb
-        isentropicEnthalpy *= 0.429923;        // kJ/kg -> btu/lb
-        leakEnthalpy *= 0.429923;              // kJ/kg -> btu/lb
+        feedwaterEnthalpy *= physics::conversions::kKJPerKgToBtuPerLb;
+        steamSpecificEnthalpy *= physics::conversions::kKJPerKgToBtuPerLb;
+        isentropicEnthalpy *= physics::conversions::kKJPerKgToBtuPerLb;
+        leakEnthalpy *= physics::conversions::kKJPerKgToBtuPerLb;
         leakDensity = 1 / leakSpecificVolume;  // lb/in3
 
         switch (utilityType) {
