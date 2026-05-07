@@ -56,10 +56,10 @@
  * @symrow{P; Total power draw; \kilo\watt}
  * @symrow{V; Supply voltage; \volt}
  * @symrow{I; Average current measured by the meter; \ampere}
- * @symrow{\mathrm{PF}; Power factor (dimensionless, 0–1); 1}
+ * @symrow{\mathrm{PF}; Power factor (dimensionless, 0–1); \unitless}
  * @symrow{10^{-3}; Conversion factor from watts to kilowatts; \watt\per\kilo\watt}
- * @symrow{\sqrt{3}; Phase factor for three-phase systems; 1}
- * @symrow{n; Quantity multiplier (number of identical loads); 1}
+ * @symrow{\sqrt{3}; Phase factor for three-phase systems; \unitless}
+ * @symrow{n; Quantity multiplier (number of identical loads); \unitless}
  * @endsymtable
  */
 
@@ -78,10 +78,10 @@
  * @symtable
  * @symrow{P; Estimated operating power; \kilo\watt}
  * @symrow{P_{rated}; Rated motor power from the nameplate; \kilo\watt}
- * @symrow{f_L; Motor load factor (dimensionless, 0–1); 1}
+ * @symrow{f_L; Motor load factor (dimensionless, 0–1); \unitless}
  * @symrow{f_{op}; Actual operating frequency; \hertz}
  * @symrow{f_{line}; Nominal line frequency; \hertz}
- * @symrow{\eta; Combined motor and drive efficiency (decimal); 1}
+ * @symrow{\eta; Combined motor and drive efficiency (decimal); \unitless}
  * @endsymtable
  */
 
@@ -99,7 +99,7 @@
  * @symtable
  * @symrow{E; Annual energy use; \kilo\watt\hour\per\year}
  * @symrow{P_{meter}; Direct power reading from the power meter; \kilo\watt}
- * @symrow{n; Quantity multiplier (number of identical loads); 1}
+ * @symrow{n; Quantity multiplier (number of identical loads); \unitless}
  * @symrow{t_{op}; Annual operating hours; \hour\per\year}
  * @endsymtable
  */
