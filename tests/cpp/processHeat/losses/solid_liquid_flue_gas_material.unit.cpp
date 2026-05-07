@@ -36,8 +36,6 @@ TEST_CASE("Calculate SolidLiquidFlueGasMaterial Heat Loss", "[Heat Loss]") {
 TEST_CASE("BUG 306", "[BUG306]") {
     double flueGasTemperature       = 600;
     double excessAirPercentage      = 20;
-    double o2InFlueGas              = 3.573146432264344;
-    double ambientAirTemp           = 65;
     double combustionAirTemperature = 65;
     double fuelTemperature          = 65;
     double ashDischargeTemperature  = 400;
@@ -50,9 +48,7 @@ TEST_CASE("BUG 306", "[BUG306]") {
     double o2                       = 8.7;
     double moisture                 = 4.9;
     double nitrogen                 = 7.5;
-    double heatInput                = 10;
     double ambientAirTempF          = 65;
-    double combAirMoisturePerc      = 0.0077;
 
     CHECK(totalHeatLoss(flueGasTemperature, excessAirPercentage, combustionAirTemperature, fuelTemperature,
                      moistureInAirCombustion, ashDischargeTemperature, unburnedCarbonInAsh, carbon, hydrogen,

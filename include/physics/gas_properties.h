@@ -15,7 +15,7 @@ class GasProperties {
     double                          h2o_generated;
     double                          co2_generated;
     double                          composition_weight;
-    double                          composition_weight_fraction;
+    double                          composition_weight_fraction = 0;
 
     GasProperties(std::function<double(double t)> specific_heat, double molecular_weight, double specific_weight,
                   double composition_percent, double composition_by_volume, double o2_generated, double heating_value,

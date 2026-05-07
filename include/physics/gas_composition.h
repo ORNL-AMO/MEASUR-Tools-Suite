@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <array>
 
 #include "physics/gas_constants.h"
 #include "physics/gas_properties.h"

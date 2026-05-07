@@ -41,7 +41,11 @@ EMSCRIPTEN_BINDINGS(steamModelerTool) {
         .property("density", &SteamSystemModelerTool::SteamPropertiesOutput::density)
         .property("specificEnthalpy", &SteamSystemModelerTool::SteamPropertiesOutput::specificEnthalpy)
         .property("specificEntropy", &SteamSystemModelerTool::SteamPropertiesOutput::specificEntropy)
-        .property("internalEnergy", &SteamSystemModelerTool::SteamPropertiesOutput::internalEnergy);
+        .property("internalEnergy", &SteamSystemModelerTool::SteamPropertiesOutput::internalEnergy)
+        .property("specificIsobaricHeatCapacity_cp", &SteamSystemModelerTool::SteamPropertiesOutput::specificIsobaricHeatCapacity_cp)
+        .property("specificIsochoricHeatCapacity_cv", &SteamSystemModelerTool::SteamPropertiesOutput::specificIsochoricHeatCapacity_cv)
+        .property("speedOfSound_w", &SteamSystemModelerTool::SteamPropertiesOutput::speedOfSound_w)
+        .property("isentropicExponent", &SteamSystemModelerTool::SteamPropertiesOutput::isentropicExponent);
 
     class_<SteamSystemModelerTool::FluidProperties, emscripten::base<SteamSystemModelerTool::SteamPropertiesOutput>>(
         "FluidProperties")

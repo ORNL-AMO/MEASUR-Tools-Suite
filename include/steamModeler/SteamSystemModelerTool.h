@@ -29,14 +29,22 @@ class SteamSystemModelerTool {
      * @param specificEnthalpy, double in kJ/kg
      * @param specificEntropy, double in kJ/kg/K
      * @param internalEnergy, double - optional parameter - in MJ
+     * @param specificIsobaricHeatCapacity_cp, double in kJ/kg/K
+     * @param specificIsochoricHeatCapacity_cv, double in kJ/kg/K
+     * @param speedOfSound_w, double in m/s
+     * @param isentropicExponent, double unitless
      */
     struct SteamPropertiesOutput {
         SteamPropertiesOutput(const double temperature, const double pressure, const double quality,
                               const double specificVolume, const double density, const double specificEnthalpy,
-                              const double specificEntropy, const double internalEnergy = 0)
+                              const double specificEntropy, const double internalEnergy = 0,
+                              const double specificIsobaricHeatCapacity_cp = 0, const double specificIsochoricHeatCapacity_cv = 0,
+                              const double speedOfSound_w = 0, const double isentropicExponent = 0)
             : temperature(temperature), pressure(pressure), quality(quality), specificVolume(specificVolume),
               density(density), specificEnthalpy(specificEnthalpy), specificEntropy(specificEntropy),
-              internalEnergy(internalEnergy) {}
+              internalEnergy(internalEnergy),
+              specificIsobaricHeatCapacity_cp(specificIsobaricHeatCapacity_cp), specificIsochoricHeatCapacity_cv(specificIsochoricHeatCapacity_cv),
+              speedOfSound_w(speedOfSound_w), isentropicExponent(isentropicExponent){}
 
         friend std::ostream& operator<<(std::ostream& stream, const SteamPropertiesOutput& props);
 
@@ -44,6 +52,7 @@ class SteamSystemModelerTool {
 
         double temperature = 0, pressure = 0, quality = 0, specificVolume = 0, density = 0;
         double specificEnthalpy = 0, specificEntropy = 0, internalEnergy = 0;
+        double specificIsobaricHeatCapacity_cp = 0, specificIsochoricHeatCapacity_cv = 0, speedOfSound_w = 0, isentropicExponent = 0;
     };
 
     /**
@@ -120,6 +129,8 @@ class SteamSystemModelerTool {
     enum class Region { REGION1, REGION2A, REGION2B, REGION2C };
 
   private:
+    static void checkIsentropicExponentLimits(double& k);
+
     /**
      * Determines the IAPWS region based on pressure and temperature
      * @param pressure double, pressure in MPa

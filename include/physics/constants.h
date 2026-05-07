@@ -147,7 +147,22 @@ inline constexpr double kBtuPerLbFToKJPerKgK = 4.1868;
  * @param[in] fahrenheit Temperature in degrees Fahrenheit @unitb{\degreeFahrenheit}
  * @return Temperature in Kelvin @unitb{\kelvin}
  */
-constexpr double fahrenheitToKelvin(double fahrenheit) { return ((fahrenheit - 32.0) / 1.8) + 273.15; }
+inline constexpr double fahrenheitToKelvin(double fahrenheit) { return ((fahrenheit - 32.0) / 1.8) + 273.15; }
+
+/// @brief convert psig to MPa.
+inline constexpr double psigToMPa(const double psig) {return (psig + physics::us::kAtmosphericPressurePsi) * 0.00689476; }
+
+/// @brief convert m3/kg -> ft3/lb.
+inline constexpr double kM3PerKgToFt3PerLb = 16.0185;
+
+/// @brief convert ft3 -> in3.
+inline constexpr double kFt3ToIn3 = 1728;
+
+/// @brief convert kJ/kg -> btu/lb.
+inline constexpr double kKJPerKgToBtuPerLb = 0.429923;
+
+/// @brief Surface pressure exerted by water @ sea level lb/in2.
+inline constexpr double kWaterSurfacePressure = 14.6;
 
 /// @brief Offset to convert Fahrenheit to Rankine.
 inline constexpr double kFahrenheitToRankineOffset = 459.67;
