@@ -56,8 +56,8 @@ ElectricityReductionOutput nameplateReduction(const NameplateData& data, int ope
                                               double electricity_cost, int units) {
     double tmp_power = data.rated_motor_power * data.load_factor *
                        std::pow(data.operational_frequency / data.line_frequency, 2.5) *
-                       (1.0 / data.motor_and_drive_efficiency);
-    double tmp_energy_use  = tmp_power * operating_hours * units;
+                       (1.0 / data.motor_and_drive_efficiency) * units;
+    double tmp_energy_use  = tmp_power * operating_hours;
     double tmp_energy_cost = tmp_energy_use * electricity_cost;
     return ElectricityReductionOutput{tmp_energy_use, tmp_energy_cost, tmp_power};
 }
