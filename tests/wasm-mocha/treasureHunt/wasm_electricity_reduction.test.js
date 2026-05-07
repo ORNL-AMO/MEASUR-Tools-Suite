@@ -233,7 +233,7 @@ describe('Electricity Reduction Tests', function () {
         let results = moduleInstance.electricityReduction(inputVec);
         assert.approximately(results.energyUse, 432000, 0.001, 'energyUse');
         assert.approximately(results.energyCost, 51840, 0.001, 'energyCost');
-        assert.approximately(results.power, 0, 0.001, 'power');
+        assert.strictEqual(results.power, 0, 'power');
         inputVec.delete();
     });
 
