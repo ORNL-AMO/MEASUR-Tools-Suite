@@ -28,7 +28,7 @@ struct CompressedAirPressureReductionInput {
     bool   is_baseline = true;        ///< True for baseline calculation, false for modification calculation
     int    hours_per_year = 0;        ///< Annual operating hours @unitb{\hour\per\year}
     double electricity_cost = 0.0;    ///< Electricity cost rate @unitb{\dollar\per\kWh}
-    double compressor_power = 0.0;    ///< Compressor power @unitb{\kWh}
+    double compressor_power = 0.0;    ///< Compressor power @unitb{\kW}
     double pressure = 0.0;            ///< Baseline compressor discharge pressure @unitb{\psi}
     double proposed_pressure = 0.0;   ///< Proposed compressor discharge pressure @unitb{\psi}
     double atmospheric_pressure = 0.0; ///< Local atmospheric pressure @unitb{\psi}
@@ -59,7 +59,7 @@ CompressedAirPressureReductionOutput compressedAirPressureReduction(
  * @brief Calculates annual energy use and cost for a baseline compressed-air case.
  * @param[in] hours_per_year Annual operating hours @unitb{\hour\per\year}.
  * @param[in] electricity_cost Electricity cost rate @unitb{\dollar\per\kWh}.
- * @param[in] compressor_power Compressor power @unitb{\kWh}.
+ * @param[in] compressor_power Compressor power @unitb{\kW}.
  * @return @ref CompressedAirPressureReductionOutput with annual energy use and cost.
  */
 CompressedAirPressureReductionOutput baselineReduction(int hours_per_year, double electricity_cost,
@@ -70,7 +70,7 @@ CompressedAirPressureReductionOutput baselineReduction(int hours_per_year, doubl
  * @brief Calculates annual energy use and cost for a compressed-air pressure-reduction modification.
  * @param[in] hours_per_year Annual operating hours @unitb{\hour\per\year}.
  * @param[in] electricity_cost Electricity cost rate @unitb{\dollar\per\kWh}.
- * @param[in] compressor_power Compressor power @unitb{\kWh}.
+ * @param[in] compressor_power Compressor power @unitb{\kW}.
  * @param[in] proposed_pressure Proposed compressor discharge pressure @unitb{\psi}.
  * @param[in] atmospheric_pressure Local atmospheric pressure @unitb{\psi}.
  * @param[in] pressure_rated Rated compressor pressure @unitb{\psi}.
