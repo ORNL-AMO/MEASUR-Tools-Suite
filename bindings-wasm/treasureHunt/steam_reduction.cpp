@@ -91,7 +91,7 @@ EMSCRIPTEN_BINDINGS(steamReduction_module) {
     register_vector<SteamReductionInput>("SteamReductionInputV");
 
     // SteamReductionOutput:
-    //   steamUse (kg/hr)
+    //   steamUse (kg/yr)
     //   energyUse (kJ/yr)
     //   energyCost ($/yr)
     value_object<SteamReductionOutput>("SteamReductionOutput")
