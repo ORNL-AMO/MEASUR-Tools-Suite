@@ -117,7 +117,21 @@ inline constexpr double kAirCorrectionBase = -1.078913827;
  */
 constexpr double kWaterDensity = 8.335;
 
+/**
+ * @brief Sensible heat factor for air flow @unitb{Btu\cdot\minute\per(\cubic\foot\cdot\degreeF\cdot\hour)}
+ * @details Product of standard air density (0.075 lb/ft³), specific heat of air (0.24 Btu/lb·°F),
+ * and the minutes-to-hours conversion factor (60 min/hr): 0.075 × 0.24 × 60 = 1.08.
+ * Used to calculate sensible heat transfer rate of an air stream in U.S. customary units.
+ */
+inline constexpr double kAirSensibleHeatFactor = 1.08;
 
+/**
+ * @brief Sensible heat factor for water flow @unitb{Btu\cdot\minute\per(\gallon\cdot\degreeF\cdot\hour)}
+ * @details Product of standard water density (8.33 lb/gal), specific heat of water (1.0 Btu/lb·°F),
+ * and the minutes-to-hours conversion factor (60 min/hr): 8.33 × 1.0 × 60 ≈ 500.
+ * Used to calculate sensible heat transfer rate of a water stream in U.S. customary units.
+ */
+inline constexpr double kWaterSensibleHeatFactor = 500.0;
 
 } // namespace physics::us
 

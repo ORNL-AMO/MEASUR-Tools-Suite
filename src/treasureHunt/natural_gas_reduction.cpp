@@ -1,4 +1,5 @@
 #include "treasureHunt/natural_gas_reduction.h"
+#include "physics/constants.h"
 
 namespace natural_gas_reduction {
 
@@ -18,7 +19,7 @@ NaturalGasReductionOutput airMassFlowMethodReduction(const AirMassFlowData& data
     } else {
         air_flow_rate = data.measured_data.area_of_duct * data.measured_data.air_velocity;
     }
-    double heat_flow   = (1.08 * air_flow_rate * (data.outlet_temperature - data.inlet_temperature)) / 1000000.0;
+    double heat_flow   = (physics::us::kAirSensibleHeatFactor * air_flow_rate * (data.outlet_temperature - data.inlet_temperature)) / 1000000.0;
     double total_flow  = air_flow_rate * units;
     double energy_use  = (heat_flow * operating_hours * units) / data.system_efficiency;
     double energy_cost = energy_use * fuel_cost;
@@ -27,7 +28,7 @@ NaturalGasReductionOutput airMassFlowMethodReduction(const AirMassFlowData& data
 
 NaturalGasReductionOutput waterMassFlowMethodReduction(const WaterMassFlowData& data, int operating_hours,
                                                        double fuel_cost, int units) {
-    double heat_flow   = (500.0 * data.water_flow * (data.outlet_temperature - data.inlet_temperature)) / 1000000.0;
+    double heat_flow   = (physics::us::kWaterSensibleHeatFactor * data.water_flow * (data.outlet_temperature - data.inlet_temperature)) / 1000000.0;
     double total_flow  = data.water_flow * units;
     double energy_use  = (heat_flow * operating_hours * units) / data.system_efficiency;
     double energy_cost = energy_use * fuel_cost;
