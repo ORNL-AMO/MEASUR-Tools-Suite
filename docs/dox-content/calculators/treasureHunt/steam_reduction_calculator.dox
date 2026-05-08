@@ -216,6 +216,6 @@
  * @symrow{C_{energy}; Annual energy cost; \dollar\per\year}
  * @symrow{\dot{m}_{steam}; Annual steam use; \kg\per\hour}
  * @symrow{E_{use}; Annual energy use; \kJ\per\year}
- * @symrow{r_{utility}; Utility cost rate (\dollar\per\kg for steam, \dollar\per\kJ for gas/other); \unitless}
+ * @symrow{r_{utility}; Utility cost rate; \dollar\per\kg\ \text{(steam)}\ \text{or}\ \dollar\per\kJ\ \text{(gas/other)}}
  * @endsymtable
  */
