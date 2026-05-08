@@ -2,6 +2,8 @@
 
 #include <cmath>
 
+#include "physics/constants.h"
+
 namespace compressed_air_pressure_reduction {
 
 CompressedAirPressureReductionOutput compressedAirPressureReduction(
@@ -37,11 +39,13 @@ CompressedAirPressureReductionOutput baselineReduction(int hours_per_year, doubl
 CompressedAirPressureReductionOutput modificationReduction(int hours_per_year, double electricity_cost,
                                                            double compressor_power, double proposed_pressure,
                                                            double atmospheric_pressure, double pressure_rated) {
-    constexpr double kSeaLevelAtmosphericPressure = 14.7;
+    // Empirical compressed-air power ratio constants from the existing treasure hunt model.
+    constexpr double kPressureRatioExponentNumerator = 0.395;
+    constexpr double kPressureRatioExponentDenominator = 1.395;
 
-    const double r = (pressure_rated + kSeaLevelAtmosphericPressure) / kSeaLevelAtmosphericPressure;
+    const double r = (pressure_rated + physics::us::kAtmosphericPressurePsi) / physics::us::kAtmosphericPressurePsi;
     const double x = (proposed_pressure + atmospheric_pressure) / atmospheric_pressure;
-    const double c = (0.395 / 1.395);
+    const double c = (kPressureRatioExponentNumerator / kPressureRatioExponentDenominator);
 
     const double energy_use = static_cast<double>(hours_per_year) *
                               (compressor_power * ((std::pow(x, c) - 1.0) / (std::pow(r, c) - 1.0)));
