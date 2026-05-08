@@ -97,6 +97,7 @@ window.MathJax = {
                 \DeclareSIUnit{\year}{yr}
                 \DeclareSIUnit{\ton}{ton}
                 \DeclareSIUnit{\squareInch}{in^2}
+                \DeclareSIUnit{\squareFoot}{ft^2}
                 \DeclareSIUnit{\inchMercury}{inHg}
             `);
         }
