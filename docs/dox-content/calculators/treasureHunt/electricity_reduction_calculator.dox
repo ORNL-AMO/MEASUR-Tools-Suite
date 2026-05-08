@@ -8,9 +8,9 @@
  * the results across all measures in a single pass.
  *
  * The calculation follows these steps for each measure:
- * 1. **Multimeter** — Compute total power from supply voltage, average current, power factor, and number of phases, then scale to annual energy use
- * 2. **Nameplate** — Estimate power from rated motor power, load factor, frequency ratio, and motor-and-drive efficiency, then scale to annual energy use
- * 3. **Power Meter** — Compute annual energy use directly from a power meter reading and operating hours
+ * 1. **Multimeter** — Compute power per load from supply voltage, average current, power factor, and number of phases, then scale to annual energy use using operating hours and number of units
+ * 2. **Nameplate** — Estimate power per load from rated motor power, load factor, frequency ratio, and motor-and-drive efficiency, then scale to annual energy use using operating hours and number of units
+ * 3. **Power Meter** — Compute annual energy use directly from a power meter reading, operating hours, and number of units
  * 4. **Other** — Accept a direct annual energy consumption value (no power-to-energy conversion required)
  * 5. **Energy Cost** — For every method, multiply the annual energy use by the electricity cost rate to obtain annual energy cost
  * 6. **Totals** — Sum energy use, energy cost, and power across all measures to produce the aggregate output
@@ -46,20 +46,19 @@
  * the square root of three is applied to account for the phase relationship between voltages and currents.
  *
  * @subheading{Single-Phase}
- * @formula{electricity-reduction-multimeter-1ph; P = V \cdot I \cdot \mathrm{PF} \cdot 10^{-3} \cdot n}
+ * @formula{electricity-reduction-multimeter-1ph; P = V \cdot I \cdot \mathrm{PF} \cdot 10^{-3}}
  *
  * @subheading{Three-Phase}
- * @formula{electricity-reduction-multimeter-3ph; P = V \cdot I \cdot \mathrm{PF} \cdot \frac{\sqrt{3}}{1000} \cdot n}
+ * @formula{electricity-reduction-multimeter-3ph; P = V \cdot I \cdot \mathrm{PF} \cdot \frac{\sqrt{3}}{1000}}
  *
  * @subheading{Symbols}
  * @symtable
- * @symrow{P; Total power draw; \kilo\watt}
+ * @symrow{P; Power draw per load; \kilo\watt}
  * @symrow{V; Supply voltage; \volt}
  * @symrow{I; Average current measured by the meter; \ampere}
  * @symrow{\mathrm{PF}; Power factor (dimensionless, 0–1); \unitless}
  * @symrow{10^{-3}; Conversion factor from watts to kilowatts; \watt\per\kilo\watt}
  * @symrow{\sqrt{3}; Phase factor for three-phase systems; \unitless}
- * @symrow{n; Quantity multiplier (number of identical loads); \unitless}
  * @endsymtable
  */
 
@@ -129,12 +128,13 @@
  * multiplied by the annual operating hours (and by the quantity multiplier for the nameplate method)
  * to obtain annual energy use.
  *
- * @formula{electricity-reduction-energy-use; E = P \cdot t_{op}}
+ * @formula{electricity-reduction-energy-use; E = P \cdot n \cdot t_{op}}
  *
  * @subheading{Symbols}
  * @symtable
  * @symrow{E; Annual energy use; \kilo\watt\hour\per\year}
- * @symrow{P; Total power draw; \kilo\watt}
+ * @symrow{P; Power draw per load; \kilo\watt}
+ * @symrow{n; Quantity multiplier (number of identical loads); \unitless}
  * @symrow{t_{op}; Annual operating hours; \hour\per\year}
  * @endsymtable
  */

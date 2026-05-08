@@ -123,7 +123,7 @@ struct ElectricityReductionInput {
 struct ElectricityReductionOutput {
     double energy_use  = 0.0; ///< Annual energy use @unitb{\kilo\watt\hour\per\year}
     double energy_cost = 0.0; ///< Annual energy cost @unitb{\dollar\per\year}
-    double power       = 0.0; ///< Total power draw @unitb{\kilo\watt}
+    double power       = 0.0; ///< Power draw per load (single unit) @unitb{\kilo\watt}
 };
 
 /**
@@ -137,16 +137,16 @@ struct ElectricityReductionOutput {
  * @param[in] input_vec  Vector of @ref ElectricityReductionInput structs, one per measure.
  * @return @ref ElectricityReductionOutput with the summed annual energy use
  *         @unitb{\kilo\watt\hour\per\year}, annual energy cost @unitb{\dollar\per\year},
- *         and total power @unitb{\kilo\watt} across all measures.
+ *         and summed per-load power @unitb{\kilo\watt} across all measures.
  */
 ElectricityReductionOutput electricityReduction(const std::vector<ElectricityReductionInput>& input_vec);
 
 /**
  * @ingroup electricity_reduction_calculator
  * @brief Calculates annual energy use and cost using the multimeter measurement method.
- * @details Computes total power from the supply voltage, average current, power factor, and number
- * of phases, then scales to annual energy use using the operating hours. Energy cost is then derived
- * using @ref electricity_reduction_energy_cost_formula.
+ * @details Computes power per load from the supply voltage, average current, power factor, and
+ * number of phases, then scales to annual energy use using the operating hours and the units
+ * multiplier. Energy cost is then derived using @ref electricity_reduction_energy_cost_formula.
  * @see electricity_reduction_multimeter_formula
  *
  * @param[in] data            @ref MultimeterData with voltage @unitb{\volt}, current @unitb{\ampere},
@@ -155,7 +155,7 @@ ElectricityReductionOutput electricityReduction(const std::vector<ElectricityRed
  * @param[in] electricity_cost Electricity cost rate @unitb{\dollar\per\kilo\watt\hour}.
  * @param[in] units           Quantity multiplier (number of identical loads).
  * @return @ref ElectricityReductionOutput with annual energy use @unitb{\kilo\watt\hour\per\year},
- *         annual energy cost @unitb{\dollar\per\year}, and power @unitb{\kilo\watt}.
+ *         annual energy cost @unitb{\dollar\per\year}, and power per load @unitb{\kilo\watt}.
  */
 ElectricityReductionOutput multimeterReduction(const MultimeterData& data, int operating_hours,
                                                double electricity_cost, int units);
@@ -163,9 +163,9 @@ ElectricityReductionOutput multimeterReduction(const MultimeterData& data, int o
 /**
  * @ingroup electricity_reduction_calculator
  * @brief Calculates annual energy use and cost using the nameplate measurement method.
- * @details Estimates power from the rated motor power, load factor, frequency ratio, and
- * motor-and-drive efficiency. Energy use is then scaled to annual use by multiplying by the
- * operating hours and the units multiplier. Energy cost is then derived using
+ * @details Estimates power per load from the rated motor power, load factor, frequency ratio, and
+ * motor-and-drive efficiency. Annual energy use is then obtained by multiplying by the operating
+ * hours and the units multiplier. Energy cost is then derived using
  * @ref electricity_reduction_energy_cost_formula.
  * @see electricity_reduction_nameplate_formula
  *
@@ -176,7 +176,7 @@ ElectricityReductionOutput multimeterReduction(const MultimeterData& data, int o
  * @param[in] electricity_cost Electricity cost rate @unitb{\dollar\per\kilo\watt\hour}.
  * @param[in] units           Quantity multiplier (number of identical loads).
  * @return @ref ElectricityReductionOutput with annual energy use @unitb{\kilo\watt\hour\per\year},
- *         annual energy cost @unitb{\dollar\per\year}, and power @unitb{\kilo\watt}.
+ *         annual energy cost @unitb{\dollar\per\year}, and power per load @unitb{\kilo\watt}.
  */
 ElectricityReductionOutput nameplateReduction(const NameplateData& data, int operating_hours,
                                               double electricity_cost, int units);
@@ -184,8 +184,8 @@ ElectricityReductionOutput nameplateReduction(const NameplateData& data, int ope
 /**
  * @ingroup electricity_reduction_calculator
  * @brief Calculates annual energy use and cost using the power meter measurement method.
- * @details Multiplies the direct power reading by the units multiplier and then by the annual
- * operating hours to obtain annual energy use. Energy cost is then derived using
+ * @details Multiplies the direct power reading by the annual operating hours and the units
+ * multiplier to obtain annual energy use. Energy cost is then derived using
  * @ref electricity_reduction_energy_cost_formula.
  * @see electricity_reduction_power_meter_formula
  *
@@ -194,7 +194,7 @@ ElectricityReductionOutput nameplateReduction(const NameplateData& data, int ope
  * @param[in] electricity_cost Electricity cost rate @unitb{\dollar\per\kilo\watt\hour}.
  * @param[in] units           Quantity multiplier (number of identical loads).
  * @return @ref ElectricityReductionOutput with annual energy use @unitb{\kilo\watt\hour\per\year},
- *         annual energy cost @unitb{\dollar\per\year}, and power @unitb{\kilo\watt}.
+ *         annual energy cost @unitb{\dollar\per\year}, and power per load @unitb{\kilo\watt}.
  */
 ElectricityReductionOutput powerMeterReduction(const PowerMeterData& data, int operating_hours,
                                                double electricity_cost, int units);

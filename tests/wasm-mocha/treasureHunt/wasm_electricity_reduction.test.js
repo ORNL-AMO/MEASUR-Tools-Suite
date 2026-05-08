@@ -157,11 +157,11 @@ describe('Electricity Reduction Tests', function () {
         let results = moduleInstance.electricityReduction(inputVec);
         assert.approximately(results.energyUse, 13901.841605, 0.001, 'energyUse');
         assert.approximately(results.energyCost, 1668.220993, 0.001, 'energyCost');
-        assert.approximately(results.power, 1.609009, 0.001, 'power');
+        assert.approximately(results.power, 0.804505, 0.001, 'power');
         inputVec.delete();
     });
 
-    it('should calculate ElectricityReduction Power Meter Method correctly', function () {
+    it('should calculate ElectricityReduction Nameplate Method correctly for multiple units', function () {
         let inputData = {
             operatingHours: 8640,
             electricityCost: 0.12,
@@ -195,7 +195,7 @@ describe('Electricity Reduction Tests', function () {
         let results = moduleInstance.electricityReduction(inputVec);
         assert.approximately(results.energyUse, 864000, 0.001, 'energyUse');
         assert.approximately(results.energyCost, 103680, 0.001, 'energyCost');
-        assert.approximately(results.power, 100, 0.001, 'power');
+        assert.approximately(results.power, 50, 0.001, 'power');
         inputVec.delete();
     });
 
@@ -301,7 +301,7 @@ describe('Electricity Reduction Tests', function () {
         let results = moduleInstance.electricityReduction(inputVec);
         assert.approximately(results.energyUse, 1945004.716785, 0.001, 'energyUse');
         assert.approximately(results.energyCost, 233400.566012, 0.001, 'energyCost');
-        assert.approximately(results.power, 175.116287, 0.001, 'power');
+        assert.approximately(results.power, 125.116287, 0.001, 'power');
         inputVec.delete();
     });
 });

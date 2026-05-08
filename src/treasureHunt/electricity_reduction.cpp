@@ -41,13 +41,13 @@ ElectricityReductionOutput multimeterReduction(const MultimeterData& data, int o
                                                double electricity_cost, int units) {
     double tmp_power = 0.0;
     if (data.number_of_phases == 1) {
-        tmp_power = data.supply_voltage * data.average_current * data.power_factor * 0.001 * units;
+        tmp_power = data.supply_voltage * data.average_current * data.power_factor * 0.001;
     }
     else {
         tmp_power = data.supply_voltage * data.average_current * data.power_factor *
-                    (std::sqrt(3.0) / 1000.0) * units;
+                    (std::sqrt(3.0) / 1000.0);
     }
-    double tmp_energy_use  = tmp_power * operating_hours;
+    double tmp_energy_use  = tmp_power * operating_hours * units;
     double tmp_energy_cost = tmp_energy_use * electricity_cost;
     return ElectricityReductionOutput{tmp_energy_use, tmp_energy_cost, tmp_power};
 }
@@ -56,16 +56,16 @@ ElectricityReductionOutput nameplateReduction(const NameplateData& data, int ope
                                               double electricity_cost, int units) {
     double tmp_power = data.rated_motor_power * data.load_factor *
                        std::pow(data.operational_frequency / data.line_frequency, 2.5) *
-                       (1.0 / data.motor_and_drive_efficiency) * units;
-    double tmp_energy_use  = tmp_power * operating_hours;
+                       (1.0 / data.motor_and_drive_efficiency);
+    double tmp_energy_use  = tmp_power * operating_hours * units;
     double tmp_energy_cost = tmp_energy_use * electricity_cost;
     return ElectricityReductionOutput{tmp_energy_use, tmp_energy_cost, tmp_power};
 }
 
 ElectricityReductionOutput powerMeterReduction(const PowerMeterData& data, int operating_hours,
                                                double electricity_cost, int units) {
-    double tmp_power       = data.power * units;
-    double tmp_energy_use  = tmp_power * operating_hours;
+    double tmp_power       = data.power;
+    double tmp_energy_use  = tmp_power * operating_hours * units;
     double tmp_energy_cost = tmp_energy_use * electricity_cost;
     return ElectricityReductionOutput{tmp_energy_use, tmp_energy_cost, tmp_power};
 }

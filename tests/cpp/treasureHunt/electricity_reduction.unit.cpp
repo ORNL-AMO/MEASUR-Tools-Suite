@@ -74,7 +74,7 @@ TEST_CASE("Electricity Reduction Nameplate Data - Multiple Units", "[Electricity
 
     CHECK(output.energy_use == Approx(13901.841605));
     CHECK(output.energy_cost == Approx(1668.220993));
-    CHECK(output.power == Approx(1.609009));
+    CHECK(output.power == Approx(0.804505));
 }
 
 TEST_CASE("Electricity Reduction Power Meter Method Test", "[ElectricityReduction][util]") {
@@ -92,7 +92,7 @@ TEST_CASE("Electricity Reduction Power Meter Method Test", "[ElectricityReductio
 
     CHECK(output.energy_use == Approx(864000));
     CHECK(output.energy_cost == Approx(103680));
-    CHECK(output.power == Approx(100));
+    CHECK(output.power == Approx(50));
 }
 
 TEST_CASE("Electricity Reduction Other Method Test", "[ElectricityReduction][util]") {
@@ -140,5 +140,5 @@ TEST_CASE("Electricity Reduction Combination", "[ElectricityReduction][util]") {
 
     CHECK(output.energy_use == Approx(1945004.716785));
     CHECK(output.energy_cost == Approx(233400.566012));
-    CHECK(output.power == Approx(175.116287));
+    CHECK(output.power == Approx(125.116287));
 }
