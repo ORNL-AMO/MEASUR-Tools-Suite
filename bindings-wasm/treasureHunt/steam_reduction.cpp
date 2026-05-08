@@ -51,7 +51,7 @@ EMSCRIPTEN_BINDINGS(steamReduction_module) {
         .field("outletTemperature",     &MassFlowMethodData::outlet_temperature);
 
     // OffsheetMethodData:
-    //   consumption (kJ/hr)
+    //   consumption (kJ/yr — total annual energy consumption used directly as energy use)
     value_object<OffsheetMethodData>("SteamOffsheetMethodData")
         .field("consumption", &OffsheetMethodData::consumption);
 

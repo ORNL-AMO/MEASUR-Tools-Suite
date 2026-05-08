@@ -170,7 +170,7 @@
  * @defgroup steam_reduction_offsheet_formula Offsheet Method Formula
  * @ingroup steam_reduction_calculator
  * @brief Annual energy use supplied as a direct consumption value.
- * @details The offsheet method accepts a pre-calculated or independently determined energy
+ * @details The offsheet method accepts a pre-calculated or independently determined annual energy
  * consumption value. No flow-rate conversion is applied; the consumption figure is used directly
  * as the annual energy use.
  *
@@ -179,7 +179,7 @@
  * @subheading{Symbols}
  * @symtable
  * @symrow{E_{use}; Annual energy use; \kJ\per\year}
- * @symrow{C_{offsheet}; Direct annual energy consumption; \kJ\per\hour}
+ * @symrow{C_{offsheet}; Direct total annual energy consumption; \kJ\per\year}
  * @endsymtable
  */
 

@@ -109,7 +109,7 @@ struct MassFlowMethodData {
  * @see steam_reduction_offsheet_formula
  */
 struct OffsheetMethodData {
-    double consumption = 0.0; ///< Direct energy consumption @unitb{kJ\per\hour}
+    double consumption = 0.0; ///< Total annual energy consumption (used directly as annual energy use) @unitb{kJ\per\year}
 };
 
 /**
@@ -235,7 +235,7 @@ SteamReductionOutput waterMassFlowReduction(const MassFlowMethodData& data, int 
  * steam use from the enthalpy difference and boiler efficiency.
  * @see steam_reduction_offsheet_formula
  *
- * @param[in] data              @ref OffsheetMethodData with the direct energy consumption value @unitb{kJ\per\hour}.
+ * @param[in] data              @ref OffsheetMethodData with the total annual energy consumption @unitb{kJ\per\year}.
  * @param[in] boiler_efficiency Boiler efficiency @unitless.
  * @param[in] change_enthalpy   Enthalpy difference between steam and feedwater @unitb{kJ\per\kg}.
  * @return @ref SteamReductionOutput with steam use @unitb{kg\per\hour}
