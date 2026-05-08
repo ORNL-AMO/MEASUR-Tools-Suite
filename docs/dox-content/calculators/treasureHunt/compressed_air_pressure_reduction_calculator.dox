@@ -55,9 +55,9 @@
  * @symrow{P_{proposed}; Proposed compressor discharge pressure; \psi}
  * @symrow{P_{atm}; Atmospheric pressure; \psi}
  * @symrow{P_{rated}; Rated compressor pressure; \psi}
- * @symrow{r; Rated pressure ratio term; 1}
- * @symrow{x; Proposed pressure ratio term; 1}
- * @symrow{c; Empirical exponent; 1}
+ * @symrow{r; Rated pressure ratio term; \unitless}
+ * @symrow{x; Proposed pressure ratio term; \unitless}
+ * @symrow{c; Empirical exponent; \unitless}
  * @symrow{t_{op}; Annual operating hours; \hour\per\year}
  * @endsymtable
  */

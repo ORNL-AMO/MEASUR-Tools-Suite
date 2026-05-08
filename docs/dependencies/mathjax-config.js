@@ -98,6 +98,7 @@ window.MathJax = {
                 \DeclareSIUnit{\ton}{ton}
                 \DeclareSIUnit{\squareInch}{in^2}
                 \DeclareSIUnit{\inchMercury}{inHg}
+                \DeclareSIUnit{\psi}{psi}
             `);
         }
     },
