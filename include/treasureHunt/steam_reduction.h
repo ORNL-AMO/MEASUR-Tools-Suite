@@ -126,14 +126,14 @@ struct SteamReductionInput {
     UtilityType utility_type   = UtilityType::kNaturalGas; ///< Utility type for energy cost calculation
     double utility_cost        = 0.0; ///< Utility cost rate (@unitb{\dollar\per\kg} for steam, @unitb{\dollar\per\kJ} for gas/other)
     SteamMeasurementMethod measurement_method = SteamMeasurementMethod::kFlowMeter; ///< Measurement method to apply
-    double system_efficiency   = 1.0; ///< System efficiency @unitless
+    double system_efficiency   = 1.0; ///< System efficiency @unitb{\unitless}
     double pressure            = 0.0; ///< Steam pressure @unitb{MPaa}
     FlowMeterMethodData  flow_meter_method_data;       ///< Data for the flow meter method
     MassFlowMethodData   air_mass_flow_method_data;    ///< Data for the air mass flow method
     MassFlowMethodData   water_mass_flow_method_data;  ///< Data for the water mass flow method
     OffsheetMethodData   offsheet_method_data;         ///< Data for the offsheet method
-    int    units               = 1;   ///< Unit conversion factor @unitless
-    double boiler_efficiency   = 1.0; ///< Boiler efficiency @unitless
+    int    units               = 1;   ///< Unit conversion factor @unitb{\unitless}
+    double boiler_efficiency   = 1.0; ///< Boiler efficiency @unitb{\unitless}
     SteamProperties::ThermodynamicQuantity steam_variable_option =
         SteamProperties::ThermodynamicQuantity::TEMPERATURE; ///< Thermodynamic quantity type for steam property lookup
     double steam_variable      = 0.0; ///< Steam thermodynamic variable value (temperature @unitb{K}, enthalpy @unitb{kJ\per\kg}, entropy @unitb{kJ\per\kg\per\K}, or quality \unitless)
