@@ -1,7 +1,6 @@
 #include <emscripten/bind.h>
 
 #include "steamModeler/SteamProperties.h"
-#include "treasureHunt/CompressedAirPressureReduction.h"
 #include "treasureHunt/CompressedAirReduction.h"
 #include "treasureHunt/ElectricityReduction.h"
 #include "treasureHunt/InsulatedPipeReduction.h"
@@ -94,21 +93,6 @@ EMSCRIPTEN_BINDINGS(compressedAirReduction_class) {
     class_<CompressedAirReduction>("CompressedAirReduction")
         .constructor<std::vector<CompressedAirReductionInput>>()
         .function("calculate", &CompressedAirReduction::calculate);
-}
-
-EMSCRIPTEN_BINDINGS(compressedAirPressureReduction_class) {
-    class_<CompressedAirPressureReductionInput>("CompressedAirPressureReductionInput")
-        .constructor<bool, int, double, double, double, double, double, double>();
-
-    register_vector<CompressedAirPressureReductionInput>("CompressedAirPressureReductionInputV");
-
-    class_<CompressedAirPressureReduction::Output>("CompressedAirPressureReductionOutput")
-        .property("energyUse", &CompressedAirPressureReduction::Output::energyUse)
-        .property("energyCost", &CompressedAirPressureReduction::Output::energyCost);
-
-    class_<CompressedAirPressureReduction>("CompressedAirPressureReduction")
-        .constructor<std::vector<CompressedAirPressureReductionInput>>()
-        .function("calculate", &CompressedAirPressureReduction::calculate);
 }
 
 EMSCRIPTEN_BINDINGS(steamReduction_class) {
