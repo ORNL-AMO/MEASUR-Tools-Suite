@@ -1,12 +1,10 @@
 #include <emscripten/bind.h>
 
-#include "steamModeler/SteamProperties.h"
 #include "treasureHunt/CompressedAirReduction.h"
 #include "treasureHunt/ElectricityReduction.h"
 #include "treasureHunt/InsulatedPipeReduction.h"
 #include "treasureHunt/InsulatedTankReduction.h"
 #include "treasureHunt/NaturalGasReduction.h"
-#include "treasureHunt/SteamReduction.h"
 #include "vector"
 
 using namespace emscripten;
@@ -93,35 +91,6 @@ EMSCRIPTEN_BINDINGS(compressedAirReduction_class) {
     class_<CompressedAirReduction>("CompressedAirReduction")
         .constructor<std::vector<CompressedAirReductionInput>>()
         .function("calculate", &CompressedAirReduction::calculate);
-}
-
-EMSCRIPTEN_BINDINGS(steamReduction_class) {
-    class_<SteamFlowMeterMethodData>("SteamFlowMeterMethodData").constructor<double>();
-
-    class_<SteamMassFlowNameplateData>("SteamMassFlowNameplateData").constructor<double>();
-
-    class_<SteamMassFlowMeasuredData>("SteamMassFlowMeasuredData").constructor<double, double>();
-
-    class_<SteamMassFlowMethodData>("SteamMassFlowMethodData")
-        .constructor<bool, SteamMassFlowMeasuredData, SteamMassFlowNameplateData, double, double>();
-
-    class_<SteamOffsheetMethodData>("SteamOffsheetMethodData").constructor<double>();
-
-    class_<SteamReductionInput>("SteamReductionInput")
-        .constructor<int, int, double, int, double, double, SteamFlowMeterMethodData, SteamMassFlowMethodData,
-                     SteamMassFlowMethodData, SteamOffsheetMethodData, int, double,
-                     SteamProperties::ThermodynamicQuantity, double, double>();
-
-    register_vector<SteamReductionInput>("SteamReductionInputV");
-
-    class_<SteamReduction::Output>("SteamReductionOutput")
-        .property("steamUse", &SteamReduction::Output::steamUse)
-        .property("energyUse", &SteamReduction::Output::energyUse)
-        .property("energyCost", &SteamReduction::Output::energyCost);
-
-    class_<SteamReduction>("SteamReduction")
-        .constructor<std::vector<SteamReductionInput>>()
-        .function("calculate", &SteamReduction::calculate);
 }
 
 EMSCRIPTEN_BINDINGS(insulatedPipeReduction_class) {
