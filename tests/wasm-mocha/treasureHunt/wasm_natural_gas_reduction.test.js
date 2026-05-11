@@ -9,77 +9,269 @@ describe('Natural Gas Reduction Tests', function () {
         });
     });
 
-    it('should calculate 1 NaturalGasReduction correctly', function () {
-        let inp = {
-            naturalGasReductionInputVec: [
-                {
-                    operatingHours: 8640,
-                    fuelCost: 0.12,
-                    measurementMethod: 0,
-                    flowMeterMethodData: {
-                        flowRate: 5
-                    },
-                    naturalGasOtherMethodData: {
-                        consumption: 30.00
-                    },
-                    airMassFlowData: {
-                        isNameplate: false,
-                        airMassFlowMeasuredData: {
-                            areaOfDuct: 3,
-                            airVelocity: 15
-                        },
-                        airMassFlowNameplateData: {
-                            airFlow: 30
-                        },
-                        inletTemperature: 70,
-                        outletTemperature: 800,
-                        systemEfficiency: 80
-                    },
-                    waterMassFlowData: {
-                        waterFlow: 10,
-                        inletTemperature: 70,
-                        outletTemperature: 100,
-                        systemEfficiency: 80
-                    },
-                    units: 2
-                }
-            ]
+    it('should calculate NaturalGasReduction Flow Meter Method correctly', function () {
+        let inputData = {
+            operatingHours: 8640,
+            fuelCost: 0.12,
+            measurementMethod: moduleInstance.NaturalGasMeasurementMethod.FlowMeter,
+            flowMeterMethodData: { flowRate: 5 },
+            otherMethodData: { consumption: 200000 },
+            airMassFlowData: {
+                isNameplate: true,
+                measuredData: { areaOfDuct: 50, airVelocity: 200 },
+                nameplateData: { airFlow: 10000 },
+                inletTemperature: 120,
+                outletTemperature: 200,
+                systemEfficiency: 100
+            },
+            waterMassFlowData: {
+                waterFlow: 400,
+                inletTemperature: 120,
+                outletTemperature: 200,
+                systemEfficiency: 100
+            },
+            units: 2
         };
-        let inputList = new moduleInstance.NaturalGasReductionInputV();
-        for (let i = 0; i < inp.naturalGasReductionInputVec.length; i++) {
-            let inpElem = inp.naturalGasReductionInputVec[i];
-            let flowMeterMethodData = new moduleInstance.FlowMeterMethodData(inpElem.flowMeterMethodData.flowRate);
-            let naturalGasOtherMethodData = new moduleInstance.NaturalGasOtherMethodData(inpElem.naturalGasOtherMethodData.consumption);
-            let airMassFlowMeasuredData = new moduleInstance.AirMassFlowMeasuredData(inpElem.airMassFlowData.airMassFlowMeasuredData.areaOfDuct,
-                inpElem.airMassFlowData.airMassFlowMeasuredData.airVelocity);
-            let airMassFlowNameplateData = new moduleInstance.AirMassFlowNameplateData(inpElem.airMassFlowData.airMassFlowNameplateData.airFlow);
-            let airMassFlowData = new moduleInstance.AirMassFlowData(inpElem.airMassFlowData.isNameplate, airMassFlowMeasuredData, airMassFlowNameplateData,
-                inpElem.airMassFlowData.inletTemperature, inpElem.airMassFlowData.outletTemperature, inpElem.airMassFlowData.systemEfficiency);
-            let waterMassFlowData = new moduleInstance.WaterMassFlowData(inpElem.waterMassFlowData.waterFlow,
-                inpElem.waterMassFlowData.inletTemperature, inpElem.waterMassFlowData.outletTemperature, inpElem.waterMassFlowData.systemEfficiency);
 
-            let input = new moduleInstance.NaturalGasReductionInput(inpElem.operatingHours, inpElem.fuelCost, inpElem.measurementMethod,
-                flowMeterMethodData, naturalGasOtherMethodData, airMassFlowData, waterMassFlowData, inpElem.units);
-            inputList.push_back(input);
-
-            input.delete();
-            waterMassFlowData.delete();
-            airMassFlowData.delete();
-            airMassFlowNameplateData.delete();
-            airMassFlowMeasuredData.delete();
-            naturalGasOtherMethodData.delete();
-            flowMeterMethodData.delete();
-        }
-
-        let instance = new moduleInstance.NaturalGasReduction(inputList);
-        let results = instance.calculate();
+        let inputVec = new moduleInstance.NaturalGasReductionInputV();
+        inputVec.push_back(inputData);
+        let results = moduleInstance.naturalGasReduction(inputVec);
         assert.approximately(results.energyUse, 88.992, 0.001, "energyUse");
         assert.approximately(results.energyCost, 10.67904, 0.001, "energyCost");
         assert.approximately(results.heatFlow, 0, 0.001, "heatFlow");
         assert.approximately(results.totalFlow, 10, 0.001, "totalFlow");
-        instance.delete();
-        inputList.delete();
+        inputVec.delete();
     });
 
+    it('should calculate NaturalGasReduction Air Mass Flow Nameplate correctly', function () {
+        let inputData = {
+            operatingHours: 8640,
+            fuelCost: 0.12,
+            measurementMethod: moduleInstance.NaturalGasMeasurementMethod.AirMassFlow,
+            flowMeterMethodData: { flowRate: 5 },
+            otherMethodData: { consumption: 200000 },
+            airMassFlowData: {
+                isNameplate: true,
+                measuredData: { areaOfDuct: 50, airVelocity: 200 },
+                nameplateData: { airFlow: 30 },
+                inletTemperature: 120,
+                outletTemperature: 200,
+                systemEfficiency: 1
+            },
+            waterMassFlowData: {
+                waterFlow: 400,
+                inletTemperature: 120,
+                outletTemperature: 200,
+                systemEfficiency: 1
+            },
+            units: 2
+        };
 
+        let inputVec = new moduleInstance.NaturalGasReductionInputV();
+        inputVec.push_back(inputData);
+        let results = moduleInstance.naturalGasReduction(inputVec);
+        assert.approximately(results.energyUse, 44.78976, 0.001, "energyUse");
+        assert.approximately(results.energyCost, 5.37477, 0.001, "energyCost");
+        assert.approximately(results.heatFlow, 0.002592, 0.000001, "heatFlow");
+        assert.approximately(results.totalFlow, 60, 0.001, "totalFlow");
+        inputVec.delete();
+    });
+
+    it('should calculate NaturalGasReduction Air Mass Flow Measured correctly', function () {
+        let inputData = {
+            operatingHours: 8640,
+            fuelCost: 0.12,
+            measurementMethod: moduleInstance.NaturalGasMeasurementMethod.AirMassFlow,
+            flowMeterMethodData: { flowRate: 5 },
+            otherMethodData: { consumption: 200000 },
+            airMassFlowData: {
+                isNameplate: false,
+                measuredData: { areaOfDuct: 50, airVelocity: 200 },
+                nameplateData: { airFlow: 30 },
+                inletTemperature: 120,
+                outletTemperature: 200,
+                systemEfficiency: 1
+            },
+            waterMassFlowData: {
+                waterFlow: 400,
+                inletTemperature: 120,
+                outletTemperature: 200,
+                systemEfficiency: 1
+            },
+            units: 2
+        };
+
+        let inputVec = new moduleInstance.NaturalGasReductionInputV();
+        inputVec.push_back(inputData);
+        let results = moduleInstance.naturalGasReduction(inputVec);
+        assert.approximately(results.energyUse, 14929.92, 0.01, "energyUse");
+        assert.approximately(results.energyCost, 1791.5904, 0.001, "energyCost");
+        assert.approximately(results.heatFlow, 0.864, 0.001, "heatFlow");
+        assert.approximately(results.totalFlow, 20000, 0.001, "totalFlow");
+        inputVec.delete();
+    });
+
+    it('should calculate NaturalGasReduction Water Mass Flow correctly', function () {
+        let inputData = {
+            operatingHours: 8640,
+            fuelCost: 0.12,
+            measurementMethod: moduleInstance.NaturalGasMeasurementMethod.WaterMassFlow,
+            flowMeterMethodData: { flowRate: 5 },
+            otherMethodData: { consumption: 200000 },
+            airMassFlowData: {
+                isNameplate: false,
+                measuredData: { areaOfDuct: 50, airVelocity: 200 },
+                nameplateData: { airFlow: 30 },
+                inletTemperature: 120,
+                outletTemperature: 200,
+                systemEfficiency: 1
+            },
+            waterMassFlowData: {
+                waterFlow: 400,
+                inletTemperature: 120,
+                outletTemperature: 200,
+                systemEfficiency: 1
+            },
+            units: 2
+        };
+
+        let inputVec = new moduleInstance.NaturalGasReductionInputV();
+        inputVec.push_back(inputData);
+        let results = moduleInstance.naturalGasReduction(inputVec);
+        assert.approximately(results.energyUse, 276480, 0.001, "energyUse");
+        assert.approximately(results.energyCost, 33177.6, 0.001, "energyCost");
+        assert.approximately(results.heatFlow, 16, 0.001, "heatFlow");
+        assert.approximately(results.totalFlow, 800, 0.001, "totalFlow");
+        inputVec.delete();
+    });
+
+    it('should calculate NaturalGasReduction Other Method correctly', function () {
+        let inputData = {
+            operatingHours: 8640,
+            fuelCost: 0.12,
+            measurementMethod: moduleInstance.NaturalGasMeasurementMethod.Other,
+            flowMeterMethodData: { flowRate: 5 },
+            otherMethodData: { consumption: 2000 },
+            airMassFlowData: {
+                isNameplate: false,
+                measuredData: { areaOfDuct: 50, airVelocity: 200 },
+                nameplateData: { airFlow: 30 },
+                inletTemperature: 120,
+                outletTemperature: 200,
+                systemEfficiency: 1
+            },
+            waterMassFlowData: {
+                waterFlow: 400,
+                inletTemperature: 120,
+                outletTemperature: 200,
+                systemEfficiency: 1
+            },
+            units: 2
+        };
+
+        let inputVec = new moduleInstance.NaturalGasReductionInputV();
+        inputVec.push_back(inputData);
+        let results = moduleInstance.naturalGasReduction(inputVec);
+        assert.approximately(results.energyUse, 2000, 0.001, "energyUse");
+        assert.approximately(results.energyCost, 240, 0.001, "energyCost");
+        assert.approximately(results.heatFlow, 0, 0.001, "heatFlow");
+        assert.approximately(results.totalFlow, 0, 0.001, "totalFlow");
+        inputVec.delete();
+    });
+
+    it('should calculate NaturalGasReduction All Methods correctly', function () {
+        let inputs = [
+            // flow meter method
+            {
+                operatingHours: 8640, fuelCost: 0.12,
+                measurementMethod: moduleInstance.NaturalGasMeasurementMethod.FlowMeter,
+                flowMeterMethodData: { flowRate: 5 },
+                otherMethodData: { consumption: 200000 },
+                airMassFlowData: { isNameplate: true, measuredData: { areaOfDuct: 50, airVelocity: 200 },
+                    nameplateData: { airFlow: 10000 }, inletTemperature: 120, outletTemperature: 200, systemEfficiency: 100 },
+                waterMassFlowData: { waterFlow: 400, inletTemperature: 120, outletTemperature: 200, systemEfficiency: 100 },
+                units: 2
+            },
+            // air mass flow nameplate
+            {
+                operatingHours: 8640, fuelCost: 0.12,
+                measurementMethod: moduleInstance.NaturalGasMeasurementMethod.AirMassFlow,
+                flowMeterMethodData: { flowRate: 5 },
+                otherMethodData: { consumption: 200000 },
+                airMassFlowData: { isNameplate: true, measuredData: { areaOfDuct: 50, airVelocity: 200 },
+                    nameplateData: { airFlow: 30 }, inletTemperature: 120, outletTemperature: 200, systemEfficiency: 1 },
+                waterMassFlowData: { waterFlow: 400, inletTemperature: 120, outletTemperature: 200, systemEfficiency: 1 },
+                units: 2
+            },
+            // air mass flow measured
+            {
+                operatingHours: 8640, fuelCost: 0.12,
+                measurementMethod: moduleInstance.NaturalGasMeasurementMethod.AirMassFlow,
+                flowMeterMethodData: { flowRate: 5 },
+                otherMethodData: { consumption: 200000 },
+                airMassFlowData: { isNameplate: false, measuredData: { areaOfDuct: 50, airVelocity: 200 },
+                    nameplateData: { airFlow: 30 }, inletTemperature: 120, outletTemperature: 200, systemEfficiency: 1 },
+                waterMassFlowData: { waterFlow: 400, inletTemperature: 120, outletTemperature: 200, systemEfficiency: 1 },
+                units: 2
+            },
+            // water mass flow method
+            {
+                operatingHours: 8640, fuelCost: 0.12,
+                measurementMethod: moduleInstance.NaturalGasMeasurementMethod.WaterMassFlow,
+                flowMeterMethodData: { flowRate: 5 },
+                otherMethodData: { consumption: 200000 },
+                airMassFlowData: { isNameplate: false, measuredData: { areaOfDuct: 50, airVelocity: 200 },
+                    nameplateData: { airFlow: 30 }, inletTemperature: 120, outletTemperature: 200, systemEfficiency: 1 },
+                waterMassFlowData: { waterFlow: 400, inletTemperature: 120, outletTemperature: 200, systemEfficiency: 1 },
+                units: 2
+            },
+            // other/off sheet method
+            {
+                operatingHours: 8640, fuelCost: 0.12,
+                measurementMethod: moduleInstance.NaturalGasMeasurementMethod.Other,
+                flowMeterMethodData: { flowRate: 5 },
+                otherMethodData: { consumption: 2000 },
+                airMassFlowData: { isNameplate: false, measuredData: { areaOfDuct: 50, airVelocity: 200 },
+                    nameplateData: { airFlow: 30 }, inletTemperature: 120, outletTemperature: 200, systemEfficiency: 1 },
+                waterMassFlowData: { waterFlow: 400, inletTemperature: 120, outletTemperature: 200, systemEfficiency: 1 },
+                units: 2
+            }
+        ];
+
+        let inputVec = new moduleInstance.NaturalGasReductionInputV();
+        for (let inp of inputs) {
+            inputVec.push_back(inp);
+        }
+        let results = moduleInstance.naturalGasReduction(inputVec);
+        assert.approximately(results.energyUse, 293543.70176, 0.001, "energyUse");
+        assert.approximately(results.energyCost, 35225.2442112, 0.001, "energyCost");
+        assert.approximately(results.heatFlow, 16.866592, 0.0001, "heatFlow");
+        assert.approximately(results.totalFlow, 20870, 0.001, "totalFlow");
+        inputVec.delete();
+    });
+
+    it('should calculate flowMeterMethodReduction standalone correctly', function () {
+        let results = moduleInstance.flowMeterMethodReduction({ flowRate: 5 }, 8640, 0.12, 2);
+        assert.approximately(results.energyUse, 88.992, 0.001, "energyUse");
+        assert.approximately(results.energyCost, 10.67904, 0.001, "energyCost");
+        assert.approximately(results.heatFlow, 0, 0.001, "heatFlow");
+        assert.approximately(results.totalFlow, 10, 0.001, "totalFlow");
+    });
+
+    it('should calculate waterMassFlowMethodReduction standalone correctly', function () {
+        let results = moduleInstance.waterMassFlowMethodReduction(
+            { waterFlow: 400, inletTemperature: 120, outletTemperature: 200, systemEfficiency: 1 }, 8640, 0.12, 2);
+        assert.approximately(results.energyUse, 276480, 0.001, "energyUse");
+        assert.approximately(results.energyCost, 33177.6, 0.001, "energyCost");
+        assert.approximately(results.heatFlow, 16, 0.001, "heatFlow");
+        assert.approximately(results.totalFlow, 800, 0.001, "totalFlow");
+    });
+
+    it('should calculate otherMethodReduction standalone correctly', function () {
+        let results = moduleInstance.otherMethodReduction({ consumption: 2000 }, 0.12);
+        assert.approximately(results.energyUse, 2000, 0.001, "energyUse");
+        assert.approximately(results.energyCost, 240, 0.001, "energyCost");
+        assert.approximately(results.heatFlow, 0, 0.001, "heatFlow");
+        assert.approximately(results.totalFlow, 0, 0.001, "totalFlow");
+    });
 });
