@@ -148,7 +148,7 @@ struct SteamReductionInput {
  * measures passed to @ref steamReduction.
  */
 struct SteamReductionOutput {
-    double steam_use   = 0.0; ///< Annual steam use @unitb{kg\per\hour}
+    double steam_use   = 0.0; ///< Annual steam use @unitb{kg\per\year}
     double energy_use  = 0.0; ///< Annual energy use @unitb{kJ\per\year}
     double energy_cost = 0.0; ///< Annual energy cost @unitb{\dollar\per\year}
 };
@@ -163,7 +163,7 @@ struct SteamReductionOutput {
  * @see steam_reduction_energy_cost_formula
  *
  * @param[in] input_vec Vector of @ref SteamReductionInput structs, one per measure.
- * @return @ref SteamReductionOutput with summed annual steam use @unitb{kg\per\hour},
+ * @return @ref SteamReductionOutput with summed annual steam use @unitb{kg\per\year},
  *         energy use @unitb{kJ\per\year}, and energy cost @unitb{\dollar\per\year}.
  */
 SteamReductionOutput steamReduction(const std::vector<SteamReductionInput>& input_vec);

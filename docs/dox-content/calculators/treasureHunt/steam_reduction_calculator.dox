@@ -82,8 +82,8 @@
  *
  * @subheading{Symbols}
  * @symtable
- * @symrow{\dot{m}_{steam}; Annual steam use; \kg\per\hour}
- * @symrow{\dot{V}_{meter}; Flow meter reading; \kg\per\hour}
+ * @symrow{\dot{m}_{steam}; Annual steam use; \kg\per\year}
+ * @symrow{\dot{V}_{meter}; Flow meter reading; \kg\per\year}
  * @symrow{t_{op}; Annual operating hours; \hour\per\year}
  * @symrow{k_{units}; Unit conversion factor; \unitless}
  * @symrow{\eta_{sys}; System efficiency; \unitless}
