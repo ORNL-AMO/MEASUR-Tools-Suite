@@ -42,7 +42,7 @@ enum class SteamMeasurementMethod {
  * @see steam_reduction_calculator
  */
 enum class UtilityType {
-    kSteam      = 0, ///< Steam utility — energy cost is based on steam use @unitb{kg\per\hour}
+    kSteam      = 0, ///< Steam utility — energy cost is based on steam use @unitb{kg\per\year}
     kNaturalGas = 1, ///< Natural gas utility — energy cost is based on energy use @unitb{kJ\per\year}
     kOther      = 2  ///< Other utility — energy cost is based on energy use @unitb{kJ\per\year}
 };
