@@ -118,7 +118,7 @@ inline constexpr double kAirCorrectionBase = -1.078913827;
 constexpr double kWaterDensity = 8.335;
 
 /**
- * @brief Sensible heat factor for air flow @unitb{Btu\cdot\minute\per(\cubic\foot\cdot\degreeF\cdot\hour)}
+ * @brief Sensible heat factor for air flow @unitb{Btu\cdot\minute\per(\cubicFoot\cdot\degreeF\cdot\hour)}
  * @details Product of standard air density (0.075 lb/ft³), specific heat of air (0.24 Btu/lb·°F),
  * and the minutes-to-hours conversion factor (60 min/hr): 0.075 × 0.24 × 60 = 1.08.
  * Used to calculate sensible heat transfer rate of an air stream in U.S. customary units.
