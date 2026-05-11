@@ -1,0 +1,222 @@
+/**
+ * @defgroup steam_reduction_calculator Steam Reduction Calculator
+ * @ingroup treasure_hunt_calculators
+ * @brief Calculates annual steam use, energy use, and energy cost for steam reduction measures
+ * using multiple measurement methods.
+ * @details This calculator estimates annual steam use, energy use, and associated cost for a set
+ * of steam reduction measures identified during an energy treasure hunt or steam efficiency
+ * assessment. It supports four measurement methods — flow meter, air mass flow, water mass flow,
+ * and offsheet (direct consumption) — and accumulates the results across all measures in a single
+ * pass.
+ *
+ * The calculation follows these steps for each measure:
+ * 1. **Enthalpy Difference** — Compute the enthalpy difference between the steam at operating
+ *    conditions and the feedwater at atmospheric pressure
+ * 2. **Flow Meter** — Compute annual steam use from a direct flow meter reading and operating hours
+ * 3. **Air Mass Flow** — Derive annual energy use from air flow rate and temperature differential
+ * 4. **Water Mass Flow** — Derive annual energy use from water flow rate and temperature differential
+ * 5. **Offsheet** — Accept a direct energy consumption value (no flow-rate conversion required)
+ * 6. **Energy Cost** — Multiply annual steam use or energy use by the utility cost rate
+ * 7. **Totals** — Sum steam use, energy use, and energy cost across all measures
+ *
+ * Relevant formulas and symbol definitions are documented below.
+ *
+ * @heading{Enthalpy Difference}
+ * @copydoc steam_reduction_enthalpy_formula
+ *
+ * @heading{Flow Meter Method}
+ * @copydoc steam_reduction_flow_meter_formula
+ *
+ * @heading{Air Mass Flow Method — Flow Rate}
+ * @copydoc steam_reduction_air_mass_flow_rate_formula
+ *
+ * @heading{Air Mass Flow Method — Energy Use}
+ * @copydoc steam_reduction_air_mass_flow_formula
+ *
+ * @heading{Water Mass Flow Method}
+ * @copydoc steam_reduction_water_mass_flow_formula
+ *
+ * @heading{Offsheet Method}
+ * @copydoc steam_reduction_offsheet_formula
+ *
+ * @heading{Steam Use from Energy Use}
+ * @copydoc steam_reduction_steam_use_from_energy_formula
+ *
+ * @heading{Energy Cost}
+ * @copydoc steam_reduction_energy_cost_formula
+ */
+
+/**
+ * @defgroup steam_reduction_enthalpy_formula Enthalpy Difference Formula
+ * @ingroup steam_reduction_calculator
+ * @brief Enthalpy difference between steam at operating conditions and feedwater at atmospheric pressure.
+ * @details The enthalpy of steam is determined from the specified pressure and thermodynamic variable
+ * using the IAPWS-IF97 steam properties model. The feedwater enthalpy is determined at atmospheric
+ * pressure (0.101325 MPaa) and the given feedwater temperature. The difference drives all
+ * subsequent energy calculations.
+ *
+ * @formula{steam-reduction-enthalpy; \Delta h = h_{steam}(P_{steam}, \theta_{steam}) - h_{feed}(P_{atm}, T_{feed})}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{\Delta h; Enthalpy difference between steam and feedwater; \kJ\per\kg}
+ * @symrow{h_{steam}; Specific enthalpy of steam at operating conditions; \kJ\per\kg}
+ * @symrow{P_{steam}; Steam pressure; \mega\pascal}
+ * @symrow{\theta_{steam}; Steam thermodynamic variable (temperature, enthalpy, entropy, or quality); \unitless}
+ * @symrow{h_{feed}; Specific enthalpy of feedwater at atmospheric pressure; \kJ\per\kg}
+ * @symrow{P_{atm}; Atmospheric reference pressure (0.101325); \mega\pascal}
+ * @symrow{T_{feed}; Feedwater temperature; \K}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup steam_reduction_flow_meter_formula Flow Meter Method Formula
+ * @ingroup steam_reduction_calculator
+ * @brief Annual steam use and energy use derived from a direct flow meter reading.
+ * @details The flow meter method uses the measured flow rate together with annual operating hours,
+ * a unit conversion factor, and system efficiency to calculate annual steam use. Energy use is
+ * then derived from the steam use and the enthalpy difference, adjusted by boiler efficiency.
+ *
+ * @formula{steam-reduction-flow-meter-steam; \dot{m}_{steam} = \dot{V}_{meter} \cdot t_{op} \cdot \frac{k_{units}}{\eta_{sys}}}
+ * @formula{steam-reduction-flow-meter-energy; E_{use} = \Delta h \cdot \dot{m}_{steam} \cdot \frac{1}{\eta_{boiler}}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{\dot{m}_{steam}; Annual steam use; \kg\per\year}
+ * @symrow{\dot{V}_{meter}; Flow meter reading; \kg\per\year}
+ * @symrow{t_{op}; Annual operating hours; \hour\per\year}
+ * @symrow{k_{units}; Unit conversion factor; \unitless}
+ * @symrow{\eta_{sys}; System efficiency; \unitless}
+ * @symrow{E_{use}; Annual energy use; \kJ\per\year}
+ * @symrow{\Delta h; Enthalpy difference between steam and feedwater; \kJ\per\kg}
+ * @symrow{\eta_{boiler}; Boiler efficiency; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup steam_reduction_air_mass_flow_rate_formula Air Mass Flow Rate Formula
+ * @ingroup steam_reduction_calculator
+ * @brief Air flow rate determined from either nameplate data or field measurements.
+ * @details When using nameplate data, the flow rate is taken directly from the equipment nameplate.
+ * When using measured data, the flow rate is computed as the product of the duct cross-sectional
+ * area and the measured air velocity.
+ *
+ * @formula{steam-reduction-air-flow-measured; \dot{V}_{air} = v_{air} \cdot A_{duct}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{\dot{V}_{air}; Air flow rate; \cubicMeter\per\minute}
+ * @symrow{v_{air}; Measured air velocity in the duct; \m\per\minute}
+ * @symrow{A_{duct}; Cross-sectional area of the duct; \squareMeter}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup steam_reduction_air_mass_flow_formula Air Mass Flow Method Energy Formula
+ * @ingroup steam_reduction_calculator
+ * @brief Annual energy use derived from air mass flow and temperature differential.
+ * @details The heat flow rate is computed from the air flow rate and the temperature rise across
+ * the heat exchanger using an empirical air heat capacity coefficient. Annual energy use is then
+ * scaled by operating hours, units, system efficiency, and boiler efficiency. The constant
+ * @math{k_{air} = 0.072381} @unitb{\kJ\minute\per\cubicMeter\per\hour\per\K} is derived from the
+ * standard air heat capacity @math{1.08} @unitb{\btu\hour\per\scf\per\hour\per\degreeR}.
+ *
+ * @formula{steam-reduction-air-heat-flow; \dot{Q}_{air} = k_{air} \cdot \dot{V}_{air} \cdot (T_{out} - T_{in})}
+ * @formula{steam-reduction-air-energy; E_{use} = \frac{k_{units} \cdot \dot{Q}_{air} \cdot t_{op}}{\eta_{sys} \cdot \eta_{boiler}}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{\dot{Q}_{air}; Air heat flow rate; \kJ\per\hour}
+ * @symrow{k_{air}; Air heat capacity coefficient (0.072381); \kJ\minute\per\cubicMeter\per\hour\per\K}
+ * @symrow{\dot{V}_{air}; Air flow rate; \cubicMeter\per\minute}
+ * @symrow{T_{out}; Outlet temperature; \degreeCelsius}
+ * @symrow{T_{in}; Inlet temperature; \degreeCelsius}
+ * @symrow{E_{use}; Annual energy use; \kJ\per\year}
+ * @symrow{k_{units}; Unit conversion factor; \unitless}
+ * @symrow{t_{op}; Annual operating hours; \hour\per\year}
+ * @symrow{\eta_{sys}; System efficiency; \unitless}
+ * @symrow{\eta_{boiler}; Boiler efficiency; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup steam_reduction_water_mass_flow_formula Water Mass Flow Method Formula
+ * @ingroup steam_reduction_calculator
+ * @brief Annual energy use derived from nameplate water mass flow and temperature differential.
+ * @details The heat flow rate is computed from the nameplate water flow rate and the temperature
+ * rise across the heat exchanger using an empirical water heat capacity coefficient. The constant
+ * @math{k_{water} = 251045} @unitb{\kJ\per\squareMeter\per\K\minute\per\hour} is derived from
+ * @math{8.34\ \text{lb/gal} \times 1\ \text{Btu/(lb·°F)} \times 60\ \text{min/hr}}.
+ *
+ * @formula{steam-reduction-water-heat-flow; \dot{Q}_{water} = k_{water} \cdot \dot{V}_{water} \cdot (T_{out} - T_{in})}
+ * @formula{steam-reduction-water-energy; E_{use} = \frac{k_{units} \cdot \dot{Q}_{water} \cdot t_{op}}{\eta_{sys} \cdot \eta_{boiler}}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{\dot{Q}_{water}; Water heat flow rate; \kJ\per\hour}
+ * @symrow{k_{water}; Water heat capacity coefficient (251045); \kJ\per\squareMeter\per\K\minute\per\hour}
+ * @symrow{\dot{V}_{water}; Nameplate water flow rate; \squareMeter\per\minute}
+ * @symrow{T_{out}; Outlet temperature; \degreeCelsius}
+ * @symrow{T_{in}; Inlet temperature; \degreeCelsius}
+ * @symrow{E_{use}; Annual energy use; \kJ\per\year}
+ * @symrow{k_{units}; Unit conversion factor; \unitless}
+ * @symrow{t_{op}; Annual operating hours; \hour\per\year}
+ * @symrow{\eta_{sys}; System efficiency; \unitless}
+ * @symrow{\eta_{boiler}; Boiler efficiency; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup steam_reduction_offsheet_formula Offsheet Method Formula
+ * @ingroup steam_reduction_calculator
+ * @brief Annual energy use supplied as a direct consumption value.
+ * @details The offsheet method accepts a pre-calculated or independently determined annual energy
+ * consumption value. No flow-rate conversion is applied; the consumption figure is used directly
+ * as the annual energy use.
+ *
+ * @formula{steam-reduction-offsheet; E_{use} = C_{offsheet}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{E_{use}; Annual energy use; \kJ\per\year}
+ * @symrow{C_{offsheet}; Direct total annual energy consumption; \kJ\per\year}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup steam_reduction_steam_use_from_energy_formula Steam Use from Energy Use Formula
+ * @ingroup steam_reduction_calculator
+ * @brief Annual steam use derived from annual energy use for the mass flow and offsheet methods.
+ * @details For the air mass flow, water mass flow, and offsheet methods, steam use is back-calculated
+ * from the annual energy use using the enthalpy difference and boiler efficiency.
+ *
+ * @formula{steam-reduction-steam-use; \dot{m}_{steam} = \frac{E_{use}}{\Delta h} \cdot \eta_{boiler}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{\dot{m}_{steam}; Annual steam use; \kg\per\hour}
+ * @symrow{E_{use}; Annual energy use; \kJ\per\year}
+ * @symrow{\Delta h; Enthalpy difference between steam and feedwater; \kJ\per\kg}
+ * @symrow{\eta_{boiler}; Boiler efficiency; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup steam_reduction_energy_cost_formula Energy Cost Formula
+ * @ingroup steam_reduction_calculator
+ * @brief Annual energy cost calculated from steam or energy use and the utility cost rate.
+ * @details For steam utility, the cost is based on annual steam use. For natural gas or other
+ * utility types, the cost is based on annual energy use.
+ *
+ * @formula{steam-reduction-cost-steam; C_{energy} = \dot{m}_{steam} \cdot r_{utility} \quad \text{(steam utility)}}
+ * @formula{steam-reduction-cost-energy; C_{energy} = E_{use} \cdot r_{utility} \quad \text{(natural gas or other utility)}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{C_{energy}; Annual energy cost; \dollar\per\year}
+ * @symrow{\dot{m}_{steam}; Annual steam use; \kg\per\hour}
+ * @symrow{E_{use}; Annual energy use; \kJ\per\year}
+ * @symrow{r_{utility}; Utility cost rate (steam utility); \dollar\per\kg}
+ * @symrow{r_{utility}; Utility cost rate (natural gas or other utility); \dollar\per\kJ}
+ * @endsymtable
+ */
