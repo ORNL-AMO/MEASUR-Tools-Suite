@@ -13,18 +13,13 @@ describe('Compressed Air Pressure Reduction Tests', function () {
         let inputList = new moduleInstance.CompressedAirPressureReductionInputV();
         for (let i = 0; i < measurInputData.compressedAirPressureReductionInputVec.length; i++) {
             let inpElem = measurInputData.compressedAirPressureReductionInputVec[i];
-
-            let input = new moduleInstance.CompressedAirPressureReductionInput(inpElem.isBaseline, inpElem.hoursPerYear, inpElem.electricityCost,
-                inpElem.compressorPower, inpElem.pressure, inpElem.proposedPressure, inpElem.atmosphericPressure, inpElem.pressureRated);
-            inputList.push_back(input);
+            inputList.push_back(inpElem);
         }
 
-        let instance = new moduleInstance.CompressedAirPressureReduction(inputList);
-        let results = instance.calculate();
+        let results = moduleInstance.compressedAirPressureReduction(inputList);
         assert.approximately(results.energyUse, energyUseExpected, 0.01, "energyUse");
         assert.approximately(results.energyCost, energyCostExpected, 0.01, "energyCost");
 
-        instance.delete();
         inputList.delete();
     }
 

@@ -1,9 +1,7 @@
 #include <emscripten/bind.h>
 
 #include "steamModeler/SteamProperties.h"
-#include "treasureHunt/CompressedAirPressureReduction.h"
 #include "treasureHunt/CompressedAirReduction.h"
-#include "treasureHunt/ElectricityReduction.h"
 #include "treasureHunt/InsulatedPipeReduction.h"
 #include "treasureHunt/InsulatedTankReduction.h"
 #include "treasureHunt/SteamReduction.h"
@@ -11,29 +9,6 @@
 
 using namespace emscripten;
 
-EMSCRIPTEN_BINDINGS(electricityReduction_class) {
-    class_<MultimeterData>("MultimeterData").constructor<int, double, double, double>();
-
-    class_<NameplateData>("NameplateData").constructor<double, bool, double, double, double, double>();
-
-    class_<PowerMeterData>("PowerMeterData").constructor<double>();
-
-    class_<OtherMethodData>("OtherMethodData").constructor<double>();
-
-    class_<ElectricityReductionInput>("ElectricityReductionInput")
-        .constructor<int, double, int, MultimeterData, NameplateData, PowerMeterData, OtherMethodData, int>();
-
-    register_vector<ElectricityReductionInput>("ElectricityReductionInputV");
-
-    class_<ElectricityReduction::Output>("ElectricityReductionOutput")
-        .property("energyUse", &ElectricityReduction::Output::energyUse)
-        .property("energyCost", &ElectricityReduction::Output::energyCost)
-        .property("power", &ElectricityReduction::Output::power);
-
-    class_<ElectricityReduction>("ElectricityReduction")
-        .constructor<std::vector<ElectricityReductionInput>>()
-        .function("calculate", &ElectricityReduction::calculate);
-}
 
 EMSCRIPTEN_BINDINGS(compressedAirReduction_class) {
     class_<CompressedAirFlowMeterMethodData>("CompressedAirFlowMeterMethodData").constructor<double>();
@@ -62,21 +37,6 @@ EMSCRIPTEN_BINDINGS(compressedAirReduction_class) {
     class_<CompressedAirReduction>("CompressedAirReduction")
         .constructor<std::vector<CompressedAirReductionInput>>()
         .function("calculate", &CompressedAirReduction::calculate);
-}
-
-EMSCRIPTEN_BINDINGS(compressedAirPressureReduction_class) {
-    class_<CompressedAirPressureReductionInput>("CompressedAirPressureReductionInput")
-        .constructor<bool, int, double, double, double, double, double, double>();
-
-    register_vector<CompressedAirPressureReductionInput>("CompressedAirPressureReductionInputV");
-
-    class_<CompressedAirPressureReduction::Output>("CompressedAirPressureReductionOutput")
-        .property("energyUse", &CompressedAirPressureReduction::Output::energyUse)
-        .property("energyCost", &CompressedAirPressureReduction::Output::energyCost);
-
-    class_<CompressedAirPressureReduction>("CompressedAirPressureReduction")
-        .constructor<std::vector<CompressedAirPressureReductionInput>>()
-        .function("calculate", &CompressedAirPressureReduction::calculate);
 }
 
 EMSCRIPTEN_BINDINGS(steamReduction_class) {
