@@ -90,6 +90,8 @@ window.MathJax = {
                 \DeclareSIUnit{\cubicFoot}{ft^3}
                 \DeclareSIUnit{\normalCubicMeter}{Nm^3}
                 \DeclareSIUnit{\NmCubed}{Nm^3}
+                \DeclareSIUnit{\cubicMeter}{m^3}
+                \DeclareSIUnit{\squareMeter}{m^2}
                 \DeclareSIUnit{\inchWaterColumn}{in\,WC}
                 \DeclareSIUnit{\kilowatt}{kW}
                 \DeclareSIUnit{\atm}{atm}
