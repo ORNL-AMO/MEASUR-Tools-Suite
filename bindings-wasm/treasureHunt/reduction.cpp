@@ -4,42 +4,11 @@
 #include "treasureHunt/CompressedAirReduction.h"
 #include "treasureHunt/InsulatedPipeReduction.h"
 #include "treasureHunt/InsulatedTankReduction.h"
-#include "treasureHunt/NaturalGasReduction.h"
 #include "treasureHunt/SteamReduction.h"
 #include "vector"
 
 using namespace emscripten;
 
-EMSCRIPTEN_BINDINGS(naturalGasReduction_class) {
-    class_<FlowMeterMethodData>("FlowMeterMethodData").constructor<double>();
-
-    class_<NaturalGasOtherMethodData>("NaturalGasOtherMethodData").constructor<double>();
-
-    class_<AirMassFlowMeasuredData>("AirMassFlowMeasuredData").constructor<double, double>();
-
-    class_<AirMassFlowNameplateData>("AirMassFlowNameplateData").constructor<double>();
-
-    class_<AirMassFlowData>("AirMassFlowData")
-        .constructor<bool, AirMassFlowMeasuredData, AirMassFlowNameplateData, double, double, double>();
-
-    class_<WaterMassFlowData>("WaterMassFlowData").constructor<double, double, double, double>();
-
-    class_<NaturalGasReductionInput>("NaturalGasReductionInput")
-        .constructor<int, double, int, FlowMeterMethodData, NaturalGasOtherMethodData, AirMassFlowData,
-                     WaterMassFlowData, int>();
-
-    register_vector<NaturalGasReductionInput>("NaturalGasReductionInputV");
-
-    class_<NaturalGasReduction::Output>("NaturalGasReductionOutput")
-        .property("energyUse", &NaturalGasReduction::Output::energyUse)
-        .property("energyCost", &NaturalGasReduction::Output::energyCost)
-        .property("heatFlow", &NaturalGasReduction::Output::heatFlow)
-        .property("totalFlow", &NaturalGasReduction::Output::totalFlow);
-
-    class_<NaturalGasReduction>("NaturalGasReduction")
-        .constructor<std::vector<NaturalGasReductionInput>>()
-        .function("calculate", &NaturalGasReduction::calculate);
-}
 
 EMSCRIPTEN_BINDINGS(compressedAirReduction_class) {
     class_<CompressedAirFlowMeterMethodData>("CompressedAirFlowMeterMethodData").constructor<double>();
