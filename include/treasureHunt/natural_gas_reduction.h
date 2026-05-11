@@ -29,7 +29,7 @@ namespace natural_gas_reduction {
  * @see natural_gas_reduction_flow_meter_formula
  */
 struct FlowMeterMethodData {
-    double flow_rate = 0.0; ///< Gas flow rate measured by the flow meter @unitb{\cubicFoot\per\minute}
+    double flow_rate = 0.0; ///< Gas flow rate measured by the flow meter @unitb{\cubicFoot\per\hour}
 };
 
 /**
@@ -83,7 +83,7 @@ struct AirMassFlowData {
     AirMassFlowNameplateData nameplate_data;             ///< Nameplate air flow data (used when @ref is_nameplate is true)
     double                   inlet_temperature  = 0.0;   ///< Inlet air temperature @unitb{\degreeF}
     double                   outlet_temperature = 0.0;   ///< Outlet air temperature @unitb{\degreeF}
-    double                   system_efficiency  = 100.0; ///< System efficiency @unitb{\percent}
+    double                   system_efficiency  = 1.0; ///< System efficiency @unitb{\unitless}
 };
 
 /**
@@ -98,7 +98,7 @@ struct WaterMassFlowData {
     double water_flow         = 0.0;   ///< Water flow rate @unitb{\gallon\per\minute}
     double inlet_temperature  = 0.0;   ///< Inlet water temperature @unitb{\degreeF}
     double outlet_temperature = 0.0;   ///< Outlet water temperature @unitb{\degreeF}
-    double system_efficiency  = 100.0; ///< System efficiency @unitb{\percent}
+    double system_efficiency  = 1.0; ///< System efficiency @unitb{\unitless}
 };
 
 /**
@@ -145,7 +145,7 @@ struct NaturalGasReductionOutput {
     double energy_use  = 0.0; ///< Annual natural gas energy use @unitb{\MMBtu\per\year}
     double energy_cost = 0.0; ///< Annual natural gas energy cost @unitb{\dollar\per\year}
     double heat_flow   = 0.0; ///< Heat flow rate @unitb{\MMBtu\per\hour}
-    double total_flow  = 0.0; ///< Total gas or fluid flow @unitb{\cubicFoot\per\minute}
+    double total_flow  = 0.0; ///< Total gas or fluid flow @unitb{\cubicFoot\per\hour}
 };
 
 /**
@@ -158,7 +158,7 @@ struct NaturalGasReductionOutput {
  * @param[in] input_vec  Vector of @ref NaturalGasReductionInput structs, one per measure.
  * @return @ref NaturalGasReductionOutput with the summed annual energy use @unitb{\MMBtu\per\year},
  *         energy cost @unitb{\dollar\per\year}, heat flow @unitb{\MMBtu\per\hour}, and
- *         total flow @unitb{\cubicFoot\per\minute} across all measures.
+ *         total flow @unitb{\cubicFoot\per\hour} across all measures.
  */
 NaturalGasReductionOutput naturalGasReduction(const std::vector<NaturalGasReductionInput>& input_vec);
 
@@ -194,7 +194,7 @@ NaturalGasReductionOutput flowMeterMethodReduction(const FlowMeterMethodData& da
  * @param[in] units           Unit conversion multiplier applied to the flow rate.
  * @return @ref NaturalGasReductionOutput with annual energy use @unitb{\MMBtu\per\year},
  *         annual energy cost @unitb{\dollar\per\year}, heat flow @unitb{\MMBtu\per\hour},
- *         and total flow @unitb{\cubicFoot\per\minute}.
+ *         and total flow @unitb{\cubicFoot\per\hour}.
  */
 NaturalGasReductionOutput airMassFlowMethodReduction(const AirMassFlowData& data, int operating_hours,
                                                      double fuel_cost, int units);
@@ -212,7 +212,7 @@ NaturalGasReductionOutput airMassFlowMethodReduction(const AirMassFlowData& data
  * @param[in] units           Unit conversion multiplier applied to the flow rate.
  * @return @ref NaturalGasReductionOutput with annual energy use @unitb{\MMBtu\per\year},
  *         annual energy cost @unitb{\dollar\per\year}, heat flow @unitb{\MMBtu\per\hour},
- *         and total flow @unitb{\gallon\per\minute}.
+ *         and total flow @unitb{\gallon\per\hour}.
  */
 NaturalGasReductionOutput waterMassFlowMethodReduction(const WaterMassFlowData& data, int operating_hours,
                                                        double fuel_cost, int units);

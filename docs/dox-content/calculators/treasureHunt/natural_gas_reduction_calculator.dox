@@ -46,7 +46,7 @@
  * @details The flow meter method uses the instantaneous gas flow rate reported by a flow meter
  * together with a unit conversion multiplier, annual operating hours, and the Btu content of
  * natural gas to obtain total annual energy use. The factor 1.03/1000 converts the product of
- * flow rate (ft³/min) and operating hours (hr/yr) to MMBtu/yr using the approximate higher
+ * flow rate (ft³/hour) and operating hours (hr/yr) to MMBtu/yr using the approximate higher
  * heating value of natural gas.
  *
  * @formula{natural-gas-reduction-flow-meter; Q_{total} = \dot{V} \cdot u \cdot t_{op} \cdot \frac{1.03}{1000}}
@@ -54,7 +54,7 @@
  * @subheading{Symbols}
  * @symtable
  * @symrow{Q_{total}; Annual natural gas energy use; \MMBtu\per\year}
- * @symrow{\dot{V}; Gas flow rate measured by the flow meter; \cubicFoot\per\minute}
+ * @symrow{\dot{V}; Gas flow rate measured by the flow meter; \cubicFoot\per\hour}
  * @symrow{u; Unit conversion multiplier; \unitless}
  * @symrow{t_{op}; Annual operating hours; \hour\per\year}
  * @symrow{1.03/1000; Btu content conversion factor for natural gas; \unitless}
@@ -91,7 +91,7 @@
  * @symrow{Q_{total}; Annual natural gas energy use; \MMBtu\per\year}
  * @symrow{t_{op}; Annual operating hours; \hour\per\year}
  * @symrow{u; Unit conversion multiplier; \unitless}
- * @symrow{\eta; System efficiency; \percent}
+ * @symrow{\eta; System efficiency; \unitless}
  * @endsymtable
  */
 
@@ -119,7 +119,7 @@
  * @symrow{Q_{total}; Annual natural gas energy use; \MMBtu\per\year}
  * @symrow{t_{op}; Annual operating hours; \hour\per\year}
  * @symrow{u; Unit conversion multiplier; \unitless}
- * @symrow{\eta; System efficiency; \percent}
+ * @symrow{\eta; System efficiency; \unitless}
  * @endsymtable
  */
 
