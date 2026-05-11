@@ -2,7 +2,6 @@
 
 #include "steamModeler/SteamProperties.h"
 #include "treasureHunt/CompressedAirReduction.h"
-#include "treasureHunt/ElectricityReduction.h"
 #include "treasureHunt/InsulatedPipeReduction.h"
 #include "treasureHunt/InsulatedTankReduction.h"
 #include "treasureHunt/NaturalGasReduction.h"
@@ -10,30 +9,6 @@
 #include "vector"
 
 using namespace emscripten;
-
-EMSCRIPTEN_BINDINGS(electricityReduction_class) {
-    class_<MultimeterData>("MultimeterData").constructor<int, double, double, double>();
-
-    class_<NameplateData>("NameplateData").constructor<double, bool, double, double, double, double>();
-
-    class_<PowerMeterData>("PowerMeterData").constructor<double>();
-
-    class_<OtherMethodData>("OtherMethodData").constructor<double>();
-
-    class_<ElectricityReductionInput>("ElectricityReductionInput")
-        .constructor<int, double, int, MultimeterData, NameplateData, PowerMeterData, OtherMethodData, int>();
-
-    register_vector<ElectricityReductionInput>("ElectricityReductionInputV");
-
-    class_<ElectricityReduction::Output>("ElectricityReductionOutput")
-        .property("energyUse", &ElectricityReduction::Output::energyUse)
-        .property("energyCost", &ElectricityReduction::Output::energyCost)
-        .property("power", &ElectricityReduction::Output::power);
-
-    class_<ElectricityReduction>("ElectricityReduction")
-        .constructor<std::vector<ElectricityReductionInput>>()
-        .function("calculate", &ElectricityReduction::calculate);
-}
 
 EMSCRIPTEN_BINDINGS(naturalGasReduction_class) {
     class_<FlowMeterMethodData>("FlowMeterMethodData").constructor<double>();

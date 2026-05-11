@@ -1,0 +1,158 @@
+/**
+ * @defgroup electricity_reduction_calculator Electricity Reduction Calculator
+ * @ingroup treasure_hunt_calculators
+ * @brief Calculates annual electricity use and cost for electricity reduction measures using multiple measurement methods.
+ * @details This calculator estimates annual electricity use and associated cost for a set of electricity
+ * reduction measures identified during an energy treasure hunt or efficiency assessment. It supports four
+ * measurement methods — multimeter, nameplate, power meter, and other (direct energy) — and accumulates
+ * the results across all measures in a single pass.
+ *
+ * The calculation follows these steps for each measure:
+ * 1. **Multimeter** — Compute power per load from supply voltage, average current, power factor, and number of phases, then scale to annual energy use using operating hours and number of units
+ * 2. **Nameplate** — Estimate power per load from rated motor power, load factor, frequency ratio, and motor-and-drive efficiency, then scale to annual energy use using operating hours and number of units
+ * 3. **Power Meter** — Compute annual energy use directly from a power meter reading, operating hours, and number of units
+ * 4. **Other** — Accept a direct annual energy consumption value (no power-to-energy conversion required)
+ * 5. **Energy Cost** — For every method, multiply the annual energy use by the electricity cost rate to obtain annual energy cost
+ * 6. **Totals** — Sum energy use, energy cost, and power across all measures to produce the aggregate output
+ *
+ * Relevant formulas and symbol definitions are documented below.
+ *
+ * @heading{Multimeter Power}
+ * @copydoc electricity_reduction_multimeter_formula
+ *
+ * @heading{Nameplate Power}
+ * @copydoc electricity_reduction_nameplate_formula
+ *
+ * @heading{Power Meter Energy Use}
+ * @copydoc electricity_reduction_power_meter_formula
+ *
+ * @heading{Other Method Energy Use}
+ * @copydoc electricity_reduction_other_formula
+ *
+ * @heading{Annual Energy Use}
+ * @copydoc electricity_reduction_energy_use_formula
+ *
+ * @heading{Energy Cost}
+ * @copydoc electricity_reduction_energy_cost_formula
+ */
+
+/**
+ * @defgroup electricity_reduction_multimeter_formula Multimeter Power Formula
+ * @ingroup electricity_reduction_calculator
+ * @brief Total power calculated from voltage, current, power factor, and number of phases.
+ * @details The multimeter method derives total power from direct electrical measurements using a
+ * clamp-on ammeter or multimeter. For single-phase loads, the power is computed as the product of
+ * supply voltage, average current, and power factor (scaled to kilowatts). For three-phase loads,
+ * the square root of three is applied to account for the phase relationship between voltages and currents.
+ *
+ * @subheading{Single-Phase}
+ * @formula{electricity-reduction-multimeter-1ph; P = V \cdot I \cdot \mathrm{PF} \cdot 10^{-3}}
+ *
+ * @subheading{Three-Phase}
+ * @formula{electricity-reduction-multimeter-3ph; P = V \cdot I \cdot \mathrm{PF} \cdot \frac{\sqrt{3}}{1000}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{P; Power draw per load; \kilo\watt}
+ * @symrow{V; Supply voltage; \volt}
+ * @symrow{I; Average current measured by the meter; \ampere}
+ * @symrow{\mathrm{PF}; Power factor (dimensionless, 0–1); \unitless}
+ * @symrow{10^{-3}; Conversion factor from watts to kilowatts; \watt\per\kilo\watt}
+ * @symrow{\sqrt{3}; Phase factor for three-phase systems; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup electricity_reduction_nameplate_formula Nameplate Power Formula
+ * @ingroup electricity_reduction_calculator
+ * @brief Operating power estimated from motor nameplate data, load factor, and efficiency.
+ * @details The nameplate method estimates operating power without direct measurement by using the
+ * rated motor power from the nameplate, adjusted for the actual load factor, the ratio of operational
+ * to line frequency (raised to the 2.5 power, representing the affinity law relationship for variable-speed
+ * drives), and the combined motor-and-drive efficiency.
+ *
+ * @formula{electricity-reduction-nameplate; P = P_{rated} \cdot f_L \cdot \left(\frac{f_{op}}{f_{line}}\right)^{2.5} \cdot \frac{1}{\eta}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{P; Estimated operating power; \kilo\watt}
+ * @symrow{P_{rated}; Rated motor power from the nameplate; \kilo\watt}
+ * @symrow{f_L; Motor load factor (dimensionless, 0–1); \unitless}
+ * @symrow{f_{op}; Actual operating frequency; \hertz}
+ * @symrow{f_{line}; Nominal line frequency; \hertz}
+ * @symrow{\eta; Combined motor and drive efficiency (decimal); \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup electricity_reduction_power_meter_formula Power Meter Energy Use Formula
+ * @ingroup electricity_reduction_calculator
+ * @brief Annual energy use derived from a direct power meter reading and operating hours.
+ * @details The power meter method uses a direct power reading from an installed or portable power
+ * meter. The reading is multiplied by the quantity multiplier (units) and the annual operating hours
+ * to obtain total annual energy use.
+ *
+ * @formula{electricity-reduction-power-meter; E = P_{meter} \cdot n \cdot t_{op}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{E; Annual energy use; \kilo\watt\hour\per\year}
+ * @symrow{P_{meter}; Direct power reading from the power meter; \kilo\watt}
+ * @symrow{n; Quantity multiplier (number of identical loads); \unitless}
+ * @symrow{t_{op}; Annual operating hours; \hour\per\year}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup electricity_reduction_other_formula Other Method Energy Use Formula
+ * @ingroup electricity_reduction_calculator
+ * @brief Annual energy use supplied as a direct consumption value.
+ * @details The other method accepts a pre-calculated or independently determined annual energy
+ * consumption value. No power-to-energy conversion is applied; the supplied figure is used directly
+ * as the annual energy use.
+ *
+ * @formula{electricity-reduction-other; E = E_{other}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{E; Annual energy use; \kilo\watt\hour\per\year}
+ * @symrow{E_{other}; Direct annual energy consumption; \kilo\watt\hour\per\year}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup electricity_reduction_energy_use_formula Annual Energy Use Formula
+ * @ingroup electricity_reduction_calculator
+ * @brief Annual energy use calculated from total power and operating hours.
+ * @details For the multimeter and nameplate methods, total power is first computed and then
+ * multiplied by the annual operating hours (and by the quantity multiplier for the nameplate method)
+ * to obtain annual energy use.
+ *
+ * @formula{electricity-reduction-energy-use; E = P \cdot n \cdot t_{op}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{E; Annual energy use; \kilo\watt\hour\per\year}
+ * @symrow{P; Power draw per load; \kilo\watt}
+ * @symrow{n; Quantity multiplier (number of identical loads); \unitless}
+ * @symrow{t_{op}; Annual operating hours; \hour\per\year}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup electricity_reduction_energy_cost_formula Energy Cost Formula
+ * @ingroup electricity_reduction_calculator
+ * @brief Annual energy cost calculated from annual energy use and the electricity cost rate.
+ * @details Regardless of the measurement method used to determine annual energy use, the annual
+ * energy cost is obtained by multiplying the energy use by the cost per kilowatt-hour. This formula
+ * applies uniformly to the multimeter, nameplate, power meter, and other methods.
+ *
+ * @formula{electricity-reduction-energy-cost; C_{elec} = r_{elec} \cdot E}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{C_{elec}; Annual energy cost; \dollar\per\year}
+ * @symrow{r_{elec}; Electricity cost rate; \dollar\per\kilo\watt\hour}
+ * @symrow{E; Annual energy use; \kilo\watt\hour\per\year}
+ * @endsymtable
+ */
