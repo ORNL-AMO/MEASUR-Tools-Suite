@@ -44,18 +44,18 @@
  * @ingroup natural_gas_reduction_calculator
  * @brief Annual natural gas energy use derived from a direct flow meter measurement.
  * @details The flow meter method uses the instantaneous gas flow rate reported by a flow meter
- * together with a unit conversion multiplier, annual operating hours, and the Btu content of
+ * together with a quantity multiplier (number of identical units), annual operating hours, and the Btu content of
  * natural gas to obtain total annual energy use. The factor 1.03/1000 converts the product of
  * flow rate (ft³/hour) and operating hours (hr/yr) to MMBtu/yr using the approximate higher
  * heating value of natural gas.
  *
- * @formula{natural-gas-reduction-flow-meter; Q_{total} = \dot{V} \cdot u \cdot t_{op} \cdot \frac{1.03}{1000}}
+ * @formula{natural-gas-reduction-flow-meter; Q_{total} = \dot{V} \cdot k_{units} \cdot t_{op} \cdot \frac{1.03}{1000}}
  *
  * @subheading{Symbols}
  * @symtable
  * @symrow{Q_{total}; Annual natural gas energy use; \MMBtu\per\year}
  * @symrow{\dot{V}; Gas flow rate measured by the flow meter; \cubicFoot\per\hour}
- * @symrow{u; Unit conversion multiplier; \unitless}
+ * @symrow{k_{units}; Quantity multiplier (number of identical units); \unitless}
  * @symrow{t_{op}; Annual operating hours; \hour\per\year}
  * @symrow{1.03/1000; Btu content conversion factor for natural gas; \unitless}
  * @endsymtable
@@ -68,7 +68,7 @@
  * @details The air mass flow method estimates the heat transferred to an air stream from the
  * temperature differential between inlet and outlet conditions. The air flow rate is taken either
  * from equipment nameplate data or from direct duct measurements (area × velocity). The heat flow
- * rate is then scaled to annual energy use using operating hours, units, and system efficiency.
+ * rate is then scaled to annual energy use using operating hours, the quantity multiplier, and system efficiency.
  *
  * When using measured data:
  * @formula{natural-gas-reduction-air-flow-measured; \dot{V}_{air} = A_{duct} \cdot v_{air}}
@@ -77,7 +77,7 @@
  * @formula{natural-gas-reduction-air-heat-flow; \dot{Q}_{air} = \frac{1.08 \cdot \dot{V}_{air} \cdot (T_{out} - T_{in})}{1{,}000{,}000}}
  *
  * Annual energy use:
- * @formula{natural-gas-reduction-air-energy-use; Q_{total} = \frac{\dot{Q}_{air} \cdot t_{op} \cdot u}{\eta}}
+ * @formula{natural-gas-reduction-air-energy-use; Q_{total} = \frac{\dot{Q}_{air} \cdot t_{op} \cdot k_{units}}{\eta}}
  *
  * @subheading{Symbols}
  * @symtable
@@ -90,7 +90,7 @@
  * @symrow{T_{in}; Inlet air temperature; \degreeF}
  * @symrow{Q_{total}; Annual natural gas energy use; \MMBtu\per\year}
  * @symrow{t_{op}; Annual operating hours; \hour\per\year}
- * @symrow{u; Unit conversion multiplier; \unitless}
+ * @symrow{k_{units}; Quantity multiplier (number of identical units); \unitless}
  * @symrow{\eta; System efficiency; \unitless}
  * @endsymtable
  */
@@ -101,13 +101,13 @@
  * @brief Annual natural gas energy use derived from heat transferred to a water stream.
  * @details The water mass flow method estimates the heat transferred to a water stream from
  * the flow rate and temperature differential between inlet and outlet conditions. The heat flow
- * rate is then scaled to annual energy use using operating hours, units, and system efficiency.
+ * rate is then scaled to annual energy use using operating hours, the quantity multiplier, and system efficiency.
  *
  * Heat flow from the water stream:
  * @formula{natural-gas-reduction-water-heat-flow; \dot{Q}_{water} = \frac{500 \cdot \dot{V}_{water} \cdot (T_{out} - T_{in})}{1{,}000{,}000}}
  *
  * Annual energy use:
- * @formula{natural-gas-reduction-water-energy-use; Q_{total} = \frac{\dot{Q}_{water} \cdot t_{op} \cdot u}{\eta}}
+ * @formula{natural-gas-reduction-water-energy-use; Q_{total} = \frac{\dot{Q}_{water} \cdot t_{op} \cdot k_{units}}{\eta}}
  *
  * @subheading{Symbols}
  * @symtable
@@ -118,7 +118,7 @@
  * @symrow{T_{in}; Inlet water temperature; \degreeF}
  * @symrow{Q_{total}; Annual natural gas energy use; \MMBtu\per\year}
  * @symrow{t_{op}; Annual operating hours; \hour\per\year}
- * @symrow{u; Unit conversion multiplier; \unitless}
+ * @symrow{k_{units}; Quantity multiplier (number of identical units); \unitless}
  * @symrow{\eta; System efficiency; \unitless}
  * @endsymtable
  */
