@@ -27,10 +27,7 @@
  * @heading{Flow Meter Method}
  * @copydoc steam_reduction_flow_meter_formula
  *
- * @heading{Air Mass Flow Method — Flow Rate}
- * @copydoc steam_reduction_air_mass_flow_rate_formula
- *
- * @heading{Air Mass Flow Method — Energy Use}
+ * @heading{Air Mass Flow Method}
  * @copydoc steam_reduction_air_mass_flow_formula
  *
  * @heading{Water Mass Flow Method}
@@ -85,7 +82,7 @@
  * @symrow{\dot{m}_{steam}; Annual steam use; \kg\per\year}
  * @symrow{\dot{V}_{meter}; Flow meter reading; \kg\per\year}
  * @symrow{t_{op}; Annual operating hours; \hour\per\year}
- * @symrow{k_{units}; Unit conversion factor; \unitless}
+ * @symrow{k_{units}; Quantity multiplier (number of identical units); \unitless}
  * @symrow{\eta_{sys}; System efficiency; \unitless}
  * @symrow{E_{use}; Annual energy use; \kJ\per\year}
  * @symrow{\Delta h; Enthalpy difference between steam and feedwater; \kJ\per\kg}
@@ -94,45 +91,37 @@
  */
 
 /**
- * @defgroup steam_reduction_air_mass_flow_rate_formula Air Mass Flow Rate Formula
+ * @defgroup steam_reduction_air_mass_flow_formula Air Mass Flow Method Formula
  * @ingroup steam_reduction_calculator
- * @brief Air flow rate determined from either nameplate data or field measurements.
- * @details When using nameplate data, the flow rate is taken directly from the equipment nameplate.
+ * @brief Annual energy use derived from air flow rate and temperature differential.
+ * @details The air flow rate is determined from either nameplate data or field measurements.
+ * When using nameplate data, the flow rate is taken directly from the equipment nameplate.
  * When using measured data, the flow rate is computed as the product of the duct cross-sectional
- * area and the measured air velocity.
- *
- * @formula{steam-reduction-air-flow-measured; \dot{V}_{air} = v_{air} \cdot A_{duct}}
- *
- * @subheading{Symbols}
- * @symtable
- * @symrow{\dot{V}_{air}; Air flow rate; \cubicMeter\per\minute}
- * @symrow{v_{air}; Measured air velocity in the duct; \m\per\minute}
- * @symrow{A_{duct}; Cross-sectional area of the duct; \squareMeter}
- * @endsymtable
- */
-
-/**
- * @defgroup steam_reduction_air_mass_flow_formula Air Mass Flow Method Energy Formula
- * @ingroup steam_reduction_calculator
- * @brief Annual energy use derived from air mass flow and temperature differential.
- * @details The heat flow rate is computed from the air flow rate and the temperature rise across
- * the heat exchanger using an empirical air heat capacity coefficient. Annual energy use is then
- * scaled by operating hours, units, system efficiency, and boiler efficiency. The constant
- * @math{k_{air} = 0.072381} @unitb{\kJ\minute\per\cubicMeter\per\hour\per\K} is derived from the
+ * area and the measured air velocity. The heat flow rate is then computed from the air flow rate
+ * and the temperature rise across the heat exchanger using an empirical air heat capacity
+ * coefficient. Annual energy use is scaled by operating hours, units, system efficiency, and
+ * boiler efficiency. The constant
+ * @math{k_{air} = 0.072381} @unitb{\kJ\minute\per\cubic\meter\per\hour\per\K} is derived from the
  * standard air heat capacity @math{1.08} @unitb{\btu\hour\per\scf\per\hour\per\degreeR}.
  *
+ * @subheading{Flow Rate}
+ * @formula{steam-reduction-air-flow-measured; \dot{V}_{air} = v_{air} \cdot A_{duct}}
+ *
+ * @subheading{Energy Use}
  * @formula{steam-reduction-air-heat-flow; \dot{Q}_{air} = k_{air} \cdot \dot{V}_{air} \cdot (T_{out} - T_{in})}
  * @formula{steam-reduction-air-energy; E_{use} = \frac{k_{units} \cdot \dot{Q}_{air} \cdot t_{op}}{\eta_{sys} \cdot \eta_{boiler}}}
  *
  * @subheading{Symbols}
  * @symtable
+ * @symrow{\dot{V}_{air}; Air flow rate; \cubic\meter\per\minute}
+ * @symrow{v_{air}; Measured air velocity in the duct; \m\per\minute}
+ * @symrow{A_{duct}; Cross-sectional area of the duct; \squareMeter}
  * @symrow{\dot{Q}_{air}; Air heat flow rate; \kJ\per\hour}
- * @symrow{k_{air}; Air heat capacity coefficient (0.072381); \kJ\minute\per\cubicMeter\per\hour\per\K}
- * @symrow{\dot{V}_{air}; Air flow rate; \cubicMeter\per\minute}
+ * @symrow{k_{air}; Air heat capacity coefficient (0.072381); \kJ\minute\per\cubic\meter\per\hour\per\K}
  * @symrow{T_{out}; Outlet temperature; \degreeCelsius}
  * @symrow{T_{in}; Inlet temperature; \degreeCelsius}
  * @symrow{E_{use}; Annual energy use; \kJ\per\year}
- * @symrow{k_{units}; Unit conversion factor; \unitless}
+ * @symrow{k_{units}; Quantity multiplier (number of identical units); \unitless}
  * @symrow{t_{op}; Annual operating hours; \hour\per\year}
  * @symrow{\eta_{sys}; System efficiency; \unitless}
  * @symrow{\eta_{boiler}; Boiler efficiency; \unitless}
@@ -145,7 +134,7 @@
  * @brief Annual energy use derived from nameplate water mass flow and temperature differential.
  * @details The heat flow rate is computed from the nameplate water flow rate and the temperature
  * rise across the heat exchanger using an empirical water heat capacity coefficient. The constant
- * @math{k_{water} = 251045} @unitb{\kJ\per\squareMeter\per\K\minute\per\hour} is derived from
+ * @math{k_{water} = 251045} @unitb{\kJ\per\cubic\meter\per\K\minute\per\hour} is derived from
  * @math{8.34\ \text{lb/gal} \times 1\ \text{Btu/(lb·°F)} \times 60\ \text{min/hr}}.
  *
  * @formula{steam-reduction-water-heat-flow; \dot{Q}_{water} = k_{water} \cdot \dot{V}_{water} \cdot (T_{out} - T_{in})}
@@ -154,12 +143,12 @@
  * @subheading{Symbols}
  * @symtable
  * @symrow{\dot{Q}_{water}; Water heat flow rate; \kJ\per\hour}
- * @symrow{k_{water}; Water heat capacity coefficient (251045); \kJ\per\squareMeter\per\K\minute\per\hour}
- * @symrow{\dot{V}_{water}; Nameplate water flow rate; \squareMeter\per\minute}
+ * @symrow{k_{water}; Water heat capacity coefficient (251045); \kJ\per\cubic\meter\per\K\minute\per\hour}
+ * @symrow{\dot{V}_{water}; Nameplate water flow rate; \cubic\meter\per\minute}
  * @symrow{T_{out}; Outlet temperature; \degreeCelsius}
  * @symrow{T_{in}; Inlet temperature; \degreeCelsius}
  * @symrow{E_{use}; Annual energy use; \kJ\per\year}
- * @symrow{k_{units}; Unit conversion factor; \unitless}
+ * @symrow{k_{units}; Quantity multiplier (number of identical units); \unitless}
  * @symrow{t_{op}; Annual operating hours; \hour\per\year}
  * @symrow{\eta_{sys}; System efficiency; \unitless}
  * @symrow{\eta_{boiler}; Boiler efficiency; \unitless}
