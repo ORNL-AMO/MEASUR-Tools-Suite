@@ -89,14 +89,17 @@
  * @defgroup flow_calculations_adjusted_discharge_coefficient_formula Adjusted Discharge Coefficient Formula
  * @ingroup flow_calculations_energy_use_calculator
  * @brief Discharge coefficient corrected for diameter ratio effects.
- * @details When the orifice diameter is smaller than the pipe diameter, the discharge coefficient must be adjusted to account for the velocity of approach and contraction effects. If the diameters are equal, no adjustment is needed.
+ * @details When the orifice diameter is smaller than the pipe diameter, the discharge coefficient must be adjusted to account for the velocity of approach and contraction effects. If the diameters are equal, no adjustment is needed. The diameter ratio \f$\beta\f$ is the ratio of the orifice diameter to the pipe diameter.
  *
- * @formula{flow-calculations-adjusted-discharge-coeff; C_{d,adj} = \begin{cases} \frac{C_d}{\sqrt{1 - \left(\frac{d_{orifice}}{d_{pipe}}\right)^4}} & \text{if } d_{orifice} < d_{pipe} \\ C_d & \text{otherwise} \end{cases}}
+ * @formula{flow-calculations-adjusted-discharge-coeff; C_{d,adj} = \begin{cases} \frac{C_d}{\sqrt{1 - \beta^4}} & \text{if } d_{orifice} < d_{pipe} \\ C_d & \text{otherwise} \end{cases}}
+ *
+ * @formula{flow-calculations-diameter-ratio; \beta = \frac{d_{orifice}}{d_{pipe}}}
  *
  * @subheading{Symbols}
  * @symtable
  * @symrow{C_{d,adj}; Adjusted discharge coefficient; \unitless}
  * @symrow{C_d; Discharge coefficient; \unitless}
+ * @symrow{\beta; Diameter ratio; \unitless}
  * @symrow{d_{orifice}; Orifice diameter; \inch}
  * @symrow{d_{pipe}; Inside pipe diameter; \inch}
  * @endsymtable
