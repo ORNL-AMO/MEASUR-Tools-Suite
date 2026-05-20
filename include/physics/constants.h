@@ -9,6 +9,12 @@
  * @namespace physics
  * @brief Contains physical constants and unit conversions.
  */
+namespace physics {
+
+/// @brief Mathematical constant pi @unitb{\unitless}
+inline constexpr double kPi = 3.14159265358979323846;
+
+} // namespace physics
 
 /**
  *  @namespace physics::si
