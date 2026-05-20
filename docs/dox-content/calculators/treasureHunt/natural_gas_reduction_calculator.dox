@@ -1,0 +1,159 @@
+/**
+ * @defgroup natural_gas_reduction_calculator Natural Gas Reduction Calculator
+ * @ingroup treasure_hunt_calculators
+ * @brief Calculates annual natural gas energy use and cost for natural gas reduction measures using
+ *        multiple measurement methods.
+ * @details This calculator estimates annual natural gas energy use and associated cost for a set of
+ * reduction measures identified during an energy treasure hunt or efficiency assessment. It supports
+ * four measurement methods — flow meter, air mass flow, water mass flow, and other (direct
+ * consumption) — and accumulates the results across all measures in a single pass.
+ *
+ * The calculation follows these steps for each measure:
+ * 1. **Flow Meter** — Compute annual energy use from a direct gas flow rate measurement, operating
+ *    hours, and the Btu content of natural gas
+ * 2. **Air Mass Flow** — Derive a heat flow rate from the air flow rate (nameplate or measured) and
+ *    temperature differential, then scale to annual energy use accounting for system efficiency
+ * 3. **Water Mass Flow** — Derive a heat flow rate from the water flow rate and temperature
+ *    differential, then scale to annual energy use accounting for system efficiency
+ * 4. **Other** — Accept a direct annual consumption value (no flow-rate conversion required)
+ * 5. **Energy Cost** — For every method, multiply the annual energy use by the fuel cost rate to
+ *    obtain annual energy cost
+ * 6. **Totals** — Sum energy use, energy cost, heat flow, and total flow across all measures to
+ *    produce the aggregate output
+ *
+ * Relevant formulas and symbol definitions are documented below.
+ *
+ * @heading{Flow Meter Energy Use}
+ * @copydoc natural_gas_reduction_flow_meter_formula
+ *
+ * @heading{Air Mass Flow Energy Use}
+ * @copydoc natural_gas_reduction_air_mass_flow_formula
+ *
+ * @heading{Water Mass Flow Energy Use}
+ * @copydoc natural_gas_reduction_water_mass_flow_formula
+ *
+ * @heading{Other Method Energy Use}
+ * @copydoc natural_gas_reduction_other_formula
+ *
+ * @heading{Energy Cost}
+ * @copydoc natural_gas_reduction_energy_cost_formula
+ */
+
+/**
+ * @defgroup natural_gas_reduction_flow_meter_formula Flow Meter Energy Use Formula
+ * @ingroup natural_gas_reduction_calculator
+ * @brief Annual natural gas energy use derived from a direct flow meter measurement.
+ * @details The flow meter method uses the instantaneous gas flow rate reported by a flow meter
+ * together with a quantity multiplier (number of identical units), annual operating hours, and the Btu content of
+ * natural gas to obtain total annual energy use. The factor 1.03/1000 converts the product of
+ * flow rate (ft³/hour) and operating hours (hr/yr) to MMBtu/yr using the approximate higher
+ * heating value of natural gas.
+ *
+ * @formula{natural-gas-reduction-flow-meter; Q_{total} = \dot{V} \cdot k_{units} \cdot t_{op} \cdot \frac{1.03}{1000}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{total}; Annual natural gas energy use; \MMBtu\per\year}
+ * @symrow{\dot{V}; Gas flow rate measured by the flow meter; \cubicFoot\per\hour}
+ * @symrow{k_{units}; Quantity multiplier (number of identical units); \unitless}
+ * @symrow{t_{op}; Annual operating hours; \hour\per\year}
+ * @symrow{1.03/1000; Btu content conversion factor for natural gas; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup natural_gas_reduction_air_mass_flow_formula Air Mass Flow Energy Use Formula
+ * @ingroup natural_gas_reduction_calculator
+ * @brief Annual natural gas energy use derived from heat transferred to an air stream.
+ * @details The air mass flow method estimates the heat transferred to an air stream from the
+ * temperature differential between inlet and outlet conditions. The air flow rate is taken either
+ * from equipment nameplate data or from direct duct measurements (area × velocity). The heat flow
+ * rate is then scaled to annual energy use using operating hours, the quantity multiplier, and system efficiency.
+ *
+ * When using measured data:
+ * @formula{natural-gas-reduction-air-flow-measured; \dot{V}_{air} = A_{duct} \cdot v_{air}}
+ *
+ * Heat flow from the air stream:
+ * @formula{natural-gas-reduction-air-heat-flow; \dot{Q}_{air} = \frac{1.08 \cdot \dot{V}_{air} \cdot (T_{out} - T_{in})}{1{,}000{,}000}}
+ *
+ * Annual energy use:
+ * @formula{natural-gas-reduction-air-energy-use; Q_{total} = \frac{\dot{Q}_{air} \cdot t_{op} \cdot k_{units}}{\eta}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{\dot{V}_{air}; Air flow rate; \cubicFoot\per\minute}
+ * @symrow{A_{duct}; Cross-sectional area of the duct; \squareFoot}
+ * @symrow{v_{air}; Air velocity in the duct; \foot\per\minute}
+ * @symrow{\dot{Q}_{air}; Heat flow rate from the air stream; \MMBtu\per\hour}
+ * @symrow{1.08; Sensible heat factor for air (0.018 Btu/ft³·°F × 60 min/hr); \unitless}
+ * @symrow{T_{out}; Outlet air temperature; \degreeF}
+ * @symrow{T_{in}; Inlet air temperature; \degreeF}
+ * @symrow{Q_{total}; Annual natural gas energy use; \MMBtu\per\year}
+ * @symrow{t_{op}; Annual operating hours; \hour\per\year}
+ * @symrow{k_{units}; Quantity multiplier (number of identical units); \unitless}
+ * @symrow{\eta; System efficiency; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup natural_gas_reduction_water_mass_flow_formula Water Mass Flow Energy Use Formula
+ * @ingroup natural_gas_reduction_calculator
+ * @brief Annual natural gas energy use derived from heat transferred to a water stream.
+ * @details The water mass flow method estimates the heat transferred to a water stream from
+ * the flow rate and temperature differential between inlet and outlet conditions. The heat flow
+ * rate is then scaled to annual energy use using operating hours, the quantity multiplier, and system efficiency.
+ *
+ * Heat flow from the water stream:
+ * @formula{natural-gas-reduction-water-heat-flow; \dot{Q}_{water} = \frac{500 \cdot \dot{V}_{water} \cdot (T_{out} - T_{in})}{1{,}000{,}000}}
+ *
+ * Annual energy use:
+ * @formula{natural-gas-reduction-water-energy-use; Q_{total} = \frac{\dot{Q}_{water} \cdot t_{op} \cdot k_{units}}{\eta}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{\dot{Q}_{water}; Heat flow rate from the water stream; \MMBtu\per\hour}
+ * @symrow{500; Sensible heat factor for water (8.33 lb/gal × 1 Btu/lb·°F × 60 min/hr); \unitless}
+ * @symrow{\dot{V}_{water}; Water flow rate; \gallon\per\minute}
+ * @symrow{T_{out}; Outlet water temperature; \degreeF}
+ * @symrow{T_{in}; Inlet water temperature; \degreeF}
+ * @symrow{Q_{total}; Annual natural gas energy use; \MMBtu\per\year}
+ * @symrow{t_{op}; Annual operating hours; \hour\per\year}
+ * @symrow{k_{units}; Quantity multiplier (number of identical units); \unitless}
+ * @symrow{\eta; System efficiency; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup natural_gas_reduction_other_formula Other Method Energy Use Formula
+ * @ingroup natural_gas_reduction_calculator
+ * @brief Annual natural gas energy use supplied as a direct consumption value.
+ * @details The other method accepts a pre-calculated or independently determined annual natural
+ * gas consumption value. No flow-rate conversion is applied; the consumption figure is used
+ * directly as the annual energy use.
+ *
+ * @formula{natural-gas-reduction-other; Q_{total} = C_{other}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{total}; Annual natural gas energy use; \MMBtu\per\year}
+ * @symrow{C_{other}; Direct annual natural gas consumption; \MMBtu\per\year}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup natural_gas_reduction_energy_cost_formula Energy Cost Formula
+ * @ingroup natural_gas_reduction_calculator
+ * @brief Annual natural gas energy cost calculated from annual energy use and the fuel cost rate.
+ * @details Regardless of the measurement method used to determine annual energy use, the annual
+ * energy cost is obtained by multiplying the energy use by the cost per unit of natural gas. This
+ * formula applies uniformly to the flow meter, air mass flow, water mass flow, and other methods.
+ *
+ * @formula{natural-gas-reduction-energy-cost; C_{energy} = r_{fuel} \cdot Q_{total}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{C_{energy}; Annual natural gas energy cost; \dollar\per\year}
+ * @symrow{r_{fuel}; Natural gas fuel cost rate; \dollar\per\MMBtu}
+ * @symrow{Q_{total}; Annual natural gas energy use; \MMBtu\per\year}
+ * @endsymtable
+ */

@@ -28,7 +28,7 @@
  * @subheading{Symbols}
  * @symtable
  * @symrow{P_{elec}; Equivalent electrical heat input; \kilo\watt}
- * @symrow{P_{fuel}; Fuel-fired heat input; \mega\btu\per\hour}
+ * @symrow{P_{fuel}; Fuel-fired heat input; \MMBtu\per\hour}
  * @symrow{\eta_{fuel}; Fuel-fired furnace efficiency; \percent}
  * @symrow{\eta_{elec}; Electrically heated furnace efficiency; \percent}
  * @endsymtable
@@ -46,7 +46,7 @@
  *
  * @subheading{Symbols}
  * @symtable
- * @symrow{P_{fuel}; Equivalent fuel-fired heat input; \mega\btu\per\hour}
+ * @symrow{P_{fuel}; Equivalent fuel-fired heat input; \MMBtu\per\hour}
  * @symrow{P_{elec}; Electrical heat input; \kilo\watt}
  * @symrow{\eta_{elec}; Electrically heated furnace efficiency; \percent}
  * @symrow{\eta_{fuel}; Fuel-fired furnace efficiency; \percent}

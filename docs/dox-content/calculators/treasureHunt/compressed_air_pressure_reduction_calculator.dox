@@ -1,0 +1,85 @@
+/**
+ * @defgroup compressed_air_pressure_reduction_calculator Compressed Air Pressure Reduction Calculator
+ * @ingroup treasure_hunt_calculators
+ * @brief Calculates annual compressed-air energy use and cost for baseline and pressure-reduction cases.
+ * @details This calculator estimates annual electrical energy use and annual energy cost for compressed-air
+ * systems evaluated during treasure hunt activities. It supports two modes:
+ * 1. **Baseline** — Uses annual operating hours and compressor power directly.
+ * 2. **Modification** — Uses proposed pressure, atmospheric pressure, and rated pressure to estimate adjusted power.
+ *
+ * For each measure, the selected mode computes annual energy use and annual energy cost, then totals are
+ * accumulated across all measures.
+ *
+ * @heading{Baseline Energy Use}
+ * @copydoc compressed_air_pressure_reduction_baseline_energy_formula
+ *
+ * @heading{Modification Energy Use}
+ * @copydoc compressed_air_pressure_reduction_modification_energy_formula
+ *
+ * @heading{Energy Cost}
+ * @copydoc compressed_air_pressure_reduction_energy_cost_formula
+ */
+
+/**
+ * @defgroup compressed_air_pressure_reduction_baseline_energy_formula Baseline Energy Use Formula
+ * @ingroup compressed_air_pressure_reduction_calculator
+ * @brief Annual energy use for baseline compressed-air operation.
+ *
+ * @formula{compressed-air-pressure-reduction-baseline-energy; E_{use} = P_{comp} \cdot t_{op}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{E_{use}; Annual energy use; \kWh\per\year}
+ * @symrow{P_{comp}; Compressor power; \kW}
+ * @symrow{t_{op}; Annual operating hours; \hour\per\year}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup compressed_air_pressure_reduction_modification_energy_formula Modification Energy Use Formula
+ * @ingroup compressed_air_pressure_reduction_calculator
+ * @brief Annual energy use for pressure-reduction modification.
+ * @details First estimate modification power from pressure terms, then multiply by annual operating hours.
+ * The ratio @math{x} converts the proposed pressure from gauge (psig) to absolute (psia) using the
+ * user-supplied atmospheric pressure @math{P_{atm}}. The ratio @math{r} converts the rated compressor
+ * pressure from psig to psia using an assumed standard atmospheric pressure of @math{14.7}
+ * @unitb{\psi}. The exponent @math{c = (k-1)/k} is the isentropic exponent derived from the heat
+ * capacity ratio @math{k = 1.395} for air (ratio of specific heats @math{c_p/c_v}).
+ *
+ * @formula{compressed-air-pressure-reduction-modification-power; P_{mod} = P_{comp} \cdot \frac{x^c - 1}{r^c - 1}}
+ * @formula{compressed-air-pressure-reduction-modification-ratio-x; x = \frac{P_{proposed} + P_{atm}}{P_{atm}}}
+ * @formula{compressed-air-pressure-reduction-modification-ratio-r; r = \frac{P_{rated} + 14.7}{14.7}}
+ * @formula{compressed-air-pressure-reduction-modification-c; c = \frac{k-1}{k}}
+ * @formula{compressed-air-pressure-reduction-modification-energy; E_{use} = P_{mod} \cdot t_{op}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{E_{use}; Annual energy use; \kWh\per\year}
+ * @symrow{P_{mod}; Modification compressor power estimate; \kW}
+ * @symrow{P_{comp}; Compressor power; \kW}
+ * @symrow{P_{proposed}; Proposed compressor discharge pressure (psig); \psi}
+ * @symrow{P_{atm}; Atmospheric pressure (user-supplied, converts psig to psia); \psi}
+ * @symrow{P_{rated}; Rated compressor discharge pressure (psig); \psi}
+ * @symrow{14.7; Assumed standard atmospheric pressure (converts @math{P_{rated}} from psig to psia); \psi}
+ * @symrow{x; Proposed absolute pressure ratio; \unitless}
+ * @symrow{r; Rated absolute pressure ratio; \unitless}
+ * @symrow{c; Isentropic exponent, (k-1)/k; \unitless}
+ * @symrow{k; Heat capacity ratio of air, c_p/c_v (1.395); \unitless}
+ * @symrow{t_{op}; Annual operating hours; \hour\per\year}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup compressed_air_pressure_reduction_energy_cost_formula Energy Cost Formula
+ * @ingroup compressed_air_pressure_reduction_calculator
+ * @brief Annual energy cost from annual energy use and electricity rate.
+ *
+ * @formula{compressed-air-pressure-reduction-energy-cost; C_{energy} = E_{use} \cdot r_{elec}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{C_{energy}; Annual energy cost; \dollar\per\year}
+ * @symrow{E_{use}; Annual energy use; \kWh\per\year}
+ * @symrow{r_{elec}; Electricity cost rate; \dollar\per\kWh}
+ * @endsymtable
+ */

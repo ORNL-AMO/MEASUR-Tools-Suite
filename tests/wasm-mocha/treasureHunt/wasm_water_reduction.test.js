@@ -9,65 +9,130 @@ describe('Water Reduction Tests', function () {
         });
     });
 
-    function executeTest(measurInputData, waterUseExpected, waterCostExpected, annualWaterSavingsExpected, costSavingsExpected) {
+    it('should calculate WaterReduction Metered Method correctly', function () {
+        let inputData = {
+            hoursPerYear: 8640,
+            waterCost: 0.005,
+            measurementMethod: moduleInstance.WaterReductionMeasurementMethod.Metered,
+            volumeMeterMethodData: {
+                initialMeterReading: 4235,
+                finalMeterReading: 5942,
+                elapsedTime: 15
+            },
+            meteredFlowMethodData: {
+                meterReading: 100
+            },
+            bucketMethodData: {
+                bucketVolume: 10,
+                bucketFillTime: 20
+            },
+            otherMethodData: {
+                consumption: 15000
+            }
+        };
+        let waterReductionInputVec = new moduleInstance.WaterReductionInputV();
+        waterReductionInputVec.push_back(inputData)
 
-        let inputList = new moduleInstance.WaterReductionInputV();
-        for (let i = 0; i < measurInputData.waterReductionInputVec.length; i++) {
-            let inpElem = measurInputData.waterReductionInputVec[i];
-            let meteredFlowMethodData = new moduleInstance.MeteredFlowMethodData(inpElem.meteredFlowMethodData.meterReading);
-            let volumeMeterMethodData = new moduleInstance.VolumeMeterMethodData(inpElem.volumeMeterMethodData.initialMeterReading,
-                inpElem.volumeMeterMethodData.finalMeterReading, inpElem.volumeMeterMethodData.elapsedTime);
-            let bucketMethodData = new moduleInstance.BucketMethodData(inpElem.bucketMethodData.bucketVolume, inpElem.bucketMethodData.bucketFillTime);
-            let otherMethodData = new moduleInstance.WaterOtherMethodData(inpElem.otherMethodData.consumption);
+        let results = moduleInstance.waterReduction(waterReductionInputVec)
+        assert.approximately(results.waterUse, 51840000, .001, "waterUse");
+        assert.approximately(results.waterCost, 259200, .001, "waterCost");
+        waterReductionInputVec.delete();
+    });
 
-            let input = new moduleInstance.WaterReductionInput(inpElem.hoursPerYear, inpElem.waterCost, inpElem.measurementMethod,
-                meteredFlowMethodData, volumeMeterMethodData, bucketMethodData, otherMethodData);
-            inputList.push_back(input);
-
-            input.delete();
-            otherMethodData.delete();
-            bucketMethodData.delete();
-            volumeMeterMethodData.delete();
-            meteredFlowMethodData.delete();
-        }
-
-        let instance = new moduleInstance.WaterReduction(inputList);
-        let results = instance.calculate();
-        assert.approximately(results.waterUse, waterUseExpected, .001, "waterUse");
-        assert.approximately(results.waterCost, waterCostExpected, .001, "waterCost");
-        assert.approximately(results.annualWaterSavings, annualWaterSavingsExpected, .001, "annualWaterSavings");
-        assert.approximately(results.costSavings, costSavingsExpected, .001, "costSavings");
-        instance.delete();
-        inputList.delete();
-    }
-
-    it('should calculate 1 WaterReduction correctly', function () {
-        let measurInputData = {
-            waterReductionInputVec: [
-                {
-                    hoursPerYear: 8640,
-                    waterCost: 0.005,
-                    measurementMethod: 0,
-                    volumeMeterMethodData: {
-                        initialMeterReading: 4235,
-                        finalMeterReading: 5942,
-                        elapsedTime: 15
-                    },
-                    meteredFlowMethodData: {
-                        meterReading: 100
-                    },
-                    bucketMethodData: {
-                        bucketVolume: 10,
-                        bucketFillTime: 20
-                    },
-                    otherMethodData: {
-                        consumption: 15000
-                    }
-                }
-            ]
+    it('should calculate WaterReduction Volume Method correctly', function () {
+        let inputData = {
+            hoursPerYear: 8640,
+            waterCost: 0.005,
+            measurementMethod: moduleInstance.WaterReductionMeasurementMethod.Volume,
+            volumeMeterMethodData: {
+                initialMeterReading: 4235,
+                finalMeterReading: 5942,
+                elapsedTime: 15
+            },
+            meteredFlowMethodData: {
+                meterReading: 100
+            },
+            bucketMethodData: {
+                bucketVolume: 10,
+                bucketFillTime: 20
+            },
+            otherMethodData: {
+                consumption: 15000
+            }
         };
 
-        executeTest(measurInputData, 51840000, 259200, 0, 0);
+        let waterReductionInputVec = new moduleInstance.WaterReductionInputV();
+        waterReductionInputVec.push_back(inputData)
+
+        let results = moduleInstance.waterReduction(waterReductionInputVec)
+        assert.approximately(results.waterUse, 58993920.0, .001, "waterUse");
+        assert.approximately(results.waterCost, 294969.6, .001, "waterCost");
+        waterReductionInputVec.delete();
+
+    });
+
+
+    it('should calculate 1 WaterReduction correctly', function () {
+        let inputData = {
+            hoursPerYear: 8640,
+            waterCost: 0.005,
+            measurementMethod: moduleInstance.WaterReductionMeasurementMethod.Bucket,
+            volumeMeterMethodData: {
+                initialMeterReading: 4235,
+                finalMeterReading: 5942,
+                elapsedTime: 15
+            },
+            meteredFlowMethodData: {
+                meterReading: 100
+            },
+            bucketMethodData: {
+                bucketVolume: 10,
+                bucketFillTime: 20
+            },
+            otherMethodData: {
+                consumption: 15000
+            }
+        };
+
+        let waterReductionInputVec = new moduleInstance.WaterReductionInputV();
+        waterReductionInputVec.push_back(inputData)
+
+        let results = moduleInstance.waterReduction(waterReductionInputVec)
+        assert.approximately(results.waterUse, 15552000.0, .001, "waterUse");
+        assert.approximately(results.waterCost, 77760.0, .001, "waterCost");
+        waterReductionInputVec.delete();
+    });
+
+
+    it('should calculate WaterReduction Other Method correctly', function () {
+        let inputData = {
+            hoursPerYear: 8640,
+            waterCost: 0.005,
+            measurementMethod: moduleInstance.WaterReductionMeasurementMethod.Other,
+            volumeMeterMethodData: {
+                initialMeterReading: 4235,
+                finalMeterReading: 5942,
+                elapsedTime: 15
+            },
+            meteredFlowMethodData: {
+                meterReading: 100
+            },
+            bucketMethodData: {
+                bucketVolume: 10,
+                bucketFillTime: 20
+            },
+            otherMethodData: {
+                consumption: 15000
+            }
+        };
+
+        let waterReductionInputVec = new moduleInstance.WaterReductionInputV();
+        waterReductionInputVec.push_back(inputData)
+
+        let results = moduleInstance.waterReduction(waterReductionInputVec)
+        assert.approximately(results.waterUse, 15000.0, .001, "waterUse");
+        assert.approximately(results.waterCost, 75.0, .001, "waterCost");
+        waterReductionInputVec.delete();
     });
 
     it('should calculate 4 WaterReductions (all methods) correctly', function () {
@@ -76,7 +141,7 @@ describe('Water Reduction Tests', function () {
                 {
                     hoursPerYear: 8640,
                     waterCost: 0.005,
-                    measurementMethod: 0,
+                    measurementMethod: moduleInstance.WaterReductionMeasurementMethod.Metered,
                     volumeMeterMethodData: {
                         initialMeterReading: 4235,
                         finalMeterReading: 5942,
@@ -96,7 +161,7 @@ describe('Water Reduction Tests', function () {
                 {
                     hoursPerYear: 8640,
                     waterCost: 0.005,
-                    measurementMethod: 1,
+                    measurementMethod: moduleInstance.WaterReductionMeasurementMethod.Volume,
                     volumeMeterMethodData: {
                         initialMeterReading: 4235,
                         finalMeterReading: 5942,
@@ -116,7 +181,7 @@ describe('Water Reduction Tests', function () {
                 {
                     hoursPerYear: 8640,
                     waterCost: 0.005,
-                    measurementMethod: 2,
+                    measurementMethod: moduleInstance.WaterReductionMeasurementMethod.Bucket,
                     volumeMeterMethodData: {
                         initialMeterReading: 4235,
                         finalMeterReading: 5942,
@@ -136,7 +201,7 @@ describe('Water Reduction Tests', function () {
                 {
                     hoursPerYear: 8640,
                     waterCost: 0.005,
-                    measurementMethod: 3,
+                    measurementMethod: moduleInstance.WaterReductionMeasurementMethod.Other,
                     volumeMeterMethodData: {
                         initialMeterReading: 4235,
                         finalMeterReading: 5942,
@@ -155,6 +220,16 @@ describe('Water Reduction Tests', function () {
                 }
             ]
         };
-        executeTest(measurInputData, 8413080, 42065.4, 0, 0);
+
+
+        let inputList = new moduleInstance.WaterReductionInputV();
+        for (let i = 0; i < measurInputData.waterReductionInputVec.length; i++) {
+            let inpElem = measurInputData.waterReductionInputVec[i];
+            inputList.push_back(inpElem);
+        }
+        let results = moduleInstance.waterReduction(inputList)
+        assert.approximately(results.waterUse, 126400920, .001, "waterUse");
+        assert.approximately(results.waterCost, 632004.6, .001, "waterCost");
+        inputList.delete();
     });
 });

@@ -39,14 +39,14 @@
  * complex fuel compositions, iterative refinement may be applied (as in 
  * @ref solid_liquid_flue_gas_material::calculateExcessAirFromFlueGasO2).
  *
- * @formula{process-heat-excess-air; EA = \frac{k_1 \cdot O_{2,flue}}{2 - k_2 \cdot O_{2,flue}}}
+ * @formula{process-heat-excess-air; EA = \frac{8.52381 \cdot O_{2,flue}}{2 - 9.52381 \cdot O_{2,flue}}}
  *
  * @subheading{Symbols}
  * @symtable
  * @symrow{EA; Excess air; \unitless}
  * @symrow{O_{2,flue}; Oxygen in flue gas; \unitless}
- * @symrow{k_1; Stoichiometric air factor (8.52381); \unitless}
- * @symrow{k_2; Oxygen flue gas factor (9.52381); \unitless}
+ * @symrow{8.52381; Stoichiometric air factor; \unitless}
+ * @symrow{9.52381; Oxygen flue gas factor; \unitless}
  * @endsymtable
  *
 */
