@@ -1,0 +1,47 @@
+/**
+ * @defgroup compressed_air_nozzle_coefficients Nozzle Coefficient Lookup Table
+ * @ingroup compressed_air_reduction_calculator
+ * @brief Pre-calibrated quadratic coefficients for 13 standard compressed air nozzle types used
+ *        in the orifice/pressure measurement method.
+ * @details These coefficients parameterize the quadratic flow-versus-pressure relationship for
+ * each nozzle type. Given a supply pressure @math{P} @unitb{\psi}, the single-nozzle flow rate
+ * is computed as:
+ *
+ * @formula{compressed-air-nozzle-flow-rate; Q_{nozzle} = a \cdot P^2 + b \cdot P + c}
+ *
+ * where @math{a}, @math{b}, and @math{c} are the nozzle-type-specific empirical coefficients
+ * listed in the table below. Each index (0–12) represents a distinct nozzle geometry; the
+ * coefficients were fitted to measured flow data at known pressures.
+ *
+ * @note Indices 11 and 12 share identical coefficients and represent the same nozzle geometry.
+ *
+ * @heading{Coefficient Table}
+ * @copydoc compressed_air_nozzle_coefficient_data
+ */
+
+/**
+ * @defgroup compressed_air_nozzle_coefficient_data Nozzle Coefficient Data
+ * @ingroup compressed_air_nozzle_coefficients
+ * The following table lists the empirical quadratic coefficients @math{a}, @math{b}, and
+ * @math{c} for each of the 13 supported nozzle types. Select the row whose index matches the
+ * @p nozzle_type field of @ref compressed_air_reduction::PressureMethodData.
+ *
+ * | Index | @math{a} @unitb{\scfm\per\psi\squared} | @math{b} @unitb{\scfm\per\psi} | @math{c} @unitb{\scfm} |
+ * |:-----:|----------------------------------------:|--------------------------------:|------------------------:|
+ * | 0     | @math{-2.200 \times 10^{-7}}            | 0.018893                        | 0.268476                |
+ * | 1     | @math{-2.800 \times 10^{-5}}            | 0.038377                        | 1.061905                |
+ * | 2     | @math{-7.600 \times 10^{-5}}            | 1.537424                        | 14.300000               |
+ * | 3     | @math{-2.200 \times 10^{-5}}            | 0.345931                        | 5.780952                |
+ * | 4     | @math{6.820 \times 10^{-4}}             | 0.643182                        | 13.833330               |
+ * | 5     | @math{5.410 \times 10^{-6}}             | 0.228851                        | 2.968095                |
+ * | 6     | @math{-2.100 \times 10^{-6}}            | 0.075463                        | 1.089857                |
+ * | 7     | @math{-2.800 \times 10^{-5}}            | 0.148710                        | 1.841905                |
+ * | 8     | @math{2.652 \times 10^{-3}}             | 2.250152                        | 46.566670               |
+ * | 9     | @math{7.470 \times 10^{-4}}             | 0.842056                        | 15.957140               |
+ * | 10    | @math{4.110 \times 10^{-4}}             | 0.560649                        | 10.161900               |
+ * | 11    | @math{9.350 \times 10^{-4}}             | 0.130792                        | 4.429524                |
+ * | 12    | @math{9.350 \times 10^{-4}}             | 0.130792                        | 4.429524                |
+ *
+ * @note Indices 11 and 12 are identical and represent the same physical nozzle geometry.
+ * @see compressed_air_reduction_pressure_formula for the formula that uses these coefficients.
+ */

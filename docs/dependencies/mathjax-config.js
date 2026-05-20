@@ -87,6 +87,8 @@ window.MathJax = {
 
                 \DeclareSIUnit{\standardCubicFeet}{scf}
                 \DeclareSIUnit{\scf}{scf}
+                \DeclareSIUnit{\standardCubicFeetPerMinute}{scfm}
+                \DeclareSIUnit{\scfm}{scfm}
                 \DeclareSIUnit{\cubicFoot}{ft^3}
                 \DeclareSIUnit{\normalCubicMeter}{Nm^3}
                 \DeclareSIUnit{\NmCubed}{Nm^3}

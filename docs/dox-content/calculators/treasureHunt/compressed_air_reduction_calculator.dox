@@ -1,0 +1,165 @@
+/**
+ * @defgroup compressed_air_reduction_calculator Compressed Air Reduction Calculator
+ * @ingroup treasure_hunt_calculators
+ * @brief Calculates annual compressed air consumption, energy use, and cost for compressed air reduction measures.
+ * @details This calculator estimates annual compressed air consumption and associated energy use and
+ * cost for compressed air reduction measures identified during an energy treasure hunt or efficiency
+ * assessment. It supports four measurement methods for determining air flow or consumption, and two
+ * utility types for translating consumption into a monetary cost.
+ *
+ * The calculation follows these steps for each measure:
+ * 1. **Flow Meter** — Read flow rate directly from an installed meter, then multiply by operating
+ *    time and the units multiplier to obtain annual consumption
+ * 2. **Bag Method** — Compute flow rate from the bag volume and fill time, then multiply by operating
+ *    time and both quantity multipliers (bags and units) to obtain annual consumption
+ * 3. **Orifice/Pressure** — Compute single-nozzle flow rate from a quadratic nozzle equation using
+ *    pre-calibrated coefficients, scale by the number of nozzles, then multiply by operating time
+ *    to obtain annual consumption (units multiplier is not applied for this method)
+ * 4. **Other** — Accept a directly supplied annual consumption value without further conversion
+ * 5. **Compressed Air Utility** — Multiply consumption by the cost rate per unit volume to obtain
+ *    annual energy cost; electrical energy use is not applicable
+ * 6. **Electricity Utility** — Convert consumption to electrical energy use via the compressor
+ *    specific power, then multiply by the electricity cost rate to obtain annual energy cost
+ * 7. **Totals** — Sum energy use, energy cost, flow rate, and consumption across all measures
+ *
+ * Relevant formulas and symbol definitions are documented below.
+ *
+ * @heading{Flow Meter Consumption}
+ * @copydoc compressed_air_reduction_flow_meter_formula
+ *
+ * @heading{Bag Method Flow Rate}
+ * @copydoc compressed_air_reduction_bag_formula
+ *
+ * @heading{Orifice/Pressure Method Flow Rate}
+ * @copydoc compressed_air_reduction_pressure_formula
+ *
+ * @heading{Electricity Energy Use}
+ * @copydoc compressed_air_reduction_electricity_formula
+ *
+ * @heading{Energy Cost}
+ * @copydoc compressed_air_reduction_cost_formula
+ *
+ * @heading{Nozzle Coefficient Reference}
+ * @copydoc compressed_air_nozzle_coefficient_data
+ */
+
+/**
+ * @defgroup compressed_air_reduction_flow_meter_formula Flow Meter Consumption Formula
+ * @ingroup compressed_air_reduction_calculator
+ * @brief Annual compressed air consumption derived from a flow meter reading.
+ * @details An installed flow meter provides an instantaneous flow rate reading. This is multiplied
+ * by the annual operating time, a unit conversion factor of 60 (to convert hours to minutes), and
+ * the quantity multiplier to obtain total annual consumption in standard cubic feet.
+ *
+ * @formula{compressed-air-reduction-flow-meter-consumption; C = Q_{meter} \cdot t_{op} \cdot 60 \cdot n}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{C; Annual compressed air consumption; \cubic\foot\per\year}
+ * @symrow{Q_{meter}; Flow rate reading from the installed meter; \cubic\foot\per\minute}
+ * @symrow{t_{op}; Annual operating hours; \hour\per\year}
+ * @symrow{60; Unit conversion factor (minutes per hour); \minute\per\hour}
+ * @symrow{n; Quantity multiplier (number of identical measures); \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup compressed_air_reduction_bag_formula Bag Method Flow Rate and Consumption Formula
+ * @ingroup compressed_air_reduction_calculator
+ * @brief Compressed air flow rate and annual consumption estimated using the bag method.
+ * @details The bag method estimates flow rate by measuring how long it takes to fill a
+ * known-volume bag with compressed air from a leak or equipment vent. Dividing the bag volume
+ * by the fill time (converted to minutes) gives the instantaneous flow rate in scfm. Annual
+ * consumption is then computed from the flow rate, operating hours, and both quantity
+ * multipliers: the number of bags tested simultaneously and the outer units multiplier.
+ *
+ * @formula{compressed-air-reduction-bag-flow-rate; Q_{bag} = \frac{V_{bag}}{t_{fill} / 60}}
+ * @formula{compressed-air-reduction-bag-consumption; C = Q_{bag} \cdot t_{op} \cdot N_{bags} \cdot 60 \cdot n}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{bag}; Estimated compressed air flow rate; \cubic\foot\per\minute}
+ * @symrow{V_{bag}; Internal volume of the bag; \cubic\foot}
+ * @symrow{t_{fill}; Time to fill the bag with compressed air; \second}
+ * @symrow{60; Unit conversion factor (seconds per minute); \second\per\minute}
+ * @symrow{C; Annual compressed air consumption; \cubic\foot\per\year}
+ * @symrow{t_{op}; Annual operating hours; \hour\per\year}
+ * @symrow{N_{bags}; Number of bags tested simultaneously; \unitless}
+ * @symrow{n; Outer quantity multiplier (number of identical measures); \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup compressed_air_reduction_pressure_formula Orifice/Pressure Method Flow Rate Formula
+ * @ingroup compressed_air_reduction_calculator
+ * @brief Compressed air flow rate estimated from nozzle type and supply pressure.
+ * @details The orifice/pressure method estimates flow rate using a quadratic equation fit to
+ * empirical flow-versus-pressure data for 13 standard nozzle types (indices 0–12). Each nozzle
+ * type has a distinct set of coefficients @math{a}, @math{b}, and @math{c} from the lookup table
+ * in @ref compressed_air_nozzle_coefficients. The single-nozzle flow rate is computed from the
+ * supply pressure; total flow rate and annual consumption then scale with the number of nozzles.
+ * The outer units multiplier is not applied in this method.
+ *
+ * @formula{compressed-air-reduction-pressure-flow-rate; Q_{nozzle} = a \cdot P^2 + b \cdot P + c}
+ * @formula{compressed-air-reduction-pressure-total-flow; Q_{total} = Q_{nozzle} \cdot N_{nozzles}}
+ * @formula{compressed-air-reduction-pressure-consumption; C = Q_{total} \cdot t_{op} \cdot 60}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{nozzle}; Flow rate per individual nozzle; \cubic\foot\per\minute}
+ * @symrow{a, b, c; Nozzle-type-specific quadratic coefficients (from lookup table); \unitless}
+ * @symrow{P; Compressed air supply pressure; \psi}
+ * @symrow{Q_{total}; Total compressed air flow rate; \cubic\foot\per\minute}
+ * @symrow{N_{nozzles}; Number of nozzles in the system; \unitless}
+ * @symrow{C; Annual compressed air consumption; \cubic\foot\per\year}
+ * @symrow{t_{op}; Annual operating hours; \hour\per\year}
+ * @symrow{60; Unit conversion factor (minutes per hour); \minute\per\hour}
+ * @endsymtable
+ *
+ * @note The coefficients @math{a}, @math{b}, and @math{c} depend entirely on the selected nozzle
+ * type. All 13 nozzle-type coefficient sets are listed in @ref compressed_air_nozzle_coefficients.
+ * @see compressed_air_nozzle_coefficients
+ */ Electricity Energy Use Formula
+ * @ingroup compressed_air_reduction_calculator
+ * @brief Annual electrical energy use derived from compressed air consumption and compressor specific power.
+ * @details When the electricity utility type is selected, the annual compressed air consumption is
+ * converted to electrical energy use using the compressor specific power. The specific power
+ * represents the electrical power required per unit of compressed air flow rate. Dividing by 60
+ * converts the per-minute basis of the specific power to a per-hour basis consistent with the
+ * consumption units.
+ *
+ * @formula{compressed-air-reduction-electricity; E = \frac{P_{specific}}{60} \cdot C}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{E; Annual electrical energy use; \kilo\watt\hour\per\year}
+ * @symrow{P_{specific}; Compressor specific power (electrical power per unit flow rate); \kilo\watt\per(\cubic\foot\per\minute)}
+ * @symrow{60; Unit conversion factor (minutes per hour); \minute\per\hour}
+ * @symrow{C; Annual compressed air consumption; \cubic\foot\per\year}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup compressed_air_reduction_cost_formula Energy Cost Formula
+ * @ingroup compressed_air_reduction_calculator
+ * @brief Annual energy cost calculated from consumption or energy use and the applicable cost rate.
+ * @details The cost calculation depends on the selected utility type. For the compressed air utility
+ * type, annual cost is the product of consumption and the cost rate per unit volume. For the
+ * electricity utility type, annual cost is the product of the electrical energy use and the
+ * electricity cost rate.
+ *
+ * @subheading{Compressed Air Utility}
+ * @formula{compressed-air-reduction-cost-air; C_{cost} = r_{air} \cdot C}
+ *
+ * @subheading{Electricity Utility}
+ * @formula{compressed-air-reduction-cost-electricity; C_{cost} = r_{elec} \cdot E}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{C_{cost}; Annual energy cost; \dollar\per\year}
+ * @symrow{r_{air}; Compressed air cost rate; \dollar\per\cubic\foot}
+ * @symrow{C; Annual compressed air consumption; \cubic\foot\per\year}
+ * @symrow{r_{elec}; Electricity cost rate; \dollar\per\kilo\watt\hour}
+ * @symrow{E; Annual electrical energy use; \kilo\watt\hour\per\year}
+ * @endsymtable
+ */
