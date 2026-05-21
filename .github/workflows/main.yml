@@ -3,11 +3,25 @@ name: CI/CD
 on:
   push:
     branches:
-      - 'master'
-      - 'develop'
+      - "master"
+      - "develop"
+  pull_request:
+    branches:
+      - "develop"
+  issues:
+    types:
+      - "opened"
   workflow_dispatch:
 
 jobs:
-  docs:
+  util-add-project-issue:
+    if: github.event_name == 'issues' && github.event.action == 'opened'
+    uses: ./.github/workflows/util_add-new-issue-to-project.yml
+
+  test-mocha:
+    if: github.event_name == 'pull_request' && github.base_ref == 'develop'
+    uses: ./.github/workflows/test_mocha.yml
+
+  release-docs:
     if: github.ref_name == 'develop' || github.ref_name == 'master'
     uses: ./.github/workflows/release_docs.yml

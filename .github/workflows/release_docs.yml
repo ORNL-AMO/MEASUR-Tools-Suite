@@ -31,7 +31,7 @@ jobs:
   deploy_dev:
     if: github.ref_name == 'develop'
     needs: build
-    runs-on: ['self-hosted', 'dev']
+    runs-on: ["self-hosted", "dev"]
     env:
       APACHE_DIR: /var/www/html
     steps:
@@ -45,7 +45,7 @@ jobs:
   deploy_prod:
     if: github.ref_name == 'master'
     needs: build
-    runs-on: ['self-hosted', 'prod']
+    runs-on: ["self-hosted", "prod"]
     env:
       APACHE_DIR: /var/www/html
       BACKUP_DIR: /opt/actions-runner/backups

@@ -1,12 +1,11 @@
-name: Add new Issues to GitHub Project
+name: "Util: Add new Issues to GitHub Project"
 
-permissions: 
+on:
+  workflow_call:
+
+permissions:
   issues: write
   contents: read
-  
-on:
-  issues:
-    types: [opened]
 
 jobs:
   add-to-project:
@@ -26,7 +25,7 @@ jobs:
               }
             }
           ' --jq '.data.resource.id')
-          
+
           PROJECT_ID="PVT_kwDOAPjh784BE-oJ"
           gh api graphql -F issueId="$ISSUE_ID" -F projectId="$PROJECT_ID" -f query='
             mutation($issueId:ID!, $projectId:ID!) {

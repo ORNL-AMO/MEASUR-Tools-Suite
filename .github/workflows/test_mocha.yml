@@ -1,8 +1,7 @@
-name: CI
+name: "Test: Mocha"
 
 on:
-  pull_request:
-    branches: [ develop ]  
+  workflow_call:
 
 jobs:
   test:
@@ -32,7 +31,7 @@ jobs:
 
       - name: List files with 'Atmosphere' in the name
         run: find . -type f -name '*Atmosphere*'
-          
+
       - name: Build WASM with Emscripten
         uses: addnab/docker-run-action@v3
         with:
