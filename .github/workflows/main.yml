@@ -25,3 +25,9 @@ jobs:
   release-docs:
     if: github.ref_name == 'develop' || github.ref_name == 'master'
     uses: ./.github/workflows/release_docs.yml
+
+  release-package:
+    if: github.ref_name == 'develop' || github.ref_name == 'master'
+    uses: ./.github/workflows/release_package.yml
+    secrets:
+      NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}

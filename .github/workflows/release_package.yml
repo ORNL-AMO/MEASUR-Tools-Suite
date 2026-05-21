@@ -1,0 +1,76 @@
+name: "Release: Package"
+
+on:
+  workflow_call:
+    secrets:
+      NPM_AUTH_TOKEN:
+        required: false
+
+env:
+  EMSDK_VERSION: latest
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Get Node version
+        run: echo "BUILD_NODE_VER=$(grep -o -P -m 1 '(?<=node":\s").*(?=")' package.json)" >> $GITHUB_ENV
+
+      - name: Node setup
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.BUILD_NODE_VER }}
+          cache: npm
+          package-manager-cache: true
+          cache-dependency-path: package-lock.json
+          registry-url: https://registry.npmjs.org/
+
+      - name: Setup Emscripten SDK
+        uses: emscripten-core/setup-emsdk@v15
+        with:
+          version: latest
+          actions-cache-folder: "emsdk-cache"
+
+      - name: Set release candidate version
+        if: github.ref_name == 'develop'
+        run: |
+          package_version="$(node -p "require('./package.json').version")-rc.${GITHUB_RUN_NUMBER}"
+          npm --no-git-tag-version version "$package_version"
+
+      - name: Build native package
+        run: |
+          cmake -S . -B buildcpp -DCMAKE_BUILD_TYPE=Release
+          cmake --build buildcpp --config Release --target clean
+          cmake --build buildcpp --config Release -j 12
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Build WASM package
+        run: |
+          emcmake cmake -DBUILD_WASM=ON .
+          emmake make clean
+          emmake make -j 12
+          rm -f bin/measur_tools_suite.js
+          rm -f bin/measur_tools_suite.wasm
+          cp package.json bin/package.json
+
+      - name: Publish release candidate to npm
+        if: github.ref_name == 'develop'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+        run: npm publish --tag rc
+
+      - name: Publish release to npm
+        if: github.ref_name == 'master'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+        run: npm publish --tag latest
