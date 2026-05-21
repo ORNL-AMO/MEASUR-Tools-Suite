@@ -6,8 +6,8 @@ on:
       NPM_AUTH_TOKEN:
         required: false
 
-env:
-  EMSDK_VERSION: latest
+permissions:
+  contents: write
 
 jobs:
   publish:
@@ -39,11 +39,15 @@ jobs:
           version: latest
           actions-cache-folder: "emsdk-cache"
 
-      - name: Set release candidate version
-        if: github.ref_name == 'develop'
+      - name: Set package version
+        id: pkg_version
         run: |
-          package_version="$(node -p "require('./package.json').version")-rc.${GITHUB_RUN_NUMBER}"
-          npm --no-git-tag-version version "$package_version"
+          package_version="$(node -p "require('./package.json').version")"
+          if [[ ${GITHUB_REF_NAME} == "develop" ]]; then
+            package_version="${package_version}-rc.${GITHUB_RUN_NUMBER}"
+            npm --no-git-tag-version version "$package_version"
+          fi
+          echo "PKG_VERSION=$package_version" >> "$GITHUB_OUTPUT"
 
       - name: Build native package
         run: |
@@ -74,3 +78,15 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         run: npm publish --tag latest
+
+      - name: Release gh release
+        if: github.ref_name == 'master'
+        uses: softprops/action-gh-release@v3
+        env:
+          VERSION: ${{ steps.pkg_version.outputs.PKG_VERSION }}
+        with:
+          name: MEASUR-Tools-Suite v${{ env.VERSION }}
+          tag_name: v${{ env.VERSION }}
+          target_commitish: master
+          draft: true
+          generate_release_notes: true
