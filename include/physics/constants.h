@@ -258,6 +258,13 @@ inline constexpr double kMMBtuToBtu = 1'000'000.0;
 inline constexpr double kLbPerFt3ToKgPerM3 = 16.018463;
 
 /**
+ * @brief Conversion factor from brake horsepower to kilowatts @unitb{\kilowatt\per\bhp}
+ * @details 1 mechanical horsepower = 0.746 kW (standard rounded value).
+ *          Used to convert compressor shaft power from bhp to kW for electricity cost calculations.
+ */
+inline constexpr double kBhpToKw = 0.746;
+
+/**
  * @brief BTU per ton of refrigeration @unitb{Btu/Ton}
  * @details Used for refrigeration capacity calculations. Source: ASHRAE Handbook.
  */

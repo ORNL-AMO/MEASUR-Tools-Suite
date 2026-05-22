@@ -7,26 +7,11 @@
 #include "compressedAir/BagMethod.h"
 #include "compressedAir/DecibelsMethod.h"
 #include "compressedAir/EstimateMethod.h"
-#include "compressedAir/OperatingCost.h"
 #include "compressedAir/OrificeMethod.h"
 #include "compressedAir/PipeData.h"
 #include "compressedAir/PipeSizing.h"
 
 using namespace emscripten;
-
-// operatingCost
-EMSCRIPTEN_BINDINGS(operatingCost) {
-    class_<OperatingCost>("OperatingCost")
-        .constructor<double, double, double, double, double, double, double>()
-        .function("calculate", &OperatingCost::calculate);
-
-    class_<OperatingCost::Output>("OperatingCostOutput")
-        .constructor<double, double, double, double>()
-        .property("runTimeUnloaded", &OperatingCost::Output::runTimeUnloaded)
-        .property("costForLoaded", &OperatingCost::Output::costForLoaded)
-        .property("costForUnloaded", &OperatingCost::Output::costForUnloaded)
-        .property("totalAnnualCost", &OperatingCost::Output::totalAnnualCost);
-}
 
 // airSystemCapacity
 EMSCRIPTEN_BINDINGS(airSystemCapacity) {

@@ -1,0 +1,148 @@
+/**
+ * @defgroup operating_cost_calculator Operating Cost Calculator
+ * @ingroup compressed_air_assessments
+ * @brief Calculates the annual electricity cost of a compressor operating in
+ *        load/unload control mode.
+ * @details This calculator quantifies the annual electricity cost of a compressor
+ *          that cycles between two states under a **load/unload control strategy**:
+ *
+ * - **Loaded** – the compressor delivers air at full capacity. The motor draws
+ *   full-load power proportional to the nameplate brake horsepower (BHP).
+ * - **Unloaded** – the compressor is unloaded (inlet valve closed or fully open to
+ *   atmosphere) but the motor continues to run. Power consumption drops to a
+ *   fraction of full-load BHP (the *unloaded BHP percentage*).
+ *
+ * Load/unload control is one of the most common strategies for industrial
+ * compressors. It is energy-efficient at high utilization but wastes electricity
+ * at low utilization because the motor idles continuously rather than shutting
+ * down. Quantifying both cost components helps engineers evaluate whether a
+ * variable-speed drive (VSD) retrofit or a different control strategy is
+ * economically justified.
+ *
+ * The three calculation outputs are:
+ * 1. **Run Time Unloaded** – the complement of the loaded run-time percentage.
+ * 2. **Loaded Cost** – annual electricity cost while delivering air.
+ * 3. **Unloaded Cost** – annual electricity cost while idling (no air delivery).
+ * 4. **Total Annual Cost** – sum of the loaded and unloaded costs.
+ *
+ * Relevant formulas are documented below.
+ *
+ * @heading{Run Time Unloaded}
+ * @copydoc operating_cost_run_time_unloaded_formula
+ *
+ * @heading{Loaded Annual Cost}
+ * @copydoc operating_cost_loaded_formula
+ *
+ * @heading{Unloaded Annual Cost}
+ * @copydoc operating_cost_unloaded_formula
+ *
+ * @heading{Total Annual Cost}
+ * @copydoc operating_cost_total_formula
+ */
+
+/**
+ * @defgroup operating_cost_run_time_unloaded_formula Run Time Unloaded Formula
+ * @ingroup operating_cost_calculator
+ * @brief Percentage of total operating time the compressor runs in the unloaded state.
+ * @details The loaded and unloaded run times are complementary: the compressor is
+ *          either fully loaded or fully unloaded at any instant. The unloaded
+ *          percentage is therefore the arithmetic complement of the loaded percentage.
+ *
+ * @formula{operating-cost-run-time-unloaded;
+ *   f_{unloaded} = 100 - f_{loaded}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{f_{unloaded}; Percentage of operating time the compressor runs unloaded; \percent}
+ * @symrow{f_{loaded}; Percentage of operating time the compressor runs loaded (input); \percent}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup operating_cost_loaded_formula Loaded Annual Cost Formula
+ * @ingroup operating_cost_calculator
+ * @brief Annual electricity cost while the compressor delivers air at full load.
+ * @details When loaded, the compressor draws electrical power equal to the full-load
+ *          shaft power (@math{P_{motor}}) converted to kilowatts via @math{k_{BHP}},
+ *          divided by the motor efficiency to account for electrical-to-mechanical
+ *          conversion losses. This power is paid for over the fraction of annual
+ *          hours that the machine actually runs loaded.
+ *
+ * @formula{operating-cost-loaded;
+ *   C_{loaded} = \frac{P_{motor} \cdot k_{BHP} \cdot H_{annual} \cdot f_{loaded} \cdot c_{elec}}{\eta_{loaded}}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{C_{loaded}; Annual electricity cost in the loaded condition; \dollar\per\year}
+ * @symrow{P_{motor}; Full-load motor brake horsepower; \bhp}
+ * @symrow{k_{BHP}; BHP-to-kilowatt conversion factor (0.746); \kilowatt\per\bhp}
+ * @symrow{H_{annual}; Total compressor operating hours per year; \hour}
+ * @symrow{f_{loaded}; Run-time loaded fraction (input ÷ 100); \percent}
+ * @symrow{c_{elec}; Electricity unit cost; \dollar\per\kilowatt\hour}
+ * @symrow{\eta_{loaded}; Motor efficiency in the loaded condition (input ÷ 100); \percent}
+ * @endsymtable
+ *
+ * @note The run-time and efficiency inputs are entered on a 0–100 percentage scale
+ *       and divided by 100 internally to obtain dimensionless fractions. Because
+ *       both the loaded run-time fraction and the loaded efficiency fraction are
+ *       expressed the same way (percent ÷ 100), the formula is algebraically
+ *       equivalent to using dimensionless fractions throughout. The result is in
+ *       dollars per year.
+ */
+
+/**
+ * @defgroup operating_cost_unloaded_formula Unloaded Annual Cost Formula
+ * @ingroup operating_cost_calculator
+ * @brief Annual electricity cost while the compressor runs unloaded (motor idling).
+ * @details In the unloaded state the compressor draws only a fraction of its
+ *          full-load BHP. That fraction, @math{f_{bhp,unloaded}}, represents the
+ *          residual mechanical work (friction, windage, valve actuation) absorbed
+ *          by the unloaded compressor. The motor efficiency in this state,
+ *          @math{\eta_{unloaded}}, may differ from the loaded value because motors
+ *          are less efficient at light loads.
+ *
+ * @formula{operating-cost-unloaded;
+ *   C_{unloaded} = \frac{P_{motor} \cdot k_{BHP} \cdot H_{annual} \cdot f_{bhp,unloaded} \cdot f_{unloaded} \cdot c_{elec}}{\eta_{unloaded}}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{C_{unloaded}; Annual electricity cost in the unloaded condition; \dollar\per\year}
+ * @symrow{P_{motor}; Full-load motor brake horsepower; \bhp}
+ * @symrow{k_{BHP}; BHP-to-kilowatt conversion factor (0.746); \kilowatt\per\bhp}
+ * @symrow{H_{annual}; Total compressor operating hours per year; \hour}
+ * @symrow{f_{bhp,unloaded}; Percentage of full-load BHP consumed when unloaded (input ÷ 100); \percent}
+ * @symrow{f_{unloaded}; Run-time unloaded fraction (= (100 - f_{loaded}) ÷ 100); \percent}
+ * @symrow{c_{elec}; Electricity unit cost; \dollar\per\kilowatt\hour}
+ * @symrow{\eta_{unloaded}; Motor efficiency in the unloaded condition (input ÷ 100); \percent}
+ * @endsymtable
+ *
+ * @note The unloaded BHP percentage, @math{f_{bhp,unloaded}}, is a compressor
+ *       nameplate or measured value that varies by machine type. Reciprocating
+ *       compressors typically unload to 15–25 % of full-load BHP; rotary screw
+ *       compressors with inlet modulation may be 25–40 %. A lower value indicates
+ *       a more efficient unloaded state.
+ */
+
+/**
+ * @defgroup operating_cost_total_formula Total Annual Cost Formula
+ * @ingroup operating_cost_calculator
+ * @brief Total annual electricity cost for a compressor operating in load/unload mode.
+ * @details The total annual cost is the simple sum of the loaded and unloaded
+ *          components. This value represents the baseline against which energy
+ *          efficiency improvements (VSD drives, pressure setpoint optimization,
+ *          compressor staging) can be compared.
+ *
+ * @formula{operating-cost-total;
+ *   C_{total} = C_{loaded} + C_{unloaded}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{C_{total}; Total annual electricity cost; \dollar\per\year}
+ * @symrow{C_{loaded}; Annual electricity cost in the loaded condition; \dollar\per\year}
+ * @symrow{C_{unloaded}; Annual electricity cost in the unloaded condition; \dollar\per\year}
+ * @endsymtable
+ */

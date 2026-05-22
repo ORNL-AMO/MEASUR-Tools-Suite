@@ -1,11 +1,11 @@
 import { assert } from 'chai';
 
 describe('Compressed Air Operating Cost', function () {
-    let moduleInstance;
+    let m;
 
     before(async function () {
         const ToolsSuiteModule = (await import('../../../bin/client.js')).default;
-        moduleInstance = await ToolsSuiteModule({
+        m = await ToolsSuiteModule({
             locateFile: (filename) => '/base/bin/' + filename
         });
     });
@@ -21,18 +21,12 @@ describe('Compressed Air Operating Cost', function () {
             costOfElectricity: 0.05
         };
 
-        const operatingCost = new moduleInstance.OperatingCost(
-            inp.motorBhp, inp.bhpUnloaded, inp.annualOperatingHours,
-            inp.runTimeLoaded, inp.efficiencyLoaded, inp.efficiencyUnloaded, inp.costOfElectricity
-        );
-        const result = operatingCost.calculate();
+        const result = m.calculateOperatingCost(inp);
 
         assert.approximately(result.runTimeUnloaded, 15, 0.01);
         assert.approximately(result.costForLoaded, 48792.326316, 0.01);
         assert.approximately(result.costForUnloaded, 2272.191667, 0.01);
         assert.approximately(result.totalAnnualCost, 51064.517982, 0.01);
-
-        operatingCost.delete();
     });
 
     it('should calculate annual operating cost (case 2)', function () {
@@ -46,17 +40,11 @@ describe('Compressed Air Operating Cost', function () {
             costOfElectricity: 0.09
         };
 
-        const operatingCost = new moduleInstance.OperatingCost(
-            inp.motorBhp, inp.bhpUnloaded, inp.annualOperatingHours,
-            inp.runTimeLoaded, inp.efficiencyLoaded, inp.efficiencyUnloaded, inp.costOfElectricity
-        );
-        const result = operatingCost.calculate();
+        const result = m.calculateOperatingCost(inp);
 
         assert.approximately(result.runTimeUnloaded, 11, 0.01);
         assert.approximately(result.costForLoaded, 98305.954839, 0.01);
         assert.approximately(result.costForUnloaded, 4394.313, 0.01);
         assert.approximately(result.totalAnnualCost, 102700.267839, 0.01);
-
-        operatingCost.delete();
     });
 });
