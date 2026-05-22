@@ -1,7 +1,7 @@
 #pragma once
 
 /**
- * @ingroup compressed_air_assessments
+ * @ingroup receiver_tank_calculator
  * @file receiver_tank.h
  * @brief Declarations for compressed air receiver tank sizing and capacity calculations.
  * @details Provides functions to size receiver tanks using four established
@@ -13,7 +13,7 @@
 #include "physics/constants.h"
 
 /**
- * @ingroup compressed_air_assessments
+ * @ingroup receiver_tank_calculator
  * @namespace receiver_tank
  * @brief Compressed air receiver tank sizing and usable capacity calculations.
  * @details This namespace provides four sizing methods and one capacity method:
@@ -45,7 +45,7 @@ inline constexpr double kCubicFeetPerGallon = 0.133681;
 // ============================================================
 
 /**
- * @ingroup compressed_air_assessments
+ * @ingroup receiver_tank_calculator
  * @struct UsableCapacityInput
  * @brief Input parameters for the usable air capacity calculation.
  */
@@ -56,7 +56,7 @@ struct UsableCapacityInput {
 };
 
 /**
- * @ingroup compressed_air_assessments
+ * @ingroup receiver_tank_calculator
  * @struct UsableCapacityResult
  * @brief Result of the usable air capacity calculation.
  */
@@ -96,7 +96,7 @@ UsableCapacityResult calculateUsableCapacity(const UsableCapacityInput& input);
 // ============================================================
 
 /**
- * @ingroup compressed_air_assessments
+ * @ingroup receiver_tank_calculator
  * @struct GeneralInput
  * @brief Input parameters for the General sizing method.
  */
@@ -107,7 +107,7 @@ struct GeneralInput {
 };
 
 /**
- * @ingroup compressed_air_assessments
+ * @ingroup receiver_tank_calculator
  * @struct SizeResult
  * @brief Tank size result shared by the General, Dedicated Storage, and Bridging methods.
  */
@@ -146,7 +146,7 @@ SizeResult calculateGeneralSize(const GeneralInput& input);
 // ============================================================
 
 /**
- * @ingroup compressed_air_assessments
+ * @ingroup receiver_tank_calculator
  * @struct DedicatedStorageInput
  * @brief Input parameters for the Dedicated Storage sizing method.
  */
@@ -191,7 +191,7 @@ SizeResult calculateDedicatedStorageSize(const DedicatedStorageInput& input);
 // ============================================================
 
 /**
- * @ingroup compressed_air_assessments
+ * @ingroup receiver_tank_calculator
  * @struct MeteredStorageInput
  * @brief Input parameters for the Metered Storage sizing method.
  */
@@ -205,7 +205,7 @@ struct MeteredStorageInput {
 };
 
 /**
- * @ingroup compressed_air_assessments
+ * @ingroup receiver_tank_calculator
  * @struct MeteredStorageResult
  * @brief Result of the Metered Storage sizing calculation.
  */
@@ -259,7 +259,7 @@ MeteredStorageResult calculateMeteredStorageSize(const MeteredStorageInput& inpu
 // ============================================================
 
 /**
- * @ingroup compressed_air_assessments
+ * @ingroup receiver_tank_calculator
  * @struct BridgingInput
  * @brief Input parameters for the Bridging Compressor Reaction Delay sizing method.
  */
