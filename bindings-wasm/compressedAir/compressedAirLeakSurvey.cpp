@@ -7,6 +7,10 @@
 using namespace emscripten;
 
 EMSCRIPTEN_BINDINGS(compressedAirLeakSurvey_class) {
+    // class_<BagMethod>("BagMethod").constructor<double, double, double, int>();
+
+    class_<CompressorElectricityData>("CompressorElectricityData").constructor<double, double>();
+
     class_<EstimateMethodData>("EstimateMethodData").constructor<double>();
 
     class_<DecibelsMethodData>("DecibelsMethodData")

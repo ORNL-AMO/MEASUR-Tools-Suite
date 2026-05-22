@@ -9,6 +9,12 @@
  * @namespace physics
  * @brief Contains physical constants and unit conversions.
  */
+namespace physics {
+
+/// @brief Mathematical constant pi @unitb{\unitless}
+inline constexpr double kPi = 3.14159265358979323846;
+
+} // namespace physics
 
 /**
  *  @namespace physics::si
@@ -27,7 +33,8 @@ inline constexpr double kWaterDensityBase = 1000.0;
 
 /**
  * @brief Specific heat of liquid water at standard conditions @unitb{\kilo\joule\per\kilogram\per\kelvin}
- * @details 4.1796 kJ/(kg·K) is the widely accepted value for the specific heat capacity of water at room temperature (15–25°C).
+ * @details 4.1796 kJ/(kg·K) is the widely accepted value for the specific heat capacity of water at room temperature
+ * (15–25°C).
  */
 inline constexpr double kSpecificHeatWater = 4.1796;
 
@@ -47,7 +54,8 @@ namespace physics::us {
 
 /**
  * @brief Orifice area factor for volumetric flow calculations @unitb{\dimensionless}
- * @details Empirical, effectively dimensionless factor used in U.S. customary orifice meter equations to convert orifice diameter (in) squared to effective area for volumetric flow (scfh).
+ * @details Empirical, effectively dimensionless factor used in U.S. customary orifice meter equations to convert
+ * orifice diameter (in) squared to effective area for volumetric flow (scfh).
  * @note Standard value for fuel-fired furnace gas flow calculations.
  */
 inline constexpr double kOrificeAreaFactor = 1300.0;
@@ -110,7 +118,6 @@ inline constexpr double kSpecificHeatAirCoeff = 0.000002556;
  */
 inline constexpr double kAirCorrectionBase = -1.078913827;
 
-
 /**
  * @brief Water density @unitb{lb/gal}
  * @details Used for water flow calculations in process heating systems. Source: CRC Handbook of Chemistry and Physics.
@@ -133,6 +140,9 @@ inline constexpr double kAirSensibleHeatFactor = 1.08;
  */
 inline constexpr double kWaterSensibleHeatFactor = 500.0;
 
+// Gravitational acceleration in U.S. customary units.
+static constexpr double kGravityFtPerSec2 = 32.174;
+
 } // namespace physics::us
 
 /**
@@ -146,7 +156,6 @@ namespace physics::conversions {
  * @details 1 Btu/(lb·°F) = 4.1868 kJ/(kg·K)
  */
 inline constexpr double kBtuPerLbFToKJPerKgK = 4.1868;
-
 
 /**
  * @brief Convert Fahrenheit to Kelvin.
@@ -164,7 +173,9 @@ inline constexpr double kBtuPerLbFToKJPerKgK = 4.1868;
 inline constexpr double fahrenheitToKelvin(double fahrenheit) { return ((fahrenheit - 32.0) / 1.8) + 273.15; }
 
 /// @brief convert psig to MPa.
-inline constexpr double psigToMPa(const double psig) {return (psig + physics::us::kAtmosphericPressurePsi) * 0.00689476; }
+inline constexpr double psigToMPa(const double psig) {
+    return (psig + physics::us::kAtmosphericPressurePsi) * 0.00689476;
+}
 
 /// @brief convert m3/kg -> ft3/lb.
 inline constexpr double kM3PerKgToFt3PerLb = 16.0185;
@@ -246,7 +257,6 @@ inline constexpr double kMMBtuToBtu = 1'000'000.0;
  */
 inline constexpr double kLbPerFt3ToKgPerM3 = 16.018463;
 
-
 /**
  * @brief BTU per ton of refrigeration @unitb{Btu/Ton}
  * @details Used for refrigeration capacity calculations. Source: ASHRAE Handbook.
@@ -288,7 +298,5 @@ constexpr double mmbtuPerHrToKW(double mmbtu_per_hr) { return mmbtu_per_hr * 293
  * @return Power in MMBtu/hr @unitb{\mega\btu\per\hour}
  */
 constexpr double kWToMMBtuPerHr(double kw) { return kw * 0.003412142; }
-
-
 
 } // namespace physics::conversions
