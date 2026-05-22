@@ -18,16 +18,33 @@ jobs:
     if: github.event_name == 'issues' && github.event.action == 'opened'
     uses: ./.github/workflows/util_add-new-issue-to-project.yml
 
-  test-mocha:
-    if: github.event_name == 'pull_request' && github.base_ref == 'develop'
-    uses: ./.github/workflows/test_mocha.yml
-
   release-docs:
     if: github.ref_name == 'develop' || github.ref_name == 'master'
     uses: ./.github/workflows/release_docs.yml
 
-  release-package:
-    if: github.ref_name == 'develop' || github.ref_name == 'master'
+  release-package-beta:
+    if: >
+      github.event_name == 'pull_request' && 
+      github.base_ref == 'develop' && 
+      github.event.pull_request.draft == false
     uses: ./.github/workflows/release_package.yml
+    with:
+      release_channel: beta
+    secrets:
+      NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+
+  release-package-rc:
+    if: github.ref_name == 'develop'
+    uses: ./.github/workflows/release_package.yml
+    with:
+      release_channel: rc
+    secrets:
+      NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+
+  release-package-latest:
+    if: github.ref_name == 'master'
+    uses: ./.github/workflows/release_package.yml
+    with:
+      release_channel: latest
     secrets:
       NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
