@@ -11,29 +11,8 @@
 #include "compressedAir/OrificeMethod.h"
 #include "compressedAir/PipeData.h"
 #include "compressedAir/PipeSizing.h"
-#include "compressedAir/PneumaticAirRequirement.h"
+
 using namespace emscripten;
-
-EMSCRIPTEN_BINDINGS(compressedAir_enums) {
-    enum_<PneumaticAirRequirement::PistonType>("PistonType")
-        .value("SingleActing", PneumaticAirRequirement::PistonType::SingleActing)
-        .value("DoubleActing", PneumaticAirRequirement::PistonType::DoubleActing);
-}
-
-// pneumaticAirRequirement
-EMSCRIPTEN_BINDINGS(pneumaticAirRequirement) {
-    class_<PneumaticAirRequirement>("PneumaticAirRequirement")
-        .constructor()
-        .constructor<PneumaticAirRequirement::PistonType, double, double, double, double>()
-        .constructor<PneumaticAirRequirement::PistonType, double, double, double, double, double>()
-        .function("calculate", &PneumaticAirRequirement::calculate);
-
-    class_<PneumaticAirRequirement::Output>("PneumaticAirRequirementOutput")
-        .constructor<double, double, double>()
-        .property("volumeAirIntakePiston", &PneumaticAirRequirement::Output::volumeAirIntakePiston)
-        .property("compressionRatio", &PneumaticAirRequirement::Output::compressionRatio)
-        .property("airRequirementPneumaticCylinder", &PneumaticAirRequirement::Output::airRequirementPneumaticCylinder);
-}
 
 // operatingCost
 EMSCRIPTEN_BINDINGS(operatingCost) {
