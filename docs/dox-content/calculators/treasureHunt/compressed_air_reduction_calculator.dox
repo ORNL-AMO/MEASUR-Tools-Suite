@@ -119,7 +119,11 @@
  * @note The coefficients @math{a}, @math{b}, and @math{c} depend entirely on the selected nozzle
  * type. All 13 nozzle-type coefficient sets are listed in @ref compressed_air_nozzle_coefficients.
  * @see compressed_air_nozzle_coefficients
- */ Electricity Energy Use Formula
+ */ 
+ 
+ 
+ /**
+ * Electricity Energy Use Formula
  * @ingroup compressed_air_reduction_calculator
  * @brief Annual electrical energy use derived from compressed air consumption and compressor specific power.
  * @details When the electricity utility type is selected, the annual compressed air consumption is
@@ -133,7 +137,7 @@
  * @subheading{Symbols}
  * @symtable
  * @symrow{E; Annual electrical energy use; \kilo\watt\hour\per\year}
- * @symrow{P_{specific}; Compressor specific power (electrical power per unit flow rate); \kilo\watt\per(\cubic\foot\per\minute)}
+ * @symrow{P_{specific}; Compressor specific power (electrical power per unit flow rate); \kilo\watt\per\cubic\foot\per\minute}
  * @symrow{60; Unit conversion factor (minutes per hour); \minute\per\hour}
  * @symrow{C; Annual compressed air consumption; \cubic\foot\per\year}
  * @endsymtable
