@@ -48,7 +48,7 @@
  * @subheading{Symbols}
  * @symtable
  * @symrow{Q_{gas}; Sensible heat for gas; \btu\per\hour}
- * @symrow{f_{vapor}; Fraction of vapor in gas mixture; 1}
+ * @symrow{f_{vapor}; Fraction of vapor in gas mixture; \unitless}
  * @symrow{m_{feed}; Feed rate for gas mixture; \pound\per\hour}
  * @symrow{C_{p,gas}; Specific heat of gas; \btu\per\pound\degreeFahrenheit}
  * @symrow{T_{discharge}; Discharge temperature; \degreeFahrenheit}
@@ -63,7 +63,7 @@
  * @subheading{Symbols}
  * @symtable
  * @symrow{Q_{vapor}; Sensible heat for vapor; \btu\per\hour}
- * @symrow{f_{vapor}; Fraction of vapor in gas mixture; 1}
+ * @symrow{f_{vapor}; Fraction of vapor in gas mixture; \unitless}
  * @symrow{m_{feed}; Feed rate for gas mixture; \pound\per\hour}
  * @symrow{C_{p,vapor}; Specific heat of vapor; \btu\per\pound\degreeFahrenheit}
  * @symrow{T_{discharge}; Discharge temperature; \degreeFahrenheit}
@@ -79,7 +79,7 @@
  * @symtable
  * @symrow{Q_{reaction}; Heat of reaction; \btu\per\hour}
  * @symrow{m_{feed}; Feed rate for gas mixture; \pound\per\hour}
- * @symrow{f_{reacted}; Fraction of feed gas reacted; 1}
+ * @symrow{f_{reacted}; Fraction of feed gas reacted; \unitless}
  * @symrow{H_{reaction}; Heat of reaction; \btu\per\pound}
  * @endsymtable
  */
