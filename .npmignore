@@ -17,6 +17,7 @@ cmake-build-relwithdebinfo/
 bindings-wasm/
 buildcpp/
 emsdk/
+emsdk-cache/
 include/
 lib/
 src/
