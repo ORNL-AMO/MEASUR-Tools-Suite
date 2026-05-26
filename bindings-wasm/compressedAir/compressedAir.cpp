@@ -13,17 +13,10 @@
 #include "compressedAir/PipeSizing.h"
 #include "compressedAir/PneumaticAirRequirement.h"
 #include "compressedAir/PneumaticValve.h"
-#include "compressedAir/ReceiverTank.h"
 
 using namespace emscripten;
 
 EMSCRIPTEN_BINDINGS(compressedAir_enums) {
-    enum_<ReceiverTank::Method>("ReceiverTankMethod")
-        .value("General", ReceiverTank::Method::General)
-        .value("DedicatedStorage", ReceiverTank::Method::DedicatedStorage)
-        .value("MeteredStorage", ReceiverTank::Method::MeteredStorage)
-        .value("BridgingCompressorReactionDelay", ReceiverTank::Method::BridgingCompressorReactionDelay);
-
     enum_<PneumaticAirRequirement::PistonType>("PistonType")
         .value("SingleActing", PneumaticAirRequirement::PistonType::SingleActing)
         .value("DoubleActing", PneumaticAirRequirement::PistonType::DoubleActing);
@@ -42,19 +35,6 @@ EMSCRIPTEN_BINDINGS(pneumaticAirRequirement) {
         .property("volumeAirIntakePiston", &PneumaticAirRequirement::Output::volumeAirIntakePiston)
         .property("compressionRatio", &PneumaticAirRequirement::Output::compressionRatio)
         .property("airRequirementPneumaticCylinder", &PneumaticAirRequirement::Output::airRequirementPneumaticCylinder);
-}
-
-// usableAirCapacity
-// receiverTank
-EMSCRIPTEN_BINDINGS(receiverTank) {
-    class_<ReceiverTank>("ReceiverTank")
-        .constructor()
-        .constructor<ReceiverTank::Method, double, double, double>()
-        .constructor<ReceiverTank::Method, double, double, double, double, double>()
-        .constructor<ReceiverTank::Method, double, double, double, double, double, double>()
-        .function("calculateSize", &ReceiverTank::calculateSize)
-        .function("calculateRefillTime", &ReceiverTank::calculateRefillTime)
-        .function("calculateUsableCapacity", &ReceiverTank::calculateUsableCapacity);
 }
 
 // operatingCost
