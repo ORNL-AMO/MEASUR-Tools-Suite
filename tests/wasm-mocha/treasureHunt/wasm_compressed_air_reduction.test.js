@@ -9,256 +9,227 @@ describe('Compressed Air Reduction Tests', function () {
         });
     });
 
-    function executeTest(measurInputData, energyUseExpected, energyCostExpected, flowRateExpected, singleNozzleFlowRateExpected, consumptionExpected) {
+    it('should calculate CompressedAirReduction Flow Meter Method (compressed air utility) correctly', function () {
+        let inputData = {
+            hoursPerYear: 8640,
+            utilityType: moduleInstance.CompressedAirUtilityType.CompressedAir,
+            utilityCost: 0.12,
+            measurementMethod: moduleInstance.CompressedAirMeasurementMethod.FlowMeter,
+            flowMeterMethodData: { meterReading: 200 },
+            bagMethodData: { bagFillTime: 0, bagVolume: 0, numberOfBags: 1 },
+            pressureMethodData: { nozzleType: 0, numberOfNozzles: 1, supplyPressure: 0 },
+            otherMethodData: { consumption: 0 },
+            compressorElectricityData: { compressorControlAdjustment: 100, compressorSpecificPower: 0 },
+            units: 1
+        };
 
-        let inputList = new moduleInstance.CompressedAirReductionInputV();
-        for (let i = 0; i < measurInputData.compressedAirReductionInputVec.length; i++) {
-            let inpElem = measurInputData.compressedAirReductionInputVec[i];
-            let compressedAirFlowMeterMethodData = new moduleInstance.CompressedAirFlowMeterMethodData(inpElem.flowMeterMethodData.meterReading);
-            let bagMethod = new moduleInstance.BagMethod(inpElem.bagMethod.operatingTime, inpElem.bagMethod.bagFillTime, inpElem.bagMethod.bagVolume, inpElem.bagMethod.numberOfUnits);
-            let pressureMethodData = new moduleInstance.PressureMethodData(inpElem.pressureMethodData.nozzleType, inpElem.pressureMethodData.numberOfNozzles,
-                inpElem.pressureMethodData.supplyPressure);
-            let compressedAirOtherMethodData = new moduleInstance.CompressedAirOtherMethodData(inpElem.otherMethodData.consumption);
-            let compressorElectricityData = new moduleInstance.CompressorElectricityData(inpElem.compressorElectricityData.compressorControlAdjustment,
-                inpElem.compressorElectricityData.compressorSpecificPower);
+        let inputVec = new moduleInstance.CompressedAirReductionInputV();
+        inputVec.push_back(inputData);
 
-            let input = new moduleInstance.CompressedAirReductionInput(inpElem.hoursPerYear, inpElem.utilityType, inpElem.utilityCost, inpElem.measurementMethod,
-                compressedAirFlowMeterMethodData, bagMethod, pressureMethodData, compressedAirOtherMethodData, compressorElectricityData, inpElem.units);
-            inputList.push_back(input);
+        let results = moduleInstance.compressedAirReduction(inputVec);
+        assert.approximately(results.consumption,           103680000.0, 0.01,   'consumption');
+        assert.approximately(results.flowRate,              200.0,       0.001,  'flowRate');
+        assert.approximately(results.singleNozzleFlowRate, 0.0,         0.001,  'singleNozzleFlowRate');
+        assert.approximately(results.energyUse,            0.0,         0.001,  'energyUse');
+        assert.approximately(results.energyCost,           12441600.0,  0.01,   'energyCost');
+        inputVec.delete();
+    });
 
-            input.delete();
-            compressorElectricityData.delete();
-            compressedAirOtherMethodData.delete();
-            pressureMethodData.delete();
-            bagMethod.delete();
-            compressedAirFlowMeterMethodData.delete();
+    it('should calculate CompressedAirReduction Flow Meter Method (electricity utility) correctly', function () {
+        let inputData = {
+            hoursPerYear: 8640,
+            utilityType: moduleInstance.CompressedAirUtilityType.Electricity,
+            utilityCost: 0.12,
+            measurementMethod: moduleInstance.CompressedAirMeasurementMethod.FlowMeter,
+            flowMeterMethodData: { meterReading: 200000 },
+            bagMethodData: { bagFillTime: 0, bagVolume: 0, numberOfBags: 1 },
+            pressureMethodData: { nozzleType: 0, numberOfNozzles: 1, supplyPressure: 0 },
+            otherMethodData: { consumption: 0 },
+            compressorElectricityData: { compressorControlAdjustment: 100, compressorSpecificPower: 0.16 },
+            units: 1
+        };
+
+        let inputVec = new moduleInstance.CompressedAirReductionInputV();
+        inputVec.push_back(inputData);
+
+        let results = moduleInstance.compressedAirReduction(inputVec);
+        assert.approximately(results.energyUse,            276480000.0,       0.01,   'energyUse');
+        assert.approximately(results.energyCost,           33177600.0,        0.01,   'energyCost');
+        assert.approximately(results.flowRate,             200000.0,          0.001,  'flowRate');
+        assert.approximately(results.singleNozzleFlowRate, 0.0,              0.001,  'singleNozzleFlowRate');
+        assert.approximately(results.consumption,          103680000000.0,    0.01,   'consumption');
+        inputVec.delete();
+    });
+
+    it('should calculate CompressedAirReduction Bag Method (electricity utility) correctly', function () {
+        let inputData = {
+            hoursPerYear: 8640,
+            utilityType: moduleInstance.CompressedAirUtilityType.Electricity,
+            utilityCost: 0.12,
+            measurementMethod: moduleInstance.CompressedAirMeasurementMethod.Bag,
+            flowMeterMethodData: { meterReading: 0 },
+            bagMethodData: { bagFillTime: 12, bagVolume: 8.68, numberOfBags: 2 },
+            pressureMethodData: { nozzleType: 0, numberOfNozzles: 1, supplyPressure: 0 },
+            otherMethodData: { consumption: 0 },
+            compressorElectricityData: { compressorControlAdjustment: 100, compressorSpecificPower: 0.16 },
+            units: 2
+        };
+
+        let inputVec = new moduleInstance.CompressedAirReductionInputV();
+        inputVec.push_back(inputData);
+
+        let results = moduleInstance.compressedAirReduction(inputVec);
+        assert.approximately(results.energyUse,            239984.64,   0.01,  'energyUse');
+        assert.approximately(results.energyCost,           28798.1568,  0.01,  'energyCost');
+        assert.approximately(results.flowRate,             43.4,        0.001, 'flowRate');
+        assert.approximately(results.singleNozzleFlowRate, 0.0,        0.001, 'singleNozzleFlowRate');
+        assert.approximately(results.consumption,          89994240.0,  0.01,  'consumption');
+        inputVec.delete();
+    });
+
+    it('should calculate CompressedAirReduction Pressure Method (electricity utility) correctly', function () {
+        let inputData = {
+            hoursPerYear: 8640,
+            utilityType: moduleInstance.CompressedAirUtilityType.Electricity,
+            utilityCost: 0.12,
+            measurementMethod: moduleInstance.CompressedAirMeasurementMethod.Pressure,
+            flowMeterMethodData: { meterReading: 0 },
+            bagMethodData: { bagFillTime: 0, bagVolume: 0, numberOfBags: 1 },
+            pressureMethodData: { nozzleType: 0, numberOfNozzles: 1, supplyPressure: 80 },
+            otherMethodData: { consumption: 0 },
+            compressorElectricityData: { compressorControlAdjustment: 100, compressorSpecificPower: 0.16 },
+            units: 1
+        };
+
+        let inputVec = new moduleInstance.CompressedAirReductionInputV();
+        inputVec.push_back(inputData);
+
+        let results = moduleInstance.compressedAirReduction(inputVec);
+        assert.approximately(results.energyUse,            2458.6094592,    0.001, 'energyUse');
+        assert.approximately(results.energyCost,           295.033135104,   0.001, 'energyCost');
+        assert.approximately(results.flowRate,             1.778508,        0.001, 'flowRate');
+        assert.approximately(results.singleNozzleFlowRate, 1.778508,       0.001, 'singleNozzleFlowRate');
+        assert.approximately(results.consumption,          921978.5471999,  0.01,  'consumption');
+        inputVec.delete();
+    });
+
+    it('should calculate CompressedAirReduction Pressure Method with multiple nozzles correctly', function () {
+        let inputData = {
+            hoursPerYear: 8640,
+            utilityType: moduleInstance.CompressedAirUtilityType.Electricity,
+            utilityCost: 0.12,
+            measurementMethod: moduleInstance.CompressedAirMeasurementMethod.Pressure,
+            flowMeterMethodData: { meterReading: 0 },
+            bagMethodData: { bagFillTime: 0, bagVolume: 0, numberOfBags: 1 },
+            pressureMethodData: { nozzleType: 2, numberOfNozzles: 4, supplyPressure: 50 },
+            otherMethodData: { consumption: 0 },
+            compressorElectricityData: { compressorControlAdjustment: 100, compressorSpecificPower: 0.16 },
+            units: 3
+        };
+
+        let inputVec = new moduleInstance.CompressedAirReductionInputV();
+        inputVec.push_back(inputData);
+
+        let results = moduleInstance.compressedAirReduction(inputVec);
+        assert.approximately(results.flowRate,             363.9248,       0.001, 'flowRate');
+        assert.approximately(results.singleNozzleFlowRate, 90.9812,       0.001, 'singleNozzleFlowRate');
+        assert.approximately(results.consumption,          188658616.32,   0.01,  'consumption');
+        assert.approximately(results.energyUse,            503089.64352,   0.001, 'energyUse');
+        assert.approximately(results.energyCost,           60370.7572224,  0.001, 'energyCost');
+        inputVec.delete();
+    });
+
+    it('should calculate CompressedAirReduction Other Method (electricity utility) correctly', function () {
+        let inputData = {
+            hoursPerYear: 8640,
+            utilityType: moduleInstance.CompressedAirUtilityType.Electricity,
+            utilityCost: 0.12,
+            measurementMethod: moduleInstance.CompressedAirMeasurementMethod.Other,
+            flowMeterMethodData: { meterReading: 0 },
+            bagMethodData: { bagFillTime: 0, bagVolume: 0, numberOfBags: 1 },
+            pressureMethodData: { nozzleType: 0, numberOfNozzles: 1, supplyPressure: 0 },
+            otherMethodData: { consumption: 200000 },
+            compressorElectricityData: { compressorControlAdjustment: 100, compressorSpecificPower: 0.16 },
+            units: 1
+        };
+
+        let inputVec = new moduleInstance.CompressedAirReductionInputV();
+        inputVec.push_back(inputData);
+
+        let results = moduleInstance.compressedAirReduction(inputVec);
+        assert.approximately(results.consumption, 200000.0,      0.01,  'consumption');
+        assert.approximately(results.energyUse,   533.33333333,  0.001, 'energyUse');
+        assert.approximately(results.energyCost,  64.0,          0.001, 'energyCost');
+        inputVec.delete();
+    });
+
+    it('should calculate 4 CompressedAirReductions (all methods) correctly', function () {
+        let inputs = [
+            // Flow meter with electricity (utilityCost=0.066)
+            {
+                hoursPerYear: 8640,
+                utilityType: moduleInstance.CompressedAirUtilityType.Electricity,
+                utilityCost: 0.066,
+                measurementMethod: moduleInstance.CompressedAirMeasurementMethod.FlowMeter,
+                flowMeterMethodData: { meterReading: 200000 },
+                bagMethodData: { bagFillTime: 0, bagVolume: 0, numberOfBags: 1 },
+                pressureMethodData: { nozzleType: 0, numberOfNozzles: 1, supplyPressure: 0 },
+                otherMethodData: { consumption: 0 },
+                compressorElectricityData: { compressorControlAdjustment: 100, compressorSpecificPower: 0.16 },
+                units: 1
+            },
+            // Bag method with electricity
+            {
+                hoursPerYear: 8640,
+                utilityType: moduleInstance.CompressedAirUtilityType.Electricity,
+                utilityCost: 0.12,
+                measurementMethod: moduleInstance.CompressedAirMeasurementMethod.Bag,
+                flowMeterMethodData: { meterReading: 0 },
+                bagMethodData: { bagFillTime: 12, bagVolume: 8.68, numberOfBags: 1 },
+                pressureMethodData: { nozzleType: 0, numberOfNozzles: 1, supplyPressure: 0 },
+                otherMethodData: { consumption: 0 },
+                compressorElectricityData: { compressorControlAdjustment: 100, compressorSpecificPower: 0.16 },
+                units: 1
+            },
+            // Pressure method with compressed air utility
+            {
+                hoursPerYear: 8640,
+                utilityType: moduleInstance.CompressedAirUtilityType.CompressedAir,
+                utilityCost: 0.12,
+                measurementMethod: moduleInstance.CompressedAirMeasurementMethod.Pressure,
+                flowMeterMethodData: { meterReading: 0 },
+                bagMethodData: { bagFillTime: 0, bagVolume: 0, numberOfBags: 1 },
+                pressureMethodData: { nozzleType: 0, numberOfNozzles: 1, supplyPressure: 80 },
+                otherMethodData: { consumption: 0 },
+                compressorElectricityData: { compressorControlAdjustment: 100, compressorSpecificPower: 0.16 },
+                units: 1
+            },
+            // Other method with electricity
+            {
+                hoursPerYear: 8640,
+                utilityType: moduleInstance.CompressedAirUtilityType.Electricity,
+                utilityCost: 0.12,
+                measurementMethod: moduleInstance.CompressedAirMeasurementMethod.Other,
+                flowMeterMethodData: { meterReading: 0 },
+                bagMethodData: { bagFillTime: 0, bagVolume: 0, numberOfBags: 1 },
+                pressureMethodData: { nozzleType: 0, numberOfNozzles: 1, supplyPressure: 0 },
+                otherMethodData: { consumption: 200000 },
+                compressorElectricityData: { compressorControlAdjustment: 100, compressorSpecificPower: 0.16 },
+                units: 1
+            }
+        ];
+
+        let inputVec = new moduleInstance.CompressedAirReductionInputV();
+        for (let i = 0; i < inputs.length; i++) {
+            inputVec.push_back(inputs[i]);
         }
 
-        let instance = new moduleInstance.CompressedAirReduction(inputList);
-        let results = instance.calculate();
-        assert.approximately(results.energyUse, energyUseExpected, 0.01, "energyUse");
-        assert.approximately(results.energyCost, energyCostExpected, 0.01, "energyCost");
-        assert.approximately(results.flowRate, flowRateExpected, 0.01, "flowRate");
-        assert.approximately(results.singleNozzleFlowRate, singleNozzleFlowRateExpected, 0.01, "singleNozzleFlowRate");
-        assert.approximately(results.consumption, consumptionExpected, 0.01, "consumption");
-        instance.delete();
-        inputList.delete();
-    }
-
-
-    it('should calculate 1 CompressedAirReduction (air flow method) correctly', function () {
-        let measurInputData = {
-            compressedAirReductionInputVec: [
-                {
-                    hoursPerYear: 8640,
-                    utilityType: 1,
-                    utilityCost: 0.12,
-                    measurementMethod: 0,
-                    flowMeterMethodData: {
-                        meterReading: 200000.0
-                    },
-                    bagMethod: {
-                        operatingTime: 8640,
-                        bagFillTime: 30,
-                        bagVolume: 1.36,
-                        numberOfUnits: 1
-                    },
-                    pressureMethodData: {
-                        nozzleType: 0,
-                        numberOfNozzles: 1,
-                        supplyPressure: 80
-                    },
-                    otherMethodData: {
-                        consumption: 200000
-                    },
-                    compressorElectricityData: {
-                        compressorControlAdjustment: 0.8,
-                        compressorSpecificPower: 0.16
-                    },
-                    units: 1
-                }
-            ]
-        };
-        executeTest(measurInputData, 276480000, 33177600, 200000, 0, 103680000000);
+        let results = moduleInstance.compressedAirReduction(inputVec);
+        assert.approximately(results.energyUse,            276540529.49,       0.01,  'energyUse');
+        assert.approximately(results.energyCost,           18365580.96,        0.01,  'energyCost');
+        assert.approximately(results.flowRate,             200045.178508,      0.001, 'flowRate');
+        assert.approximately(results.singleNozzleFlowRate, 1.778508,          0.001, 'singleNozzleFlowRate');
+        assert.approximately(results.consumption,          103703620538.55,    0.01,  'consumption');
+        inputVec.delete();
     });
-
-
-    it('should calculate 1 CompressedAirReduction (bag method) correctly', function () {
-        let measurInputData = {
-            compressedAirReductionInputVec: [
-                {
-                    hoursPerYear: 8760,
-                    utilityType: 1,
-                    utilityCost: 0.066,
-                    measurementMethod: 1,
-                    flowMeterMethodData: {
-                        meterReading: 200000.0
-                    },
-                    bagMethod: {
-                        operatingTime: 8760,
-                        bagFillTime: 12,
-                        bagVolume: 6.68403122278085,
-                        numberOfUnits: 1
-                    },
-                    pressureMethodData: {
-                        nozzleType: 0,
-                        numberOfNozzles: 1,
-                        supplyPressure: 80
-                    },
-                    otherMethodData: {
-                        consumption: 200000
-                    },
-                    compressorElectricityData: {
-                        compressorControlAdjustment: 25,
-                        compressorSpecificPower: 0.16
-                    },
-                    units: 1
-                }
-            ]
-        };
-        executeTest(measurInputData, 46841.69, 3091.55, 33.42245989, 0, 17565634.05);
-    });
-
-
-    it('should calculate 4 CompressedAirReduction (all methods) correctly', function () {
-        let measurInputData = {
-            compressedAirReductionInputVec: [
-                // flow measurement with electricity
-                // energyUse = 221184000.0
-                // energyCost = 26542080.0
-                // flowRate = 0.0
-                // singleNozzleFlowRate = 0.0
-                // consumption = 103680000000.0
-                {
-                    hoursPerYear: 8640,
-                    utilityType: 1,
-                    utilityCost: 0.066,
-                    measurementMethod: 0,
-                    flowMeterMethodData: {
-                        meterReading: 200000.0
-                    },
-                    bagMethod: {
-                        operatingTime: 8640,
-                        bagFillTime: 30,
-                        bagVolume: 1.36,
-                        numberOfUnits: 1
-                    },
-                    pressureMethodData: {
-                        nozzleType: 0,
-                        numberOfNozzles: 1,
-                        supplyPressure: 80
-                    },
-                    otherMethodData: {
-                        consumption: 200000
-                    },
-                    compressorElectricityData: {
-                        compressorControlAdjustment: 0.8,
-                        compressorSpecificPower: 0.16
-                    },
-                    units: 1
-                },
-                // bag method with electricity
-                // energyUse = 3769.9111
-                // energyCost = 452.3893
-                // flowRate = 3.408846
-                // singleNozzleFlowRate = 0.0
-                // consumption = 3534291.73528
-                {
-                    hoursPerYear: 8640,
-                    utilityType: 1,
-                    utilityCost: 0.12,
-                    measurementMethod: 1,
-                    flowMeterMethodData: {
-                        meterReading: 200000.0
-                    },
-                    bagMethod: {
-                        operatingTime: 8640,
-                        bagFillTime: 12,
-                        bagVolume: 8.68,
-                        numberOfUnits: 1
-                    },
-                    pressureMethodData: {
-                        nozzleType: 0,
-                        numberOfNozzles: 1,
-                        supplyPressure: 80
-                    },
-                    otherMethodData: {
-                        consumption: 200000
-                    },
-                    compressorElectricityData: {
-                        compressorControlAdjustment: 0.8,
-                        compressorSpecificPower: 0.16
-                    },
-                    units: 1
-                },
-                // pressure method, no electricity
-                // flowRate = 1.778508
-                // singleNozzleFlowRate = 1.778508
-                // consumption = 921978.5471999
-                {
-                    hoursPerYear: 8640,
-                    utilityType: 0,
-                    utilityCost: 0.12,
-                    measurementMethod: 2,
-                    flowMeterMethodData: {
-                        meterReading: 200000.0
-                    },
-                    bagMethod: {
-                        operatingTime: 8640,
-                        bagFillTime: 30,
-                        bagVolume: 1.36,
-                        numberOfUnits: 1
-                    },
-                    pressureMethodData: {
-                        nozzleType: 0,
-                        numberOfNozzles: 1,
-                        supplyPressure: 80
-                    },
-                    otherMethodData: {
-                        consumption: 200000
-                    },
-                    compressorElectricityData: {
-                        compressorControlAdjustment: 0.8,
-                        compressorSpecificPower: 0.16
-                    },
-                    units: 1
-                },
-                // other method with electricity
-                // consumption = 200000.0
-                // energyUse = 213.3333
-                // energyCost = 25.6
-                {
-                    hoursPerYear: 8640,
-                    utilityType: 1,
-                    utilityCost: 0.12,
-                    measurementMethod: 3,
-                    flowMeterMethodData: {
-                        meterReading: 200000.0
-                    },
-                    bagMethod: {
-                        operatingTime: 8640,
-                        bagFillTime: 30,
-                        bagVolume: 1.36,
-                        numberOfUnits: 1
-                    },
-                    pressureMethodData: {
-                        nozzleType: 0,
-                        numberOfNozzles: 1,
-                        supplyPressure: 80
-                    },
-                    otherMethodData: {
-                        consumption: 200000
-                    },
-                    compressorElectricityData: {
-                        compressorControlAdjustment: 0.8,
-                        compressorSpecificPower: 0.16
-                    },
-                    units: 1
-                }
-            ]
-        };
-        executeTest(measurInputData, 276540529.49, 18365580.96, 200045.18, 1.778508, 103703620538.55);
-    });
-
-
 });

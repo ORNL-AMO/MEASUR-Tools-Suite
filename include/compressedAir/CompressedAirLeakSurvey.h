@@ -4,14 +4,22 @@
 #include <stdexcept>
 #include <vector>
 
-#include "treasureHunt/CompressedAirReduction.h"
+#include "compressedAir/BagMethod.h"
 
 #ifndef M_PI
     #define M_PI 3.14159265358979323846
 #endif
 
-// BagMethodData implemented in CompressedAirReduction.h
-// BagMethod is now used for all new logic and data flow
+class CompressorElectricityData {
+  public:
+    CompressorElectricityData(const double compressorControlAdjustment, const double compressorSpecificPower)
+        : compressorControlAdjustment(compressorControlAdjustment), compressorSpecificPower(compressorSpecificPower) {}
+
+    double calculate() const { return compressorSpecificPower / 60.0; }
+
+  private:
+    double compressorControlAdjustment, compressorSpecificPower;
+};
 
 class EstimateMethodData {
   public:
@@ -196,7 +204,6 @@ class CompressedAirLeakSurvey {
     std::vector<CompressedAirLeakSurveyInput> const& getCompressedAirLeakSurveyInputVec() const {
         return compressedAirLeakSurveyInputVec;
     }
-    void setCompressedAirReductionInputVec(std::vector<CompressedAirReductionInput>& compressedAirReductionInputVec);
 
   private:
     std::vector<CompressedAirLeakSurveyInput> compressedAirLeakSurveyInputVec;
