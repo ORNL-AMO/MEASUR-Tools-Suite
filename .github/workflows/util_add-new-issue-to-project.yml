@@ -2,6 +2,9 @@ name: "Util: Add new Issues to GitHub Project"
 
 on:
   workflow_call:
+    secrets:
+      PROJECT_TOKEN:
+        required: true
 
 permissions:
   issues: write
