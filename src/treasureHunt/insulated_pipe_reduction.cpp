@@ -12,8 +12,6 @@ namespace insulated_pipe_reduction {
 // ── Air property polynomial coefficients (T^4 … T^0) ────────────────────────
 // Each array holds the 5 coefficients for a 4th-order polynomial fit of the
 // named air property as a function of temperature (K).
-static constexpr std::array<double, 5> kAirSpecificHeatCoeffs        = { 3.03724e-13, -1.1132e-9,    1.44382e-6,  -0.000565339, 1.07223839  };
-static constexpr std::array<double, 5> kAirViscosityCoeffs           = {-1.586e-10,   5.115e-7,     -7.246e-4,     7.978e-1,   -1.850       };
 static constexpr std::array<double, 5> kAirKinematicViscosityCoeffs  = { 2.25852e-11, -8.32093e-8,   0.000172673,  0.01063728, -0.76108359  };
 static constexpr std::array<double, 5> kAirThermalConductivityCoeffs = { 3.17176e-11, -5.90229e-8,   4.58531e-6,   0.088867888, 0.520072239 };
 static constexpr std::array<double, 5> kAirAlphaCoeffs               = { 1.35569e-10, -3.80588e-7,   0.000446483, -0.035935528, 2.254489164 };

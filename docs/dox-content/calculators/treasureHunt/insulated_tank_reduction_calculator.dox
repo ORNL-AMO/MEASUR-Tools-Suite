@@ -121,7 +121,7 @@
  * @symrow{T_\infty; Ambient air temperature; \degreeRankine}
  * @symrow{d; Tank outer diameter; \foot}
  * @symrow{\nu; Kinematic viscosity of air at ambient temperature; \foot\squared\per\second}
- * @symrow{\alpha; Thermal diffusivity of air at ambient temperature; \foot\squared\per\hour}
+ * @symrow{\alpha; Thermal diffusivity of air at ambient temperature; \foot\squared\per\second}
  * @endsymtable
  */
 

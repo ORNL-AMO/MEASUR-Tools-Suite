@@ -15,7 +15,7 @@ TEST_CASE("Rayleigh Number - vertical tank surface", "[insulated_tank_reduction]
     double ambient_temperature = 529.67;
     double diameter            = 5.0;
     double kin_viscosity       = 4.5396e-8;   // ft²/s, approx from polynomial
-    double thermal_diffusivity = 0.8348;       // ft²/hr, approx from polynomial
+    double thermal_diffusivity = 0.8348 / 3600.0; // ft²/s, converted from ft²/hr polynomial
 
     double ra = rayleighNumber(thermal_expansion, surface_temperature, ambient_temperature,
                                diameter, kin_viscosity, thermal_diffusivity);
@@ -51,8 +51,8 @@ TEST_CASE("Insulated Tank - with insulation", "[insulated_tank_reduction]") {
     input.surface_temperature     = 959.67;
 
     InsulatedTankOutput output = calculate(input);
-    CHECK(output.heat_loss        == Approx(0.04446693395883733));
-    CHECK(output.annual_heat_loss == Approx(43.2811490532683365));
+    CHECK(output.heat_loss        == Approx(0.04511472807275703));
+    CHECK(output.annual_heat_loss == Approx(43.91166865748351));
 }
 
 TEST_CASE("Insulated Tank - with insulation 2", "[insulated_tank_reduction]") {
@@ -72,8 +72,8 @@ TEST_CASE("Insulated Tank - with insulation 2", "[insulated_tank_reduction]") {
     input.surface_temperature     = 759.67;
 
     InsulatedTankOutput output = calculate(input);
-    CHECK(output.heat_loss        == Approx(0.030515));
-    CHECK(output.annual_heat_loss == Approx(29.70135));
+    CHECK(output.heat_loss        == Approx(0.0312837773195821));
+    CHECK(output.annual_heat_loss == Approx(30.44954325772658));
 }
 
 TEST_CASE("Insulated Tank - no insulation (bare)", "[insulated_tank_reduction]") {
@@ -93,8 +93,8 @@ TEST_CASE("Insulated Tank - no insulation (bare)", "[insulated_tank_reduction]")
     input.surface_temperature     = 959.67;
 
     InsulatedTankOutput output = calculate(input);
-    CHECK(output.heat_loss        == Approx(1.1112001223));
-    CHECK(output.annual_heat_loss == Approx(1081.568119));
+    CHECK(output.heat_loss        == Approx(4.74279643553729));
+    CHECK(output.annual_heat_loss == Approx(4616.32186392296));
 }
 
 TEST_CASE("Insulated Tank - emissivity validation throws", "[insulated_tank_reduction]") {

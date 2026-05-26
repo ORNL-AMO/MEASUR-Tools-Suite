@@ -26,8 +26,8 @@ namespace insulated_pipe_reduction {
  * @ingroup insulated_pipe_reduction_calculator
  * @struct InsulatedPipeInput
  * @brief Input parameters for the insulated pipe heat loss calculation.
- * @details All temperatures are in Kelvin and all lengths are in SI units (meters or
- * millimeters as noted). The material coefficient vectors must each contain exactly 5
+ * @details All temperatures are in Kelvin and all lengths are in meters. The material
+ * coefficient vectors must each contain exactly 5
  * values representing polynomial fit coefficients (order 4 down to order 0) for thermal
  * conductivity as a function of temperature.
  */

@@ -86,7 +86,7 @@ double naturalConvectionCoefficient(double rayleigh, double conductivity, double
 
 InsulatedTankOutput insulatedTankHeatLoss(const InsulatedTankInput& input) {
     AirProperties ap           = computeAirProperties(input.ambient_temperature);
-    double thermal_diffusivity = ap.conductivity / (ap.density * ap.specific_heat);
+    double thermal_diffusivity = ap.conductivity / (ap.density * ap.specific_heat) / 3600.0;
     double thermal_expansion   = 1.0 / input.ambient_temperature;
 
     double ra    = rayleighNumber(thermal_expansion, input.surface_temperature,
@@ -119,7 +119,7 @@ InsulatedTankOutput insulatedTankHeatLoss(const InsulatedTankInput& input) {
 
 InsulatedTankOutput bareTankHeatLoss(const InsulatedTankInput& input) {
     AirProperties ap           = computeAirProperties(input.ambient_temperature);
-    double thermal_diffusivity = ap.conductivity / (ap.density * ap.specific_heat);
+    double thermal_diffusivity = ap.conductivity / (ap.density * ap.specific_heat) / 3600.0;
     double thermal_expansion   = 1.0 / input.ambient_temperature;
 
     double ra    = rayleighNumber(thermal_expansion, input.tank_temperature,

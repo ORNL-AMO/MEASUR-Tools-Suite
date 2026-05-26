@@ -141,7 +141,7 @@ inline constexpr double kAirSensibleHeatFactor = 1.08;
 inline constexpr double kWaterSensibleHeatFactor = 500.0;
 
 // Gravitational acceleration in U.S. customary units.
-static constexpr double kGravityFtPerSec2 = 32.174;
+inline constexpr double kGravityFtPerSec2 = 32.174;
 
 } // namespace physics::us
 
