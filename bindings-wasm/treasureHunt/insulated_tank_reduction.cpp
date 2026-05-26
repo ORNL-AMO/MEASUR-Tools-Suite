@@ -57,9 +57,9 @@ EMSCRIPTEN_BINDINGS(insulated_tank_reduction_module) {
     //   thermal_expansion:   volumetric thermal expansion coefficient of air (1/T_ambient) [1/°R]
     //   surface_temperature: outer surface temperature [°R]
     //   ambient_temperature: ambient air temperature [°R]
-    //   diameter:            tank outer diameter [ft]
+    //   diameter:            tank inner diameter [ft]
     //   kin_viscosity:       air kinematic viscosity [ft²/s]
-    //   thermal_diffusivity: air thermal diffusivity [ft²/hr]
+    //   thermal_diffusivity: air thermal diffusivity [ft²/s]
     //   returns: Rayleigh number [dimensionless]
     function("insulatedTankRayleighNumber", &rayleighNumber);
 

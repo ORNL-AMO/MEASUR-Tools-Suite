@@ -110,9 +110,9 @@ InsulatedTankOutput bareTankHeatLoss(const InsulatedTankInput& input);
  * @param[in] thermal_expansion   Volumetric thermal expansion coefficient of air (1/T_ambient) @unitb{\per\degreeRankine}
  * @param[in] surface_temperature Outer surface temperature @unitb{\degreeRankine}
  * @param[in] ambient_temperature Ambient air temperature @unitb{\degreeRankine}
- * @param[in] diameter            Tank outer diameter @unitb{\foot}
+ * @param[in] diameter            Tank inner diameter @unitb{\foot}
  * @param[in] kin_viscosity       Kinematic viscosity of air @unitb{\foot\squared\per\second}
- * @param[in] thermal_diffusivity Thermal diffusivity of air @unitb{\foot\squared\per\hour}
+ * @param[in] thermal_diffusivity Thermal diffusivity of air @unitb{\foot\squared\per\second}
  * @return Dimensionless Rayleigh number @unitb{\unitless}
  */
 double rayleighNumber(double thermal_expansion, double surface_temperature,
