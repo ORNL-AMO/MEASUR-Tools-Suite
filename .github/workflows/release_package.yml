@@ -10,6 +10,10 @@ on:
       NPM_AUTH_TOKEN:
         required: true
 
+concurrency:
+  group: release-package-${{ inputs.release_channel }}
+  cancel-in-progress: false
+
 permissions:
   contents: write
 

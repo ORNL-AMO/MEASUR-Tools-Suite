@@ -21,7 +21,7 @@ jobs:
       PROJECT_TOKEN: ${{ secrets.PROJECT_TOKEN }}
 
   release-docs:
-    if: github.ref_name == 'develop' || github.ref_name == 'master'
+    if: github.event_name == 'push' && (github.ref_name == 'develop' || github.ref_name == 'master')
     uses: ./.github/workflows/release_docs.yml
 
   release-package-beta:
