@@ -44,12 +44,6 @@ describe('Compressed Air Receiver Tank', function () {
         assert.approximately(result.tankSize, 5497.8, 0.01);
     });
 
-    it('should apply default atmosphericPressure (14.7) for General method when omitted', function () {
-        const inp = { airDemand: 150, allowablePressureDrop: 3 };
-        const result = m.calculateReceiverTankGeneralSize(inp);
-        assert.approximately(result.tankSize, 5497.8, 0.01);
-    });
-
     it('should calculate tank size using the General method (case 2)', function () {
         const inp = { airDemand: 190, allowablePressureDrop: 8, atmosphericPressure: 12.7 };
         const result = m.calculateReceiverTankGeneralSize(inp);
@@ -62,15 +56,6 @@ describe('Compressed Air Receiver Tank', function () {
         const inp = {
             lengthOfDemand: 0.5, airFlowRequirement: 100,
             atmosphericPressure: 14.7, initialTankPressure: 110, finalTankPressure: 100
-        };
-        const result = m.calculateReceiverTankDedicatedStorageSize(inp);
-        assert.approximately(result.tankSize, 549.78, 0.01);
-    });
-
-    it('should apply default atmosphericPressure (14.7) for Dedicated Storage method when omitted', function () {
-        const inp = {
-            lengthOfDemand: 0.5, airFlowRequirement: 100,
-            initialTankPressure: 110, finalTankPressure: 100
         };
         const result = m.calculateReceiverTankDedicatedStorageSize(inp);
         assert.approximately(result.tankSize, 549.78, 0.01);
@@ -91,16 +76,6 @@ describe('Compressed Air Receiver Tank', function () {
         const inp = {
             lengthOfDemand: 0.5, airFlowRequirement: 900,
             atmosphericPressure: 14.7, initialTankPressure: 100, finalTankPressure: 70,
-            meteredFlowControl: 45
-        };
-        const result = m.calculateReceiverTankMeteredStorageSize(inp);
-        assert.approximately(result.tankSize, 1566.873, 0.01);
-    });
-
-    it('should apply default atmosphericPressure (14.7) for Metered Storage method when omitted', function () {
-        const inp = {
-            lengthOfDemand: 0.5, airFlowRequirement: 900,
-            initialTankPressure: 100, finalTankPressure: 70,
             meteredFlowControl: 45
         };
         const result = m.calculateReceiverTankMeteredStorageSize(inp);
@@ -133,15 +108,6 @@ describe('Compressed Air Receiver Tank', function () {
         const inp = {
             distanceToCompressorRoom: 1000, speedOfAir: 250,
             atmosphericPressure: 14.7, airDemandCfm: 600, allowablePressureDrop: 2
-        };
-        const result = m.calculateReceiverTankBridgingSize(inp);
-        assert.approximately(result.tankSize, 2199.12, 0.01);
-    });
-
-    it('should apply default atmosphericPressure (14.7) for Bridging method when omitted', function () {
-        const inp = {
-            distanceToCompressorRoom: 1000, speedOfAir: 250,
-            airDemandCfm: 600, allowablePressureDrop: 2
         };
         const result = m.calculateReceiverTankBridgingSize(inp);
         assert.approximately(result.tankSize, 2199.12, 0.01);

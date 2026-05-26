@@ -36,12 +36,7 @@ EMSCRIPTEN_BINDINGS(receiver_tank) {
     value_object<SizeResult>("ReceiverTankSizeResult")
         .field("tankSize", &SizeResult::tank_size);
 
-    function("calculateReceiverTankGeneralSize",
-        +[](GeneralInput inp) -> SizeResult {
-            if (inp.atmospheric_pressure == 0.0)
-                inp.atmospheric_pressure = physics::us::kAtmosphericPressurePsi;
-            return calculateGeneralSize(inp);
-        });
+    function("calculateReceiverTankGeneralSize", &calculateGeneralSize);
 
     // ---- Dedicated Storage Method ----
     // calculateReceiverTankDedicatedStorageSize(ReceiverTankDedicatedStorageInput) -> ReceiverTankSizeResult
@@ -58,12 +53,7 @@ EMSCRIPTEN_BINDINGS(receiver_tank) {
         .field("initialTankPressure", &DedicatedStorageInput::initial_tank_pressure)
         .field("finalTankPressure", &DedicatedStorageInput::final_tank_pressure);
 
-    function("calculateReceiverTankDedicatedStorageSize",
-        +[](DedicatedStorageInput inp) -> SizeResult {
-            if (inp.atmospheric_pressure == 0.0)
-                inp.atmospheric_pressure = physics::us::kAtmosphericPressurePsi;
-            return calculateDedicatedStorageSize(inp);
-        });
+    function("calculateReceiverTankDedicatedStorageSize", &calculateDedicatedStorageSize);
 
     // ---- Metered Storage Method ----
     // calculateReceiverTankMeteredStorageSize(ReceiverTankMeteredStorageInput) -> ReceiverTankMeteredStorageResult
@@ -86,12 +76,7 @@ EMSCRIPTEN_BINDINGS(receiver_tank) {
         .field("tankSize", &MeteredStorageResult::tank_size)
         .field("refillTime", &MeteredStorageResult::refill_time);
 
-    function("calculateReceiverTankMeteredStorageSize",
-        +[](MeteredStorageInput inp) -> MeteredStorageResult {
-            if (inp.atmospheric_pressure == 0.0)
-                inp.atmospheric_pressure = physics::us::kAtmosphericPressurePsi;
-            return calculateMeteredStorageSize(inp);
-        });
+    function("calculateReceiverTankMeteredStorageSize", &calculateMeteredStorageSize);
 
     // ---- Bridging Compressor Reaction Delay Method ----
     // calculateReceiverTankBridgingSize(ReceiverTankBridgingInput) -> ReceiverTankSizeResult
@@ -108,10 +93,5 @@ EMSCRIPTEN_BINDINGS(receiver_tank) {
         .field("airDemandCfm", &BridgingInput::air_demand_cfm)
         .field("allowablePressureDrop", &BridgingInput::allowable_pressure_drop);
 
-    function("calculateReceiverTankBridgingSize",
-        +[](BridgingInput inp) -> SizeResult {
-            if (inp.atmospheric_pressure == 0.0)
-                inp.atmospheric_pressure = physics::us::kAtmosphericPressurePsi;
-            return calculateBridgingSize(inp);
-        });
+    function("calculateReceiverTankBridgingSize", &calculateBridgingSize);
 }
