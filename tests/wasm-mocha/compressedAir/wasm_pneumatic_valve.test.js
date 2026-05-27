@@ -1,61 +1,51 @@
 import { assert } from 'chai';
 
 describe('Compressed Air Pneumatic Valve', function () {
-    let moduleInstance;
+    let m;
 
     before(async function () {
         const ToolsSuiteModule = (await import('../../../bin/client.js')).default;
-        moduleInstance = await ToolsSuiteModule({
+        m = await ToolsSuiteModule({
             locateFile: (filename) => '/base/bin/' + filename
         });
     });
 
-    it('should calculate flow rate without a specified flow rate (case 1)', function () {
-        const inp = { inletPressure: 100, outletPressure: 70 };
+    // ---- Flow Rate (Cv = 1) ----
 
-        const pneumaticValve = new moduleInstance.PneumaticValve(inp.inletPressure, inp.outletPressure);
-        const result = pneumaticValve.calculate();
-
-        assert.approximately(result, 49.09732, 0.01);
-
-        pneumaticValve.delete();
+    it('should calculate flow rate for Cv = 1 (case 1: 100 / 70 psia)', function () {
+        const result = m.calculatePneumaticValveFlowRate({ inletPressure: 100, outletPressure: 70 });
+        assert.approximately(result.flowRate, 49.097320446, 0.01);
     });
 
-    it('should calculate flow rate without a specified flow rate (case 2)', function () {
-        const inp = { inletPressure: 120, outletPressure: 90 };
-
-        const pneumaticValve = new moduleInstance.PneumaticValve(inp.inletPressure, inp.outletPressure);
-        const result = pneumaticValve.calculate();
-
-        assert.approximately(result, 54.568621, 0.01);
-
-        pneumaticValve.delete();
+    it('should calculate flow rate for Cv = 1 (case 2: 120 / 90 psia)', function () {
+        const result = m.calculatePneumaticValveFlowRate({ inletPressure: 120, outletPressure: 90 });
+        assert.approximately(result.flowRate, 54.56862079, 0.01);
     });
 
-    it('should calculate Cv coefficient with a specified flow rate (case 1)', function () {
-        // When a flow rate is provided, the valve calculates the Cv coefficient
-        const inp = { inletPressure: 80, outletPressure: 75, flowRate: 55 };
-
-        const pneumaticValve = new moduleInstance.PneumaticValve(
-            inp.inletPressure, inp.outletPressure, inp.flowRate
-        );
-        const result = pneumaticValve.calculate();
-
-        assert.approximately(result, 2.873685, 0.01);
-
-        pneumaticValve.delete();
+    it('should calculate flow rate for Cv = 1 (case 3: 120 / 70 psia)', function () {
+        const result = m.calculatePneumaticValveFlowRate({ inletPressure: 120, outletPressure: 70 });
+        assert.approximately(result.flowRate, 67.00921112, 0.01);
     });
 
-    it('should calculate Cv coefficient with a specified flow rate (case 2)', function () {
-        const inp = { inletPressure: 90, outletPressure: 85, flowRate: 95 };
+    // ---- Flow Coefficient (Cv) ----
 
-        const pneumaticValve = new moduleInstance.PneumaticValve(
-            inp.inletPressure, inp.outletPressure, inp.flowRate
-        );
-        const result = pneumaticValve.calculate();
+    it('should calculate Cv coefficient (case 1: 80 / 75 psia, 55 scfm)', function () {
+        const result = m.calculatePneumaticValveCv({ inletPressure: 80, outletPressure: 75, flowRate: 55 });
+        assert.approximately(result.flowCoefficient, 2.873684832, 0.01);
+    });
 
-        assert.approximately(result, 4.671398, 0.01);
+    it('should calculate Cv coefficient (case 2: 90 / 85 psia, 95 scfm)', function () {
+        const result = m.calculatePneumaticValveCv({ inletPressure: 90, outletPressure: 85, flowRate: 95 });
+        assert.approximately(result.flowCoefficient, 4.671398062, 0.01);
+    });
 
-        pneumaticValve.delete();
+    it('should calculate Cv coefficient (case 3: 90 / 75 psia, 55 scfm)', function () {
+        const result = m.calculatePneumaticValveCv({ inletPressure: 90, outletPressure: 75, flowRate: 55 });
+        assert.approximately(result.flowCoefficient, 1.608060504, 0.01);
+    });
+
+    it('should calculate Cv coefficient (case 4: 90 / 85 psia, 55 scfm)', function () {
+        const result = m.calculatePneumaticValveCv({ inletPressure: 90, outletPressure: 85, flowRate: 55 });
+        assert.approximately(result.flowCoefficient, 2.7044936151, 0.01);
     });
 });

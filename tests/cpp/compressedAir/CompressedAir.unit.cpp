@@ -10,8 +10,6 @@
 #include "compressedAir/PipeData.h"
 #include "compressedAir/PipeSizing.h"
 #include "compressedAir/PneumaticAirRequirement.h"
-#include "compressedAir/PneumaticValve.h"
-
 using namespace Catch;
 
 TEST_CASE("PneumaticAirRequirement", "[CompressedAir][PneumaticAirRequirement]") {
@@ -173,17 +171,6 @@ TEST_CASE("Compressor Pipe Sizing", "[CompressedAir][PipeSizing]") {
     compare(PipeSizing(1400, 110, 25, 14.5).calculate(), PipeSizing::Output(15.6530120482, 4.4797281351));
     compare(PipeSizing(1400, 110, 30, 14.5).calculate(), PipeSizing::Output(13.0441767068, 4.0894135851));
     compare(PipeSizing(1400, 110, 30, 11.5).calculate(), PipeSizing::Output(10.6008230453, 3.6865700558));
-}
-
-TEST_CASE("Compressor Pneumatic Valve", "[CompressedAir][PneumaticValve][FlowFactor]") {
-    CHECK(PneumaticValve(100, 70).calculate() == Approx(49.097320446));
-    CHECK(PneumaticValve(120, 70).calculate() == Approx(67.00921112));
-    CHECK(PneumaticValve(120, 90).calculate() == Approx(54.56862079));
-
-    CHECK(PneumaticValve(80, 75, 55).calculate() == Approx(2.873684832));
-    CHECK(PneumaticValve(90, 75, 55).calculate() == Approx(1.608060504));
-    CHECK(PneumaticValve(90, 85, 55).calculate() == Approx(2.7044936151));
-    CHECK(PneumaticValve(90, 85, 95).calculate() == Approx(4.671398062));
 }
 
 TEST_CASE("Bag Method", "[CompressedAir][BagMethod]") {

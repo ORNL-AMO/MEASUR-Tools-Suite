@@ -12,8 +12,6 @@
 #include "compressedAir/PipeData.h"
 #include "compressedAir/PipeSizing.h"
 #include "compressedAir/PneumaticAirRequirement.h"
-#include "compressedAir/PneumaticValve.h"
-
 using namespace emscripten;
 
 EMSCRIPTEN_BINDINGS(compressedAir_enums) {
@@ -107,14 +105,6 @@ EMSCRIPTEN_BINDINGS(pipeSizing) {
         .constructor<double, double>()
         .property("crossSectionalArea", &PipeSizing::Output::crossSectionalArea)
         .property("pipeDiameter", &PipeSizing::Output::pipeDiameter);
-}
-
-// pneumaticValve
-EMSCRIPTEN_BINDINGS(pneumaticValve) {
-    class_<PneumaticValve>("PneumaticValve")
-        .constructor<double, double>()
-        .constructor<double, double, double>()
-        .function("calculate", &PneumaticValve::calculate);
 }
 
 // bagMethod

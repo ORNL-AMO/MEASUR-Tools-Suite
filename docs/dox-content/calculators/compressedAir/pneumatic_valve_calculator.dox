@@ -1,0 +1,105 @@
+/**
+ * @defgroup pneumatic_valve_calculator Pneumatic Valve Calculator
+ * @ingroup compressed_air_assessments
+ * @brief Calculates pneumatic valve air flow rate and valve flow coefficient (Cv).
+ * @details This calculator provides two engineering methods for sizing and selecting
+ *          pneumatic valves in compressed air distribution systems. All formulas use
+ *          U.S. customary units.
+ *
+ * A **pneumatic valve** controls the flow of compressed air in a distribution system.
+ * Its flow capacity is characterized by the dimensionless **valve flow coefficient Cv**,
+ * which represents the volume of air (in scfm) that flows through the valve at a
+ * unit pressure differential (1 psi) for a valve with Cv = 1. The Cv rating is the
+ * primary parameter used to select a valve for a given application.
+ *
+ * The simplified pneumatic valve formula used here is valid for subsonic (non-choked)
+ * flow of dry air at standard conditions. It is widely used in industrial compressed
+ * air system design when a quick, conservative valve selection is needed:
+ *
+ * @f[
+ *   Q = C_v \cdot k_{flow} \cdot \sqrt{P_{in}^2 - P_{out}^2}
+ * @f]
+ *
+ * where @math{k_{flow} = 0.6875} is an empirically derived air flow constant for
+ * dry air at 60°F and 14.696 psia. This calculator exposes two modes:
+ *
+ * 1. **Flow Rate (Cv = 1)** – computes the theoretical flow through a unit-Cv valve.
+ *    For a valve with a known Cv, multiply the result by that Cv.
+ * 2. **Flow Coefficient (Cv)** – rearranges the formula to solve for Cv when the
+ *    required flow rate and operating pressures are known.
+ *
+ * The calculation methods are:
+ * 1. **Flow Rate (Cv = 1)** – computes @math{Q} for a valve with unit flow coefficient
+ *    given the inlet and outlet pressures.
+ * 2. **Flow Coefficient (Cv)** – computes @math{C_v} for a valve given the measured or
+ *    required flow rate and the operating pressures.
+ *
+ * Relevant formulas are documented below.
+ *
+ * @heading{Flow Rate (Cv = 1)}
+ * @copydoc pneumatic_valve_flow_rate_formula
+ *
+ * @heading{Flow Coefficient (Cv)}
+ * @copydoc pneumatic_valve_cv_formula
+ */
+
+/**
+ * @defgroup pneumatic_valve_flow_rate_formula Flow Rate Formula (Cv = 1)
+ * @ingroup pneumatic_valve_calculator
+ * @brief Air flow rate through a pneumatic valve with unit flow coefficient (Cv = 1).
+ * @details Computes the theoretical air flow rate for a valve with Cv = 1 using the
+ *          simplified compressible-flow pneumatic valve formula. This formula is valid
+ *          for subsonic (non-choked) flow of dry air at standard conditions (60°F,
+ *          14.696 psia) and is commonly used for conservative valve sizing in industrial
+ *          compressed air systems.
+ *
+ *          The factored form used in the calculation is algebraically identical to the
+ *          square-of-pressures form:
+ *          @f$\sqrt{(P_{in} - P_{out})(P_{in} + P_{out})} = \sqrt{P_{in}^2 - P_{out}^2}@f$.
+ *
+ * @formula{pneumatic-valve-flow-rate;
+ *   Q = k_{flow} \cdot \sqrt{(P_{in} - P_{out}) \cdot (P_{in} + P_{out})}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q; Air flow rate through the valve (Cv = 1); \scfm}
+ * @symrow{k_{flow}; Empirical air flow constant for dry air at standard conditions (0.6875); \scfm\per\psi}
+ * @symrow{P_{in}; Inlet (upstream) absolute pressure; \psi}
+ * @symrow{P_{out}; Outlet (downstream) absolute pressure; \psi}
+ * @endsymtable
+ *
+ * @note The constant @math{k_{flow} = 0.6875} is empirically derived from isentropic
+ *       flow theory for dry air (specific heat ratio @math{\gamma = 1.4}) at standard
+ *       conditions. Pressures must be in psia (absolute). For a valve with a specific
+ *       Cv, multiply @math{Q} by that Cv value.
+ */
+
+/**
+ * @defgroup pneumatic_valve_cv_formula Flow Coefficient (Cv) Formula
+ * @ingroup pneumatic_valve_calculator
+ * @brief Valve flow coefficient (Cv) for a pneumatic valve with a known flow rate.
+ * @details Rearranges the pneumatic valve flow formula to solve for the dimensionless
+ *          valve flow coefficient Cv. Use this method when the required flow rate and
+ *          operating pressures are known and a valve must be selected or verified.
+ *          Select a valve whose catalog Cv rating equals or exceeds the calculated value.
+ *
+ * @formula{pneumatic-valve-cv;
+ *   C_v = \frac{Q}{k_{flow} \cdot \sqrt{(P_{in} - P_{out}) \cdot (P_{in} + P_{out})}}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{C_v; Dimensionless valve flow coefficient; \unitless}
+ * @symrow{Q; Measured or required air flow rate; \scfm}
+ * @symrow{k_{flow}; Empirical air flow constant for dry air at standard conditions (0.6875); \scfm\per\psi}
+ * @symrow{P_{in}; Inlet (upstream) absolute pressure; \psi}
+ * @symrow{P_{out}; Outlet (downstream) absolute pressure; \psi}
+ * @endsymtable
+ *
+ * @note Cv is treated as dimensionless in this formula; the unit dependence is absorbed
+ *       into the constant @math{k_{flow}}. A higher Cv indicates a valve with lower flow
+ *       restriction. Pressures must be in psia (absolute). Always select a valve with a
+ *       catalog Cv at least as large as the calculated value to ensure the system can
+ *       meet its flow requirements.
+ */
