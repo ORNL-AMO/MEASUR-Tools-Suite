@@ -106,6 +106,8 @@ window.MathJax = {
                 \DeclareSIUnit{\psi}{psi}
                 \DeclareSIUnit{\hour}{h}
                 \DeclareSIUnit{\bhp}{bhp}
+                \DeclareSIUnit{\psia}{psia}
+                \DeclareSIUnit{\psig}{psig}
             `);
         }
     },

@@ -3,11 +3,51 @@ name: CI/CD
 on:
   push:
     branches:
-      - 'master'
-      - 'develop'
+      - "master"
+      - "develop"
+  pull_request:
+    branches:
+      - "develop"
+  issues:
+    types:
+      - "opened"
   workflow_dispatch:
 
 jobs:
-  docs:
-    if: github.ref_name == 'develop' || github.ref_name == 'master'
+  util-add-project-issue:
+    if: github.event_name == 'issues' && github.event.action == 'opened'
+    uses: ./.github/workflows/util_add-new-issue-to-project.yml
+    secrets:
+      PROJECT_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+
+  release-docs:
+    if: github.event_name == 'push' && (github.ref_name == 'develop' || github.ref_name == 'master')
     uses: ./.github/workflows/release_docs.yml
+
+  release-package-beta:
+    if: >
+      github.event_name == 'pull_request' && 
+      github.base_ref == 'develop' && 
+      github.event.pull_request.draft == false &&
+      github.event.pull_request.head.repo.fork == false
+    uses: ./.github/workflows/release_package.yml
+    with:
+      release_channel: beta
+    secrets:
+      NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+
+  release-package-rc:
+    if: github.event_name == 'push' && github.ref_name == 'develop'
+    uses: ./.github/workflows/release_package.yml
+    with:
+      release_channel: rc
+    secrets:
+      NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+
+  release-package-latest:
+    if: github.event_name == 'push' && github.ref_name == 'master'
+    uses: ./.github/workflows/release_package.yml
+    with:
+      release_channel: latest
+    secrets:
+      NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}

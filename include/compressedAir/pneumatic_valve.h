@@ -54,8 +54,8 @@ inline constexpr double kAirFlowFactor = 0.6875;
  * @brief Input parameters for the flow rate calculation (Cv = 1).
  */
 struct FlowRateInput {
-    double inlet_pressure  = 0.0; ///< Inlet (upstream) gauge pressure @unitb{\psi}
-    double outlet_pressure = 0.0; ///< Outlet (downstream) gauge pressure @unitb{\psi}
+    double inlet_pressure  = 0.0; ///< Inlet (upstream) absolute pressure @unitb{\psia}
+    double outlet_pressure = 0.0; ///< Outlet (downstream) absolute pressure @unitb{\psia}
 };
 
 /**
@@ -83,8 +83,8 @@ struct FlowRateResult {
  * @symtable
  * @symrow{Q; Air flow rate through the valve (Cv = 1); \scfm}
  * @symrow{k_{flow}; Empirical air flow constant for dry air at standard conditions (0.6875); \scfm\per\psi}
- * @symrow{P_{in}; Inlet (upstream) gauge pressure; \psi}
- * @symrow{P_{out}; Outlet (downstream) gauge pressure; \psi}
+ * @symrow{P_{in}; Inlet (upstream) absolute pressure; \psia}
+ * @symrow{P_{out}; Outlet (downstream) absolute pressure; \psia}
  * @endsymtable
  *
  * @note The factored form @math{\sqrt{(P_{in}-P_{out})(P_{in}+P_{out})}} is algebraically
@@ -108,8 +108,8 @@ FlowRateResult calculateFlowRate(const FlowRateInput& input);
  * @brief Input parameters for the valve flow coefficient (Cv) calculation.
  */
 struct CvInput {
-    double inlet_pressure  = 0.0; ///< Inlet (upstream) gauge pressure @unitb{\psi}
-    double outlet_pressure = 0.0; ///< Outlet (downstream) gauge pressure @unitb{\psi}
+    double inlet_pressure  = 0.0; ///< Inlet (upstream) absolute pressure @unitb{\psia}
+    double outlet_pressure = 0.0; ///< Outlet (downstream) absolute pressure @unitb{\psia}
     double flow_rate       = 0.0; ///< Measured or required air flow rate @unitb{\scfm}
 };
 
@@ -138,8 +138,8 @@ struct CvResult {
  * @symrow{C_v; Dimensionless valve flow coefficient; \unitless}
  * @symrow{Q; Measured or required air flow rate; \scfm}
  * @symrow{k_{flow}; Empirical air flow constant for dry air at standard conditions (0.6875); \scfm\per\psi}
- * @symrow{P_{in}; Inlet (upstream) gauge pressure; \psi}
- * @symrow{P_{out}; Outlet (downstream) gauge pressure; \psi}
+ * @symrow{P_{in}; Inlet (upstream) absolute pressure; \psia}
+ * @symrow{P_{out}; Outlet (downstream) absolute pressure; \psia}
  * @endsymtable
  *
  * @note Cv is a dimensionless sizing coefficient with implicit unit dependence on the

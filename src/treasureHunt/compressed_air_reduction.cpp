@@ -45,7 +45,7 @@ CompressedAirReductionOutput compressedAirReduction(const std::vector<Compressed
         if (input.utility_type == UtilityType::CompressedAir) {
             energy_cost = input.utility_cost * method_output.consumption;
         } else {
-            energy_use  = (input.compressor_electricity_data.compressor_specific_power / 60.0) *
+            energy_use  = ((input.compressor_electricity_data.compressor_specific_power * (input.compressor_electricity_data.compressor_control_adjustment / 100)) / 60.0) *
                           method_output.consumption;
             energy_cost = energy_use * input.utility_cost;
         }

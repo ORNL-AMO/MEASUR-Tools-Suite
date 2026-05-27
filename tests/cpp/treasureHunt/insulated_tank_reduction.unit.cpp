@@ -15,7 +15,7 @@ TEST_CASE("Rayleigh Number - vertical tank surface", "[insulated_tank_reduction]
     double ambient_temperature = 529.67;
     double diameter            = 5.0;
     double kin_viscosity       = 4.5396e-8;   // ft²/s, approx from polynomial
-    double thermal_diffusivity = 0.8348;       // ft²/hr, approx from polynomial
+    double thermal_diffusivity = 0.8348; // ft²/hr
 
     double ra = rayleighNumber(thermal_expansion, surface_temperature, ambient_temperature,
                                diameter, kin_viscosity, thermal_diffusivity);

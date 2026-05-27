@@ -19,7 +19,7 @@ describe('Compressed Air Reduction Tests', function () {
             bagMethodData: { bagFillTime: 0, bagVolume: 0, numberOfBags: 1 },
             pressureMethodData: { nozzleType: 0, numberOfNozzles: 1, supplyPressure: 0 },
             otherMethodData: { consumption: 0 },
-            compressorElectricityData: { compressorControlAdjustment: 0, compressorSpecificPower: 0 },
+            compressorElectricityData: { compressorControlAdjustment: 100, compressorSpecificPower: 0 },
             units: 1
         };
 
@@ -45,7 +45,7 @@ describe('Compressed Air Reduction Tests', function () {
             bagMethodData: { bagFillTime: 0, bagVolume: 0, numberOfBags: 1 },
             pressureMethodData: { nozzleType: 0, numberOfNozzles: 1, supplyPressure: 0 },
             otherMethodData: { consumption: 0 },
-            compressorElectricityData: { compressorControlAdjustment: 0.8, compressorSpecificPower: 0.16 },
+            compressorElectricityData: { compressorControlAdjustment: 100, compressorSpecificPower: 0.16 },
             units: 1
         };
 
@@ -71,7 +71,7 @@ describe('Compressed Air Reduction Tests', function () {
             bagMethodData: { bagFillTime: 12, bagVolume: 8.68, numberOfBags: 2 },
             pressureMethodData: { nozzleType: 0, numberOfNozzles: 1, supplyPressure: 0 },
             otherMethodData: { consumption: 0 },
-            compressorElectricityData: { compressorControlAdjustment: 0.40, compressorSpecificPower: 0.16 },
+            compressorElectricityData: { compressorControlAdjustment: 100, compressorSpecificPower: 0.16 },
             units: 2
         };
 
@@ -97,7 +97,7 @@ describe('Compressed Air Reduction Tests', function () {
             bagMethodData: { bagFillTime: 0, bagVolume: 0, numberOfBags: 1 },
             pressureMethodData: { nozzleType: 0, numberOfNozzles: 1, supplyPressure: 80 },
             otherMethodData: { consumption: 0 },
-            compressorElectricityData: { compressorControlAdjustment: 0.40, compressorSpecificPower: 0.16 },
+            compressorElectricityData: { compressorControlAdjustment: 100, compressorSpecificPower: 0.16 },
             units: 1
         };
 
@@ -123,7 +123,7 @@ describe('Compressed Air Reduction Tests', function () {
             bagMethodData: { bagFillTime: 0, bagVolume: 0, numberOfBags: 1 },
             pressureMethodData: { nozzleType: 2, numberOfNozzles: 4, supplyPressure: 50 },
             otherMethodData: { consumption: 0 },
-            compressorElectricityData: { compressorControlAdjustment: 0.40, compressorSpecificPower: 0.16 },
+            compressorElectricityData: { compressorControlAdjustment: 100, compressorSpecificPower: 0.16 },
             units: 3
         };
 
@@ -149,7 +149,7 @@ describe('Compressed Air Reduction Tests', function () {
             bagMethodData: { bagFillTime: 0, bagVolume: 0, numberOfBags: 1 },
             pressureMethodData: { nozzleType: 0, numberOfNozzles: 1, supplyPressure: 0 },
             otherMethodData: { consumption: 200000 },
-            compressorElectricityData: { compressorControlAdjustment: 0.40, compressorSpecificPower: 0.16 },
+            compressorElectricityData: { compressorControlAdjustment: 100, compressorSpecificPower: 0.16 },
             units: 1
         };
 
@@ -175,7 +175,7 @@ describe('Compressed Air Reduction Tests', function () {
                 bagMethodData: { bagFillTime: 0, bagVolume: 0, numberOfBags: 1 },
                 pressureMethodData: { nozzleType: 0, numberOfNozzles: 1, supplyPressure: 0 },
                 otherMethodData: { consumption: 0 },
-                compressorElectricityData: { compressorControlAdjustment: 0.8, compressorSpecificPower: 0.16 },
+                compressorElectricityData: { compressorControlAdjustment: 100, compressorSpecificPower: 0.16 },
                 units: 1
             },
             // Bag method with electricity
@@ -188,7 +188,7 @@ describe('Compressed Air Reduction Tests', function () {
                 bagMethodData: { bagFillTime: 12, bagVolume: 8.68, numberOfBags: 1 },
                 pressureMethodData: { nozzleType: 0, numberOfNozzles: 1, supplyPressure: 0 },
                 otherMethodData: { consumption: 0 },
-                compressorElectricityData: { compressorControlAdjustment: 0.8, compressorSpecificPower: 0.16 },
+                compressorElectricityData: { compressorControlAdjustment: 100, compressorSpecificPower: 0.16 },
                 units: 1
             },
             // Pressure method with compressed air utility
@@ -201,7 +201,7 @@ describe('Compressed Air Reduction Tests', function () {
                 bagMethodData: { bagFillTime: 0, bagVolume: 0, numberOfBags: 1 },
                 pressureMethodData: { nozzleType: 0, numberOfNozzles: 1, supplyPressure: 80 },
                 otherMethodData: { consumption: 0 },
-                compressorElectricityData: { compressorControlAdjustment: 0.8, compressorSpecificPower: 0.16 },
+                compressorElectricityData: { compressorControlAdjustment: 100, compressorSpecificPower: 0.16 },
                 units: 1
             },
             // Other method with electricity
@@ -214,7 +214,7 @@ describe('Compressed Air Reduction Tests', function () {
                 bagMethodData: { bagFillTime: 0, bagVolume: 0, numberOfBags: 1 },
                 pressureMethodData: { nozzleType: 0, numberOfNozzles: 1, supplyPressure: 0 },
                 otherMethodData: { consumption: 200000 },
-                compressorElectricityData: { compressorControlAdjustment: 0.8, compressorSpecificPower: 0.16 },
+                compressorElectricityData: { compressorControlAdjustment: 100, compressorSpecificPower: 0.16 },
                 units: 1
             }
         ];

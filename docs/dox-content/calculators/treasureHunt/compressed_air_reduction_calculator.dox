@@ -119,21 +119,27 @@
  * @note The coefficients @math{a}, @math{b}, and @math{c} depend entirely on the selected nozzle
  * type. All 13 nozzle-type coefficient sets are listed in @ref compressed_air_nozzle_coefficients.
  * @see compressed_air_nozzle_coefficients
- */ Electricity Energy Use Formula
+ */ 
+ 
+ 
+/**
+ * @defgroup compressed_air_reduction_electricity_formula Electricity Energy Use Formula
  * @ingroup compressed_air_reduction_calculator
- * @brief Annual electrical energy use derived from compressed air consumption and compressor specific power.
+ * @brief Annual electrical energy use derived from compressed air consumption, compressor specific power, and control adjustment.
  * @details When the electricity utility type is selected, the annual compressed air consumption is
- * converted to electrical energy use using the compressor specific power. The specific power
- * represents the electrical power required per unit of compressed air flow rate. Dividing by 60
- * converts the per-minute basis of the specific power to a per-hour basis consistent with the
- * consumption units.
+ * converted to electrical energy use using the compressor specific power scaled by the compressor
+ * control adjustment factor. The control adjustment is expressed as a percentage (0–100) and is
+ * divided by 100 to obtain a dimensionless multiplier. Dividing by 60 converts the per-minute
+ * basis of the specific power to a per-hour basis consistent with the consumption units.
  *
- * @formula{compressed-air-reduction-electricity; E = \frac{P_{specific}}{60} \cdot C}
+ * @formula{compressed-air-reduction-electricity; E = \frac{P_{specific} \cdot \frac{f_{control}}{100}}{60} \cdot C}
  *
  * @subheading{Symbols}
  * @symtable
  * @symrow{E; Annual electrical energy use; \kilo\watt\hour\per\year}
- * @symrow{P_{specific}; Compressor specific power (electrical power per unit flow rate); \kilo\watt\per(\cubic\foot\per\minute)}
+ * @symrow{P_{specific}; Compressor specific power (electrical power per unit flow rate); \kilo\watt\per\cubic\foot\per\minute}
+ * @symrow{f_{control}; Compressor control adjustment factor; \percent}
+ * @symrow{100; Percentage-to-fraction conversion; \unitless}
  * @symrow{60; Unit conversion factor (minutes per hour); \minute\per\hour}
  * @symrow{C; Annual compressed air consumption; \cubic\foot\per\year}
  * @endsymtable
