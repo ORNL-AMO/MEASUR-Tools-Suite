@@ -104,6 +104,8 @@ window.MathJax = {
                 \DeclareSIUnit{\squareFoot}{ft^2}
                 \DeclareSIUnit{\inchMercury}{inHg}
                 \DeclareSIUnit{\psi}{psi}
+                \DeclareSIUnit{\hour}{h}
+                \DeclareSIUnit{\bhp}{bhp}
                 \DeclareSIUnit{\psia}{psia}
                 \DeclareSIUnit{\psig}{psig}
             `);

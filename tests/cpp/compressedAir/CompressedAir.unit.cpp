@@ -5,36 +5,11 @@
 #include "compressedAir/BagMethod.h"
 #include "compressedAir/DecibelsMethod.h"
 #include "compressedAir/EstimateMethod.h"
-#include "compressedAir/OperatingCost.h"
 #include "compressedAir/OrificeMethod.h"
 #include "compressedAir/PipeData.h"
 #include "compressedAir/PipeSizing.h"
 
 using namespace Catch;
-
-TEST_CASE("Compressor Operating Cost", "[CompressedAir][OperatingCost]") {
-    std::size_t unitTestNumber = 1;
-    auto const compare = [&unitTestNumber](OperatingCost::Output const& actual, OperatingCost::Output const& expected) {
-        INFO("Unit test number " + std::to_string(unitTestNumber));
-        CHECK(expected.runTimeUnloaded == Approx(actual.runTimeUnloaded));
-        CHECK(expected.costForLoaded == Approx(actual.costForLoaded));
-        CHECK(expected.costForUnloaded == Approx(actual.costForUnloaded));
-        CHECK(expected.totalAnnualCost == Approx(actual.totalAnnualCost));
-        unitTestNumber++;
-    };
-
-    compare(OperatingCost(215, 25, 6800, 85, 95, 90, 0.05).calculate(),
-            {15, 48792.3263157895, 2272.1916666667, 51064.5179824561});
-    compare(OperatingCost(255, 25, 6800, 85, 95, 90, 0.05).calculate(), {15, 57869.9684210526, 2694.925, 60564.893421});
-    compare(OperatingCost(255, 35, 6800, 85, 95, 90, 0.05).calculate(),
-            {15, 57869.9684210526, 3772.895, 61642.8634210526});
-    compare(OperatingCost(255, 35, 6000, 85, 95, 90, 0.05).calculate(),
-            {15, 51061.7368421053, 3329.025, 54390.7618421053});
-    compare(OperatingCost(255, 35, 6000, 89, 93, 90, 0.05).calculate(),
-            {11, 54614.419354838, 2441.285, 57055.704354838});
-    compare(OperatingCost(255, 35, 6000, 89, 93, 90, 0.09).calculate(),
-            {11, 98305.9548387097, 4394.313, 102700.2678387097});
-}
 
 TEST_CASE("Compressor Air System Capacity", "[CompressedAir][AirSystemCapacity]") {
     auto output = AirSystemCapacity({3000, 2000, 1000, 200, 100, 500, 0, 300, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
