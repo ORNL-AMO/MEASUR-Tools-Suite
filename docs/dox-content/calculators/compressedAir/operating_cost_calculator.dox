@@ -19,7 +19,7 @@
  * variable-speed drive (VSD) retrofit or a different control strategy is
  * economically justified.
  *
- * The three calculation outputs are:
+ * The four calculation outputs are:
  * 1. **Run Time Unloaded** – the complement of the loaded run-time percentage.
  * 2. **Loaded Cost** – annual electricity cost while delivering air.
  * 3. **Unloaded Cost** – annual electricity cost while idling (no air delivery).
