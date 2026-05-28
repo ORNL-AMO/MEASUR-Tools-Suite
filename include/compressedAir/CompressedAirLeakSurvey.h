@@ -5,21 +5,13 @@
 #include <vector>
 
 #include "compressedAir/BagMethod.h"
+#include "compressedAir/compressed_air_utils.h"
 
 #ifndef M_PI
     #define M_PI 3.14159265358979323846
 #endif
 
-class CompressorElectricityData {
-  public:
-    CompressorElectricityData(const double compressorControlAdjustment, const double compressorSpecificPower)
-        : compressorControlAdjustment(compressorControlAdjustment), compressorSpecificPower(compressorSpecificPower) {}
-
-    double calculate() const { return compressorSpecificPower / 60.0; }
-
-  private:
-    double compressorControlAdjustment, compressorSpecificPower;
-};
+using compressed_air_utils::CompressorElectricityData;
 
 class EstimateMethodData {
   public:
@@ -185,12 +177,9 @@ class CompressedAirLeakSurvey {
             }
             // electricity
             else if (compressedAirLeakSurveyInput.getUtilityType() == 1) {
-                CompressorElectricityData compressorElectricityData =
-                    compressedAirLeakSurveyInput.getCompressorElectricityData();
-                double electricityCalculation = compressorElectricityData.calculate();
-                tmpAnnualTotalElectricity     = electricityCalculation * tmpAnnualTotalFlowRate;
-                tmpAnnualTotalElectricityCost =
-                    tmpAnnualTotalElectricity * compressedAirLeakSurveyInput.getUtilityCost();
+                const CompressorElectricityData& ced = compressedAirLeakSurveyInput.getCompressorElectricityData();
+                tmpAnnualTotalElectricity     = (ced.compressor_specific_power / 60.0) * tmpAnnualTotalFlowRate;
+                tmpAnnualTotalElectricityCost = tmpAnnualTotalElectricity * compressedAirLeakSurveyInput.getUtilityCost();
             }
             annualTotalElectricity += tmpAnnualTotalElectricity;
             annualTotalElectricityCost += tmpAnnualTotalElectricityCost;
