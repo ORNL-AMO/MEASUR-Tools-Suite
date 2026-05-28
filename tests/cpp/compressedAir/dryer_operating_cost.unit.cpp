@@ -21,31 +21,38 @@ TEST_CASE("Compute operating cost of a desiccant dryer:", "[dryerOperatingCost]"
         0.08, 0.2, 0.25);
 
     validateDryerOutput(doc.calculate(DryerOperatingCost::Heatless),
-        {73.34, 60020.86, 0, 0, 15, 16.33});
+        {73.34, 60020.86, 0, 0, 15, 16.3299});
 
     validateDryerOutput(doc.calculate(DryerOperatingCost::HeatedExternally),
-        {73.34, 38193.08, 19.36, 18, 7, 16.33});
+        {73.34, 38193.08, 19.358, 18, 7, 16.3299});
 
     validateDryerOutput(doc.calculate(DryerOperatingCost::BlowerPurgeWithSweep),
-        {73.34, 51442.40, 69.14, 18, 7, 16.33});
+        {73.34, 51442.40, 69.136, 18, 7, 16.3299});
 
     validateDryerOutput(doc.calculate(DryerOperatingCost::BlowerPurgeWithoutSweep),
-        {73.34, 47161.58, 69.14, 18, 7, 16.33});
+        {73.34, 47161.58, 69.136, 18, 7, 16.3299});
 
     validateDryerOutput(doc.calculate(DryerOperatingCost::HeatOfCompressionHC),
-        {73.34, 3333.81, 3.05, 3, 2, 16.33});
+        {73.34, 3333.81, 3.0501, 3, 2, 16.3299});
 
     validateDryerOutput(doc.calculate(DryerOperatingCost::HeatOfCompressionSP),
-        {73.34, 69.888, 0, 0, 0, 16.33});
+        {73.34, 69.888, 0, 0, 0, 16.3299});
 
     validateDryerOutput(doc.calculate(DryerOperatingCost::Refrigerated),
-        {63.944, 8639.09, 0, 0, 0, 0});
+        {63.944, 8639.09, 0, 0, 0, 16.3299});
 
-
-    auto docNonDefault = DryerOperatingCost(1752, 50, 100,
+    const auto docNonDefault = DryerOperatingCost(1752, 50, 100,
         24, 7, 52,
         0.08, 0.2, 0.25,
         3.05, 3, 2, 16.33);
     validateDryerOutput(docNonDefault.calculate(DryerOperatingCost::HeatOfCompressionHC),
-        {73.34, 3333.81, 3.05, 3, 2, 16.33});
+        {73.34, 3333.81, 3.05, 3, 2, 16.3299});
+
+    constexpr auto input = DryerOperatingCost::Input(1752, 50, 100,
+        24, 7, 52,
+        0.08, 0.2, 0.25,
+        3.05, 3, 2, 16.33);
+    const auto docInputStruct = DryerOperatingCost(input);
+    validateDryerOutput(docInputStruct.calculate(DryerOperatingCost::HeatOfCompressionHC),
+        {73.34, 3333.81, 3.05, 3, 2, 16.3299});
 }

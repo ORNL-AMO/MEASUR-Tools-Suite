@@ -2,7 +2,6 @@
 
 #include <emscripten/bind.h>
 
-using namespace std;
 using namespace emscripten;
 
 EMSCRIPTEN_BINDINGS(dryer_operating_cost_class) {
@@ -23,11 +22,27 @@ EMSCRIPTEN_BINDINGS(dryer_operating_cost_class) {
         .property("purgeRate", &DryerOperatingCost::Output::purgeRate)
         .property("designDDCPercentage", &DryerOperatingCost::Output::designDDCPercentage);
 
+    value_object<DryerOperatingCost::Input>("DryerOperatingCostInput")
+        .field("flowRate", &DryerOperatingCost::Input::flowRate)
+        .field("pressure", &DryerOperatingCost::Input::pressure)
+        .field("temperature", &DryerOperatingCost::Input::temperature)
+        .field("operatingHoursPerDay", &DryerOperatingCost::Input::operatingHoursPerDay)
+        .field("operatingDaysPerWeek", &DryerOperatingCost::Input::operatingDaysPerWeek)
+        .field("operatingWeeksPerYear", &DryerOperatingCost::Input::operatingWeeksPerYear)
+        .field("costOfElectricity", &DryerOperatingCost::Input::costOfElectricity)
+        .field("costOfCompressedAir", &DryerOperatingCost::Input::costOfCompressedAir)
+        .field("costOfCoolingWater", &DryerOperatingCost::Input::costOfCoolingWater)
+        .field("heaterPower", &DryerOperatingCost::Input::heaterPower)
+        .field("heatingHoursPerDay", &DryerOperatingCost::Input::heatingHoursPerDay)
+        .field("purgeRate", &DryerOperatingCost::Input::purgeRate)
+        .field("designDDCPercentage", &DryerOperatingCost::Input::designDDCPercentage);
+
     /*
-    Use the first constructor that does not require heater power, heating hours per day, purge rate and design DDC percentage
+    Use the first constructor that takes Input struct for ease of use in JavaScript, where all parameters can be passed as an object.
+    Use the second constructor that does not require heater power, heating hours per day, purge rate and design DDC percentage
     as input for bindings, as these four parameters can be calculated within the class if not provided.
-    The second constructor is also bound to allow users to provide heater power, heating hours per day, purge rate and design DDC percentage
-    if these parameters information is available.
+    The third constructor is also bound to allow users to provide heater power, heating hours per day, purge rate and design DDC percentage
+    if information about these parameters is available.
     Parameters of constructors:
         @param flowRate double, Flow Rate in SCFM (1 - 50,000 SCFM)
         @param pressure double, Pressure in psig (25 - 150 psig)
@@ -39,11 +54,11 @@ EMSCRIPTEN_BINDINGS(dryer_operating_cost_class) {
         @param costOfCompressedAir double, Cost of compressed air per 1000 SCF - $ ($0.20 - $0.50 per 1000 SCF)
         @param costOfCoolingWater double, Cost of cooling water per 1000 gallons - $ ($0.25 - $10.00 per 1000 gallons)
 
-        Additional parameter in second constructor:
+        Additional parameter in third constructor:
         @param heaterPower double, Heater power rating in kW (0 - 1000 kW).
                 If heater power is not known or needs to be computed set it to 0.
-        @param heatingHoursPerDay double, Hours for which the dryer heater operates per day - hours (1 - 24 hours)
-                If heating hours per day is not known or needs to be calculator default set it to 0.
+        @param heatingHoursPerDay double, Hours for which the dryer heater operates per day - hours (0 - 24 hours)
+                If heating hours per day is not known or needs to be calculated default set it to 0.
                 Calculator default for heating hours per day is
                 18 hours for Heated Externally, Blower Purge With Sweep and Blower Purge Without Sweep dryers, and
                 3 hours for Heat of Compression - HC dryer.
@@ -58,6 +73,7 @@ EMSCRIPTEN_BINDINGS(dryer_operating_cost_class) {
                Calculator default for design DDC percentage is 16.33% for desiccant dryers.
      */
     class_<DryerOperatingCost>("DryerOperatingCost")
+        .constructor<const DryerOperatingCost::Input&>()
         .constructor<double, double, double, double, double, double, double, double, double>()
         .constructor<double, double, double, double, double, double, double, double, double, double, double, double, double>()
         .function("calculate", &DryerOperatingCost::calculate);

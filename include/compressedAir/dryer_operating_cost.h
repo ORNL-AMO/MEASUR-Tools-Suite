@@ -18,10 +18,12 @@
  *
  */
 
+#include <cmath>
 #include <map>
 #include <stdexcept>
 
 #include "physics/constants.h"
+#include "physics/gas_constants.h"
 
 class DryerOperatingCost {
   public:
@@ -52,6 +54,52 @@ class DryerOperatingCost {
 
         const double waterRemoved, totalCostPerYear, heaterPower, heatingHoursPerDay, purgeRate, designDDCPercentage;
     };
+
+    /**
+     * @brief Input struct for DryerOperatingCost
+     * @var flowRate double, Flow Rate in SCFM (1 - 50,000 SCFM)
+     * @var pressure double, Pressure in psig (25 - 150 psig)
+     * @var temperature double, Temperature F (50 - 120 F)
+     * @var operatingHoursPerDay double, Hours for which the dryer operates per day - hours (1 - 24 hours)
+     * @var operatingDaysPerWeek double, Days for which the dryer operates per week - days ( 1 - 7 days)
+     * @var operatingWeeksPerYear double, Weeks for which the dryer operates per year - weeks (1 - 52 weeks)
+     * @var costOfElectricity double, Cost of electricity per kWh - $ ($0.01 - $0.20 per kWh)
+     * @var costOfCompressedAir double, Cost of compressed air per 1000 SCF - $ ($0.20 - $0.50 per 1000 SCF)
+     * @var costOfCoolingWater double, Cost of cooling water per 1000 gallons - $ ($0.25 - $10.00 per 1000 gallons)
+     * @var heaterPower double, Heater power rating in kW (0 - 1000 kW).
+     *          If heater power is not known or needs to be computed set it to 0.
+     *          Heater power is required for Heated Externally, Blower Purge With Sweep, Blower Purge Without Sweep and Heat of Compression - HC dryers.
+     * @var heatingHoursPerDay double, Hours for which the dryer heater operates per day - hours (0 - 24 hours)
+     *          If heating hours per day is not known or needs to be calculated default set it to 0.
+     *          Calculator default for heating hours per day is
+     *          18 hours for Heated Externally, Blower Purge With Sweep and Blower Purge Without Sweep dryers, and
+     *          3 hours for Heat of Compression - HC dryer.
+     * @var purgeRate double, Purge rate for the dryer - percentage (0 - 100%)
+     *          If purge rate is not known or needs to be calculated default set it to 0.
+     *          Calculator default for purge rate is
+     *          15% for Heatless dryer,
+     *          7% for Heated Externally, Blower Purge With Sweep and Blower Purge Without Sweep dryers, and
+     *          2% for Heat of Compression - HC dryer.
+     * @var designDDCPercentage double, Design DDC percentage for the dryer - percentage (0 - 100%)
+     *          If design DDC percentage is not known or needs to be calculated default set it to 0.
+     *          Calculator default for design DDC percentage is 16.33% for desiccant dryers.
+     */
+    struct Input {
+        double flowRate, pressure, temperature;
+        double operatingHoursPerDay, operatingDaysPerWeek, operatingWeeksPerYear;
+        double costOfElectricity, costOfCompressedAir, costOfCoolingWater;
+        double heaterPower, heatingHoursPerDay, purgeRate, designDDCPercentage;
+    };
+
+    /**
+     * Constructor for DryerOperatingCost - Use this constructor when all input parameters are available.
+     * @param input Input struct, input parameters for calculation of dryer operating cost including optional parameters
+     * that can be calculated within the class if not provided.
+     */
+    explicit DryerOperatingCost(const Input& input) : DryerOperatingCost(input.flowRate, input.pressure, input.temperature,
+        input.operatingHoursPerDay, input.operatingDaysPerWeek, input.operatingWeeksPerYear,
+        input.costOfElectricity, input.costOfCompressedAir, input.costOfCoolingWater,
+        input.heaterPower, input.heatingHoursPerDay, input.purgeRate, input.designDDCPercentage) {}
 
     /**
     * Constructor for DryerOperatingCost - Use this constructor when heater power rating, heating hours per day, purge rate and design DDC percentage is not known or needs to be computed.
@@ -87,8 +135,8 @@ class DryerOperatingCost {
      *
      * @param heaterPower double, Heater power rating in kW (0 - 1000 kW).
      *          If heater power is not known or needs to be computed set it to 0.
-     * @param heatingHoursPerDay double, Hours for which the dryer heater operates per day - hours (1 - 24 hours)
-     *          If heating hours per day is not known or needs to be calculator default set it to 0.
+     * @param heatingHoursPerDay double, Hours for which the dryer heater operates per day - hours (0 - 24 hours)
+     *          If heating hours per day is not known or needs to be calculated default set it to 0.
      *          Calculator default for heating hours per day is
      *          18 hours for Heated Externally, Blower Purge With Sweep and Blower Purge Without Sweep dryers, and
      *          3 hours for Heat of Compression - HC dryer.
@@ -109,7 +157,7 @@ class DryerOperatingCost {
             flowRate(flowRate), pressure(pressure), temperature(temperature),
             operatingHoursPerDay(operatingHoursPerDay), operatingDaysPerWeek(operatingDaysPerWeek), operatingWeeksPerYear(operatingWeeksPerYear),
             costOfElectricity(costOfElectricity), costOfCompressedAir(costOfCompressedAir), costOfCoolingWater(costOfCoolingWater),
-            heaterPower(heaterPower), heatingHoursPerDay(heatingHoursPerDay), purgeRate(purgeRate), designDDCPercentage(designDDCPercentage) {
+            heaterPower(heaterPower), heatingHoursPerDay(heatingHoursPerDay), purgeRate(purgeRate), designDDCPercent(designDDCPercentage) {
         if (flowRate < 1 || flowRate > 50000) {
             throw std::invalid_argument("Flow rate must be between 1 and 50,000 SCFM.");
         }
@@ -137,11 +185,23 @@ class DryerOperatingCost {
         if (costOfCoolingWater < 0.25 || costOfCoolingWater > 10.00) {
             throw std::invalid_argument("Cost of cooling water must be between $0.25 and $10.00 per 1000 gallons.");
         }
+        if (heaterPower < 0 || heaterPower > 1000) {
+            throw std::invalid_argument("Heater power must be between 0 and 1000 kW.");
+        }
+        if (heatingHoursPerDay < 0 || heatingHoursPerDay > 24) {
+            throw std::invalid_argument("Heating hours per day must be between 0 and 24.");
+        }
+        if (purgeRate < 0 || purgeRate > 100) {
+            throw std::invalid_argument("Purge rate must be between 0 and 100%.");
+        }
+        if (designDDCPercentage < 0 || designDDCPercentage > 100) {
+            throw std::invalid_argument("Design DDC percentage must be between 0 and 100%.");
+        }
 
-        if (designDDCPercentage == 0) {
-            this->designDDCPercentage = 0.1633;
+        if (this->designDDCPercent == 0) {
+            this->designDDCPercent = 0.1633;
         } else {
-            this->designDDCPercentage = designDDCPercentage / 100;
+            this->designDDCPercent = designDDCPercentage / 100;
         }
     }
 
@@ -155,12 +215,12 @@ class DryerOperatingCost {
         auto heaterKW = heaterPower;
         auto heatingHrsPerDay = heatingHoursPerDay;
 
-        auto tempLookup = lookupTemp.find(static_cast<int>(temperature))->second;
+        auto tempLookup = lookupTemp.find(static_cast<int>(std::round(temperature)))->second;
         if (dryerType == Refrigerated) {
             const auto tempLookup40 = lookupTemp.find(40)->second;
             tempLookup -= tempLookup40;
         }
-        auto const waterRemovedPPH = flowRate * 60 * 18.016 * tempLookup / ((pressure + physics::us::kAtmosphericPressurePsi) * 379);
+        auto const waterRemovedPPH = flowRate * 60 * gas_constants::kH2OMw * tempLookup / ((pressure + physics::us::kAtmosphericPressurePsi) * 379);
         auto const waterRemovedPer4Hrs = waterRemovedPPH * 4;
 
         double theoreticalDryerSizeRequired = 0.0;
@@ -168,7 +228,7 @@ class DryerOperatingCost {
             theoreticalDryerSizeRequired = flowRate * (114.7 / (pressure + physics::us::kAtmosphericPressurePsi));
         } else if (dryerType == Refrigerated) {
         } else {
-            const auto desiccantRequired = waterRemovedPer4Hrs / designDDCPercentage;
+            const auto desiccantRequired = waterRemovedPer4Hrs / designDDCPercent;
             theoreticalDryerSizeRequired = desiccantRequired / 0.5784;
         }
 
@@ -247,7 +307,7 @@ class DryerOperatingCost {
         auto const totalCostPerWeek = totalCostPerDay * operatingDaysPerWeek;
         auto const totalCostPerYear = totalCostPerWeek * operatingWeeksPerYear;
 
-        return {waterRemovedPPH, totalCostPerYear, heaterKW, heatingHrsPerDay, purgeRatePercentage*100, designDDCPercentage*100};
+        return {waterRemovedPPH, totalCostPerYear, heaterKW, heatingHrsPerDay, purgeRatePercentage*100, designDDCPercent*100};
     }
 
   private:
@@ -255,7 +315,7 @@ class DryerOperatingCost {
     const double operatingHoursPerDay, operatingDaysPerWeek, operatingWeeksPerYear;
     const double costOfElectricity, costOfCompressedAir, costOfCoolingWater;
     const double heaterPower, heatingHoursPerDay, purgeRate;
-    double designDDCPercentage = 0.1633;
+    double designDDCPercent = 0.1633;
 
     const std::map<int, double> lookupTemp = {
         {36, 0.10396}, {37, 0.10815}, {38, 0.11249}, {39, 0.11699}, {40, 0.12164},
