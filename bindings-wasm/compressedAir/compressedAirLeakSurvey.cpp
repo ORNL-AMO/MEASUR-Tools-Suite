@@ -16,8 +16,8 @@ EMSCRIPTEN_BINDINGS(compressedAirLeakSurvey_class) {
     class_<OrificeMethodData>("OrificeMethodData").constructor<double, double, double, double, double, int>();
 
     class_<CompressedAirLeakSurveyInput>("CompressedAirLeakSurveyInput")
-        .constructor<int, int, double, int, EstimateMethodData, DecibelsMethodData, BagMethod, OrificeMethodData,
-                     CompressorElectricityData, int>();
+        .constructor<int, int, double, int, EstimateMethodData, DecibelsMethodData, bag_method::Input,
+                     OrificeMethodData, CompressorElectricityData, int>();
 
     register_vector<CompressedAirLeakSurveyInput>("CompressedAirLeakSurveyInputV");
 

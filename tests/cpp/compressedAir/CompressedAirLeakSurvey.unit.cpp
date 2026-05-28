@@ -1,5 +1,4 @@
 #include "compressedAir/CompressedAirLeakSurvey.h"
-#include "compressedAir/BagMethod.h"
 
 #include "catch.hpp"
 
@@ -8,7 +7,7 @@ using namespace Catch;
 TEST_CASE("Compressed Air Leak Survey Estimate Method and Electricity", "[CompressedAirLeakSurvey][Util]") {
     std::vector<CompressedAirLeakSurveyInput> compressedAirLeakSurveyInputVec = {CompressedAirLeakSurveyInput(
         8640, 1, 0.12, 0, EstimateMethodData(0.1), DecibelsMethodData(130, 25, 20, 150, 1.04, 1.2, 30, 125, 1.85, 1.65),
-        BagMethod(8760, 12, 8.68, 1), OrificeMethodData(250.0, 14.7, 1.0, 6.0, 6.2, 4),
+        bag_method::Input{8760, 12, 8.68, 1}, OrificeMethodData(250.0, 14.7, 1.0, 6.0, 6.2, 4),
         CompressorElectricityData(0.40, 0.16), 1)};
 
     auto compressedAirLeakSurvey = CompressedAirLeakSurvey(compressedAirLeakSurveyInputVec);
@@ -20,7 +19,7 @@ TEST_CASE("Compressed Air Leak Survey Estimate Method and Electricity", "[Compre
 
     compressedAirLeakSurveyInputVec = {CompressedAirLeakSurveyInput(
         3840, 1, 0.12, 0, EstimateMethodData(0.1), DecibelsMethodData(130, 25, 20, 150, 1.04, 1.2, 30, 125, 1.85, 1.65),
-        BagMethod(3840, 12, 8.68, 1), OrificeMethodData(250.0, 14.7, 1.0, 6.0, 6.2, 4),
+        bag_method::Input{3840, 12, 8.68, 1}, OrificeMethodData(250.0, 14.7, 1.0, 6.0, 6.2, 4),
         CompressorElectricityData(0.25, 0.16), 1)};
 
     compressedAirLeakSurvey = CompressedAirLeakSurvey(compressedAirLeakSurveyInputVec);
@@ -32,7 +31,7 @@ TEST_CASE("Compressed Air Leak Survey Estimate Method and Electricity", "[Compre
 
     compressedAirLeakSurveyInputVec = {CompressedAirLeakSurveyInput(
         8760, 1, 0.12, 0, EstimateMethodData(100), DecibelsMethodData(130, 25, 20, 150, 1.04, 1.2, 30, 125, 1.85, 1.65),
-        BagMethod(8760, 12, 8.68, 1), OrificeMethodData(250.0, 14.7, 1.0, 6.0, 6.2, 4),
+        bag_method::Input{8760, 12, 8.68, 1}, OrificeMethodData(250.0, 14.7, 1.0, 6.0, 6.2, 4),
         CompressorElectricityData(0.25, 0.16), 1)};
 
     compressedAirLeakSurvey = CompressedAirLeakSurvey(compressedAirLeakSurveyInputVec);
@@ -46,7 +45,7 @@ TEST_CASE("Compressed Air Leak Survey Estimate Method and Electricity", "[Compre
 TEST_CASE("Compressed Air Leak Survey Decibels Method and Electricity", "[CompressedAirLeakSurvey][Util]") {
     std::vector<CompressedAirLeakSurveyInput> compressedAirLeakSurveyInputVec = {CompressedAirLeakSurveyInput(
         8640, 1, 0.12, 1, EstimateMethodData(0.1), DecibelsMethodData(130, 25, 20, 150, 1.04, 1.2, 30, 125, 1.85, 1.65),
-        BagMethod(15, 10, 12, 1), OrificeMethodData(250.0, 14.7, 1.0, 6.0, 6.2, 4),
+        bag_method::Input{15, 10, 12, 1}, OrificeMethodData(250.0, 14.7, 1.0, 6.0, 6.2, 4),
         CompressorElectricityData(0.40, 0.16), 1)};
 
     auto compressedAirLeakSurvey = CompressedAirLeakSurvey(compressedAirLeakSurveyInputVec);
@@ -60,7 +59,7 @@ TEST_CASE("Compressed Air Leak Survey Decibels Method and Electricity", "[Compre
 TEST_CASE("Compressed Air Leak Survey Bag Method and Electricity", "[CompressedAirLeakSurvey][Util]") {
     std::vector<CompressedAirLeakSurveyInput> compressedAirLeakSurveyInputVec = {CompressedAirLeakSurveyInput(
         8640, 1, 0.12, 2, EstimateMethodData(0.1), DecibelsMethodData(130, 25, 20, 150, 1.04, 1.2, 30, 125, 1.85, 1.65),
-        BagMethod(15, 10, 12, 1), OrificeMethodData(250.0, 14.7, 1.0, 6.0, 6.2, 4),
+        bag_method::Input{15, 10, 12, 1}, OrificeMethodData(250.0, 14.7, 1.0, 6.0, 6.2, 4),
         CompressorElectricityData(0.40, 0.16), 2)};
 
     auto compressedAirLeakSurvey = CompressedAirLeakSurvey(compressedAirLeakSurveyInputVec);
@@ -74,7 +73,7 @@ TEST_CASE("Compressed Air Leak Survey Bag Method and Electricity", "[CompressedA
 TEST_CASE("Compressed Air Leak Survey Orifice Method and Electricity", "[CompressedAirLeakSurvey][Util]") {
     std::vector<CompressedAirLeakSurveyInput> compressedAirLeakSurveyInputVec = {CompressedAirLeakSurveyInput(
         8640, 1, 0.12, 3, EstimateMethodData(0.1), DecibelsMethodData(130, 25, 20, 150, 1.04, 1.2, 30, 125, 1.85, 1.65),
-        BagMethod(15, 10, 12, 1), OrificeMethodData(550, 14.7, 1.0, .375, 100, 4),
+        bag_method::Input{15, 10, 12, 1}, OrificeMethodData(550, 14.7, 1.0, .375, 100, 4),
         CompressorElectricityData(0.40, 0.16), 1)};
 
     auto compressedAirLeakSurvey = CompressedAirLeakSurvey(compressedAirLeakSurveyInputVec);

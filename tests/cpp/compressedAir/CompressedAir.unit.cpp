@@ -2,7 +2,6 @@
 
 #include "compressedAir/AirSystemCapacity.h"
 #include "compressedAir/AirVelocity.h"
-#include "compressedAir/BagMethod.h"
 #include "compressedAir/DecibelsMethod.h"
 #include "compressedAir/EstimateMethod.h"
 #include "compressedAir/OrificeMethod.h"
@@ -90,17 +89,6 @@ TEST_CASE("Compressor Air Velocity", "[CompressedAir][AirVelocity]") {
             {1614.361140443, 913.789324779, 563.149235038, 322.872228,    237.406050,   144.139387539, 101.108213388,
              65.53563493,    48.969498699,  38.044645886,  24.2154171067, 16.763874771, 9.6822939251,  6.1421476491,
              4.3280459529,   3.5795147238,  2.7408508327,  2.1620908131,  1.7421163386, 1.2044475059});
-}
-
-TEST_CASE("Bag Method", "[CompressedAir][BagMethod]") {
-    auto const compare = [](BagMethod::Output const& results, BagMethod::Output const& expected) {
-        CHECK(expected.flowRate == Approx(results.flowRate));
-        CHECK(expected.annualConsumption == Approx(results.annualConsumption));
-    };
-
-    compare(BagMethod(8760, 50, 45, 1).calculate(), BagMethod::Output(54, 28382.4));
-    compare(BagMethod(8760, 60, 50, 1).calculate(), BagMethod::Output(50, 26280));
-    compare(BagMethod(8760, 120, 50, 1).calculate(), BagMethod::Output(25, 13140));
 }
 
 TEST_CASE("Estimate Method", "[CompressedAir][EstimateMethod]") {

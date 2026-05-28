@@ -1,0 +1,95 @@
+/**
+ * @defgroup bag_method_calculator Bag Method Calculator
+ * @ingroup compressed_air_assessments
+ * @brief Estimates compressed air leak flow rate and annual consumption using the bag fill-time method.
+ * @details This calculator implements the bag method, a practical field technique for measuring
+ *          compressed air leaks. A measurement bag (typically a trash bag with a known volume)
+ *          is placed over the leak point and the time required for the bag to fill completely
+ *          is recorded. The fill time and bag volume together yield the volumetric flow rate of
+ *          the leak. This method is the second most accurate field technique for measuring
+ *          compressed air consumption, after inline flow meters.
+ *
+ * The bag method is commonly used in **compressed air leak surveys** to quantify individual
+ * leak points that cannot be instrumented with a flow meter. It requires only a pre-measured
+ * bag and a stopwatch, making it well suited for difficult-to-access leak locations. The
+ * annual consumption estimate is derived by scaling the instantaneous leak rate by system
+ * operating hours, enabling the economic impact of each leak to be estimated directly.
+ *
+ * **Procedure:**
+ * 1. Pre-measure the volume of the bag (in cubic feet) by filling it with water or measuring
+ *    its dimensions.
+ * 2. Hold the bag opening tightly over the leak source, allowing leaked air to fill the bag.
+ * 3. Record the fill time in seconds.
+ * 4. Enter the operating time and number of similar leak points to compute the annual impact.
+ *
+ * The calculation methods are:
+ * 1. **Flow Rate** – computes the instantaneous leak flow rate in scfm from the bag volume
+ *    and fill time.
+ * 2. **Annual Consumption** – scales the flow rate by annual operating hours and the number
+ *    of measurement units, then converts to kiloscf.
+ *
+ * Relevant formulas are documented below.
+ *
+ * @heading{Flow Rate}
+ * @copydoc bag_method_flow_rate_formula
+ *
+ * @heading{Annual Consumption}
+ * @copydoc bag_method_annual_consumption_formula
+ */
+
+/**
+ * @defgroup bag_method_flow_rate_formula Bag Method Flow Rate Formula
+ * @ingroup bag_method_calculator
+ * @brief Instantaneous compressed air leak flow rate from bag volume and fill time.
+ * @details The leak flow rate is determined by dividing the pre-measured bag volume by
+ *          the time required to fill the bag, with the fill time converted from seconds
+ *          to minutes. This gives the volumetric flow rate of the leak in standard cubic
+ *          feet per minute (scfm), at approximately standard atmospheric conditions.
+ *
+ *          The formula assumes that the bag is held snugly over the leak and that all
+ *          leaked air enters the bag (no bypass). Fill times under 5 seconds reduce
+ *          accuracy because reaction-time measurement error becomes significant; fill
+ *          times over 60 seconds are generally unnecessary since a smaller bag should
+ *          be used for those cases.
+ *
+ * @formula{bag-method-flow-rate;
+ *   Q_{leak} = \frac{V_{bag} \cdot 60}{t_{fill}}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{leak}; Compressed air leak flow rate; \scfm}
+ * @symrow{V_{bag}; Pre-measured volume of the measurement bag; \cubicFoot}
+ * @symrow{t_{fill}; Time for the bag to fill with leaked air; \second}
+ * @symrow{60; Seconds per minute conversion; \second\per\minute}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup bag_method_annual_consumption_formula Bag Method Annual Consumption Formula
+ * @ingroup bag_method_calculator
+ * @brief Estimated annual air consumption from a compressed air leak measured by the bag method.
+ * @details Annual air loss is computed by scaling the instantaneous leak flow rate by the
+ *          annual system operating time and the number of measurement units, converting from
+ *          standard cubic feet to kiloscf. The factor of 60 converts operating hours to
+ *          minutes so the units are consistent with the flow rate in scfm. The factor of 1000
+ *          converts standard cubic feet to kiloscf, a more practical unit for annual volumes.
+ *
+ * @formula{bag-method-annual-consumption;
+ *   C_{annual} = \frac{Q_{leak} \cdot t_{op} \cdot n \cdot 60}{1000}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{C_{annual}; Estimated annual air loss from the leak; \kscf}
+ * @symrow{Q_{leak}; Compressed air leak flow rate; \scfm}
+ * @symrow{t_{op}; Annual system operating time; \hour}
+ * @symrow{n; Number of leak points measured simultaneously; \unitless}
+ * @symrow{60; Minutes per hour conversion; \minute\per\hour}
+ * @symrow{1000; Standard cubic feet per kiloscf conversion; \unitless}
+ * @endsymtable
+ *
+ * @note The result is in kiloscf (kscf), where 1 kscf = 1000 standard cubic feet.
+ *       This unit is conventional for annual compressed air volumes in industrial
+ *       energy assessments.
+ */
