@@ -8,6 +8,10 @@ auto validateDryerOutput = [](const DryerOperatingCost::Output& results,
                              const DryerOperatingCost::Output& expected) {
     CHECK(Approx(results.waterRemoved) == expected.waterRemoved);
     CHECK(Approx(results.totalCostPerYear) == expected.totalCostPerYear);
+    CHECK(Approx(results.heaterPower) == expected.heaterPower);
+    CHECK(Approx(results.heatingHoursPerDay) == expected.heatingHoursPerDay);
+    CHECK(Approx(results.purgeRate) == expected.purgeRate);
+    CHECK(Approx(results.designDDCPercentage) == expected.designDDCPercentage);
 };
 
 TEST_CASE("Compute operating cost of a desiccant dryer:", "[dryerOperatingCost]") {
