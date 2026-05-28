@@ -17,6 +17,10 @@ describe('Dryer Operating Cost', function () {
     function validateDryerOutput(results, expected) {
         assert.approximately(results.waterRemoved, expected.waterRemoved, .01, "waterRemoved");
         assert.approximately(results.totalCostPerYear, expected.totalCostPerYear, .01, "totalCostPerYear");
+        assert.approximately(results.heaterPower, expected.heaterPower, .01, "heaterPower");
+        assert.approximately(results.heatingHoursPerDay, expected.heatingHoursPerDay, .01, "heatingHoursPerDay");
+        assert.approximately(results.purgeRate, expected.purgeRate, .01, "purgeRate");
+        assert.approximately(results.designDDCPercentage, expected.designDDCPercentage, .01, "designDDCPercentage");
 
         results.delete();
     }
