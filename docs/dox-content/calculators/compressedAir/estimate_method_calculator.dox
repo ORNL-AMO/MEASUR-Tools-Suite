@@ -1,0 +1,53 @@
+/**
+ * @defgroup estimate_method_calculator Estimate Method Calculator
+ * @ingroup compressed_air_assessments
+ * @brief Estimates annual compressed air consumption from a leak using visual and audible assessment.
+ * @details This calculator implements the estimate method, a rapid field technique for evaluating
+ *          compressed air leak severity without specialized measurement equipment. An operator
+ *          categorizes a leak by observable indicators — audible hissing, visible moisture or
+ *          contamination at the leak point — and selects a corresponding estimated flow rate
+ *          from a lookup table based on those clues.
+ *
+ * The estimate method is most appropriate for **initial leak surveys** and triage, where speed
+ * of assessment takes precedence over accuracy. Individual leaks identified as significant
+ * should be re-measured with a higher-accuracy technique (bag method, orifice method, or
+ * inline flow meter) to obtain a reliable economic impact estimate.
+ *
+ * The method requires only two inputs:
+ * - **Estimated leak rate** – assigned from a leak severity lookup table based on visual
+ *   and audible clues [scfm].
+ * - **Annual operating time** – the number of hours per year the compressed air system
+ *   is pressurized [hr].
+ *
+ * **Annual Consumption:**
+ * @copydoc estimate_method_annual_consumption_formula
+ */
+
+/**
+ * @defgroup estimate_method_annual_consumption_formula Estimate Method Annual Consumption Formula
+ * @ingroup estimate_method_calculator
+ * @brief Estimated annual air consumption from a compressed air leak assessed by the estimate method.
+ * @details Annual air loss is computed by multiplying the estimated leak rate by the annual
+ *          system operating time and a minutes-per-hour conversion factor, then dividing by
+ *          the scf-to-kscf conversion factor. The factor of 60 converts operating hours to
+ *          minutes so the units are consistent with the flow rate expressed in scfm. The
+ *          factor of 1000 converts standard cubic feet to kiloscf, which is the conventional
+ *          unit for annual compressed air volumes in industrial energy assessments.
+ *
+ * @formula{estimate-method-annual-consumption;
+ *   C_{annual} = \frac{\dot{Q}_{leak} \cdot t_{op} \cdot 60}{1000}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{C_{annual}; Estimated annual air loss from the leak; \kscf}
+ * @symrow{\dot{Q}_{leak}; Estimated compressed air leak flow rate; \scfm}
+ * @symrow{t_{op}; Annual system operating time; \hour}
+ * @symrow{60; Minutes per hour conversion; \minute\per\hour}
+ * @symrow{1000; Standard cubic feet per kiloscf conversion; \unitless}
+ * @endsymtable
+ *
+ * @note The result is in kiloscf (kscf), where 1 kscf = 1000 standard cubic feet.
+ *       This unit is conventional for annual compressed air volumes in industrial
+ *       energy assessments.
+ */

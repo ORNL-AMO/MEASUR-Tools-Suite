@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "compressedAir/bag_method.h"
+#include "compressedAir/estimate_method.h"
 
 #ifndef M_PI
     #define M_PI 3.14159265358979323846
@@ -21,15 +22,6 @@ class CompressorElectricityData {
     double compressorControlAdjustment, compressorSpecificPower;
 };
 
-class EstimateMethodData {
-  public:
-    EstimateMethodData(const double leakRateEstimate) : leakRateEstimate(leakRateEstimate) {}
-
-    double getLeakRateEstimate() const { return leakRateEstimate; }
-
-  private:
-    double leakRateEstimate;
-};
 
 class DecibelsMethodData {
   public:
@@ -98,12 +90,12 @@ class OrificeMethodData {
 class CompressedAirLeakSurveyInput {
   public:
     CompressedAirLeakSurveyInput(const int hoursPerYear, const int utilityType, const double utilityCost,
-                                 const int measurementMethod, const EstimateMethodData estimateMethodData,
+                                 const int measurementMethod, const estimate_method::Input estimateMethodInput,
                                  const DecibelsMethodData decibelsMethodData, const bag_method::Input bagMethodInput,
                                  const OrificeMethodData         orificeMethodData,
                                  const CompressorElectricityData compressorElectricityData, const int units)
         : hoursPerYear(hoursPerYear), utilityType(utilityType), utilityCost(utilityCost),
-          measurementMethod(measurementMethod), estimateMethodData(estimateMethodData),
+          measurementMethod(measurementMethod), estimateMethodInput(estimateMethodInput),
           decibelsMethodData(decibelsMethodData), bagMethodInput(bagMethodInput),
           orificeMethodData(orificeMethodData), compressorElectricityData(compressorElectricityData), units(units) {}
 
@@ -112,7 +104,7 @@ class CompressedAirLeakSurveyInput {
     int                       getMeasurementMethod() const { return measurementMethod; }
     int                       getUnits() const { return units; }
     double                    getUtilityCost() const { return utilityCost; }
-    EstimateMethodData        getEstimateMethodData() const { return estimateMethodData; }
+    estimate_method::Input    getEstimateMethodInput() const { return estimateMethodInput; }
     DecibelsMethodData        getDecibelsMethodData() const { return decibelsMethodData; }
     bag_method::Input         getBagMethodInput() const { return bagMethodInput; }
     OrificeMethodData         getOrificeMethodData() const { return orificeMethodData; }
@@ -122,7 +114,7 @@ class CompressedAirLeakSurveyInput {
     int                       hoursPerYear, utilityType;
     double                    utilityCost;
     int                       measurementMethod;
-    EstimateMethodData        estimateMethodData;
+    estimate_method::Input    estimateMethodInput;
     DecibelsMethodData        decibelsMethodData;
     bag_method::Input         bagMethodInput;
     OrificeMethodData         orificeMethodData;
@@ -154,9 +146,10 @@ class CompressedAirLeakSurvey {
 
             // estimate method
             if (compressedAirLeakSurveyInput.getMeasurementMethod() == 0) {
-                EstimateMethodData estimateMethodData = compressedAirLeakSurveyInput.getEstimateMethodData();
-                tmpTotalFlowRate = estimateMethodData.getLeakRateEstimate() * compressedAirLeakSurveyInput.getUnits();
-                tmpAnnualTotalFlowRate = (compressedAirLeakSurveyInput.getHoursPerYear() * tmpTotalFlowRate * 60);
+                auto estResult         = estimate_method::calculate(compressedAirLeakSurveyInput.getEstimateMethodInput());
+                tmpTotalFlowRate       = compressedAirLeakSurveyInput.getEstimateMethodInput().leak_rate_estimate *
+                                         compressedAirLeakSurveyInput.getUnits();
+                tmpAnnualTotalFlowRate = estResult.annual_consumption * 1000.0 * compressedAirLeakSurveyInput.getUnits();
             }
             // decibels method
             else if (compressedAirLeakSurveyInput.getMeasurementMethod() == 1) {

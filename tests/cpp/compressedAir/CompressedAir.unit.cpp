@@ -3,7 +3,6 @@
 #include "compressedAir/AirSystemCapacity.h"
 #include "compressedAir/AirVelocity.h"
 #include "compressedAir/DecibelsMethod.h"
-#include "compressedAir/EstimateMethod.h"
 #include "compressedAir/OrificeMethod.h"
 #include "compressedAir/PipeData.h"
 
@@ -89,19 +88,6 @@ TEST_CASE("Compressor Air Velocity", "[CompressedAir][AirVelocity]") {
             {1614.361140443, 913.789324779, 563.149235038, 322.872228,    237.406050,   144.139387539, 101.108213388,
              65.53563493,    48.969498699,  38.044645886,  24.2154171067, 16.763874771, 9.6822939251,  6.1421476491,
              4.3280459529,   3.5795147238,  2.7408508327,  2.1620908131,  1.7421163386, 1.2044475059});
-}
-
-TEST_CASE("Estimate Method", "[CompressedAir][EstimateMethod]") {
-    // auto const compare = [](EstimateMethod::Output const & results, EstimateMethod::Output const & expected) {
-    // CHECK(expected.annualConsumption == Approx(results.annualConsumption));
-    //};
-    // compare(EstimateMethod(EstimateMethod::LeakEstimateType::Small, 115200 / 60.0).calculate(),
-    // EstimateMethod::Output(5.25)); compare(EstimateMethod(EstimateMethod::LeakEstimateType::Small, 115200
-    // / 60.0).calculate(), EstimateMethod::Output(1.092));
-    CHECK(EstimateMethod(1280, 0.1).calculate().annualConsumption ==
-          Approx(EstimateMethod::Output(7.68).annualConsumption));
-    CHECK(EstimateMethod(1280, 1.429).calculate().annualConsumption ==
-          Approx(EstimateMethod::Output(109.7472).annualConsumption));
 }
 
 TEST_CASE("Decibels Method", "[CompressedAir][DecibelsMethod]") {

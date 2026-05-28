@@ -5,7 +5,6 @@
 #include "compressedAir/AirSystemCapacity.h"
 #include "compressedAir/AirVelocity.h"
 #include "compressedAir/DecibelsMethod.h"
-#include "compressedAir/EstimateMethod.h"
 #include "compressedAir/OrificeMethod.h"
 #include "compressedAir/PipeData.h"
 
@@ -55,17 +54,6 @@ EMSCRIPTEN_BINDINGS(airVelocity) {
     class_<AirVelocity>("AirVelocity")
         .constructor<double, double, double>()
         .function("calculate", &AirVelocity::calculate);
-}
-
-// estimateMethod
-EMSCRIPTEN_BINDINGS(estimateMethod) {
-    class_<EstimateMethod>("EstimateMethod")
-        .constructor<double, double>()
-        .function("calculate", &EstimateMethod::calculate);
-
-    class_<EstimateMethod::Output>("EstimateMethodOutput")
-        .constructor<double>()
-        .property("annualConsumption", &EstimateMethod::Output::annualConsumption);
 }
 
 // decibelsMethod
