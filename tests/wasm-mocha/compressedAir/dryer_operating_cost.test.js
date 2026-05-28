@@ -1,6 +1,6 @@
 import { assert } from 'chai';
 
-describe('Steam Leak Survey', function () {
+describe('Dryer Operating Cost', function () {
     let moduleInstance;
     before(async function () {
         const ToolsSuiteModule = (await import('../../../bin/client.js')).default;
