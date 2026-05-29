@@ -14,7 +14,7 @@ describe('Compressed Air Leak Survey', function () {
         estimateLeakRate,
         decibelParams, bagParams, orificeParams,
         compressorControlAdjustment, compressorSpecificPower, units) {
-        const estimate = new moduleInstance.EstimateMethodData(estimateLeakRate);
+        const estimate = { leakRateEstimate: estimateLeakRate, operatingTime: hoursPerYear };
         const decibels = new moduleInstance.DecibelsMethodData(...decibelParams);
         const bag = { ...bagParams };
         const orifice = new moduleInstance.OrificeMethodData(...orificeParams);
@@ -25,10 +25,8 @@ describe('Compressed Air Leak Survey', function () {
             estimate, decibels, bag, orifice, compElec, units
         );
 
-        estimate.delete();
         decibels.delete();
         orifice.delete();
-
         return input;
     }
 
