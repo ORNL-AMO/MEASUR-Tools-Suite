@@ -4,7 +4,6 @@
 
 #include "compressedAir/AirSystemCapacity.h"
 #include "compressedAir/AirVelocity.h"
-#include "compressedAir/DecibelsMethod.h"
 #include "compressedAir/PipeData.h"
 
 using namespace emscripten;
@@ -53,16 +52,4 @@ EMSCRIPTEN_BINDINGS(airVelocity) {
     class_<AirVelocity>("AirVelocity")
         .constructor<double, double, double>()
         .function("calculate", &AirVelocity::calculate);
-}
-
-// decibelsMethod
-EMSCRIPTEN_BINDINGS(decibelsMethod) {
-    class_<DecibelsMethod>("DecibelsMethod")
-        .constructor<double, double, double, double, double, double, double, double, double, double, double>()
-        .function("calculate", &DecibelsMethod::calculate);
-
-    class_<DecibelsMethod::Output>("DecibelsMethodOutput")
-        .constructor<double, double>()
-        .property("leakRateEstimate", &DecibelsMethod::Output::leakRateEstimate)
-        .property("annualConsumption", &DecibelsMethod::Output::annualConsumption);
 }

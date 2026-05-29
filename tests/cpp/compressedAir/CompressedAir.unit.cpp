@@ -2,7 +2,6 @@
 
 #include "compressedAir/AirSystemCapacity.h"
 #include "compressedAir/AirVelocity.h"
-#include "compressedAir/DecibelsMethod.h"
 #include "compressedAir/PipeData.h"
 
 using namespace Catch;
@@ -87,14 +86,4 @@ TEST_CASE("Compressor Air Velocity", "[CompressedAir][AirVelocity]") {
             {1614.361140443, 913.789324779, 563.149235038, 322.872228,    237.406050,   144.139387539, 101.108213388,
              65.53563493,    48.969498699,  38.044645886,  24.2154171067, 16.763874771, 9.6822939251,  6.1421476491,
              4.3280459529,   3.5795147238,  2.7408508327,  2.1620908131,  1.7421163386, 1.2044475059});
-}
-
-TEST_CASE("Decibels Method", "[CompressedAir][DecibelsMethod]") {
-    auto const compare = [](DecibelsMethod::Output const& results, DecibelsMethod::Output const& expected) {
-        CHECK(expected.leakRateEstimate == Approx(results.leakRateEstimate));
-        CHECK(expected.annualConsumption == Approx(results.annualConsumption));
-    };
-
-    compare(DecibelsMethod(1280, 130, 25, 20, 150, 1.04, 1.2, 30, 125, 1.85, 1.65).calculate(),
-            DecibelsMethod::Output(1.429, 109.7472));
 }

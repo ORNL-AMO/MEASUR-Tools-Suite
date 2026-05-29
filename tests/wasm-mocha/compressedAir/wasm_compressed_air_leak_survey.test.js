@@ -15,7 +15,20 @@ describe('Compressed Air Leak Survey', function () {
         decibelParams, bagParams, orificeParams,
         compressorControlAdjustment, compressorSpecificPower, units) {
         const estimate = { leakRateEstimate: estimateLeakRate, operatingTime: hoursPerYear };
-        const decibels = new moduleInstance.DecibelsMethodData(...decibelParams);
+        // DecibelsMethodInput is a value_object — constructed as a plain JS object
+        const decibels = {
+            operatingTime:  0,
+            linePressure:   decibelParams[0],
+            decibels:       decibelParams[1],
+            decibelRatingA: decibelParams[2],
+            pressureA:      decibelParams[3],
+            firstFlowA:     decibelParams[4],
+            secondFlowA:    decibelParams[5],
+            decibelRatingB: decibelParams[6],
+            pressureB:      decibelParams[7],
+            firstFlowB:     decibelParams[8],
+            secondFlowB:    decibelParams[9]
+        };
         const bag = { ...bagParams };
         // orificeParams is now a plain object (OrificeMethodInput value_object)
         const orifice = { ...orificeParams };
@@ -26,7 +39,6 @@ describe('Compressed Air Leak Survey', function () {
             estimate, decibels, bag, orifice, compElec, units
         );
 
-        decibels.delete();
         return input;
     }
 

@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "compressedAir/bag_method.h"
+#include "compressedAir/decibels_method.h"
 #include "compressedAir/estimate_method.h"
 #include "compressedAir/orifice_method.h"
 #include "compressedAir/compressed_air_utils.h"
@@ -13,50 +14,16 @@
 using compressed_air_utils::CompressorElectricityData;
 
 
-class DecibelsMethodData {
-  public:
-    DecibelsMethodData(const double linePressure, const double decibels, const double decibelRatingA,
-                       const double pressureA, const double firstFlowA, const double secondFlowA,
-                       const double decibelRatingB, const double pressureB, const double firstFlowB,
-                       const double secondFlowB)
-        : linePressure(linePressure), decibels(decibels), decibelRatingA(decibelRatingA), pressureA(pressureA),
-          firstFlowA(firstFlowA), secondFlowA(secondFlowA), decibelRatingB(decibelRatingB), pressureB(pressureB),
-          firstFlowB(firstFlowB), secondFlowB(secondFlowB) {}
-
-    double calculate() {
-        const double denominator = (pressureB - pressureA) * (decibelRatingB - decibelRatingA);
-        const double leakRateEstimate =
-            ((pressureB - linePressure) * (decibelRatingB - decibels)) / denominator * firstFlowA +
-            ((linePressure - pressureA) * (decibelRatingB - decibels)) / denominator * secondFlowA +
-            ((pressureB - linePressure) * (decibels - decibelRatingA)) / denominator * firstFlowB +
-            ((linePressure - pressureA) * (decibels - decibelRatingA)) / denominator * secondFlowB;
-
-        return leakRateEstimate;
-    }
-
-  private:
-    double linePressure;   // X
-    double decibels;       // Y
-    double decibelRatingA; // Y1
-    double pressureA;      // X1
-    double firstFlowA;     // Q11
-    double secondFlowA;    // Q21
-    double decibelRatingB; // Y2
-    double pressureB;      // X2
-    double firstFlowB;     // Q12
-    double secondFlowB;    // Q22
-};
-
 class CompressedAirLeakSurveyInput {
   public:
     CompressedAirLeakSurveyInput(const int hoursPerYear, const int utilityType, const double utilityCost,
                                  const int measurementMethod, const estimate_method::Input estimateMethodInput,
-                                 const DecibelsMethodData decibelsMethodData, const bag_method::Input bagMethodInput,
+                                 const decibels_method::Input decibelsMethodInput, const bag_method::Input bagMethodInput,
                                  const orifice_method::Input         orificeMethodInput,
                                  const CompressorElectricityData compressorElectricityData, const int units)
         : hoursPerYear(hoursPerYear), utilityType(utilityType), utilityCost(utilityCost),
           measurementMethod(measurementMethod), estimateMethodInput(estimateMethodInput),
-          decibelsMethodData(decibelsMethodData), bagMethodInput(bagMethodInput),
+          decibelsMethodInput(decibelsMethodInput), bagMethodInput(bagMethodInput),
           orificeMethodInput(orificeMethodInput), compressorElectricityData(compressorElectricityData), units(units) {}
 
     int                       getHoursPerYear() const { return hoursPerYear; } // operating time
@@ -65,7 +32,7 @@ class CompressedAirLeakSurveyInput {
     int                       getUnits() const { return units; }
     double                    getUtilityCost() const { return utilityCost; }
     estimate_method::Input    getEstimateMethodInput() const { return estimateMethodInput; }
-    DecibelsMethodData        getDecibelsMethodData() const { return decibelsMethodData; }
+    decibels_method::Input    getDecibelsMethodInput() const { return decibelsMethodInput; }
     bag_method::Input         getBagMethodInput() const { return bagMethodInput; }
     orifice_method::Input     getOrificeMethodInput() const { return orificeMethodInput; }
     CompressorElectricityData getCompressorElectricityData() const { return compressorElectricityData; }
@@ -75,7 +42,7 @@ class CompressedAirLeakSurveyInput {
     double                    utilityCost;
     int                       measurementMethod;
     estimate_method::Input    estimateMethodInput;
-    DecibelsMethodData        decibelsMethodData;
+    decibels_method::Input    decibelsMethodInput;
     bag_method::Input         bagMethodInput;
     orifice_method::Input     orificeMethodInput;
     CompressorElectricityData compressorElectricityData;
@@ -113,9 +80,9 @@ class CompressedAirLeakSurvey {
             }
             // decibels method
             else if (compressedAirLeakSurveyInput.getMeasurementMethod() == 1) {
-                DecibelsMethodData decibelsMethodData = compressedAirLeakSurveyInput.getDecibelsMethodData();
-                tmpTotalFlowRate       = decibelsMethodData.calculate() * compressedAirLeakSurveyInput.getUnits();
-                tmpAnnualTotalFlowRate = (compressedAirLeakSurveyInput.getHoursPerYear() * tmpTotalFlowRate * 60);
+                auto debResult         = decibels_method::calculate(compressedAirLeakSurveyInput.getDecibelsMethodInput());
+                tmpTotalFlowRate       = debResult.leak_rate_estimate * compressedAirLeakSurveyInput.getUnits();
+                tmpAnnualTotalFlowRate = compressedAirLeakSurveyInput.getHoursPerYear() * tmpTotalFlowRate * 60;
             }
             // bag method
             else if (compressedAirLeakSurveyInput.getMeasurementMethod() == 2) {
