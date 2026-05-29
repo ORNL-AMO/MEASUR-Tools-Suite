@@ -1,6 +1,6 @@
 #include <emscripten/bind.h>
 
-#include "compressedAir/bag_method.h"
+#include "compressedAir/leak_survey/bag_method.h"
 
 using namespace emscripten;
 using namespace bag_method;

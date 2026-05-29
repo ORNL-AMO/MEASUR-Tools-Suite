@@ -1,6 +1,6 @@
 #include "catch.hpp"
 
-#include "compressedAir/decibels_method.h"
+#include "compressedAir/leak_survey/decibels_method.h"
 
 using namespace Catch;
 using namespace decibels_method;

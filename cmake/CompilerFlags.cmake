@@ -23,6 +23,7 @@ set( CXX_STANDARD_REQUIRED ON )
 # OS (at least on some systems). Further, gcc sometimes optimizes calls to
 # math.h functions, making -lm unnecessary with gcc, but it may still be
 # necessary with clang.
+include(CheckCXXCompilerFlag)
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
   CHECK_CXX_COMPILER_FLAG("-std=c++11 -stdlib=libc++" HAS_LIBCXX11)
   # Linking against libc++ instead of the GNU libstdc++.

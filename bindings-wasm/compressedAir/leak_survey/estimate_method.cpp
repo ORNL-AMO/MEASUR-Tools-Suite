@@ -1,6 +1,6 @@
 #include <emscripten/bind.h>
 
-#include "compressedAir/estimate_method.h"
+#include "compressedAir/leak_survey/estimate_method.h"
 
 using namespace emscripten;
 using namespace estimate_method;

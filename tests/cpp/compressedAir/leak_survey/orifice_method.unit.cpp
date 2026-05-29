@@ -1,6 +1,6 @@
 #include "catch.hpp"
 
-#include "compressedAir/orifice_method.h"
+#include "compressedAir/leak_survey/orifice_method.h"
 
 using namespace Catch;
 using namespace orifice_method;
