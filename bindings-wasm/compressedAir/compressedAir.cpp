@@ -9,7 +9,6 @@
 #include "compressedAir/EstimateMethod.h"
 #include "compressedAir/OrificeMethod.h"
 #include "compressedAir/PipeData.h"
-#include "compressedAir/PipeSizing.h"
 
 using namespace emscripten;
 
@@ -57,18 +56,6 @@ EMSCRIPTEN_BINDINGS(airVelocity) {
     class_<AirVelocity>("AirVelocity")
         .constructor<double, double, double>()
         .function("calculate", &AirVelocity::calculate);
-}
-
-// pipeSizing
-EMSCRIPTEN_BINDINGS(pipeSizing) {
-    class_<PipeSizing>("PipeSizing")
-        .constructor<double, double, double, double>()
-        .function("calculate", &PipeSizing::calculate);
-
-    class_<PipeSizing::Output>("PipeSizingOutput")
-        .constructor<double, double>()
-        .property("crossSectionalArea", &PipeSizing::Output::crossSectionalArea)
-        .property("pipeDiameter", &PipeSizing::Output::pipeDiameter);
 }
 
 // bagMethod

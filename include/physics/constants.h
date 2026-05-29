@@ -198,6 +198,16 @@ inline constexpr double kHoursPerDay = 24.0;
 /// @brief Number of minutes in an hour.
 inline constexpr double kMinutesPerHour = 60.0;
 
+/// @brief Number of seconds in a minute.
+inline constexpr double kSecondsPerMinute = 60.0;
+
+/**
+ * @brief Conversion factor: square inches per square foot @unitb{\inch\squared\per\squareFoot}
+ * @details 1 ft² = 144 in². Used when converting pipe cross-sectional areas between
+ *          square feet and square inches in U.S. customary piping calculations.
+ */
+inline constexpr double kIn2PerFt2 = 144.0;
+
 /**
  * @brief Conversion factor from kilowatts to BTU/hr @unitb{\btu\per\hour\per\kilowatt}
  * @details Source: NIST, Perry's Chemical Engineers' Handbook

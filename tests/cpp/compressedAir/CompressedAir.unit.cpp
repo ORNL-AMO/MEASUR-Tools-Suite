@@ -7,7 +7,6 @@
 #include "compressedAir/EstimateMethod.h"
 #include "compressedAir/OrificeMethod.h"
 #include "compressedAir/PipeData.h"
-#include "compressedAir/PipeSizing.h"
 
 using namespace Catch;
 
@@ -91,19 +90,6 @@ TEST_CASE("Compressor Air Velocity", "[CompressedAir][AirVelocity]") {
             {1614.361140443, 913.789324779, 563.149235038, 322.872228,    237.406050,   144.139387539, 101.108213388,
              65.53563493,    48.969498699,  38.044645886,  24.2154171067, 16.763874771, 9.6822939251,  6.1421476491,
              4.3280459529,   3.5795147238,  2.7408508327,  2.1620908131,  1.7421163386, 1.2044475059});
-}
-
-TEST_CASE("Compressor Pipe Sizing", "[CompressedAir][PipeSizing]") {
-    auto const compare = [](PipeSizing::Output const& results, PipeSizing::Output const& expected) {
-        CHECK(expected.crossSectionalArea == Approx(results.crossSectionalArea));
-        CHECK(expected.pipeDiameter == Approx(results.pipeDiameter));
-    };
-
-    compare(PipeSizing(1000, 90, 25, 14.5).calculate(), PipeSizing::Output(13.3205741627, 4.132512454));
-    compare(PipeSizing(1400, 90, 25, 14.5).calculate(), PipeSizing::Output(18.648803827, 4.8896546766));
-    compare(PipeSizing(1400, 110, 25, 14.5).calculate(), PipeSizing::Output(15.6530120482, 4.4797281351));
-    compare(PipeSizing(1400, 110, 30, 14.5).calculate(), PipeSizing::Output(13.0441767068, 4.0894135851));
-    compare(PipeSizing(1400, 110, 30, 11.5).calculate(), PipeSizing::Output(10.6008230453, 3.6865700558));
 }
 
 TEST_CASE("Bag Method", "[CompressedAir][BagMethod]") {

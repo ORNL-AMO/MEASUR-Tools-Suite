@@ -1,0 +1,99 @@
+/**
+ * @defgroup pipe_sizing_calculator Pipe Sizing Calculator
+ * @ingroup compressed_air_assessments
+ * @brief Sizes compressed air distribution pipes to meet a target design velocity.
+ * @details This calculator determines the minimum internal cross-sectional area and
+ *          corresponding pipe diameter required to carry a given compressed air flow
+ *          at or below a specified design velocity. All formulas use U.S. customary units.
+ *
+ * Correct pipe sizing is critical for efficient compressed air distribution:
+ *
+ * - **Undersized pipes** create excessive pressure drop, wasting energy and reducing
+ *   available pressure at end-use equipment.
+ * - **Oversized pipes** increase capital cost and reduce air velocity, which can allow
+ *   condensate to accumulate rather than being carried to drain points.
+ * - **Main headers** are typically designed for 20 ft/s; velocity should never exceed
+ *   30 ft/s in any distribution segment.
+ *
+ * The calculation applies Boyle's Law to convert the free-air volumetric flow rate
+ * to the compressed-air flow at operating pressure, then uses the continuity equation
+ * to find the pipe area that limits velocity to the design value.
+ *
+ * Relevant formulas are documented below.
+ *
+ * @heading{Cross-Sectional Area}
+ * @copydoc pipe_sizing_area_formula
+ *
+ * @heading{Pipe Diameter}
+ * @copydoc pipe_sizing_diameter_formula
+ */
+
+/**
+ * @defgroup pipe_sizing_area_formula Pipe Cross-Sectional Area Formula
+ * @ingroup pipe_sizing_calculator
+ * @brief Minimum internal pipe area to limit compressed-air velocity to the design value.
+ * @details The formula derives from the continuity equation applied to a compressible
+ *          fluid. The free-air flow rate @math{Q} is first converted to the actual
+ *          compressed-air volumetric flow at operating pressure using Boyle's Law:
+ *
+ * @formula{pipe-sizing-qcompressed;
+ *   Q_{compressed} = Q \cdot \dfrac{P_{atm}}{P_{line} + P_{atm}}
+ * }
+ *
+ * The required cross-sectional area at the design velocity is:
+ *
+ * @formula{pipe-sizing-area-ft2;
+ *   A_{ft^2} = \dfrac{Q_{compressed}}{v \cdot k_{60}}
+ * }
+ *
+ * Converting from ft² to in² by multiplying by @math{k_{144}}:
+ *
+ * @formula{pipe-sizing-area;
+ *   A = \frac{k_{144} \cdot Q \cdot P_{atm}}{v \cdot k_{60} \cdot (P_{line} + P_{atm})}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{A; Minimum required internal cross-sectional area; \inch\squared}
+ * @symrow{k_{144}; Square inches per square foot (144); \inch\squared\per\squareFoot}
+ * @symrow{Q; Volumetric free-air flow rate; \cubicFoot\per\minute}
+ * @symrow{P_{atm}; Atmospheric (absolute) pressure; \psia}
+ * @symrow{v; Maximum allowable compressed-air design velocity; \foot\per\second}
+ * @symrow{k_{60}; Seconds per minute (60); \second\per\minute}
+ * @symrow{P_{line}; Operating gauge pressure in the pipe; \psig}
+ * @endsymtable
+ *
+ * @note @math{P_{line} + P_{atm}} converts gauge pressure to absolute pressure
+ *       (Boyle's Law requires absolute pressures).
+ *       The combined factor @math{k_{144} / k_{60} = 2.4} converts the area from
+ *       ft²·min/s to in².
+ */
+
+/**
+ * @defgroup pipe_sizing_diameter_formula Pipe Diameter Formula
+ * @ingroup pipe_sizing_calculator
+ * @brief Internal pipe diameter corresponding to the computed cross-sectional area.
+ * @details Assumes a circular pipe cross-section. The relationship between internal
+ *          diameter and cross-sectional area for a circle is:
+ *
+ * @math{A = k_c \cdot D^2}
+ *
+ * Solving for the diameter:
+ *
+ * @formula{pipe-sizing-diameter;
+ *   D = \sqrt{\frac{A}{k_c}}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{D; Minimum required internal pipe diameter; \inch}
+ * @symrow{A; Cross-sectional area (from \eqref{eq:pipe-sizing-area}); \inch\squared}
+ * @symrow{k_c; Circle area factor (0.78 \approx \pi/4); \unitless}
+ * @endsymtable
+ *
+ * @note The factor @math{k_c = 0.78} is an industry-standard rounded approximation
+ *       of @math{\pi / 4 \approx 0.7854} used in U.S. customary compressed air
+ *       pipe sizing practice. The resulting diameter is the minimum internal
+ *       (bore) diameter; the next larger standard nominal pipe size should be
+ *       selected for the actual installation.
+ */
