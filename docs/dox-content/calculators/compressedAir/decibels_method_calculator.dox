@@ -1,0 +1,116 @@
+/**
+ * @defgroup decibels_method_calculator Decibels Method Calculator
+ * @ingroup compressed_air_assessments
+ * @brief Estimates compressed air leak flow rate and annual consumption using bilinear
+ *        interpolation from ultrasonic decibel and line pressure measurements.
+ * @details This calculator implements the decibels method, a non-contact field technique
+ *          for estimating compressed air leak flow rate. An ultrasonic detector measures
+ *          the sound pressure level (in decibels) at the leak location while the compressed
+ *          air line pressure is recorded. Two calibration reference points bracket the
+ *          measured values: each reference point is defined by a decibel rating and supplies
+ *          flow rate values at two known pressures, forming a 2×2 grid of reference flow
+ *          values. Standard bilinear interpolation over the pressure and decibel axes yields
+ *          the leak flow rate at the measured conditions.
+ *
+ * The decibels method is particularly useful when physical access to the leak is restricted,
+ * since no bag or orifice fixture is required. The ultrasonic detector can locate and
+ * quantify leaks from a distance, making it well suited for pressurized systems where
+ * shutdown is not feasible. Accuracy depends on the quality and range of the calibration
+ * reference data supplied by the detector manufacturer.
+ *
+ * **Procedure:**
+ * 1. Obtain the detector manufacturer's calibration table, which lists flow rates at two
+ *    reference pressures (P₁ and P₂) for two reference decibel ratings (L₁ and L₂).
+ * 2. Hold the ultrasonic detector near the suspected leak and record the decibel reading.
+ * 3. Record the compressed air line pressure at the leak location.
+ * 4. Enter the four reference flow values and the two reference pressures and decibel
+ *    ratings, along with the measured values and annual operating time.
+ *
+ * The calculation methods are:
+ * 1. **Leak Rate Estimate** – applies bilinear interpolation to the 2×2 reference grid to
+ *    obtain the instantaneous leak flow rate in scfm.
+ * 2. **Annual Consumption** – scales the leak flow rate by annual operating hours and
+ *    converts to kiloscf.
+ *
+ * Relevant formulas are documented below.
+ *
+ * @heading{Leak Rate Estimate}
+ * @copydoc decibels_method_leak_rate_formula
+ *
+ * @heading{Annual Consumption}
+ * @copydoc decibels_method_annual_consumption_formula
+ */
+
+/**
+ * @defgroup decibels_method_leak_rate_formula Decibels Method Leak Rate Formula
+ * @ingroup decibels_method_calculator
+ * @brief Compressed air leak flow rate estimated by bilinear interpolation.
+ * @details The leak flow rate is determined by bilinear interpolation over a 2×2 grid
+ *          of reference flow values supplied by the ultrasonic detector manufacturer.
+ *          The grid axes are line pressure (P) and ultrasonic decibel level (L). Two
+ *          reference pressures (P₁ and P₂) and two reference decibel ratings (L₁ and L₂)
+ *          define the grid corners; the measured line pressure P and decibel level L
+ *          are interpolated within this grid.
+ *
+ *          The four reference flow values at the grid corners are:
+ *          - Q₁₁: flow at (P₁, L₁) — `first_flow_a`
+ *          - Q₂₁: flow at (P₂, L₁) — `second_flow_a`
+ *          - Q₁₂: flow at (P₁, L₂) — `first_flow_b`
+ *          - Q₂₂: flow at (P₂, L₂) — `second_flow_b`
+ *
+ *          The formula reduces to the known corner value when the measured point falls
+ *          exactly on a reference corner, and to linear interpolation when the measured
+ *          point lies on a reference edge.
+ *
+ * @formula{decibels-method-leak-rate;
+ *   Q_{leak} = \frac{
+ *     (P_2 - P)(L_2 - L)\,Q_{11}
+ *     + (P - P_1)(L_2 - L)\,Q_{21}
+ *     + (P_2 - P)(L - L_1)\,Q_{12}
+ *     + (P - P_1)(L - L_1)\,Q_{22}
+ *   }{(P_2 - P_1)(L_2 - L_1)}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{leak};  Estimated compressed air leak flow rate;                \scfm}
+ * @symrow{P;         Measured line pressure;                                 \psig}
+ * @symrow{L;         Measured ultrasonic decibel level at the leak;          \decibel}
+ * @symrow{P_1;       Reference pressure (pressure_a);                        \psig}
+ * @symrow{P_2;       Reference pressure (pressure_b);                        \psig}
+ * @symrow{L_1;       Lower reference decibel rating (decibel_rating_a);      \decibel}
+ * @symrow{L_2;       Upper reference decibel rating (decibel_rating_b);      \decibel}
+ * @symrow{Q_{11};    Reference flow at (P_1,\, L_1) — first_flow_a;         \scfm}
+ * @symrow{Q_{21};    Reference flow at (P_2,\, L_1) — second_flow_a;        \scfm}
+ * @symrow{Q_{12};    Reference flow at (P_1,\, L_2) — first_flow_b;         \scfm}
+ * @symrow{Q_{22};    Reference flow at (P_2,\, L_2) — second_flow_b;        \scfm}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup decibels_method_annual_consumption_formula Decibels Method Annual Consumption Formula
+ * @ingroup decibels_method_calculator
+ * @brief Estimated annual air consumption from a compressed air leak measured by the decibels method.
+ * @details Annual air loss is computed by scaling the instantaneous leak flow rate by the
+ *          annual system operating time and converting from standard cubic feet to kiloscf.
+ *          The factor of 60 converts operating hours to minutes so the units are consistent
+ *          with the flow rate in scfm. The factor of 1000 converts standard cubic feet to
+ *          kiloscf, a more practical unit for annual volumes.
+ *
+ * @formula{decibels-method-annual-consumption;
+ *   C_{annual} = \frac{Q_{leak} \cdot t_{op} \cdot 60}{1000}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{C_{annual}; Estimated annual air loss from the leak; \kscf}
+ * @symrow{Q_{leak};   Compressed air leak flow rate;           \scfm}
+ * @symrow{t_{op};     Annual system operating time;            \hour}
+ * @symrow{60;         Minutes per hour conversion;             \minute\per\hour}
+ * @symrow{1000;       Standard cubic feet per kiloscf;         \unitless}
+ * @endsymtable
+ *
+ * @note The result is in kiloscf (kscf), where 1 kscf = 1000 standard cubic feet.
+ *       This unit is conventional for annual compressed air volumes in industrial
+ *       energy assessments.
+ */

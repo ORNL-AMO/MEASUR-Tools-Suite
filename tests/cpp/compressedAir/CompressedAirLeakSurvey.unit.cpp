@@ -7,7 +7,7 @@ using namespace Catch;
 TEST_CASE("Compressed Air Leak Survey Estimate Method and Electricity", "[CompressedAirLeakSurvey][Util]") {
     std::vector<CompressedAirLeakSurveyInput> compressedAirLeakSurveyInputVec = {CompressedAirLeakSurveyInput(
         8640, 1, 0.12, 0, estimate_method::Input {8640, 0.1},
-        DecibelsMethodData(130, 25, 20, 150, 1.04, 1.2, 30, 125, 1.85, 1.65), bag_method::Input {8760, 12, 8.68, 1},
+        decibels_method::Input{0, 130, 25, 20, 150, 1.04, 1.2, 30, 125, 1.85, 1.65}, bag_method::Input {8760, 12, 8.68, 1},
         orifice_method::Input {0.0, 250.0, 14.7, 1.0, 6.0, 6.2, 4},
         compressed_air_utils::CompressorElectricityData {0.40, 0.16}, 1)};
 
@@ -20,7 +20,7 @@ TEST_CASE("Compressed Air Leak Survey Estimate Method and Electricity", "[Compre
 
     compressedAirLeakSurveyInputVec = {CompressedAirLeakSurveyInput(
         3840, 1, 0.12, 0, estimate_method::Input {3840, 0.1},
-        DecibelsMethodData(130, 25, 20, 150, 1.04, 1.2, 30, 125, 1.85, 1.65), bag_method::Input {3840, 12, 8.68, 1},
+        decibels_method::Input{0, 130, 25, 20, 150, 1.04, 1.2, 30, 125, 1.85, 1.65}, bag_method::Input {3840, 12, 8.68, 1},
         orifice_method::Input {0.0, 250.0, 14.7, 1.0, 6.0, 6.2, 4},
         compressed_air_utils::CompressorElectricityData {0.25, 0.16}, 1)};
 
@@ -33,7 +33,7 @@ TEST_CASE("Compressed Air Leak Survey Estimate Method and Electricity", "[Compre
 
     compressedAirLeakSurveyInputVec = {CompressedAirLeakSurveyInput(
         8760, 1, 0.12, 0, estimate_method::Input {8760, 100},
-        DecibelsMethodData(130, 25, 20, 150, 1.04, 1.2, 30, 125, 1.85, 1.65), bag_method::Input {8760, 12, 8.68, 1},
+        decibels_method::Input{0, 130, 25, 20, 150, 1.04, 1.2, 30, 125, 1.85, 1.65}, bag_method::Input {8760, 12, 8.68, 1},
         orifice_method::Input {0.0, 250.0, 14.7, 1.0, 6.0, 6.2, 4},
         compressed_air_utils::CompressorElectricityData {0.25, 0.16}, 1)};
 
@@ -48,7 +48,7 @@ TEST_CASE("Compressed Air Leak Survey Estimate Method and Electricity", "[Compre
 TEST_CASE("Compressed Air Leak Survey Decibels Method and Electricity", "[CompressedAirLeakSurvey][Util]") {
     std::vector<CompressedAirLeakSurveyInput> compressedAirLeakSurveyInputVec = {CompressedAirLeakSurveyInput(
         8640, 1, 0.12, 1, estimate_method::Input {8640, 0.1},
-        DecibelsMethodData(130, 25, 20, 150, 1.04, 1.2, 30, 125, 1.85, 1.65), bag_method::Input {15, 10, 12, 1},
+        decibels_method::Input{0, 130, 25, 20, 150, 1.04, 1.2, 30, 125, 1.85, 1.65}, bag_method::Input {15, 10, 12, 1},
         orifice_method::Input {0.0, 250.0, 14.7, 1.0, 6.0, 6.2, 4},
         compressed_air_utils::CompressorElectricityData {0.40, 0.16}, 1)};
 
@@ -63,7 +63,7 @@ TEST_CASE("Compressed Air Leak Survey Decibels Method and Electricity", "[Compre
 TEST_CASE("Compressed Air Leak Survey Bag Method and Electricity", "[CompressedAirLeakSurvey][Util]") {
     std::vector<CompressedAirLeakSurveyInput> compressedAirLeakSurveyInputVec = {CompressedAirLeakSurveyInput(
         8640, 1, 0.12, 2, estimate_method::Input {8640, 0.1},
-        DecibelsMethodData(130, 25, 20, 150, 1.04, 1.2, 30, 125, 1.85, 1.65), bag_method::Input {15, 10, 12, 1},
+        decibels_method::Input{0, 130, 25, 20, 150, 1.04, 1.2, 30, 125, 1.85, 1.65}, bag_method::Input {15, 10, 12, 1},
         orifice_method::Input {0.0, 250.0, 14.7, 1.0, 6.0, 6.2, 4},
         compressed_air_utils::CompressorElectricityData {0.40, 0.16}, 2)};
 
@@ -78,7 +78,7 @@ TEST_CASE("Compressed Air Leak Survey Bag Method and Electricity", "[CompressedA
 TEST_CASE("Compressed Air Leak Survey Orifice Method and Electricity", "[CompressedAirLeakSurvey][Util]") {
     std::vector<CompressedAirLeakSurveyInput> compressedAirLeakSurveyInputVec = {CompressedAirLeakSurveyInput(
         8640, 1, 0.12, 3, estimate_method::Input {8640, 0.1},
-        DecibelsMethodData(130, 25, 20, 150, 1.04, 1.2, 30, 125, 1.85, 1.65), bag_method::Input {15, 10, 12, 1},
+        decibels_method::Input{0, 130, 25, 20, 150, 1.04, 1.2, 30, 125, 1.85, 1.65}, bag_method::Input {15, 10, 12, 1},
         orifice_method::Input {0.0, 550, 14.7, 1.0, .375, 100, 4},
         compressed_air_utils::CompressorElectricityData {0.40, 0.16}, 1)};
 
