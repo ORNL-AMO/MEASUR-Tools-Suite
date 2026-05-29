@@ -36,21 +36,22 @@ namespace decibels_method {
  * @ingroup decibels_method_calculator
  * @struct Input
  * @brief Input parameters for the decibels method compressed air leak calculation.
- * @details Two reference calibration points (A and B) must bracket the measured
- *          line pressure and decibel level. Point A is the lower decibel reference;
- *          point B is the upper decibel reference. For each reference point, flow
- *          rates at two pressures (pressure_a and pressure_b) are required.
+ * @details Two calibration reference points (A and B) define the interpolation grid.
+ *          By convention, point A carries the lower decibel reference and point B the
+ *          higher; the two reference pressures (pressure_a and pressure_b) have no
+ *          required ordering. For each reference point, flow rates at both reference
+ *          pressures are required.
  */
 struct Input {
     double operating_time    = 0.0; ///< Annual system operating time @unitb{\hour}
     double line_pressure     = 0.0; ///< Measured compressed air line pressure @unitb{\psig}
     double decibels          = 0.0; ///< Measured ultrasonic decibel level at the leak @unitb{\decibel}
     double decibel_rating_a  = 0.0; ///< Lower reference decibel rating (point A) @unitb{\decibel}
-    double pressure_a        = 0.0; ///< Lower reference pressure (point A) @unitb{\psig}
+    double pressure_a        = 0.0; ///< Reference pressure for point A @unitb{\psig}
     double first_flow_a      = 0.0; ///< Flow rate at (pressure_a, decibel_rating_a) @unitb{\scfm}
     double second_flow_a     = 0.0; ///< Flow rate at (pressure_b, decibel_rating_a) @unitb{\scfm}
     double decibel_rating_b  = 0.0; ///< Upper reference decibel rating (point B) @unitb{\decibel}
-    double pressure_b        = 0.0; ///< Upper reference pressure (point B) @unitb{\psig}
+    double pressure_b        = 0.0; ///< Reference pressure for point B @unitb{\psig}
     double first_flow_b      = 0.0; ///< Flow rate at (pressure_a, decibel_rating_b) @unitb{\scfm}
     double second_flow_b     = 0.0; ///< Flow rate at (pressure_b, decibel_rating_b) @unitb{\scfm}
 };
@@ -93,8 +94,8 @@ struct Result {
  * @symrow{Q_{leak};  Estimated compressed air leak flow rate;                \scfm}
  * @symrow{P;         Measured line pressure;                                 \psig}
  * @symrow{L;         Measured ultrasonic decibel level at the leak;          \decibel}
- * @symrow{P_1;       Lower reference pressure (pressure_a);                  \psig}
- * @symrow{P_2;       Upper reference pressure (pressure_b);                  \psig}
+ * @symrow{P_1;       Reference pressure (pressure_a);                        \psig}
+ * @symrow{P_2;       Reference pressure (pressure_b);                        \psig}
  * @symrow{L_1;       Lower reference decibel rating (decibel_rating_a);      \decibel}
  * @symrow{L_2;       Upper reference decibel rating (decibel_rating_b);      \decibel}
  * @symrow{Q_{11};    Flow rate at (P_1,\, L_1) — first_flow_a;              \scfm}

@@ -12,11 +12,11 @@ EMSCRIPTEN_BINDINGS(decibels_method) {
     //   linePressure    [psig]   - measured compressed air line pressure
     //   decibels        [dB]     - measured ultrasonic decibel level at the leak
     //   decibelRatingA  [dB]     - lower reference decibel rating (point A)
-    //   pressureA       [psig]   - lower reference pressure (point A)
+    //   pressureA       [psig]   - reference pressure for point A
     //   firstFlowA      [scfm]   - flow rate at (pressureA, decibelRatingA)
     //   secondFlowA     [scfm]   - flow rate at (pressureB, decibelRatingA)
     //   decibelRatingB  [dB]     - upper reference decibel rating (point B)
-    //   pressureB       [psig]   - upper reference pressure (point B)
+    //   pressureB       [psig]   - reference pressure for point B
     //   firstFlowB      [scfm]   - flow rate at (pressureA, decibelRatingB)
     //   secondFlowB     [scfm]   - flow rate at (pressureB, decibelRatingB)
     //   -> leakRateEstimate  [scfm]  - estimated compressed air leak flow rate

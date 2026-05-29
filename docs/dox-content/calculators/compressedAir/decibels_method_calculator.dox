@@ -76,8 +76,8 @@
  * @symrow{Q_{leak};  Estimated compressed air leak flow rate;                \scfm}
  * @symrow{P;         Measured line pressure;                                 \psig}
  * @symrow{L;         Measured ultrasonic decibel level at the leak;          \decibel}
- * @symrow{P_1;       Lower reference pressure (pressure_a);                  \psig}
- * @symrow{P_2;       Upper reference pressure (pressure_b);                  \psig}
+ * @symrow{P_1;       Reference pressure (pressure_a);                        \psig}
+ * @symrow{P_2;       Reference pressure (pressure_b);                        \psig}
  * @symrow{L_1;       Lower reference decibel rating (decibel_rating_a);      \decibel}
  * @symrow{L_2;       Upper reference decibel rating (decibel_rating_b);      \decibel}
  * @symrow{Q_{11};    Reference flow at (P_1,\, L_1) — first_flow_a;         \scfm}
