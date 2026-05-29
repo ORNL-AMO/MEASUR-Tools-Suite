@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include "compressedAir/compressed_air_utils.h"
+
 /**
  * @ingroup compressed_air_reduction_calculator
  * @file compressed_air_reduction.h
@@ -22,6 +24,8 @@
  * @see compressed_air_reduction_calculator
  */
 namespace compressed_air_reduction {
+
+using compressed_air_utils::CompressorElectricityData;
 
 /**
  * @ingroup compressed_air_reduction_calculator
@@ -104,22 +108,6 @@ struct PressureMethodData {
  */
 struct OtherMethodData {
     double consumption = 0.0; ///< Annual compressed air consumption @unitb{\cubic\foot\per\year}
-};
-
-/**
- * @ingroup compressed_air_reduction_calculator
- * @struct CompressorElectricityData
- * @brief Compressor electricity parameters used when @ref UtilityType::Electricity is selected.
- * @details The compressor specific power characterizes the electrical power required to sustain
- * one standard cubic foot per minute of compressed air flow. The control adjustment factor
- * accounts for part-load or variable-speed control efficiency and is expressed as a percentage
- * (0–100); it is divided by 100 and multiplied by the specific power before converting
- * consumption to electrical energy use.
- * @see compressed_air_reduction_electricity_formula
- */
-struct CompressorElectricityData {
-    double compressor_control_adjustment = 0.0; ///< Compressor control adjustment factor @unitb{\percent}
-    double compressor_specific_power     = 0.0; ///< Electrical power per unit flow rate @unitb{\kilo\watt\per(\cubic\foot\per\minute)}
 };
 
 /**

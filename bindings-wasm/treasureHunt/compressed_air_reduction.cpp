@@ -23,10 +23,6 @@ EMSCRIPTEN_BINDINGS(compressedAirReduction_module) {
     value_object<OtherMethodData>("OtherMethodData")
         .field("consumption", &OtherMethodData::consumption);
 
-    value_object<CompressorElectricityData>("CompressorElectricityData")
-        .field("compressorControlAdjustment", &CompressorElectricityData::compressor_control_adjustment)
-        .field("compressorSpecificPower",     &CompressorElectricityData::compressor_specific_power);
-
     enum_<MeasurementMethod>("CompressedAirMeasurementMethod")
         .value("FlowMeter", MeasurementMethod::FlowMeter)
         .value("Bag",       MeasurementMethod::Bag)
