@@ -1,10 +1,11 @@
 #pragma once
 
+#include <cmath>
 #include <exception>
 #include <stdexcept>
 #include <vector>
 
-#include "compressedAir/BagMethod.h"
+#include "compressedAir/bag_method.h"
 #include "compressedAir/compressed_air_utils.h"
 
 #ifndef M_PI
@@ -91,13 +92,13 @@ class CompressedAirLeakSurveyInput {
   public:
     CompressedAirLeakSurveyInput(const int hoursPerYear, const int utilityType, const double utilityCost,
                                  const int measurementMethod, const EstimateMethodData estimateMethodData,
-                                 const DecibelsMethodData decibelsMethodData, const BagMethod bagMethod,
+                                 const DecibelsMethodData decibelsMethodData, const bag_method::Input bagMethodInput,
                                  const OrificeMethodData         orificeMethodData,
                                  const CompressorElectricityData compressorElectricityData, const int units)
         : hoursPerYear(hoursPerYear), utilityType(utilityType), utilityCost(utilityCost),
           measurementMethod(measurementMethod), estimateMethodData(estimateMethodData),
-          decibelsMethodData(decibelsMethodData), bagMethod(bagMethod), orificeMethodData(orificeMethodData),
-          compressorElectricityData(compressorElectricityData), units(units) {}
+          decibelsMethodData(decibelsMethodData), bagMethodInput(bagMethodInput),
+          orificeMethodData(orificeMethodData), compressorElectricityData(compressorElectricityData), units(units) {}
 
     int                       getHoursPerYear() const { return hoursPerYear; } // operating time
     int                       getUtilityType() const { return utilityType; }
@@ -106,7 +107,7 @@ class CompressedAirLeakSurveyInput {
     double                    getUtilityCost() const { return utilityCost; }
     EstimateMethodData        getEstimateMethodData() const { return estimateMethodData; }
     DecibelsMethodData        getDecibelsMethodData() const { return decibelsMethodData; }
-    BagMethod                 getBagMethod() const { return bagMethod; }
+    bag_method::Input         getBagMethodInput() const { return bagMethodInput; }
     OrificeMethodData         getOrificeMethodData() const { return orificeMethodData; }
     CompressorElectricityData getCompressorElectricityData() const { return compressorElectricityData; }
 
@@ -116,7 +117,7 @@ class CompressedAirLeakSurveyInput {
     int                       measurementMethod;
     EstimateMethodData        estimateMethodData;
     DecibelsMethodData        decibelsMethodData;
-    BagMethod                 bagMethod;
+    bag_method::Input         bagMethodInput;
     OrificeMethodData         orificeMethodData;
     CompressorElectricityData compressorElectricityData;
     int                       units;
@@ -158,11 +159,9 @@ class CompressedAirLeakSurvey {
             }
             // bag method
             else if (compressedAirLeakSurveyInput.getMeasurementMethod() == 2) {
-                BagMethod bagMethod = compressedAirLeakSurveyInput.getBagMethod();
-                // Use BagMethod::calculate() for new logic
-                auto bagOutput         = bagMethod.calculate();
-                tmpTotalFlowRate       = bagOutput.flowRate * compressedAirLeakSurveyInput.getUnits();
-                tmpAnnualTotalFlowRate = bagOutput.annualConsumption * compressedAirLeakSurveyInput.getUnits();
+                auto bagResult         = bag_method::calculate(compressedAirLeakSurveyInput.getBagMethodInput());
+                tmpTotalFlowRate       = bagResult.flow_rate * compressedAirLeakSurveyInput.getUnits();
+                tmpAnnualTotalFlowRate = bagResult.annual_consumption * compressedAirLeakSurveyInput.getUnits();
             }
             // orifice method
             else if (compressedAirLeakSurveyInput.getMeasurementMethod() == 3) {

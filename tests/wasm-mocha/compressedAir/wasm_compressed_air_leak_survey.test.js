@@ -11,12 +11,12 @@ describe('Compressed Air Leak Survey', function () {
     });
 
     function buildInput(hoursPerYear, utilityType, utilityCost, measurementMethod,
-                        estimateLeakRate,
-                        decibelParams, bagParams, orificeParams,
-                        compressorControlAdjustment, compressorSpecificPower, units) {
+        estimateLeakRate,
+        decibelParams, bagParams, orificeParams,
+        compressorControlAdjustment, compressorSpecificPower, units) {
         const estimate = new moduleInstance.EstimateMethodData(estimateLeakRate);
         const decibels = new moduleInstance.DecibelsMethodData(...decibelParams);
-        const bag = new moduleInstance.BagMethod(...bagParams);
+        const bag = { ...bagParams };
         const orifice = new moduleInstance.OrificeMethodData(...orificeParams);
         const compElec = { compressorControlAdjustment, compressorSpecificPower };
 
@@ -27,7 +27,6 @@ describe('Compressed Air Leak Survey', function () {
 
         estimate.delete();
         decibels.delete();
-        bag.delete();
         orifice.delete();
 
         return input;
@@ -47,8 +46,15 @@ describe('Compressed Air Leak Survey', function () {
     const defaultDecibels = [130, 25, 20, 150, 1.04, 1.2, 30, 125, 1.85, 1.65];
 
     it('should calculate estimate method with electricity (8640 hrs)', function () {
+        const bagParams = {
+            operatingTime: 8760,
+            bagFillTime: 12,
+            bagVolume: 8.68,
+            numberOfUnits: 1
+        };
+
         const input = buildInput(8640, 1, 0.12, 0,
-            0.1, defaultDecibels, [8760, 12, 8.68, 1], [250.0, 14.7, 1.0, 6.0, 6.2, 4],
+            0.1, defaultDecibels, bagParams, [250.0, 14.7, 1.0, 6.0, 6.2, 4],
             0.40, 0.16, 1);
         const result = runSurvey(input);
 
@@ -59,8 +65,14 @@ describe('Compressed Air Leak Survey', function () {
     });
 
     it('should calculate estimate method with electricity (3840 hrs)', function () {
+        const bagParams = {
+            operatingTime: 3840,
+            bagFillTime: 12,
+            bagVolume: 8.68,
+            numberOfUnits: 1
+        };
         const input = buildInput(3840, 1, 0.12, 0,
-            0.1, defaultDecibels, [3840, 12, 8.68, 1], [250.0, 14.7, 1.0, 6.0, 6.2, 4],
+            0.1, defaultDecibels, bagParams, [250.0, 14.7, 1.0, 6.0, 6.2, 4],
             0.25, 0.16, 1);
         const result = runSurvey(input);
 
@@ -71,8 +83,14 @@ describe('Compressed Air Leak Survey', function () {
     });
 
     it('should calculate estimate method with electricity (large leak rate)', function () {
+        const bagParams = {
+            operatingTime: 8760,
+            bagFillTime: 12,
+            bagVolume: 8.68,
+            numberOfUnits: 1
+        };
         const input = buildInput(8760, 1, 0.12, 0,
-            100, defaultDecibels, [8760, 12, 8.68, 1], [250.0, 14.7, 1.0, 6.0, 6.2, 4],
+            100, defaultDecibels, bagParams, [250.0, 14.7, 1.0, 6.0, 6.2, 4],
             0.25, 0.16, 1);
         const result = runSurvey(input);
 
@@ -83,8 +101,14 @@ describe('Compressed Air Leak Survey', function () {
     });
 
     it('should calculate decibels method with electricity', function () {
+        const bagParams = {
+            operatingTime: 15,
+            bagFillTime: 10,
+            bagVolume: 12,
+            numberOfUnits: 1
+        };
         const input = buildInput(8640, 1, 0.12, 1,
-            0.1, defaultDecibels, [15, 10, 12, 1], [250.0, 14.7, 1.0, 6.0, 6.2, 4],
+            0.1, defaultDecibels, bagParams, [250.0, 14.7, 1.0, 6.0, 6.2, 4],
             0.40, 0.16, 1);
         const result = runSurvey(input);
 
@@ -95,8 +119,14 @@ describe('Compressed Air Leak Survey', function () {
     });
 
     it('should calculate bag method with electricity', function () {
+        const bagParams = {
+            operatingTime: 15,
+            bagFillTime: 10,
+            bagVolume: 12,
+            numberOfUnits: 1
+        };
         const input = buildInput(8640, 1, 0.12, 2,
-            0.1, defaultDecibels, [15, 10, 12, 1], [250.0, 14.7, 1.0, 6.0, 6.2, 4],
+            0.1, defaultDecibels, bagParams, [250.0, 14.7, 1.0, 6.0, 6.2, 4],
             0.40, 0.16, 2);
         const result = runSurvey(input);
 
@@ -107,8 +137,14 @@ describe('Compressed Air Leak Survey', function () {
     });
 
     it('should calculate orifice method with electricity', function () {
+        const bagParams = {
+            operatingTime: 15,
+            bagFillTime: 10,
+            bagVolume: 12,
+            numberOfUnits: 1
+        };
         const input = buildInput(8640, 1, 0.12, 3,
-            0.1, defaultDecibels, [15, 10, 12, 1], [550, 14.7, 1.0, 0.375, 100, 4],
+            0.1, defaultDecibels, bagParams, [550, 14.7, 1.0, 0.375, 100, 4],
             0.40, 0.16, 1);
         const result = runSurvey(input);
 

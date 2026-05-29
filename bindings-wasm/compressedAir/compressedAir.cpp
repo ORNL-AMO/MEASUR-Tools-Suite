@@ -4,7 +4,6 @@
 
 #include "compressedAir/AirSystemCapacity.h"
 #include "compressedAir/AirVelocity.h"
-#include "compressedAir/BagMethod.h"
 #include "compressedAir/DecibelsMethod.h"
 #include "compressedAir/EstimateMethod.h"
 #include "compressedAir/OrificeMethod.h"
@@ -56,18 +55,6 @@ EMSCRIPTEN_BINDINGS(airVelocity) {
     class_<AirVelocity>("AirVelocity")
         .constructor<double, double, double>()
         .function("calculate", &AirVelocity::calculate);
-}
-
-// bagMethod
-EMSCRIPTEN_BINDINGS(bagMethod) {
-    class_<BagMethod>("BagMethod")
-        .constructor<double, double, double, double>()
-        .function("calculate", &BagMethod::calculate);
-
-    class_<BagMethod::Output>("BagMethodOutput")
-        .constructor<double, double>()
-        .property("flowRate", &BagMethod::Output::flowRate)
-        .property("annualConsumption", &BagMethod::Output::annualConsumption);
 }
 
 // estimateMethod
