@@ -15,7 +15,6 @@ Progress on refactoring compressedAir calculators to the namespace pattern (free
 - `compressed_air_leak_survey` — done 2026-05-29
   - New `include/compressedAir/compressed_air_leak_survey.h` (namespace + enums + full doxygen)
   - New `src/compressedAir/compressed_air_leak_survey.cpp`
-  - `include/compressedAir/CompressedAirLeakSurvey.h` → backward-compat wrapper
   - New `bindings-wasm/compressedAir/compressed_air_leak_survey.cpp` (value_object pattern)
   - Old `bindings-wasm/compressedAir/compressedAirLeakSurvey.cpp` → deleted
   - New `tests/cpp/compressedAir/compressed_air_leak_survey.unit.cpp`
