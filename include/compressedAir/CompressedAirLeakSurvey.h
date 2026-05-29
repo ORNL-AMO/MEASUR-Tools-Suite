@@ -7,9 +7,9 @@
 
 #include "compressedAir/bag_method.h"
 #include "compressedAir/decibels_method.h"
+#include "compressedAir/compressed_air_utils.h"
 #include "compressedAir/estimate_method.h"
 #include "compressedAir/orifice_method.h"
-#include "compressedAir/compressed_air_utils.h"
 
 using compressed_air_utils::CompressorElectricityData;
 
@@ -73,10 +73,13 @@ class CompressedAirLeakSurvey {
 
             // estimate method
             if (compressedAirLeakSurveyInput.getMeasurementMethod() == 0) {
-                auto estResult         = estimate_method::calculate(compressedAirLeakSurveyInput.getEstimateMethodInput());
-                tmpTotalFlowRate       = compressedAirLeakSurveyInput.getEstimateMethodInput().leak_rate_estimate *
-                                         compressedAirLeakSurveyInput.getUnits();
-                tmpAnnualTotalFlowRate = estResult.annual_consumption * 1000.0 * compressedAirLeakSurveyInput.getUnits();
+                auto estInput = compressedAirLeakSurveyInput.getEstimateMethodInput();
+                //set time to hours per year for estimate method calculation
+                estInput.operating_time = compressedAirLeakSurveyInput.getHoursPerYear();
+                auto estResult   = estimate_method::calculate(estInput);
+                tmpTotalFlowRate = estInput.leak_rate_estimate * compressedAirLeakSurveyInput.getUnits();
+                tmpAnnualTotalFlowRate =
+                    estResult.annual_consumption * 1000.0 * compressedAirLeakSurveyInput.getUnits();
             }
             // decibels method
             else if (compressedAirLeakSurveyInput.getMeasurementMethod() == 1) {
@@ -92,8 +95,8 @@ class CompressedAirLeakSurvey {
             }
             // orifice method
             else if (compressedAirLeakSurveyInput.getMeasurementMethod() == 3) {
-                auto orfResult         = orifice_method::calculate(compressedAirLeakSurveyInput.getOrificeMethodInput());
-                tmpTotalFlowRate       = orfResult.leak_rate_estimate * compressedAirLeakSurveyInput.getUnits();
+                auto orfResult   = orifice_method::calculate(compressedAirLeakSurveyInput.getOrificeMethodInput());
+                tmpTotalFlowRate = orfResult.leak_rate_estimate * compressedAirLeakSurveyInput.getUnits();
                 tmpAnnualTotalFlowRate = (compressedAirLeakSurveyInput.getHoursPerYear() * tmpTotalFlowRate * 60);
             }
 
@@ -104,8 +107,9 @@ class CompressedAirLeakSurvey {
             // electricity
             else if (compressedAirLeakSurveyInput.getUtilityType() == 1) {
                 const CompressorElectricityData& ced = compressedAirLeakSurveyInput.getCompressorElectricityData();
-                tmpAnnualTotalElectricity     = (ced.compressor_specific_power / 60.0) * tmpAnnualTotalFlowRate;
-                tmpAnnualTotalElectricityCost = tmpAnnualTotalElectricity * compressedAirLeakSurveyInput.getUtilityCost();
+                tmpAnnualTotalElectricity            = (ced.compressor_specific_power / 60.0) * tmpAnnualTotalFlowRate;
+                tmpAnnualTotalElectricityCost =
+                    tmpAnnualTotalElectricity * compressedAirLeakSurveyInput.getUtilityCost();
             }
             annualTotalElectricity += tmpAnnualTotalElectricity;
             annualTotalElectricityCost += tmpAnnualTotalElectricityCost;
