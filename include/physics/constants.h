@@ -140,8 +140,32 @@ inline constexpr double kAirSensibleHeatFactor = 1.08;
  */
 inline constexpr double kWaterSensibleHeatFactor = 500.0;
 
-// Gravitational acceleration in U.S. customary units.
+/// @brief Gravitational acceleration in U.S. customary units @unitb{\foot\per\second\squared}
+/// @details Precise value of standard gravity.
 inline constexpr double kGravityFtPerSec2 = 32.174;
+
+/**
+ * @brief Conventional engineering approximation for standard gravity @unitb{\foot\per\second\squared}
+ * @details 32.2 ft/s² is the rounded value used in U.S. customary compressible-flow and gas-dynamics
+ *          calculations (e.g., orifice and nozzle flow equations). The precise standard value is 32.174 ft/s².
+ *          The approximation is used here to match established industry formula coefficients.
+ */
+inline constexpr double kStandardGravityApprox = 32.2;
+
+/**
+ * @brief Specific gas constant for dry air in U.S. customary units
+ * @details 53.34 ft·lbf / (lbm·°R). Derived from the universal gas constant divided by the
+ *          molar mass of air: R = 1545 ft·lbf/(lbmol·°R) / 28.97 lbm/lbmol = 53.34 ft·lbf/(lbm·°R).
+ *          Used in ideal-gas density calculations for compressed-air engineering.
+ */
+inline constexpr double kSpecificGasConstantAir = 53.34;
+
+/**
+ * @brief Ratio of specific heats (adiabatic index) for dry air @unitb{\unitless}
+ * @details gamma = Cp/Cv = 1.4 for dry air at typical compressed-air operating conditions
+ *          (below ~250°F). Used in isentropic flow and orifice discharge calculations.
+ */
+inline constexpr double kGammaAir = 1.4;
 
 } // namespace physics::us
 

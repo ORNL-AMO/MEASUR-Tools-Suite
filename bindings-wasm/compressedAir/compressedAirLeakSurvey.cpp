@@ -1,4 +1,5 @@
 #include "compressedAir/CompressedAirLeakSurvey.h"
+#include "compressedAir/orifice_method.h"
 
 #include <emscripten/bind.h>
 
@@ -8,16 +9,12 @@ using namespace emscripten;
 
 EMSCRIPTEN_BINDINGS(compressedAirLeakSurvey_class) {
 
-    class_<EstimateMethodData>("EstimateMethodData").constructor<double>();
-
     class_<DecibelsMethodData>("DecibelsMethodData")
         .constructor<double, double, double, double, double, double, double, double, double, double>();
 
-    class_<OrificeMethodData>("OrificeMethodData").constructor<double, double, double, double, double, int>();
-
     class_<CompressedAirLeakSurveyInput>("CompressedAirLeakSurveyInput")
-        .constructor<int, int, double, int, EstimateMethodData, DecibelsMethodData, bag_method::Input,
-                     OrificeMethodData, CompressorElectricityData, int>();
+        .constructor<int, int, double, int, estimate_method::Input, DecibelsMethodData, bag_method::Input,
+                     orifice_method::Input, CompressorElectricityData, int>();
 
     register_vector<CompressedAirLeakSurveyInput>("CompressedAirLeakSurveyInputV");
 
