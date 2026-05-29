@@ -78,6 +78,8 @@ window.MathJax = {
 
                 \DeclareSIUnit{\pound}{lb}
                 \DeclareSIUnit{\lb}{lb}
+                \DeclareSIUnit{\lbm}{lb_{m}}
+                \DeclareSIUnit{\lbf}{lb_{f}}
 
                 \DeclareSIUnit{\revolutionsPerMinute}{rpm}
                 \DeclareSIUnit{\rpm}{rpm}

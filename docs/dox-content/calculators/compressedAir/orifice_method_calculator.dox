@@ -129,7 +129,7 @@
  * @symrow{\rho_{ca}; Air density at supply (compressed) conditions; \pound\per\cubicFoot}
  * @symrow{P_{abs}; Absolute supply pressure; \psia}
  * @symrow{144; Unit conversion: square inches per square foot; \squareInch\per\squareFoot}
- * @symrow{R_{air}; Specific gas constant for dry air (53.34 ft·lbf per lbm·°R); \unitless}
+ * @symrow{R_{air}; Specific gas constant for dry air (53.34 ft·lbf per lbm·°R); \foot\lbf\per\lbm\per\degreeRankine}
  * @symrow{T_R; Air temperature in degrees Rankine; \degreeRankine}
  * @endsymtable
  */
@@ -152,7 +152,7 @@
  * @symrow{\rho_{std}; Air density at standard atmospheric conditions; \pound\per\cubicFoot}
  * @symrow{P_{atm}; Local atmospheric pressure; \psia}
  * @symrow{144; Unit conversion: square inches per square foot; \squareInch\per\squareFoot}
- * @symrow{R_{air}; Specific gas constant for dry air (53.34 ft·lbf per lbm·°R); \unitless}
+ * @symrow{R_{air}; Specific gas constant for dry air (53.34 ft·lbf per lbm·°R); \foot\lbf\per\lbm\per\degreeRankine}
  * @symrow{T_R; Air temperature in degrees Rankine; \degreeRankine}
  * @endsymtable
  */
@@ -198,9 +198,9 @@
  * @symtable
  * @symrow{V^*; Sonic air velocity at the orifice throat; \foot\per\second}
  * @symrow{\gamma; Ratio of specific heats for dry air (1.4); \unitless}
- * @symrow{R_{air}; Specific gas constant for dry air (53.34 ft·lbf per lbm·°R); \unitless}
+ * @symrow{R_{air}; Specific gas constant for dry air (53.34 ft·lbf per lbm·°R); \foot\lbf\per\lbm\per\degreeRankine}
  * @symrow{T_R; Air temperature in degrees Rankine; \degreeRankine}
- * @symrow{g_c; Gravitational conversion constant (32.2 lbm·ft per lbf·s²); \unitless}
+ * @symrow{g_c; Gravitational conversion constant (32.2 lbm·ft per lbf·s²); \lbm\foot\per\lbf\per\second\squared}
  * @endsymtable
  */
 
