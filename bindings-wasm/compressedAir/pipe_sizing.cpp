@@ -13,7 +13,7 @@ EMSCRIPTEN_BINDINGS(pipe_sizing) {
         .field("airlinePressure",     &Input::airline_pressure)
         // designVelocity: maximum allowable compressed-air velocity [ft/s]
         .field("designVelocity",      &Input::design_velocity)
-        // atmosphericPressure: local atmospheric pressure [psia], default 14.7
+        // atmosphericPressure: local atmospheric pressure [psia]
         .field("atmosphericPressure", &Input::atmospheric_pressure);
 
     value_object<Result>("PipeSizingResult")
