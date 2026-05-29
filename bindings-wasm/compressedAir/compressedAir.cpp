@@ -5,7 +5,6 @@
 #include "compressedAir/AirSystemCapacity.h"
 #include "compressedAir/AirVelocity.h"
 #include "compressedAir/DecibelsMethod.h"
-#include "compressedAir/OrificeMethod.h"
 #include "compressedAir/PipeData.h"
 
 using namespace emscripten;
@@ -66,21 +65,4 @@ EMSCRIPTEN_BINDINGS(decibelsMethod) {
         .constructor<double, double>()
         .property("leakRateEstimate", &DecibelsMethod::Output::leakRateEstimate)
         .property("annualConsumption", &DecibelsMethod::Output::annualConsumption);
-}
-
-// orificeMethod
-EMSCRIPTEN_BINDINGS(orificeMethod) {
-    class_<OrificeMethod>("OrificeMethod")
-        .constructor<double, double, double, double, double, double, double>()
-        .function("calculate", &OrificeMethod::calculate);
-
-    class_<OrificeMethod::Output>("OrificeMethodOutput")
-        .constructor<double, double, double, double, double, double, double>()
-        .property("standardDensity", &OrificeMethod::Output::standardDensity)
-        .property("sonicDensity", &OrificeMethod::Output::sonicDensity)
-        .property("leakVelocity", &OrificeMethod::Output::leakVelocity)
-        .property("leakRateLBMmin", &OrificeMethod::Output::leakRateLBMmin)
-        .property("leakRateScfm", &OrificeMethod::Output::leakRateScfm)
-        .property("leakRateEstimate", &OrificeMethod::Output::leakRateEstimate)
-        .property("annualConsumption", &OrificeMethod::Output::annualConsumption);
 }

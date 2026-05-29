@@ -6,11 +6,8 @@
 
 #include "compressedAir/bag_method.h"
 #include "compressedAir/estimate_method.h"
+#include "compressedAir/orifice_method.h"
 #include "compressedAir/compressed_air_utils.h"
-
-#ifndef M_PI
-    #define M_PI 3.14159265358979323846
-#endif
 
 using compressed_air_utils::CompressorElectricityData;
 
@@ -49,47 +46,17 @@ class DecibelsMethodData {
     double secondFlowB;    // Q22
 };
 
-class OrificeMethodData {
-  public:
-    OrificeMethodData(const double airTemp, const double atmPressure, const double dischargeCoef, const double diameter,
-                      const double supplyPressure, const int numOrifices)
-        : airTemp(airTemp), atmPressure(atmPressure), dischargeCoef(dischargeCoef), diameter(diameter),
-          supplyPressure(supplyPressure), numOrifices(numOrifices) {}
-
-    double calculate() {
-        const double caPressurePSIA = atmPressure + supplyPressure;
-
-        // convert to rankine for density calcs
-        const double airTempRankine = airTemp + 459.67;
-
-        const double caDensity       = caPressurePSIA * 144 / (53.34 * airTempRankine);
-        const double standardDensity = atmPressure * 144 / (53.34 * airTempRankine);
-        const double sonicDensity    = caDensity * std::pow((2 / 2.4), (1 / .4));
-
-        const double leakVelocity = std::pow(((2 * 1.4) / (1.4 + 1)) * 53.34 * airTempRankine * 32.2, 0.5);
-        const double leakRateLBMmin =
-            sonicDensity * (diameter * diameter) * (M_PI / (4 * 144)) * leakVelocity * 60 * dischargeCoef;
-        const double leakRateScfm     = leakRateLBMmin / standardDensity;
-        const double leakRateEstimate = leakRateScfm * numOrifices;
-        return leakRateEstimate;
-    }
-
-  private:
-    double airTemp, atmPressure, dischargeCoef, diameter, supplyPressure;
-    int    numOrifices;
-};
-
 class CompressedAirLeakSurveyInput {
   public:
     CompressedAirLeakSurveyInput(const int hoursPerYear, const int utilityType, const double utilityCost,
                                  const int measurementMethod, const estimate_method::Input estimateMethodInput,
                                  const DecibelsMethodData decibelsMethodData, const bag_method::Input bagMethodInput,
-                                 const OrificeMethodData         orificeMethodData,
+                                 const orifice_method::Input         orificeMethodInput,
                                  const CompressorElectricityData compressorElectricityData, const int units)
         : hoursPerYear(hoursPerYear), utilityType(utilityType), utilityCost(utilityCost),
           measurementMethod(measurementMethod), estimateMethodInput(estimateMethodInput),
           decibelsMethodData(decibelsMethodData), bagMethodInput(bagMethodInput),
-          orificeMethodData(orificeMethodData), compressorElectricityData(compressorElectricityData), units(units) {}
+          orificeMethodInput(orificeMethodInput), compressorElectricityData(compressorElectricityData), units(units) {}
 
     int                       getHoursPerYear() const { return hoursPerYear; } // operating time
     int                       getUtilityType() const { return utilityType; }
@@ -99,7 +66,7 @@ class CompressedAirLeakSurveyInput {
     estimate_method::Input    getEstimateMethodInput() const { return estimateMethodInput; }
     DecibelsMethodData        getDecibelsMethodData() const { return decibelsMethodData; }
     bag_method::Input         getBagMethodInput() const { return bagMethodInput; }
-    OrificeMethodData         getOrificeMethodData() const { return orificeMethodData; }
+    orifice_method::Input     getOrificeMethodInput() const { return orificeMethodInput; }
     CompressorElectricityData getCompressorElectricityData() const { return compressorElectricityData; }
 
   private:
@@ -109,7 +76,7 @@ class CompressedAirLeakSurveyInput {
     estimate_method::Input    estimateMethodInput;
     DecibelsMethodData        decibelsMethodData;
     bag_method::Input         bagMethodInput;
-    OrificeMethodData         orificeMethodData;
+    orifice_method::Input     orificeMethodInput;
     CompressorElectricityData compressorElectricityData;
     int                       units;
 };
@@ -157,8 +124,8 @@ class CompressedAirLeakSurvey {
             }
             // orifice method
             else if (compressedAirLeakSurveyInput.getMeasurementMethod() == 3) {
-                OrificeMethodData orificeMethodData = compressedAirLeakSurveyInput.getOrificeMethodData();
-                tmpTotalFlowRate       = orificeMethodData.calculate() * compressedAirLeakSurveyInput.getUnits();
+                auto orfResult         = orifice_method::calculate(compressedAirLeakSurveyInput.getOrificeMethodInput());
+                tmpTotalFlowRate       = orfResult.leak_rate_estimate * compressedAirLeakSurveyInput.getUnits();
                 tmpAnnualTotalFlowRate = (compressedAirLeakSurveyInput.getHoursPerYear() * tmpTotalFlowRate * 60);
             }
 
