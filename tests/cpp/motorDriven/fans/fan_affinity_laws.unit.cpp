@@ -42,10 +42,10 @@ TEST_CASE("Compute annual energy and cost savings", "[fanAffinityLaws]") {
 
     INFO("Test Case #5 for Two-Speed + Change Fan Size: ");
     validateFALOutput(FanAffinityLaws(0.08, 96, 97, 0,
-    4380, 20, 60000,
-    FanAffinityLaws::OnOff, FanAffinityLaws::TwoSpeed,
-    FanAffinityLaws::Volume, 40000).changeFanSize(36, 38),
-    FanAffinityLaws::Output(94072.16, 51363.6, 3416.69));
+        4380, 20, 60000,
+        FanAffinityLaws::OnOff, FanAffinityLaws::TwoSpeed,
+        FanAffinityLaws::Volume, 40000).changeFanSize(36, 38),
+        FanAffinityLaws::Output(94072.16, 51363.6, 3416.69));
 
     INFO("Test Case #6 for VSD: ");
     validateFALOutput(FanAffinityLaws(0.07, 95, 93, 88,

@@ -35,7 +35,7 @@ EMSCRIPTEN_BINDINGS(fan_affinity_laws) {
 
     /**
      * Function calculate computes the annual energy and cost savings based on current and changed state of motor control
-     * Function changeFanSize takes in two paramters current fan diameter and new fan diameter and
+     * Function changeFanSize takes in two parameters current fan diameter and new fan diameter, and
      * computes the annual energy and cost savings based on current and changed state of motor control and  change in fan size.
      */
     class_<FanAffinityLaws>("FanAffinityLaws")
