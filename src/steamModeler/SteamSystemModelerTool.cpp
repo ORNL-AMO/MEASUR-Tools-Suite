@@ -12,7 +12,7 @@ void SteamSystemModelerTool::checkIsentropicExponentLimits(double& k) {
 
 // where t is temperature and p is pressure
 SteamSystemModelerTool::SteamPropertiesOutput SteamSystemModelerTool::region1(const double t, const double p) {
-    static const std::array<double, 34> n = {
+    static constexpr std::array<double, 34> n = {
         {0.14632971213167,      -0.84548187169114,    -0.37563603672040e1,   0.33855169168385e1,
          -0.95791963387872,     0.15772038513228,     -0.16616417199501e-1,  0.81214629983568e-3,
          0.28319080123804e-3,   -0.60706301565874e-3, -0.18990068218419e-1,  -0.32529748770505e-1,
@@ -23,7 +23,7 @@ SteamSystemModelerTool::SteamPropertiesOutput SteamSystemModelerTool::region1(co
          -0.68762131295531e-18, 0.14478307828521e-19, 0.26335781662795e-22,  -0.11947622640071e-22,
          0.18228094581404e-23,  -0.93537087292458e-25}};
 
-    static const std::array<int, 34> j = {{-2, -1, 0,  1, 2, 3,  4,  5,  -9, -7,  -1, 0,   1,   3,   -3,  0,   1,
+    static constexpr std::array<int, 34> j = {{-2, -1, 0,  1, 2, 3,  4,  5,  -9, -7,  -1, 0,   1,   3,   -3,  0,   1,
                                            3,  17, -4, 0, 6, -5, -2, 10, -8, -11, -6, -29, -31, -38, -39, -40, -41}};
 
     static const std::array<int, 34> i = {
@@ -45,7 +45,7 @@ SteamSystemModelerTool::SteamPropertiesOutput SteamSystemModelerTool::region1(co
         gibbsPT += -n[k] * i[k] * pow((7.1 - reducedPressure), i[k] - 1) * j[k] * pow((inversedReducedTemp - 1.222), j[k]-1);
     }
 
-    auto const r = 0.461526;
+    constexpr auto r = 0.461526;
 
     double cp = -inversedReducedTemp * inversedReducedTemp * gibbsTT * r;
     double cvn = gibbsPi - inversedReducedTemp * gibbsPT;
@@ -68,11 +68,11 @@ SteamSystemModelerTool::SteamPropertiesOutput SteamSystemModelerTool::region1(co
 
 // where t is temperature in K and p is pressure in MPa
 SteamSystemModelerTool::SteamPropertiesOutput SteamSystemModelerTool::region2(const double t, const double p) {
-    static const std::array<double, 9>  n0 = {{-0.96927686500217E+01, 0.10086655968018E+02, -0.56087911283020E-02,
+    static constexpr std::array<double, 9>  n0 = {{-0.96927686500217E+01, 0.10086655968018E+02, -0.56087911283020E-02,
                                                0.71452738081455E-01, -0.40710498223928E+00, 0.14240819171444E+01,
                                                -0.43839511319450E+01, -0.28408632460772E+00, 0.21268463753307E-01}};
-    static const std::array<double, 9>  j0 = {{0, 1, -5, -4, -3, -2, -1, 2, 3}};
-    static const std::array<double, 43> n1 = {
+    static constexpr std::array<double, 9>  j0 = {{0, 1, -5, -4, -3, -2, -1, 2, 3}};
+    static constexpr std::array<double, 43> n1 = {
         {-0.17731742473213E-02, -0.17834862292358E-01, -0.45996013696365E-01, -0.57581259083432E-01,
          -0.50325278727930E-01, -0.33032641670203E-04, -0.18948987516315E-03, -0.39392777243355E-02,
          -0.43797295650573E-01, -0.26674547914087E-04, 0.20481737692309E-07,  0.43870667284435E-06,
@@ -116,7 +116,7 @@ SteamSystemModelerTool::SteamPropertiesOutput SteamSystemModelerTool::region2(co
         gibbsPT1 += n1[k] * i1[k] * std::pow(reducedPressure, i1[k]-1) * j1[k] * std::pow((inverseReducedTemp - 0.5), j1[k]-1);
         gibbsPP1 += n1[k] * i1[k] * (i1[k] -1) * std::pow(reducedPressure, i1[k]-2) * std::pow((inverseReducedTemp - 0.5), j1[k]);
     }
-    auto const r = 0.461526;
+    constexpr auto r = 0.461526;
 
     double cp = -inverseReducedTemp * inverseReducedTemp * (gibbsTT0 + gibbsTT1) * r;
     double cvn = 1 + reducedPressure * gibbsPi1 - inverseReducedTemp * reducedPressure * gibbsPT1;
@@ -185,7 +185,7 @@ SteamSystemModelerTool::SteamPropertiesOutput SteamSystemModelerTool::region3(co
 }
 
 SteamSystemModelerTool::SteamPropertiesOutput SteamSystemModelerTool::region3Density(const double d, const double t) {
-    static const std::array<double, 40> n = {
+    static constexpr std::array<double, 40> n = {
         {0.10658070028513E+01,  -0.15732845290239E+02, 0.20944396974307E+02,  -0.76867707878716E+01,
          0.26185947787954E+01,  -0.28080781148620E+01, 0.12053369696517E+01,  -0.84566812812502E-02,
          -0.12654315477714E+01, -0.11524407806681E+01, 0.88521043984318E+00,  -0.64207765181607E+00,
@@ -217,7 +217,7 @@ SteamSystemModelerTool::SteamPropertiesOutput SteamSystemModelerTool::region3Den
         helmholtzSS += n[k] * i[k] * (i[k]-1) * std::pow(reducedDensity, i[k]-2) * std::pow(inverseReducedTemp, j[k]);
     }
 
-    auto const r = 0.461526;
+    constexpr auto r = 0.461526;
 
     double cv = -inverseReducedTemp * inverseReducedTemp * helmholtzTT * r;
     double cpn = reducedDensity * helmholtzS - reducedDensity * inverseReducedTemp * helmholtzST;
@@ -273,36 +273,31 @@ double SteamSystemModelerTool::region4(const double t) {
  * @param t Temperature in K.
  */
 int SteamSystemModelerTool::regionSelect(const double p, const double t) {
-    const std::string methodName = std::string("SteamSystemModelerTool::") + std::string(__func__) + ": ";
+    if (p >= PRESSURE_MIN && p <= PRESSURE_REGION5_MAX && TEMPERATURE_MAX < t && t <= TEMPERATURE_REGION5_MAX) {
+        throw std::runtime_error("Region Select for combination of values: temp in K=" + std::to_string(t) +
+                   ", pressure in MPa=" + std::to_string(p) + " is in region 5, which is currently not implemented.");
+    }
 
-    // std::cout << methodName << "pressure in MPa=" << p << ", temp in K=" << t << std::endl;
+    if (p >= PRESSURE_MIN && p <= PRESSURE_MAX && TEMPERATURE_MIN <= t && t <= TEMPERATURE_MAX) {
+        if (t <= TEMPERATURE_Tp) {
+            if (p <= region4(t)) {
+                return 2;
+            }
 
-    const double boundaryPressure = (t >= TEMPERATURE_Tp) ? boundaryByTemperatureRegion3to2(t) : region4(t);
-    // std::cout << methodName << "boundaryPressure=" << boundaryPressure << std::endl;
-
-    if (t >= TEMPERATURE_MIN && t <= TEMPERATURE_Tp) {
-        if (p <= PRESSURE_MAX && p >= boundaryPressure)
             return 1;
-        if (p > 0 && p <= boundaryPressure)
+        }
+
+        if (t > TEMPERATURE_REGION3_MAX || p <= PRESSURE_Tp || p <= boundaryByTemperatureRegion3to2(t)) {
             return 2;
+        }
+
+        return 3;
     }
 
-    if (t >= TEMPERATURE_Tp && t <= TEMPERATURE_REGION3_MAX) {
-        if (p > 0 && p <= boundaryPressure)
-            return 2;
-        if (p <= PRESSURE_MAX && p > boundaryPressure)
-            return 3;
-    }
-
-    if (t > TEMPERATURE_REGION3_MAX && t <= TEMPERATURE_MAX)
-        return 2;
-
-    auto message = "regionSelect failed for combination of values: temp in K=" + std::to_string(t) +
-                   ", pressure in MPa=" + std::to_string(p) + ", boundaryPressure=" + std::to_string(boundaryPressure) +
+    throw std::runtime_error("Region Select failed for combination of values: temp in K=" + std::to_string(t) +
+                   ", pressure in MPa=" + std::to_string(p) +
                    "; valid temp range=" + std::to_string(TEMPERATURE_MIN) + " - " + std::to_string(TEMPERATURE_MAX) +
-                   "; max pressure=" + std::to_string(PRESSURE_MAX);
-    // std::cout << methodName << message << std::endl;
-    throw std::runtime_error(message);
+                   "; valid pressure range=" + std::to_string(PRESSURE_MIN) + "- " + std::to_string(PRESSURE_MAX));
 }
 
 double SteamSystemModelerTool::backwardPressureEnthalpyRegion1(const double pressure, const double enthalpy) {
@@ -310,7 +305,7 @@ double SteamSystemModelerTool::backwardPressureEnthalpyRegion1(const double pres
 
     static const std::array<int, 20> J = {{0, 1, 2, 6, 22, 32, 0, 1, 2, 3, 4, 10, 32, 10, 32, 10, 32, 32, 32, 32}};
 
-    static const std::array<double, 20> n = {
+    static constexpr std::array<double, 20> n = {
         {-0.23872489924521E+3, 0.40421188637945E+3,   0.11349746881718E+3,  -0.58457616048039E+1,
          -0.15285482413140E-3, -0.10866707695377E-5,  -0.13391744872602E+2, 0.43211039183559E+2,
          -0.54010067170506E+2, 0.30535892203916E+2,   -0.65964749423638E+1, 0.93965400878363E-2,
@@ -331,7 +326,7 @@ double SteamSystemModelerTool::backwardPressureEnthalpyRegion2A(const double pre
         {0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 7}};
     static const std::array<int, 34>    array1 = {{0, 1,  2,  3,  7,  20, 0,  1,  2,  3,  7,  9,  11, 18, 44, 0,  2,
                                                    7, 36, 38, 40, 42, 44, 24, 44, 12, 32, 44, 32, 36, 42, 34, 44, 28}};
-    static const std::array<double, 34> array2 = {
+    static constexpr std::array<double, 34> array2 = {
         {0.10898952318288E+4,  0.84951654495535E+3,   -0.10781748091826E+3, 0.33153654801263E+2,  -0.74232016790248E+1,
          0.11765048724356E+2,  0.18445749355790E+1,   -0.41792700549624E+1, 0.62478196935812E+1,  -0.17344563108114E+2,
          -0.20058176862096E+3, 0.27196065473796E+3,   -0.45511318285818E+3, 0.30919688604755E+4,  0.25226640357872E+6,
@@ -356,7 +351,7 @@ double SteamSystemModelerTool::backwardPressureEnthalpyRegion2B(const double pre
     static const std::array<int, 38> J = {{0,  1, 2, 12, 18, 24, 28, 40, 0,  2,  6,  12, 18, 24, 28, 40, 2,  8, 18,
                                            40, 1, 2, 12, 24, 2,  12, 18, 24, 28, 40, 18, 24, 40, 28, 2,  28, 1, 40}};
 
-    static const std::array<double, 38> n = {
+    static constexpr std::array<double, 38> n = {
         {0.14895041079516E+4,   0.74307798314034E+3,  -0.97708318797837E+2,  0.24742464705674E+1,
          -0.63281320016026,     0.11385952129658E+1,  -0.47811863648625,     0.85208123431544E-2,
          0.93747147377932,      0.33593118604916E+1,  0.33809355601454E+1,   0.16844539671904,
@@ -378,12 +373,12 @@ double SteamSystemModelerTool::backwardPressureEnthalpyRegion2B(const double pre
 }
 
 double SteamSystemModelerTool::backwardPressureEnthalpyRegion2C(const double pressure, const double enthalpy) {
-    static const std::array<int, 23> I = {
+    static constexpr std::array<int, 23> I = {
         {-7, -7, -6, -6, -5, -5, -2, -2, -1, -1, 0, 0, 1, 1, 2, 6, 6, 6, 6, 6, 6, 6, 6}};
 
     static const std::array<int, 23> J = {{0, 4, 0, 2, 0, 2, 0, 1, 0, 2, 0, 1, 4, 8, 4, 0, 1, 4, 10, 12, 16, 20, 22}};
 
-    static const std::array<double, 23> n = {
+    static constexpr std::array<double, 23> n = {
         {-0.32368398555242E+13, 0.73263350902181E+13,  0.35825089945447E+12, -0.58340131851590E+12,
          -0.10783068217470E+11, 0.20825544563171E+11,  0.61074783564516E+6,  0.85977722535580E+6,
          -0.25745723604170E+5,  0.31081088422714E+5,   0.12082315865936E+4,  0.48219755109255E+3,
@@ -401,16 +396,16 @@ double SteamSystemModelerTool::backwardPressureEnthalpyRegion2C(const double pre
 }
 
 double SteamSystemModelerTool::backwardPressureEntropyRegion2A(const double pressure, const double entropy) {
-    static const std::array<double, 46> array0 = {
+    static constexpr std::array<double, 46> array0 = {
         {-1.5,  -1.5, -1.5, -1.5, -1.5, -1.5,  -1.25, -1.25, -1.25, -1,   -1,   -1,   -1,   -1,  -1,  -0.75,
          -0.75, -0.5, -0.5, -0.5, -0.5, -0.25, -0.25, -0.25, -0.25, 0.25, 0.25, 0.25, 0.25, 0.5, 0.5, 0.5,
          0.5,   0.5,  0.5,  0.5,  0.75, 0.75,  0.75,  0.75,  1,     1,    1.25, 1.25, 1.5,  1.5}};
 
-    static const std::array<int, 46> array1 = {
+    static constexpr std::array<int, 46> array1 = {
         {-24, -23, -19, -13, -11, -10, -19, -15, -6, -26, -21, -17, -16, -9, -8, -15, -14, -26, -13, -9, -7, -27, -25,
          -11, -6,  1,   4,   8,   11,  0,   1,   5,  6,   10,  14,  16,  0,  4,  9,   17,  7,   18,  3,  15, 5,   18}};
 
-    static const std::array<double, 46> array2 = {
+    static constexpr std::array<double, 46> array2 = {
         {-0.39235983861984E+6, 0.51526573827270E+6,  0.40482443161048E+5,  -0.32193790923902E+3, 0.96961424218694E+2,
          -0.22867846371773E+2, -0.44942914124357E+6, -0.50118336020166E+4, 0.35684463560015,     0.44235335848190E+5,
          -0.13673388811708E+5, 0.42163260207864E+6,  0.22516925837475E+5,  0.47442144865646E+3,  -0.14931130797647E+3,
@@ -431,7 +426,7 @@ double SteamSystemModelerTool::backwardPressureEntropyRegion2A(const double pres
 }
 
 double SteamSystemModelerTool::backwardPressureEntropyRegion2B(const double pressure, const double entropy) {
-    static const std::array<int, 44> array0 = {{-6, -6, -5, -5, -4, -4, -4, -3, -3, -3, -3, -2, -2, -2, -2,
+    static constexpr std::array<int, 44> array0 = {{-6, -6, -5, -5, -4, -4, -4, -3, -3, -3, -3, -2, -2, -2, -2,
                                                 -1, -1, -1, -1, -1, 0,  0,  0,  0,  0,  0,  0,  1,  1,  1,
                                                 1,  1,  1,  2,  2,  2,  3,  3,  3,  4,  4,  5,  5,  5}};
 
@@ -439,7 +434,7 @@ double SteamSystemModelerTool::backwardPressureEntropyRegion2B(const double pres
                                                 0, 1,  5, 8,  9, 0, 1,  2, 4, 5,  6,  9, 0, 1, 2,
                                                 3, 7,  8, 0,  1, 5, 0,  1, 3, 0,  1,  0, 1, 2}};
 
-    static const std::array<double, 44> array2 = {
+    static constexpr std::array<double, 44> array2 = {
         {0.31687665083497E+6,  0.20864175881858E+2,  -0.39859399803599E+6, -0.21816058518877E+2, 0.22369785194242E+6,
          -0.27841703445817E+4, 0.99207436071480E+1,  -0.75197512299157E+5, 0.29708605951158E+4,  -0.34406878548526E+1,
          0.38815564249115,     0.17511295085750E+5,  -0.14237112854449E+4, 0.10943803364167E+1,  0.89971619308495,
@@ -459,13 +454,13 @@ double SteamSystemModelerTool::backwardPressureEntropyRegion2B(const double pres
 }
 
 double SteamSystemModelerTool::backwardPressureEntropyRegion2C(const double pressure, const double entropy) {
-    static const std::array<int, 30> array0 = {
+    static constexpr std::array<int, 30> array0 = {
         {-2, -2, -1, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 7, 7, 7, 7, 7}};
 
     static const std::array<int, 30> array1 = {
         {0, 1, 0, 0, 1, 2, 3, 0, 1, 3, 4, 0, 1, 2, 0, 1, 5, 0, 1, 4, 0, 1, 2, 0, 1, 0, 1, 3, 4, 5}};
 
-    static const std::array<double, 30> array2 = {
+    static constexpr std::array<double, 30> array2 = {
         {0.90968501005365E+3,  0.24045667088420E+4,  -0.59162326387130E+3,  0.54145404128074E+3,
          -0.27098308411192E+3, 0.97976525097926E+3,  -0.46966772959435E+3,  0.14399274604723E+2,
          -0.19104204230429E+2, 0.53299167111971E+1,  -0.21252975375934E+2,  -0.31147334413760,
@@ -486,7 +481,7 @@ double SteamSystemModelerTool::backwardPressureEntropyRegion2C(const double pres
 double SteamSystemModelerTool::backwardPressureEntropyRegion1(const double pressure, const double entropy) {
     static const std::array<int, 20>    array0 = {{0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 4}};
     static const std::array<int, 20>    array1 = {{0, 1, 2, 3, 11, 31, 0, 1, 2, 3, 12, 31, 0, 1, 2, 9, 31, 10, 32, 32}};
-    static const std::array<double, 20> array2 = {
+    static constexpr std::array<double, 20> array2 = {
         {0.17478268058307E+3,   0.34806930892873E+2,   0.65292584978455E+1,  0.33039981775489,
          -0.19281382923196E-6,  -0.24909197244573E-22, -0.26107636489332,    0.22592965981586,
          -0.64256463395226E-1,  0.78876289270526E-2,   0.35672110607366E-9,  0.17332496994895E-23,
