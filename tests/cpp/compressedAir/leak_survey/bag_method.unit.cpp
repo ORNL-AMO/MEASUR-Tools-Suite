@@ -1,6 +1,6 @@
 #include "catch.hpp"
 
-#include "compressedAir/bag_method.h"
+#include "compressedAir/leak_survey/bag_method.h"
 
 using namespace Catch;
 using namespace bag_method;

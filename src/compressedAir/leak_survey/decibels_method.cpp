@@ -1,4 +1,4 @@
-#include "compressedAir/decibels_method.h"
+#include "compressedAir/leak_survey/decibels_method.h"
 
 namespace decibels_method {
 

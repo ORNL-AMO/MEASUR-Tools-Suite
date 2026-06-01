@@ -4,7 +4,7 @@ describe('Compressed Air Decibels Method', function () {
     let m;
 
     before(async function () {
-        const ToolsSuiteModule = (await import('../../../bin/client.js')).default;
+        const ToolsSuiteModule = (await import('../../../../bin/client.js')).default;
         m = await ToolsSuiteModule({
             locateFile: (filename) => '/base/bin/' + filename
         });

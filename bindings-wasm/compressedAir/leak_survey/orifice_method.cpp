@@ -1,6 +1,6 @@
 #include <emscripten/bind.h>
 
-#include "compressedAir/orifice_method.h"
+#include "compressedAir/leak_survey/orifice_method.h"
 
 using namespace emscripten;
 using namespace orifice_method;

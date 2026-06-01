@@ -2,6 +2,8 @@
 
 This project uses [Doxygen](https://www.doxygen.nl/) to generate documentation from annotated source code. Doxygen comments are used to describe the purpose, behavior, and usage of classes, functions, and other entities in the codebase. Follow these guidelines to ensure your code is well-documented and easy to understand. Always use `@` for Doxygen commands.
 
+.dox files are used to describe calculations with the audience of non-developers in mind. It is used to provide algorithm documentation for system engineering end users. In general we want to use a top down approach in the algorithm documentation. Starting with the final result and breaking down the equations and formulas from there.
+
 ## Table of Contents
 
 - [Doxygen Commands](#doxygen-commands)
