@@ -36,10 +36,15 @@ SteamSystemModelerTool::SteamPropertiesOutput SteamProperties::waterPropertiesPr
             rv.quality = 0;
             return rv;
         }
-        default:
-            break;
+        case 5: {
+            throw std::runtime_error("Region Select for combination of values: temp in K=" + std::to_string(t) +
+                   ", pressure in MPa=" + std::to_string(p) + " is in region 5, which is currently not implemented.");
+        }
+        default: {
+                throw std::runtime_error("Region Select failed for combination of values: temp in K=" + std::to_string(t) +
+                        ", pressure in MPa=" + std::to_string(p) + ", the region is unknown and is not 1, 2, 3, or 5");
+        }
     }
-    return {0, 0, 0, 0, 0, 0, 0};
 }
 
 // TODO combine this with waterPropertiesPressureEntropy?
