@@ -54,7 +54,7 @@ TEST_CASE("Compressed Air Reduction Bag Method - Electricity Utility", "[Compres
         0.12,
         MeasurementMethod::Bag,
         FlowMeterMethodData{},
-        BagMethodData{12, 8.68, 2},
+        BagMethodData{12, 8.68},
         PressureMethodData{},
         OtherMethodData{},
         CompressorElectricityData{100, 0.16},
@@ -137,7 +137,7 @@ TEST_CASE("Compressed Air Reduction Combination - All Methods", "[CompressedAirR
                                     OtherMethodData{}, CompressorElectricityData{100, 0.16}, 1},
         // Bag method with electricity
         CompressedAirReductionInput{8640, UtilityType::Electricity, 0.12, MeasurementMethod::Bag,
-                                    FlowMeterMethodData{}, BagMethodData{12, 8.68, 1}, PressureMethodData{},
+                                    FlowMeterMethodData{}, BagMethodData{12, 8.68}, PressureMethodData{},
                                     OtherMethodData{}, CompressorElectricityData{100, 0.16}, 1},
         // Pressure method with compressed air utility
         CompressedAirReductionInput{8640, UtilityType::CompressedAir, 0.12, MeasurementMethod::Pressure,

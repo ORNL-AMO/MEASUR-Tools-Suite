@@ -9,12 +9,12 @@
  *
  * The calculation follows these steps for each measure:
  * 1. **Flow Meter** — Read flow rate directly from an installed meter, then multiply by operating
- *    time and the units multiplier to obtain annual consumption
+ *    time to obtain annual consumption
  * 2. **Bag Method** — Compute flow rate from the bag volume and fill time, then multiply by operating
  *    time and both quantity multipliers (bags and units) to obtain annual consumption
  * 3. **Orifice/Pressure** — Compute single-nozzle flow rate from a quadratic nozzle equation using
  *    pre-calibrated coefficients, scale by the number of nozzles, then multiply by operating time
- *    to obtain annual consumption (units multiplier is not applied for this method)
+ *    to obtain annual consumption.
  * 4. **Other** — Accept a directly supplied annual consumption value without further conversion
  * 5. **Compressed Air Utility** — Multiply consumption by the cost rate per unit volume to obtain
  *    annual energy cost; electrical energy use is not applicable
@@ -70,11 +70,10 @@
  * @details The bag method estimates flow rate by measuring how long it takes to fill a
  * known-volume bag with compressed air from a leak or equipment vent. Dividing the bag volume
  * by the fill time (converted to minutes) gives the instantaneous flow rate in scfm. Annual
- * consumption is then computed from the flow rate, operating hours, and both quantity
- * multipliers: the number of bags tested simultaneously and the outer units multiplier.
+ * consumption is then computed from the flow rate, operating hours.
  *
  * @formula{compressed-air-reduction-bag-flow-rate; Q_{bag} = \frac{V_{bag}}{t_{fill} / 60}}
- * @formula{compressed-air-reduction-bag-consumption; C = Q_{bag} \cdot t_{op} \cdot N_{bags} \cdot 60 \cdot n}
+ * @formula{compressed-air-reduction-bag-consumption; C = Q_{bag} \cdot t_{op} \cdot 60 \cdot n}
  *
  * @subheading{Symbols}
  * @symtable
@@ -84,7 +83,6 @@
  * @symrow{60; Unit conversion factor (seconds per minute); \second\per\minute}
  * @symrow{C; Annual compressed air consumption; \cubic\foot\per\year}
  * @symrow{t_{op}; Annual operating hours; \hour\per\year}
- * @symrow{N_{bags}; Number of bags tested simultaneously; \unitless}
  * @symrow{n; Outer quantity multiplier (number of identical measures); \unitless}
  * @endsymtable
  */
@@ -98,7 +96,6 @@
  * type has a distinct set of coefficients @math{a}, @math{b}, and @math{c} from the lookup table
  * in @ref compressed_air_nozzle_coefficients. The single-nozzle flow rate is computed from the
  * supply pressure; total flow rate and annual consumption then scale with the number of nozzles.
- * The outer units multiplier is not applied in this method.
  *
  * @formula{compressed-air-reduction-pressure-flow-rate; Q_{nozzle} = a \cdot P^2 + b \cdot P + c}
  * @formula{compressed-air-reduction-pressure-total-flow; Q_{total} = Q_{nozzle} \cdot N_{nozzles}}
