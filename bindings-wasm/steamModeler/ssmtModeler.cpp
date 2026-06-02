@@ -158,7 +158,7 @@ EMSCRIPTEN_BINDINGS(steamModeler) {
 
     // BoilerInput
     class_<BoilerInput>("BoilerInput")
-        .constructor<double, double, double, double, bool, bool, double, double, double, double>();
+        .constructor<double, double, double, double, bool, bool, double, double, double, double, bool>();
 
     // HeaderWithPressure
     class_<HeaderWithPressure>("HeaderWithPressure").constructor<double, double, double, double, bool>();

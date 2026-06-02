@@ -202,14 +202,10 @@ const Header HeaderFactory::make(
         }
     }
 
-    //TODO ISSUE 312: only add blowdown flashed condensate if
-    // it is not sent to the dearator
-
     // Blowdown flash tank outlet gas
-    const bool isBlowdownFlashed = boilerInput.isBlowdownFlashed();
     // std::cout << methodName << "boilerInput.isBlowdownFlashed=" << isFlashCondensate << std::endl;
 
-    if (isBlowdownFlashed) {
+    if (boilerInput.isBlowdownFlashed() && !boilerInput.isSendBlowdownToDeaerator()) {
         // std::cout << methodName << "boilerInput.isBlowdownFlashed=true, adding blowdownFlashTank" << std::endl;
 
         const Inlet& inlet = inletFactory.makeFromOutletGas(blowdownFlashTank);
