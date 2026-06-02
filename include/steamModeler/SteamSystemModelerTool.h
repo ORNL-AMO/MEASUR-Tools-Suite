@@ -1,9 +1,7 @@
 #pragma once
 
 #include <cmath>
-#include <iostream>
 #include <memory>
-#include <string>
 
 class Point {
   public:
@@ -175,7 +173,6 @@ class SteamSystemModelerTool {
      * Calculates the steam properties using region 4 equations (saturated properties)
      *
      * @param temperature double, temperature in Kelvin
-     * @param pressure double, pressure in MPa
      *
      * @return SteamProperties::Output, steam properties
      */
@@ -297,7 +294,6 @@ class SteamSystemModelerTool {
     /**
      * Uses linear interpolation to goal seek  region 3 using pressure and entropy
      * @param pressure double, pressure in MPa
-     * @param enthalpy double, specific enthalpy in kJ/kg
      * @param entropy double, specific entropy in kJ/kg/K
      * @return double, temperature in Kelvins
      */
@@ -359,7 +355,7 @@ class SteamSystemModelerTool {
      * Uses linear extrapolation for estimate equation to determine much more accurate temperature
      * @param region int, region number
      * @param key Key, value type like ENTROPY ot ENTHALPY
-     * @param regionFunction Region, the region of which function to be used (REGION1, REGION2A, etc)
+     * @param regionFunction Region, the region of which function to be used (REGION1, REGION2A, etc.)
      * @param pressure double, pressure in MPa
      * @param var2 double, value of either entropy (in kJ/kg/K) or enthalpy (in kJ/kg)
      * @return double, temperature in Kelvin
@@ -372,7 +368,7 @@ class SteamSystemModelerTool {
     /**
      * Minimum Pressure of Water MPa
      */
-    static constexpr double PRESSURE_MIN = 0.01;
+    static constexpr double PRESSURE_MIN = 0.00061;
     /**
      * Minimum Temperature of Water K
      */
@@ -408,9 +404,19 @@ class SteamSystemModelerTool {
     static constexpr double TEMPERATURE_MAX = 1073.15;
 
     /**
-     * Maximum Temperature of Water for Region 3 MPa
+     * Maximum Temperature of Water for Region 3 K
      */
     static constexpr double TEMPERATURE_REGION3_MAX = 863.15;
+
+    /**
+     * Maximum Temperature of Water for Region 5 K
+     */
+    static constexpr double TEMPERATURE_REGION5_MAX = 2273.15;
+
+    /**
+     * Maximum Pressure of Water for Region 5MPa
+     */
+    static constexpr double PRESSURE_REGION5_MAX = 50;
 
     /**
      * Calculates the boundary pressure associated with the given temperature
