@@ -7,6 +7,9 @@ std::shared_ptr<FlashTank> FlashTankFactory::make(const HeaderInput& headerInput
     std::shared_ptr<FlashTank> flashTankPtr = nullptr;
 
     if (boilerInput.isBlowdownFlashed()) {
+        
+        //TODO ISSUE 312: if boiler has blowdown flashed and sent to dearator
+        // calculate flash tank properties using boiler input like there is 1 header here
         if (headerInput.getHeaderCount() == 1) {
             // flash tank uses deaerator pressure from boiler input
             // when only one header

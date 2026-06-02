@@ -87,9 +87,16 @@ Deaerator DeaeratorModeler::makeDeaerator(
 
     const SteamSystemModelerTool::FluidProperties& makeupWaterAndCondensateHeaderOutput =
         makeupWaterAndCondensateHeaderCalculationsDomain.makeupWaterAndCondensateHeaderOutput;
+
+
+
     const SteamSystemModelerTool::FluidProperties& inletHeaderOutput =
         headerCountInput == 1 ? highPressureHeaderCalculationsDomain.highPressureHeaderOutput
                               : lowPressureHeaderCalculationsDomain->lowPressureHeaderOutput;
+
+    // TODO ISSUE 312: if boiler has blowdown flashed and sent to dearatoe\r
+    // combine inlet header output with blowdown flash tank output using header calculator
+    // use as inleatHeaderOutput in deaerator calculations
 
     return deaeratorFactory.make(boilerInput, feedwaterMassFlow, makeupWaterAndCondensateHeaderOutput,
                                  inletHeaderOutput);

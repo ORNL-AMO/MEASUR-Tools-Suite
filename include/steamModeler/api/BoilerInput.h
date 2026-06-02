@@ -5,6 +5,8 @@
 /**
  * Steam Modeler boiler input data.
  */
+
+//TODO: ISSUE 312: add boolean option to send blowdown to dearator
 class BoilerInput {
   public:
     BoilerInput(double fuelType, double fuel, double combustionEfficiency, double blowdownRate, bool blowdownFlashed,
