@@ -51,3 +51,42 @@ TEST_CASE("ReceiverTank - Bridging Compressor Reaction Delay Size",
     CHECK(calculateBridgingSize({1200, 350, 11.7, 800, 2}).tank_size == Approx(2000.3657142857));
     CHECK(calculateBridgingSize({1200, 350, 11.7, 800, 19}).tank_size == Approx(210.56481203));
 }
+
+TEST_CASE("ReceiverTank - Compressor Cycle Size", "[CompressedAir][ReceiverTank][CompressorCycleSize]") {
+    // {load_time, unload_time, compressor_capacity, unload_pressure, full_load_pressure, atmospheric_pressure}
+    {
+        auto r = calculateCompressorCycleSize({15, 5, 100, 110, 100, 14.7});
+        CHECK(r.tank_size           == Approx(68.7225));
+        CHECK(r.effective_capacity  == Approx(75.0));
+        CHECK(r.pressure_change     == Approx(10.0));
+        CHECK(r.volume_cf           == Approx(9.1875));
+    }
+    {
+        auto r = calculateCompressorCycleSize({20, 10, 200, 120, 100, 14.7});
+        CHECK(r.tank_size           == Approx(122.1733333));
+        CHECK(r.effective_capacity  == Approx(133.3333333));
+        CHECK(r.pressure_change     == Approx(20.0));
+        CHECK(r.volume_cf           == Approx(16.3333333));
+    }
+    {
+        auto r = calculateCompressorCycleSize({10, 5, 150, 105, 100, 14.7});
+        CHECK(r.tank_size           == Approx(183.26));
+        CHECK(r.effective_capacity  == Approx(100.0));
+        CHECK(r.pressure_change     == Approx(5.0));
+        CHECK(r.volume_cf           == Approx(24.5));
+    }
+    {
+        auto r = calculateCompressorCycleSize({10, 5, 150, 105, 100, 12.0});
+        CHECK(r.tank_size           == Approx(149.6));
+        CHECK(r.effective_capacity  == Approx(100.0));
+        CHECK(r.pressure_change     == Approx(5.0));
+        CHECK(r.volume_cf           == Approx(20.0));
+    }
+    {
+        auto r = calculateCompressorCycleSize({25, 15, 300, 115, 95, 14.7});
+        CHECK(r.tank_size           == Approx(257.709375));
+        CHECK(r.effective_capacity  == Approx(187.5));
+        CHECK(r.pressure_change     == Approx(20.0));
+        CHECK(r.volume_cf           == Approx(34.453125));
+    }
+}

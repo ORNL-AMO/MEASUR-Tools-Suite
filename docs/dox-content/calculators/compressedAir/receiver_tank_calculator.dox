@@ -5,6 +5,8 @@
  * @details This calculator provides four engineering methods for sizing receiver tanks
  *          in a compressed air system and a standalone method for computing the usable
  *          air capacity of an existing tank. All formulas use U.S. customary units.
+ *          For symbol consistency, all sizing methods use @math{V_{required}} for the
+ *          required receiver volume.
  *
  * A **receiver tank** (also called an air receiver or storage tank) is a pressure vessel
  * that stores compressed air between the compressor and the distribution system. It
@@ -16,7 +18,7 @@
  * - Separates moisture and oil carried over from the compressor.
  *
  * Choosing the correct tank volume is critical: an undersized tank causes excessive
- * compressor cycling and pressure drops; an oversized tank wastes capital and floor space.
+ * compressor cycling and pressure drops.
  *
  * The calculation methods are:
  * 1. **Usable Capacity** – determines the volume of standard cubic feet actually available
@@ -31,6 +33,8 @@
  * 5. **Bridging Compressor Reaction Delay** – sizes a tank that must supply air during
  *    the time the pressure signal propagates from a demand event back to the compressor
  *    room and the compressor responds.
+ * 6. **Compressor Cycle** – sizes a tank from the compressor's load/unload duty cycle and
+ *    the operating pressure band, ensuring the compressor does not short-cycle.
  *
  * Relevant formulas are documented below.
  *
@@ -51,6 +55,9 @@
  *
  * @heading{Bridging Compressor Reaction Delay Method}
  * @copydoc receiver_tank_bridging_size_formula
+ *
+ * @heading{Compressor Cycle Method}
+ * @copydoc receiver_tank_compressor_cycle_size_formula
  */
 
 /**
@@ -83,21 +90,24 @@
  * @ingroup receiver_tank_calculator
  * @brief Sizes a receiver tank from a known air demand and allowable pressure drop.
  * @details The General method assumes the entire air demand must come from stored
- *          compressed air. The formula derives from the ideal gas law applied to the
- *          pressure differential across the tank: the tank must hold enough air at
- *          atmospheric pressure to satisfy the demand while keeping the pressure drop
- *          within the specified limit.
+ *          compressed air. This is the usable-capacity relation solved for required
+ *          tank size, using the same pressure symbols as the Usable Capacity method.
  *
  * @formula{receiver-tank-general-size;
- *   V_{tank} = Q_{demand} \cdot \frac{P_{atm}}{\Delta P} \cdot k_{gal}
+ *   V_{required} = V_{usable} \cdot \frac{P_{atm}}{P_{in} - P_{out}} \cdot k_{gal}
  * }
+
+ * Equivalent form: @math{V_{required} = Q_{demand} \cdot \frac{P_{atm}}{\Delta P} \cdot k_{gal}},
+ * where @math{Q_{demand} = V_{usable}} and @math{\Delta P = P_{in} - P_{out}}.
  *
  * @subheading{Symbols}
  * @symtable
- * @symrow{V_{tank}; Required receiver tank size; \gallon}
- * @symrow{Q_{demand}; Air demand drawn from the tank; \cubicFoot}
+ * @symrow{V_{required}; Required receiver tank size; \gallon}
+ * @symrow{V_{usable}; Required usable air drawn from the tank; \cubicFoot}
  * @symrow{P_{atm}; Atmospheric pressure; \psi}
- * @symrow{\Delta P; Allowable pressure drop; \psi}
+ * @symrow{P_{in}; Initial tank pressure for drawdown; \psi}
+ * @symrow{P_{out}; Final tank pressure for drawdown; \psi}
+ * @symrow{\Delta P; Pressure drop, @math{P_{in} - P_{out}}; \psi}
  * @symrow{k_{gal}; Gallons per cubic foot (7.48); \gallon\per\cubicFoot}
  * @endsymtable
  */
@@ -109,21 +119,21 @@
  * @details The Dedicated Storage method is used when a process requires a fixed flow rate
  *          for a known duration and the compressor cannot keep up. The tank is sized to
  *          provide that flow over the demand period while the pressure falls from the
- *          initial (fully charged) to the final (minimum acceptable) value.
+ *          initial to the final value.
  *
  * @formula{receiver-tank-dedicated-storage-size;
- *   V_{tank} = \frac{k_{gal} \cdot t_{demand} \cdot Q_{flow} \cdot P_{atm}}{P_1 - P_2}
+ *   V_{required} = \frac{k_{gal} \cdot t_{demand} \cdot Q_{flow} \cdot P_{atm}}{P_{in} - P_{out}}
  * }
  *
  * @subheading{Symbols}
  * @symtable
- * @symrow{V_{tank}; Required receiver tank size; \gallon}
+ * @symrow{V_{required}; Required receiver tank size; \gallon}
  * @symrow{k_{gal}; Gallons per cubic foot (7.48); \gallon\per\cubicFoot}
  * @symrow{t_{demand}; Duration of the air demand event; \minute}
  * @symrow{Q_{flow}; Required air flow rate during the demand event; \cubicFoot\per\minute}
  * @symrow{P_{atm}; Atmospheric pressure; \psi}
- * @symrow{P_1; Initial tank pressure (fully charged); \psi}
- * @symrow{P_2; Final tank pressure (minimum acceptable); \psi}
+ * @symrow{P_{in}; Initial tank pressure; \psi}
+ * @symrow{P_{out}; Final tank pressure; \psi}
  * @endsymtable
  */
 
@@ -139,19 +149,19 @@
  *          for the same scenario.
  *
  * @formula{receiver-tank-metered-storage-size;
- *   V_{tank} = \frac{k_{gal} \cdot t_{demand} \cdot (Q_{flow} - Q_{metered}) \cdot P_{atm}}{P_1 - P_2}
+ *   V_{required} = \frac{k_{gal} \cdot t_{demand} \cdot (Q_{flow} - Q_{metered}) \cdot P_{atm}}{P_{in} - P_{out}}
  * }
  *
  * @subheading{Symbols}
  * @symtable
- * @symrow{V_{tank}; Required receiver tank size; \gallon}
+ * @symrow{V_{required}; Required receiver tank size; \gallon}
  * @symrow{k_{gal}; Gallons per cubic foot (7.48); \gallon\per\cubicFoot}
  * @symrow{t_{demand}; Duration of the air demand event; \minute}
  * @symrow{Q_{flow}; Required air flow rate during the demand event; \cubicFoot\per\minute}
  * @symrow{Q_{metered}; Metering valve (needle valve) flow rate; \cubicFoot\per\minute}
  * @symrow{P_{atm}; Atmospheric pressure; \psi}
- * @symrow{P_1; Initial tank pressure (fully charged); \psi}
- * @symrow{P_2; Final tank pressure (minimum acceptable); \psi}
+ * @symrow{P_{in}; Initial tank pressure; \psi}
+ * @symrow{P_{out}; Final tank pressure; \psi}
  * @endsymtable
  */
 
@@ -159,18 +169,18 @@
  * @defgroup receiver_tank_metered_storage_refill_formula Metered Storage Method Refill Time Formula
  * @ingroup receiver_tank_calculator
  * @brief Time required to refill the receiver tank after a metered storage demand event.
- * @details After a demand event empties the tank from @math{P_1} to @math{P_2}, the
+ * @details After a demand event empties the tank from @math{P_{in}} to @math{P_{out}}, the
  *          metering valve continues to supply air at @math{Q_{metered}} while the system
  *          pressure recovers. The refill time is the time required to re-pressurize the
- *          tank volume @math{V_{cf}} from @math{P_2} back to @math{P_1} at the constant
+ *          tank volume @math{V_{cf}} from @math{P_{out}} back to @math{P_{in}} at the constant
  *          metered flow rate. The intermediate computation yields a time in minutes (since
  *          @math{Q_{metered}} is in cfm); multiplying by 60 converts to seconds.
  *
  * @formula{receiver-tank-metered-storage-refill;
- *   T_{refill} = \frac{60 \cdot V_{cf} \cdot (P_1 - P_2)}{Q_{metered} \cdot P_{atm}}
+ *   T_{refill} = \frac{60 \cdot V_{cf} \cdot (P_{in} - P_{out})}{Q_{metered} \cdot P_{atm}}
  * }
  *
- * where @math{V_{cf} = V_{tank} \cdot k_{cf}} is the tank volume in cubic feet.
+ * where @math{V_{cf} = V_{required} \cdot k_{cf}} is the tank volume in cubic feet.
  *
  * @subheading{Symbols}
  * @symtable
@@ -178,8 +188,9 @@
  * @symrow{60; Seconds per minute conversion; \second\per\minute}
  * @symrow{V_{cf}; Tank volume in cubic feet; \cubicFoot}
  * @symrow{k_{cf}; Cubic feet per gallon (0.133681); \cubicFoot\per\gallon}
- * @symrow{P_1; Initial tank pressure (fully charged); \psi}
- * @symrow{P_2; Final tank pressure (minimum acceptable); \psi}
+ * @symrow{V_{required}; Required receiver tank size; \gallon}
+ * @symrow{P_{in}; Initial tank pressure; \psi}
+ * @symrow{P_{out}; Final tank pressure; \psi}
  * @symrow{Q_{metered}; Metering valve flow rate; \cubicFoot\per\minute}
  * @symrow{P_{atm}; Atmospheric pressure; \psi}
  * @endsymtable
@@ -198,12 +209,12 @@
  *          gallon-to-cubic-foot conversion.
  *
  * @formula{receiver-tank-bridging-size;
- *   V_{tank} = \frac{d_{pipe}}{v_{air}} \cdot \frac{Q_{demand}}{60} \cdot \frac{P_{atm}}{\Delta P} \cdot k_{gal}
+ *   V_{required} = \frac{d_{pipe}}{v_{air}} \cdot \frac{Q_{demand}}{60} \cdot \frac{P_{atm}}{\Delta P} \cdot k_{gal}
  * }
  *
  * @subheading{Symbols}
  * @symtable
- * @symrow{V_{tank}; Required receiver tank size; \gallon}
+ * @symrow{V_{required}; Required receiver tank size; \gallon}
  * @symrow{d_{pipe}; Distance from demand event to compressor room; \foot}
  * @symrow{v_{air}; Speed of compressed air in distribution piping; \foot\per\second}
  * @symrow{Q_{demand}; Air demand at the event location; \cubicFoot\per\minute}
@@ -216,4 +227,55 @@
  * @note The factor @math{d_{pipe} / v_{air}} yields the signal transit time in seconds.
  *       Dividing @math{Q_{demand}} by 60 converts from cfm to ft³/s so the product of
  *       transit time × flow rate gives a volume in ft³, which is then scaled to gallons.
+ */
+
+/**
+ * @defgroup receiver_tank_compressor_cycle_size_formula Compressor Cycle Method Tank Size Formula
+ * @ingroup receiver_tank_calculator
+ * @brief Sizes a receiver tank from the compressor duty cycle and operating pressure band.
+ * @details The Compressor Cycle method derives the required storage volume directly from
+ *          the compressor's load/unload pattern. The effective net capacity is the
+ *          fraction of the compressor's rated output consumed over a full cycle; the tank
+ *          must store the air that accumulates during the unloaded phase so that system
+ *          pressure stays within @math{P_{load}} to @math{P_{unload}}.
+ *
+ * @formula{receiver-tank-compressor-cycle-size;
+ *   V_{required} = \frac{Q_{comp} \cdot t_{load} \cdot t_{unload} \cdot P_{atm}}
+ *                       {60 \cdot (t_{load} + t_{unload}) \cdot (P_{unload} - P_{load})} \cdot k_{gal}
+ * }
+ *
+ * @subheading{Derivation}
+ * The effective net capacity consumed per unit time is:
+ * @formula{receiver-tank-compressor-cycle-capacity;
+ *   Q_{eff} = \frac{t_{load}}{t_{load} + t_{unload}} \cdot Q_{comp}
+ * }
+ *
+ * The volume (ft³) that must be stored during the unloaded phase is:
+ * @formula{receiver-tank-compressor-cycle-vcf;
+ *   V_{cf} = \frac{Q_{eff} \cdot t_{unload} / 60}{(P_{unload} - P_{load}) / P_{atm}}
+ * }
+ *
+ * Converting to gallons gives @math{V_{required} = V_{cf} \cdot k_{gal}}.
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{V_{required}; Required receiver tank size (liquid storage volume); \gallon}
+ * @symrow{V_{cf}; Required storage volume (area storage volume); \cubicFoot}
+ * @symrow{Q_{comp}; Rated compressor capacity at full load; \cubicFoot\per\minute}
+ * @symrow{Q_{eff}; Effective net capacity consumed per cycle; \cubicFoot\per\minute}
+ * @symrow{\Delta P; Pressure band width (@math{P_{unload} - P_{load}}); \psi}
+ * @symrow{t_{load}; Compressor loaded time per cycle; \minute}
+ * @symrow{t_{unload}; Compressor unloaded time per cycle; \minute}
+ * @symrow{P_{atm}; Atmospheric pressure; \psi}
+ * @symrow{P_{unload}; Compressor unload (cut-out) pressure; \psi}
+ * @symrow{P_{load}; Compressor full-load (cut-in) pressure; \psi}
+ * @symrow{60; Seconds per minute conversion; \second\per\minute}
+ * @symrow{k_{gal}; Gallons per cubic foot (7.48); \gallon\per\cubicFoot}
+ * @endsymtable
+ *
+ * @subheading{Returned intermediate results}
+ * In addition to @math{V_{required}}, the calculation returns:
+ * - **effectiveCapacity** (@math{Q_{eff}}) — average flow delivered over a full cycle @unitb{\cubicFoot\per\minute}
+ * - **pressureChange** (@math{\Delta P}) — operating pressure band width @unitb{\psi}
+ * - **volumeCf** (@math{V_{cf}}) — required area storage volume before gallon conversion @unitb{\cubicFoot}
  */

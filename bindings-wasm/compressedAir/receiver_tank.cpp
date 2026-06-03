@@ -94,4 +94,29 @@ EMSCRIPTEN_BINDINGS(receiver_tank) {
         .field("allowablePressureDrop", &BridgingInput::allowable_pressure_drop);
 
     function("calculateReceiverTankBridgingSize", &calculateBridgingSize);
+
+    // ---- Compressor Cycle Method ----
+    // calculateReceiverTankCompressorCycleSize(ReceiverTankCompressorCycleInput) -> ReceiverTankCompressorCycleResult
+    //   loadTime             [min]   - compressor loaded time per cycle
+    //   unloadTime           [min]   - compressor unloaded time per cycle
+    //   compressorCapacity   [cfm]   - rated compressor output at full load
+    //   unloadPressure       [psia]  - pressure at which the compressor unloads
+    //   fullLoadPressure     [psia]  - pressure at which the compressor fully loads
+    //   atmosphericPressure  [psia]  - local atmospheric pressure (default: 14.7)
+    //   -> tankSize [gal], effectiveCapacity [cfm], pressureChange [psi], volumeCf [ft³]
+    value_object<CompressorCycleInput>("ReceiverTankCompressorCycleInput")
+        .field("loadTime", &CompressorCycleInput::load_time)
+        .field("unloadTime", &CompressorCycleInput::unload_time)
+        .field("compressorCapacity", &CompressorCycleInput::compressor_capacity)
+        .field("unloadPressure", &CompressorCycleInput::unload_pressure)
+        .field("fullLoadPressure", &CompressorCycleInput::full_load_pressure)
+        .field("atmosphericPressure", &CompressorCycleInput::atmospheric_pressure);
+
+    value_object<CompressorCycleResult>("ReceiverTankCompressorCycleResult")
+        .field("tankSize", &CompressorCycleResult::tank_size)
+        .field("effectiveCapacity", &CompressorCycleResult::effective_capacity)
+        .field("pressureChange", &CompressorCycleResult::pressure_change)
+        .field("volumeCf", &CompressorCycleResult::volume_cf);
+
+    function("calculateReceiverTankCompressorCycleSize", &calculateCompressorCycleSize);
 }
