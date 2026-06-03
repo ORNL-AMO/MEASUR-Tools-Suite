@@ -20,7 +20,7 @@
  *    its dimensions.
  * 2. Hold the bag opening tightly over the leak source, allowing leaked air to fill the bag.
  * 3. Record the fill time in seconds.
- * 4. Enter the operating time and number of similar leak points to compute the annual impact.
+ * 4. Enter the operating time to compute the annual impact.
  *
  * The calculation methods are:
  * 1. **Flow Rate** – computes the instantaneous leak flow rate in scfm from the bag volume
@@ -70,13 +70,13 @@
  * @ingroup bag_method_calculator
  * @brief Estimated annual air consumption from a compressed air leak measured by the bag method.
  * @details Annual air loss is computed by scaling the instantaneous leak flow rate by the
- *          annual system operating time and the number of measurement units, converting from
+ *          annual system operating time, converting from
  *          standard cubic feet to kiloscf. The factor of 60 converts operating hours to
  *          minutes so the units are consistent with the flow rate in scfm. The factor of 1000
  *          converts standard cubic feet to kiloscf, a more practical unit for annual volumes.
  *
  * @formula{bag-method-annual-consumption;
- *   C_{annual} = \frac{Q_{leak} \cdot t_{op} \cdot n \cdot 60}{1000}
+ *   C_{annual} = \frac{Q_{leak} \cdot t_{op} \cdot 60}{1000}
  * }
  *
  * @subheading{Symbols}
@@ -84,7 +84,6 @@
  * @symrow{C_{annual}; Estimated annual air loss from the leak; \kscf}
  * @symrow{Q_{leak}; Compressed air leak flow rate; \scfm}
  * @symrow{t_{op}; Annual system operating time; \hour}
- * @symrow{n; Number of leak points measured simultaneously; \unitless}
  * @symrow{60; Minutes per hour conversion; \minute\per\hour}
  * @symrow{1000; Standard cubic feet per kiloscf conversion; \unitless}
  * @endsymtable

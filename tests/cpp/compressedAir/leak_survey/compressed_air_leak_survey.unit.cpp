@@ -10,7 +10,7 @@ namespace {
 // Default sub-method inputs shared across test cases (only the selected method matters)
 const estimate_method::Input  kDefaultEstimate  = {0, 0.1};
 const decibels_method::Input  kDefaultDecibels  = {0, 130, 25, 20, 150, 1.04, 1.2, 30, 125, 1.85, 1.65};
-const bag_method::Input       kDefaultBag       = {8760, 12, 8.68, 1};
+const bag_method::Input       kDefaultBag       = {8760, 12, 8.68};
 const orifice_method::Input   kDefaultOrifice   = {0.0, 250.0, 14.7, 1.0, 6.0, 6.2, 4};
 const compressed_air_utils::CompressorElectricityData kDefaultElecData = {0.40, 0.16};
 
@@ -54,7 +54,7 @@ TEST_CASE("CompressedAirLeakSurvey - Estimate Method, Electricity (3840 hr)",
           "[CompressedAir][CompressedAirLeakSurvey][EstimateMethod]") {
     auto input = makeInput(3840, 1, 0.12, 0,
                            {3840, 0.1}, kDefaultDecibels,
-                           bag_method::Input{3840, 12, 8.68, 1},
+                           bag_method::Input{3840, 12, 8.68},
                            kDefaultOrifice,
                            {0.25, 0.16}, 1);
     auto result = calculate({input});
@@ -80,7 +80,7 @@ TEST_CASE("CompressedAirLeakSurvey - Decibels Method, Electricity",
           "[CompressedAir][CompressedAirLeakSurvey][DecibelsMethod]") {
     auto input = makeInput(8640, 1, 0.12, 1,
                            {8640, 0.1}, kDefaultDecibels,
-                           bag_method::Input{15, 10, 12, 1},
+                           bag_method::Input{15, 10, 12},
                            kDefaultOrifice,
                            {0.40, 0.16}, 1);
     auto result = calculate({input});
@@ -94,7 +94,7 @@ TEST_CASE("CompressedAirLeakSurvey - Bag Method, Electricity",
           "[CompressedAir][CompressedAirLeakSurvey][BagMethod]") {
     auto input = makeInput(8640, 1, 0.12, 2,
                            {8640, 0.1}, kDefaultDecibels,
-                           bag_method::Input{15, 10, 12, 1},
+                           bag_method::Input{15, 10, 12},
                            kDefaultOrifice,
                            {0.40, 0.16}, 2);
     auto result = calculate({input});
@@ -108,7 +108,7 @@ TEST_CASE("CompressedAirLeakSurvey - Orifice Method, Electricity",
           "[CompressedAir][CompressedAirLeakSurvey][OrificeMethod]") {
     auto input = makeInput(8640, 1, 0.12, 3,
                            {8640, 0.1}, kDefaultDecibels,
-                           bag_method::Input{15, 10, 12, 1},
+                           bag_method::Input{15, 10, 12},
                            orifice_method::Input{0.0, 550.0, 14.7, 1.0, 0.375, 100.0, 4},
                            {0.40, 0.16}, 1);
     auto result = calculate({input});
