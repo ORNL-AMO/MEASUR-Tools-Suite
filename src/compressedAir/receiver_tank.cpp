@@ -38,4 +38,16 @@ SizeResult calculateBridgingSize(const BridgingInput& input) {
             kGallonsPerCubicFoot};
 }
 
+CompressorCycleResult calculateCompressorCycleSize(const CompressorCycleInput& input) {
+    const double pressure_change =
+        input.unload_pressure - input.full_load_pressure;
+    const double effective_capacity =
+        (input.load_time / (input.load_time + input.unload_time)) * input.compressor_capacity;
+    const double volume_cf =
+        (effective_capacity * input.unload_time / 60.0) /
+        (pressure_change / input.atmospheric_pressure);
+    const double tank_size_gallons = volume_cf * kGallonsPerCubicFoot;
+    return {tank_size_gallons, effective_capacity, pressure_change, volume_cf};
+}
+
 } // namespace receiver_tank

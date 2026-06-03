@@ -121,4 +121,66 @@ describe('Compressed Air Receiver Tank', function () {
         const result = m.calculateReceiverTankBridgingSize(inp);
         assert.approximately(result.tankSize, 210.56481203, 0.01);
     });
+
+    // ---- Compressor Cycle Method ----
+
+    it('should calculate tank size using the Compressor Cycle method (case 1)', function () {
+        const inp = {
+            loadTime: 15, unloadTime: 5, compressorCapacity: 100,
+            unloadPressure: 110, fullLoadPressure: 100, atmosphericPressure: 14.7
+        };
+        const result = m.calculateReceiverTankCompressorCycleSize(inp);
+        assert.approximately(result.tankSize, 68.7225, 0.01);
+        assert.approximately(result.effectiveCapacity, 75.0, 0.01);
+        assert.approximately(result.pressureChange, 10.0, 0.01);
+        assert.approximately(result.volumeCf, 9.1875, 0.01);
+    });
+
+    it('should calculate tank size using the Compressor Cycle method (case 2)', function () {
+        const inp = {
+            loadTime: 20, unloadTime: 10, compressorCapacity: 200,
+            unloadPressure: 120, fullLoadPressure: 100, atmosphericPressure: 14.7
+        };
+        const result = m.calculateReceiverTankCompressorCycleSize(inp);
+        assert.approximately(result.tankSize, 122.1733333, 0.01);
+        assert.approximately(result.effectiveCapacity, 133.3333333, 0.01);
+        assert.approximately(result.pressureChange, 20.0, 0.01);
+        assert.approximately(result.volumeCf, 16.3333333, 0.01);
+    });
+
+    it('should calculate tank size using the Compressor Cycle method (case 3)', function () {
+        const inp = {
+            loadTime: 10, unloadTime: 5, compressorCapacity: 150,
+            unloadPressure: 105, fullLoadPressure: 100, atmosphericPressure: 14.7
+        };
+        const result = m.calculateReceiverTankCompressorCycleSize(inp);
+        assert.approximately(result.tankSize, 183.26, 0.01);
+        assert.approximately(result.effectiveCapacity, 100.0, 0.01);
+        assert.approximately(result.pressureChange, 5.0, 0.01);
+        assert.approximately(result.volumeCf, 24.5, 0.01);
+    });
+
+    it('should calculate tank size using the Compressor Cycle method (non-default atmospheric pressure)', function () {
+        const inp = {
+            loadTime: 10, unloadTime: 5, compressorCapacity: 150,
+            unloadPressure: 105, fullLoadPressure: 100, atmosphericPressure: 12.0
+        };
+        const result = m.calculateReceiverTankCompressorCycleSize(inp);
+        assert.approximately(result.tankSize, 149.6, 0.01);
+        assert.approximately(result.effectiveCapacity, 100.0, 0.01);
+        assert.approximately(result.pressureChange, 5.0, 0.01);
+        assert.approximately(result.volumeCf, 20.0, 0.01);
+    });
+
+    it('should calculate tank size using the Compressor Cycle method (case 5)', function () {
+        const inp = {
+            loadTime: 25, unloadTime: 15, compressorCapacity: 300,
+            unloadPressure: 115, fullLoadPressure: 95, atmosphericPressure: 14.7
+        };
+        const result = m.calculateReceiverTankCompressorCycleSize(inp);
+        assert.approximately(result.tankSize, 257.709375, 0.01);
+        assert.approximately(result.effectiveCapacity, 187.5, 0.01);
+        assert.approximately(result.pressureChange, 20.0, 0.01);
+        assert.approximately(result.volumeCf, 34.453125, 0.01);
+    });
 });
