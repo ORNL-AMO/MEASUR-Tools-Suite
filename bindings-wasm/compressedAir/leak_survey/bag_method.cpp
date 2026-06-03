@@ -17,8 +17,7 @@ EMSCRIPTEN_BINDINGS(bag_method) {
     value_object<Input>("BagMethodInput")
         .field("operatingTime", &Input::operating_time)
         .field("bagFillTime", &Input::bag_fill_time)
-        .field("bagVolume", &Input::bag_volume)
-        .field("numberOfUnits", &Input::number_of_units);
+        .field("bagVolume", &Input::bag_volume);
 
     value_object<Result>("BagMethodResult")
         .field("flowRate", &Result::flow_rate)

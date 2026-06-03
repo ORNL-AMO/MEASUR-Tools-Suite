@@ -39,7 +39,6 @@ struct Input {
     double operating_time  = 0.0; ///< Annual system operating time @unitb{\hour}
     double bag_fill_time   = 0.0; ///< Time for the measurement bag to fill with leaked air @unitb{\second}
     double bag_volume      = 0.0; ///< Pre-measured volume of the measurement bag @unitb{\cubicFoot}
-    int    number_of_units = 1;   ///< Number of leak points measured simultaneously @unitb{\unitless}
 };
 
 /**
@@ -55,8 +54,8 @@ struct Result {
 /**
  * @brief Estimates compressed air leak flow rate and annual consumption using the bag method.
  * @details The leak flow rate is the bag volume divided by the fill time (converted to minutes).
- *          Annual consumption scales by operating hours, the minutes-per-hour factor,
- *          and the number of measurement units, then converts to kiloscf.
+ *          Annual consumption scales by operating hours and the minutes-per-hour factor,
+ *          then converts to kiloscf.
  *
  * **Flow Rate:**
  * @formula{bag-method-flow-rate;
@@ -73,7 +72,7 @@ struct Result {
  *
  * **Annual Consumption:**
  * @formula{bag-method-annual-consumption;
- *   C_{annual} = \frac{Q_{leak} \cdot t_{op} \cdot n \cdot 60}{1000}
+ *   C_{annual} = \frac{Q_{leak} \cdot t_{op} \cdot 60}{1000}
  * }
  *
  * where:
@@ -81,7 +80,6 @@ struct Result {
  * @symrow{C_{annual}; Estimated annual air loss from the leak; \kscf}
  * @symrow{Q_{leak}; Compressed air leak flow rate; \scfm}
  * @symrow{t_{op}; Annual system operating time; \hour}
- * @symrow{n; Number of leak points measured simultaneously; \unitless}
  * @symrow{60; Minutes per hour conversion; \minute\per\hour}
  * @symrow{1000; Standard cubic feet per kiloscf conversion; \unitless}
  * @endsymtable
