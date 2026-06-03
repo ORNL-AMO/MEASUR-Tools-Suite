@@ -15,8 +15,7 @@ describe('Compressed Air Bag Method', function () {
         const inp = {
             operatingTime: 8760,
             bagFillTime: 50,
-            bagVolume: 45 * 0.133681,
-            numberOfUnits: 1
+            bagVolume: 45 * 0.133681
         };
         const result = m.calculateBagMethod(inp);
         assert.approximately(result.flowRate, 7.218774, 0.01);
@@ -27,8 +26,7 @@ describe('Compressed Air Bag Method', function () {
         const inp = {
             operatingTime: 8760,
             bagFillTime: 12,
-            bagVolume: 8.68,
-            numberOfUnits: 1
+            bagVolume: 8.68
         };
         const result = m.calculateBagMethod(inp);
         assert.approximately(result.flowRate, 43.4, 0.01);
@@ -39,8 +37,7 @@ describe('Compressed Air Bag Method', function () {
         const inp = {
             operatingTime: 15,
             bagFillTime: 10,
-            bagVolume: 12,
-            numberOfUnits: 1
+            bagVolume: 12
         };
         const result = m.calculateBagMethod(inp);
         assert.approximately(result.flowRate, 72.0, 0.01);
@@ -51,11 +48,10 @@ describe('Compressed Air Bag Method', function () {
         const inp = {
             operatingTime: 8760,
             bagFillTime: 10,
-            bagVolume: 12,
-            numberOfUnits: 3
+            bagVolume: 12
         };
         const result = m.calculateBagMethod(inp);
         assert.approximately(result.flowRate, 72.0, 0.01);
-        assert.approximately(result.annualConsumption, 113529.6, 0.1);
+        assert.approximately(result.annualConsumption, 37843.2, 0.1);
     });
 });
