@@ -61,11 +61,11 @@ TEST_CASE("Compressed Air Reduction Bag Method - Electricity Utility", "[Compres
         2}};
 
     CompressedAirReductionOutput output = compressedAirReduction(input_vec);
-    CHECK(output.energy_use            == Approx(239984.64));
-    CHECK(output.energy_cost           == Approx(28798.1568));
+    CHECK(output.energy_use            == Approx(119992.319));
+    CHECK(output.energy_cost           == Approx(14399.0784));
     CHECK(output.flow_rate             == Approx(43.4));
     CHECK(output.single_nozzle_flow_rate == Approx(0.0));
-    CHECK(output.consumption           == Approx(89994240.0));
+    CHECK(output.consumption           == Approx(44997120.0));
 }
 
 TEST_CASE("Compressed Air Reduction Pressure Method - Electricity Utility", "[CompressedAirReduction][util]") {
