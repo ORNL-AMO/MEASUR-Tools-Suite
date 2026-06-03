@@ -1,11 +1,25 @@
 /**
  * @defgroup compressed_air_pressure_reduction_calculator Compressed Air Pressure Reduction Calculator
  * @ingroup treasure_hunt_calculators
- * @brief Calculates annual compressed-air energy use and cost for baseline and pressure-reduction cases.
- * @details This calculator estimates annual electrical energy use and annual energy cost for compressed-air
- * systems evaluated during treasure hunt activities. It supports two modes:
- * 1. **Baseline** — Uses annual operating hours and compressor power directly.
- * 2. **Modification** — Uses proposed pressure, atmospheric pressure, and rated pressure to estimate adjusted power.
+ * @brief Quantifies electricity savings from reducing compressed air system pressure.
+ * @details This calculator can be used to quantify the electricity saved from reducing compressed air
+ * system pressure. The benefits of lowering system pressure are twofold:
+ * 1. **Reduced compressor work** — Lower pressure reduces compressor work and therefore reduces
+ *    electrical demand.
+ * 2. **Reduced airflow losses** — Lower pressure reduces delivered airflow and therefore reduces
+ *    losses from artificial demand and air leaks.
+ *
+ * This calculator only estimates electricity savings at compressors. These savings are not applicable
+ * when compressed air is supplied from an external source.
+ *
+ * @note This calculator is not valid for centrifugal compressors.
+ *
+ * The calculation estimates annual electrical energy use and annual energy cost for compressed-air
+ * systems evaluated during treasure hunt activities. It supports a baseline mode and a modification
+ * mode, and the baseline mode includes two power-entry options:
+ * 1. **Baseline (Measured Power)** — Uses measured compressor power and annual operating hours directly.
+ * 2. **Baseline (Rated Power)** — Uses rated (or otherwise estimated) compressor power and annual operating hours directly.
+ * 3. **Modification** — Uses proposed pressure, atmospheric pressure, and rated pressure to estimate adjusted power.
  *
  * For each measure, the selected mode computes annual energy use and annual energy cost, then totals are
  * accumulated across all measures.
@@ -23,7 +37,13 @@
 /**
  * @defgroup compressed_air_pressure_reduction_baseline_energy_formula Baseline Energy Use Formula
  * @ingroup compressed_air_pressure_reduction_calculator
- * @brief Annual energy use for baseline compressed-air operation.
+ * @brief Annual energy use for baseline compressed-air operation using measured or rated power.
+ * @details The baseline calculation accepts compressor power as a direct input and applies the same
+ * equation for both baseline options:
+ * 1. **Measured Power baseline** — @math{P_{comp}} is measured compressor power.
+ * 2. **Rated Power baseline** — @math{P_{comp}} is rated compressor power.
+ *
+ * In both cases, annual energy use is compressor power multiplied by annual operating hours.
  *
  * @formula{compressed-air-pressure-reduction-baseline-energy; E_{use} = P_{comp} \cdot t_{op}}
  *

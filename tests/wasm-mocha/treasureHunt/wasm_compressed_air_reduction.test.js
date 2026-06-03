@@ -16,7 +16,7 @@ describe('Compressed Air Reduction Tests', function () {
             utilityCost: 0.12,
             measurementMethod: moduleInstance.CompressedAirMeasurementMethod.FlowMeter,
             flowMeterMethodData: { meterReading: 200 },
-            bagMethodData: { bagFillTime: 0, bagVolume: 0, numberOfBags: 1 },
+            bagMethodData: { bagFillTime: 0, bagVolume: 0 },
             pressureMethodData: { nozzleType: 0, numberOfNozzles: 1, supplyPressure: 0 },
             otherMethodData: { consumption: 0 },
             compressorElectricityData: { compressorControlAdjustment: 100, compressorSpecificPower: 0 },
@@ -42,7 +42,7 @@ describe('Compressed Air Reduction Tests', function () {
             utilityCost: 0.12,
             measurementMethod: moduleInstance.CompressedAirMeasurementMethod.FlowMeter,
             flowMeterMethodData: { meterReading: 200000 },
-            bagMethodData: { bagFillTime: 0, bagVolume: 0, numberOfBags: 1 },
+            bagMethodData: { bagFillTime: 0, bagVolume: 0 },
             pressureMethodData: { nozzleType: 0, numberOfNozzles: 1, supplyPressure: 0 },
             otherMethodData: { consumption: 0 },
             compressorElectricityData: { compressorControlAdjustment: 100, compressorSpecificPower: 0.16 },
@@ -68,7 +68,7 @@ describe('Compressed Air Reduction Tests', function () {
             utilityCost: 0.12,
             measurementMethod: moduleInstance.CompressedAirMeasurementMethod.Bag,
             flowMeterMethodData: { meterReading: 0 },
-            bagMethodData: { bagFillTime: 12, bagVolume: 8.68, numberOfBags: 2 },
+            bagMethodData: { bagFillTime: 12, bagVolume: 8.68 },
             pressureMethodData: { nozzleType: 0, numberOfNozzles: 1, supplyPressure: 0 },
             otherMethodData: { consumption: 0 },
             compressorElectricityData: { compressorControlAdjustment: 100, compressorSpecificPower: 0.16 },
@@ -79,11 +79,11 @@ describe('Compressed Air Reduction Tests', function () {
         inputVec.push_back(inputData);
 
         let results = moduleInstance.compressedAirReduction(inputVec);
-        assert.approximately(results.energyUse,            239984.64,   0.01,  'energyUse');
-        assert.approximately(results.energyCost,           28798.1568,  0.01,  'energyCost');
+        assert.approximately(results.energyUse,            119992.32,   0.01,  'energyUse');
+        assert.approximately(results.energyCost,           14399.0784,  0.01,  'energyCost');
         assert.approximately(results.flowRate,             43.4,        0.001, 'flowRate');
         assert.approximately(results.singleNozzleFlowRate, 0.0,        0.001, 'singleNozzleFlowRate');
-        assert.approximately(results.consumption,          89994240.0,  0.01,  'consumption');
+        assert.approximately(results.consumption,          44997120,  0.01,  'consumption');
         inputVec.delete();
     });
 
@@ -94,7 +94,7 @@ describe('Compressed Air Reduction Tests', function () {
             utilityCost: 0.12,
             measurementMethod: moduleInstance.CompressedAirMeasurementMethod.Pressure,
             flowMeterMethodData: { meterReading: 0 },
-            bagMethodData: { bagFillTime: 0, bagVolume: 0, numberOfBags: 1 },
+            bagMethodData: { bagFillTime: 0, bagVolume: 0 },
             pressureMethodData: { nozzleType: 0, numberOfNozzles: 1, supplyPressure: 80 },
             otherMethodData: { consumption: 0 },
             compressorElectricityData: { compressorControlAdjustment: 100, compressorSpecificPower: 0.16 },
@@ -120,7 +120,7 @@ describe('Compressed Air Reduction Tests', function () {
             utilityCost: 0.12,
             measurementMethod: moduleInstance.CompressedAirMeasurementMethod.Pressure,
             flowMeterMethodData: { meterReading: 0 },
-            bagMethodData: { bagFillTime: 0, bagVolume: 0, numberOfBags: 1 },
+            bagMethodData: { bagFillTime: 0, bagVolume: 0},
             pressureMethodData: { nozzleType: 2, numberOfNozzles: 4, supplyPressure: 50 },
             otherMethodData: { consumption: 0 },
             compressorElectricityData: { compressorControlAdjustment: 100, compressorSpecificPower: 0.16 },
@@ -146,7 +146,7 @@ describe('Compressed Air Reduction Tests', function () {
             utilityCost: 0.12,
             measurementMethod: moduleInstance.CompressedAirMeasurementMethod.Other,
             flowMeterMethodData: { meterReading: 0 },
-            bagMethodData: { bagFillTime: 0, bagVolume: 0, numberOfBags: 1 },
+            bagMethodData: { bagFillTime: 0, bagVolume: 0 },
             pressureMethodData: { nozzleType: 0, numberOfNozzles: 1, supplyPressure: 0 },
             otherMethodData: { consumption: 200000 },
             compressorElectricityData: { compressorControlAdjustment: 100, compressorSpecificPower: 0.16 },
@@ -172,7 +172,7 @@ describe('Compressed Air Reduction Tests', function () {
                 utilityCost: 0.066,
                 measurementMethod: moduleInstance.CompressedAirMeasurementMethod.FlowMeter,
                 flowMeterMethodData: { meterReading: 200000 },
-                bagMethodData: { bagFillTime: 0, bagVolume: 0, numberOfBags: 1 },
+                bagMethodData: { bagFillTime: 0, bagVolume: 0 },
                 pressureMethodData: { nozzleType: 0, numberOfNozzles: 1, supplyPressure: 0 },
                 otherMethodData: { consumption: 0 },
                 compressorElectricityData: { compressorControlAdjustment: 100, compressorSpecificPower: 0.16 },
@@ -185,7 +185,7 @@ describe('Compressed Air Reduction Tests', function () {
                 utilityCost: 0.12,
                 measurementMethod: moduleInstance.CompressedAirMeasurementMethod.Bag,
                 flowMeterMethodData: { meterReading: 0 },
-                bagMethodData: { bagFillTime: 12, bagVolume: 8.68, numberOfBags: 1 },
+                bagMethodData: { bagFillTime: 12, bagVolume: 8.68 },
                 pressureMethodData: { nozzleType: 0, numberOfNozzles: 1, supplyPressure: 0 },
                 otherMethodData: { consumption: 0 },
                 compressorElectricityData: { compressorControlAdjustment: 100, compressorSpecificPower: 0.16 },
@@ -198,7 +198,7 @@ describe('Compressed Air Reduction Tests', function () {
                 utilityCost: 0.12,
                 measurementMethod: moduleInstance.CompressedAirMeasurementMethod.Pressure,
                 flowMeterMethodData: { meterReading: 0 },
-                bagMethodData: { bagFillTime: 0, bagVolume: 0, numberOfBags: 1 },
+                bagMethodData: { bagFillTime: 0, bagVolume: 0 },
                 pressureMethodData: { nozzleType: 0, numberOfNozzles: 1, supplyPressure: 80 },
                 otherMethodData: { consumption: 0 },
                 compressorElectricityData: { compressorControlAdjustment: 100, compressorSpecificPower: 0.16 },
@@ -211,7 +211,7 @@ describe('Compressed Air Reduction Tests', function () {
                 utilityCost: 0.12,
                 measurementMethod: moduleInstance.CompressedAirMeasurementMethod.Other,
                 flowMeterMethodData: { meterReading: 0 },
-                bagMethodData: { bagFillTime: 0, bagVolume: 0, numberOfBags: 1 },
+                bagMethodData: { bagFillTime: 0, bagVolume: 0 },
                 pressureMethodData: { nozzleType: 0, numberOfNozzles: 1, supplyPressure: 0 },
                 otherMethodData: { consumption: 200000 },
                 compressorElectricityData: { compressorControlAdjustment: 100, compressorSpecificPower: 0.16 },

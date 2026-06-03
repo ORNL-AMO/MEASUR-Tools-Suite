@@ -54,18 +54,18 @@ TEST_CASE("Compressed Air Reduction Bag Method - Electricity Utility", "[Compres
         0.12,
         MeasurementMethod::Bag,
         FlowMeterMethodData{},
-        BagMethodData{12, 8.68, 2},
+        BagMethodData{12, 8.68},
         PressureMethodData{},
         OtherMethodData{},
         CompressorElectricityData{100, 0.16},
         2}};
 
     CompressedAirReductionOutput output = compressedAirReduction(input_vec);
-    CHECK(output.energy_use            == Approx(239984.64));
-    CHECK(output.energy_cost           == Approx(28798.1568));
+    CHECK(output.energy_use            == Approx(119992.319));
+    CHECK(output.energy_cost           == Approx(14399.0784));
     CHECK(output.flow_rate             == Approx(43.4));
     CHECK(output.single_nozzle_flow_rate == Approx(0.0));
-    CHECK(output.consumption           == Approx(89994240.0));
+    CHECK(output.consumption           == Approx(44997120.0));
 }
 
 TEST_CASE("Compressed Air Reduction Pressure Method - Electricity Utility", "[CompressedAirReduction][util]") {
@@ -137,7 +137,7 @@ TEST_CASE("Compressed Air Reduction Combination - All Methods", "[CompressedAirR
                                     OtherMethodData{}, CompressorElectricityData{100, 0.16}, 1},
         // Bag method with electricity
         CompressedAirReductionInput{8640, UtilityType::Electricity, 0.12, MeasurementMethod::Bag,
-                                    FlowMeterMethodData{}, BagMethodData{12, 8.68, 1}, PressureMethodData{},
+                                    FlowMeterMethodData{}, BagMethodData{12, 8.68}, PressureMethodData{},
                                     OtherMethodData{}, CompressorElectricityData{100, 0.16}, 1},
         // Pressure method with compressed air utility
         CompressedAirReductionInput{8640, UtilityType::CompressedAir, 0.12, MeasurementMethod::Pressure,

@@ -73,7 +73,7 @@ CompressedAirReductionOutput flowMeterReduction(const FlowMeterMethodData& data,
 
 CompressedAirReductionOutput bagMethodReduction(const BagMethodData& data, int hours_per_year, int units) {
     double flow_rate   = data.bag_volume / (data.bag_fill_time / 60.0);
-    double consumption = flow_rate * hours_per_year * data.number_of_bags * 60.0 * units;
+    double consumption = flow_rate * hours_per_year * 60.0 * units;
     return CompressedAirReductionOutput{0.0, 0.0, flow_rate, 0.0, consumption};
 }
 
