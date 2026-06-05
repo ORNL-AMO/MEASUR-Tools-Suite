@@ -92,7 +92,7 @@
  * @ingroup compressed_air_reduction_calculator
  * @brief Compressed airflow rate estimated from nozzle type and supply pressure.
  * @details The orifice/pressure method estimates flow rate using a quadratic equation fit to
- * empirical flow-versus-pressure data for 13 standard nozzle types (indices 0–12). Each nozzle
+ * empirical flow-versus-pressure data for 12 standard nozzle types (indices 0–11). Each nozzle
  * type has a distinct set of coefficients @math{a}, @math{b}, and @math{c} from the lookup table
  * in @ref compressed_air_nozzle_coefficients. The single-nozzle flow rate is computed from the
  * supply pressure; total flow rate and annual consumption then scale with the number of nozzles.
@@ -114,7 +114,15 @@
  * @endsymtable
  *
  * @note The coefficients @math{a}, @math{b}, and @math{c} depend entirely on the selected nozzle
- * type. All 13 nozzle-type coefficient sets are listed in @ref compressed_air_nozzle_coefficients.
+ * type. All 12 nozzle-type coefficient sets are listed in @ref compressed_air_nozzle_coefficients.
+ *
+ * @note This method differs fundamentally from the orifice method used in the
+ * @ref orifice_method_calculator. Here the flow source is a manufactured end-use nozzle whose
+ * exact orifice geometry may be unknown but whose flow characteristics have been empirically
+ * characterised; a pre-fitted quadratic curve is therefore more accurate than a geometry-based
+ * calculation. In the leak survey the source is an unintended opening of known diameter, so
+ * first-principles compressible-flow equations applied directly to the hole geometry give the
+ * best estimate.
  * @see compressed_air_nozzle_coefficients
  */ 
  
