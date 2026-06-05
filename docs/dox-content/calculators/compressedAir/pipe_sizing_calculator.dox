@@ -36,11 +36,11 @@
  *          fluid. The free-air flow rate @math{Q} is first converted to the actual
  *          compressed-air volumetric flow at operating pressure using Boyle's Law:
  *
- * @formula{Q_{compressed} = Q \cdot \dfrac{P_{atm}}{P_{line} + P_{atm}}}
+ * @formula{boyles-law; Q_{compressed} = Q \cdot \dfrac{P_{atm}}{P_{line} + P_{atm}}}
  *
  * The required cross-sectional area at the design velocity is:
  *
- * @formula{A_{ft^2} = \dfrac{Q_{compressed}}{v \cdot k_{60}}}
+ * @formula{cross-sectional-area; A_{ft^2} = \dfrac{Q_{compressed}}{v \cdot k_{60}}}
  *
  * Converting from ft² to in² by multiplying by @math{k_{144}}:
  *
