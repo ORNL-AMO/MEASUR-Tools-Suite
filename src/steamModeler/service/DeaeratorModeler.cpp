@@ -1,11 +1,13 @@
 #include "steamModeler/service/DeaeratorModeler.h"
+#include "steamModeler/Header.h"
 
 Deaerator DeaeratorModeler::model(
     const int headerCountInput, const BoilerInput& boilerInput, const Boiler& boiler,
     const HighPressureHeaderCalculationsDomain&                    highPressureHeaderCalculationsDomain,
     const std::shared_ptr<MediumPressureHeaderCalculationsDomain>& mediumPressureHeaderCalculationsDomain,
     const std::shared_ptr<LowPressureHeaderCalculationsDomain>&    lowPressureHeaderCalculationsDomain,
-    const MakeupWaterAndCondensateHeaderCalculationsDomain& makeupWaterAndCondensateHeaderCalculationsDomain) const {
+    const MakeupWaterAndCondensateHeaderCalculationsDomain&        makeupWaterAndCondensateHeaderCalculationsDomain,
+    const std::shared_ptr<FlashTank>&                              blowdownFlashTank) const {
     const std::string methodName = std::string("DeaeratorModeler::") + std::string(__func__) + ": ";
 
     // std::cout << methodName << "calculating deaerator" << std::endl;
@@ -14,7 +16,8 @@ Deaerator DeaeratorModeler::model(
         headerCountInput, boiler, mediumPressureHeaderCalculationsDomain, lowPressureHeaderCalculationsDomain);
     const Deaerator& deaerator = makeDeaerator(headerCountInput, boilerInput, highPressureHeaderCalculationsDomain,
                                                lowPressureHeaderCalculationsDomain,
-                                               makeupWaterAndCondensateHeaderCalculationsDomain, feedwaterMassFlow);
+                                               makeupWaterAndCondensateHeaderCalculationsDomain, feedwaterMassFlow,
+                                               blowdownFlashTank);
 
     return deaerator;
 }
@@ -79,7 +82,8 @@ Deaerator DeaeratorModeler::makeDeaerator(
     const HighPressureHeaderCalculationsDomain&                 highPressureHeaderCalculationsDomain,
     const std::shared_ptr<LowPressureHeaderCalculationsDomain>& lowPressureHeaderCalculationsDomain,
     const MakeupWaterAndCondensateHeaderCalculationsDomain&     makeupWaterAndCondensateHeaderCalculationsDomain,
-    const double                                                feedwaterMassFlow) const {
+    const double                                                feedwaterMassFlow, 
+    const std::shared_ptr<FlashTank>& blowdownFlashTank) const {
     const std::string methodName = std::string("DeaeratorModeler::") + std::string(__func__) + ": ";
 
     // 6B. Calculate Deaerator
@@ -90,13 +94,22 @@ Deaerator DeaeratorModeler::makeDeaerator(
 
 
 
-    const SteamSystemModelerTool::FluidProperties& inletHeaderOutput =
+    const SteamSystemModelerTool::FluidProperties& inletFromHeader =
         headerCountInput == 1 ? highPressureHeaderCalculationsDomain.highPressureHeaderOutput
                               : lowPressureHeaderCalculationsDomain->lowPressureHeaderOutput;
 
-    // TODO ISSUE 312: if boiler has blowdown flashed and sent to dearatoe\r
-    // combine inlet header output with blowdown flash tank output using header calculator
-    // use as inleatHeaderOutput in deaerator calculations
+    // ISSUE 312: combine inlet header output with blowdown flash tank output when
+    // blowdown is flashed and sent to the deaerator
+    SteamSystemModelerTool::FluidProperties inletHeaderOutput = inletFromHeader;
+
+    if (headerCountInput > 1 && blowdownFlashTank != nullptr
+        && boilerInput.isBlowdownFlashed() && boilerInput.isSendBlowdownToDeaerator()) {
+        const Inlet  headerInlet       = inletFactory.makeWithEnthalpy(inletFromHeader);
+        const Inlet  blowdownInlet     = inletFactory.makeFromOutletGas(blowdownFlashTank);
+        const double deaeratorPressure = boilerInput.getDeaeratorPressure();
+        const Header combinedHeader    = Header(deaeratorPressure, {headerInlet, blowdownInlet});
+        inletHeaderOutput              = fluidPropertiesFactory.make(combinedHeader);
+    }
 
     return deaeratorFactory.make(boilerInput, feedwaterMassFlow, makeupWaterAndCondensateHeaderOutput,
                                  inletHeaderOutput);
