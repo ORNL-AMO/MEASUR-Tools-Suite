@@ -84,7 +84,7 @@
  * @symtable
  * @symrow{D; Minimum required internal pipe diameter; \inch}
  * @symrow{A; Cross-sectional area (from \eqref{eq:pipe-sizing-area}); \inch\squared}
- * @symrow{k_c; Circle area factor (0.78 \approx \pi/4); \unitless}
+ * @symrow{k_c; Circle area factor (0.78 @math{\approx \pi/4}); \unitless}
  * @endsymtable
  *
  * @note The factor @math{k_c = 0.78} is an industry-standard rounded approximation
