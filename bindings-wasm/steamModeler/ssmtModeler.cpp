@@ -158,7 +158,7 @@ EMSCRIPTEN_BINDINGS(steamModeler) {
 
     // BoilerInput
     // second constructor is needed for backwards compatibility with existing JavaScript code that does not include the
-    // sendBlowdownToDeaerator parameter --- IGNORE ---
+    // sendBlowdownToDeaerator parameter
     class_<BoilerInput>("BoilerInput")
         .constructor<double, double, double, double, bool, bool, double, double, double, double, bool>()
         .constructor(+[](double fuelType, double fuel, double combustionEfficiency, double blowdownRate,
