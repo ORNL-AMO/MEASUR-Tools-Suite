@@ -257,8 +257,8 @@ describe('Fan Plane Results', function () {
 
         //let addlTravPlanesVector = new Module.PlaneDataNodeBindingDataVector(output.addlTravPlanes);
 
-        for (let i = 0; i < output.addlTravPlanes.size(); i++) { // error: length = 0, was .size
-            validateResults(output.addlTravPlanes.get(i), trav[i], false, "addlTravPlanes_" + (i+1));
+        for (let i = 0; i < output.addlTravPlanes.length; i++) { // error: length = 0, was .size
+            validateResults(output.addlTravPlanes[i], trav[i], false, "addlTravPlanes_" + (i+1));
         }
     });
 });

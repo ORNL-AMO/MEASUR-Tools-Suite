@@ -93,6 +93,7 @@ jobs:
           emmake make -j 12
           rm -f bin/measur_tools_suite.js
           rm -f bin/measur_tools_suite.wasm
+          cp -r ts_def/. bin/
           cp package.json bin/package.json
 
       - name: Run tests

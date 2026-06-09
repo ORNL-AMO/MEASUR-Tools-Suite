@@ -34,6 +34,7 @@ struct FieldDataModified {
      * @param inletPressure
      * @param outletPressure
      * @param compressibilityFactor
+     * @param velocityPressure
      */
     FieldDataModified(const double measuredVoltage, const double measuredAmps, const double flowRate,
                       const double inletPressure, const double outletPressure, const double compressibilityFactor,
@@ -57,6 +58,7 @@ struct FieldDataBaseline : public FieldDataModified {
      * @param outletPressure
      * @param compressibilityFactor
      * @param loadEstimationMethod
+     * @param velocityPressure
      */
     FieldDataBaseline(const double measuredPower, const double measuredVoltage, const double measuredAmps,
                       const double flowRate, const double inletPressure, const double outletPressure,
@@ -74,19 +76,19 @@ struct FieldDataBaseline : public FieldDataModified {
 class FanResult {
   public:
     struct Output {
-        Output(double fanEfficiency, const double motorRatedPower, const double motorShaftPower,
-               const double fanShaftPower, double motorEfficiency, double motorPowerFactor, const double motorCurrent,
-               const double motorPower, const double annualEnergy, double annualCost, const double fanEnergyIndex,
-               const double loadFactor, double driveEfficiency, const double estimatedFLA = 0)
+        Output(const double fanEfficiency, const double motorRatedPower, const double motorShaftPower,
+               const double fanShaftPower, const double motorEfficiency, const double motorPowerFactor, const double motorCurrent,
+               const double motorPower, const double annualEnergy, const double annualCost, const double fanEnergyIndex,
+               const double loadFactor, const double driveEfficiency, const double estimatedFLA = 0)
             : fanEfficiency(fanEfficiency), motorRatedPower(motorRatedPower), motorShaftPower(motorShaftPower),
               fanShaftPower(fanShaftPower), motorEfficiency(motorEfficiency), motorPowerFactor(motorPowerFactor),
               motorCurrent(motorCurrent), motorPower(motorPower), annualEnergy(annualEnergy), annualCost(annualCost),
               fanEnergyIndex(fanEnergyIndex), loadFactor(loadFactor), driveEfficiency(driveEfficiency),
               estimatedFLA(estimatedFLA) {}
 
-        Output(const MotorShaftPower::Output output, double fanEfficiency, const double motorRatedPower,
-               const double fanShaftPower, const double annualEnergy, double annualCost, const double fanEnergyIndex,
-               const double loadFactor, double driveEfficiency, const double estimatedFLA = 0)
+        Output(const MotorShaftPower::Output& output, const double fanEfficiency, const double motorRatedPower,
+               const double fanShaftPower, const double annualEnergy, const double annualCost, const double fanEnergyIndex,
+               const double loadFactor, const double driveEfficiency, const double estimatedFLA = 0)
             : fanEfficiency(fanEfficiency), motorRatedPower(motorRatedPower), motorShaftPower(output.shaftPower),
               fanShaftPower(fanShaftPower), motorEfficiency(output.efficiency), motorPowerFactor(output.powerFactor),
               motorCurrent(output.current), motorPower(output.power), annualEnergy(annualEnergy),
@@ -108,21 +110,21 @@ class FanResult {
         // const double loadFactor, driveEfficiency, estimatedFLA;
     };
 
-    FanResult(Fan::Input fanInput, Motor motor, double operatingHours, double unitCost)
+    FanResult(const Fan::Input& fanInput, const Motor& motor, const double operatingHours, const double unitCost)
         : fanInput(fanInput), motor(motor), operatingHours(operatingHours), unitCost(unitCost) {}
 
     /**
-     * @param fanFieldData, Fan::FieldDataBaseline
+     * @param fanFieldData Fan::FieldDataBaseline
      * @return FanResult::Output, the results of an existing fan system assessment
      */
-    Output calculateExisting(Fan::FieldDataBaseline const fanFieldData);
+    Output calculateExisting(Fan::FieldDataBaseline fanFieldData);
 
     /**
-     * @param fanFieldData, Fan::FieldDataModified
-     * @param fanEfficiency, double
+     * @param fanFieldData Fan::FieldDataModified
+     * @param fanEfficiency double
      * @return FanResult::Output, the results of a fan system assessment
      */
-    Output calculateModified(Fan::FieldDataModified const fanFieldData, double fanEfficiency);
+    Output calculateModified(Fan::FieldDataModified fanFieldData, double fanEfficiency);
 
   private:
     double annualSavingsPotential = 0;

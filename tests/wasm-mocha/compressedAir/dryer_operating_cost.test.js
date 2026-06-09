@@ -111,6 +111,13 @@ describe('Dryer Operating Cost', function () {
         try {
             logMessage('Dryer Type HeatOfCompressionHC With Heater Power, Heating Hours per Day, Purge Rate, design DDC %: ');
             dryerOperatingCost = new moduleInstance.DryerOperatingCost(input);
+            // OR
+            dryerOperatingCost = new moduleInstance.DryerOperatingCost({
+                flowRate:1752, pressure: 50, temperature:100,
+                operatingHoursPerDay: 24, operatingDaysPerWeek:7, operatingWeeksPerYear:52,
+                costOfElectricity:0.08, costOfCompressedAir:0.2, costOfCoolingWater:0.25,
+                heaterPower:3.05, heatingHoursPerDay:3, purgeRate:2, designDDCPercentage:16.33
+            });
             validateDryerOutput(dryerOperatingCost.calculate(moduleInstance.DryerType.HeatOfCompressionHC),
                 {waterRemoved:73.34, totalCostPerYear: 3333.81, heaterPower: 3.05, heatingHoursPerDay: 3, purgeRate: 2, designDDCPercentage: 16.33});
         } finally {
