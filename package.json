@@ -30,7 +30,5 @@
     "karma-mocha-reporter": "^2.2.5",
     "karma-webpack": "^5.0.1",
     "mocha": "^11.7.1"
-  },
-  "main": "bin/client.js",
-  "types": "bin/client.d.ts"
+  }
 }
