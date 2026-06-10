@@ -1,10 +1,10 @@
 /**
- * @brief Data structure for a lighting default data record.
+ * Data structure for a lighting default data record.
  *
  * Represents a single entry in the lighting default data set, containing
  * fixture category, lamp type, photometric, and electrical characteristics.
  */
-export class LightingData {
+export declare class LightingData {
     /**
      * Constructs a Lighting's data record with the specified parameters.
      * The data ID is initialized to 0; use {@link setID} to assign a sequential ID.
@@ -122,8 +122,6 @@ export class LightingData {
     delete(): void;
 }
 
-/** Factory function to load the Lighting Data module. */
-export default function LightingDataModule(): Promise<{
+export type LightingDataModule = {
     LightingData: typeof LightingData;
-}>;
-
+};

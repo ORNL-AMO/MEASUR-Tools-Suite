@@ -2,8 +2,8 @@ import { GasType, BaseGasDensityInputType, FanType } from "./fanEnum";
 import { Motor } from "../motor/motor";
 import { Drive, LoadEstimationMethod } from "../motor/motorEnum";
 
-/** @brief Input parameters for fan result calculations. */
-export class FanInput {
+/** Input parameters for fan result calculations. */
+export declare class FanInput {
     /**
      * Constructor for Fan Input
      * @param fanSpeed double, Fan speed in RPM
@@ -17,8 +17,8 @@ export class FanInput {
     delete(): void;
 }
 
-/** @brief Baseline field data for existing fan calculations. */
-export class FieldDataBaseline {
+/** Baseline field data for existing fan calculations. */
+export declare class FieldDataBaseline {
     /**
      * To be used for Baseline Fan results
      * @param measuredPower double
@@ -47,8 +47,8 @@ export class FieldDataBaseline {
     delete(): void;
 }
 
-/** @brief Modified field data for fan modification calculations. */
-export class FieldDataModified {
+/** Modified field data for fan modification calculations. */
+export declare class FieldDataModified {
     /**
      * To be used for Modified and Optimal Fan results
      * @param measuredVoltage double
@@ -74,21 +74,21 @@ export class FieldDataModified {
 }
 
 /**
- * @brief Output for fan system assessments.
- * @var fanEfficiency double
- * @var motorRatedPower double
- * @var motorShaftPower double
- * @var fanShaftPower double
- * @var motorEfficiency double
- * @var motorPowerFactor double
- * @var motorCurrent double
- * @var motorPower double
- * @var annualEnergy double
- * @var annualCost double
- * @var fanEnergyIndex double
- * @var loadFactor double
- * @var driveEfficiency double
- * @var estimatedFLA double
+ * Output for fan system assessments.
+ * @property fanEfficiency double
+ * @property motorRatedPower double
+ * @property motorShaftPower double
+ * @property fanShaftPower double
+ * @property motorEfficiency double
+ * @property motorPowerFactor double
+ * @property motorCurrent double
+ * @property motorPower double
+ * @property annualEnergy double
+ * @property annualCost double
+ * @property fanEnergyIndex double
+ * @property loadFactor double
+ * @property driveEfficiency double
+ * @property estimatedFLA double
  */
 export interface FanOutput {
     fanEfficiency: number;
@@ -110,8 +110,8 @@ export interface FanOutput {
     delete(): void;
 }
 
-/** @brief Calculates existing and modified fan assessment outputs. */
-export class FanResult {
+/** Calculates existing and modified fan assessment outputs. */
+export declare class FanResult {
     /**
      * Constructor for FanResult
      * @param fanInput FanInput
@@ -123,14 +123,14 @@ export class FanResult {
 
     /**
      * @param fanFieldData Fan::FieldDataBaseline
-     * @return FanOutput, the results of an existing fan system assessment
+     * @returns FanOutput, the results of an existing fan system assessment
      */
     calculateExisting(fanFieldData: FieldDataBaseline): FanOutput;
 
     /**
      * @param fanFieldData Fan::FieldDataModified
      * @param fanEfficiency double
-     * @return FanOutput, the results of a fan system assessment
+     * @returns FanOutput, the results of a fan system assessment
      */
     calculateModified(fanFieldData: FieldDataModified, fanEfficiency: number): FanOutput;
 
@@ -138,10 +138,10 @@ export class FanResult {
     delete(): void;
 }
 
-/** @brief Fan rated and corrected data used in AMCA 203 calculations. */
-export class FanRatedInfo {
+/** Fan rated and corrected data used in AMCA 203 calculations. */
+export declare class FanRatedInfo {
     /**
-     * @brief Constructor for FanRatedInfo
+     * Constructor for FanRatedInfo
      * @param fanSpeed double, Fan speed RPM
      * @param motorSpeed double, Motor speed RPM
      * @param fanSpeedCorrected double, Fan speed corrected to reference conditions RPM
@@ -160,8 +160,8 @@ export class FanRatedInfo {
     delete(): void;
 }
 
-/** @brief Flange plane definition used by AMCA 203 plane data. */
-export class FlangePlane {
+/** Flange plane definition used by AMCA 203 plane data. */
+export declare class FlangePlane {
     /**
      * Constructor for FlangePlane
      * @param area double
@@ -174,8 +174,8 @@ export class FlangePlane {
     delete(): void;
 }
 
-/** @brief Traverse plane with velocity-pressure traverse data. */
-export class TraversePlane {
+/** Traverse plane with velocity-pressure traverse data. */
+export declare class TraversePlane {
     /**
      * Constructor for TraversePlane
      * @param area double
@@ -198,8 +198,8 @@ export class TraversePlane {
     delete(): void;
 }
 
-/** @brief MST plane definition used by AMCA 203 plane data. */
-export class MstPlane {
+/** MST plane definition used by AMCA 203 plane data. */
+export declare class MstPlane {
     /**
      * Constructor for MstPlane
      * @param area double
@@ -213,8 +213,8 @@ export class MstPlane {
     delete(): void;
 }
 
-/** @brief AMCA 203 plane data container. */
-export class PlaneData {
+/** AMCA 203 plane data container. */
+export declare class PlaneData {
     /**
      * Constructor for PlaneData
      * @param fanInletFlange FlangePlane
@@ -243,8 +243,8 @@ export class PlaneData {
     delete(): void;
 }
 
-/** @brief Fan shaft power helper for AMCA 203 calculations. */
-export class FanShaftPower {
+/** Fan shaft power helper for AMCA 203 calculations. */
+export declare class FanShaftPower {
     /**
      * Constructor for FanShaftPower
      * @param motorShaftPower double, motor shaft power in hp
@@ -266,13 +266,13 @@ export class FanShaftPower {
 }
 
 /**
- * @brief AMCA 203 intermediate result set.
- * @var kpc double
- * @var power double
- * @var flow double
- * @var pressureTotal double
- * @var pressureStatic double
- * @var staticPressureRise double
+ * AMCA 203 intermediate result set.
+ * @property kpc double
+ * @property power double
+ * @property flow double
+ * @property pressureTotal double
+ * @property pressureStatic double
+ * @property staticPressureRise double
  */
 export interface Fan203Results {
     kpc: number;
@@ -287,12 +287,12 @@ export interface Fan203Results {
 }
 
 /**
- * @brief AMCA 203 output bundle.
- * @var fanEfficiencyTotalPressure double
- * @var fanEfficiencyStaticPressure double
- * @var fanEfficiencyStaticPressureRise double
- * @var asTested Fan203Results
- * @var converted Fan203Results
+ * AMCA 203 output bundle.
+ * @property fanEfficiencyTotalPressure double
+ * @property fanEfficiencyStaticPressure double
+ * @property fanEfficiencyStaticPressureRise double
+ * @property asTested Fan203Results
+ * @property converted Fan203Results
  */
 export interface Fan203Output {
     fanEfficiencyTotalPressure: number;
@@ -305,8 +305,8 @@ export interface Fan203Output {
     delete(): void;
 }
 
-/** @brief AMCA 203 fan performance calculator. */
-export class Fan203 {
+/** AMCA 203 fan performance calculator. */
+export declare class Fan203 {
     /**
      * Constructor for Fan203
      * @param fanRatedInfo FanRatedInfo
@@ -322,8 +322,8 @@ export class Fan203 {
     delete(): void;
 }
 
-/** @brief Base gas density calculator. */
-export class BaseGasDensity {
+/** Base gas density calculator. */
+export declare class BaseGasDensity {
     /**
      * Constructor for BaseGasDensity
      * @param dryBulbTemp double, temperature of inputted air in °F
@@ -403,15 +403,15 @@ export class BaseGasDensity {
     delete(): void;
 }
 
-/** @brief Velocity-pressure traverse data utilities. */
-export class VelocityPressureTraverseData {
+/** Velocity-pressure traverse data utilities. */
+export declare class VelocityPressureTraverseData {
     /**
-     * @return double, the velocity pressure traverse data value in inches of water (in WC)
+     * @returns double, the velocity pressure traverse data value in inches of water (in WC)
      */
     getPv3Value(): number;
 
     /**
-     * @return double
+     * @returns double
      */
     get75percentRule(): number;
 
@@ -419,13 +419,13 @@ export class VelocityPressureTraverseData {
     delete(): void;
 }
 
-/** @brief Plane data node-binding utility. */
-export class PlaneDataNodeBinding {
+/** Plane data node-binding utility. */
+export declare class PlaneDataNodeBinding {
     /**
-     * @brief Compute results
+     * Compute results
      * @param planeData PlaneData
      * @param baseGasDensity BaseGasDensity
-     * @return PlaneDataNodeBindingOutput
+     * @returns PlaneDataNodeBindingOutput
      */
     calculate(planeData: PlaneData, baseGasDensity: BaseGasDensity): PlaneDataNodeBindingOutput;
 
@@ -434,12 +434,12 @@ export class PlaneDataNodeBinding {
 }
 
 /**
- * @brief Plane data node-binding output data row.
- * @var gasDensity double, density in pounds per sqft, lb/scf
- * @var gasVelocity double, velocity in ft/min
- * @var gasVolumeFlowRate double, ft3/min
- * @var gasVelocityPressure double, pressure in inches of water (in WC)
- * @var gasTotalPressure double, pressure in inches of water (in WC)
+ * Plane data node-binding output data row.
+ * @property gasDensity double, density in pounds per sqft, lb/scf
+ * @property gasVelocity double, velocity in ft/min
+ * @property gasVolumeFlowRate double, ft3/min
+ * @property gasVelocityPressure double, pressure in inches of water (in WC)
+ * @property gasTotalPressure double, pressure in inches of water (in WC)
  */
 export interface PlaneDataNodeBindingData {
     gasDensity: number;
@@ -453,13 +453,13 @@ export interface PlaneDataNodeBindingData {
 }
 
 /**
- * @brief Plane data node-binding flange data row.
- * @var gasDensity double, density in pounds per sqft, lb/scf
- * @var gasVelocity double, velocity in ft/min
- * @var gasVolumeFlowRate double, ft3/min
- * @var gasVelocityPressure double, pressure in inches of water (in WC)
- * @var gasTotalPressure double, pressure in inches of water (in WC)
- * @var staticPressure double, pressure in inches of water (in WC)
+ * Plane data node-binding flange data row.
+ * @property gasDensity double, density in pounds per sqft, lb/scf
+ * @property gasVelocity double, velocity in ft/min
+ * @property gasVolumeFlowRate double, ft3/min
+ * @property gasVelocityPressure double, pressure in inches of water (in WC)
+ * @property gasTotalPressure double, pressure in inches of water (in WC)
+ * @property staticPressure double, pressure in inches of water (in WC)
  */
 export interface PlaneDataNodeBindingDataFlange {
     gasDensity: number;
@@ -474,13 +474,13 @@ export interface PlaneDataNodeBindingDataFlange {
 }
 
 /**
- * @brief Plane data node-binding output bundle.
- * @var fanInletFlange PlaneDataNodeBindingDataFlange
- * @var fanOrEvaseOutletFlange PlaneDataNodeBindingDataFlange
- * @var flowTraverse PlaneDataNodeBindingData
- * @var inletMstPlane PlaneDataNodeBindingData
- * @var outletMstPlane PlaneDataNodeBindingData
- * @var addlTravPlanes PlaneDataNodeBindingData array
+ * Plane data node-binding output bundle.
+ * @property fanInletFlange PlaneDataNodeBindingDataFlange
+ * @property fanOrEvaseOutletFlange PlaneDataNodeBindingDataFlange
+ * @property flowTraverse PlaneDataNodeBindingData
+ * @property inletMstPlane PlaneDataNodeBindingData
+ * @property outletMstPlane PlaneDataNodeBindingData
+ * @property addlTravPlanes PlaneDataNodeBindingData array
  */
 export interface PlaneDataNodeBindingOutput {
     fanInletFlange: PlaneDataNodeBindingDataFlange;
@@ -495,18 +495,18 @@ export interface PlaneDataNodeBindingOutput {
 }
 
 /**
- * @brief function for plane node-binding calculations.
+ * function for plane node-binding calculations.
  * @param planeData PlaneData
  * @param baseGasDensity BaseGasDensity
- * @return PlaneDataNodeBindingOutput
+ * @returns PlaneDataNodeBindingOutput
  */
 export function PlaneDataNodeBindingCalculate(
     planeData: PlaneData,
     baseGasDensity: BaseGasDensity
 ): PlaneDataNodeBindingOutput;
 
-/** @brief Optimal fan efficiency calculator. */
-export class OptimalFanEfficiency {
+/** Optimal fan efficiency calculator. */
+export declare class OptimalFanEfficiency {
     /**
      * Constructor for Optimal Fan Efficiency
      * @param fanType FanType
@@ -527,7 +527,7 @@ export class OptimalFanEfficiency {
 
     /**
      * Calculate Thermal Resistance
-     * @return optimal fan efficiency, double as a %
+     * @returns optimal fan efficiency, double as a %
      */
     calculate(): number;
 
@@ -535,8 +535,8 @@ export class OptimalFanEfficiency {
     delete(): void;
 }
 
-/** @brief Compressibility factor calculator. */
-export class CompressibilityFactor {
+/** Compressibility factor calculator. */
+export declare class CompressibilityFactor {
     /**
      * Constructor
      * @param moverShaftPower double, in horsepower (hp)
@@ -557,7 +557,7 @@ export class CompressibilityFactor {
 
     /**
      * Calculate Compressibility Factor
-     * @return double Compressibility Factor
+     * @returns double Compressibility Factor
      */
     calculate(): number;
 
@@ -565,8 +565,7 @@ export class CompressibilityFactor {
     delete(): void;
 }
 
-/** Factory function to load the Fan. */
-export default function FanModule(): Promise<{
+export type FanModule = {
     FanInput: typeof FanInput;
     FieldDataBaseline: typeof FieldDataBaseline;
     FieldDataModified: typeof FieldDataModified;
@@ -584,5 +583,10 @@ export default function FanModule(): Promise<{
     PlaneDataNodeBindingCalculate: typeof PlaneDataNodeBindingCalculate;
     OptimalFanEfficiency: typeof OptimalFanEfficiency;
     CompressibilityFactor: typeof CompressibilityFactor;
-}>;
-
+    FanOutput: FanOutput;
+    Fan203Output: Fan203Output;
+    Fan203Results: Fan203Results;
+    PlaneDataNodeBindingOutput: PlaneDataNodeBindingOutput;
+    PlaneDataNodeBindingData: PlaneDataNodeBindingData;
+    PlaneDataNodeBindingDataFlange: PlaneDataNodeBindingDataFlange;
+};

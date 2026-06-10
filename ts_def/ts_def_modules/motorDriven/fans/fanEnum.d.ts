@@ -1,5 +1,5 @@
 /**
- * @brief Gas type used by base gas density calculations.
+ * Gas type used by base gas density calculations.
  */
 export enum GasType {
     AIR = 0,
@@ -8,7 +8,7 @@ export enum GasType {
 }
 
 /**
- * @brief Input mode used by base gas density calculations.
+ * Input mode used by base gas density calculations.
  */
 export enum BaseGasDensityInputType {
     DewPoint = 0,
@@ -17,7 +17,7 @@ export enum BaseGasDensityInputType {
 }
 
 /**
- * @brief Fan type used by optimal fan efficiency calculations.
+ * Fan type used by optimal fan efficiency calculations.
  */
 export enum FanType {
     AirfoilSISW = 0,
@@ -35,7 +35,7 @@ export enum FanType {
 }
 
 /**
- * @brief Calculation mode for fan curve data.
+ * Calculation mode for fan curve data.
  */
 export enum FanCurveDataCalculationType {
     BaseCurve = 0,
@@ -44,7 +44,7 @@ export enum FanCurveDataCalculationType {
 }
 
 /**
- * @brief Fan pressure curve type.
+ * Fan pressure curve type.
  */
 export enum FanCurveType {
     FanStaticPressure = 0,
@@ -52,12 +52,10 @@ export enum FanCurveType {
     StaticPressureRise = 2
 }
 
-/** Factory function to load the Fan Enum WASM bindings. */
-export default function FanEnumModule(): Promise<{
+export type FanEnumModule = {
     GasType: typeof GasType;
     BaseGasDensityInputType: typeof BaseGasDensityInputType;
     FanType: typeof FanType;
     FanCurveDataCalculationType: typeof FanCurveDataCalculationType;
     FanCurveType: typeof FanCurveType;
-}>;
-
+};

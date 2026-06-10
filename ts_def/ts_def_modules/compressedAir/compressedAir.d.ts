@@ -1,9 +1,9 @@
 /**
- * @brief Pipe data for compressed air calculators.
+ * Pipe data for compressed air calculators.
  * @details Holds values by nominal pipe size. This type is used by air system
  *          capacity and air velocity calculations.
  */
-export class PipeData {
+export declare class PipeData {
     /**
      * @param oneHalf double, nominal 1/2 in pipe value.
      * @param threeFourths double, nominal 3/4 in pipe value.
@@ -75,15 +75,15 @@ export class PipeData {
 }
 
 /**
- * @brief Output object for air system capacity calculations.
+ * Output object for air system capacity calculations.
  *
- * @var totalPipeVolume double, total pipe volume.
- * @var totalReceiverVolume double, total receiver volume.
- * @var totalCapacityOfCompressedAirSystem double, total compressed air system capacity.
- * @var receiverCapacities number[], receiver capacities.
- * @var pipeLengths PipeData, per-size pipe values.
+ * @property totalPipeVolume double, total pipe volume.
+ * @property totalReceiverVolume double, total receiver volume.
+ * @property totalCapacityOfCompressedAirSystem double, total compressed air system capacity.
+ * @property receiverCapacities number[], receiver capacities.
+ * @property pipeLengths PipeData, per-size pipe values.
  */
-export class AirSystemCapacityOutput {
+export declare class AirSystemCapacityOutput {
     constructor(
         totalPipeVolume: number,
         receiverCapacities: number[],
@@ -103,9 +103,9 @@ export class AirSystemCapacityOutput {
 }
 
 /**
- * @brief Calculates total compressed air system capacity from pipe and receiver data.
+ * Calculates total compressed air system capacity from pipe and receiver data.
  */
-export class AirSystemCapacity {
+export declare class AirSystemCapacity {
     /**
      * @param pipeLengths PipeData, object containing values for different pipe sizes.
      * @param receivers number[], vector of receiver volumes.
@@ -119,9 +119,9 @@ export class AirSystemCapacity {
 }
 
 /**
- * @brief Calculates compressed air velocity through different piping sizes.
+ * Calculates compressed air velocity through different piping sizes.
  */
-export class AirVelocity {
+export declare class AirVelocity {
     /**
      * @param airFlow double, volumetric flow rate in scfm.
      * @param pipePressure double, pipe pressure in psig.
@@ -135,11 +135,9 @@ export class AirVelocity {
     delete(): void;
 }
 
-/** Factory function to load the Compressed Air. */
-export default function CompressedAirModule(): Promise<{
+export type CompressedAirModule = {
     PipeData: typeof PipeData;
     AirSystemCapacity: typeof AirSystemCapacity;
     AirSystemCapacityOutput: typeof AirSystemCapacityOutput;
     AirVelocity: typeof AirVelocity;
-}>;
-
+};

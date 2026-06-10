@@ -1,5 +1,5 @@
 /**
- * @brief Utility type used to compute steam cost.
+ * Utility type used to compute steam cost.
  */
 export enum UtilityType {
     steam = 0,
@@ -8,15 +8,15 @@ export enum UtilityType {
 }
 
 /**
- * @brief Result struct for steam leak calculations.
+ * Result struct for steam leak calculations.
  *
- * @var leakRate double, leak rate in lb/hr
+ * @property leakRate double, leak rate in lb/hr
  *
- * @var steamLoss double, steam loss in klb/yr
+ * @property steamLoss double, steam loss in klb/yr
  *
- * @var energyLoss double, energy loss in MMBtu/yr
+ * @property energyLoss double, energy loss in MMBtu/yr
  *
- * @var leakCost double, annual leak cost
+ * @property leakCost double, annual leak cost
  */
 export interface SteamLeakSurveyResults {
     leakRate: number;
@@ -29,7 +29,7 @@ export interface SteamLeakSurveyResults {
 }
 
 /** Implements plume-based steam leak-rate estimation, based on DOE's Quantify and Eliminate Steam Leaks. */
-export class QuantifySteamLeakByPlumeLength {
+export declare class QuantifySteamLeakByPlumeLength {
     /**
      * @param steamPressure double, steam pressure in psig
      * @param plumeLength double, visible plume length in feet
@@ -39,9 +39,9 @@ export class QuantifySteamLeakByPlumeLength {
 }
 
 /**
- * @brief Steam leak survey calculations using estimate, orifice, and plume methods.
+ * Steam leak survey calculations using estimate, orifice, and plume methods.
  */
-export class SteamLeakSurvey {
+export declare class SteamLeakSurvey {
     /**
      * Constructor for SteamLeakSurvey, when utility type is steam
      * @param operatingTime double, operating time of the system hours per year
@@ -149,26 +149,26 @@ export class SteamLeakSurvey {
     );
 
     /**
-     * @return steamCost computed based on fuel type steam or electric or natural gas
+     * @returns steamCost computed based on fuel type steam or electric or natural gas
      */
     costOfSteam(): number;
 
     /**
      * @param turbineEfficiency double, system efficiency percentage (0 - 100 %)
-     * @return steamCost computed based on fuel type steam or electric or natural gas and turbine
+     * @returns steamCost computed based on fuel type steam or electric or natural gas and turbine
      */
     costOfSteam(turbineEfficiency: number): number;
 
     /**
      * @param leakRate double, lb/hr
-     * @return SteamLeakSurveyResults
+     * @returns SteamLeakSurveyResults
      */
     estimateMethodPRVCalc(leakRate: number): SteamLeakSurveyResults;
 
     /**
      * @param turbineEfficiency double, system efficiency percentage (0 - 100 %)
      * @param leakRate double, lb/hr
-     * @return SteamLeakSurveyResults
+     * @returns SteamLeakSurveyResults
      */
     estimateMethodTurbineCalc(turbineEfficiency: number, leakRate: number): SteamLeakSurveyResults;
 
@@ -177,7 +177,7 @@ export class SteamLeakSurvey {
      * @param holeSize double, estimated diameter of orifice through which steam is leaking in inches
      * @param dischargeCoef double, discharge coefficient used to capture the effect of the shape of the leak rate as fraction (0 - 1)
      * @param atmPressure double, atmospheric pressure (standard pressure is 14.7 psia, range 0 - 20)
-     * @return SteamLeakSurveyResults
+     * @returns SteamLeakSurveyResults
      */
     orificeMethodCalc(
         turbineEfficiency: number,
@@ -190,7 +190,7 @@ export class SteamLeakSurvey {
      * @param turbineEfficiency double, system efficiency percentage (0 - 100 %)
      * @param plumeLength double, feet (range 3 - 12 feet)
      * @param ambTemp double, ambient temperature (usually between 45 and 90 degrees F)
-     * @return SteamLeakSurveyResults
+     * @returns SteamLeakSurveyResults
      */
     plumeMethodCalc(turbineEfficiency: number, plumeLength: number, ambTemp: number): SteamLeakSurveyResults;
 
@@ -198,10 +198,8 @@ export class SteamLeakSurvey {
     delete(): void;
 }
 
-/** Factory function to load the Steam Leak Survey. */
-export default function SteamLeakSurveyModule(): Promise<{
+export type SteamLeakSurveyModule = {
     UtilityType: typeof UtilityType;
     QuantifySteamLeakByPlumeLength: typeof QuantifySteamLeakByPlumeLength;
     SteamLeakSurvey: typeof SteamLeakSurvey;
-}>;
-
+};

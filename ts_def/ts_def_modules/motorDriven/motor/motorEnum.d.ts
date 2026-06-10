@@ -27,15 +27,9 @@ export enum MotorEfficiencyClass {
     SPECIFIED =3
 }
 
-/**
- * Module: MotorEnumModule
- *
- * Description: This module provides enumerations related to motor drive systems, line frequency, load estimation methods, and motor efficiency classes.
- *
- */
-export default function MotorEnumModule(): Promise<{
+export type MotorEnumModule = {
     Drive: typeof Drive;
     LineFrequency: typeof LineFrequency;
     LoadEstimationMethod: typeof LoadEstimationMethod;
     MotorEfficiencyClass: typeof MotorEfficiencyClass;
-}>;
+};

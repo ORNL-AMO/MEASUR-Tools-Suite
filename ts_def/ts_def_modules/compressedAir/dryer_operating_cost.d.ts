@@ -10,33 +10,33 @@ export enum DryerType {
 }
 
 /**
- * @brief Input struct for DryerOperatingCost
+ * Input struct for DryerOperatingCost
  *
- * @var flowRate double, Flow Rate in SCFM (1 - 50,000 SCFM)
+ * @property flowRate double, Flow Rate in SCFM (1 - 50,000 SCFM)
  *
- * @var pressure double, Pressure in psig (25 - 150 psig)
+ * @property pressure double, Pressure in psig (25 - 150 psig)
  *
- * @var temperature double, Temperature F (50 - 120 F)
+ * @property temperature double, Temperature F (50 - 120 F)
  *
- * @var operatingHoursPerDay double, Hours for which the dryer operates per day - hours (1 - 24 hours)
+ * @property operatingHoursPerDay double, Hours for which the dryer operates per day - hours (1 - 24 hours)
  *
- * @var operatingDaysPerWeek double, Days for which the dryer operates per week - days ( 1 - 7 days)
+ * @property operatingDaysPerWeek double, Days for which the dryer operates per week - days ( 1 - 7 days)
  *
- * @var operatingWeeksPerYear double, Weeks for which the dryer operates per year - weeks (1 - 52 weeks)
+ * @property operatingWeeksPerYear double, Weeks for which the dryer operates per year - weeks (1 - 52 weeks)
  *
- * @var costOfElectricity double, Cost of electricity per kWh - $ ($0.01 - $0.20 per kWh)
+ * @property costOfElectricity double, Cost of electricity per kWh - $ ($0.01 - $0.20 per kWh)
  *
- * @var costOfCompressedAir double, Cost of compressed air per 1000 SCF - $ ($0.20 - $0.50 per 1000 SCF)
+ * @property costOfCompressedAir double, Cost of compressed air per 1000 SCF - $ ($0.20 - $0.50 per 1000 SCF)
  *
- * @var costOfCoolingWater double, Cost of cooling water per 1000 gallons - $ ($0.25 - $10.00 per 1000 gallons)
+ * @property costOfCoolingWater double, Cost of cooling water per 1000 gallons - $ ($0.25 - $10.00 per 1000 gallons)
  *
- * @var heaterPower double, Heater power rating in kW (0 - 1000 kW).
+ * @property heaterPower double, Heater power rating in kW (0 - 1000 kW).
  *
  *          If heater power is not known or needs to be computed set it to 0.
  *
  *          Heater power is required for Heated Externally, Blower Purge With Sweep, Blower Purge Without Sweep and Heat of Compression - HC dryers.
  *
- * @var heatingHoursPerDay double, Hours for which the dryer heater operates per day - hours (0 - 24 hours)
+ * @property heatingHoursPerDay double, Hours for which the dryer heater operates per day - hours (0 - 24 hours)
  *
  *          If heating hours per day is not known or needs to be calculated default set it to 0.
  *
@@ -46,7 +46,7 @@ export enum DryerType {
  *
  *          3 hours for Heat of Compression - HC dryer.
  *
- * @var purgeRate double, Purge rate for the dryer - percentage (0 - 100%)
+ * @property purgeRate double, Purge rate for the dryer - percentage (0 - 100%)
  *
  *          If purge rate is not known or needs to be calculated default set it to 0.
  *
@@ -58,7 +58,7 @@ export enum DryerType {
  *
  *          2% for Heat of Compression - HC dryer.
  *
- * @var designDDCPercentage double, Design DDC percentage for the dryer - percentage (0 - 100%)
+ * @property designDDCPercentage double, Design DDC percentage for the dryer - percentage (0 - 100%)
  *
  *          If design DDC percentage is not known or needs to be calculated default set it to 0.
  *
@@ -82,22 +82,21 @@ export interface DryerOperatingCostInput {
 }
 
 /**
- * @brief Output struct for DryerOperatingCost
+ * Output struct for DryerOperatingCost
  *
- * @var waterRemoved double, flow rate of water removed by the dryer in pounds per hour (PPH)
+ * @property waterRemoved double, flow rate of water removed by the dryer in pounds per hour (PPH)
  *
- * @var totalCostPerYear double, Total cost of operation of the dryer per year in $
+ * @property totalCostPerYear double, Total cost of operation of the dryer per year in $
  *
- * @var heaterPower double, Heater power rating in kW (0 - 1000 kW)
+ * @property heaterPower double, Heater power rating in kW (0 - 1000 kW)
  *
- * @var heatingHoursPerDay double, Hours for which the dryer heater operates per day - hours (1 - 24 hours)
+ * @property heatingHoursPerDay double, Hours for which the dryer heater operates per day - hours (1 - 24 hours)
  *
- * @var purgeRate double, Purge rate for the dryer - percentage (0 - 100%)
+ * @property purgeRate double, Purge rate for the dryer - percentage (0 - 100%)
  *
- * @var designDDCPercentage double, Design DDC percentage for the dryer - percentage (0 - 100%)
+ * @property designDDCPercentage double, Design DDC percentage for the dryer - percentage (0 - 100%)
  *
  */
-
 export interface DryerOperatingCostOutput {
     waterRemoved: number;
     totalCostPerYear: number;
@@ -111,7 +110,7 @@ export interface DryerOperatingCostOutput {
 }
 
 /** Calculates annual operating cost for supported desiccant and refrigerated dryers. */
-export class DryerOperatingCost {
+export declare class DryerOperatingCost {
     /**
      * Constructor for DryerOperatingCost - Use this constructor when all input parameters are available.
      * @param input Input struct, input parameters for calculation of dryer operating cost including optional parameters
@@ -217,7 +216,7 @@ export class DryerOperatingCost {
      *
      * @param dryerType DryerType enum, type of dryer for which operating cost is to be calculated
      *
-     * @return DryerOperatingCostOutput
+     * @returns DryerOperatingCostOutput
      *
      */
     calculate(dryerType: DryerType): DryerOperatingCostOutput;
@@ -226,9 +225,9 @@ export class DryerOperatingCost {
     delete(): void;
 }
 
-/** Factory function to load the Dryer Operating Cost WASM bindings. */
-export default function DryerOperatingCostModule(): Promise<{
+export type DryerOperatingCostModule = {
     DryerType: typeof DryerType;
     DryerOperatingCost: typeof DryerOperatingCost;
-}>;
-
+    DryerOperatingCostInput: DryerOperatingCostInput;
+    DryerOperatingCostOutput: DryerOperatingCostOutput;
+};

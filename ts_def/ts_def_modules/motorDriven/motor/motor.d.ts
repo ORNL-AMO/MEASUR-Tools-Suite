@@ -1,7 +1,7 @@
-import {LineFrequency, MotorEfficiencyClass} from "./motorEnum";
+import { LineFrequency, MotorEfficiencyClass } from "./motorEnum";
 
 /** Class representing motor data and specifications. */
-export class MotorData {
+export declare class MotorData {
     /**
      * Constructor for motor data.
      *
@@ -88,7 +88,7 @@ export class MotorData {
 }
 
 /** Class for calculating motor efficiency based on various parameters. */
-export class MotorEfficiency {
+export declare class MotorEfficiency {
     /**
      * Constructor for motor efficiency.
      *
@@ -115,7 +115,7 @@ export class MotorEfficiency {
      *
      * @param specifiedEfficiency efficiency of SPECIFIED efficiency class motor as defined by fraction
      *
-     * @return double The calculated motor efficiency %.
+     * @returns double The calculated motor efficiency %.
      *
      */
     calculate(loadFactor : number, specifiedEfficiency : number): number;
@@ -125,7 +125,7 @@ export class MotorEfficiency {
 }
 
 /** Class for estimating the full load amps (FLA) of a motor based on various parameters. */
-export class EstimateFLA {
+export declare class EstimateFLA {
     /**
      * Constructor for estimating full load amps (FLA) of a motor.
      *
@@ -154,7 +154,7 @@ export class EstimateFLA {
     /**
      * Method to calculate the estimated full load amps (FLA) of the motor.
      *
-     * @return double, The estimated full load amps (FLA).
+     * @returns double, The estimated full load amps (FLA).
      *
      */
     getEstimatedFLA(): number;
@@ -164,7 +164,7 @@ export class EstimateFLA {
 }
 
 /** Class representing a motor and its performance characteristics. */
-export class Motor {
+export declare class Motor {
     /**
      * Constructor for the Motor class, which initializes the motor with various parameters.
      *
@@ -200,7 +200,7 @@ export class Motor {
 }
 
 /** Class for calculating the motor current based on various parameters. */
-export class MotorCurrent {
+export declare class MotorCurrent {
     /**
      * Constructor for calculating the motor current based on various parameters.
      *
@@ -232,7 +232,7 @@ export class MotorCurrent {
      *
      * @param fullLoadAmps double, Current at full load in Amps
      *
-     * @return double, motor current in amps
+     * @returns double, motor current in amps
      *
      */
     calculateCurrent(fullLoadAmps: number): number;
@@ -242,7 +242,7 @@ export class MotorCurrent {
 }
 
 /** Class for calculating the motor power factor based on various parameters. */
-export class MotorPowerFactor {
+export declare class MotorPowerFactor {
     /**
      * Constructor
      * @param motorRatedPower double, Rated Power of motor in hp
@@ -266,7 +266,7 @@ export class MotorPowerFactor {
     /**
      * Calculates the motor power factor
      *
-     * @return double, power factor - unitless
+     * @returns double, power factor - unitless
      *
      */
     calculate(): number;
@@ -281,7 +281,7 @@ export class MotorPowerFactor {
  * Object contains the calculated current, efficiency, and powerfactor of the motor.
  *
  */
-export class MotorPerformanceOutput {
+export declare class MotorPerformanceOutput {
     /**
      * Constructor for the MotorPerformanceOutput class, which initializes the output with various parameters.
      *
@@ -303,7 +303,7 @@ export class MotorPerformanceOutput {
 }
 
 /** Class for calculating the overall motor performance based on various parameters. */
-export class MotorPerformance {
+export declare class MotorPerformance {
     /**
      * Constructor
      *
@@ -337,7 +337,7 @@ export class MotorPerformance {
     /**
      * Calculates the overall motor performance based on the input parameters and returns a MotorPerformanceOutput object containing the calculated current, efficiency, and power factor.
      *
-     * @return MotorPerformanceOutput, an object containing the calculated current, efficiency, and power factor of the motor.
+     * @returns MotorPerformanceOutput, an object containing the calculated current, efficiency, and power factor of the motor.
      *
      */
     calculate(): MotorPerformanceOutput;
@@ -346,9 +346,7 @@ export class MotorPerformance {
     delete(): void;
 }
 
-
-/** Factory function to load the Motor module and its associated classes and enumerations. */
-export default function MotorModule(): Promise<{
+export type MotorModule = {
     MotorData: typeof MotorData;
     MotorEfficiency: typeof MotorEfficiency;
     EstimateFLA: typeof EstimateFLA;
@@ -357,4 +355,4 @@ export default function MotorModule(): Promise<{
     MotorPowerFactor: typeof MotorPowerFactor;
     MotorPerformanceOutput: typeof MotorPerformanceOutput;
     MotorPerformance: typeof MotorPerformance;
-}>;
+};

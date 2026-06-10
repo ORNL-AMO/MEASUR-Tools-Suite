@@ -1,9 +1,9 @@
 /**
- * @brief Input parameters for the bag method compressed air leak calculation.
+ * Input parameters for the bag method compressed air leak calculation.
  *
- * @var operatingTime double, annual system operating time in hours.
- * @var bagFillTime double, time for the measurement bag to fill with leaked air in seconds.
- * @var bagVolume double, pre-measured volume of the measurement bag in cubic feet.
+ * @property operatingTime double, annual system operating time in hours.
+ * @property bagFillTime double, time for the measurement bag to fill with leaked air in seconds.
+ * @property bagVolume double, pre-measured volume of the measurement bag in cubic feet.
  */
 export interface BagMethodInput {
     operatingTime: number;
@@ -12,10 +12,10 @@ export interface BagMethodInput {
 }
 
 /**
- * @brief Result of the bag method leak flow rate calculation.
+ * Result of the bag method leak flow rate calculation.
  *
- * @var flowRate double, measured compressed air leak flow rate in scfm.
- * @var annualConsumption double, estimated annual air loss from the leak in kscf.
+ * @property flowRate double, measured compressed air leak flow rate in scfm.
+ * @property annualConsumption double, estimated annual air loss from the leak in kscf.
  */
 export interface BagMethodResult {
     flowRate: number;
@@ -23,16 +23,16 @@ export interface BagMethodResult {
 }
 
 /**
- * @brief Estimates compressed air leak flow rate and annual consumption using the bag method.
+ * Estimates compressed air leak flow rate and annual consumption using the bag method.
  * @details The leak flow rate is the bag volume divided by the fill time (converted to minutes).
  *          Annual consumption scales by operating hours and converts to kiloscf.
  * @param input Input parameters for bag method calculation.
- * @return BagMethodResult containing `flowRate` [scfm] and `annualConsumption` [kscf].
+ * @returns BagMethodResult containing `flowRate` [scfm] and `annualConsumption` [kscf].
  */
 export function calculateBagMethod(input: BagMethodInput): BagMethodResult;
 
-/** Factory function to load the Bag Method. */
-export default function BagMethodModule(): Promise<{
+export type BagMethodModule = {
     calculateBagMethod: typeof calculateBagMethod;
-}>;
-
+    BagMethodInput: BagMethodInput;
+    BagMethodResult: BagMethodResult;
+};

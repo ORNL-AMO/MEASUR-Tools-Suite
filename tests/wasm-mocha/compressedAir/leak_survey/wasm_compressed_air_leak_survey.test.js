@@ -34,8 +34,7 @@ describe('Compressed Air Leak Survey', function () {
     }
 
     function runSurvey(input) {
-        const result = moduleInstance.calculateCompressedAirLeakSurvey([input]);
-        return result;
+        return moduleInstance.calculateCompressedAirLeakSurvey([input]);
     }
 
     const defaultDecibels = {
@@ -68,6 +67,45 @@ describe('Compressed Air Leak Survey', function () {
         assert.approximately(result.annualTotalElectricityCost, 16.5888,  0.001);
         assert.approximately(result.totalFlowRate,              0.1,      0.001);
         assert.approximately(result.annualTotalFlowRate,        51840,    1);
+    });
+
+    it('Calculate estimate method with electricity (8640 hrs) with InputV', function () {
+        const lsInp =  {
+            hoursPerYear: 8640,
+            utilityType: 1,
+            utilityCost: 0.12,
+            measurementMethod: 0,
+            estimateMethodInput: {
+                operatingTime:    8640,
+                leakRateEstimate: 0.1
+            },
+            decibelsMethodInput: {
+                operatingTime: 0,
+                linePressure: 130,
+                decibels: 25,
+                decibelRatingA: 20,
+                pressureA: 150,
+                firstFlowA: 1.04,
+                secondFlowA: 1.2,
+                decibelRatingB: 30,
+                pressureB: 125,
+                firstFlowB: 1.85,
+                secondFlowB: 1.65
+            },
+            bagMethodInput:    {
+                operatingTime: 8760, bagFillTime: 12, bagVolume: 8.68
+            },
+            orificeMethodInput: { operatingTime: 0, airTemp: 250, atmPressure: 14.7,
+                dischargeCoef: 1.0, diameter: 6.0, supplyPressure: 6.2, numOrifices: 4
+            },
+            compressorElectricityData: { compressorControlAdjustment: 0.40, compressorSpecificPower: 0.16 },
+            units: 1
+        };
+        const resultV = moduleInstance.calculateCompressedAirLeakSurvey([lsInp]);
+        assert.approximately(resultV.annualTotalElectricity,     138.24,   0.01);
+        assert.approximately(resultV.annualTotalElectricityCost, 16.5888,  0.001);
+        assert.approximately(resultV.totalFlowRate,              0.1,      0.001);
+        assert.approximately(resultV.annualTotalFlowRate,        51840,    1);
     });
 
     it('should calculate estimate method with electricity (3840 hrs)', function () {

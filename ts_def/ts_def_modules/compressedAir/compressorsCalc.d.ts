@@ -1,5 +1,5 @@
 /**
- * @brief Compressor type used in compressor calculation models.
+ * Compressor type used in compressor calculation models.
  */
 export enum CompressorType {
     Centrifugal = 0,
@@ -8,7 +8,7 @@ export enum CompressorType {
 }
 
 /**
- * @brief Compressor control strategy used in compressor calculation models.
+ * Compressor control strategy used in compressor calculation models.
  */
 export enum ControlType {
     LoadUnload = 0,
@@ -22,7 +22,7 @@ export enum ControlType {
 }
 
 /**
- * @brief Compressor stage configuration.
+ * Compressor stage configuration.
  */
 export enum Stage {
     Single = 0,
@@ -31,7 +31,7 @@ export enum Stage {
 }
 
 /**
- * @brief Lubrication type used for compressor calculations.
+ * Lubrication type used for compressor calculations.
  */
 export enum Lubricant {
     Injected = 0,
@@ -40,7 +40,7 @@ export enum Lubricant {
 }
 
 /**
- * @brief Modulation mode used by supported control types.
+ * Modulation mode used by supported control types.
  */
 export enum Modulation {
     Throttle = 0,
@@ -48,7 +48,7 @@ export enum Modulation {
 }
 
 /**
- * @brief Input interpretation mode used by compressor calculation methods.
+ * Input interpretation mode used by compressor calculation methods.
  */
 export enum ComputeFrom {
     PercentagePower = 0,
@@ -59,35 +59,35 @@ export enum ComputeFrom {
 }
 
 /**
- * @brief Data record for one default compressor entry.
- * @var idCompType integer
- * @var model string
- * @var hp double, watt
- * @var ratedCapacity double, scf/min
- * @var ratedPressure double, lb/in2
- * @var maxFllFlowPressure double, lb/in2
- * @var idControlType integer
- * @var unloadPoint double, lb/in2
- * @var minULSumpPressure double, lb/in2
- * @var blowdownTime double, minute
- * @var unloadSteps double, %
- * @var modulatingPressRange double, lb/in2
- * @var powerFLBHP double, kW
- * @var totPackageInputPower double, kW
- * @var specPackagePower double, kW
- * @var noLoadPowerFM double, kW
- * @var noLoadPowerUL double, kW
- * @var maxSurgePressure double, lb/in2
- * @var maxPressSurgeFlow double, lb/in2
- * @var minStonewallPressure double, lb/in2
- * @var minPressStonewallFlow double, lb/in2
- * @var designSurgeFlow double, lb/in2
- * @var designInTemp double, F
- * @var designInPressure double, lb/in2
- * @var ampsFL double
- * @var effFL double, %
+ * Data record for one default compressor entry.
+ * @property idCompType integer
+ * @property model string
+ * @property hp double, watt
+ * @property ratedCapacity double, scf/min
+ * @property ratedPressure double, lb/in2
+ * @property maxFllFlowPressure double, lb/in2
+ * @property idControlType integer
+ * @property unloadPoint double, lb/in2
+ * @property minULSumpPressure double, lb/in2
+ * @property blowdownTime double, minute
+ * @property unloadSteps double, %
+ * @property modulatingPressRange double, lb/in2
+ * @property powerFLBHP double, kW
+ * @property totPackageInputPower double, kW
+ * @property specPackagePower double, kW
+ * @property noLoadPowerFM double, kW
+ * @property noLoadPowerUL double, kW
+ * @property maxSurgePressure double, lb/in2
+ * @property maxPressSurgeFlow double, lb/in2
+ * @property minStonewallPressure double, lb/in2
+ * @property minPressStonewallFlow double, lb/in2
+ * @property designSurgeFlow double, lb/in2
+ * @property designInTemp double, F
+ * @property designInPressure double, lb/in2
+ * @property ampsFL double
+ * @property effFL double, %
  */
-export class CompressorsData {
+export declare class CompressorsData {
     constructor(
         idCompType: number,
         model: string,
@@ -151,14 +151,14 @@ export class CompressorsData {
 }
 
 /**
- * @brief Standard compressor calculation output.
+ * Standard compressor calculation output.
  * @param kW_Calc double
  * @param C_Calc double
  * @param PerkW double
  * @param C_Per double
  *      Units for power kW and Capacity acfm
  */
-export class CompressorsOutput {
+export declare class CompressorsOutput {
     kW_Calc: number;
     C_Calc: number;
     PerkW: number;
@@ -169,15 +169,15 @@ export class CompressorsOutput {
 }
 
 /**
- * @brief Compressor calculation output for blow-off control.
+ * Compressor calculation output for blow-off control.
  * @param kW_Calc double, units kW
- * @var C_Calc double, units acfm
- * @var PerkW double, units percentage / fraction
- * @var C_Per double, units percentage / fraction
- * @var C_blow double, units acfm
- * @var blowPer double, units percentage / fraction
+ * @property C_Calc double, units acfm
+ * @property PerkW double, units percentage / fraction
+ * @property C_Per double, units percentage / fraction
+ * @property C_blow double, units acfm
+ * @property blowPer double, units percentage / fraction
  */
-export class CompressorsOutputBlowOff {
+export declare class CompressorsOutputBlowOff {
     kW_Calc: number;
     C_Calc: number;
     PerkW: number;
@@ -190,12 +190,12 @@ export class CompressorsOutputBlowOff {
 }
 
 /**
- * @brief Output for air leak reduction calculation.
- * @var C_lkred double, units acfm
- * @var C_usage_lkred double, units acfm
- * @var PerC_lkred double percentage / fraction
+ * Output for air leak reduction calculation.
+ * @property C_lkred double, units acfm
+ * @property C_usage_lkred double, units acfm
+ * @property PerC_lkred double percentage / fraction
  */
-export class ReduceAirLeaksOutput {
+export declare class ReduceAirLeaksOutput {
     C_lkred: number;
     C_usage_lkred: number;
     PerC_lkred: number;
@@ -205,11 +205,11 @@ export class ReduceAirLeaksOutput {
 }
 
 /**
- * @brief Output for end-use efficiency improvement calculation.
- * @var C_af_red double, units acfm
- * @var CPer_af_red double percentage / fraction
+ * Output for end-use efficiency improvement calculation.
+ * @property C_af_red double, units acfm
+ * @property CPer_af_red double percentage / fraction
  */
-export class ImproveEndUseEfficiencyOutput {
+export declare class ImproveEndUseEfficiencyOutput {
     C_af_red: number;
     CPer_af_red: number;
 
@@ -218,13 +218,13 @@ export class ImproveEndUseEfficiencyOutput {
 }
 
 /**
- * @brief Output for system air pressure reduction calculation.
- * @var P_fl_rpred double, units psig
- * @var kW_fl_rpadj double, units kW
- * @var C_usage_rpred double, units acfm
- * @var PerC_rpred double percentage / fraction
+ * Output for system air pressure reduction calculation.
+ * @property P_fl_rpred double, units psig
+ * @property kW_fl_rpadj double, units kW
+ * @property C_usage_rpred double, units acfm
+ * @property PerC_rpred double percentage / fraction
  */
-export class ReduceSystemAirPressureOutput {
+export declare class ReduceSystemAirPressureOutput {
     P_fl_rpred: number;
     kW_fl_rpadj: number;
     C_usage_rpred: number;
@@ -235,12 +235,12 @@ export class ReduceSystemAirPressureOutput {
 }
 
 /**
- * @brief Output for cascading set-point adjustment calculation.
- * @var kW_fl_adj double, units kW
- * @var C_usage_adj double, units acfm
- * @var PerC_adj double percentage / fraction
+ * Output for cascading set-point adjustment calculation.
+ * @property kW_fl_adj double, units kW
+ * @property C_usage_adj double, units acfm
+ * @property PerC_adj double percentage / fraction
  */
-export class AdjustCascadingSetPointOutput {
+export declare class AdjustCascadingSetPointOutput {
     kW_fl_adj: number;
     C_usage_adj: number;
     PerC_adj: number;
@@ -250,12 +250,12 @@ export class AdjustCascadingSetPointOutput {
 }
 
 /**
- * @brief Output for pressure reduction savings calculation.
- * @var kW_savings double, units kW
- * @var kWh_savings double, units kWh
- * @var cost_savings double, units currency $$$
+ * Output for pressure reduction savings calculation.
+ * @property kW_savings double, units kW
+ * @property kWh_savings double, units kWh
+ * @property cost_savings double, units currency $$$
  */
-export class PressureReductionSavingOutput {
+export declare class PressureReductionSavingOutput {
     kW_savings: number;
     kWh_savings: number;
     cost_savings: number;
@@ -265,7 +265,7 @@ export class PressureReductionSavingOutput {
 }
 
 /** Centrifugal compressor model with load/unload control. */
-export class Compressors_Centrifugal_LoadUnload {
+export declare class Compressors_Centrifugal_LoadUnload {
     /**
      * @param kWFl double, kW
      * @param CFl  double, acfm
@@ -275,26 +275,26 @@ export class Compressors_Centrifugal_LoadUnload {
 
     /**
      * @param perkW double
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromPerkW(perkW: number): CompressorsOutput;
 
     /**
      * @param cPer double
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromPerC(cPer: number): CompressorsOutput;
 
     /**
      * @param kW double
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromkWMeasured(kW: number): CompressorsOutput;
 
     /**
      *
      * @param c double Capacity
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromCMeasured(c: number): CompressorsOutput;
 
@@ -302,7 +302,7 @@ export class Compressors_Centrifugal_LoadUnload {
      * @param v double Voltage
      * @param i double Current
      * @param pf double Power Factor
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromVIPFMeasured(v: number, i: number, pf: number): CompressorsOutput;
 
@@ -321,7 +321,7 @@ export class Compressors_Centrifugal_LoadUnload {
 }
 
 /** Centrifugal compressor model with modulation/unload control. */
-export class Compressors_Centrifugal_ModulationUnload {
+export declare class Compressors_Centrifugal_ModulationUnload {
     /**
      * @param kWFl double, kW
      * @param CFl double, acfm
@@ -334,25 +334,25 @@ export class Compressors_Centrifugal_ModulationUnload {
 
     /**
      * @param perkW
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromPerkW(perkW: number): CompressorsOutput;
 
     /**
      * @param cPer double
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromPerC(cPer: number): CompressorsOutput;
 
     /**
      * @param kW double
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromkWMeasured(kW: number): CompressorsOutput;
 
     /**
      * @param c double
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromCMeasured(c: number): CompressorsOutput;
 
@@ -360,7 +360,7 @@ export class Compressors_Centrifugal_ModulationUnload {
      * @param v double Voltage
      * @param i double Current
      * @param pf double Power Factor
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromVIPFMeasured(v: number, i: number, pf: number): CompressorsOutput;
 
@@ -381,7 +381,7 @@ export class Compressors_Centrifugal_ModulationUnload {
 }
 
 /** Centrifugal compressor model with blow-off control. */
-export class Compressors_Centrifugal_BlowOff {
+export declare class Compressors_Centrifugal_BlowOff {
     /**
      * @param kWFl double, units kW
      * @param CFl double, units acfm
@@ -394,26 +394,26 @@ export class Compressors_Centrifugal_BlowOff {
     /**
      * @param perkW double
      * @param blowPer double
-     * @return CompressorsOutputBlowOff
+     * @returns CompressorsOutputBlowOff
      */
     calculateFromPerkW_BlowOff(perkW: number, blowPer: number): CompressorsOutputBlowOff;
 
     /**
      * @param cPer double, units percentage / fraction
-     * @return CompressorsOutputBlowOff
+     * @returns CompressorsOutputBlowOff
      */
     calculateFromPerC_BlowOff(cPer: number): CompressorsOutputBlowOff;
 
     /**
      * @param kW double, units kW
      * @param blowPer double, units percentage / fraction
-     * @return CompressorsOutputBlowOff
+     * @returns CompressorsOutputBlowOff
      */
     calculateFromkWMeasured_BlowOff(kW: number, blowPer: number): CompressorsOutputBlowOff;
 
     /**
      * @param c double, capacity units acfm
-     * @return CompressorsOutputBlowOff
+     * @returns CompressorsOutputBlowOff
      */
     calculateFromCMeasured_BlowOff(c: number): CompressorsOutputBlowOff;
 
@@ -441,7 +441,7 @@ export class Compressors_Centrifugal_BlowOff {
 }
 
 /** Compressor model for modulation without unload control. */
-export class Compressors_ModulationWOUnload {
+export declare class Compressors_ModulationWOUnload {
     /**
      * @param kWFl double, kW
      * @param CFl double, acfm
@@ -451,25 +451,25 @@ export class Compressors_ModulationWOUnload {
 
     /**
      * @param perkW double
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromPerkW(perkW: number): CompressorsOutput;
 
     /**
      * @param cPer double
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromPerC(cPer: number): CompressorsOutput;
 
     /**
      * @param kW double
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromkWMeasured(kW: number): CompressorsOutput;
 
     /**
      * @param c double
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromCMeasured(c: number): CompressorsOutput;
 
@@ -477,7 +477,7 @@ export class Compressors_ModulationWOUnload {
      * @param v Voltage double
      * @param i Current double
      * @param pf Power Factor double
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromVIPFMeasured(v: number, i: number, pf: number): CompressorsOutput;
 
@@ -520,7 +520,7 @@ export class Compressors_ModulationWOUnload {
 }
 
 /** Compressor model for start/stop control. */
-export class Compressors_StartStop {
+export declare class Compressors_StartStop {
     /**
      * @param kWFl double, kW
      * @param CFl double, acfm
@@ -531,25 +531,25 @@ export class Compressors_StartStop {
 
     /**
      * @param perkW double
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromPerkW(perkW: number): CompressorsOutput;
 
     /**
      * @param cPer double
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromPerC(cPer: number): CompressorsOutput;
 
     /**
      * @param kW double
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromkWMeasured(kW: number): CompressorsOutput;
 
     /**
      * @param c double
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromCMeasured(c: number): CompressorsOutput;
 
@@ -557,7 +557,7 @@ export class Compressors_StartStop {
      * @param v double Voltage
      * @param i double Current
      * @param pf double Power Factor
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromVIPFMeasured(v: number, i: number, pf: number): CompressorsOutput;
 
@@ -600,7 +600,7 @@ export class Compressors_StartStop {
 }
 
 /** Compressor model for load/unload and related controls. */
-export class Compressors_LoadUnload {
+export declare class Compressors_LoadUnload {
     /**
      * @param kWFl double, kW
      * @param CFl double, acfm
@@ -642,25 +642,25 @@ export class Compressors_LoadUnload {
 
     /**
      * @param perkW double, %
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromPerkW(perkW: number): CompressorsOutput;
 
     /**
      * @param cPer double, %
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromPerC(cPer: number): CompressorsOutput;
 
     /**
      * @param kW double, kW
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromkWMeasured(kW: number): CompressorsOutput;
 
     /**
      * @param c double, acfm
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromCMeasured(c: number): CompressorsOutput;
 
@@ -668,7 +668,7 @@ export class Compressors_LoadUnload {
      * @param v double Voltage
      * @param i double Current
      * @param pf double Power Factor
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromVIPFMeasured(v: number, i: number, pf: number): CompressorsOutput;
 
@@ -709,7 +709,7 @@ export class Compressors_LoadUnload {
 }
 
 /** Variable-frequency-drive compressor model. */
-export class Compressor_VFD {
+export declare class Compressor_VFD {
     /**
      * @param fullLoadPower double
      * @param midTurndownPower double
@@ -731,25 +731,25 @@ export class Compressor_VFD {
 
     /**
      * @param perkW double
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromPerkW(perkW: number): CompressorsOutput;
 
     /**
      * @param cPer double
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromPerC(cPer: number): CompressorsOutput;
 
     /**
      * @param kW double
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromkWMeasured(kW: number): CompressorsOutput;
 
     /**
      * @param c double
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromCMeasured(c: number): CompressorsOutput;
 
@@ -757,7 +757,7 @@ export class Compressor_VFD {
      * @param v double Voltage
      * @param i double Current
      * @param pf double power factor
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromVIPFMeasured(v: number, i: number, pf: number): CompressorsOutput;
 
@@ -766,7 +766,7 @@ export class Compressor_VFD {
 }
 
 /** Compressor model for modulation with unload control. */
-export class Compressors_ModulationWithUnload extends Compressors_LoadUnload {
+export declare class Compressors_ModulationWithUnload extends Compressors_LoadUnload {
     /**
      * @param kWFl double, kW
      * @param CFl double, acfm
@@ -841,25 +841,25 @@ export class Compressors_ModulationWithUnload extends Compressors_LoadUnload {
 
     /**
      * @param perkW double
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromPerkW(perkW: number): CompressorsOutput;
 
     /**
      * @param cPer double
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromPerC(cPer: number): CompressorsOutput;
 
     /**
      * @param kW double
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromkWMeasured(kW: number): CompressorsOutput;
 
     /**
      * @param c double
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromCMeasured(c: number): CompressorsOutput;
 
@@ -867,7 +867,7 @@ export class Compressors_ModulationWithUnload extends Compressors_LoadUnload {
      * @param v double Voltage
      * @param i double Current
      * @param pf double double Power Factor
-     * @return CompressorsOutput
+     * @returns CompressorsOutput
      */
     calculateFromVIPFMeasured(v: number, i: number, pf: number): CompressorsOutput;
 
@@ -908,11 +908,11 @@ export class Compressors_ModulationWithUnload extends Compressors_LoadUnload {
 }
 
 /**
- * @brief Calculates reduced air usage from leak reduction.
- * @var CFl double, units acfm
- * @var CUsage double, units acfm
- * @var CLk double, units acfm
- * @var perCLkred double percentage / fraction
+ * Calculates reduced air usage from leak reduction.
+ * @property CFl double, units acfm
+ * @property CUsage double, units acfm
+ * @property CLk double, units acfm
+ * @property perCLkred double percentage / fraction
  */
 export function ReduceAirLeaks(
     CFl: number,
@@ -922,10 +922,10 @@ export function ReduceAirLeaks(
 ): ReduceAirLeaksOutput;
 
 /**
- * @brief Calculates reduced air usage from end-use efficiency improvements.
- * @var CFl double, units acfm
- * @var CUsage double, units acfm
- * @var CAvgafRed double, units acfm
+ * Calculates reduced air usage from end-use efficiency improvements.
+ * @property CFl double, units acfm
+ * @property CUsage double, units acfm
+ * @property CAvgafRed double, units acfm
  */
 export function ImproveEndUseEfficiency(
     CFl: number,
@@ -934,14 +934,14 @@ export function ImproveEndUseEfficiency(
 ): ImproveEndUseEfficiencyOutput;
 
 /**
- * @brief Calculates adjusted usage and power when system pressure is reduced.
- * @var CFl double, units acfm
- * @var CUsage double, units acfm
- * @var PFl double, units psig
- * @var kWFl double, units kW
- * @var PRpred double, units psig
- * @var PAlt double, units psig
- * @var PAtm double, units psia
+ * Calculates adjusted usage and power when system pressure is reduced.
+ * @property CFl double, units acfm
+ * @property CUsage double, units acfm
+ * @property PFl double, units psig
+ * @property kWFl double, units kW
+ * @property PRpred double, units psig
+ * @property PAlt double, units psig
+ * @property PAtm double, units psia
  */
 export function ReduceSystemAirPressure(
     CFl: number,
@@ -954,14 +954,14 @@ export function ReduceSystemAirPressure(
 ): ReduceSystemAirPressureOutput;
 
 /**
- * @brief Calculates adjusted usage and power for cascading set-point changes.
- * @var CFl double, units acfm
- * @var CUsage double, units acfm
- * @var PFl double, units psig
- * @var kWFl double, units kW
- * @var PFlAdj double, units psig
- * @var PAlt double, units psig
- * @var PAtm double, units psia
+ * Calculates adjusted usage and power for cascading set-point changes.
+ * @property CFl double, units acfm
+ * @property CUsage double, units acfm
+ * @property PFl double, units psig
+ * @property kWFl double, units kW
+ * @property PFlAdj double, units psig
+ * @property PAlt double, units psig
+ * @property PAtm double, units psia
  */
 export function AdjustCascadingSetPoint(
     CFl: number,
@@ -974,15 +974,15 @@ export function AdjustCascadingSetPoint(
 ): AdjustCascadingSetPointOutput;
 
 /**
- * @brief Calculates kW, energy, and cost savings from discharge pressure reduction.
- * @var operatingHours double
- * @var costPerkWh double, units /kWh
- * @var kWFlRated double, units kW
- * @var PFlRated double, units psig
- * @var dischargePresBaseline double, units psig
- * @var dischargePresMod double, units psig
- * @var PAlt double, units psig
- * @var PAtm double, units psig
+ * Calculates kW, energy, and cost savings from discharge pressure reduction.
+ * @property operatingHours double
+ * @property costPerkWh double, units /kWh
+ * @property kWFlRated double, units kW
+ * @property PFlRated double, units psig
+ * @property dischargePresBaseline double, units psig
+ * @property dischargePresMod double, units psig
+ * @property PAlt double, units psig
+ * @property PAtm double, units psig
  */
 export function PressureReductionSaving(
     operatingHours: number,
@@ -996,12 +996,12 @@ export function PressureReductionSaving(
 ): PressureReductionSavingOutput;
 
 /**
- * @brief Calculates adjusted full-load compressor power for a discharge pressure.
- * @var kWFlRated double, units kW
- * @var PFlRated double, units psig
- * @var PDischarge double, units psig
- * @var PAlt double, units psig
- * @var PAtm double, units psia
+ * Calculates adjusted full-load compressor power for a discharge pressure.
+ * @property kWFlRated double, units kW
+ * @property PFlRated double, units psig
+ * @property PDischarge double, units psig
+ * @property PAlt double, units psig
+ * @property PAtm double, units psia
  */
 export function kWAdjusted(
     kWFlRated: number,
@@ -1011,8 +1011,7 @@ export function kWAdjusted(
     PAtm?: number
 ): number;
 
-/** Factory function to load the Compressors Calc. */
-export default function CompressorsCalcModule(): Promise<{
+export type CompressorsCalcModule = {
     CompressorType: typeof CompressorType;
     ControlType: typeof ControlType;
     Stage: typeof Stage;
@@ -1035,6 +1034,7 @@ export default function CompressorsCalcModule(): Promise<{
     Compressors_LoadUnload: typeof Compressors_LoadUnload;
     Compressor_VFD: typeof Compressor_VFD;
     Compressors_ModulationWithUnload: typeof Compressors_ModulationWithUnload;
+
     ReduceAirLeaks: typeof ReduceAirLeaks;
     ImproveEndUseEfficiency: typeof ImproveEndUseEfficiency;
     ReduceSystemAirPressure: typeof ReduceSystemAirPressure;
@@ -1045,5 +1045,4 @@ export default function CompressorsCalcModule(): Promise<{
     AdjustDischargePressureLoadUnload: typeof Compressors_Centrifugal_LoadUnload.prototype.AdjustDischargePressure;
     AdjustDischargePressureModulationUnload: typeof Compressors_Centrifugal_ModulationUnload.prototype.AdjustDischargePressure;
     AdjustDischargePressureBlowOff: typeof Compressors_Centrifugal_BlowOff.prototype.AdjustDischargePressure;
-}>;
-
+};

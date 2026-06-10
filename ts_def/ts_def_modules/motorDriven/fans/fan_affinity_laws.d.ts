@@ -1,5 +1,5 @@
 /**
- * @brief Motor control types for the fan system.
+ * Motor control types for the fan system.
  */
 export enum MotorControlType {
     OnOff = 0,
@@ -9,7 +9,7 @@ export enum MotorControlType {
 }
 
 /**
- * @brief Flow mode for desired flow input.
+ * Flow mode for desired flow input.
  */
 export enum FlowMode {
     Percent = 0,
@@ -17,10 +17,10 @@ export enum FlowMode {
 }
 
 /**
- * @brief Output struct for FanAffinityLaws
- * @var annualEnergyBaseline double, Baseline energy consumption in kWh
- * @var annualEnergyNew double, Energy consumption in kWh
- * @var annualCostSavings double, Cost savings in $ based on change in energy consumption and electricity cost
+ * Output struct for FanAffinityLaws
+ * @property annualEnergyBaseline double, Baseline energy consumption in kWh
+ * @property annualEnergyNew double, Energy consumption in kWh
+ * @property annualCostSavings double, Cost savings in $ based on change in energy consumption and electricity cost
  */
 export interface FanAffinityLawsOutput {
     annualEnergyBaseline: number;
@@ -32,19 +32,19 @@ export interface FanAffinityLawsOutput {
 }
 
 /**
- * @brief Input struct for FanAffinityLaws.
+ * Input struct for FanAffinityLaws.
  * Use this struct to create input object and then use that object to create FanAffinityLaws object.
- * @var electricityCost double, electric usage rate in $/kWh
- * @var driveEfficiency double, Efficiency of the drive percentage (1 - 100)
- * @var motorEfficiency double, Efficiency of the motor percentage (1 - 100)
- * @var flowPercentBaseline double, Flow rate change by percent (0 - 100)
- * @var operatingHours double, Hours for which the fan system operates per year - hours (1 - 8760 hours)
- * @var motorPower double, Motor Power in kW
- * @var ratedFlow double, Flow Rate in CFM
- * @var motorControlTypeCurrent MotorControlType enum, current motor control for the fan system
- * @var motorControlTypeNew MotorControlType enum, changed motor control for the fan system
- * @var flowMode FlowMode enum, mode for flow change - by percent or by volume
- * @var desiredFlowRate double, Desired flow rate based on flow mode
+ * @property electricityCost double, electric usage rate in $/kWh
+ * @property driveEfficiency double, Efficiency of the drive percentage (1 - 100)
+ * @property motorEfficiency double, Efficiency of the motor percentage (1 - 100)
+ * @property flowPercentBaseline double, Flow rate change by percent (0 - 100)
+ * @property operatingHours double, Hours for which the fan system operates per year - hours (1 - 8760 hours)
+ * @property motorPower double, Motor Power in kW
+ * @property ratedFlow double, Flow Rate in CFM
+ * @property motorControlTypeCurrent MotorControlType enum, current motor control for the fan system
+ * @property motorControlTypeNew MotorControlType enum, changed motor control for the fan system
+ * @property flowMode FlowMode enum, mode for flow change - by percent or by volume
+ * @property desiredFlowRate double, Desired flow rate based on flow mode
  *          If flow mode is volume desired flow rate is flow volume in CFM
  *          If flow mode is percentage desired flow rate is flow percentage (0 - 100)
  */
@@ -63,9 +63,9 @@ export interface FanAffinityLawsInput {
 }
 
 /**
- * @brief Fan affinity law calculations for annual baseline/new energy and annual cost savings.
+ * Fan affinity law calculations for annual baseline/new energy and annual cost savings.
  */
-export class FanAffinityLaws {
+export declare class FanAffinityLaws {
     /**
      * Constructor for FanAffinityLaws. Use this constructor with input object.
      * @param input Input struct containing all necessary input parameters for FanAffinityLaws
@@ -103,18 +103,18 @@ export class FanAffinityLaws {
     );
 
     /**
-     * @brief Compute annual baseline and changed energy based on current and changed state of motor Control
+     * Compute annual baseline and changed energy based on current and changed state of motor Control
      *      at a desired flow rate by percent or by volume.
-     * @return Output struct containing annual energy baseline and changed annual energy in kWh
+     * @returns Output struct containing annual energy baseline and changed annual energy in kWh
      */
     calculate(): FanAffinityLawsOutput;
 
     /**
-     * @brief Compute annual baseline and changed energy based on current and changed state of motor Control
+     * Compute annual baseline and changed energy based on current and changed state of motor Control
      *      at a desired flow rate by percent or by volume with changing fan size.
      * @param fanDiameterCurrent double, Current fan diameter in inches
      * @param fanDiameter double, Changed fan diameter in inches
-     * @return Output struct containing annual energy baseline and changed annual energy in kWh
+     * @returns Output struct containing annual energy baseline and changed annual energy in kWh
      */
     changeFanSize(fanDiameterCurrent: number, fanDiameter: number): FanAffinityLawsOutput;
 
@@ -122,10 +122,10 @@ export class FanAffinityLaws {
     delete(): void;
 }
 
-/** Factory function to load the Fan Affinity Laws. */
-export default function FanAffinityLawsModule(): Promise<{
+export type FanAffinityLawsModule = {
     MotorControlType: typeof MotorControlType;
     FlowMode: typeof FlowMode;
     FanAffinityLaws: typeof FanAffinityLaws;
-}>;
-
+    FanAffinityLawsOutput: FanAffinityLawsOutput;
+    FanAffinityLawsInput: FanAffinityLawsInput;
+};
