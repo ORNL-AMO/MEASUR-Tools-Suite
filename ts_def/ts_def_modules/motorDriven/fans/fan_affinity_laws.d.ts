@@ -68,7 +68,7 @@ export interface FanAffinityLawsInput {
 export declare class FanAffinityLaws {
     /**
      * Constructor for FanAffinityLaws. Use this constructor with input object.
-     * @param input Input struct containing all necessary input parameters for FanAffinityLaws
+     * @param input {@link FanAffinityLawsInput} struct containing all necessary input parameters for FanAffinityLaws
      */
     constructor(input: FanAffinityLawsInput);
 
@@ -114,7 +114,7 @@ export declare class FanAffinityLaws {
      *      at a desired flow rate by percent or by volume with changing fan size.
      * @param fanDiameterCurrent double, Current fan diameter in inches
      * @param fanDiameter double, Changed fan diameter in inches
-     * @returns Output struct containing annual energy baseline and changed annual energy in kWh
+     * @returns {@link FanAffinityLawsOutput} struct containing annual energy baseline and changed annual energy in kWh
      */
     changeFanSize(fanDiameterCurrent: number, fanDiameter: number): FanAffinityLawsOutput;
 

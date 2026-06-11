@@ -76,8 +76,8 @@ export interface CompressedAirLeakSurveyResult {
  * @details Iterates over each survey entry, routes it to the selected measurement
  *          sub-calculator, applies the `units` multiplier, computes utility cost,
  *          and accumulates totals.
- * @param inputs Array of survey entries, one per leak measurement row.
- * @returns CompressedAirLeakSurveyResult containing accumulated survey totals.
+ * @param inputs {@link CompressedAirLeakSurveyInput} Array of survey entries, one per leak measurement row.
+ * @returns {@link CompressedAirLeakSurveyResult} containing accumulated survey totals.
  */
 export function calculateCompressedAirLeakSurvey(
     inputs: CompressedAirLeakSurveyInput[]

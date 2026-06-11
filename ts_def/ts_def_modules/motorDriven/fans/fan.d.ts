@@ -122,15 +122,15 @@ export declare class FanResult {
     constructor(fanInput: FanInput, motor: Motor, operatingHours: number, unitCost: number);
 
     /**
-     * @param fanFieldData Fan::FieldDataBaseline
-     * @returns FanOutput, the results of an existing fan system assessment
+     * @param fanFieldData {@link FieldDataBaseline}
+     * @returns {@link FanOutput}, the results of an existing fan system assessment
      */
     calculateExisting(fanFieldData: FieldDataBaseline): FanOutput;
 
     /**
      * @param fanFieldData Fan::FieldDataModified
      * @param fanEfficiency double
-     * @returns FanOutput, the results of a fan system assessment
+     * @returns {@link FanOutput}, the results of a fan system assessment
      */
     calculateModified(fanFieldData: FieldDataModified, fanEfficiency: number): FanOutput;
 

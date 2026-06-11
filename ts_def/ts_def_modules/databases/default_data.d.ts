@@ -148,25 +148,25 @@ export declare class DefaultData {
     delete(): void;
 }
 
-/** Returns default gas load/charge materials. */
+/** @returns {@link GasLoadChargeMaterial} array. */
 export function getDefaultGasLoadChargeMaterials(): GasLoadChargeMaterial[];
 
-/** Returns default liquid load/charge materials. */
+/** @returns {@link LiquidLoadChargeMaterial} array. */
 export function getDefaultLiquidLoadChargeMaterials(): LiquidLoadChargeMaterial[];
 
-/** Returns default solid load/charge materials. */
+/** @returns {@link SolidLoadChargeMaterial} array. */
 export function getDefaultSolidLoadChargeMaterials(): SolidLoadChargeMaterial[];
 
-/** Returns default gas flue gas materials. */
+/** @returns {@link GasFlueGasMaterial} array. */
 export function getDefaultGasFlueGasMaterials(): GasFlueGasMaterial[];
 
-/** Returns default solid/liquid flue gas materials. */
+/** @returns {@link SolidLiquidFlueGasMaterial} array. */
 export function getDefaultSolidLiquidFlueGasMaterials(): SolidLiquidFlueGasMaterial[];
 
-/** Returns default wall types. */
+/** @returns {@link WallType} array. */
 export function getDefaultWallTypes(): WallType[];
 
-/** Returns default atmosphere gas types. */
+/** @returns {@link AtmosphereGasType} array. */
 export function getDefaultGasTypes(): AtmosphereGasType[];
 
 export type DefaultDataModule = {

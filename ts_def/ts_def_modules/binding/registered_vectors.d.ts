@@ -10,6 +10,7 @@ import {
 import { GasType } from "../motorDriven/fans/fanEnum";
 import { CompressorsData } from "../compressedAir/compressorsCalc";
 import { CompressedAirLeakSurveyInput } from "../compressedAir/leak_survey/compressed_air_leak_survey";
+import {GasCompositions} from "../physics/gas_compositions";
 
 export declare abstract class RegisteredVector<T> {
     /** Constructor for creating an array of elements of type <T> */
@@ -49,68 +50,73 @@ export declare abstract class RegisteredVector<T> {
 }
 
 /** A vector of {@link number} records, mapped from `std::vector<number>`. */
-export declare class DoubleVector extends RegisteredVector<number> {}
+export declare interface DoubleVector extends RegisteredVector<number> {}
 
 /** A vector of {@link number[]} records, mapped from `std::vector<std::vector<number>>`. */
-export declare class DoubleVector2D extends RegisteredVector<number[]> {}
+export declare interface DoubleVector2D extends RegisteredVector<number[]> {}
 
 /** A vector of {@link CompressorsData} records, mapped from `std::vector<CompressorsData>`. */
-export declare class CompressorsDataV extends RegisteredVector<CompressorsData> {}
+export declare interface CompressorsDataV extends RegisteredVector<CompressorsData> {}
 
 /** A vector of {@link CompressedAirLeakSurveyInput} records, mapped from `std::vector<CompressedAirLeakSurveyInput>`. */
-export declare class CompressedAirLeakSurveyInputV extends RegisteredVector<CompressedAirLeakSurveyInput> {}
+export declare interface CompressedAirLeakSurveyInputV extends RegisteredVector<CompressedAirLeakSurveyInput> {}
 
 /** A vector of {@link GasLoadChargeMaterial} records, mapped from `std::vector<GasLoadChargeMaterial>`. */
-export declare class GasLoadChargeMaterialV extends RegisteredVector<GasLoadChargeMaterial> {}
+export declare interface GasLoadChargeMaterialV extends RegisteredVector<GasLoadChargeMaterial> {}
 
 /** A vector of {@link LiquidLoadChargeMaterial} records, mapped from `std::vector<LiquidLoadChargeMaterial>`. */
-export declare class LiquidLoadChargeMaterialV extends RegisteredVector<LiquidLoadChargeMaterial> {}
+export declare interface LiquidLoadChargeMaterialV extends RegisteredVector<LiquidLoadChargeMaterial> {}
 
 /** A vector of {@link SolidLoadChargeMaterial} records, mapped from `std::vector<SolidLoadChargeMaterial>`. */
-export declare class SolidLoadChargeMaterialV extends RegisteredVector<SolidLoadChargeMaterial> {}
+export declare interface SolidLoadChargeMaterialV extends RegisteredVector<SolidLoadChargeMaterial> {}
 
 /** A vector of {@link GasFlueGasMaterial} records, mapped from `std::vector<GasFlueGasMaterial>`. */
-export declare class GasFlueGasMaterialV extends RegisteredVector<GasFlueGasMaterial> {}
+export declare interface GasFlueGasMaterialV extends RegisteredVector<GasFlueGasMaterial> {}
 
 /** A vector of {@link SolidLiquidFlueGasMaterial} records, mapped from `std::vector<SolidLiquidFlueGasMaterial>`. */
-export declare class SolidLiquidFlueGasMaterialV extends RegisteredVector<SolidLiquidFlueGasMaterial> {}
+export declare interface SolidLiquidFlueGasMaterialV extends RegisteredVector<SolidLiquidFlueGasMaterial> {}
 
 /** A vector of {@link WallType} records, mapped from `std::vector<WallType>`. */
-export declare class WallTypeV extends RegisteredVector<WallType> {}
+export declare interface WallTypeV extends RegisteredVector<WallType> {}
 
 /** A vector of {@link GasType} records, mapped from `std::vector<GasType>`. */
-export declare class AtmosphereGasTypeV extends RegisteredVector<GasType> {}
+export declare interface AtmosphereGasTypeV extends RegisteredVector<GasType> {}
 
 /** A vector of {@link TraversePlane} records, mapped from `std::vector<TraversePlane>`. */
-export declare class TraversePlaneVector extends RegisteredVector<TraversePlane> {}
+export declare interface TraversePlaneVector extends RegisteredVector<TraversePlane> {}
 
 /** A vector of {@link PlaneDataNodeBindingData} records, mapped from `std::vector<PlaneDataNodeBindingData>`. */
-export declare class PlaneDataNodeBindingDataVector extends RegisteredVector<PlaneDataNodeBindingData> {}
+export declare interface PlaneDataNodeBindingDataVector extends RegisteredVector<PlaneDataNodeBindingData> {}
 
 /** A vector of {@link MotorData} records, mapped from `std::vector<MotorData>`. */
-export declare class MotorDataV extends RegisteredVector<MotorData> {}
+export declare interface MotorDataV extends RegisteredVector<MotorData> {}
 
 /** A vector of {@link LightingData} records, mapped from `std::vector<LightingData>`. */
-export declare class LightingDataV extends RegisteredVector<LightingData> {}
+export declare interface LightingDataV extends RegisteredVector<LightingData> {}
+
+/** A vector of {@link GasCompositions} records, mapped from `std::vector<GasCompositions>`. */
+export declare interface GasCompositionsV extends RegisteredVector<GasCompositions> {}
 
 export type RegisteredVectorsModule = {
-    DoubleVector: typeof DoubleVector;
-    DoubleVector2D: typeof DoubleVector2D;
+    DoubleVector: DoubleVector;
+    DoubleVector2D: DoubleVector2D;
 
-    CompressorsDataV: typeof CompressorsDataV;
-    CompressedAirLeakSurveyInputV: typeof CompressedAirLeakSurveyInputV;
+    CompressorsDataV: CompressorsDataV;
+    CompressedAirLeakSurveyInputV: CompressedAirLeakSurveyInputV;
 
-    GasLoadChargeMaterialV: typeof GasLoadChargeMaterialV;
-    LiquidLoadChargeMaterialV: typeof LiquidLoadChargeMaterialV;
-    SolidLoadChargeMaterialV: typeof SolidLoadChargeMaterialV;
-    GasFlueGasMaterialV: typeof GasFlueGasMaterialV;
-    SolidLiquidFlueGasMaterialV: typeof SolidLiquidFlueGasMaterialV;
-    WallTypeV: typeof WallTypeV;
-    AtmosphereGasTypeV: typeof AtmosphereGasTypeV;
+    GasLoadChargeMaterialV: GasLoadChargeMaterialV;
+    LiquidLoadChargeMaterialV: LiquidLoadChargeMaterialV;
+    SolidLoadChargeMaterialV: SolidLoadChargeMaterialV;
+    GasFlueGasMaterialV: GasFlueGasMaterialV;
+    SolidLiquidFlueGasMaterialV: SolidLiquidFlueGasMaterialV;
+    WallTypeV: WallTypeV;
+    AtmosphereGasTypeV: AtmosphereGasTypeV;
 
-    TraversePlaneVector: typeof TraversePlaneVector;
-    PlaneDataNodeBindingDataVector: typeof PlaneDataNodeBindingDataVector;
+    TraversePlaneVector: TraversePlaneVector;
+    PlaneDataNodeBindingDataVector: PlaneDataNodeBindingDataVector;
 
-    MotorDataV: typeof MotorDataV;
-    LightingDataV: typeof LightingDataV;
+    MotorDataV: MotorDataV;
+    LightingDataV: LightingDataV;
+
+    GasCompositionsV: GasCompositionsV;
 };

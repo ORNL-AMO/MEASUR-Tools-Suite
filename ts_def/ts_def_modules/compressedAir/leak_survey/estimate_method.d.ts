@@ -22,8 +22,8 @@ export interface EstimateMethodResult {
  * Estimates annual compressed air consumption from a leak using the estimate method.
  * @details Annual consumption is calculated from leak rate estimate and annual operating time.
  * @note Leak rate estimate must be in scfm and operating time in hours per year.
- * @param input Input for estimate method calculation.
- * @returns EstimateMethodResult containing `annualConsumption` [kscf].
+ * @param input {@link EstimateMethodInput} for estimate method calculation.
+ * @returns {@link EstimateMethodResult} containing `annualConsumption` [kscf].
  */
 export function calculateEstimateMethod(input: EstimateMethodInput): EstimateMethodResult;
 

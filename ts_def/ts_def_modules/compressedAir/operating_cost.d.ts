@@ -38,8 +38,8 @@ export interface OperatingCostResult {
  * Calculates the annual electricity cost for a compressor cycling between loaded and unloaded operation.
  * @details Computes unloaded runtime percentage, loaded annual cost, unloaded annual cost, and total annual cost.
  * @note Percentage inputs are provided on a 0-100 scale and converted internally.
- * @param input OperatingCostInput
- * @returns OperatingCostResult with unloaded runtime and annual cost components.
+ * @param input {@link OperatingCostInput}
+ * @returns {@link OperatingCostResult} with unloaded runtime and annual cost components.
  */
 export function calculateOperatingCost(input: OperatingCostInput): OperatingCostResult;
 

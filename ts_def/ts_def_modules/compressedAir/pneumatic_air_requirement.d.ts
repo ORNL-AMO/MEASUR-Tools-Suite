@@ -45,8 +45,8 @@ export interface PneumaticAirRequirementResult {
 
 /**
  * Calculates the air requirement for a single-acting pneumatic cylinder.
- * @param input PneumaticAirRequirementSingleActingInput
- * @returns PneumaticAirRequirementResult containing cylinder intake volume, compression ratio, and free-air requirement.
+ * @param input {@link PneumaticAirRequirementSingleActingInput}
+ * @returns {@link PneumaticAirRequirementResult} containing cylinder intake volume, compression ratio, and free-air requirement.
  */
 export function calculatePneumaticAirRequirementSingleActing(
     input: PneumaticAirRequirementSingleActingInput
@@ -54,8 +54,8 @@ export function calculatePneumaticAirRequirementSingleActing(
 
 /**
  * Calculates the air requirement for a double-acting pneumatic cylinder.
- * @param input PneumaticAirRequirementDoubleActingInput
- * @returns PneumaticAirRequirementResult containing cylinder intake volume, compression ratio, and free-air requirement.
+ * @param input {@link PneumaticAirRequirementDoubleActingInput}
+ * @returns {@link PneumaticAirRequirementResult} containing cylinder intake volume, compression ratio, and free-air requirement.
  */
 export function calculatePneumaticAirRequirementDoubleActing(
     input: PneumaticAirRequirementDoubleActingInput

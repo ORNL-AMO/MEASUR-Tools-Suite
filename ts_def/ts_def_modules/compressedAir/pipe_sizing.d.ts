@@ -28,8 +28,8 @@ export interface PipeSizingResult {
  * Calculates the minimum pipe cross-sectional area and diameter for a compressed air system.
  * @details Converts free-air flow to compressed-air volume at operating pressure and
  *          computes the minimum circular internal diameter for the design velocity.
- * @param input PipeSizingInput
- * @returns PipeSizingResult containing `crossSectionalArea` [in^2] and `pipeDiameter` [in].
+ * @param input {@link PipeSizingInput}
+ * @returns {@link PipeSizingResult} containing `crossSectionalArea` [in^2] and `pipeDiameter` [in].
  */
 export function calculatePipeSize(input: PipeSizingInput): PipeSizingResult;
 

@@ -44,8 +44,8 @@ export interface OrificeMethodResult {
  * Estimates compressed air leak flow rate and annual consumption using the orifice method.
  * @details Applies isentropic choked-flow relations with pressure and leak geometry inputs.
  * @note Supply pressure is provided in psig and converted to absolute pressure internally.
- * @param input Input for orifice method calculation.
- * @returns OrificeMethodResult containing intermediate and final flow values.
+ * @param input {@link OrificeMethodInput} for orifice method calculation.
+ * @returns {@link OrificeMethodResult} containing intermediate and final flow values.
  */
 export function calculateOrificeMethod(input: OrificeMethodInput): OrificeMethodResult;
 

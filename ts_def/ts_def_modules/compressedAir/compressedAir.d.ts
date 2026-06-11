@@ -81,7 +81,7 @@ export declare class PipeData {
  * @property totalReceiverVolume double, total receiver volume.
  * @property totalCapacityOfCompressedAirSystem double, total compressed air system capacity.
  * @property receiverCapacities number[], receiver capacities.
- * @property pipeLengths PipeData, per-size pipe values.
+ * @property pipeLengths {@link PipeData}, per-size pipe values.
  */
 export declare class AirSystemCapacityOutput {
     constructor(
@@ -112,6 +112,9 @@ export declare class AirSystemCapacity {
      */
     constructor(pipeLengths: PipeData, receivers: number[]);
 
+    /**
+     * @returns {@link AirSystemCapacityOutput} object containing total pipe volume, total receiver volume, total compressed air system capacity, and per-size pipe values.
+    */
     calculate(): AirSystemCapacityOutput;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -129,6 +132,9 @@ export declare class AirVelocity {
      */
     constructor(airFlow: number, pipePressure: number, atmosphericPressure: number);
 
+    /**
+     * @returns {@link PipeData} object containing air velocity values for different pipe sizes.
+    */
     calculate(): PipeData;
 
     /** Frees the underlying resource; must be called when finished with the instance */

@@ -42,8 +42,8 @@ export interface PneumaticValveCvResult {
 
 /**
  * Calculates the air flow rate through a pneumatic valve with unit flow coefficient (Cv = 1).
- * @param input PneumaticValveFlowRateInput
- * @returns PneumaticValveFlowRateResult containing `flowRate` [scfm].
+ * @param input {@link PneumaticValveFlowRateInput}
+ * @returns {@link PneumaticValveFlowRateResult} containing `flowRate` [scfm].
  */
 export function calculatePneumaticValveFlowRate(
     input: PneumaticValveFlowRateInput
@@ -51,8 +51,8 @@ export function calculatePneumaticValveFlowRate(
 
 /**
  * Calculates the valve flow coefficient (Cv) for a pneumatic valve.
- * @param input PneumaticValveCvInput
- * @returns PneumaticValveCvResult containing `flowCoefficient`.
+ * @param input {@link PneumaticValveCvInput}
+ * @returns {@link PneumaticValveCvResult} containing `flowCoefficient`.
  */
 export function calculatePneumaticValveCv(
     input: PneumaticValveCvInput

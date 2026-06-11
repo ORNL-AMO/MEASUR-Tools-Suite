@@ -26,8 +26,8 @@ export interface BagMethodResult {
  * Estimates compressed air leak flow rate and annual consumption using the bag method.
  * @details The leak flow rate is the bag volume divided by the fill time (converted to minutes).
  *          Annual consumption scales by operating hours and converts to kiloscf.
- * @param input Input parameters for bag method calculation.
- * @returns BagMethodResult containing `flowRate` [scfm] and `annualConsumption` [kscf].
+ * @param input {@link BagMethodInput} parameters for bag method calculation.
+ * @returns {@link BagMethodResult} containing `flowRate` [scfm] and `annualConsumption` [kscf].
  */
 export function calculateBagMethod(input: BagMethodInput): BagMethodResult;
 

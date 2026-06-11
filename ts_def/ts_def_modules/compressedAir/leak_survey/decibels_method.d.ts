@@ -46,8 +46,8 @@ export interface DecibelsMethodResult {
  * Estimates compressed air leak flow rate and annual consumption using the decibels method.
  * @details Uses bilinear interpolation across line pressure and ultrasonic decibel reference axes.
  * @note Reference pressures and decibel ratings should bracket measured values for best accuracy.
- * @param input Input for decibels method calculation.
- * @returns DecibelsMethodResult containing `leakRateEstimate` [scfm] and `annualConsumption` [kscf].
+ * @param input {@link DecibelsMethodInput} for decibels method calculation.
+ * @returns {@link DecibelsMethodResult} containing `leakRateEstimate` [scfm] and `annualConsumption` [kscf].
  */
 export function calculateDecibelsMethod(input: DecibelsMethodInput): DecibelsMethodResult;
 

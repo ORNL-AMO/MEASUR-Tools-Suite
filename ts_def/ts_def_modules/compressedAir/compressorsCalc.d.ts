@@ -913,6 +913,7 @@ export declare class Compressors_ModulationWithUnload extends Compressors_LoadUn
  * @property CUsage double, units acfm
  * @property CLk double, units acfm
  * @property perCLkred double percentage / fraction
+ * @returns ReduceAirLeaksOutput
  */
 export function ReduceAirLeaks(
     CFl: number,
@@ -926,6 +927,7 @@ export function ReduceAirLeaks(
  * @property CFl double, units acfm
  * @property CUsage double, units acfm
  * @property CAvgafRed double, units acfm
+ * @returns ImproveEndUseEfficiencyOutput
  */
 export function ImproveEndUseEfficiency(
     CFl: number,
@@ -942,6 +944,7 @@ export function ImproveEndUseEfficiency(
  * @property PRpred double, units psig
  * @property PAlt double, units psig
  * @property PAtm double, units psia
+ * @returns ReduceSystemAirPressureOutput
  */
 export function ReduceSystemAirPressure(
     CFl: number,
@@ -962,6 +965,7 @@ export function ReduceSystemAirPressure(
  * @property PFlAdj double, units psig
  * @property PAlt double, units psig
  * @property PAtm double, units psia
+ * @returns AdjustCascadingSetPointOutput
  */
 export function AdjustCascadingSetPoint(
     CFl: number,
@@ -983,6 +987,7 @@ export function AdjustCascadingSetPoint(
  * @property dischargePresMod double, units psig
  * @property PAlt double, units psig
  * @property PAtm double, units psig
+ * @returns PressureReductionSavingOutput
  */
 export function PressureReductionSaving(
     operatingHours: number,
@@ -1002,6 +1007,7 @@ export function PressureReductionSaving(
  * @property PDischarge double, units psig
  * @property PAlt double, units psig
  * @property PAtm double, units psia
+ * @returns double
  */
 export function kWAdjusted(
     kWFlRated: number,

@@ -337,7 +337,7 @@ export declare class MotorPerformance {
     /**
      * Calculates the overall motor performance based on the input parameters and returns a MotorPerformanceOutput object containing the calculated current, efficiency, and power factor.
      *
-     * @returns MotorPerformanceOutput, an object containing the calculated current, efficiency, and power factor of the motor.
+     * @returns {@link MotorPerformanceOutput}, an object containing the calculated current, efficiency, and power factor of the motor.
      *
      */
     calculate(): MotorPerformanceOutput;
