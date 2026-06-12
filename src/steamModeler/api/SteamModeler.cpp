@@ -27,7 +27,7 @@ SteamModelerOutput SteamModeler::modeler(const bool isBaselineCalc, const double
     const SteamModelerOutput& steamModelerOutput = makeOutput(steamModelCalculationsDomain);
     logSection(methodName + "populating output from calculations results: end");
 
-    SM_LOG(methodName + "steamModelerOutput=" << steamModelerOutput);
+    SM_LOG(methodName << "steamModelerOutput=" << steamModelerOutput);
 
     return steamModelerOutput;
 }

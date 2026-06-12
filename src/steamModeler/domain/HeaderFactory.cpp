@@ -190,7 +190,7 @@ const Header HeaderFactory::make(
 
     // Blowdown flash tank outlet gas
     const bool isBlowdownFlashed = boilerInput.isBlowdownFlashed();
-    SM_LOG(methodName << "boilerInput.isBlowdownFlashed=" << isFlashCondensate);
+    SM_LOG(methodName << "boilerInput.isBlowdownFlashed=" << isBlowdownFlashed);
 
     if (isBlowdownFlashed) {
         SM_LOG(methodName << "boilerInput.isBlowdownFlashed=true, adding blowdownFlashTank");

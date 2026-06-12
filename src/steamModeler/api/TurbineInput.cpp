@@ -54,7 +54,7 @@ std::ostream& operator<<(std::ostream& stream, const PressureTurbineOperation& o
             stream << "-STEAM_FLOW";
             break;
         default:
-            std::string msg = "CondensingTurbineOperation::operator<<: operator enum not handled";
+            std::string msg = "PressureTurbineOperation::operator<<: operator enum not handled";
             SM_LOG(msg);
             throw std::invalid_argument(msg);
     }
