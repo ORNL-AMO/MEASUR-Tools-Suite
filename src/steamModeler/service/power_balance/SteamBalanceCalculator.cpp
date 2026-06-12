@@ -1,4 +1,5 @@
 #include "steamModeler/service/power_balance/SteamBalanceCalculator.h"
+#include "steamModeler/util/SteamModelerLogger.h"
 
 // 7. Calculate the balance of the system
 
@@ -26,8 +27,6 @@ double SteamBalanceCalculator::calc(
 
     // steam balance = difference between use and production (we want 0!)
     double steamBalance = steamUse - steamProduction;
-    //     std::cout << methodName
-    //               << "steamUse=" << steamUse << " - steamProduction=" << steamProduction
-    //               << ": steamBalance=" << steamBalance << std::endl;
+    SM_LOG(methodName << "steamUse=" << steamUse << " - steamProduction=" << steamProduction << ": steamBalance=" << steamBalance);
     return steamBalance;
 }

@@ -27,39 +27,24 @@ SteamModelerOutput SteamModeler::modeler(const bool isBaselineCalc, const double
     const SteamModelerOutput& steamModelerOutput = makeOutput(steamModelCalculationsDomain);
     logSection(methodName + "populating output from calculations results: end");
 
-    // std::cout << methodName + "steamModelerOutput=" << steamModelerOutput << std::endl;
+    SM_LOG(methodName + "steamModelerOutput=" << steamModelerOutput);
 
     return steamModelerOutput;
 }
 
-void SteamModeler::logInputData(const bool isBaselineCalc, const double baselinePowerDemand,
-                                const HeaderInput& headerInput, const BoilerInput& boilerInput,
-                                const TurbineInput& turbineInput, const OperationsInput& operationsInput) {
-    // keep this block or fix unused variable
-    bool isBaselineCalc_             = isBaselineCalc;
-    isBaselineCalc_                  = isBaselineCalc_;
-    double baselinePowerDemand_      = baselinePowerDemand;
-    baselinePowerDemand_             = baselinePowerDemand_;
-    HeaderInput headerInput_         = headerInput;
-    headerInput_                     = headerInput_;
-    BoilerInput boilerInput_         = boilerInput;
-    boilerInput_                     = boilerInput_;
-    TurbineInput turbineInput_       = turbineInput;
-    turbineInput_                    = turbineInput_;
-    OperationsInput operationsInput_ = operationsInput;
-    operationsInput_                 = operationsInput_;
-    // keep this block or fix unused variable
-
+void SteamModeler::logInputData([[maybe_unused]] const bool isBaselineCalc,
+                                [[maybe_unused]] const double baselinePowerDemand,
+                                [[maybe_unused]] const HeaderInput& headerInput,
+                                [[maybe_unused]] const BoilerInput& boilerInput,
+                                [[maybe_unused]] const TurbineInput& turbineInput,
+                                [[maybe_unused]] const OperationsInput& operationsInput) {
     logSection("SteamModeler::logInputData:");
-
-    // std::cout
-    // << "isBaselineCalc=" << isBaselineCalc
-    // << ", baselinePowerDemand=" << baselinePowerDemand
-    // << ", headerInput=" << headerInput
-    // << ", boilerInput=" << boilerInput
-    // << ", turbineInput=" << turbineInput
-    // << ", operationsInput=" << operationsInput
-    // << std::endl;
+    SM_LOG("isBaselineCalc=" << isBaselineCalc
+           << ", baselinePowerDemand=" << baselinePowerDemand
+           << ", headerInput=" << headerInput
+           << ", boilerInput=" << boilerInput
+           << ", turbineInput=" << turbineInput
+           << ", operationsInput=" << operationsInput);
 }
 
 SteamModelCalculationsDomain SteamModeler::runModel(const bool isBaselineCalc, const double baselinePowerDemand,
@@ -84,21 +69,16 @@ SteamModelerOutput SteamModeler::makeOutput(const SteamModelCalculationsDomain& 
     }
 }
 
-void SteamModeler::logSection(const std::string& message) const {
-    std::string message_ = message;
-    message_             = message_; // keep this or fix unused variable
-    // std::cout << "======== " << std::endl;
-    // std::cout << "======== " << message << std::endl;
-    // std::cout << "======== " << std::endl;
+void SteamModeler::logSection([[maybe_unused]] const std::string& message) const {
+    SM_LOG("======== ");
+    SM_LOG("======== " << message);
+    SM_LOG("======== ");
 }
 
-void SteamModeler::logException(const std::exception& e, const std::string& message) const {
-    std::string message_ = message;
-    message_             = message_; // keep this or fix unused variable
-    std::exception e_    = e;
-    e_                   = e_; // keep this or fix unused variable
-    // std::cout << "================================ " << std::endl;
-    // std::cout << message << std::endl;
-    // std::cout << e.what() << std::endl;
-    // std::cout << "================================ " << std::endl;
+void SteamModeler::logException([[maybe_unused]] const std::exception& e,
+                                [[maybe_unused]] const std::string& message) const {
+    SM_LOG("================================ ");
+    SM_LOG(message);
+    SM_LOG(e.what());
+    SM_LOG("================================ ");
 }

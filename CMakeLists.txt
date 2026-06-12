@@ -12,6 +12,7 @@ set(TOOLS_SUITE_VERSION "${CMAKE_VERSION_MAJOR}.${CMAKE_VERSION_MINOR}.${CMAKE_V
 option(BUILD_PACKAGE "Build package" OFF)
 option(BUILD_TESTING "Build testing targets" ON)
 option(BUILD_WASM "Build wasm" OFF)
+option(STEAM_MODELER_LOGGING "Enable SteamModeler debug logging" OFF)
 
 # Set a default build type if none was specified
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
@@ -71,6 +72,10 @@ add_library(measur_tools_suite STATIC ${SOURCE_FILES} ${SOURCE_FILES_WASM} ${INC
 
 if(UNIX AND NOT APPLE)
   target_link_libraries(measur_tools_suite dl)
+endif()
+
+if(STEAM_MODELER_LOGGING)
+  target_compile_definitions(measur_tools_suite PUBLIC STEAM_MODELER_LOGGING=1)
 endif()
 
 include_directories(SYSTEM)

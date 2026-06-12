@@ -1,4 +1,5 @@
 #include "steamModeler/service/medium_pressure_header/MediumPressureHeaderModeler.h"
+#include "steamModeler/util/SteamModelerLogger.h"
 
 std::shared_ptr<MediumPressureHeaderCalculationsDomain> MediumPressureHeaderModeler::model(
     const int headerCountInput, const HeaderWithHighestPressure& highPressureHeaderInput,
@@ -18,8 +19,7 @@ std::shared_ptr<MediumPressureHeaderCalculationsDomain> MediumPressureHeaderMode
     bool isMediumPressureHeaderBalanced = false;
     while (!isMediumPressureHeaderBalanced && iterationCount < maxIterationCount) {
         iterationCount++;
-        // std::cout << methodName << "running mediumPressureHeaderModeler iterationCount=" << iterationCount <<
-        // std::endl;
+        SM_LOG(methodName << "running mediumPressureHeaderModeler iterationCount=" << iterationCount);
 
         try {
             mediumPressureHeaderCalculationsDomain = modelIteration(
@@ -37,9 +37,8 @@ std::shared_ptr<MediumPressureHeaderCalculationsDomain> MediumPressureHeaderMode
             }
         } catch (const ReducedSteamException& e) {
             // TODO extract methods
-            //     const std::string &actionMessage = e.getActionMessage();
-            //     std::cout << methodName << "ReducedSteamException: " << actionMessage
-            // << "; rerunning MediumPressureHeaderModeler with updated highToLowPressureTurbine" << std::endl;
+            const std::string& actionMessage = e.getActionMessage();
+            SM_LOG(methodName << "ReducedSteamException: " << actionMessage << "; rerunning MediumPressureHeaderModeler with updated highToLowPressureTurbine");
             const std::shared_ptr<Turbine>& highToLowPressureTurbine      = e.getHighToLowPressureTurbineUpdated();
             const std::shared_ptr<Turbine>& highToLowPressureTurbineIdeal = e.getHighToLowPressureTurbineIdealUpdated();
 
@@ -77,7 +76,7 @@ std::shared_ptr<MediumPressureHeaderCalculationsDomain> MediumPressureHeaderMode
     if (!isMediumPressureHeaderBalanced) {
         const std::string msg = "Could not reduce enough steam from highToLowPressureTurbine to balance system in " +
                                 std::to_string(iterationCount) + " attempts";
-        // std::cout << methodName << msg << std::endl;
+        SM_LOG(methodName << msg);
         throw UnableToBalanceException(msg);
     }
 
@@ -95,7 +94,7 @@ std::shared_ptr<MediumPressureHeaderCalculationsDomain> MediumPressureHeaderMode
 
     // if medium pressure header exists
     if (headerCountInput == 3) {
-        // std::cout << methodName << "medium pressure header provided, processing" << std::endl;
+        SM_LOG(methodName << "medium pressure header provided, processing");
 
         // TODO move these/trace ptrs for NPE elim, into highToMediumPrvCalculator.calc and
         // mediumPressureHeaderCalculator.calc
@@ -112,23 +111,22 @@ std::shared_ptr<MediumPressureHeaderCalculationsDomain> MediumPressureHeaderMode
             highPressureHeaderCalculationsDomain.highToLowPressureTurbineIdeal;
 
         // 3A. Calculate High to Medium PRV
-        //  std::cout << methodName << "calculating high to medium pressure PRV" << std::endl;
+        SM_LOG(methodName << "calculating high to medium pressure PRV");
         const std::shared_ptr<PrvWithoutDesuperheating>& highToMediumPressurePrv = highToMediumPrvCalculator.calc(
             highPressureHeaderInput, mediumPressureHeaderInput, highToLowTurbineInput, highToMediumTurbineInput,
             condensingTurbineInput, highToLowPressureTurbine, highToMediumPressureTurbine, condensingTurbine, boiler,
             highPressureHeaderOutput);
-        // std::cout << methodName << "highToMediumPressurePrv=" << highToMediumPressurePrv << std::endl;
+        SM_LOG(methodName << "highToMediumPressurePrv=" << highToMediumPressurePrv);
 
         // 3B. Model Medium Pressure Header
         // 3B1. Calculate inlets for medium pressure header
-        //  std::cout << methodName << "calculating medium pressure header" << std::endl;
+        SM_LOG(methodName << "calculating medium pressure header");
         const MediumPressureHeaderCalculatorOutput& mediumPressureHeaderCalculatorOutput =
             mediumPressureHeaderCalculator.calc(
                 boiler, highToLowTurbineInput, highToLowPressureTurbine, highToLowPressureTurbineIdeal,
                 highPressureHeaderOutput, mediumPressureHeaderInput, highToMediumPressurePrv, highToMediumTurbineInput,
                 highToMediumPressureTurbine, highPressureCondensateFlashTank, lowPressureHeaderInput);
-        // std::cout << methodName << "mediumPressureHeaderCalculatorOutput=" << mediumPressureHeaderCalculatorOutput
-        //  << std::endl;
+        SM_LOG(methodName << "mediumPressureHeaderCalculatorOutput=" << mediumPressureHeaderCalculatorOutput);
 
         const SteamSystemModelerTool::FluidProperties& mediumPressureHeaderOutputOriginal =
             mediumPressureHeaderCalculatorOutput.mediumPressureHeaderOutput;
@@ -138,30 +136,29 @@ std::shared_ptr<MediumPressureHeaderCalculationsDomain> MediumPressureHeaderMode
             mediumPressureHeaderCalculatorOutput.highToLowPressureTurbineIdealUpdated;
 
         // 3C. Calculate Heat Loss for Remaining Steam in Medium Pressure Header
-        //  std::cout << methodName << "calculating mediumPressureHeader heat loss" << std::endl;
+        SM_LOG(methodName << "calculating mediumPressureHeader heat loss");
         const HeatLoss& heatLoss = heatLossFactory.make(mediumPressureHeaderInput, mediumPressureHeaderOutputOriginal);
-        // std::cout << methodName << "mediumPressureHeader heatLoss=" << heatLoss << std::endl;
+        SM_LOG(methodName << "mediumPressureHeader heatLoss=" << heatLoss);
 
-        // std::cout << methodName << "updating mediumPressureHeader with heat loss" << std::endl;
+        SM_LOG(methodName << "updating mediumPressureHeader with heat loss");
         const SteamSystemModelerTool::FluidProperties& mediumPressureHeaderOutput =
             fluidPropertiesFactory.makeWithSpecificVolume(heatLoss, mediumPressureHeaderOutputOriginal.specificVolume);
-        // std::cout << methodName << "mediumPressureHeaderOutput=" << mediumPressureHeaderOutput << std::endl;
+        SM_LOG(methodName << "mediumPressureHeaderOutput=" << mediumPressureHeaderOutput);
 
         // 3D. Calculate Medium Pressure Condensate
-        //  std::cout << methodName << "calculating medium pressure condensate" << std::endl;
+        SM_LOG(methodName << "calculating medium pressure condensate");
         const SteamSystemModelerTool::FluidProperties& mediumPressureCondensate =
             mediumPressureCondensateCalculator.calc(mediumPressureHeaderInput);
-        // std::cout << methodName << "mediumPressureCondensate=" << mediumPressureCondensate << std::endl;
+        SM_LOG(methodName << "mediumPressureCondensate=" << mediumPressureCondensate);
 
         // 3E. Calculate medium to low steam turbine if in use
-        //  std::cout << methodName << "calculating medium to low pressure turbine" << std::endl;
+        SM_LOG(methodName << "calculating medium to low pressure turbine");
         const MediumToLowPressureTurbineCalculatorOutput mediumToLowPressureTurbineCalculatorOutput =
             mediumToLowPressureTurbineCalculator.calc(highToLowTurbineInput, highToLowPressureTurbineUpdated,
                                                       highToLowPressureTurbineIdealUpdated, mediumToLowTurbineInput,
                                                       highPressureHeaderOutput, mediumPressureHeaderInput,
                                                       mediumPressureHeaderOutput, lowPressureHeaderInput, boiler);
-        // std::cout << methodName << "mediumToLowPressureTurbineCalculatorOutput="
-        //  << mediumToLowPressureTurbineCalculatorOutput << std::endl;
+        SM_LOG(methodName << "mediumToLowPressureTurbineCalculatorOutput=" << mediumToLowPressureTurbineCalculatorOutput);
         const std::shared_ptr<Turbine>& mediumToLowPressureTurbine =
             mediumToLowPressureTurbineCalculatorOutput.mediumToLowPressureTurbine;
         const std::shared_ptr<Turbine>& mediumToLowPressureTurbineIdeal =
@@ -177,7 +174,7 @@ std::shared_ptr<MediumPressureHeaderCalculationsDomain> MediumPressureHeaderMode
         return std::make_shared<MediumPressureHeaderCalculationsDomain>(domain);
     }
     else {
-        // std::cout << methodName << "medium pressure header not provided, skipping" << std::endl;
+        SM_LOG(methodName << "medium pressure header not provided, skipping");
         return nullptr;
     }
 }

@@ -2,6 +2,9 @@
 
 #include "catch.hpp"
 
+//FROM ISSUE 364
+// This test is to be used to investigate a bug in the steam modeler where the specific enthalpy of a header with 0 mass flow
+
 using namespace Catch;
 
 static const BoilerInput makeBoilerInput() {
@@ -114,7 +117,7 @@ static const SteamModelerInput makeSteamModelerInput(int headerCount) {
     return {isBaselineCalc, baselinePowerDemand, boilerInput, headerInput, operationsInput, turbineInput};
 }
 
-TEST_CASE("steamModelerBug", "[steam modeler bug 3]") {
+TEST_CASE("steamModelerBug", "[steam modeler bug 3 header]") {
     auto steamModeler = SteamModeler();
 
     SteamModelerInput  steamModelerInput = makeSteamModelerInput(3);
@@ -123,7 +126,7 @@ TEST_CASE("steamModelerBug", "[steam modeler bug 3]") {
     // TODO add asserts
 }
 
-TEST_CASE("steamModelerBug", "[steam modeler bug 2]") {
+TEST_CASE("steamModelerBug", "[steam modeler bug 2 header]") {
     auto steamModeler = SteamModeler();
 
     SteamModelerInput  steamModelerInput = makeSteamModelerInput(2);

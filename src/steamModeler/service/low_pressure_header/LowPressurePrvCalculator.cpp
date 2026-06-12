@@ -1,4 +1,5 @@
 #include "steamModeler/service/low_pressure_header/LowPressurePrvCalculator.h"
+#include "steamModeler/util/SteamModelerLogger.h"
 
 std::shared_ptr<PrvWithoutDesuperheating> LowPressurePrvCalculator::calc(
     const int headerCountInput, const HeaderWithHighestPressure& highPressureHeaderInput,
@@ -23,7 +24,7 @@ std::shared_ptr<PrvWithoutDesuperheating> LowPressurePrvCalculator::calc(
         calcPrvMassFlow(headerCountInput, highPressureHeaderInput, highPressureHeaderOutput, highToLowTurbineInput,
                         highToLowPressureTurbine, condensingTurbineInput, condensingTurbine, mediumPressureHeaderInput,
                         mediumToLowTurbineInput, mediumPressureHeaderCalculationsDomain);
-    // std::cout << methodName << "prvMassFlow=" << prvMassFlow << std::endl;
+    SM_LOG(methodName << "prvMassFlow=" << prvMassFlow);
 
     return makePrv(lowPressureHeaderInput, boiler, headerOutput, prvMassFlow);
 }
@@ -37,20 +38,18 @@ LowPressurePrvCalculator::makePrv(const std::shared_ptr<HeaderNotHighestPressure
     std::shared_ptr<PrvWithoutDesuperheating> prvPtr;
 
     if (lowPressureHeaderInput->isDesuperheatSteamIntoNextHighest()) {
-        // std::cout << methodName << "lowPressureHeaderInput->isDesuperheatSteamIntoNextHighest,"
-        //  << " making PrvWithDesuperheating" << std::endl;
+        SM_LOG(methodName << "lowPressureHeaderInput->isDesuperheatSteamIntoNextHighest," << " making PrvWithDesuperheating");
         double                       feedwaterPressure = boiler.getFeedwaterProperties().pressure;
         const PrvWithDesuperheating& prv =
             prvWithDesuperheatingFactory.make(headerOutput, prvMassFlow, lowPressureHeaderInput, feedwaterPressure);
-        // std::cout << methodName << "lowPressurePrv=" << prv << std::endl;
+        SM_LOG(methodName << "lowPressurePrv=" << prv);
         prvPtr = std::make_shared<PrvWithDesuperheating>(prv);
     }
     else {
-        // std::cout << methodName << "lowPressureHeaderInput-> not isDesuperheatSteamIntoNextHighest,"
-        //  << " making PrvWithoutDesuperheating" << std::endl;
+        SM_LOG(methodName << "lowPressureHeaderInput-> not isDesuperheatSteamIntoNextHighest," << " making PrvWithoutDesuperheating");
         const PrvWithoutDesuperheating& prv =
             prvWithoutDesuperheatingFactory.make(headerOutput, prvMassFlow, lowPressureHeaderInput);
-        // std::cout << methodName << "lowPressurePrv=" << prv << std::endl;
+        SM_LOG(methodName << "lowPressurePrv=" << prv);
         prvPtr = std::make_shared<PrvWithoutDesuperheating>(prv);
     }
 
@@ -79,51 +78,44 @@ double LowPressurePrvCalculator::calcPrvMassFlow(
     const std::shared_ptr<MediumPressureHeaderCalculationsDomain>& mediumPressureHeaderCalculationsDomain) const {
     const std::string methodName = std::string("LowPressurePrvCalculator::") + std::string(__func__) + ": ";
 
-    // std::cout << methodName << "calculating low pressure PRV mass flow" << std::endl;
+    SM_LOG(methodName << "calculating low pressure PRV mass flow");
 
     double prvMassFlow = 0;
 
     // either medium to low or high to low
     if (headerCountInput == 2) {
-        // std::cout << methodName
-        //   << "2 headers exist, subtracting high pressure header process steam usage from its mass flow"
-        //   << std::endl;
+        SM_LOG(methodName << "2 headers exist, subtracting high pressure header process steam usage from its mass flow");
         // if 2 headers, next highest is high pressure
         prvMassFlow = highPressureHeader.massFlow - highPressureHeaderInput.getProcessSteamUsage();
-        // std::cout << methodName << "prvMassFlow=" << prvMassFlow << std::endl;
+        SM_LOG(methodName << "prvMassFlow=" << prvMassFlow);
 
         if (highToLowTurbineInput.isUseTurbine()) {
-            // std::cout << methodName
-            //      << "using highToLowPressureTurbine, subtracting its massFlow from prvMassFlow" << std::endl;
+            SM_LOG(methodName << "using highToLowPressureTurbine, subtracting its massFlow from prvMassFlow");
             prvMassFlow = prvMassFlow - highToLowPressureTurbine->getMassFlow();
-            // std::cout << methodName << "updated prvMassFlow=" << prvMassFlow << std::endl;
+            SM_LOG(methodName << "updated prvMassFlow=" << prvMassFlow);
         }
 
         if (condensingTurbineInput.isUseTurbine()) {
-            // std::cout << methodName
-            //    << "using condensingTurbine, subtracting its massFlow from prvMassFlow" << std::endl;
+            SM_LOG(methodName << "using condensingTurbine, subtracting its massFlow from prvMassFlow");
             prvMassFlow = prvMassFlow - condensingTurbine->getMassFlow();
-            // std::cout << methodName << "updated prvMassFlow=" << prvMassFlow << std::endl;
+            SM_LOG(methodName << "updated prvMassFlow=" << prvMassFlow);
         }
     }
     else if (headerCountInput == 3) {
-        // std::cout << methodName
-        //   << "3 headers exist, subtracting medium pressure header process steam usage from its mass flow"
-        //   << std::endl;
+        SM_LOG(methodName << "3 headers exist, subtracting medium pressure header process steam usage from its mass flow");
 
         // if 3 headers, next highest is medium pressure
         const SteamSystemModelerTool::FluidProperties& mediumPressureHeaderOutput =
             mediumPressureHeaderCalculationsDomain->mediumPressureHeaderOutput;
         prvMassFlow = mediumPressureHeaderOutput.massFlow - mediumPressureHeaderInput->getProcessSteamUsage();
-        // std::cout << methodName << "prvMassFlow=" << prvMassFlow << std::endl;
+        SM_LOG(methodName << "prvMassFlow=" << prvMassFlow);
 
         if (mediumToLowTurbineInput.isUseTurbine()) {
-            // std::cout << methodName
-            //  << "using mediumToLowPressureTurbine, subtracting its massFlow from prvMassFlow" << std::endl;
+            SM_LOG(methodName << "using mediumToLowPressureTurbine, subtracting its massFlow from prvMassFlow");
             const std::shared_ptr<Turbine>& mediumToLowPressureTurbine =
                 mediumPressureHeaderCalculationsDomain->mediumToLowPressureTurbine;
             prvMassFlow = prvMassFlow - mediumToLowPressureTurbine->getMassFlow();
-            // std::cout << methodName << "updated prvMassFlow=" << prvMassFlow << std::endl;
+            SM_LOG(methodName << "updated prvMassFlow=" << prvMassFlow);
         }
     }
 

@@ -1,4 +1,5 @@
 #include <steamModeler/domain/FlashTankFactory.h>
+#include "steamModeler/util/SteamModelerLogger.h"
 
 std::shared_ptr<FlashTank> FlashTankFactory::make(const HeaderInput& headerInput, const BoilerInput& boilerInput,
                                                   const Boiler& boiler) const {
@@ -21,8 +22,7 @@ std::shared_ptr<FlashTank> FlashTankFactory::make(const HeaderInput& headerInput
         }
     }
     else {
-        // std::cout << methodName << "boilerInput.isBlowdownFlashed() is false, skipping flash tank creation" <<
-        // std::endl;
+        SM_LOG(methodName << "boilerInput.isBlowdownFlashed() is false, skipping flash tank creation");
     }
 
     return flashTankPtr;
