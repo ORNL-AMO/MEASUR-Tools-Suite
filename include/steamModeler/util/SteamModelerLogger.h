@@ -1,7 +1,5 @@
 #pragma once
 
-#include <iostream>
-
 /**
  * Compile-time toggle for SteamModeler debug logging.
  *
@@ -18,6 +16,7 @@
 #endif
 
 #if STEAM_MODELER_LOGGING
+#include <iostream>
 // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define SM_LOG(x) (std::cout << x << std::endl)
 #else
