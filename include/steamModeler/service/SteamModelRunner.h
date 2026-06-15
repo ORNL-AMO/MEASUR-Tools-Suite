@@ -1,5 +1,7 @@
 #pragma once
 
+#include <steamModeler/util/SteamModelerLogger.h>
+
 #include <steamModeler/api/BoilerInput.h>
 #include <steamModeler/api/HeaderInput.h>
 #include <steamModeler/api/OperationsInput.h>
@@ -32,9 +34,12 @@ class SteamModelRunner {
     const SteamModelCalculator steamModelCalculator = SteamModelCalculator();
     const MassFlowCalculator   massFlowCalculator   = MassFlowCalculator();
 
-    double handleSteamBalanceException(const SteamBalanceException& e, const int iterationCount,
-                                       const double initialMassFlow) const;
+    double handleSteamBalanceException([[maybe_unused]] const SteamBalanceException& e,
+                                       [[maybe_unused]] const int iterationCount,
+                                       [[maybe_unused]] const double initialMassFlow,
+                                       [[maybe_unused]] const double prevMassFlow,
+                                       [[maybe_unused]] const double prevBalance) const;
 
-    void logSection(const std::string& message) const;
+    void logSection([[maybe_unused]] const std::string& message) const;
 };
 

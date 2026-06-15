@@ -1,4 +1,5 @@
 #include <steamModeler/service/medium_pressure_header/MediumToLowPressureTurbineCalculator.h>
+#include "steamModeler/util/SteamModelerLogger.h"
 
 MediumToLowPressureTurbineCalculatorOutput MediumToLowPressureTurbineCalculator::calc(
     const PressureTurbine& highToLowTurbineInput, const std::shared_ptr<Turbine>& highToLowPressureTurbine,
@@ -12,12 +13,10 @@ MediumToLowPressureTurbineCalculatorOutput MediumToLowPressureTurbineCalculator:
     MediumToLowPressureTurbineCalculatorOutput mediumToLowPressureTurbineCalculatorOutput;
 
     if (mediumToLowTurbineInput.isUseTurbine()) {
-        // std::cout << methodName
-        //   << "medium to low turbine input provided and mediumToLowTurbineInput isUseTurbine,"
-        //   << " calculating mediumToLowPressureTurbine" << std::endl;
+        SM_LOG(methodName << "medium to low turbine input provided and mediumToLowTurbineInput isUseTurbine," << " calculating mediumToLowPressureTurbine");
 
         double availableMassFlow = calcAvailableMassFlow(mediumPressureHeaderInput, mediumPressureHeaderOutput);
-        // std::cout << methodName << "availableMassFlow" << availableMassFlow << std::endl;
+        SM_LOG(methodName << "availableMassFlow" << availableMassFlow);
 
         mediumToLowPressureTurbineCalculatorOutput =
             calc(availableMassFlow, highToLowTurbineInput, highToLowPressureTurbine, highToLowPressureTurbineIdeal,
@@ -25,9 +24,7 @@ MediumToLowPressureTurbineCalculatorOutput MediumToLowPressureTurbineCalculator:
                  boiler);
     }
     else {
-        // std::cout << methodName
-        //   << "medium to low turbine input not provided and mediumToLowTurbineInput not isUseTurbine, skipping"
-        //   << std::endl;
+        SM_LOG(methodName << "medium to low turbine input not provided and mediumToLowTurbineInput not isUseTurbine, skipping");
         const std::shared_ptr<Turbine> mediumToLowPressureTurbine      = nullptr;
         const std::shared_ptr<Turbine> mediumToLowPressureTurbineIdeal = nullptr;
         mediumToLowPressureTurbineCalculatorOutput = {mediumToLowPressureTurbine, mediumToLowPressureTurbineIdeal,
@@ -51,7 +48,7 @@ MediumToLowPressureTurbineCalculator::calc(const double availableMassFlow, const
     MediumToLowPressureTurbineCalculatorOutput mediumToLowPressureTurbineCalculatorOutput;
 
     const PressureTurbineOperation& pressureTurbineOperation = mediumToLowTurbineInput.getOperationType();
-    //     std::cout << methodName << "pressureTurbineOperation=" << pressureTurbineOperation << std::endl;
+    SM_LOG(methodName << "pressureTurbineOperation=" << pressureTurbineOperation);
 
     switch (pressureTurbineOperation) {
         case PressureTurbineOperation::FLOW_RANGE:
@@ -85,7 +82,7 @@ MediumToLowPressureTurbineCalculator::calc(const double availableMassFlow, const
             break;
         default:
             std::string msg = methodName + "PressureTurbineOperation enum not handled";
-            //     std::cout << msg << std::endl;
+            SM_LOG(msg);
             throw std::invalid_argument(msg);
     }
 
@@ -111,11 +108,7 @@ MediumToLowPressureTurbineCalculatorOutput MediumToLowPressureTurbineCalculator:
 
     // if minimum amount needed is greater than available amount
     if (mediumToLowTurbineInputOperationValue1 > availableMassFlow) {
-        // std::cout << methodName
-        //   << "mediumToLowTurbineInputOperationValue1=" << mediumToLowTurbineInputOperationValue1
-        //   << " > availableMassFlow=" << availableMassFlow
-        //   << ", calculating mediumToLowPressureTurbine with amount needed (mediumToLowTurbineInputOperationValue1)"
-        //   << " instead of amount available" << std::endl;
+        SM_LOG(methodName << "mediumToLowTurbineInputOperationValue1=" << mediumToLowTurbineInputOperationValue1 << " > availableMassFlow=" << availableMassFlow << ", calculating mediumToLowPressureTurbine with amount needed (mediumToLowTurbineInputOperationValue1)" << " instead of amount available");
         // calculateThermalResistance turbine with amount needed
         mediumToLowPressureTurbine =
             turbineFactory.makePtrWithMassFlow(mediumPressureHeaderOutput, mediumToLowTurbineInput,
@@ -129,17 +122,12 @@ MediumToLowPressureTurbineCalculatorOutput MediumToLowPressureTurbineCalculator:
             "mediumToLowPressureTurbine", highToLowTurbineInput, lowPressureHeaderInput, boiler,
             highToLowPressureTurbine, highToLowPressureTurbineIdeal, highPressureHeaderOutput, neededMassFlow,
             availableMassFlow);
-        // std::cout << methodName << "steamReducerOutput=" << steamReducerOutput << std::endl;
+        SM_LOG(methodName << "steamReducerOutput=" << steamReducerOutput);
         highToLowPressureTurbineUpdated      = steamReducerOutput.highToLowPressureTurbineUpdated;
         highToLowPressureTurbineIdealUpdated = steamReducerOutput.highToLowPressureTurbineIdealUpdated;
     }
     else if (mediumToLowTurbineInputOperationValue2 < availableMassFlow) {
-        // std::cout << methodName
-        //   << "mediumToLowTurbineInputOperationValue2=" << mediumToLowTurbineInputOperationValue2
-        //   << " < availableMassFlow=" << availableMassFlow
-        //   << ", calculating mediumToLowPressureTurbine with max amount allowed
-        //   (mediumToLowTurbineInputOperationValue2)"
-        //   << " instead of the greater amount available" << std::endl;
+        SM_LOG(methodName << "mediumToLowTurbineInputOperationValue2=" << mediumToLowTurbineInputOperationValue2 << " < availableMassFlow=" << availableMassFlow << ", calculating mediumToLowPressureTurbine with max amount allowed (mediumToLowTurbineInputOperationValue2)" << " instead of the greater amount available");
         mediumToLowPressureTurbine =
             turbineFactory.makePtrWithMassFlow(mediumPressureHeaderOutput, mediumToLowTurbineInput,
                                                mediumToLowTurbineInputOperationValue2, lowPressureHeaderInput, false);
@@ -148,18 +136,15 @@ MediumToLowPressureTurbineCalculatorOutput MediumToLowPressureTurbineCalculator:
                                                mediumToLowTurbineInputOperationValue2, lowPressureHeaderInput, true);
     }
     else {
-        // std::cout << methodName
-        //   << "availableMassFlow=" << availableMassFlow << " is between needed and max amounts,"
-        //   << " calculating mediumToLowPressureTurbine with availableMassFlow" << std::endl;
+        SM_LOG(methodName << "availableMassFlow=" << availableMassFlow << " is between needed and max amounts," << " calculating mediumToLowPressureTurbine with availableMassFlow");
         mediumToLowPressureTurbine = turbineFactory.makePtrWithMassFlow(
             mediumPressureHeaderOutput, mediumToLowTurbineInput, availableMassFlow, lowPressureHeaderInput, false);
         mediumToLowPressureTurbineIdeal = turbineFactory.makePtrWithMassFlow(
             mediumPressureHeaderOutput, mediumToLowTurbineInput, availableMassFlow, lowPressureHeaderInput, true);
     }
 
-    //     std::cout << methodName << "mediumToLowPressureTurbine=" << mediumToLowPressureTurbine << std::endl;
-    //     std::cout << methodName << "mediumToLowPressureTurbineIdeal=" << mediumToLowPressureTurbineIdeal <<
-    //     std::endl;
+    SM_LOG(methodName << "mediumToLowPressureTurbine=" << mediumToLowPressureTurbine);
+    SM_LOG(methodName << "mediumToLowPressureTurbineIdeal=" << mediumToLowPressureTurbineIdeal);
 
     return {mediumToLowPressureTurbine, mediumToLowPressureTurbineIdeal, highToLowPressureTurbineUpdated,
             highToLowPressureTurbineIdealUpdated};
@@ -182,8 +167,7 @@ MediumToLowPressureTurbineCalculatorOutput MediumToLowPressureTurbineCalculator:
     const double mediumToLowTurbineInputOperationValue1 = mediumToLowTurbineInput.getOperationValue1();
     const double mediumToLowTurbineInputOperationValue2 = mediumToLowTurbineInput.getOperationValue2();
 
-    //     std::cout << methodName
-    //       << "calculating mediumToLowPressureTurbine with availableMassFlow=" << availableMassFlow << std::endl;
+    SM_LOG(methodName << "calculating mediumToLowPressureTurbine with availableMassFlow=" << availableMassFlow);
     mediumToLowPressureTurbine = turbineFactory.makePtrWithMassFlow(mediumPressureHeaderOutput, mediumToLowTurbineInput,
                                                                     availableMassFlow, lowPressureHeaderInput, false);
     mediumToLowPressureTurbineIdeal = turbineFactory.makePtrWithMassFlow(
@@ -191,12 +175,7 @@ MediumToLowPressureTurbineCalculatorOutput MediumToLowPressureTurbineCalculator:
     // check that power out is in range
     const double mediumToLowPressureTurbinePowerOut = mediumToLowPressureTurbine->getPowerOut();
     if (mediumToLowTurbineInputOperationValue1 > mediumToLowPressureTurbinePowerOut) {
-        // std::cout << methodName
-        //   << "mediumToLowTurbineInputOperationValue1=" << mediumToLowTurbineInputOperationValue1
-        //   << " > mediumToLowPressureTurbinePowerOut=" << mediumToLowPressureTurbinePowerOut
-        //   << "; not enough power out of turbine,"
-        //   << " calculating mediumToLowPressureTurbine with amount needed instead of amount available"
-        //   << std::endl;
+        SM_LOG(methodName << "mediumToLowTurbineInputOperationValue1=" << mediumToLowTurbineInputOperationValue1 << " > mediumToLowPressureTurbinePowerOut=" << mediumToLowPressureTurbinePowerOut << "; not enough power out of turbine," << " calculating mediumToLowPressureTurbine with amount needed instead of amount available");
         // calculateThermalResistance minimum mass flow needed
         mediumToLowPressureTurbine =
             turbineFactory.makePtrWithPowerOut(mediumPressureHeaderOutput, mediumToLowTurbineInput,
@@ -209,17 +188,12 @@ MediumToLowPressureTurbineCalculatorOutput MediumToLowPressureTurbineCalculator:
             "mediumToLowPressureTurbine", highToLowTurbineInput, lowPressureHeaderInput, boiler,
             highToLowPressureTurbine, highToLowPressureTurbineIdeal, highPressureHeaderOutput, neededMassFlow,
             availableMassFlow);
-        // std::cout << methodName << "steamReducerOutput=" << steamReducerOutput << std::endl;
+        SM_LOG(methodName << "steamReducerOutput=" << steamReducerOutput);
         highToLowPressureTurbineUpdated      = steamReducerOutput.highToLowPressureTurbineUpdated;
         highToLowPressureTurbineIdealUpdated = steamReducerOutput.highToLowPressureTurbineIdealUpdated;
     }
     else if (mediumToLowTurbineInputOperationValue2 < mediumToLowPressureTurbinePowerOut) {
-        // std::cout << methodName
-        //   << "mediumToLowTurbineInputOperationValue2=" << mediumToLowTurbineInputOperationValue2
-        //   << " < mediumToLowPressureTurbinePowerOut=" << mediumToLowPressureTurbinePowerOut
-        //   << " not enough power out of turbine,"
-        //   << " calculating mediumToLowPressureTurbine with amount needed instead of amount available"
-        //   << std::endl;
+        SM_LOG(methodName << "mediumToLowTurbineInputOperationValue2=" << mediumToLowTurbineInputOperationValue2 << " < mediumToLowPressureTurbinePowerOut=" << mediumToLowPressureTurbinePowerOut << " not enough power out of turbine," << " calculating mediumToLowPressureTurbine with amount needed instead of amount available");
         // if power out with available mass flow is greater than max, calculateThermalResistance turbine with max power
         // out
         mediumToLowPressureTurbine =
@@ -230,9 +204,8 @@ MediumToLowPressureTurbineCalculatorOutput MediumToLowPressureTurbineCalculator:
                                                mediumToLowTurbineInputOperationValue2, lowPressureHeaderInput, true);
     }
 
-    //     std::cout << methodName << "mediumToLowPressureTurbine=" << mediumToLowPressureTurbine << std::endl;
-    //     std::cout << methodName << "mediumToLowPressureTurbineIdeal=" << mediumToLowPressureTurbineIdeal <<
-    //     std::endl;
+    SM_LOG(methodName << "mediumToLowPressureTurbine=" << mediumToLowPressureTurbine);
+    SM_LOG(methodName << "mediumToLowPressureTurbineIdeal=" << mediumToLowPressureTurbineIdeal);
 
     return {mediumToLowPressureTurbine, mediumToLowPressureTurbineIdeal, highToLowPressureTurbineUpdated,
             highToLowPressureTurbineIdealUpdated};
@@ -270,14 +243,13 @@ MediumToLowPressureTurbineCalculatorOutput MediumToLowPressureTurbineCalculator:
             "mediumToLowPressureTurbine", highToLowTurbineInput, lowPressureHeaderInput, boiler,
             highToLowPressureTurbine, highToLowPressureTurbineIdeal, highPressureHeaderOutput, neededMassFlow,
             availableMassFlow);
-        // std::cout << methodName << "steamReducerOutput=" << steamReducerOutput << std::endl;
+        SM_LOG(methodName << "steamReducerOutput=" << steamReducerOutput);
         highToLowPressureTurbineUpdated      = steamReducerOutput.highToLowPressureTurbineUpdated;
         highToLowPressureTurbineIdealUpdated = steamReducerOutput.highToLowPressureTurbineIdealUpdated;
     }
 
-    //     std::cout << methodName << "mediumToLowPressureTurbine=" << mediumToLowPressureTurbine << std::endl;
-    //     std::cout << methodName << "mediumToLowPressureTurbineIdeal=" << mediumToLowPressureTurbineIdeal <<
-    //     std::endl;
+    SM_LOG(methodName << "mediumToLowPressureTurbine=" << mediumToLowPressureTurbine);
+    SM_LOG(methodName << "mediumToLowPressureTurbineIdeal=" << mediumToLowPressureTurbineIdeal);
 
     return {mediumToLowPressureTurbine, mediumToLowPressureTurbineIdeal, highToLowPressureTurbineUpdated,
             highToLowPressureTurbineIdealUpdated};
@@ -315,14 +287,13 @@ MediumToLowPressureTurbineCalculatorOutput MediumToLowPressureTurbineCalculator:
             "mediumToLowPressureTurbine", highToLowTurbineInput, lowPressureHeaderInput, boiler,
             highToLowPressureTurbine, highToLowPressureTurbineIdeal, highPressureHeaderOutput, neededMassFlow,
             availableMassFlow);
-        // std::cout << methodName << "steamReducerOutput=" << steamReducerOutput << std::endl;
+        SM_LOG(methodName << "steamReducerOutput=" << steamReducerOutput);
         highToLowPressureTurbineUpdated      = steamReducerOutput.highToLowPressureTurbineUpdated;
         highToLowPressureTurbineIdealUpdated = steamReducerOutput.highToLowPressureTurbineIdealUpdated;
     }
 
-    //     std::cout << methodName << "mediumToLowPressureTurbine=" << mediumToLowPressureTurbine << std::endl;
-    //     std::cout << methodName << "mediumToLowPressureTurbineIdeal=" << mediumToLowPressureTurbineIdeal <<
-    //     std::endl;
+    SM_LOG(methodName << "mediumToLowPressureTurbine=" << mediumToLowPressureTurbine);
+    SM_LOG(methodName << "mediumToLowPressureTurbineIdeal=" << mediumToLowPressureTurbineIdeal);
 
     return {mediumToLowPressureTurbine, mediumToLowPressureTurbineIdeal, highToLowPressureTurbineUpdated,
             highToLowPressureTurbineIdealUpdated};
@@ -342,9 +313,8 @@ MediumToLowPressureTurbineCalculatorOutput MediumToLowPressureTurbineCalculator:
     std::shared_ptr<Turbine> mediumToLowPressureTurbineIdeal = turbineFactory.makePtrWithMassFlow(
         mediumPressureHeaderOutput, mediumToLowTurbineInput, availableMassFlow, lowPressureHeaderInput, true);
 
-    //     std::cout << methodName << "mediumToLowPressureTurbine=" << mediumToLowPressureTurbine << std::endl;
-    //     std::cout << methodName << "mediumToLowPressureTurbineIdeal=" << mediumToLowPressureTurbineIdeal <<
-    //     std::endl;
+    SM_LOG(methodName << "mediumToLowPressureTurbine=" << mediumToLowPressureTurbine);
+    SM_LOG(methodName << "mediumToLowPressureTurbineIdeal=" << mediumToLowPressureTurbineIdeal);
 
     return {mediumToLowPressureTurbine, mediumToLowPressureTurbineIdeal, highToLowPressureTurbine,
             highToLowPressureTurbineIdeal};

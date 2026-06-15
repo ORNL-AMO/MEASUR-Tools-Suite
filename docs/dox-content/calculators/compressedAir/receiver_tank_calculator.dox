@@ -25,11 +25,16 @@
  *    between two operating pressures for an existing or proposed tank.
  * 2. **General** – the simplest sizing method; computes the tank volume needed to supply a
  *    known air demand within an allowable pressure drop.
- * 3. **Dedicated Storage** – sizes a tank that must independently supply a sustained flow
- *    for a defined time interval by drawing down from a stored pressure.
- * 4. **Metered Storage** – extends Dedicated Storage by accounting for a metering (needle)
- *    valve that continuously replenishes the tank during the demand event; also computes
- *    the tank refill time after the event.
+ * 3. **Dedicated Storage** – determines the amount of compressed air storage required to
+ *    support a short-duration event without causing system pressure to fall below an
+ *    acceptable minimum. Assumes storage alone supplies the additional air demand during
+ *    the event, with no significant compressor recovery during the storage discharge period.
+ * 4. **Metered Storage** – used when a compressor can partially replenish the storage
+ *    volume during the demand event through a controlled recovery flow. The recovery flow
+ *    is typically regulated by a needle valve that meters air into or out of the storage
+ *    receiver at a slower fixed rate. Accounts for both the stored air and the metered
+ *    recovery flow available during the event, often reducing the required storage volume
+ *    compared to a storage-only design; also computes the tank refill time after the event.
  * 5. **Bridging Compressor Reaction Delay** – sizes a tank that must supply air during
  *    the time the pressure signal propagates from a demand event back to the compressor
  *    room and the compressor responds.
@@ -115,11 +120,12 @@
 /**
  * @defgroup receiver_tank_dedicated_storage_size_formula Dedicated Storage Method Tank Size Formula
  * @ingroup receiver_tank_calculator
- * @brief Sizes a tank that must supply a sustained flow for a defined duration from stored pressure.
- * @details The Dedicated Storage method is used when a process requires a fixed flow rate
- *          for a known duration and the compressor cannot keep up. The tank is sized to
- *          provide that flow over the demand period while the pressure falls from the
- *          initial to the final value.
+ * @brief Determines the compressed air storage volume needed to support a short-duration demand event without letting system pressure fall below an acceptable minimum.
+ * @details Use this method when storage alone must supply the additional air demand during
+ *          the event, with no significant compressor recovery occurring during the storage
+ *          discharge period. The tank is sized so that pressure can fall from the initial
+ *          stored value to the minimum acceptable value while satisfying the full demand
+ *          flow rate for the duration of the event.
  *
  * @formula{receiver-tank-dedicated-storage-size;
  *   V_{required} = \frac{k_{gal} \cdot t_{demand} \cdot Q_{flow} \cdot P_{atm}}{P_{in} - P_{out}}
@@ -140,13 +146,16 @@
 /**
  * @defgroup receiver_tank_metered_storage_size_formula Metered Storage Method Tank Size Formula
  * @ingroup receiver_tank_calculator
- * @brief Sizes a tank when flow is regulated through a metering (needle) valve.
- * @details The Metered Storage method extends the Dedicated Storage method for the case
- *          where a needle valve or flow-control orifice continuously supplies air to the
- *          downstream process at a controlled rate @math{Q_{metered}} during the demand
- *          event. Only the net demand @math{(Q_{flow} - Q_{metered})} draws from the
- *          stored volume, so the required tank is smaller than the Dedicated Storage size
- *          for the same scenario.
+ * @brief Sizes a dedicated storage tank when the compressor can partially replenish storage during the demand event through a controlled recovery flow.
+ * @details Use this method when a compressor can partially replenish the storage volume
+ *          during the demand event through a controlled recovery flow. In many compressed
+ *          air systems this recovery flow is regulated by a needle valve that meters air
+ *          into or out of the storage receiver at a slower fixed rate @math{Q_{metered}}.
+ *          The calculator accounts for both the stored air and the metered recovery flow
+ *          available during the event: only the net demand @math{(Q_{flow} - Q_{metered})}
+ *          draws from the stored volume, often reducing the required tank size compared to
+ *          a storage-only design. This method is appropriate for intermittent, high-flow
+ *          applications where a controlled refill rate is desired.
  *
  * @formula{receiver-tank-metered-storage-size;
  *   V_{required} = \frac{k_{gal} \cdot t_{demand} \cdot (Q_{flow} - Q_{metered}) \cdot P_{atm}}{P_{in} - P_{out}}

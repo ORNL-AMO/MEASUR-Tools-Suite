@@ -21,6 +21,14 @@
  * techniques when the discharge coefficient @f$C_d@f$ is known. For surveys where geometry
  * details are unavailable, @f$C_d = 1.0@f$ serves as a conservative upper bound.
  *
+ * @note This method differs from the orifice/pressure method used in the
+ * @ref compressed_air_reduction_pressure_formula. Here the leak source is an unintended opening
+ * of known (measured) diameter, so first-principles compressible-flow equations applied to the
+ * hole geometry yield the best estimate. In the compressed air reduction calculator the flow
+ * source is a manufactured end-use nozzle whose exact geometry may be unknown; empirically
+ * fitted quadratic coefficients indexed by nozzle type are therefore used in place of a
+ * geometry-based calculation.
+ *
  * The calculation proceeds through the following steps:
  * 1. **Temperature conversion** – Convert air temperature from °F to °R.
  * 2. **Pressure conversion** – Add atmospheric pressure to gauge pressure to obtain absolute

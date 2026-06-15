@@ -1,4 +1,5 @@
 #include <steamModeler/domain/FluidPropertiesFactory.h>
+#include "steamModeler/util/SteamModelerLogger.h"
 
 SteamSystemModelerTool::FluidProperties FluidPropertiesFactory::make(const Header& header) const {
     const SteamSystemModelerTool::SteamPropertiesOutput& headerSteamProperties = header.getHeaderProperties();
@@ -59,8 +60,10 @@ FluidPropertiesFactory::makeWithVentedSteamAmount(const SteamSystemModelerTool::
 
     // const double massFlowOriginal = properties.massFlow;
     // const double energyFlowOriginal = properties.energyFlow;
-    // std::cout << methodName << "adding ventedSteamAmount=" << ventedSteamAmount << " to massFlowOriginal=" <<
-    // massFlowOriginal << "; energyFlowOriginal=" << energyFlowOriginal << "; result=" << properties << std::endl;
+    SM_LOG(methodName << "adding ventedSteamAmount=" << ventedSteamAmount
+           << " to massFlow=" << properties.massFlow
+           << "; energyFlow=" << properties.energyFlow
+           << "; result=" << properties);
 
     return properties;
 }
