@@ -12,15 +12,10 @@ static const BoilerInput makeBoilerInput() {
     const double blowdownRate          = 5.764;
     const bool   blowdownFlashed       = false;
     const bool   preheatMakeupWater    = false;
-    const double steamQuality          = 0;
-    const double pressureOrTemperature = 0;
-    const double saturatedPressure     = 10;
     const double steamTemperature      = 457.15;
     const double deaeratorVentRate     = 0;
     const double deaeratorPressure     = 0.17132499999999998;
     const double approachTemperature   = 0;
-    const double blowdownConductivity  = 4060;
-    const double feedwaterConductivity = 234;
     return {fuelType,
             fuel,
             combustionEfficiency,
