@@ -1,4 +1,11 @@
 /**
+ * Leak Survey - Bag Method
+ *
+ * Estimates compressed air leak flow and annual consumption using a timed
+ * bag-fill field measurement.
+ */
+
+/**
  * Input parameters for the bag method compressed air leak calculation.
  *
  * @property operatingTime double, annual system operating time in hours.
@@ -9,6 +16,9 @@ export interface BagMethodInput {
     operatingTime: number;
     bagFillTime: number;
     bagVolume: number;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+    delete(): void;
 }
 
 /**
@@ -20,6 +30,9 @@ export interface BagMethodInput {
 export interface BagMethodResult {
     flowRate: number;
     annualConsumption: number;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+    delete(): void;
 }
 
 /**

@@ -1,5 +1,12 @@
 /**
- * Gas type used by base gas density calculations.
+ * Fan Enumerations
+ *
+ * Enumerations used by fan performance, base gas density, and fan-curve
+ * calculations.
+ */
+
+/**
+ * Enumeration representing gas type used by base gas density calculations.
  */
 export enum GasType {
     AIR = 0,
@@ -8,7 +15,7 @@ export enum GasType {
 }
 
 /**
- * Input mode used by base gas density calculations.
+ * Enumeration representing base gas density input mode.
  */
 export enum BaseGasDensityInputType {
     DewPoint = 0,
@@ -17,7 +24,7 @@ export enum BaseGasDensityInputType {
 }
 
 /**
- * Fan type used by optimal fan efficiency calculations.
+ * Enumeration representing fan type for optimal efficiency calculations.
  */
 export enum FanType {
     AirfoilSISW = 0,
@@ -35,7 +42,7 @@ export enum FanType {
 }
 
 /**
- * Calculation mode for fan curve data.
+ * Enumeration representing fan curve data calculation mode.
  */
 export enum FanCurveDataCalculationType {
     BaseCurve = 0,
@@ -44,7 +51,7 @@ export enum FanCurveDataCalculationType {
 }
 
 /**
- * Fan pressure curve type.
+ * Enumeration representing fan pressure curve type.
  */
 export enum FanCurveType {
     FanStaticPressure = 0,

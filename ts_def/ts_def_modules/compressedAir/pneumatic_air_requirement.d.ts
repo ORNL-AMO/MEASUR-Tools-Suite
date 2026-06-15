@@ -1,4 +1,11 @@
 /**
+ * Pneumatic Air Requirement
+ *
+ * Calculates compressed air requirements for single-acting and double-acting
+ * pneumatic cylinders.
+ */
+
+/**
  * Input parameters for the single-acting piston air requirement calculation.
  *
  * @property cylinderDiameter double, inner bore diameter of the cylinder in inches.
@@ -11,6 +18,9 @@ export interface PneumaticAirRequirementSingleActingInput {
     cylinderStroke: number;
     airPressure: number;
     cyclesPerMin: number;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+    delete(): void;
 }
 
 /**
@@ -28,6 +38,9 @@ export interface PneumaticAirRequirementDoubleActingInput {
     pistonRodDiameter: number;
     airPressure: number;
     cyclesPerMin: number;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+    delete(): void;
 }
 
 /**
@@ -41,6 +54,9 @@ export interface PneumaticAirRequirementResult {
     volumeAirIntakePiston: number;
     compressionRatio: number;
     airRequirementPneumaticCylinder: number;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+    delete(): void;
 }
 
 /**

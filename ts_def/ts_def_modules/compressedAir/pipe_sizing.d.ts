@@ -1,4 +1,11 @@
 /**
+ * Compressed Air Pipe Sizing
+ *
+ * Calculates minimum cross-sectional area and diameter for compressed air
+ * piping at a target design velocity.
+ */
+
+/**
  * Input parameters for the pipe sizing calculation.
  *
  * @property airflow double, volumetric free-air flow rate in cfm.
@@ -11,6 +18,9 @@ export interface PipeSizingInput {
     airlinePressure: number;
     designVelocity: number;
     atmosphericPressure: number;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+    delete(): void;
 }
 
 /**
@@ -22,6 +32,9 @@ export interface PipeSizingInput {
 export interface PipeSizingResult {
     crossSectionalArea: number;
     pipeDiameter: number;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+    delete(): void;
 }
 
 /**

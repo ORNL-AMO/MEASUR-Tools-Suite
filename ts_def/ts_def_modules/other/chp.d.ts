@@ -1,4 +1,11 @@
 /**
+ * Combined Heat and Power (CHP) economics.
+ *
+ * Provides operating economics calculations for CHP systems, including
+ * annual savings, fuel costs, operating costs, and payback metrics.
+ */
+
+/**
  * CHP cost calculation option.
  */
 export enum CHPOption {
@@ -7,18 +14,27 @@ export enum CHPOption {
 }
 
 /**
- * Output of CHP cost calculations.
+ * Result object returned by {@link CHP.getCostInfo}.
+ *
+ * @property annualOperationSavings double, annual operating savings in $
+ * @property totalInstalledCostsPayback double, total installed costs used for payback in $
+ * @property simplePayback double, simple payback in years
+ * @property fuelCosts double, annual fuel costs in $
+ * @property thermalCredit double, annual thermal credit in $
+ * @property incrementalOandM double, annual incremental O&M costs in $
+ * @property totalOperatingCosts double, annual total operating costs in $
  */
 export declare class CostInfoOutput {
     /**
-     * Constructor for CostInfoOutput
-     * @param annualOperationSavings double
-     * @param totalInstalledCostsPayback double
-     * @param simplePayback double
-     * @param fuelCosts double
-     * @param thermalCredit double
-     * @param incrementalOandM double
-     * @param totalOperatingCosts double
+     * Creates a CHP cost summary result.
+     *
+     * @param annualOperationSavings double, annual operating savings in $
+     * @param totalInstalledCostsPayback double, total installed costs used for payback in $
+     * @param simplePayback double, simple payback in years
+     * @param fuelCosts double, annual fuel costs in $
+     * @param thermalCredit double, annual thermal credit in $
+     * @param incrementalOandM double, annual incremental O&M costs in $
+     * @param totalOperatingCosts double, annual total operating costs in $
      */
     constructor(
         annualOperationSavings: number,
@@ -30,12 +46,19 @@ export declare class CostInfoOutput {
         totalOperatingCosts: number
     );
 
+    /** Annual operating savings, units $ */
     annualOperationSavings: number;
+    /** Total installed costs used for payback, units $ */
     totalInstalledCostsPayback: number;
+    /** Simple payback, units years */
     simplePayback: number;
+    /** Fuel costs, units $ */
     fuelCosts: number;
+    /** Thermal credit, units $ */
     thermalCredit: number;
+    /** Incremental O&M costs, units $ */
     incrementalOandM: number;
+    /** Total operating costs, units $ */
     totalOperatingCosts: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -43,10 +66,15 @@ export declare class CostInfoOutput {
 }
 
 /**
- * Calculates CHP-related operating economics.
+ * CHP calculator.
+ *
+ * Computes CHP operating economics from annual electricity and thermal demand,
+ * fuel/electric costs, and utilization/availability assumptions.
  */
 export declare class CHP {
     /**
+     * Creates a CHP calculation instance.
+     *
      * @param annualOperatingHours double, annual operating hours
      * @param annualElectricityConsumption double, annual electricity consumption in kWh
      * @param annualThermalDemand double, annual thermal demand in MMBtu
@@ -76,8 +104,9 @@ export declare class CHP {
     );
 
     /**
-     * Gets the Net CHP power
-     * @returns double const, Net CHP power in  MMBtu
+     * Calculates CHP cost outputs.
+     *
+     * @returns {@link CostInfoOutput}
      */
     getCostInfo(): CostInfoOutput;
 

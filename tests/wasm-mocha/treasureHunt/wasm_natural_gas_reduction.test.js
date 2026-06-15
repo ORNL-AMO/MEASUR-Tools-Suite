@@ -267,8 +267,8 @@ describe('Natural Gas Reduction Tests', function () {
         assert.approximately(results.totalFlow, 800, 0.001, "totalFlow");
     });
 
-    it('should calculate otherMethodReduction standalone correctly', function () {
-        let results = moduleInstance.otherMethodReduction({ consumption: 2000 }, 0.12);
+    it('should calculate naturalGasOtherMethodReduction standalone correctly', function () {
+        let results = moduleInstance.naturalGasOtherMethodReduction({ consumption: 2000 }, 0.12);
         assert.approximately(results.energyUse, 2000, 0.001, "energyUse");
         assert.approximately(results.energyCost, 240, 0.001, "energyCost");
         assert.approximately(results.heatFlow, 0, 0.001, "heatFlow");

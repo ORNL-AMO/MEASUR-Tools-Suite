@@ -1,37 +1,38 @@
 /**
- * Gas Composition calculations for process heat.
+ * Gas Composition Calculations
  *
  * Represents a fuel gas mixture and its derived thermodynamic properties.
- * Supports excess-air / O₂ conversions for flue-gas analysis.
+ * Supports excess-air and flue-gas oxygen conversion calculations.
  */
 
 /**
- * Represents a fuel gas mixture and its properties for process heat calculations.
- * Stores the composition and calculated properties for a fuel gas mixture,
- * including constituent gases and derived values.
+ * Fuel gas composition model and calculator.
  *
- * Constructs a {@link GasCompositions} instance representing a named fuel gas mixture.
+ * Stores mixture composition and derived properties used for process heat
+ * calculations.
  *
- * All percentage parameters are expressed as percent by volume (% vol).
- *
- * @property heatingValue   Heating value of the fuel gas mixture, units BTU/SCF
- * @property heatingValueVolume Heating value of the fuel gas mixture, units BTU/ft³
- * @property specificGravity Specific gravity of the fuel gas mixture (unitless)
+ * @property heatingValue double, heating value of the fuel gas mixture, units Btu/SCF
+ * @property heatingValueVolume double, heating value of the fuel gas mixture, units Btu/ft3
+ * @property specificGravity double, specific gravity of the fuel gas mixture (unitless)
  */
 export declare class GasCompositions {
     /**
-     * @param substance Name of the fuel gas mixture
-     * @param ch4_percent Methane (CH4) percent by volume, units %
-     * @param c2h6_percent Ethane (C2H6) percent by volume, units %
-     * @param n2_percent Nitrogen (N2) percent by volume, units %
-     * @param h2_percent Hydrogen (H2) percent by volume, units %
-     * @param c3h8_percent Propane (C3H8) percent by volume, units %
-     * @param c4h10_cnh2n_percent Butane/Paraffins (C4H10/CnH2n) percent by volume, units %
-     * @param h2o_percent Water vapor (H2O) percent by volume, units %
-     * @param co_percent Carbon monoxide (CO) percent by volume, units %
-     * @param co2_percent Carbon dioxide (CO2) percent by volume, units %
-     * @param so2_percent Sulphur dioxide (SO2) percent by volume, units %
-     * @param o2_percent Oxygen (O2) percent by volume, units %
+     * Creates a fuel gas composition.
+     *
+     * All composition values are percent by volume.
+     *
+     * @param substance string, name of the fuel gas mixture
+     * @param ch4_percent double, methane (CH4), units %
+     * @param c2h6_percent double, ethane (C2H6), units %
+     * @param n2_percent double, nitrogen (N2), units %
+     * @param h2_percent double, hydrogen (H2), units %
+     * @param c3h8_percent double, propane (C3H8), units %
+     * @param c4h10_cnh2n_percent double, butane/paraffins (C4H10/CnH2n), units %
+     * @param h2o_percent double, water vapor (H2O), units %
+     * @param co_percent double, carbon monoxide (CO), units %
+     * @param co2_percent double, carbon dioxide (CO2), units %
+     * @param so2_percent double, sulfur dioxide (SO2), units %
+     * @param o2_percent double, oxygen (O2), units %
      */
     constructor(
         substance: string,
@@ -48,26 +49,26 @@ export declare class GasCompositions {
         o2_percent: number
     );
 
-    /** Heating value of the fuel gas mixture, units BTU/SCF */
+    /** Heating value of the fuel gas mixture, units Btu/SCF */
     heatingValue: number;
-    /** Heating value of the fuel gas mixture, units BTU/ft³ */
+    /** Heating value of the fuel gas mixture, units Btu/ft3 */
     heatingValueVolume: number;
-    /** Specific gravity of the fuel gas mixture (unitless) */
+    /** Specific gravity of the fuel gas mixture, unitless */
     specificGravity: number;
 
     /**
-     * Calculates excess air percentage from flue gas oxygen percentage.
+     * Calculates excess air from flue gas oxygen.
      *
-     * @param flue_gas_o2_percentage Oxygen percentage in flue gas, units %
-     * @returns Excess air percentage, units %
+     * @param flue_gas_o2_percentage double, oxygen percentage in flue gas, units %
+     * @returns double, excess air percentage, units %
      */
     calculateExcessAir(flue_gas_o2_percentage: number): number;
 
     /**
-     * Calculates flue gas oxygen percentage from excess air percentage.
+     * Calculates flue gas oxygen from excess air.
      *
-     * @param excess_air Excess air percentage, units %
-     * @returns Oxygen percentage in flue gas, units %
+     * @param excess_air double, excess air percentage, units %
+     * @returns double, oxygen percentage in flue gas, units %
      */
     calculateO2(excess_air: number): number;
 

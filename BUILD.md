@@ -189,6 +189,23 @@ const toolsSuiteModule = await moduleFactory({
 const totalHeatLoss = toolsSuiteModule.wallTotalHeatLoss(
 	500, 80, 225, 10, 0.9, 1.394, 1
 );
+// Alternatively, using the module type for better type safety
+import type * as MeasurToolsSuiteModule  from '/path/to/client';
+const totalHeatLoss = toolsSuiteModule as MeasurToolsSuiteModule.WallHeatLossModule;
+const wthl = totalHeatLoss.wallTotalHeatLoss(500, 80, 225, 10, 0.9, 1.394, 1);
+
+// Example 2 usage of DryerOperatingCost module
+const docRes = new toolsSuiteModule.DryerOperatingCost(1752, 50, 100, 24, 7, 52, 0.08, 0.2, 0.25).calculate(ToolsSuiteModule.DryerType.Heatless);
+console.log("DryerOperatingCost calculation => Water Removed:", docRes.waterRemoved);
+docRes.delete();
+// Alternatively, using the module type for better type safety
+const dryerOperatingCostModule = toolsSuiteModule as MeasurToolsSuiteModule.DryerOperatingCostModule;
+let doc = new dryerOperatingCostModule.DryerOperatingCost(1752, 50, 100, 24, 7, 52, 0.08, 0.2, 0.25);
+let res = doc.calculate(dryerOperatingCostModule.DryerType.Heatless);
+let wr = res.waterRemoved;
+console.log("DryerOperatingCost calculation => Water removed:", wr);
+res.delete();
+doc.delete();
 ```
 
 ### 6.6 WebAssembly Tests (Browser)

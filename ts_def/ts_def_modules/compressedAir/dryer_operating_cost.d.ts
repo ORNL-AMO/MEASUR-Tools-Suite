@@ -1,3 +1,10 @@
+/**
+ * Dryer Operating Cost
+ *
+ * Calculates annual operating cost and moisture removal for supported
+ * compressed-air dryer types.
+ */
+
 /** Enumeration for supported compressed-air dryer types. */
 export enum DryerType {
     Heatless = 0,
@@ -79,6 +86,9 @@ export interface DryerOperatingCostInput {
     heatingHoursPerDay: number;
     purgeRate: number;
     designDDCPercentage: number;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+    delete(): void;
 }
 
 /**

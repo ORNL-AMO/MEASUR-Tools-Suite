@@ -1,22 +1,23 @@
 /**
- * Data structure for a lighting default data record.
+ * Lighting default data.
  *
- * Represents a single entry in the lighting default data set, containing
- * fixture category, lamp type, photometric, and electrical characteristics.
+ * Defines a single default lighting fixture record used by lighting
+ * calculations and default dataset retrieval.
  */
 export declare class LightingData {
     /**
-     * Constructs a Lighting's data record with the specified parameters.
-     * The data ID is initialized to 0; use {@link setID} to assign a sequential ID.
+     * Creates a lighting default data record.
      *
-     * @param category lighting system category (unitless)
-     * @param type lighting system type (unitless)
-     * @param lampsPerFixture number of lamps per fixture (unitless)
-     * @param lampWattage lamp wattage in watts (W)
-     * @param lampOutput lamp luminous output in lumens (lm)
-     * @param lampLife lamp rated life in hours (h)
-     * @param lampCRI lamp Color Rendering Index (unitless)
-     * @param coefficientOfUtilization coefficient of utilization as a percentage (%)
+     * The ID is initialized to 0; use {@link setID} to assign a sequential ID.
+     *
+     * @param category string, fixture category
+     * @param type string, fixture type
+     * @param lampsPerFixture double, number of lamps per fixture
+     * @param lampWattage double, lamp wattage in W
+     * @param lampOutput double, lamp luminous output in lumens
+     * @param lampLife double, rated lamp life in hours
+     * @param lampCRI double, Color Rendering Index
+     * @param coefficientOfUtilization double, coefficient of utilization as decimal
      * @param ballastFactor ballast factor (unitless)
      * @param lumenDegradationFactor lumen degradation factor (unitless)
      */
@@ -34,87 +35,76 @@ export declare class LightingData {
     );
 
     /**
-     * Sets the sequential ID of the lighting default data record.
-     * Used for default data initialization by assigning a sequential data ID.
+     * Sets the sequential record ID.
      *
-     * @param id sequential ID of the lighting default data record
+     * @param id double, sequential ID of this lighting record
      */
     setID(id: number): void;
 
     /**
-     * Gets the sequential ID of the lighting default data record.
+     * Gets the sequential record ID.
      *
-     * @returns sequential ID of the lighting default data record
+     * @returns double, sequential ID
      */
     ID(): number;
 
     /**
-     * Gets the category of the lighting system.
-     *
-     * @returns category of the lighting system
+     * Gets fixture category.
+     * @returns string, fixture category
      */
     category(): string;
 
     /**
-     * Gets the type of the lighting system.
-     *
-     * @returns type of the lighting system
+     * Gets fixture type.
+     * @returns string, fixture type
      */
     type(): string;
 
     /**
-     * Gets the number of lamps per fixture of the lighting system.
-     *
-     * @returns number of lamps per fixture (unitless)
+     * Gets number of lamps per fixture.
+     * @returns double, lamps per fixture
      */
     lampsPerFixture(): number;
 
     /**
-     * Gets the lamp wattage of the lighting system.
-     *
-     * @returns lamp wattage in watts (W)
+     * Gets lamp wattage.
+     * @returns double, lamp wattage in W
      */
     lampWattage(): number;
 
     /**
-     * Gets the lamp luminous output of the lighting system.
-     *
-     * @returns lamp output in lumens (lm)
+     * Gets lamp luminous output.
+     * @returns double, lamp output in lumens
      */
     lampOutput(): number;
 
     /**
-     * Gets the rated lamp life of the lighting system.
-     *
-     * @returns lamp life in hours (h)
+     * Gets rated lamp life.
+     * @returns double, lamp life in hours
      */
     lampLife(): number;
 
     /**
-     * Gets the lamp Color Rendering Index (CRI) of the lighting system.
-     *
-     * @returns lamp CRI (unitless)
+     * Gets lamp Color Rendering Index (CRI).
+     * @returns double, lamp CRI
      */
     lampCRI(): number;
 
     /**
-     * Gets the coefficient of utilization of the lighting system.
-     *
-     * @returns coefficient of utilization as a percentage (%)
+     * Gets coefficient of utilization.
+     * @returns double, coefficient of utilization as decimal
      */
     coefficientOfUtilization(): number;
 
     /**
-     * Gets the ballast factor of the lighting system.
-     *
-     * @returns ballast factor (unitless)
+     * Gets ballast factor.
+     * @returns double, ballast factor
      */
     ballastFactor(): number;
 
     /**
-     * Gets the lumen degradation factor of the lighting system.
-     *
-     * @returns lumen degradation factor (unitless)
+     * Gets lumen degradation factor.
+     * @returns double, lumen degradation factor
      */
     lumenDegradationFactor(): number;
 

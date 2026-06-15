@@ -1,4 +1,11 @@
 /**
+ * Leak Survey - Orifice Method
+ *
+ * Estimates compressed air leak flow and annual consumption using orifice
+ * choked-flow relations.
+ */
+
+/**
  * Input parameters for the orifice method compressed air leak calculation.
  *
  * @property operatingTime double, annual system operating time in hours.
@@ -17,6 +24,9 @@ export interface OrificeMethodInput {
     diameter: number;
     supplyPressure: number;
     numOrifices: number;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+    delete(): void;
 }
 
 /**
@@ -38,6 +48,9 @@ export interface OrificeMethodResult {
     leakRateScfm: number;
     leakRateEstimate: number;
     annualConsumption: number;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+    delete(): void;
 }
 
 /**

@@ -1,4 +1,11 @@
 /**
+ * Compressor Performance Calculations
+ *
+ * Provides compressor performance models, control-type calculations, and
+ * compressed-air reduction and savings helper functions.
+ */
+
+/**
  * Compressor type used in compressor calculation models.
  */
 export enum CompressorType {
@@ -766,7 +773,7 @@ export declare class Compressor_VFD {
 }
 
 /** Compressor model for modulation with unload control. */
-export declare class Compressors_ModulationWithUnload extends Compressors_LoadUnload {
+export declare class Compressors_ModulationWithUnload {
     /**
      * @param kWFl double, kW
      * @param CFl double, acfm

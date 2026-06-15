@@ -5,6 +5,13 @@ import { OrificeMethodInput } from "./orifice_method";
 import { CompressorElectricityData } from "../compressed_air_utils";
 
 /**
+ * Compressed Air Leak Survey
+ *
+ * Aggregates leak estimates from supported field measurement methods and
+ * computes annual air, electricity, and cost impact.
+ */
+
+/**
  * Selects the field measurement method used to estimate each leak's flow rate.
  * @details Each method is implemented in its own leak survey binding module.
  */
@@ -54,6 +61,9 @@ export interface CompressedAirLeakSurveyInput {
     orificeMethodInput: OrificeMethodInput;
     compressorElectricityData: CompressorElectricityData;
     units: number;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+    delete(): void;
 }
 
 /**
@@ -69,6 +79,9 @@ export interface CompressedAirLeakSurveyResult {
     annualTotalElectricityCost: number;
     totalFlowRate: number;
     annualTotalFlowRate: number;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+    delete(): void;
 }
 
 /**
@@ -90,5 +103,3 @@ export type CompressedAirLeakSurveyModule = {
     CompressedAirLeakSurveyInput: CompressedAirLeakSurveyInput;
     CompressedAirLeakSurveyResult: CompressedAirLeakSurveyResult;
 };
-
-

@@ -8,7 +8,7 @@ export enum UtilityType {
 }
 
 /**
- * Result struct for steam leak calculations.
+ * Result object returned by steam leak calculation methods.
  *
  * @property leakRate double, leak rate in lb/hr
  *
@@ -19,9 +19,13 @@ export enum UtilityType {
  * @property leakCost double, annual leak cost
  */
 export interface SteamLeakSurveyResults {
+    /** Leak rate, units lb/hr */
     leakRate: number;
+    /** Steam loss, units klb/yr */
     steamLoss: number;
+    /** Energy loss, units MMBtu/yr */
     energyLoss: number;
+    /** Annual leak cost */
     leakCost: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -149,35 +153,45 @@ export declare class SteamLeakSurvey {
     );
 
     /**
+     * Calculate steam cost based on utility type.
+     *
      * @returns steamCost computed based on fuel type steam or electric or natural gas
      */
     costOfSteam(): number;
 
     /**
+     * Calculate steam cost based on utility type and turbine efficiency.
+     *
      * @param turbineEfficiency double, system efficiency percentage (0 - 100 %)
      * @returns steamCost computed based on fuel type steam or electric or natural gas and turbine
      */
     costOfSteam(turbineEfficiency: number): number;
 
     /**
+     * Calculate steam leak losses using an estimated leak rate.
+     *
      * @param leakRate double, lb/hr
-     * @returns SteamLeakSurveyResults
+     * @returns {@link SteamLeakSurveyResults}
      */
     estimateMethodPRVCalc(leakRate: number): SteamLeakSurveyResults;
 
     /**
+     * Calculate steam leak losses using an estimated leak rate and turbine efficiency.
+     *
      * @param turbineEfficiency double, system efficiency percentage (0 - 100 %)
      * @param leakRate double, lb/hr
-     * @returns SteamLeakSurveyResults
+     * @returns {@link SteamLeakSurveyResults}
      */
     estimateMethodTurbineCalc(turbineEfficiency: number, leakRate: number): SteamLeakSurveyResults;
 
     /**
+     * Calculate steam leak losses using the orifice method.
+     *
      * @param turbineEfficiency double, system efficiency percentage (0 - 100 %)
      * @param holeSize double, estimated diameter of orifice through which steam is leaking in inches
      * @param dischargeCoef double, discharge coefficient used to capture the effect of the shape of the leak rate as fraction (0 - 1)
      * @param atmPressure double, atmospheric pressure (standard pressure is 14.7 psia, range 0 - 20)
-     * @returns SteamLeakSurveyResults
+     * @returns {@link SteamLeakSurveyResults}
      */
     orificeMethodCalc(
         turbineEfficiency: number,
@@ -187,10 +201,12 @@ export declare class SteamLeakSurvey {
     ): SteamLeakSurveyResults;
 
     /**
+     * Calculate steam leak losses using the plume-length method.
+     *
      * @param turbineEfficiency double, system efficiency percentage (0 - 100 %)
      * @param plumeLength double, feet (range 3 - 12 feet)
      * @param ambTemp double, ambient temperature (usually between 45 and 90 degrees F)
-     * @returns SteamLeakSurveyResults
+     * @returns {@link SteamLeakSurveyResults}
      */
     plumeMethodCalc(turbineEfficiency: number, plumeLength: number, ambTemp: number): SteamLeakSurveyResults;
 
@@ -200,6 +216,7 @@ export declare class SteamLeakSurvey {
 
 export type SteamLeakSurveyModule = {
     UtilityType: typeof UtilityType;
+    SteamLeakSurveyResults: SteamLeakSurveyResults;
     QuantifySteamLeakByPlumeLength: typeof QuantifySteamLeakByPlumeLength;
     SteamLeakSurvey: typeof SteamLeakSurvey;
 };

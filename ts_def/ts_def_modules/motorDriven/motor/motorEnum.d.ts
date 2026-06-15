@@ -1,4 +1,12 @@
-/** Enumeration: Type of motor drive system. */
+/**
+ * Motor Enumerations
+ *
+ * Enumerations used by motor, pump, and fan motor-driven calculations.
+ */
+
+/**
+ * Enumeration representing the motor drive type.
+ */
 export enum Drive {
     DIRECT_DRIVE =0,
     V_BELT_DRIVE =1,
@@ -7,19 +15,25 @@ export enum Drive {
     SPECIFIED =4
 }
 
-/** Enumeration: Line frequency in Hz. */
+/**
+ * Enumeration representing line frequency.
+ */
 export enum LineFrequency {
     FREQ60 =0,
     FREQ50 =1
 }
 
-/** Enumeration: Method for estimating motor load. */
+/**
+ * Enumeration representing the motor load estimation method.
+ */
 export enum LoadEstimationMethod {
     POWER =0,
     CURRENT =1
 }
 
-/** Enumeration: Efficiency class of the motor. */
+/**
+ * Enumeration representing the motor efficiency class.
+ */
 export enum MotorEfficiencyClass {
     STANDARD =0,
     ENERGY_EFFICIENT =1,

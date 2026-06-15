@@ -1,6 +1,15 @@
 import { LineFrequency, MotorEfficiencyClass } from "./motorEnum";
 
-/** Class representing motor data and specifications. */
+/**
+ * Motor calculations and data models.
+ *
+ * Provides motor data records and calculators for efficiency, current,
+ * power factor, and overall motor performance.
+ */
+
+/**
+ * Motor default data record.
+ */
 export declare class MotorData {
     /**
      * Constructor for motor data.
@@ -37,7 +46,7 @@ export declare class MotorData {
         voltageLimit: number,
         catalog: string );
 
-    /** Getter for motor data property ID. */
+    /** Gets motor data record ID. */
     getId(): number;
     /** Getter for motor data property HP. */
     getHp(): number;
@@ -60,7 +69,7 @@ export declare class MotorData {
     /** Getter for motor data property catalog. */
     getCatalog(): string;
 
-    /** Setter for motor data property ID. */
+    /** Sets motor data record ID. */
     setId(value: number): void;
     /** Setter for motor data property HP. */
     setHp(value: number): void;
@@ -87,7 +96,9 @@ export declare class MotorData {
     delete(): void;
 }
 
-/** Class for calculating motor efficiency based on various parameters. */
+/**
+ * Motor efficiency calculator.
+ */
 export declare class MotorEfficiency {
     /**
      * Constructor for motor efficiency.
@@ -124,7 +135,9 @@ export declare class MotorEfficiency {
     delete(): void;
 }
 
-/** Class for estimating the full load amps (FLA) of a motor based on various parameters. */
+/**
+ * Full-load current (FLA) estimator.
+ */
 export declare class EstimateFLA {
     /**
      * Constructor for estimating full load amps (FLA) of a motor.
@@ -163,7 +176,9 @@ export declare class EstimateFLA {
     delete(): void;
 }
 
-/** Class representing a motor and its performance characteristics. */
+/**
+ * Motor model.
+ */
 export declare class Motor {
     /**
      * Constructor for the Motor class, which initializes the motor with various parameters.
@@ -199,7 +214,9 @@ export declare class Motor {
     delete(): void;
 }
 
-/** Class for calculating the motor current based on various parameters. */
+/**
+ * Motor current calculator.
+ */
 export declare class MotorCurrent {
     /**
      * Constructor for calculating the motor current based on various parameters.
@@ -241,7 +258,9 @@ export declare class MotorCurrent {
     delete(): void;
 }
 
-/** Class for calculating the motor power factor based on various parameters. */
+/**
+ * Motor power factor calculator.
+ */
 export declare class MotorPowerFactor {
     /**
      * Constructor
@@ -276,10 +295,11 @@ export declare class MotorPowerFactor {
 }
 
 /**
- * Struct representing the output of motor performance calculations,
+ * Result object returned by {@link MotorPerformance.calculate}.
  *
- * Object contains the calculated current, efficiency, and powerfactor of the motor.
- *
+ * @property current double, motor current in A
+ * @property efficiency double, motor efficiency as decimal
+ * @property powerFactor double, motor power factor (unitless)
  */
 export declare class MotorPerformanceOutput {
     /**
@@ -302,7 +322,9 @@ export declare class MotorPerformanceOutput {
     delete(): void;
 }
 
-/** Class for calculating the overall motor performance based on various parameters. */
+/**
+ * Motor performance calculator.
+ */
 export declare class MotorPerformance {
     /**
      * Constructor

@@ -2,7 +2,16 @@ import { GasType, BaseGasDensityInputType, FanType } from "./fanEnum";
 import { Motor } from "../motor/motor";
 import { Drive, LoadEstimationMethod } from "../motor/motorEnum";
 
-/** Input parameters for fan result calculations. */
+/**
+ * Fan calculations and AMCA 203 utilities.
+ *
+ * Provides fan-system performance calculators, AMCA 203 data models,
+ * base gas density utilities, and helper calculations.
+ */
+
+/**
+ * Input parameters for fan result calculations.
+ */
 export declare class FanInput {
     /**
      * Constructor for Fan Input
@@ -17,7 +26,9 @@ export declare class FanInput {
     delete(): void;
 }
 
-/** Baseline field data for existing fan calculations. */
+/**
+ * Baseline field data for existing fan calculations.
+ */
 export declare class FieldDataBaseline {
     /**
      * To be used for Baseline Fan results
@@ -47,7 +58,9 @@ export declare class FieldDataBaseline {
     delete(): void;
 }
 
-/** Modified field data for fan modification calculations. */
+/**
+ * Modified field data for fan modification calculations.
+ */
 export declare class FieldDataModified {
     /**
      * To be used for Modified and Optimal Fan results
@@ -74,21 +87,22 @@ export declare class FieldDataModified {
 }
 
 /**
- * Output for fan system assessments.
- * @property fanEfficiency double
- * @property motorRatedPower double
- * @property motorShaftPower double
- * @property fanShaftPower double
- * @property motorEfficiency double
- * @property motorPowerFactor double
- * @property motorCurrent double
- * @property motorPower double
- * @property annualEnergy double
- * @property annualCost double
- * @property fanEnergyIndex double
- * @property loadFactor double
- * @property driveEfficiency double
- * @property estimatedFLA double
+ * Result object returned by fan system assessments.
+ *
+ * @property fanEfficiency double, fan efficiency as decimal
+ * @property motorRatedPower double, motor rated power in hp
+ * @property motorShaftPower double, motor shaft power in hp
+ * @property fanShaftPower double, fan shaft power in hp
+ * @property motorEfficiency double, motor efficiency as decimal
+ * @property motorPowerFactor double, motor power factor (unitless)
+ * @property motorCurrent double, motor current in A
+ * @property motorPower double, motor electric power in kW
+ * @property annualEnergy double, annual energy in kWh
+ * @property annualCost double, annual cost in $
+ * @property fanEnergyIndex double, fan energy index (unitless)
+ * @property loadFactor double, load factor as decimal
+ * @property driveEfficiency double, drive efficiency as decimal
+ * @property estimatedFLA double, estimated full-load amps in A
  */
 export interface FanOutput {
     fanEfficiency: number;
@@ -316,6 +330,11 @@ export declare class Fan203 {
      */
     constructor(fanRatedInfo: FanRatedInfo, planeData: PlaneData, baseGasDensity: BaseGasDensity, fanShaftPower: FanShaftPower);
 
+    /**
+     * Calculates AMCA 203 fan performance results.
+     *
+     * @returns {@link Fan203Output}
+     */
     calculate(): Fan203Output;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -326,7 +345,7 @@ export declare class Fan203 {
 export declare class BaseGasDensity {
     /**
      * Constructor for BaseGasDensity
-     * @param dryBulbTemp double, temperature of inputted air in °F
+     * @param dryBulbTemp double, temperature of inputted air in degF
      * @param staticPressure double, pressure in Hg
      * @param barometricPressure double in Hg
      * @param gasDensity double, density of a gas in pounds per sqft,lb/scf
@@ -337,10 +356,10 @@ export declare class BaseGasDensity {
     constructor(
         /**
          * Constructor for BaseGasDensity
-         * @param dryBulbTemp double, temperature of inputted air in °F
+         * @param dryBulbTemp double, temperature of inputted air in degF
          * @param staticPressure double, pressure in inches of water (in WC)
          * @param barometricPressure double, pressure in Hg
-         * @param relativeHumidityOrDewPoint double, elative humidity in % or Dewpoint in °F
+         * @param relativeHumidityOrDewPoint double, elative humidity in % or Dewpoint in degF
          * @param gasType GasType
          * @param inputType BaseGasDensityInputType
          * @param specificGravity double, specific gravity unitless
@@ -356,10 +375,10 @@ export declare class BaseGasDensity {
 
     /**
      * Constructor for BaseGasDensity
-     * @param dryBulbTemp double, temperature of inputted air in °F
+     * @param dryBulbTemp double, temperature of inputted air in degF
      * @param staticPressure double, pressure in inches of water (in WC)
      * @param barometricPressure double, pressure in Hg
-     * @param wetBulbTemp double, temperature of inputted air in °F
+     * @param wetBulbTemp double, temperature of inputted air in degF
      * @param gasType GasType
      * @param inputType BaseGasDensityInputType
      * @param specificGravity double, specific gravity unitless

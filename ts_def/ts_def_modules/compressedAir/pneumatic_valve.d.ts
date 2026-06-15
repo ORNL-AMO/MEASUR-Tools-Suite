@@ -1,4 +1,11 @@
 /**
+ * Pneumatic Valve Calculations
+ *
+ * Calculates flow rate for unit Cv valves and required valve flow coefficient
+ * (Cv) from pressure and flow conditions.
+ */
+
+/**
  * Input parameters for the flow rate calculation (Cv = 1).
  *
  * @property inletPressure double, inlet (upstream) absolute pressure in psia.
@@ -7,6 +14,9 @@
 export interface PneumaticValveFlowRateInput {
     inletPressure: number;
     outletPressure: number;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+    delete(): void;
 }
 
 /**
@@ -16,6 +26,9 @@ export interface PneumaticValveFlowRateInput {
  */
 export interface PneumaticValveFlowRateResult {
     flowRate: number;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+    delete(): void;
 }
 
 /**
@@ -29,6 +42,9 @@ export interface PneumaticValveCvInput {
     inletPressure: number;
     outletPressure: number;
     flowRate: number;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+    delete(): void;
 }
 
 /**
@@ -38,6 +54,9 @@ export interface PneumaticValveCvInput {
  */
 export interface PneumaticValveCvResult {
     flowCoefficient: number;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+    delete(): void;
 }
 
 /**

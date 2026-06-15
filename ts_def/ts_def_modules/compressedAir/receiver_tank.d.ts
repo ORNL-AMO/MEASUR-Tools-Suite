@@ -1,4 +1,11 @@
 /**
+ * Receiver Tank Calculations
+ *
+ * Provides compressed air receiver tank sizing and usable-capacity calculations
+ * for common sizing methods.
+ */
+
+/**
  * Input parameters for the usable air capacity calculation.
  *
  * @property tankSize double, tank volume in gallons.
@@ -9,6 +16,9 @@ export interface ReceiverTankUsableCapacityInput {
     tankSize: number;
     airPressureIn: number;
     airPressureOut: number;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+    delete(): void;
 }
 
 /**
@@ -18,6 +28,9 @@ export interface ReceiverTankUsableCapacityInput {
  */
 export interface ReceiverTankUsableCapacityResult {
     usableCapacity: number;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+    delete(): void;
 }
 
 /**
@@ -27,6 +40,9 @@ export interface ReceiverTankGeneralInput {
     airDemand: number;
     allowablePressureDrop: number;
     atmosphericPressure: number;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+    delete(): void;
 }
 
 /**
@@ -34,6 +50,10 @@ export interface ReceiverTankGeneralInput {
  */
 export interface ReceiverTankSizeResult {
     tankSize: number;
+    delete(): void;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+
 }
 
 /**
@@ -45,6 +65,9 @@ export interface ReceiverTankDedicatedStorageInput {
     atmosphericPressure: number;
     initialTankPressure: number;
     finalTankPressure: number;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+    delete(): void;
 }
 
 /**
@@ -57,6 +80,10 @@ export interface ReceiverTankMeteredStorageInput {
     initialTankPressure: number;
     finalTankPressure: number;
     meteredFlowControl: number;
+    delete(): void;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+
 }
 
 /**
@@ -65,6 +92,9 @@ export interface ReceiverTankMeteredStorageInput {
 export interface ReceiverTankMeteredStorageResult {
     tankSize: number;
     refillTime: number;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+    delete(): void;
 }
 
 /**
@@ -76,6 +106,10 @@ export interface ReceiverTankBridgingInput {
     atmosphericPressure: number;
     airDemandCfm: number;
     allowablePressureDrop: number;
+    delete(): void;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+
 }
 
 /**
@@ -88,6 +122,9 @@ export interface ReceiverTankCompressorCycleInput {
     unloadPressure: number;
     fullLoadPressure: number;
     atmosphericPressure: number;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+    delete(): void;
 }
 
 /**
@@ -98,6 +135,10 @@ export interface ReceiverTankCompressorCycleResult {
     effectiveCapacity: number;
     pressureChange: number;
     volumeCf: number;
+    delete(): void;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+
 }
 
 /**

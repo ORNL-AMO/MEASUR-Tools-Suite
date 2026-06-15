@@ -1,17 +1,29 @@
 /**
- * Output of pump valve power loss calculations.
+ * Pump Valve Power Loss
  *
- * @property pressure_drop double, pressure drop in PSI.
- * @property head_loss double, head loss in feet.
- * @property power_loss_frictional double, frictional power loss in hp.
- * @property power_loss_electrical double, electrical power loss in kW.
- * @property annual_energy_loss double, annual energy loss in kWh.
+ * Calculates hydraulic and electrical losses caused by throttled valve
+ * operation compared to wide-open flow.
+ */
+
+/**
+ * Result object returned by {@link PumpValvePowerLoss.calculate}.
+ *
+ * @property pressure_drop double, pressure drop in psi
+ * @property head_loss double, head loss in ft
+ * @property power_loss_frictional double, frictional power loss in hp
+ * @property power_loss_electrical double, electrical power loss in kW
+ * @property annual_energy_loss double, annual energy loss in kWh
  */
 export interface PumpValvePowerLossOutput {
+    /** Pressure drop, units psi */
     pressure_drop: number;
+    /** Head loss, units ft */
     head_loss: number;
+    /** Frictional power loss, units hp */
     power_loss_frictional: number;
+    /** Electrical power loss, units kW */
     power_loss_electrical: number;
+    /** Annual energy loss, units kWh */
     annual_energy_loss: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -23,7 +35,7 @@ export interface PumpValvePowerLossOutput {
  */
 export declare class PumpValvePowerLoss {
     /**
-     * Constructor for PumpValvePowerLoss - parameter less default constructor
+     * Default constructor - no arguments required.
      */
     constructor();
 
@@ -37,7 +49,7 @@ export declare class PumpValvePowerLoss {
      * @param upstream_gauge_elevation double, upstream gauge elevation in feet.
      * @param downstream_pressure double, downstream gauge pressure in PSI.
      * @param downstream_gauge_elevation double, downstream gauge elevation in feet.
-     * @returns PumpValvePowerLossOutput
+     * @returns {@link PumpValvePowerLossOutput}
      */
     calculate(
         operating_hours: number,

@@ -2,7 +2,14 @@ import { Motor } from "../motor/motor";
 import { Drive, LoadEstimationMethod } from "../motor/motorEnum";
 
 /**
- * Output struct for head tool calculations.
+ * Pump calculations.
+ *
+ * Provides pump head tools and pump-system result calculators for baseline
+ * and modified operating conditions.
+ */
+
+/**
+ * Result object returned by head tool calculations.
  */
 export declare class HeadToolOutput {
     /**
@@ -23,11 +30,17 @@ export declare class HeadToolOutput {
         pumpHead: number
     );
 
+    /** Differential elevation head, units ft */
     differentialElevationHead: number;
+    /** Differential pressure head, units ft */
     differentialPressureHead: number;
+    /** Differential velocity head, units ft */
     differentialVelocityHead: number;
+    /** Estimated suction friction head, units ft */
     estimatedSuctionFrictionHead: number;
+    /** Estimated discharge friction head, units ft */
     estimatedDischargeFrictionHead: number;
+    /** Total pump head, units ft */
     pumpHead: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -173,7 +186,7 @@ export declare class PumpFieldData {
 }
 
 /**
- * Output data of pump result calculations.
+ * Result object returned by pump result calculations.
  */
 export declare class PumpResults {
     /**
@@ -206,18 +219,31 @@ export declare class PumpResults {
         drive_efficiency: number
     );
 
+    /** Pump efficiency, unitless decimal */
     pump_efficiency: number;
+    /** Motor rated power, units hp */
     motor_rated_power: number;
+    /** Motor shaft power, units hp */
     motor_shaft_power: number;
+    /** Mover shaft power, units hp */
     mover_shaft_power: number;
+    /** Motor efficiency, unitless decimal */
     motor_efficiency: number;
+    /** Motor power factor, unitless */
     motor_power_factor: number;
+    /** Motor current, units A */
     motor_current: number;
+    /** Motor power, units kW */
     motor_power: number;
+    /** Annual energy, units kWh */
     annual_energy: number;
+    /** Annual cost, units $ */
     annual_cost: number;
+    /** Load factor, unitless decimal */
     load_factor: number;
+    /** Drive efficiency, unitless decimal */
     drive_efficiency: number;
+    /** Estimated full-load amps, units A */
     estimatedFLA: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */

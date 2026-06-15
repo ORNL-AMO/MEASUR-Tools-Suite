@@ -1,4 +1,11 @@
 /**
+ * Compressed Air Core Calculations
+ *
+ * Provides compressed air system capacity and velocity calculations based on
+ * pipe size data, system pressure, and receiver volumes.
+ */
+
+/**
  * Pipe data for compressed air calculators.
  * @details Holds values by nominal pipe size. This type is used by air system
  *          capacity and air velocity calculations.

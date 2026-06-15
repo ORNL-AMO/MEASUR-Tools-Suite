@@ -1,5 +1,12 @@
 /**
- * Motor control types for the fan system.
+ * Fan Affinity Laws
+ *
+ * Calculates baseline and modified fan energy use and annual energy cost
+ * savings for motor-control and flow changes.
+ */
+
+/**
+ * Enumeration representing motor control type for the fan system.
  */
 export enum MotorControlType {
     OnOff = 0,
@@ -9,7 +16,7 @@ export enum MotorControlType {
 }
 
 /**
- * Flow mode for desired flow input.
+ * Enumeration representing desired-flow input mode.
  */
 export enum FlowMode {
     Percent = 0,
@@ -17,14 +24,18 @@ export enum FlowMode {
 }
 
 /**
- * Output struct for FanAffinityLaws
- * @property annualEnergyBaseline double, Baseline energy consumption in kWh
- * @property annualEnergyNew double, Energy consumption in kWh
- * @property annualCostSavings double, Cost savings in $ based on change in energy consumption and electricity cost
+ * Result object returned by {@link FanAffinityLaws.calculate} and {@link FanAffinityLaws.changeFanSize}.
+ *
+ * @property annualEnergyBaseline double, baseline annual energy in kWh
+ * @property annualEnergyNew double, modified annual energy in kWh
+ * @property annualCostSavings double, annual cost savings in $
  */
 export interface FanAffinityLawsOutput {
+    /** Baseline annual energy, units kWh */
     annualEnergyBaseline: number;
+    /** Modified annual energy, units kWh */
     annualEnergyNew: number;
+    /** Annual cost savings, units $ */
     annualCostSavings: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -32,8 +43,8 @@ export interface FanAffinityLawsOutput {
 }
 
 /**
- * Input struct for FanAffinityLaws.
- * Use this struct to create input object and then use that object to create FanAffinityLaws object.
+ * Input object for {@link FanAffinityLaws}.
+ *
  * @property electricityCost double, electric usage rate in $/kWh
  * @property driveEfficiency double, Efficiency of the drive percentage (1 - 100)
  * @property motorEfficiency double, Efficiency of the motor percentage (1 - 100)
@@ -49,17 +60,31 @@ export interface FanAffinityLawsOutput {
  *          If flow mode is percentage desired flow rate is flow percentage (0 - 100)
  */
 export interface FanAffinityLawsInput {
+    /** Electricity cost, units $/kWh */
     electricityCost: number;
+    /** Drive efficiency, units % */
     driveEfficiency: number;
+    /** Motor efficiency, units % */
     motorEfficiency: number;
+    /** Baseline flow percentage, units % */
     flowPercentBaseline: number;
+    /** Annual operating hours, units h */
     operatingHours: number;
+    /** Motor power, units kW */
     motorPower: number;
+    /** Rated flow, units CFM */
     ratedFlow: number;
+    /** Current motor control type */
     motorControlTypeCurrent: MotorControlType;
+    /** New motor control type */
     motorControlTypeNew: MotorControlType;
+    /** Flow mode */
     flowMode: FlowMode;
+    /** Desired flow rate (units depend on flow mode) */
     desiredFlowRate: number;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+    delete(): void;
 }
 
 /**

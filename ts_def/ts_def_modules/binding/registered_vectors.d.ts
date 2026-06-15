@@ -10,7 +10,17 @@ import {
 import { GasType } from "../motorDriven/fans/fanEnum";
 import { CompressorsData } from "../compressedAir/compressorsCalc";
 import { CompressedAirLeakSurveyInput } from "../compressedAir/leak_survey/compressed_air_leak_survey";
-import {GasCompositions} from "../physics/gas_compositions";
+import { GasCompositions } from "../physics/gas_compositions";
+import { CalculationsTable } from "../wasteWater/wasteWater";
+import { GraphDataPoint } from "../wasteWater/svi";
+import { ChillerInput } from "../processCooling/process_cooling";
+import { WaterReductionInput } from "../treasureHunt/water_reduction";
+import { SteamReductionInput } from "../treasureHunt/steam_reduction";
+import { NaturalGasReductionInput } from "../treasureHunt/natural_gas_reduction";
+import { ElectricityReductionInput } from "../treasureHunt/electricity_reduction";
+import { CompressedAirReductionInput } from "../treasureHunt/compressed_air_reduction";
+import { CompressedAirPressureReductionInput } from "../treasureHunt/compressed_air_pressure_reduction";
+import { Inlet } from "../steamModeler/ssmt";
 
 export declare abstract class RegisteredVector<T> {
     /** Constructor for creating an array of elements of type <T> */
@@ -97,6 +107,39 @@ export declare interface LightingDataV extends RegisteredVector<LightingData> {}
 /** A vector of {@link GasCompositions} records, mapped from `std::vector<GasCompositions>`. */
 export declare interface GasCompositionsV extends RegisteredVector<GasCompositions> {}
 
+/** A vector of int records, mapped from `std::vector<int>`. */
+export declare interface IntVector extends RegisteredVector<number> {}
+
+/** A vector of {@link ChillerInput} records, mapped from `std::vector<ChillerInput>`. */
+export declare interface ChillerInputV extends RegisteredVector<ChillerInput> {}
+
+/** A vector of {@link Inlet} records, mapped from `std::vector<Inlet>`. */
+export declare interface InletVector extends RegisteredVector<Inlet> {}
+
+/** A vector of {@link CompressedAirPressureReductionInput} records, mapped from `std::vector<CompressedAirPressureReductionInput>`. */
+export declare interface CompressedAirPressureReductionInputV extends RegisteredVector<CompressedAirPressureReductionInput> {}
+
+/** A vector of {@link CompressedAirReductionInput} records, mapped from `std::vector<CompressedAirReductionInput>`. */
+export declare interface CompressedAirReductionInputV extends RegisteredVector<CompressedAirReductionInput> {}
+
+/** A vector of {@link ElectricityReductionInput} records, mapped from `std::vector<ElectricityReductionInput>`. */
+export declare interface ElectricityReductionInputV extends RegisteredVector<ElectricityReductionInput> {}
+
+/** A vector of {@link NaturalGasReductionInput} records, mapped from `std::vector<NaturalGasReductionInput>`. */
+export declare interface NaturalGasReductionInputV extends RegisteredVector<NaturalGasReductionInput> {}
+
+/** A vector of {@link SteamReductionInput} records, mapped from `std::vector<SteamReductionInput>`. */
+export declare interface SteamReductionInputV extends RegisteredVector<SteamReductionInput> {}
+
+/** A vector of {@link WaterReductionInput} records, mapped from `std::vector<WaterReductionInput>`. */
+export declare interface WaterReductionInputV extends RegisteredVector<WaterReductionInput> {}
+
+/** A vector of {@link GraphDataPoint} records, mapped from `std::vector<GraphDataPoint>`. */
+export declare interface GraphDataV extends RegisteredVector<GraphDataPoint> {}
+
+/** A vector of {@link CalculationsTable} records, mapped from `std::vector<CalculationsTable>`. */
+export declare interface CalculationsTableV extends RegisteredVector<CalculationsTable> {}
+
 export type RegisteredVectorsModule = {
     DoubleVector: DoubleVector;
     DoubleVector2D: DoubleVector2D;
@@ -119,4 +162,19 @@ export type RegisteredVectorsModule = {
     LightingDataV: LightingDataV;
 
     GasCompositionsV: GasCompositionsV;
+
+    IntVector: IntVector;
+    ChillerInputV: ChillerInputV;
+
+    InletVector: InletVector;
+
+    CompressedAirPressureReductionInputV: CompressedAirPressureReductionInputV;
+    CompressedAirReductionInputV: CompressedAirReductionInput;
+    ElectricityReductionInputV: ElectricityReductionInputV;
+    NaturalGasReductionInputV: NaturalGasReductionInputV;
+    SteamReductionInputV: SteamReductionInputV;
+    WaterReductionInputV: WaterReductionInputV;
+
+    GraphDataV: GraphDataV;
+    CalculationsTableV: CalculationsTableV;
 };

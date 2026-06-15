@@ -1,8 +1,8 @@
 /**
- * Power Factor (pf) Calculations — Power Triangle
+ * Power Factor (pf) Calculations - Power Triangle
  *
  * Calculates Apparent Power S, Real Power P, Reactive Power Q,
- * Phase Angle Φ, Power Factor pf, and Capacitance based on two known inputs.
+ * Phase Angle, Power Factor pf, and Capacitance based on two known inputs.
  *
  * Input combination must include two known parameters:
  *   1. Apparent Power + Real Power | Reactive Power | Phase Angle | Power Factor
@@ -34,12 +34,12 @@ export enum PowerFactorModeType {
  * @property realPower double, units kW
  * @property reactivePower double, units kVAr
  * @property apparentPower double, units kVA
- * @property powerFactor double, units % as decimal value (0 – 1)
+ * @property powerFactor double, units % as decimal value (0 - 1)
  * @property phaseAngle double, units deg
  * @property realDemand double, units kW
  * @property demandPenalty double, units kW
- * @property proposedReactivePower double, units kVAr — reactive power required to reach the target power factor
- * @property proposedCapacitance double, units kVAr — capacitance required to correct to the target power factor
+ * @property proposedReactivePower double, units kVAr - reactive power required to reach the target power factor
+ * @property proposedCapacitance double, units kVAr - capacitance required to correct to the target power factor
  */
 export interface PowerFactorOutput {
     /** Real Power P, units kW */
@@ -48,9 +48,9 @@ export interface PowerFactorOutput {
     reactivePower: number;
     /** Apparent Power S, units kVA */
     apparentPower: number;
-    /** Power Factor pf, units % as decimal value (0 – 1) */
+    /** Power Factor pf, units % as decimal value (0 - 1) */
     powerFactor: number;
-    /** Phase Angle Φ, units deg */
+    /** Phase Angle, units deg */
     phaseAngle: number;
     /** Real Demand, units kW */
     realDemand: number;
@@ -68,27 +68,27 @@ export interface PowerFactorOutput {
 /**
  * Power Factor calculator.
  *
- * Computes all power-triangle quantities (P, Q, S, Φ, pf) and the capacitance
+ * Computes all power-triangle quantities (P, Q, S, Angle, pf) and the capacitance
  * correction required to reach a target power factor, given any two known
  * power-triangle parameters.
  */
 export declare class PowerFactor {
-    /** Default constructor — no arguments required. */
+    /** Default constructor - no arguments required. */
     constructor();
 
     /**
      * Perform power factor calculations.
      *
-     * @param mode {@link PowerFactorModeType} — selects which two input parameters are supplied.
-     * @param input1 double — first known parameter (see mode for interpretation):
+     * @param mode {@link PowerFactorModeType} - selects which two input parameters are supplied.
+     * @param input1 double - first known parameter (see mode for interpretation):
      *   - Apparent Power: units kVA
      *   - Real Power: units kW
      *   - Reactive Power: units kVAr
-     * @param input2 double — second known parameter (see mode for interpretation):
+     * @param input2 double - second known parameter (see mode for interpretation):
      *   - Real Power: units kW
      *   - Reactive Power: units kVAr
      *   - Phase Angle: units deg
-     *   - Power Factor: units % as decimal value (0 – 1)
+     *   - Power Factor: units % as decimal value (0 - 1)
      * @param inputPowerFactor double, Minimum Required / Target Power Factor as decimal (default 0.95)
      * @returns {@link PowerFactorOutput}
      */

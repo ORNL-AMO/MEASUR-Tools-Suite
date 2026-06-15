@@ -1,4 +1,11 @@
 /**
+ * Leak Survey - Estimate Method
+ *
+ * Estimates annual compressed air loss from an estimated leak flow rate and
+ * annual operating time.
+ */
+
+/**
  * Input parameters for the estimate method compressed air leak calculation.
  *
  * @property operatingTime double, annual system operating time in hours.
@@ -7,6 +14,9 @@
 export interface EstimateMethodInput {
     operatingTime: number;
     leakRateEstimate: number;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+    delete(): void;
 }
 
 /**
@@ -16,6 +26,9 @@ export interface EstimateMethodInput {
  */
 export interface EstimateMethodResult {
     annualConsumption: number;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+    delete(): void;
 }
 
 /**

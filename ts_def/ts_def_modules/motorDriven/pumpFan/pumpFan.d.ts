@@ -1,6 +1,13 @@
 import { Drive } from "../motor/motorEnum";
 
 /**
+ * Pump/Fan helper calculations.
+ *
+ * Provides calculators for mover shaft power, specific speed correction,
+ * and pump efficiency metrics.
+ */
+
+/**
  * Pump style classification used by pump/fan calculators.
  */
 export enum PumpStyle {
@@ -27,7 +34,10 @@ export enum SpecificSpeed {
 }
 
 /**
- * Output of mover shaft power calculation.
+ * Result object returned by {@link MoverShaftPower.calculate}.
+ *
+ * @property moverShaftPower double, mover shaft power in hp
+ * @property driveEfficiency double, drive efficiency as decimal value (0 - 1)
  */
 export declare class MoverShaftPowerOutput {
     /**
@@ -37,7 +47,9 @@ export declare class MoverShaftPowerOutput {
      */
     constructor(moverShaftPower: number, driveEfficiency: number);
 
+    /** Mover shaft power, units hp */
     moverShaftPower: number;
+    /** Drive efficiency, unitless decimal */
     driveEfficiency: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -86,7 +98,10 @@ export declare class OptimalSpecificSpeedCorrection {
 }
 
 /**
- * Output of pump efficiency calculation.
+ * Result object returned by {@link PumpEfficiency.calculate}.
+ *
+ * @property average double, achievable average pump efficiency as decimal
+ * @property max double, maximum pump efficiency as decimal
  */
 export declare class PumpEfficiencyResults {
     /**
@@ -96,7 +111,9 @@ export declare class PumpEfficiencyResults {
      */
     constructor(average: number, max: number);
 
+    /** Achievable average pump efficiency, unitless decimal */
     average: number;
+    /** Maximum pump efficiency, unitless decimal */
     max: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */

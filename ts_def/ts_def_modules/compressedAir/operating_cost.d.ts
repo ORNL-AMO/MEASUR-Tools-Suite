@@ -1,4 +1,11 @@
 /**
+ * Compressor Operating Cost
+ *
+ * Calculates annual loaded and unloaded compressor electricity cost and
+ * total operating cost.
+ */
+
+/**
  * Input parameters for the annual compressor operating cost calculation.
  *
  * @property motorBhp double, full-load motor brake horsepower in bhp.
@@ -17,6 +24,9 @@ export interface OperatingCostInput {
     efficiencyLoaded: number;
     efficiencyUnloaded: number;
     costOfElectricity: number;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+    delete(): void;
 }
 
 /**
@@ -32,6 +42,9 @@ export interface OperatingCostResult {
     costForLoaded: number;
     costForUnloaded: number;
     totalAnnualCost: number;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+    delete(): void;
 }
 
 /**

@@ -1,4 +1,11 @@
 /**
+ * Leak Survey - Decibels Method
+ *
+ * Estimates compressed air leak rate and annual consumption from ultrasonic
+ * decibel readings and calibration points.
+ */
+
+/**
  * Input parameters for the decibels method compressed air leak calculation.
  * @details Two calibration reference points (A and B) define the interpolation grid.
  *          By convention, point A carries the lower decibel reference and point B the
@@ -29,6 +36,9 @@ export interface DecibelsMethodInput {
     pressureB: number;
     firstFlowB: number;
     secondFlowB: number;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+    delete(): void;
 }
 
 /**
@@ -40,6 +50,9 @@ export interface DecibelsMethodInput {
 export interface DecibelsMethodResult {
     leakRateEstimate: number;
     annualConsumption: number;
+
+    /** Frees the underlying resource; must be called when finished with the instance */
+    delete(): void;
 }
 
 /**
