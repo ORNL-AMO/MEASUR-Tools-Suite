@@ -10,6 +10,7 @@ LowPressureVentedSteamCalculationsDomain LowPressureVentedSteamCalculator::calc(
     const std::shared_ptr<MediumPressureHeaderCalculationsDomain>& mediumPressureHeaderCalculationsDomain,
     const std::shared_ptr<LowPressureHeaderCalculationsDomain>&    lowPressureHeaderCalculationsDomain,
     MakeupWaterAndCondensateHeaderCalculationsDomain&              makeupWaterAndCondensateHeaderCalculationsDomain,
+    const std::shared_ptr<FlashTank>& blowdownFlashTank,
     const double deaeratorInletSteamMassFlow, const bool recalcMakeupWaterAndMassFlow) const {
     const std::string methodName = std::string("LowPressureVentedSteamCalculator::") + std::string(__func__) + ": ";
 
@@ -77,7 +78,7 @@ LowPressureVentedSteamCalculationsDomain LowPressureVentedSteamCalculator::calc(
     const Deaerator& deaerator =
         deaeratorModeler.model(headerCountInput, boilerInput, boiler, highPressureHeaderCalculationsDomain,
                                mediumPressureHeaderCalculationsDomain, lowPressureHeaderCalculationsDomain,
-                               makeupWaterAndCondensateHeaderCalculationsDomain);
+                               makeupWaterAndCondensateHeaderCalculationsDomain, blowdownFlashTank);
     //     std::cout << methodName << "deaerator=" << deaerator << std::endl;
 
     return {lowPressureVentedSteam, makeupWaterUpdated, makeupWaterAndCondensateHeaderOutputUpdated,

@@ -64,7 +64,7 @@ SteamModelCalculationsDomain SteamModelCalculator::calc(const bool isBaselineCal
     Deaerator deaerator =
         deaeratorModeler.model(headerCountInput, boilerInput, boiler, highPressureHeaderCalculationsDomain,
                                mediumPressureHeaderCalculationsDomain, lowPressureHeaderCalculationsDomain,
-                               makeupWaterAndCondensateHeaderCalculationsDomain);
+                               makeupWaterAndCondensateHeaderCalculationsDomain, blowdownFlashTank);
     //     std::cout << methodName << "deaerator=" << deaerator << std::endl;
 
     //     std::cout << methodName << "running powerBalanceChecker" << std::endl;

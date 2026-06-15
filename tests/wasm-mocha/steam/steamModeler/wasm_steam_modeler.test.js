@@ -135,6 +135,7 @@ describe('Steam Modeler Tests', function () {
             deaeratorVentRate: 0.1,
             deaeratorPressure: 0.07,
             approachTemperature: 10,
+            sendBlowdownToDeaerator: false,
         };
 
         const header1 = {

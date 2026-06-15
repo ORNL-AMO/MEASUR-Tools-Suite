@@ -7,15 +7,15 @@ std::shared_ptr<FlashTank> FlashTankFactory::make(const HeaderInput& headerInput
     std::shared_ptr<FlashTank> flashTankPtr = nullptr;
 
     if (boilerInput.isBlowdownFlashed()) {
-        if (headerInput.getHeaderCount() == 1) {
+        if (headerInput.getHeaderCount() == 1 || boilerInput.isSendBlowdownToDeaerator()) {
             // flash tank uses deaerator pressure from boiler input
-            // when only one header
+            // when only one header or when blowdown is sent to deaerator
             const double     pressure  = boilerInput.getDeaeratorPressure();
             const FlashTank& flashTank = make(pressure, boiler);
             flashTankPtr               = std::make_shared<FlashTank>(flashTank);
         }
         else {
-            const double pressure = headerInput.getPressureFromLowestPressureHeader();
+            const double pressure      = headerInput.getPressureFromLowestPressureHeader();
             const FlashTank& flashTank = make(pressure, boiler);
             flashTankPtr               = std::make_shared<FlashTank>(flashTank);
         }

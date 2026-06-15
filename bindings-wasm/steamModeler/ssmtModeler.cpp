@@ -157,8 +157,18 @@ EMSCRIPTEN_BINDINGS(steamModeler) {
         .constructor<bool, double, BoilerInput, HeaderInput, OperationsInput, TurbineInput>();
 
     // BoilerInput
+    // second constructor is needed for backwards compatibility with existing JavaScript code that does not include the
+    // sendBlowdownToDeaerator parameter
     class_<BoilerInput>("BoilerInput")
-        .constructor<double, double, double, double, bool, bool, double, double, double, double>();
+        .constructor<double, double, double, double, bool, bool, double, double, double, double, bool>()
+        .constructor(+[](double fuelType, double fuel, double combustionEfficiency, double blowdownRate,
+                         bool blowdownFlashed, bool preheatMakeupWater, double steamTemperature,
+                         double deaeratorVentRate, double deaeratorPressure,
+                         double approachTemperature) -> BoilerInput* {
+            return new BoilerInput(fuelType, fuel, combustionEfficiency, blowdownRate, blowdownFlashed,
+                                   preheatMakeupWater, steamTemperature, deaeratorVentRate, deaeratorPressure,
+                                   approachTemperature, false);
+        });
 
     // HeaderWithPressure
     class_<HeaderWithPressure>("HeaderWithPressure").constructor<double, double, double, double, bool>();
