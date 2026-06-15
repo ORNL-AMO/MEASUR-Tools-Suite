@@ -90,6 +90,7 @@ jobs:
         run: |
           emcmake cmake -S . -B build-wasm -DBUILD_WASM=ON
           emmake make -C build-wasm -j 12
+          mkdir -p bin
           cp build-wasm/bin/client.js bin/client.js
           cp build-wasm/bin/client.wasm bin/client.wasm
           rm -f bin/measur_tools_suite.js
