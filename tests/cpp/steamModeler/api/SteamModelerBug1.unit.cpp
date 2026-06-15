@@ -2,6 +2,9 @@
 
 #include "catch.hpp"
 
+//FROM ISSUE 364
+// This test is to be used to investigate a bug in the steam modeler where the specific enthalpy of a header with 0 mass flow
+
 using namespace Catch;
 
 static const BoilerInput makeBoilerInput() {
@@ -12,15 +15,10 @@ static const BoilerInput makeBoilerInput() {
     const double blowdownRate          = 7.631;
     const bool   blowdownFlashed       = false;
     const bool   preheatMakeupWater    = false;
-    const double steamQuality          = 1;
-    const double pressureOrTemperature = 0;
-    const double saturatedPressure     = 124;
     const double steamTemperature      = 451.2055555555555;
     const double deaeratorVentRate     = 0;
     const double deaeratorPressure     = 0.17027299297111664;
     const double approachTemperature   = 0;
-    const double blowdownConductivity  = 999.9;
-    const double feedwaterConductivity = 76.3;
     return {fuelType,
             fuel,
             combustionEfficiency,
@@ -114,7 +112,7 @@ static const SteamModelerInput makeSteamModelerInput(int headerCount) {
     return {isBaselineCalc, baselinePowerDemand, boilerInput, headerInput, operationsInput, turbineInput};
 }
 
-TEST_CASE("steamModelerBug", "[steam modeler bug 3]") {
+TEST_CASE("steamModelerBug", "[steam modeler bug 3 header]") {
     auto steamModeler = SteamModeler();
 
     SteamModelerInput  steamModelerInput = makeSteamModelerInput(3);
@@ -123,7 +121,7 @@ TEST_CASE("steamModelerBug", "[steam modeler bug 3]") {
     // TODO add asserts
 }
 
-TEST_CASE("steamModelerBug", "[steam modeler bug 2]") {
+TEST_CASE("steamModelerBug", "[steam modeler bug 2 header]") {
     auto steamModeler = SteamModeler();
 
     SteamModelerInput  steamModelerInput = makeSteamModelerInput(2);

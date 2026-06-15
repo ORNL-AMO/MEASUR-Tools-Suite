@@ -1,6 +1,7 @@
 #include "steamModeler/service/MassFlowCalculator.h"
 
 #include <string>
+#include "steamModeler/util/SteamModelerLogger.h"
 
 double MassFlowCalculator::calcInitialMassFlow(const HeaderInput& headerInput) const {
     const std::string methodName = std::string("MassFlowCalculator::") + std::string(__func__) + ": ";
@@ -26,11 +27,11 @@ double MassFlowCalculator::calcInitialMassFlow(const HeaderInput& headerInput) c
     }
     else {
         std::string msg = methodName + "headerCount=" + std::to_string(headerCount) + " not handled";
-        // std::cout << msg << std::endl;
+        SM_LOG(msg);
         throw std::out_of_range(msg);
     }
 
-    // std::cout << methodName << "massFlow=" << massFlow << std::endl;
+    SM_LOG(methodName << "massFlow=" << massFlow);
 
     return massFlow;
 }
@@ -44,13 +45,11 @@ double MassFlowCalculator::addToMassFlow(const std::string& objectName, const do
 
     // handle NaN
     if (processSteamUsage > 0) {
-        // std::cout << methodName << "adding " << objectName << " processSteamUsage=" << processSteamUsage
-        //           << " to massFlow=" << massFlow << std::endl;
+        SM_LOG(methodName << "adding " << objectName << " processSteamUsage=" << processSteamUsage << " to massFlow=" << massFlow);
         massFlowUpdated += processSteamUsage;
     }
     else {
-        // std::cout << methodName << objectName << " processSteamUsage=" << processSteamUsage
-        //           << ", not adding to massFlow=" << massFlow << std::endl;
+        SM_LOG(methodName << objectName << " processSteamUsage=" << processSteamUsage << ", not adding to massFlow=" << massFlow);
     }
 
     return massFlowUpdated;

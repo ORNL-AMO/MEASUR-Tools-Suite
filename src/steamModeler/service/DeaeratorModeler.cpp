@@ -1,4 +1,5 @@
 #include "steamModeler/service/DeaeratorModeler.h"
+#include "steamModeler/util/SteamModelerLogger.h"
 
 Deaerator DeaeratorModeler::model(
     const int headerCountInput, const BoilerInput& boilerInput, const Boiler& boiler,
@@ -8,7 +9,7 @@ Deaerator DeaeratorModeler::model(
     const MakeupWaterAndCondensateHeaderCalculationsDomain& makeupWaterAndCondensateHeaderCalculationsDomain) const {
     const std::string methodName = std::string("DeaeratorModeler::") + std::string(__func__) + ": ";
 
-    // std::cout << methodName << "calculating deaerator" << std::endl;
+    SM_LOG(methodName << "calculating deaerator");
 
     const double feedwaterMassFlow = calcFeedwaterMassFlow(
         headerCountInput, boiler, mediumPressureHeaderCalculationsDomain, lowPressureHeaderCalculationsDomain);
@@ -27,7 +28,7 @@ double DeaeratorModeler::calcFeedwaterMassFlow(
 
     // 6. Calculate Deaerator
     // 6A. Get Feedwater Details and Inlet header
-    //  std::cout << methodName << "calculating feedwaterMassFlow from boiler" << std::endl;
+    SM_LOG(methodName << "calculating feedwaterMassFlow from boiler");
 
     const SteamSystemModelerTool::FluidProperties& feedwaterProperties = boiler.getFeedwaterProperties();
     double                                         feedwaterMassFlow   = feedwaterProperties.massFlow;
@@ -36,27 +37,22 @@ double DeaeratorModeler::calcFeedwaterMassFlow(
         const std::shared_ptr<PrvWithoutDesuperheating>& lowPressurePrv =
             lowPressureHeaderCalculationsDomain->lowPressurePrv;
         const double lowOutletMassFlow = getFeedwaterMassFlow(lowPressurePrv);
-        // std::cout << methodName
-        //   << "lowPressureHeader exists, adding feedwater mass flow from lowPressurePrv=" << lowOutletMassFlow
-        //   << " to feedwaterMassFlow" << std::endl;
+        SM_LOG(methodName << "lowPressureHeader exists, adding feedwater mass flow from lowPressurePrv=" << lowOutletMassFlow << " to feedwaterMassFlow");
         feedwaterMassFlow += lowOutletMassFlow;
 
         if (headerCountInput == 3) {
             const std::shared_ptr<PrvWithoutDesuperheating>& highToMediumPressurePrv =
                 mediumPressureHeaderCalculationsDomain->highToMediumPressurePrv;
             const double highOutletMassFlow = getFeedwaterMassFlow(highToMediumPressurePrv);
-            // std::cout << methodName
-            //   << "mediumPressureHeader exists, adding feedwater mass flow from highToMediumPressurePrv="
-            //   << highOutletMassFlow << " to feedwaterMassFlow" << std::endl;
+            SM_LOG(methodName << "mediumPressureHeader exists, adding feedwater mass flow from highToMediumPressurePrv=" << highOutletMassFlow << " to feedwaterMassFlow");
             feedwaterMassFlow += highOutletMassFlow;
         }
     }
     else {
-        // std::cout << methodName
-        //   << "lowPressureHeader does not exist, skipping lowPressurePrv feedwaterMassFlow" << std::endl;
+        SM_LOG(methodName << "lowPressureHeader does not exist, skipping lowPressurePrv feedwaterMassFlow");
     }
 
-    // std::cout << methodName << "feedwaterMassFlow=" << feedwaterMassFlow << std::endl;
+    SM_LOG(methodName << "feedwaterMassFlow=" << feedwaterMassFlow);
 
     return feedwaterMassFlow;
 }
@@ -83,7 +79,7 @@ Deaerator DeaeratorModeler::makeDeaerator(
     const std::string methodName = std::string("DeaeratorModeler::") + std::string(__func__) + ": ";
 
     // 6B. Calculate Deaerator
-    //  std::cout << methodName << "making deaerator" << std::endl;
+    SM_LOG(methodName << "making deaerator");
 
     const SteamSystemModelerTool::FluidProperties& makeupWaterAndCondensateHeaderOutput =
         makeupWaterAndCondensateHeaderCalculationsDomain.makeupWaterAndCondensateHeaderOutput;

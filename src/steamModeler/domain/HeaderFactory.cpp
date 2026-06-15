@@ -1,14 +1,15 @@
 #include "steamModeler/domain/HeaderFactory.h"
+#include "steamModeler/util/SteamModelerLogger.h"
 
 const Header HeaderFactory::make(const double& headerPressure, const Boiler& boiler) const {
     const std::string methodName = "HeaderFactory::" + std::string(__func__) + ": ";
 
-    // std::cout << methodName << "making header" << std::endl;
+    SM_LOG(methodName << "making header");
 
     std::vector<Inlet> inlets = inletFactory.make(boiler);
 
     const Header header = {headerPressure, inlets};
-    // std::cout << methodName << "header=" << header << std::endl;
+    SM_LOG(methodName << "header=" << header);
 
     return header;
 }
@@ -20,48 +21,46 @@ const Header HeaderFactory::make(const std::shared_ptr<HeaderNotHighestPressure>
                                  const std::shared_ptr<FlashTank>& highPressureCondensateFlashTank) const {
     const std::string methodName = "HeaderFactory::" + std::string(__func__) + ": ";
 
-    // std::cout << methodName << "making header" << std::endl;
+    SM_LOG(methodName << "making header");
 
     const double headerPressure = mediumPressureHeaderInput->getPressure();
 
     // High to medium PRV
-    //  std::cout << methodName << "adding highToMediumPrv inlet" << std::endl;
+    SM_LOG(methodName << "adding highToMediumPrv inlet");
     const Inlet        highToMediumPrvInlet = inletFactory.make(prvWithoutDesuperheating);
     std::vector<Inlet> inlets               = {highToMediumPrvInlet};
 
     // High to medium turbine
     const bool isUseTurbine = highToMediumTurbineInput.isUseTurbine();
-    // std::cout << methodName << "highToMediumTurbineInput.isUseTurbine=" << isUseTurbine << std::endl;
+    SM_LOG(methodName << "highToMediumTurbineInput.isUseTurbine=" << isUseTurbine);
 
     if (isUseTurbine) {
-        // std::cout << methodName << "isUseTurbine=true, adding highToMediumPressureTurbine inlet" << std::endl;
+        SM_LOG(methodName << "isUseTurbine=true, adding highToMediumPressureTurbine inlet");
 
         Inlet highToMediumTurbineInlet = inletFactory.make(highToMediumPressureTurbine);
-        // std::cout << methodName << "highToMediumTurbineInlet=" << highToMediumTurbineInlet << std::endl;
+        SM_LOG(methodName << "highToMediumTurbineInlet=" << highToMediumTurbineInlet);
         inlets.push_back(highToMediumTurbineInlet);
     }
     else {
-        // std::cout << methodName << "isUseTurbine=false, skipping highToMediumPressureTurbine inlet" << std::endl;
+        SM_LOG(methodName << "isUseTurbine=false, skipping highToMediumPressureTurbine inlet");
     }
 
     // High pressure flashed condensate
     const bool isFlashCondensate = mediumPressureHeaderInput->isFlashCondensate();
-    // std::cout << methodName << "mediumPressureHeaderInput->isFlashCondensate=" << isFlashCondensate << std::endl;
+    SM_LOG(methodName << "mediumPressureHeaderInput->isFlashCondensate=" << isFlashCondensate);
 
     if (isFlashCondensate) {
-        // std::cout << methodName << "isFlashCondensate=true, adding highPressureFlashedCondensate inlet" << std::endl;
+        SM_LOG(methodName << "isFlashCondensate=true, adding highPressureFlashedCondensate inlet");
         Inlet highPressureFlashedCondensateInlet = inletFactory.makeFromOutletGas(highPressureCondensateFlashTank);
-        // std::cout << methodName << "highPressureFlashedCondensateInlet=" << highPressureFlashedCondensateInlet
-        //<< std::endl;
+        SM_LOG(methodName << "highPressureFlashedCondensateInlet=" << highPressureFlashedCondensateInlet);
         inlets.push_back(highPressureFlashedCondensateInlet);
     }
     else {
-        // std::cout << methodName << "isFlashCondensate=false, skipping highPressureFlashedCondensate inlet" <<
-        // std::endl;
+        SM_LOG(methodName << "isFlashCondensate=false, skipping highPressureFlashedCondensate inlet");
     }
 
     const Header header = {headerPressure, inlets};
-    // std::cout << methodName << "header=" << header << std::endl;
+    SM_LOG(methodName << "header=" << header);
 
     return header;
 }
@@ -71,21 +70,20 @@ const Header HeaderFactory::make(const std::shared_ptr<HeaderNotHighestPressure>
                                  const SteamSystemModelerTool::FluidProperties&   mediumPressureCondensate) const {
     const std::string methodName = "HeaderFactory::" + std::string(__func__) + ": ";
 
-    // std::cout << methodName << "making header" << std::endl;
+    SM_LOG(methodName << "making header");
 
     const double headerPressure = lowPressureHeaderInput->getPressure();
 
     Inlet highPressureFlashedCondensateInlet = inletFactory.makeFromOutletLiquid(highPressureCondensateFlashTank);
-    // std::cout << methodName << "highPressureFlashedCondensateInlet=" << highPressureFlashedCondensateInlet <<
-    // std::endl;
+    SM_LOG(methodName << "highPressureFlashedCondensateInlet=" << highPressureFlashedCondensateInlet);
 
     Inlet mediumPressureCondensateInlet = inletFactory.makeWithEnthalpy(mediumPressureCondensate);
-    // std::cout << methodName << "mediumPressureCondensateInlet=" << mediumPressureCondensateInlet << std::endl;
+    SM_LOG(methodName << "mediumPressureCondensateInlet=" << mediumPressureCondensateInlet);
 
     std::vector<Inlet> inlets = {highPressureFlashedCondensateInlet, mediumPressureCondensateInlet};
 
     const Header header = {headerPressure, inlets};
-    // std::cout << methodName << "header=" << header << std::endl;
+    SM_LOG(methodName << "header=" << header);
 
     return header;
 }
@@ -95,20 +93,20 @@ const Header HeaderFactory::make(const std::shared_ptr<HeaderNotHighestPressure>
                                  const SteamSystemModelerTool::FluidProperties&   mediumPressureCondensate) const {
     const std::string methodName = "HeaderFactory::" + std::string(__func__) + ": ";
 
-    // std::cout << methodName << "making header" << std::endl;
+    SM_LOG(methodName << "making header");
 
     const double headerPressure = lowPressureHeaderInput->getPressure();
 
     Inlet highPressureCondensateInlet = inletFactory.makeWithEnthalpy(highPressureCondensate);
-    // std::cout << methodName << "highPressureCondensateInlet=" << highPressureCondensateInlet << std::endl;
+    SM_LOG(methodName << "highPressureCondensateInlet=" << highPressureCondensateInlet);
 
     Inlet mediumPressureCondensateInlet = inletFactory.makeWithEnthalpy(mediumPressureCondensate);
-    // std::cout << methodName << "mediumPressureCondensateInlet=" << mediumPressureCondensateInlet << std::endl;
+    SM_LOG(methodName << "mediumPressureCondensateInlet=" << mediumPressureCondensateInlet);
 
     std::vector<Inlet> inlets = {highPressureCondensateInlet, mediumPressureCondensateInlet};
 
     const Header header = {headerPressure, inlets};
-    // std::cout << methodName << "header=" << header << std::endl;
+    SM_LOG(methodName << "header=" << header);
 
     return header;
 }
@@ -123,7 +121,7 @@ const Header HeaderFactory::make(
     const std::shared_ptr<MediumPressureHeaderCalculationsDomain>& mediumPressureHeaderCalculationsDomain) const {
     const std::string methodName = "HeaderFactory::" + std::string(__func__) + ": ";
 
-    // std::cout << methodName << "making header" << std::endl;
+    SM_LOG(methodName << "making header");
 
     // Low pressure PRV; PRV always exists
     const double headerPressure = lowPressureHeaderInput->getPressure();
@@ -133,70 +131,58 @@ const Header HeaderFactory::make(
 
     // High to low pressure turbine
     const bool isUseTurbineHighToLow = highToLowTurbineInput.isUseTurbine();
-    // std::cout << methodName << "highToLowTurbineInput.isUseTurbine=" << isUseTurbineHighToLow << std::endl;
+    SM_LOG(methodName << "highToLowTurbineInput.isUseTurbine=" << isUseTurbineHighToLow);
 
     if (isUseTurbineHighToLow) {
-        // std::cout << methodName << "highToLowTurbineInput.isUseTurbine=true, adding highToLowPressureTurbine"
-        // << std::endl;
+        SM_LOG(methodName << "highToLowTurbineInput.isUseTurbine=true, adding highToLowPressureTurbine");
         const Inlet& inlet = inletFactory.make(highToLowPressureTurbine);
-        // std::cout << methodName << "highToLowPressureTurbineInlet=" << inlet << std::endl;
+        SM_LOG(methodName << "highToLowPressureTurbineInlet=" << inlet);
         inlets.push_back(inlet);
     }
     else {
-        // std::cout << methodName << "highToLowTurbineInput.isUseTurbine=false, skipping highToLowPressureTurbine"
-        // << std::endl;
+        SM_LOG(methodName << "highToLowTurbineInput.isUseTurbine=false, skipping highToLowPressureTurbine");
     }
 
     // Medium to low pressure turbine
     const bool isUseTurbineMediumToLow = mediumToLowTurbineInput.isUseTurbine();
-    // std::cout << methodName << "mediumToLowTurbineInput.isUseTurbine=" << isUseTurbineMediumToLow << std::endl;
+    SM_LOG(methodName << "mediumToLowTurbineInput.isUseTurbine=" << isUseTurbineMediumToLow);
 
     if (headerCountInput == 3 && isUseTurbineMediumToLow) {
-        // std::cout << methodName
-        //   << "mediumToLowTurbineInput.isUseTurbineMediumToLow=true, adding mediumToLowPressureTurbine"
-        //   << std::endl;
+        SM_LOG(methodName << "mediumToLowTurbineInput.isUseTurbineMediumToLow=true, adding mediumToLowPressureTurbine");
         const std::shared_ptr<Turbine>& mediumToLowPressureTurbine =
             mediumPressureHeaderCalculationsDomain->mediumToLowPressureTurbine;
         const Inlet& inlet = inletFactory.make(mediumToLowPressureTurbine);
-        // std::cout << methodName << "mediumToLowPressureTurbineInlet=" << inlet << std::endl;
+        SM_LOG(methodName << "mediumToLowPressureTurbineInlet=" << inlet);
         inlets.push_back(inlet);
     }
     else {
-        // std::cout << methodName
-        //   << "mediumToLowTurbineInput.isUseTurbineMediumToLow=false, skipping mediumToLowPressureTurbine"
-        //   << std::endl;
+        SM_LOG(methodName << "mediumToLowTurbineInput.isUseTurbineMediumToLow=false, skipping mediumToLowPressureTurbine");
     }
 
     // Flashed condensate into header
     const bool isFlashCondensate = lowPressureHeaderInput->isFlashCondensate();
-    // std::cout << methodName << "lowPressureHeaderInput.isFlashCondensate=" << isFlashCondensate << std::endl;
+    SM_LOG(methodName << "lowPressureHeaderInput.isFlashCondensate=" << isFlashCondensate);
 
     if (isFlashCondensate) {
         // if medium pressure header exists, use medium pressure flash tank
         if (headerCountInput == 3) {
-            // std::cout << methodName
-            //   << "lowPressureHeaderInput.isFlashCondensate=true & 3 headers, adding
-            //   mediumPressureCondensateFlashTank"
-            //   << std::endl;
+            SM_LOG(methodName << "lowPressureHeaderInput.isFlashCondensate=true & 3 headers, adding mediumPressureCondensateFlashTank");
 
             const std::shared_ptr<FlashTank>& mediumPressureCondensateFlashTank =
                 lowPressureFlashedSteamIntoHeaderCalculatorDomain.mediumPressureCondensateFlashTank;
             const Inlet& inlet = inletFactory.makeFromOutletGas(mediumPressureCondensateFlashTank);
-            // std::cout << methodName << "mediumPressureCondensateFlashTankInlet=" << inlet << std::endl;
+            SM_LOG(methodName << "mediumPressureCondensateFlashTankInlet=" << inlet);
 
             inlets.push_back(inlet);
         }
         else {
-            // std::cout << methodName
-            //   << "lowPressureHeaderInput.isFlashCondensate=true & not 3 headers, adding
-            //   highPressureCondensateFlashTank"
-            //   << std::endl;
+            SM_LOG(methodName << "lowPressureHeaderInput.isFlashCondensate=true & not 3 headers, adding highPressureCondensateFlashTank");
 
             // if only high and low header, high pressure flash tank
             const std::shared_ptr<FlashTank>& highPressureCondensateFlashTank =
                 lowPressureFlashedSteamIntoHeaderCalculatorDomain.highPressureCondensateFlashTank;
             const Inlet& inlet = inletFactory.makeFromOutletGas(highPressureCondensateFlashTank);
-            // std::cout << methodName << "highPressureCondensateFlashTankInlet=" << inlet << std::endl;
+            SM_LOG(methodName << "highPressureCondensateFlashTankInlet=" << inlet);
 
             inlets.push_back(inlet);
         }
@@ -204,22 +190,22 @@ const Header HeaderFactory::make(
 
     // Blowdown flash tank outlet gas
     const bool isBlowdownFlashed = boilerInput.isBlowdownFlashed();
-    // std::cout << methodName << "boilerInput.isBlowdownFlashed=" << isFlashCondensate << std::endl;
+    SM_LOG(methodName << "boilerInput.isBlowdownFlashed=" << isBlowdownFlashed);
 
     if (isBlowdownFlashed) {
-        // std::cout << methodName << "boilerInput.isBlowdownFlashed=true, adding blowdownFlashTank" << std::endl;
+        SM_LOG(methodName << "boilerInput.isBlowdownFlashed=true, adding blowdownFlashTank");
 
         const Inlet& inlet = inletFactory.makeFromOutletGas(blowdownFlashTank);
-        // std::cout << methodName << "blowdownFlashTankInlet=" << inlet << std::endl;
+        SM_LOG(methodName << "blowdownFlashTankInlet=" << inlet);
 
         inlets.push_back(inlet);
     }
     else {
-        // std::cout << methodName << "boilerInput.isBlowdownFlashed=false, skipping blowdownFlashTank" << std::endl;
+        SM_LOG(methodName << "boilerInput.isBlowdownFlashed=false, skipping blowdownFlashTank");
     }
 
     const Header header = {headerPressure, inlets};
-    // std::cout << methodName << "header=" << header << std::endl;
+    SM_LOG(methodName << "header=" << header);
 
     return header;
 }
@@ -232,77 +218,69 @@ const Header HeaderFactory::make(
     const std::shared_ptr<LowPressureHeaderCalculationsDomain>&    lowPressureHeaderCalculationsDomain) const {
     const std::string methodName = "HeaderFactory::" + std::string(__func__) + ": ";
 
-    // std::cout << methodName << "making header" << std::endl;
+    SM_LOG(methodName << "making header");
 
     std::vector<Inlet> inlets = {};
 
     const bool isFlashTankNull = isMediumPressureCondensateFlashTankNull(lowPressureHeaderCalculationsDomain);
     if (highPressureCondensateFlashTank == nullptr && isFlashTankNull) {
-        // std::cout << methodName
-        //   << "highPressureCondensateFlashTank not specified & mediumPressureCondensateFlashTank not specified"
-        //   << ", adding highPressureCondensate" << std::endl;
+        SM_LOG(methodName << "highPressureCondensateFlashTank not specified & mediumPressureCondensateFlashTank not specified" << ", adding highPressureCondensate");
         const SteamSystemModelerTool::FluidProperties& highPressureCondensate =
             highPressureHeaderCalculationsDomain.highPressureCondensate;
         const Inlet& inlet = inletFactory.makeWithEnthalpy(highPressureCondensate);
-        // std::cout << methodName << "highPressureCondensateInlet=" << inlet << std::endl;
+        SM_LOG(methodName << "highPressureCondensateInlet=" << inlet);
 
         inlets.push_back(inlet);
     }
     else if (isFlashTankNull) {
-        // std::cout << methodName
-        //   << "highPressureCondensateFlashTank specified & mediumPressureCondensateFlashTank not specified"
-        //   << ", adding highPressureCondensateFlashTank" << std::endl;
+        SM_LOG(methodName << "highPressureCondensateFlashTank specified & mediumPressureCondensateFlashTank not specified" << ", adding highPressureCondensateFlashTank");
         const Inlet& inlet = inletFactory.makeFromOutletLiquid(highPressureCondensateFlashTank);
-        // std::cout << methodName << "highPressureCondensateFlashTankInlet=" << inlet << std::endl;
+        SM_LOG(methodName << "highPressureCondensateFlashTankInlet=" << inlet);
 
         inlets.push_back(inlet);
     }
 
     if (headerCountInput > 1) {
-        // std::cout << methodName << "lowPressureHeader specified, adding lowPressureCondensate" << std::endl;
+        SM_LOG(methodName << "lowPressureHeader specified, adding lowPressureCondensate");
 
         const SteamSystemModelerTool::FluidProperties& lowPressureCondensate =
             lowPressureHeaderCalculationsDomain->lowPressureCondensate;
         const Inlet& inlet = inletFactory.makeWithEnthalpy(lowPressureCondensate);
-        // std::cout << methodName << "lowPressureCondensateInlet=" << inlet << std::endl;
+        SM_LOG(methodName << "lowPressureCondensateInlet=" << inlet);
 
         inlets.push_back(inlet);
     }
     else {
-        // std::cout << methodName << "lowPressureHeader not exists, skipping lowPressureCondensate" << std::endl;
+        SM_LOG(methodName << "lowPressureHeader not exists, skipping lowPressureCondensate");
     }
 
     if (headerCountInput == 3) {
         if (isFlashTankNull) {
-            // std::cout << methodName
-            //   << "mediumPressureHeader specified & mediumPressureCondensateFlashTank not specified"
-            //   << ", adding mediumPressureCondensate" << std::endl;
+            SM_LOG(methodName << "mediumPressureHeader specified & mediumPressureCondensateFlashTank not specified" << ", adding mediumPressureCondensate");
 
             const SteamSystemModelerTool::FluidProperties& mediumPressureCondensate =
                 mediumPressureHeaderCalculationsDomain->mediumPressureCondensate;
             const Inlet& inlet = inletFactory.makeWithEnthalpy(mediumPressureCondensate);
-            // std::cout << methodName << "mediumPressureCondensateInlet=" << inlet << std::endl;
+            SM_LOG(methodName << "mediumPressureCondensateInlet=" << inlet);
 
             inlets.push_back(inlet);
         }
         else {
-            // std::cout << methodName
-            //   << "mediumPressureHeader specified & mediumPressureCondensateFlashTank specified"
-            //   << ", adding mediumPressureCondensateFlashTank" << std::endl;
+            SM_LOG(methodName << "mediumPressureHeader specified & mediumPressureCondensateFlashTank specified" << ", adding mediumPressureCondensateFlashTank");
 
             const LowPressureFlashedSteamIntoHeaderCalculatorDomain& lowPressureFlashedSteamIntoHeaderCalculatorDomain =
                 lowPressureHeaderCalculationsDomain->lowPressureFlashedSteamIntoHeaderCalculatorDomain;
             const std::shared_ptr<FlashTank>& mediumPressureCondensateFlashTank =
                 lowPressureFlashedSteamIntoHeaderCalculatorDomain.mediumPressureCondensateFlashTank;
             const Inlet& inlet = inletFactory.makeFromOutletLiquid(mediumPressureCondensateFlashTank);
-            // std::cout << methodName << "mediumPressureCondensateFlashTankInlet=" << inlet << std::endl;
+            SM_LOG(methodName << "mediumPressureCondensateFlashTankInlet=" << inlet);
 
             inlets.push_back(inlet);
         }
     }
 
     const Header header = {headerPressure, inlets};
-    // std::cout << methodName << "header=" << header << std::endl;
+    SM_LOG(methodName << "header=" << header);
 
     return header;
 }
@@ -389,45 +367,45 @@ const Header HeaderFactory::make(const double                                   
                                  const std::shared_ptr<Turbine>&                condensingTurbine) const {
     const std::string methodName = "HeaderFactory::" + std::string(__func__) + ": ";
 
-    // std::cout << methodName << "making header" << std::endl;
+    SM_LOG(methodName << "making header");
 
-    // std::cout << methodName << "adding returnCondensate inlet" << std::endl;
+    SM_LOG(methodName << "adding returnCondensate inlet");
     const Inlet& returnCondensateInlet = inletFactory.makeWithEnthalpy(returnCondensate);
 
     std::vector<Inlet> inlets = {returnCondensateInlet};
 
     // makeup water
     const bool isPreheatMakeupWater = boilerInput.isPreheatMakeupWater();
-    // std::cout << methodName << "boilerInput.isPreheatMakeupWater=" << isPreheatMakeupWater << std::endl;
+    SM_LOG(methodName << "boilerInput.isPreheatMakeupWater=" << isPreheatMakeupWater);
 
     if (isPreheatMakeupWater) {
-        // std::cout << methodName << "isPreheatMakeupWater is true, adding heatExchangerOutput inlet" << std::endl;
+        SM_LOG(methodName << "isPreheatMakeupWater is true, adding heatExchangerOutput inlet");
 
         const Inlet& makeupWaterInlet = inletFactory.makeWithTemperature(heatExchangerOutput);
         inlets.push_back(makeupWaterInlet);
     }
     else {
-        // std::cout << methodName << "isPreheatMakeupWater is false, adding makeupWater inlet" << std::endl;
+        SM_LOG(methodName << "isPreheatMakeupWater is false, adding makeupWater inlet");
 
         const Inlet& makeupWaterInlet = inletFactory.makeWithEnthalpy(makeupWater);
         inlets.push_back(makeupWaterInlet);
     }
 
     const bool isUseTurbine = condensingTurbineInput.isUseTurbine();
-    // std::cout << methodName << "condensingTurbineInput.isUseTurbine=" << isUseTurbine << std::endl;
+    SM_LOG(methodName << "condensingTurbineInput.isUseTurbine=" << isUseTurbine);
     if (isUseTurbine) {
-        // std::cout << methodName << "isUseTurbine=true, adding condensingTurbine inlet" << std::endl;
+        SM_LOG(methodName << "isUseTurbine=true, adding condensingTurbine inlet");
 
         const double condenserPressure      = condensingTurbineInput.getCondenserPressure();
         const Inlet& condensingTurbineInlet = inletFactory.make(condensingTurbine, condenserPressure);
         inlets.push_back(condensingTurbineInlet);
     }
     else {
-        // std::cout << methodName << "isUseTurbine=false, skipping condensingTurbine" << std::endl;
+        SM_LOG(methodName << "isUseTurbine=false, skipping condensingTurbine");
     }
 
     const Header header = {headerPressure, inlets};
-    // std::cout << methodName << "header=" << header << std::endl;
+    SM_LOG(methodName << "header=" << header);
 
     return header;
 }

@@ -1,6 +1,7 @@
 #include "steamModeler/service/medium_pressure_header/SteamBalanceCheckerService.h"
 
 #include <steamModeler/service/medium_pressure_header/ReducedSteamException.h>
+#include "steamModeler/util/SteamModelerLogger.h"
 
 SteamReducerOutput
 SteamBalanceCheckerService::check(const std::string& itemName, const PressureTurbine& highToLowTurbineInput,
@@ -19,13 +20,11 @@ SteamBalanceCheckerService::check(const std::string& itemName, const PressureTur
 
     // if need more than .0001
     if (absAdditionalSteamNeeded > 1e-3) {
-        // std::cout << methodName
-        //   << itemName << " additionalSteamNeeded=" << additionalSteamNeeded << " > " << 1e-3
-        //   << "; attempting to take steam needed from highToLowPressureTurbine" << std::endl;
+        SM_LOG(methodName << itemName << " additionalSteamNeeded=" << additionalSteamNeeded << " > " << 1e-3 << "; attempting to take steam needed from highToLowPressureTurbine");
         const SteamReducerOutput& steamReducerOutput = steamReducer.reduceSteamThroughHighToLowTurbine(
             additionalSteamNeeded, highToLowTurbineInput, highToLowPressureTurbine, highToLowPressureTurbineIdeal,
             highPressureHeaderOutput, lowPressureHeaderInput);
-        // std::cout << methodName << "steamReducerOutput=" << steamReducerOutput << std::endl;
+        SM_LOG(methodName << "steamReducerOutput=" << steamReducerOutput);
 
         const double remainingAdditionalSteamNeeded = steamReducerOutput.remainingAdditionalSteamNeeded;
         // if high to low turbine was reduced and more steam is available
@@ -61,21 +60,19 @@ SteamBalanceCheckerService::check(const std::string& itemName, const PressureTur
     const std::string methodName = std::string("SteamBalanceCheckerService::") + std::string(__func__) + ": ";
 
     // calculateThermalResistance additional steam needed to meet minimum requirement
-    std::cout << "availableMassFlow: " << availableMassFlow << std::endl;
+    SM_LOG("availableMassFlow: " << availableMassFlow);
     const double additionalSteamNeeded = highToMediumPressureTurbine->getMassFlow() - availableMassFlow;
 
-    std::cout << "additionalSteamNeeded: " << additionalSteamNeeded << std::endl;
+    SM_LOG("additionalSteamNeeded: " << additionalSteamNeeded);
     const double absAdditionalSteamNeeded = fabs(additionalSteamNeeded);
 
     // if need more than .0001
     if (absAdditionalSteamNeeded > 1e-3) {
-        // std::cout << methodName
-        //   << itemName << " additionalSteamNeeded=" << additionalSteamNeeded << " > " << 1e-3
-        //   << "; attempting to take steam needed from high to low turbine" << std::endl;
+        SM_LOG(methodName << itemName << " additionalSteamNeeded=" << additionalSteamNeeded << " > " << 1e-3 << "; attempting to take steam needed from high to low turbine");
         const SteamReducerOutput& steamReducerOutput = steamReducer.reduceSteamThroughHighToLowTurbine(
             additionalSteamNeeded, highToLowTurbineInput, highToLowPressureTurbine, highToLowPressureTurbineIdeal,
             highPressureHeaderOutput, lowPressureHeaderInput);
-        // std::cout << methodName << "steamReducerOutput=" << steamReducerOutput << std::endl;
+        SM_LOG(methodName << "steamReducerOutput=" << steamReducerOutput);
 
         const double remainingAdditionalSteamNeeded = steamReducerOutput.remainingAdditionalSteamNeeded;
 
@@ -94,8 +91,7 @@ void SteamBalanceCheckerService::check(const std::shared_ptr<Turbine>& turbine, 
     // check that enough mass flow is available for set amount
     const double highToLowPressureTurbineMassFlow = turbine->getMassFlow();
     if (highToLowPressureTurbineMassFlow > availableMassFlow) {
-        // std::cout << methodName << "highToLowPressureTurbineMassFlow=" << highToLowPressureTurbineMassFlow
-        //   << " > availableMassFlow=" << availableMassFlow << ", not enough power out of turbine" << std::endl;
+        SM_LOG(methodName << "highToLowPressureTurbineMassFlow=" << highToLowPressureTurbineMassFlow << " > availableMassFlow=" << availableMassFlow << ", not enough power out of turbine");
         restarter.restartIfNotEnoughSteam(turbine, availableMassFlow, boiler);
     }
 }
