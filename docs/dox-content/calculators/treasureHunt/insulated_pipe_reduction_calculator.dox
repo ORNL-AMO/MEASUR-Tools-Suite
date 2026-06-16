@@ -4,7 +4,8 @@
  * @brief Calculates heat loss per unit length and annual heat loss from a hot pipe,
  *        with or without thermal insulation.
  * @details This calculator estimates how much heat a hot pipe loses to the surrounding
- * air per unit length and over a full operating year. Two cases are supported:
+ * air or how much heat infiltrates a cold pipe from the surrounding air, per unit length
+ * and over a full operating year. Two cases are supported:
  * - **Insulated pipe** — the pipe is wrapped in an insulation layer of known thickness;
  *   heat must conduct through the pipe wall and the insulation before being dissipated
  *   to the air by convection and radiation at the jacket outer surface.
@@ -32,7 +33,7 @@
  * 7. Check convergence on heat loss per unit length; if converged, return the average
  *    of the previous and current values.
  *
- * Annual heat loss is obtained by multiplying the converged per-length value by pipe
+ * Annual heat loss or gain is obtained by multiplying the converged per-length value by pipe
  * length, annual operating hours, and the reciprocal of system efficiency.
  *
  * Relevant formulas and symbol definitions are documented below.
