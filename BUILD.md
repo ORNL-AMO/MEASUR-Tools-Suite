@@ -180,11 +180,9 @@ Artifacts appear under `bin/`
 ### 6.5 WebAssembly Usage Example
 
 ```ts
-import type { WallHeatLossModule, DryerOperatingCostModule } from 'measur-tools-suite';
+import createModule, { type MeasurToolsSuite } from 'measur-tools-suite';
 
-// Initialize module
-const moduleFactory = (await import('/path/to/client.js')).default;
-const toolsSuiteModule = await moduleFactory({
+const toolsSuiteModule: MeasurToolsSuite = await createModule({
 	locateFile: (filename) => '/path/to/client.wasm'
 });
 
@@ -194,22 +192,10 @@ const totalHeatLoss = toolsSuiteModule.wallTotalHeatLoss(
 );
 console.log('Wall total heat loss:', totalHeatLoss);
 
-// Alternatively, narrow to a typed sub-module for IDE assistance
-const wallLossModule = toolsSuiteModule as unknown as WallHeatLossModule;
-const wthl = wallLossModule.wallTotalHeatLoss(500, 80, 225, 10, 0.9, 1.394, 1);
-console.log('Wall total heat loss (typed):', wthl);
-
-// Example 2: DryerOperatingCost — plain usage
-// Enum values and constructors come from the live module instance
-const docRes = new toolsSuiteModule.DryerOperatingCost(1752, 50, 100, 24, 7, 52, 0.08, 0.2, 0.25)
-	.calculate(toolsSuiteModule.DryerType.Heatless);
-console.log('DryerOperatingCost => Water Removed:', docRes.waterRemoved);
-docRes.delete();
-
-// Alternatively, narrow to a typed sub-module for IDE assistance
-const dryerModule = toolsSuiteModule as unknown as DryerOperatingCostModule;
-const doc = new dryerModule.DryerOperatingCost(1752, 50, 100, 24, 7, 52, 0.08, 0.2, 0.25);
-const res = doc.calculate(dryerModule.DryerType.Heatless);
+// Example 2: DryerOperatingCost — class-based API
+// Always call delete() on class instances and output objects to free WASM memory
+const doc = new toolsSuiteModule.DryerOperatingCost(1752, 50, 100, 24, 7, 52, 0.08, 0.2, 0.25);
+const res = doc.calculate(toolsSuiteModule.DryerType.Heatless);
 console.log('DryerOperatingCost => Water removed:', res.waterRemoved);
 res.delete();
 doc.delete();

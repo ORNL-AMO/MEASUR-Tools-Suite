@@ -1,6 +1,6 @@
 {
   "name": "measur-tools-suite",
-  "version": "1.2.1",
+  "version": "1.1.4",
   "engines": {
     "node": "20.19.4",
     "npm": "10.8.2"
@@ -20,7 +20,6 @@
     "url": "https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues"
   },
   "homepage": "https://github.com/ORNL-AMO/MEASUR-Tools-Suite#readme",
-  "types": "ts_def/client.d.ts",
   "devDependencies": {
     "chai": "^6.0.1",
     "express": "^4.17.1",

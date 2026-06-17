@@ -48,20 +48,17 @@ res.delete();
 doc.delete();
 ```
 
-**TypeScript** — named `import type` provides IDE autocompletion with zero runtime cost; enum values and constructors still come from the live module instance.
+**TypeScript** — `MeasurToolsSuite` is the fully-typed module instance; no casts needed.
 
 ```ts
-import type { DryerOperatingCostModule } from 'measur-tools-suite';
+import createModule, { type MeasurToolsSuite } from 'measur-tools-suite';
 
-const moduleFactory = (await import('/path/to/client.js')).default;
-const toolsSuiteModule = await moduleFactory({
+const toolsSuiteModule: MeasurToolsSuite = await createModule({
 	locateFile: (filename) => '/path/to/client.wasm'
 });
 
-// Narrow to the typed sub-module for full IDE assistance
-const dryerModule = toolsSuiteModule as unknown as DryerOperatingCostModule;
-const doc = new dryerModule.DryerOperatingCost(1752, 50, 100, 24, 7, 52, 0.08, 0.2, 0.25);
-const res = doc.calculate(dryerModule.DryerType.Heatless);
+const doc = new toolsSuiteModule.DryerOperatingCost(1752, 50, 100, 24, 7, 52, 0.08, 0.2, 0.25);
+const res = doc.calculate(toolsSuiteModule.DryerType.Heatless);
 console.log('Water removed:', res.waterRemoved);
 res.delete();
 doc.delete();
