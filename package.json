@@ -9,7 +9,7 @@
     "test:browser": "karma start",
     "tests": "npx karma start --browsers ChromeHeadlessNoSandbox --auto-watch false"
   },
-  "description": "Calculation library for the Department of Energy Advanced Manufacturing and Materials Technologies Office and the Industrial Efficiency & Decarbonization Office (DOE AMMTO IEDO)  suite of tools",
+  "description": "Oak Ridge National Lab's Industrial Resources calculation library for MEASUR.",
   "author": "Gina Accawi <accawigk@ornl.gov>",
   "license": "MIT",
   "repository": {
