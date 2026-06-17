@@ -86,9 +86,6 @@ export interface DryerOperatingCostInput {
     heatingHoursPerDay: number;
     purgeRate: number;
     designDDCPercentage: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -107,7 +104,9 @@ export interface DryerOperatingCostInput {
  * @property designDDCPercentage double, Design DDC percentage for the dryer - percentage (0 - 100%)
  *
  */
-export interface DryerOperatingCostOutput {
+export declare class DryerOperatingCostOutput {
+    private constructor();
+
     waterRemoved: number;
     totalCostPerYear: number;
     heaterPower: number;
@@ -238,6 +237,5 @@ export declare class DryerOperatingCost {
 export type DryerOperatingCostModule = {
     DryerType: typeof DryerType;
     DryerOperatingCost: typeof DryerOperatingCost;
-    DryerOperatingCostInput: DryerOperatingCostInput;
-    DryerOperatingCostOutput: DryerOperatingCostOutput;
+    DryerOperatingCostOutput: typeof DryerOperatingCostOutput;
 };

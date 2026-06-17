@@ -24,9 +24,6 @@ export interface OrificeMethodInput {
     diameter: number;
     supplyPressure: number;
     numOrifices: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -48,9 +45,6 @@ export interface OrificeMethodResult {
     leakRateScfm: number;
     leakRateEstimate: number;
     annualConsumption: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -64,6 +58,4 @@ export function calculateOrificeMethod(input: OrificeMethodInput): OrificeMethod
 
 export type OrificeMethodModule = {
     calculateOrificeMethod: typeof calculateOrificeMethod;
-    OrificeMethodInput: OrificeMethodInput;
-    OrificeMethodResult: OrificeMethodResult;
 };

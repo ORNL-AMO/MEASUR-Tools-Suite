@@ -1,17 +1,21 @@
 import { assert } from 'chai';
+import createModule, {
+    type MeasurToolsSuite,
+    type OperatingCostInput,
+    type OperatingCostResult,
+} from 'measur-tools-suite';
 
 describe('Compressed Air Operating Cost', function () {
-    let m;
+    let moduleInstance: MeasurToolsSuite;
 
     before(async function () {
-        const ToolsSuiteModule = (await import('../../../bin/client.js')).default;
-        m = await ToolsSuiteModule({
-            locateFile: (filename) => '/base/bin/' + filename
+        moduleInstance = await createModule({
+            locateFile: (filename: string) => '/base/bin/' + filename
         });
     });
 
     it('should calculate annual operating cost (case 1)', function () {
-        const inp = {
+        const inp: OperatingCostInput = {
             motorBhp: 215,
             bhpUnloaded: 25,
             annualOperatingHours: 6800,
@@ -21,7 +25,7 @@ describe('Compressed Air Operating Cost', function () {
             costOfElectricity: 0.05
         };
 
-        const result = m.calculateOperatingCost(inp);
+        const result: OperatingCostResult = moduleInstance.calculateOperatingCost(inp);
 
         assert.approximately(result.runTimeUnloaded, 15, 0.01);
         assert.approximately(result.costForLoaded, 48792.326316, 0.01);
@@ -30,7 +34,7 @@ describe('Compressed Air Operating Cost', function () {
     });
 
     it('should calculate annual operating cost (case 2)', function () {
-        const inp = {
+        const inp: OperatingCostInput = {
             motorBhp: 255,
             bhpUnloaded: 35,
             annualOperatingHours: 6000,
@@ -40,7 +44,7 @@ describe('Compressed Air Operating Cost', function () {
             costOfElectricity: 0.09
         };
 
-        const result = m.calculateOperatingCost(inp);
+        const result: OperatingCostResult = moduleInstance.calculateOperatingCost(inp);
 
         assert.approximately(result.runTimeUnloaded, 11, 0.01);
         assert.approximately(result.costForLoaded, 98305.954839, 0.01);

@@ -36,9 +36,6 @@ export interface DecibelsMethodInput {
     pressureB: number;
     firstFlowB: number;
     secondFlowB: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -50,9 +47,6 @@ export interface DecibelsMethodInput {
 export interface DecibelsMethodResult {
     leakRateEstimate: number;
     annualConsumption: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -66,6 +60,4 @@ export function calculateDecibelsMethod(input: DecibelsMethodInput): DecibelsMet
 
 export type DecibelsMethodModule = {
     calculateDecibelsMethod: typeof calculateDecibelsMethod;
-    DecibelsMethodInput: DecibelsMethodInput;
-    DecibelsMethodResult: DecibelsMethodResult;
 };

@@ -18,9 +18,6 @@ export interface PneumaticAirRequirementSingleActingInput {
     cylinderStroke: number;
     airPressure: number;
     cyclesPerMin: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -38,9 +35,6 @@ export interface PneumaticAirRequirementDoubleActingInput {
     pistonRodDiameter: number;
     airPressure: number;
     cyclesPerMin: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -54,9 +48,6 @@ export interface PneumaticAirRequirementResult {
     volumeAirIntakePiston: number;
     compressionRatio: number;
     airRequirementPneumaticCylinder: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -80,7 +71,4 @@ export function calculatePneumaticAirRequirementDoubleActing(
 export type PneumaticAirRequirementModule = {
     calculatePneumaticAirRequirementSingleActing: typeof calculatePneumaticAirRequirementSingleActing;
     calculatePneumaticAirRequirementDoubleActing: typeof calculatePneumaticAirRequirementDoubleActing;
-    PneumaticAirRequirementSingleActingInput: PneumaticAirRequirementSingleActingInput;
-    PneumaticAirRequirementDoubleActingInput: PneumaticAirRequirementDoubleActingInput;
-    PneumaticAirRequirementResult: PneumaticAirRequirementResult;
 };

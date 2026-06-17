@@ -14,9 +14,6 @@
 export interface EstimateMethodInput {
     operatingTime: number;
     leakRateEstimate: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -26,9 +23,6 @@ export interface EstimateMethodInput {
  */
 export interface EstimateMethodResult {
     annualConsumption: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -42,6 +36,4 @@ export function calculateEstimateMethod(input: EstimateMethodInput): EstimateMet
 
 export type EstimateMethodModule = {
     calculateEstimateMethod: typeof calculateEstimateMethod;
-    EstimateMethodInput: EstimateMethodInput;
-    EstimateMethodResult: EstimateMethodResult;
 };

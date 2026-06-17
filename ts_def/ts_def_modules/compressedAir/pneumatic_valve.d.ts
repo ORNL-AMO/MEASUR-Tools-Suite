@@ -14,9 +14,6 @@
 export interface PneumaticValveFlowRateInput {
     inletPressure: number;
     outletPressure: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -26,9 +23,6 @@ export interface PneumaticValveFlowRateInput {
  */
 export interface PneumaticValveFlowRateResult {
     flowRate: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -42,9 +36,6 @@ export interface PneumaticValveCvInput {
     inletPressure: number;
     outletPressure: number;
     flowRate: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -54,9 +45,6 @@ export interface PneumaticValveCvInput {
  */
 export interface PneumaticValveCvResult {
     flowCoefficient: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -80,8 +68,4 @@ export function calculatePneumaticValveCv(
 export type PneumaticValveModule = {
     calculatePneumaticValveFlowRate: typeof calculatePneumaticValveFlowRate;
     calculatePneumaticValveCv: typeof calculatePneumaticValveCv;
-    PneumaticValveFlowRateInput: PneumaticValveFlowRateInput;
-    PneumaticValveFlowRateResult: PneumaticValveFlowRateResult;
-    PneumaticValveCvInput: PneumaticValveCvInput;
-    PneumaticValveCvResult: PneumaticValveCvResult;
 };

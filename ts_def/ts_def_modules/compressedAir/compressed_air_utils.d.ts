@@ -18,11 +18,6 @@ export interface CompressorElectricityData {
     compressorControlAdjustment: number;
     /** Compressor specific power, units kW/(cfm) */
     compressorSpecificPower: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
-export type CompressedAirUtilsModule = {
-    CompressorElectricityData: CompressorElectricityData;
-};
+export type CompressedAirUtilsModule = {};

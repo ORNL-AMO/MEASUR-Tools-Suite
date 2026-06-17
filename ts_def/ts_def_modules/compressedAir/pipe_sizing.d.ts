@@ -18,9 +18,6 @@ export interface PipeSizingInput {
     airlinePressure: number;
     designVelocity: number;
     atmosphericPressure: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -32,9 +29,6 @@ export interface PipeSizingInput {
 export interface PipeSizingResult {
     crossSectionalArea: number;
     pipeDiameter: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -48,6 +42,4 @@ export function calculatePipeSize(input: PipeSizingInput): PipeSizingResult;
 
 export type PipeSizingModule = {
     calculatePipeSize: typeof calculatePipeSize;
-    PipeSizingInput: PipeSizingInput;
-    PipeSizingResult: PipeSizingResult;
 };

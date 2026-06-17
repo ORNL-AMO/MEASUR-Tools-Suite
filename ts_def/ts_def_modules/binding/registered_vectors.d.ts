@@ -60,6 +60,10 @@ export declare abstract class RegisteredVector<T> {
     delete(): void;
 }
 
+export type RegisteredVectorConstructor<TVector extends RegisteredVector<unknown>> = {
+    new (): TVector;
+};
+
 /** A vector of {@link number} records, mapped from `std::vector<number>`. */
 export declare interface DoubleVector extends RegisteredVector<number> {}
 
@@ -142,40 +146,40 @@ export declare interface GraphDataV extends RegisteredVector<GraphDataPoint> {}
 export declare interface CalculationsTableV extends RegisteredVector<CalculationsTable> {}
 
 export type RegisteredVectorsModule = {
-    DoubleVector: DoubleVector;
-    DoubleVector2D: DoubleVector2D;
+    DoubleVector: RegisteredVectorConstructor<DoubleVector>;
+    DoubleVector2D: RegisteredVectorConstructor<DoubleVector2D>;
 
-    CompressorsDataV: CompressorsDataV;
-    CompressedAirLeakSurveyInputV: CompressedAirLeakSurveyInputV;
+    CompressorsDataV: RegisteredVectorConstructor<CompressorsDataV>;
+    CompressedAirLeakSurveyInputV: RegisteredVectorConstructor<CompressedAirLeakSurveyInputV>;
 
-    GasLoadChargeMaterialV: GasLoadChargeMaterialV;
-    LiquidLoadChargeMaterialV: LiquidLoadChargeMaterialV;
-    SolidLoadChargeMaterialV: SolidLoadChargeMaterialV;
-    GasFlueGasMaterialV: GasFlueGasMaterialV;
-    SolidLiquidFlueGasMaterialV: SolidLiquidFlueGasMaterialV;
-    WallTypeV: WallTypeV;
-    AtmosphereGasTypeV: AtmosphereGasTypeV;
+    GasLoadChargeMaterialV: RegisteredVectorConstructor<GasLoadChargeMaterialV>;
+    LiquidLoadChargeMaterialV: RegisteredVectorConstructor<LiquidLoadChargeMaterialV>;
+    SolidLoadChargeMaterialV: RegisteredVectorConstructor<SolidLoadChargeMaterialV>;
+    GasFlueGasMaterialV: RegisteredVectorConstructor<GasFlueGasMaterialV>;
+    SolidLiquidFlueGasMaterialV: RegisteredVectorConstructor<SolidLiquidFlueGasMaterialV>;
+    WallTypeV: RegisteredVectorConstructor<WallTypeV>;
+    AtmosphereGasTypeV: RegisteredVectorConstructor<AtmosphereGasTypeV>;
 
-    TraversePlaneVector: TraversePlaneVector;
-    PlaneDataNodeBindingDataVector: PlaneDataNodeBindingDataVector;
+    TraversePlaneVector: RegisteredVectorConstructor<TraversePlaneVector>;
+    PlaneDataNodeBindingDataVector: RegisteredVectorConstructor<PlaneDataNodeBindingDataVector>;
 
-    MotorDataV: MotorDataV;
-    LightingDataV: LightingDataV;
+    MotorDataV: RegisteredVectorConstructor<MotorDataV>;
+    LightingDataV: RegisteredVectorConstructor<LightingDataV>;
 
-    GasCompositionsV: GasCompositionsV;
+    GasCompositionsV: RegisteredVectorConstructor<GasCompositionsV>;
 
-    IntVector: IntVector;
-    ChillerInputV: ChillerInputV;
+    IntVector: RegisteredVectorConstructor<IntVector>;
+    ChillerInputV: RegisteredVectorConstructor<ChillerInputV>;
 
-    InletVector: InletVector;
+    InletVector: RegisteredVectorConstructor<InletVector>;
 
-    CompressedAirPressureReductionInputV: CompressedAirPressureReductionInputV;
-    CompressedAirReductionInputV: CompressedAirReductionInput;
-    ElectricityReductionInputV: ElectricityReductionInputV;
-    NaturalGasReductionInputV: NaturalGasReductionInputV;
-    SteamReductionInputV: SteamReductionInputV;
-    WaterReductionInputV: WaterReductionInputV;
+    CompressedAirPressureReductionInputV: RegisteredVectorConstructor<CompressedAirPressureReductionInputV>;
+    CompressedAirReductionInputV: RegisteredVectorConstructor<CompressedAirReductionInputV>;
+    ElectricityReductionInputV: RegisteredVectorConstructor<ElectricityReductionInputV>;
+    NaturalGasReductionInputV: RegisteredVectorConstructor<NaturalGasReductionInputV>;
+    SteamReductionInputV: RegisteredVectorConstructor<SteamReductionInputV>;
+    WaterReductionInputV: RegisteredVectorConstructor<WaterReductionInputV>;
 
-    GraphDataV: GraphDataV;
-    CalculationsTableV: CalculationsTableV;
+    GraphDataV: RegisteredVectorConstructor<GraphDataV>;
+    CalculationsTableV: RegisteredVectorConstructor<CalculationsTableV>;
 };

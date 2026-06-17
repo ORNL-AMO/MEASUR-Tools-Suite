@@ -24,9 +24,6 @@ export interface OperatingCostInput {
     efficiencyLoaded: number;
     efficiencyUnloaded: number;
     costOfElectricity: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -42,9 +39,6 @@ export interface OperatingCostResult {
     costForLoaded: number;
     costForUnloaded: number;
     totalAnnualCost: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -58,6 +52,4 @@ export function calculateOperatingCost(input: OperatingCostInput): OperatingCost
 
 export type OperatingCostModule = {
     calculateOperatingCost: typeof calculateOperatingCost;
-    OperatingCostInput: OperatingCostInput;
-    OperatingCostResult: OperatingCostResult;
 };

@@ -1,3 +1,5 @@
+import { DoubleVector } from "../binding/registered_vectors";
+
 /**
  * Compressed Air Core Calculations
  *
@@ -93,7 +95,7 @@ export declare class PipeData {
 export declare class AirSystemCapacityOutput {
     constructor(
         totalPipeVolume: number,
-        receiverCapacities: number[],
+        receiverCapacities: DoubleVector,
         totalReceiverVolume: number,
         totalCapacityOfCompressedAirSystem: number,
         pipeLengths: PipeData
@@ -102,7 +104,7 @@ export declare class AirSystemCapacityOutput {
     totalPipeVolume: number;
     totalReceiverVolume: number;
     totalCapacityOfCompressedAirSystem: number;
-    receiverCapacities: number[];
+    receiverCapacities: DoubleVector;
     pipeLengths: PipeData;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -115,9 +117,9 @@ export declare class AirSystemCapacityOutput {
 export declare class AirSystemCapacity {
     /**
      * @param pipeLengths PipeData, object containing values for different pipe sizes.
-     * @param receivers number[], vector of receiver volumes.
+     * @param receivers DoubleVector, vector of receiver volumes.
      */
-    constructor(pipeLengths: PipeData, receivers: number[]);
+    constructor(pipeLengths: PipeData, receivers: DoubleVector);
 
     /**
      * @returns {@link AirSystemCapacityOutput} object containing total pipe volume, total receiver volume, total compressed air system capacity, and per-size pipe values.

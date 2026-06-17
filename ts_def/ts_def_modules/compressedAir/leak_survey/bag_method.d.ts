@@ -16,9 +16,6 @@ export interface BagMethodInput {
     operatingTime: number;
     bagFillTime: number;
     bagVolume: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -30,9 +27,6 @@ export interface BagMethodInput {
 export interface BagMethodResult {
     flowRate: number;
     annualConsumption: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -46,6 +40,4 @@ export function calculateBagMethod(input: BagMethodInput): BagMethodResult;
 
 export type BagMethodModule = {
     calculateBagMethod: typeof calculateBagMethod;
-    BagMethodInput: BagMethodInput;
-    BagMethodResult: BagMethodResult;
 };
