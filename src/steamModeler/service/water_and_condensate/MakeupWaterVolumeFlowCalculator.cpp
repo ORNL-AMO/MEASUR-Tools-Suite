@@ -1,4 +1,5 @@
 #include "steamModeler/service/water-and-condensate/MakeupWaterVolumeFlowCalculator.h"
+#include "steamModeler/util/SteamModelerLogger.h"
 
 MakeupWaterVolumeFlowCalculationsDomain
 MakeupWaterVolumeFlowCalculator::calc(const SteamSystemModelerTool::FluidProperties& makeupWaterAndMassFlow,
@@ -22,8 +23,7 @@ double MakeupWaterVolumeFlowCalculator::calcMakeupWaterVolumeFlow(
 
     const double volumeFlow = specificVolume * massFlow;
 
-    // std::cout << methodName << "massFlow=" << massFlow << ", specificVolume" << specificVolume <<
-    //           ": result=" << volumeFlow << std::endl;
+    SM_LOG(methodName << "massFlow=" << massFlow << ", specificVolume" << specificVolume << ": result=" << volumeFlow);
 
     return volumeFlow;
 }
@@ -34,8 +34,7 @@ double MakeupWaterVolumeFlowCalculator::calcMakeupWaterVolumeFlowAnnual(const do
 
     const double volumeFlowAnnual = makeupWaterVolumeFlow * operatingHoursPerYear;
 
-    // std::cout << methodName << "makeupWaterVolumeFlow=" << makeupWaterVolumeFlow <<
-    //           ", operatingHoursPerYear=" << operatingHoursPerYear << ": result=" << volumeFlowAnnual << std::endl;
+    SM_LOG(methodName << "makeupWaterVolumeFlow=" << makeupWaterVolumeFlow << ", operatingHoursPerYear=" << operatingHoursPerYear << ": result=" << volumeFlowAnnual);
 
     return volumeFlowAnnual;
 }

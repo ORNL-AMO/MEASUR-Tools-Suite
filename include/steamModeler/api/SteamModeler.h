@@ -1,5 +1,7 @@
 #pragma once
 
+#include <steamModeler/util/SteamModelerLogger.h>
+
 #include <steamModeler/domain/SteamModelCalculationsDomain.h>
 #include <steamModeler/domain/SteamModelerOutputFactory.h>
 #include <steamModeler/service/SteamModelRunner.h>
@@ -45,12 +47,16 @@ class SteamModeler {
 
     SteamModelerOutput makeOutput(const SteamModelCalculationsDomain& steamModelCalculationsDomain) const;
 
-    void logSection(const std::string& message) const;
+    void logSection([[maybe_unused]] const std::string& message) const;
 
-    void logException(const std::exception& e, const std::string& message) const;
+    void logException([[maybe_unused]] const std::exception& e,
+                      [[maybe_unused]] const std::string& message) const;
 
-    void logInputData(const bool isBaselineCalc, const double baselinePowerDemand, const HeaderInput& headerInput,
-                      const BoilerInput& boilerInput, const TurbineInput& turbineInput,
-                      const OperationsInput& operationsInput);
+    void logInputData([[maybe_unused]] const bool isBaselineCalc,
+                      [[maybe_unused]] const double baselinePowerDemand,
+                      [[maybe_unused]] const HeaderInput& headerInput,
+                      [[maybe_unused]] const BoilerInput& boilerInput,
+                      [[maybe_unused]] const TurbineInput& turbineInput,
+                      [[maybe_unused]] const OperationsInput& operationsInput);
 };
 

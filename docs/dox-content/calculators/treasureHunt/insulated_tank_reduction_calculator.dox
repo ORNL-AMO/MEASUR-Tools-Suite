@@ -1,0 +1,272 @@
+/**
+ * @defgroup insulated_tank_reduction_calculator Insulated Tank Reduction Calculator
+ * @ingroup treasure_hunt_calculators
+ * @brief Calculates heat loss and annual energy cost for a hot cylindrical tank,
+ *        with or without thermal insulation.
+ * @details This calculator estimates how much heat a hot or cold vertical cylindrical tank
+ * exchanges with the surrounding air and the equivalent annual energy that must be
+ * supplied to the heating or cooling systems to compensate for those losses. Two cases are
+ * supported:
+ * - **Insulated tank** — the tank wall is wrapped in a layer of insulation; heat
+ *   conducts through the tank wall and the insulation annulus before being
+ *   dissipated to the air at the jacket outer surface.
+ * - **Bare (uninsulated) tank** — no insulation is present; heat is dissipated
+ *   directly from the tank wall outer surface.
+ *
+ * The calculation uses U.S. customary units throughout. Temperatures are in
+ * degrees Rankine, lengths in feet, thermal conductivities in BTU/(hr·ft·°F),
+ * and gravitational acceleration g = 32.174 ft/s².
+ *
+ * The calculation follows these steps:
+ * 1. Evaluate air properties (thermal conductivity, density, kinematic viscosity,
+ *    and specific heat) at the ambient temperature using fourth-order polynomial
+ *    fits to tabulated data.
+ * 2. Compute the thermal diffusivity of air from the polynomial-fitted properties.
+ * 3. Compute the Rayleigh number (Ra) from the outer surface temperature (jacket or bare
+ *    tank wall), the ambient temperature, and the air properties.
+ * 4. Derive the natural convection heat transfer coefficient at the outer surface
+ *    using the Ra^(1/3) empirical correlation.
+ * 5. Compute the overall heat transfer coefficient using a cylindrical multi-layer
+ *    resistance model that accounts for the inner convective resistance, the tank
+ *    wall conductive resistance, and (if insulated) the insulation conductive
+ *    resistance and the outer air-film resistance.
+ * 6. Compute the total heat loss as the sum of the convective–conductive and
+ *    radiative components.
+ * 7. Scale the heat loss by operating hours and heating system efficiency to obtain
+ *    annual heat loss.
+ *
+ * Relevant formulas and symbol definitions are documented below.
+ *
+ * @heading{Air Property Polynomial Fits}
+ * @copydoc insulated_tank_reduction_air_properties_formula
+ *
+ * @heading{Rayleigh Number (U.S. Customary)}
+ * @copydoc insulated_tank_reduction_rayleigh_formula
+ *
+ * @heading{Natural Convection Coefficient}
+ * @copydoc insulated_tank_reduction_natural_convection_formula
+ *
+ * @heading{Insulated Tank — Overall Heat Transfer Coefficient}
+ * @copydoc insulated_tank_reduction_insulated_formula
+ *
+ * @heading{Bare Tank — Overall Heat Transfer Coefficient}
+ * @copydoc insulated_tank_reduction_bare_formula
+ *
+ * @heading{Convective–Conductive Heat Loss}
+ * @copydoc insulated_tank_reduction_conv_cond_formula
+ *
+ * @heading{Radiative Heat Loss}
+ * @copydoc insulated_tank_reduction_radiation_formula
+ *
+ * @heading{Annual Heat Loss}
+ * @copydoc insulated_tank_reduction_annual_formula
+ */
+
+/**
+ * @defgroup insulated_tank_reduction_air_properties_formula Air Property Polynomial Fits
+ * @ingroup insulated_tank_reduction_calculator
+ * @brief Fourth-order polynomial fits for air properties as a function of temperature.
+ * @details Air properties are evaluated at the ambient temperature using curve fits
+ * to tabulated air data in U.S. customary units. Each property is expressed as a
+ * fourth-order polynomial in temperature @math{T} (°R):
+ *
+ * @formula{insulated-tank-poly; p(T) = c_4 T^4 + c_3 T^3 + c_2 T^2 + c_1 T + c_0}
+ *
+ * The following properties are computed (with scaling applied after polynomial evaluation):
+ *
+ * | Property | Unit | Scaling |
+ * |---|---|---|
+ * | Specific heat, @math{c_p} | BTU/(lb·°F) | × 1 |
+ * | Density, @math{\rho} | lb/ft³ | × 10⁻² |
+ * | Kinematic viscosity, @math{\nu} | ft²/s | × 10⁻⁴ / 3600 |
+ * | Thermal conductivity, @math{k} | BTU/(hr·ft·°F) | × 1 |
+ *
+ * Thermal diffusivity is derived from these fitted properties:
+ *
+ * @formula{insulated-tank-thermal-diffusivity; \alpha = \frac{k}{\rho \, c_p}}
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{\alpha; Thermal diffusivity of air; \foot\squared\per\hour}
+ * @symrow{k; Thermal conductivity of air; \btu\per\hour\foot\degreeFahrenheit}
+ * @symrow{\rho; Density of air; \pound\per\foot\cubed}
+ * @symrow{c_p; Specific heat of air; \btu\per\pound\degreeFahrenheit}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup insulated_tank_reduction_rayleigh_formula Rayleigh Number Formula
+ * @ingroup insulated_tank_reduction_calculator
+ * @brief Rayleigh number for natural convection along a vertical cylinder in U.S.
+ *        customary units.
+ * @details The Rayleigh number characterises the strength of buoyancy-driven natural
+ * convection at the tank outer surface. It combines the buoyancy force (from the
+ * temperature difference between the surface and the ambient air) with the fluid's
+ * resistance to motion and heat diffusion.
+ *
+ * @formula{insulated-tank-rayleigh;
+ *   \mathrm{Ra} = \frac{g \,\beta \,\lvert T_s - T_\infty \rvert\, d^3}{\nu\,\alpha}
+ * }
+ *
+ * @note This formula uses gravitational acceleration g = 32.174 ft/s² (U.S. customary).
+ *       The thermal expansion coefficient @math{\beta} is approximated as
+ *       @math{1 / T_\infty} for an ideal gas.
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{\mathrm{Ra}; Rayleigh number; \unitless}
+ * @symrow{g; Gravitational acceleration (32.174); \foot\per\second\squared}
+ * @symrow{\beta; Volumetric thermal expansion coefficient of air (1/@math{T_\infty}); \per\degreeRankine}
+ * @symrow{T_s; Outer surface temperature (jacket or bare tank wall); \degreeRankine}
+ * @symrow{T_\infty; Ambient air temperature; \degreeRankine}
+ * @symrow{d; Tank outer diameter; \foot}
+ * @symrow{\nu; Kinematic viscosity of air at ambient temperature; \foot\squared\per\second}
+ * @symrow{\alpha; Thermal diffusivity of air at ambient temperature; \foot\squared\per\second}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup insulated_tank_reduction_natural_convection_formula Natural Convection Coefficient Formula
+ * @ingroup insulated_tank_reduction_calculator
+ * @brief Natural convection heat transfer coefficient for a vertical cylinder.
+ * @details This empirical correlation applies to turbulent natural convection along
+ * a vertical surface. It uses the cube-root dependence on Rayleigh number that is
+ * characteristic of the turbulent regime.
+ *
+ * @formula{insulated-tank-natural-convection;
+ *   h_{nat} = 0.125 \,\mathrm{Ra}^{1/3} \frac{k}{d}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{h_{nat}; Natural convection heat transfer coefficient; \btu\per\hour\foot\squared\degreeRankine}
+ * @symrow{\mathrm{Ra}; Rayleigh number; \unitless}
+ * @symrow{k; Thermal conductivity of air at ambient temperature; \btu\per\hour\foot\degreeFahrenheit}
+ * @symrow{d; Tank outer diameter; \foot}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup insulated_tank_reduction_insulated_formula Insulated Tank — Overall Heat Transfer Coefficient
+ * @ingroup insulated_tank_reduction_calculator
+ * @brief Overall heat transfer coefficient for an insulated cylindrical tank.
+ * @details Heat flows in series through four resistances: the inner convective
+ * resistance (tank contents to tank wall), the conductive resistance of the tank
+ * wall, the conductive resistance of the insulation annulus, and the outer
+ * air-film resistance (natural convection at the jacket outer surface). Each
+ * conductive resistance is expressed per unit tank-diameter basis, accounting
+ * for the cylindrical geometry.
+ *
+ * @formula{insulated-tank-insulated-coeff;
+ *   U_{ins} = \frac{1}
+ *     {\dfrac{r_i}{r_{o,ins}}\cdot\dfrac{1}{h_{nat}}
+ *      + \dfrac{r_i}{k_{ins}}\ln\!\left(\dfrac{r_{o,ins}}{r_{o,tank}}\right)
+ *      + \dfrac{r_i}{k_{tank}}\ln\!\left(\dfrac{r_{o,tank}}{r_i}\right)
+ *      + \dfrac{1}{h_{inner}}}
+ * }
+ *
+ * @note The inner convection coefficient @math{h_{inner}} = 10 BTU/(hr·ft²·°F) is
+ *       a standard assumption for natural convection of process fluid inside the tank.
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{U_{ins}; Overall heat transfer coefficient (insulated); \btu\per\hour\foot\squared\degreeFahrenheit}
+ * @symrow{r_i; Tank inner radius (@math{d/2}); \foot}
+ * @symrow{r_{o,tank}; Tank outer radius (@math{r_i + t_{tank}}); \foot}
+ * @symrow{r_{o,ins}; Insulation outer radius (@math{r_{o,tank} + t_{ins}}); \foot}
+ * @symrow{h_{nat}; Natural convection coefficient at jacket outer surface; \btu\per\hour\foot\squared\degreeFahrenheit}
+ * @symrow{k_{ins}; Thermal conductivity of insulation; \btu\per\hour\foot\degreeFahrenheit}
+ * @symrow{k_{tank}; Thermal conductivity of tank wall; \btu\per\hour\foot\degreeFahrenheit}
+ * @symrow{h_{inner}; Inner surface convection coefficient (10 BTU/(hr·ft²·°F)); \btu\per\hour\foot\squared\degreeFahrenheit}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup insulated_tank_reduction_bare_formula Bare Tank — Overall Heat Transfer Coefficient
+ * @ingroup insulated_tank_reduction_calculator
+ * @brief Overall heat transfer coefficient for a bare (uninsulated) cylindrical tank.
+ * @details Without insulation, heat flows through two resistances: the inner
+ * convective resistance and the tank wall conductive resistance. The outer
+ * air-film resistance acts directly on the tank wall outer surface.
+ *
+ * @formula{insulated-tank-bare-coeff;
+ *   U_{bare} = \frac{1}
+ *     {\dfrac{r_i}{r_{o,tank}}\cdot\dfrac{1}{h_{nat}}
+ *      + \dfrac{r_i}{k_{tank}}\ln\!\left(\dfrac{r_{o,tank}}{r_i}\right)
+ *      + \dfrac{1}{h_{inner}}}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{U_{bare}; Overall heat transfer coefficient (bare); \btu\per\hour\foot\squared\degreeFahrenheit}
+ * @symrow{r_i; Tank inner radius (@math{d/2}); \foot}
+ * @symrow{r_{o,tank}; Tank outer radius (@math{r_i + t_{tank}}); \foot}
+ * @symrow{h_{nat}; Natural convection coefficient at tank outer surface; \btu\per\hour\foot\squared\degreeFahrenheit}
+ * @symrow{k_{tank}; Thermal conductivity of tank wall; \btu\per\hour\foot\degreeFahrenheit}
+ * @symrow{h_{inner}; Inner surface convection coefficient (10 BTU/(hr·ft²·°F)); \btu\per\hour\foot\squared\degreeFahrenheit}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup insulated_tank_reduction_conv_cond_formula Convective–Conductive Heat Loss
+ * @ingroup insulated_tank_reduction_calculator
+ * @brief Total convective and conductive heat loss through the tank system.
+ * @details The overall coefficient, lateral tank surface area, and temperature
+ * difference are combined to produce the convective–conductive heat loss. The
+ * result is scaled by 10⁻⁵ to produce the output unit.
+ *
+ * @formula{insulated-tank-conv-cond;
+ *   q_{cc} = U \cdot A \cdot \Delta T
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{q_{cc}; Convective–conductive heat loss; \btu\per\hour}
+ * @symrow{U; Overall heat transfer coefficient (@math{U_{ins}} or @math{U_{bare}}); \btu\per\hour\foot\squared\degreeFahrenheit}
+ * @symrow{A; Lateral tank surface area (@math{\pi\,d\,H}); \foot\squared}
+ * @symrow{\Delta T; Temperature difference (surface – ambient); \degreeRankine}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup insulated_tank_reduction_radiation_formula Radiative Heat Loss
+ * @ingroup insulated_tank_reduction_calculator
+ * @brief Radiation heat loss from the tank outer surface using the Stefan–Boltzmann law.
+ * @details Computes the radiated heat flux using the U.S. customary Stefan–Boltzmann
+ * constant and the emissivity of the outermost surface (jacket or bare tank wall).
+ *
+ * @formula{insulated-tank-radiation;
+ *   q_{rad} = \sigma\,\varepsilon\,A\,(T_s^4 - T_\infty^4)
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{q_{rad}; Radiative heat loss; \btu\per\hour}
+ * @symrow{A; Lateral tank surface area (@math{\pi\,d\,H}); \foot\squared}
+ * @symrow{\sigma; Stefan–Boltzmann constant (1.713441 × 10⁻⁹); \btu\per\hour\foot\squared\degreeRankine\tothe{4}}
+ * @symrow{\varepsilon; Surface emissivity (jacket or bare tank); \unitless}
+ * @symrow{T_s; Outer surface temperature (jacket or bare tank wall); \degreeRankine}
+ * @symrow{T_\infty; Ambient air temperature; \degreeRankine}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup insulated_tank_reduction_annual_formula Annual Heat Loss Formula
+ * @ingroup insulated_tank_reduction_calculator
+ * @brief Annual heat loss for the tank, adjusted for system efficiency.
+ * @details The total instantaneous heat loss is multiplied by annual operating
+ * hours and divided by a factor of 10 and the heating system efficiency to convert
+ * to the annual energy equivalent the heating system must supply.
+ *
+ * @formula{insulated-tank-annual;
+ *   Q_{annual} = \frac{q_{total} \cdot t_{op}}{\eta}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{annual}; Annual heat loss (efficiency-adjusted); \btu}
+ * @symrow{q_{total}; Total instantaneous heat loss (@math{q_{cc} + q_{rad}}); \btu\per\hour}
+ * @symrow{t_{op}; Annual operating hours; \hour\per\year}
+ * @symrow{\eta; Heating system efficiency (0–1); \unitless}
+ * @endsymtable
+ */

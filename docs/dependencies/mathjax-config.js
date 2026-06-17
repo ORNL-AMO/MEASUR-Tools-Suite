@@ -78,6 +78,8 @@ window.MathJax = {
 
                 \DeclareSIUnit{\pound}{lb}
                 \DeclareSIUnit{\lb}{lb}
+                \DeclareSIUnit{\lbm}{lb_{m}}
+                \DeclareSIUnit{\lbf}{lb_{f}}
 
                 \DeclareSIUnit{\revolutionsPerMinute}{rpm}
                 \DeclareSIUnit{\rpm}{rpm}
@@ -87,6 +89,10 @@ window.MathJax = {
 
                 \DeclareSIUnit{\standardCubicFeet}{scf}
                 \DeclareSIUnit{\scf}{scf}
+                \DeclareSIUnit{\standardCubicFeetPerMinute}{scfm}
+                \DeclareSIUnit{\scfm}{scfm}
+                \DeclareSIUnit{\kilostandardCubicFeet}{kscf}
+                \DeclareSIUnit{\kscf}{kscf}
                 \DeclareSIUnit{\cubicFoot}{ft^3}
                 \DeclareSIUnit{\normalCubicMeter}{Nm^3}
                 \DeclareSIUnit{\NmCubed}{Nm^3}
@@ -102,6 +108,11 @@ window.MathJax = {
                 \DeclareSIUnit{\squareFoot}{ft^2}
                 \DeclareSIUnit{\inchMercury}{inHg}
                 \DeclareSIUnit{\psi}{psi}
+                \DeclareSIUnit{\decibel}{dB}
+                \DeclareSIUnit{\hour}{h}
+                \DeclareSIUnit{\bhp}{bhp}
+                \DeclareSIUnit{\psia}{psia}
+                \DeclareSIUnit{\psig}{psig}
             `);
         }
     },

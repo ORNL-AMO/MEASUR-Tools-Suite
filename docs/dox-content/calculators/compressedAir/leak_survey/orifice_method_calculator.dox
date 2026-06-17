@@ -1,0 +1,309 @@
+/**
+ * @defgroup orifice_method_calculator Orifice Method Calculator
+ * @ingroup compressed_air_assessments
+ * @brief Estimates compressed air leak flow rate and annual consumption using orifice pressure
+ *        and geometry measurements.
+ * @details This calculator implements the orifice method, which treats a compressed air leak
+ *          as flow through a sharp-edged circular orifice at choked (sonic) conditions. When
+ *          supply pressure exceeds approximately twice atmospheric pressure — the typical
+ *          condition for industrial compressed air systems — the flow through the orifice
+ *          reaches the speed of sound at the throat and becomes independent of the downstream
+ *          condition. Under these choked-flow conditions, the mass flow rate is fully determined
+ *          by the upstream pressure, temperature, and the orifice geometry.
+ *
+ * The method applies isentropic compressible-flow theory for dry air (γ = 1.4) using U.S.
+ * customary units. The ideal gas law gives local air densities, and the standard isentropic
+ * choking relations yield the throat density and sonic velocity. The resulting mass flow per
+ * orifice is converted to standard volumetric flow (scfm) and scaled by the number of
+ * identical leak points.
+ *
+ * The orifice method provides the highest field accuracy of the non-inline-meter survey
+ * techniques when the discharge coefficient @f$C_d@f$ is known. For surveys where geometry
+ * details are unavailable, @f$C_d = 1.0@f$ serves as a conservative upper bound.
+ *
+ * @note This method differs from the orifice/pressure method used in the
+ * @ref compressed_air_reduction_pressure_formula. Here the leak source is an unintended opening
+ * of known (measured) diameter, so first-principles compressible-flow equations applied to the
+ * hole geometry yield the best estimate. In the compressed air reduction calculator the flow
+ * source is a manufactured end-use nozzle whose exact geometry may be unknown; empirically
+ * fitted quadratic coefficients indexed by nozzle type are therefore used in place of a
+ * geometry-based calculation.
+ *
+ * The calculation proceeds through the following steps:
+ * 1. **Temperature conversion** – Convert air temperature from °F to °R.
+ * 2. **Pressure conversion** – Add atmospheric pressure to gauge pressure to obtain absolute
+ *    supply pressure.
+ * 3. **Density at supply conditions** – Apply the ideal gas law at supply pressure and temperature.
+ * 4. **Density at standard conditions** – Apply the ideal gas law at atmospheric pressure and
+ *    temperature (used for the scfm conversion).
+ * 5. **Sonic (throat) density** – Apply the isentropic choked-flow density ratio.
+ * 6. **Sonic velocity** – Compute the speed of sound at the throat temperature.
+ * 7. **Mass flow per orifice** – Multiply throat density, orifice area, velocity, discharge
+ *    coefficient, and the 60 s/min conversion.
+ * 8. **Volumetric flow per orifice** – Divide mass flow by standard density.
+ * 9. **Total leak rate** – Scale per-orifice flow by the number of orifice leak points.
+ * 10. **Annual consumption** – Scale total flow by annual operating hours, convert to kscf.
+ *
+ * Relevant formulas are documented below.
+ *
+ * @heading{Temperature Conversion}
+ * @copydoc orifice_method_temperature_formula
+ *
+ * @heading{Absolute Supply Pressure}
+ * @copydoc orifice_method_abs_pressure_formula
+ *
+ * @heading{Air Density at Supply Conditions}
+ * @copydoc orifice_method_ca_density_formula
+ *
+ * @heading{Air Density at Standard Conditions}
+ * @copydoc orifice_method_standard_density_formula
+ *
+ * @heading{Sonic Density at Orifice Throat}
+ * @copydoc orifice_method_sonic_density_formula
+ *
+ * @heading{Sonic Velocity at Orifice Throat}
+ * @copydoc orifice_method_sonic_velocity_formula
+ *
+ * @heading{Mass Flow Rate per Orifice}
+ * @copydoc orifice_method_mass_flow_formula
+ *
+ * @heading{Volumetric Flow Rate per Orifice}
+ * @copydoc orifice_method_volume_flow_formula
+ *
+ * @heading{Total Leak Rate}
+ * @copydoc orifice_method_total_leak_formula
+ *
+ * @heading{Annual Consumption}
+ * @copydoc orifice_method_annual_consumption_formula
+ */
+
+/**
+ * @defgroup orifice_method_temperature_formula Orifice Method Temperature Conversion Formula
+ * @ingroup orifice_method_calculator
+ * @brief Conversion of compressed air temperature from °F to °R for thermodynamic calculations.
+ * @details All gas-dynamics calculations require absolute temperature. The Rankine scale is the
+ *          absolute temperature scale in U.S. customary units, defined such that 0 °R equals
+ *          absolute zero. The offset from Fahrenheit to Rankine is 459.67 degrees.
+ *
+ * @formula{orifice-method-temperature;
+ *   T_R = T_F + 459.67
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{T_R; Air temperature in degrees Rankine; \degreeRankine}
+ * @symrow{T_F; Compressed air temperature at the leak point; \degreeFahrenheit}
+ * @symrow{459.67; Fahrenheit-to-Rankine offset; \degreeRankine}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup orifice_method_abs_pressure_formula Orifice Method Absolute Supply Pressure Formula
+ * @ingroup orifice_method_calculator
+ * @brief Conversion of gauge supply pressure to absolute pressure for density calculations.
+ * @details Pressure gauges read relative to atmospheric pressure (gauge pressure). The ideal
+ *          gas law requires absolute pressure. Absolute pressure is gauge pressure plus the
+ *          local atmospheric (barometric) pressure. Standard atmospheric pressure at sea level
+ *          is 14.7 psia; this default is appropriate for most industrial sites.
+ *
+ * @formula{orifice-method-abs-pressure;
+ *   P_{abs} = P_{atm} + P_{supply}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{P_{abs}; Absolute supply pressure; \psia}
+ * @symrow{P_{atm}; Local atmospheric (barometric) pressure; \psia}
+ * @symrow{P_{supply}; Compressed air supply pressure (gauge); \psig}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup orifice_method_ca_density_formula Orifice Method Supply-Condition Density Formula
+ * @ingroup orifice_method_calculator
+ * @brief Air density at compressed air supply conditions using the ideal gas law.
+ * @details The density of dry air at any pressure and temperature follows the ideal gas law.
+ *          In U.S. customary units, pressure must be in lbf/ft² (multiply psia by 144 to
+ *          convert from lbf/in² to lbf/ft²). The specific gas constant for dry air is
+ *          @f$R_{air} = 53.34@f$ ft·lbf/(lbm·°R). This density is used in the isentropic
+ *          choking relations to find the throat (sonic) density.
+ *
+ * @formula{orifice-method-ca-density;
+ *   \rho_{ca} = \frac{P_{abs} \cdot 144}{R_{air} \cdot T_R}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{\rho_{ca}; Air density at supply (compressed) conditions; \pound\per\cubicFoot}
+ * @symrow{P_{abs}; Absolute supply pressure; \psia}
+ * @symrow{144; Unit conversion: square inches per square foot; \squareInch\per\squareFoot}
+ * @symrow{R_{air}; Specific gas constant for dry air (53.34 ft·lbf per lbm·°R); \foot\lbf\per\lbm\per\degreeRankine}
+ * @symrow{T_R; Air temperature in degrees Rankine; \degreeRankine}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup orifice_method_standard_density_formula Orifice Method Standard-Condition Density Formula
+ * @ingroup orifice_method_calculator
+ * @brief Air density at standard atmospheric conditions, used to convert mass flow to scfm.
+ * @details Standard volumetric flow (scfm) is defined at atmospheric pressure. The standard
+ *          density is computed at the same temperature as the supply density but at atmospheric
+ *          pressure only. Dividing mass flow (lbm/min) by standard density (lbm/ft³) yields
+ *          the equivalent volumetric flow at standard conditions (scfm).
+ *
+ * @formula{orifice-method-standard-density;
+ *   \rho_{std} = \frac{P_{atm} \cdot 144}{R_{air} \cdot T_R}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{\rho_{std}; Air density at standard atmospheric conditions; \pound\per\cubicFoot}
+ * @symrow{P_{atm}; Local atmospheric pressure; \psia}
+ * @symrow{144; Unit conversion: square inches per square foot; \squareInch\per\squareFoot}
+ * @symrow{R_{air}; Specific gas constant for dry air (53.34 ft·lbf per lbm·°R); \foot\lbf\per\lbm\per\degreeRankine}
+ * @symrow{T_R; Air temperature in degrees Rankine; \degreeRankine}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup orifice_method_sonic_density_formula Orifice Method Sonic Throat Density Formula
+ * @ingroup orifice_method_calculator
+ * @brief Isentropic density at the choked (sonic) throat of the orifice.
+ * @details When flow is choked, the throat conditions follow the isentropic relations for
+ *          an ideal gas. The critical density ratio relates stagnation density (≈ supply
+ *          density for low approach velocity) to throat density via the ratio of specific
+ *          heats @f$\gamma@f$. For dry air, @f$\gamma = 1.4@f$.
+ *
+ * @formula{orifice-method-sonic-density;
+ *   \rho^* = \rho_{ca} \cdot \left(\frac{2}{\gamma + 1}\right)^{\frac{1}{\gamma - 1}}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{\rho^*; Air density at the isentropic sonic throat; \pound\per\cubicFoot}
+ * @symrow{\rho_{ca}; Air density at supply conditions; \pound\per\cubicFoot}
+ * @symrow{\gamma; Ratio of specific heats for dry air (1.4); \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup orifice_method_sonic_velocity_formula Orifice Method Sonic Velocity Formula
+ * @ingroup orifice_method_calculator
+ * @brief Sonic (speed-of-sound) air velocity at the choked orifice throat.
+ * @details The speed of sound at the throat temperature follows from isentropic relations.
+ *          The throat temperature is lower than the supply temperature by the factor
+ *          @f$2/(\gamma+1)@f$. Substituting into the sound-speed formula and using the
+ *          gravitational conversion constant @f$g_c = 32.2@f$ lbm·ft/(lbf·s²) to reconcile
+ *          U.S. customary units gives the expression below. Note: the supply temperature
+ *          @f$T_R@f$ is used directly because the stagnation-to-throat temperature ratio
+ *          @f$2/(\gamma+1)@f$ is already absorbed into the leading coefficient.
+ *
+ * @formula{orifice-method-sonic-velocity;
+ *   V^* = \sqrt{\frac{2\gamma}{\gamma + 1} \cdot R_{air} \cdot T_R \cdot g_c}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{V^*; Sonic air velocity at the orifice throat; \foot\per\second}
+ * @symrow{\gamma; Ratio of specific heats for dry air (1.4); \unitless}
+ * @symrow{R_{air}; Specific gas constant for dry air (53.34 ft·lbf per lbm·°R); \foot\lbf\per\lbm\per\degreeRankine}
+ * @symrow{T_R; Air temperature in degrees Rankine; \degreeRankine}
+ * @symrow{g_c; Gravitational conversion constant (32.2 lbm·ft per lbf·s²); \lbm\foot\per\lbf\per\second\squared}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup orifice_method_mass_flow_formula Orifice Method Mass Flow Rate Formula
+ * @ingroup orifice_method_calculator
+ * @brief Mass flow rate of compressed air escaping through one orifice at sonic conditions.
+ * @details The mass flow rate is computed from the one-dimensional choked-flow continuity
+ *          equation: mass flow = density × area × velocity. The orifice area is in ft²,
+ *          converted from the diameter in inches by dividing @f$\pi d^2/4@f$ by 144.
+ *          The discharge coefficient @f$C_d@f$ accounts for the vena contracta (the narrowing
+ *          of the stream below the geometric orifice area) and friction losses. The factor
+ *          60 converts the per-second velocity to per-minute for consistent units.
+ *
+ * @formula{orifice-method-mass-flow;
+ *   \dot{m} = \rho^* \cdot \frac{\pi d^2}{4 \cdot 144} \cdot V^* \cdot 60 \cdot C_d
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{\dot{m}; Mass flow rate of leaked air through one orifice; \pound\per\minute}
+ * @symrow{\rho^*; Air density at the sonic throat; \pound\per\cubicFoot}
+ * @symrow{d; Orifice (leak opening) diameter; \inch}
+ * @symrow{144; Unit conversion: square inches per square foot; \squareInch\per\squareFoot}
+ * @symrow{V^*; Sonic velocity at the orifice throat; \foot\per\second}
+ * @symrow{60; Seconds per minute conversion; \second\per\minute}
+ * @symrow{C_d; Orifice discharge coefficient; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup orifice_method_volume_flow_formula Orifice Method Volumetric Flow Rate Formula
+ * @ingroup orifice_method_calculator
+ * @brief Volumetric flow rate per orifice at standard atmospheric conditions (scfm).
+ * @details Dividing the mass flow rate (lbm/min) by the standard-condition density (lbm/ft³)
+ *          gives the volumetric flow rate referenced to standard conditions (scfm). This
+ *          conversion allows direct comparison of leak rates at different supply pressures
+ *          and temperatures, since all values are normalized to the same reference state.
+ *
+ * @formula{orifice-method-volume-flow;
+ *   Q_{scfm} = \frac{\dot{m}}{\rho_{std}}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{scfm}; Volumetric flow rate per orifice at standard conditions; \scfm}
+ * @symrow{\dot{m}; Mass flow rate per orifice; \pound\per\minute}
+ * @symrow{\rho_{std}; Air density at standard atmospheric conditions; \pound\per\cubicFoot}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup orifice_method_total_leak_formula Orifice Method Total Leak Rate Formula
+ * @ingroup orifice_method_calculator
+ * @brief Total compressed air leak flow rate summed across all orifice leak points.
+ * @details When multiple identical leak points are present (e.g., several identical fittings
+ *          of the same worn type), the total leak rate is the per-orifice flow rate multiplied
+ *          by the number of orifices. This aggregation is appropriate when all orifices share
+ *          the same supply pressure, temperature, diameter, and discharge coefficient.
+ *
+ * @formula{orifice-method-total-leak;
+ *   Q_{leak} = Q_{scfm} \cdot n
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{leak}; Total volumetric leak flow rate for all orifices; \scfm}
+ * @symrow{Q_{scfm}; Volumetric flow rate per orifice; \scfm}
+ * @symrow{n; Number of identical orifice leak points; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup orifice_method_annual_consumption_formula Orifice Method Annual Consumption Formula
+ * @ingroup orifice_method_calculator
+ * @brief Estimated annual compressed air loss from all orifice leak points.
+ * @details Annual consumption is the total instantaneous leak flow rate scaled by the number
+ *          of operating hours per year, with a conversion from minutes to hours (factor of 60)
+ *          and from standard cubic feet to kiloscf (factor of 1000). This gives the projected
+ *          yearly air loss in kiloscf, a practical unit for annual energy assessment.
+ *
+ * @formula{orifice-method-annual-consumption;
+ *   C_{annual} = \frac{Q_{leak} \cdot t_{op} \cdot 60}{1000}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{C_{annual}; Estimated annual compressed air loss; \kscf}
+ * @symrow{Q_{leak}; Total volumetric leak flow rate; \scfm}
+ * @symrow{t_{op}; Annual system operating time; \hour}
+ * @symrow{60; Minutes per hour conversion; \minute\per\hour}
+ * @symrow{1000; Standard cubic feet per kiloscf conversion; \unitless}
+ * @endsymtable
+ *
+ * @note The result is in kiloscf (kscf), where 1 kscf = 1000 standard cubic feet.
+ *       This unit is conventional for annual compressed air volumes in industrial
+ *       energy assessments.
+ */

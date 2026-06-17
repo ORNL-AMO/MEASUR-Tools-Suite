@@ -67,11 +67,12 @@ Install only what you need for the scenario you plan to use.
 
 ## 4. CMake Options
 
-| Option          | Default | Purpose                             |
-| --------------- | ------- | ----------------------------------- |
-| `BUILD_TESTING` | ON      | Build C++ unit tests (`cpp_tests`)  |
-| `BUILD_WASM`    | OFF     | Build WebAssembly module (`client`) |
-| `BUILD_PACKAGE` | OFF     | Enable install + packaging targets  |
+| Option                   | Default | Purpose                                                              |
+| ------------------------ | ------- | -------------------------------------------------------------------- |
+| `BUILD_TESTING`          | ON      | Build C++ unit tests (`cpp_tests`)                                   |
+| `BUILD_WASM`             | OFF     | Build WebAssembly module (`client`)                                  |
+| `BUILD_PACKAGE`          | OFF     | Enable install + packaging targets                                   |
+| `STEAM_MODELER_LOGGING`  | 0       | Enable verbose SteamModeler debug output (see [§10](#10-steammodeler-debug-logging)) |
 
 Mutually influential behavior:
 - When `BUILD_WASM=ON` the build disables `BUILD_TESTING` & `BUILD_PACKAGE` internally (see `CMakeLists.txt`). Toggle intentionally—do not expect tests with WASM in a single configure.
@@ -434,6 +435,47 @@ docker exec -it measur-tools-suite-build /bin/bash
 # Stop container
 docker compose down
 ```
+
+---
+
+## 10. SteamModeler Debug Logging
+
+The SteamModeler and all of its supporting classes include verbose debug logging that is **disabled by default** so it never appears in production or WebAssembly builds.
+
+The toggle lives in a single header: `include/steamModeler/util/SteamModelerLogger.h`
+
+```cpp
+#ifndef STEAM_MODELER_LOGGING
+#define STEAM_MODELER_LOGGING 0   // 0 = silent (default), 1 = verbose
+#endif
+```
+
+### Enabling logging
+
+**Option A — Edit the header (local debug session)**
+
+Change the define to `1` and rebuild:
+
+```cpp
+#define STEAM_MODELER_LOGGING 1
+```
+
+**Option B — Compiler flag (no source changes required)**
+
+Pass the flag at configure time:
+
+```bash
+cmake -S . -B build-cpp -DSTEAM_MODELER_LOGGING=1
+cmake --build build-cpp
+```
+
+Or directly via the compiler (without CMake):
+
+```bash
+make CXXFLAGS="-DSTEAM_MODELER_LOGGING=1"
+```
+
+> **Note:** Always revert to `0` (or remove the flag) before building the WASM module for production. Debug output through `std::cout` is visible in the browser DevTools console when `STEAM_MODELER_LOGGING=1` is set in a WASM build.
 
 ---
 

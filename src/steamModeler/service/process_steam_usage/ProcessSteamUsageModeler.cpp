@@ -1,4 +1,5 @@
 #include <steamModeler/service/process_steam_usage/ProcessSteamUsageModeler.h>
+#include "steamModeler/util/SteamModelerLogger.h"
 
 /** These functions do not impact iteration of the model, they calculateThermalResistance informational values. */
 ProcessSteamUsageCalculationsDomain ProcessSteamUsageModeler::model(
@@ -10,7 +11,7 @@ ProcessSteamUsageCalculationsDomain ProcessSteamUsageModeler::model(
     const std::shared_ptr<LowPressureHeaderCalculationsDomain>&    lowPressureHeaderCalculationsDomain) const {
     const std::string methodName = std::string("ProcessSteamUsageModeler::") + std::string(__func__) + ": ";
 
-    //     std::cout << methodName << "calculating highPressureProcessSteamUsage" << std::endl;
+    SM_LOG(methodName << "calculating highPressureProcessSteamUsage");
     // 8. calculateThermalResistance process steam usage
     // 8a. calculateThermalResistance high pressure process steam usage
     const ProcessSteamUsage& highPressureProcessSteamUsage =
@@ -20,7 +21,7 @@ ProcessSteamUsageCalculationsDomain ProcessSteamUsageModeler::model(
     std::shared_ptr<ProcessSteamUsage> mediumPressureProcessUsagePtr = nullptr;
 
     if (headerCountInput > 1) {
-        // std::cout << methodName << "lowPressureHeader exists, calculating lowPressureProcessUsage" << std::endl;
+        SM_LOG(methodName << "lowPressureHeader exists, calculating lowPressureProcessUsage");
         // 8b. calculateThermalResistance low pressure process steam usage
         const SteamSystemModelerTool::FluidProperties& lowPressureHeaderOutput =
             lowPressureHeaderCalculationsDomain->lowPressureHeaderOutput;
@@ -33,8 +34,7 @@ ProcessSteamUsageCalculationsDomain ProcessSteamUsageModeler::model(
     }
 
     if (headerCountInput == 3) {
-        // std::cout << methodName << "mediumPressureHeader exists, calculating mediumPressureProcessUsage" <<
-        // std::endl;
+        SM_LOG(methodName << "mediumPressureHeader exists, calculating mediumPressureProcessUsage");
         // 8c. calculateThermalResistance medium pressure process steam usage
         const SteamSystemModelerTool::FluidProperties& mediumPressureHeaderOutput =
             mediumPressureHeaderCalculationsDomain->mediumPressureHeaderOutput;

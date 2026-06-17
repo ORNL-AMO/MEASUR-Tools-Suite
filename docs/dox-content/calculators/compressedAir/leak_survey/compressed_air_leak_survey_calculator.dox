@@ -1,0 +1,244 @@
+/**
+ * @defgroup compressed_air_leak_survey_calculator Compressed Air Leak Survey Calculator
+ * @ingroup compressed_air_assessments
+ * @brief Aggregates the annual energy cost and air flow impact of multiple compressed
+ *        air leaks across an industrial facility.
+ * @details A **compressed air leak survey** is a systematic facility walk-down in which
+ *          a technician locates, tags, and measures every audible or detectable
+ *          compressed air leak. This calculator processes the full set of measurements
+ *          and produces four summary outputs:
+ *
+ * 1. **Total Flow Rate** – the combined instantaneous flow rate of all identified leaks
+ *    @unitb{\scfm}. This represents the compressor capacity being wasted at any
+ *    given moment.
+ * 2. **Annual Total Flow Rate** – the total volume of compressed air wasted per year
+ *    @unitb{\scf}. Comparing this value to the facility's total annual compressed
+ *    air production reveals the percentage lost to leaks.
+ * 3. **Annual Total Electricity** – the electrical energy consumed by the compressor
+ *    to replace the leaked air over one year @unitb{\kilo\watt\hour}. Computed only
+ *    when the electricity cost basis is selected.
+ * 4. **Annual Total Electricity Cost** – the monetary cost of the leaked air over one
+ *    year @unitb{\dollar\per\year}, calculated using either the compressed air
+ *    utility rate or the electricity rate depending on the cost basis selection.
+ *
+ * Each leak in the survey is processed individually and the results are summed.
+ * A single survey entry can represent multiple identical leaks through the
+ * @c units multiplier, which avoids the need to enter duplicate rows.
+ *
+ * **Measurement Methods**
+ *
+ * The calculator supports four leak flow-rate measurement methods. Only the method
+ * selected for each entry contributes to the calculation; the other three input
+ * structs are ignored.
+ *
+ * | Method   | Selector | Description |
+ * |----------|----------|-------------|
+ * | Estimate | 0 | Visual and audible assessment; see @ref estimate_method_calculator |
+ * | Decibels | 1 | Ultrasonic detector reading; see @ref decibels_method_calculator |
+ * | Bag      | 2 | Bag fill-time measurement; see @ref bag_method_calculator |
+ * | Orifice  | 3 | Pressure and orifice geometry; see @ref orifice_method_calculator |
+ *
+ * **Cost Basis**
+ *
+ * The cost of a compressed air leak can be expressed in two ways:
+ * - **Compressed air** (utility_type = 0): the operator pays a flat rate per standard
+ *   cubic foot of compressed air delivered, regardless of how it is generated. This
+ *   rate is applied directly to the annual volume lost.
+ * - **Electricity** (utility_type = 1): the operator pays for the electrical energy
+ *   that the compressor uses to replace the leaked air. This basis requires the
+ *   compressor's specific power (kW per cfm of delivery) and the electricity rate.
+ *
+ * Relevant formulas are documented below.
+ *
+ * @heading{Per-Leak Total Flow Rate}
+ * @copydoc leak_survey_total_flow_formula
+ *
+ * @heading{Annual Volume — Estimate and Orifice Methods}
+ * @copydoc leak_survey_time_based_annual_formula
+ *
+ * @heading{Annual Volume — Decibels Method}
+ * @copydoc leak_survey_decibels_annual_formula
+ *
+ * @heading{Annual Volume — Bag Method}
+ * @copydoc leak_survey_bag_annual_formula
+ *
+ * @heading{Annual Electricity (utility_type = 1)}
+ * @copydoc leak_survey_electricity_formula
+ *
+ * @heading{Annual Electricity Cost (utility_type = 1)}
+ * @copydoc leak_survey_electricity_cost_formula
+ *
+ * @heading{Annual Compressed Air Cost (utility_type = 0)}
+ * @copydoc leak_survey_ca_cost_formula
+ */
+
+/**
+ * @defgroup leak_survey_total_flow_formula Total Flow Rate Formula
+ * @ingroup compressed_air_leak_survey_calculator
+ * @brief Combined instantaneous flow rate for one survey entry.
+ * @details The total instantaneous flow rate for a survey entry is the per-leak flow
+ *          rate returned by the selected measurement sub-calculator multiplied by the
+ *          number of identical leak points. This represents the total compressor
+ *          capacity being wasted by this group of leaks at any given moment.
+ *
+ * @formula{leak-survey-total-flow;
+ *   Q_{total} = Q_{method} \cdot n
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{total}; Combined instantaneous flow rate for this survey entry; \scfm}
+ * @symrow{Q_{method}; Leak flow rate from the selected sub-calculator; \scfm}
+ * @symrow{n; Number of identical leak points (units multiplier); \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup leak_survey_time_based_annual_formula Annual Volume Formula — Estimate and Orifice Methods
+ * @ingroup compressed_air_leak_survey_calculator
+ * @brief Annual air volume for survey entries using the estimate or orifice method.
+ * @details For the estimate method, the sub-calculator's operating time is set to
+ *          @math{t_{op}} (hours per year) before calling @ref estimate_method::calculate.
+ *          The returned annual consumption (in kscf) is multiplied by 1000 to convert
+ *          to standard cubic feet, then scaled by the units multiplier.
+ *
+ *          For the estimate method:
+ * @formula{leak-survey-estimate-annual;
+ *   V_{annual} = C_{annual} \cdot 1000 \cdot n
+ * }
+ *
+ *          For the orifice method, and for the decibels method, the annual volume is
+ *          computed from the instantaneous flow rate and the annual operating hours:
+ * @formula{leak-survey-time-based-annual;
+ *   V_{annual} = t_{op} \cdot Q_{total} \cdot 60
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{V_{annual}; Annual compressed air volume lost through this survey entry; \scf}
+ * @symrow{C_{annual}; Annual consumption from estimate_method::calculate; \kscf}
+ * @symrow{1000; Kiloscf to standard cubic feet conversion; \unitless}
+ * @symrow{n; Number of identical leak points (units multiplier); \unitless}
+ * @symrow{t_{op}; Annual compressed air system operating time; \hour\per\year}
+ * @symrow{Q_{total}; Combined instantaneous flow rate for this entry; \scfm}
+ * @symrow{60; Minutes per hour conversion; \minute\per\hour}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup leak_survey_decibels_annual_formula Annual Volume Formula — Decibels Method
+ * @ingroup compressed_air_leak_survey_calculator
+ * @brief Annual air volume for survey entries using the decibels method.
+ * @details The decibels sub-calculator returns an instantaneous leak rate. The annual
+ *          volume is computed from that rate, the annual operating time, and the
+ *          minutes-per-hour conversion factor.
+ *
+ * @formula{leak-survey-decibels-annual;
+ *   V_{annual} = t_{op} \cdot Q_{total} \cdot 60
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{V_{annual}; Annual compressed air volume lost through this survey entry; \scf}
+ * @symrow{t_{op}; Annual compressed air system operating time; \hour\per\year}
+ * @symrow{Q_{total}; Combined instantaneous flow rate for this entry; \scfm}
+ * @symrow{60; Minutes per hour conversion; \minute\per\hour}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup leak_survey_bag_annual_formula Annual Volume Formula — Bag Method
+ * @ingroup compressed_air_leak_survey_calculator
+ * @brief Annual air volume for survey entries using the bag method.
+ * @details The bag sub-calculator returns an annual consumption in kscf that already
+ *          accounts for the operating time and number of units specified in the bag
+ *          method input. The survey applies its own @c units multiplier to this result
+ *          without the 1000× conversion to standard cubic feet. The reported
+ *          @c annual_total_flow_rate therefore carries units of kscf for bag-method
+ *          entries, while estimate, decibels, and orifice entries contribute in scf.
+ *
+ * @formula{leak-survey-bag-annual;
+ *   V_{annual} = C_{bag} \cdot n
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{V_{annual}; Annual compressed air volume for this survey entry; \kscf}
+ * @symrow{C_{bag}; Annual consumption from bag_method::calculate; \kscf}
+ * @symrow{n; Number of identical leak points (units multiplier); \unitless}
+ * @endsymtable
+ *
+ * @note The @c bag_method::Input.operating_time field governs the period over which
+ *       annual consumption is computed for bag-method entries; it is not overridden
+ *       by the survey's @c hours_per_year field (unlike the estimate method).
+ */
+
+/**
+ * @defgroup leak_survey_electricity_formula Annual Electricity Formula
+ * @ingroup compressed_air_leak_survey_calculator
+ * @brief Annual electrical energy consumed by the compressor to replace leaked air.
+ * @details When the electricity cost basis is selected (@c utility_type = 1), the
+ *          compressor's specific power (kW per cfm of air delivery) is used to convert
+ *          the annual air volume into electrical energy. Dividing the specific power
+ *          by 60 converts from kW/(ft³/min) to kW·hr/scf so that multiplying by the
+ *          annual volume (in scf) yields kilowatt-hours.
+ *
+ * @formula{leak-survey-electricity;
+ *   E_{annual} = \frac{k_{sp}}{60} \cdot V_{annual}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{E_{annual}; Annual electrical energy consumed to replace leaked air; \kilo\watt\hour}
+ * @symrow{k_{sp}; Compressor specific power; \kilo\watt\minute\per\cubicFoot}
+ * @symrow{60; Minutes per hour conversion; \minute\per\hour}
+ * @symrow{V_{annual}; Annual compressed air volume for this survey entry; \scf}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup leak_survey_electricity_cost_formula Annual Electricity Cost Formula
+ * @ingroup compressed_air_leak_survey_calculator
+ * @brief Annual monetary cost of leaked air when electricity is the cost basis.
+ * @details The annual electricity cost is the product of the annual electrical energy
+ *          consumed (see @ref leak_survey_electricity_formula) and the electricity
+ *          utility rate. This basis is appropriate when the operator wishes to compare
+ *          leak repair costs directly to the compressor electricity bill.
+ *
+ * @formula{leak-survey-electricity-cost;
+ *   C_{cost} = E_{annual} \cdot r_{elec}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{C_{cost}; Annual electricity cost of leaked air; \dollar\per\year}
+ * @symrow{E_{annual}; Annual electrical energy consumed; \kilo\watt\hour}
+ * @symrow{r_{elec}; Electricity utility rate; \dollar\per\kilo\watt\hour}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup leak_survey_ca_cost_formula Annual Compressed Air Cost Formula
+ * @ingroup compressed_air_leak_survey_calculator
+ * @brief Annual monetary cost of leaked air when compressed air is the cost basis.
+ * @details When the compressed air cost basis is selected (@c utility_type = 0), the
+ *          annual cost is the product of the compressed air utility rate and the annual
+ *          air volume. This basis is appropriate when the facility purchases compressed
+ *          air from an external supplier or has an internally established cost-per-scf
+ *          transfer price.
+ *
+ * @formula{leak-survey-ca-cost;
+ *   C_{cost} = r_{ca} \cdot V_{annual}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{C_{cost}; Annual compressed air cost of leaked air; \dollar\per\year}
+ * @symrow{r_{ca}; Compressed air utility rate; \dollar\per\cubic\foot}
+ * @symrow{V_{annual}; Annual compressed air volume for this survey entry; \scf}
+ * @endsymtable
+ *
+ * @note When @c utility_type = 0 (compressed air), @c annual_total_electricity
+ *       in the @ref compressed_air_leak_survey::Result remains zero. Only
+ *       @c annual_total_electricity_cost is populated.
+ */

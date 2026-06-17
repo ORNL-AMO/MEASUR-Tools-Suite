@@ -1,9 +1,10 @@
 #include "steamModeler/domain/InletFactory.h"
+#include "steamModeler/util/SteamModelerLogger.h"
 
 std::vector<Inlet> InletFactory::make(const Boiler& boiler) const {
     const std::string methodName = std::string("InletFactory::") + std::string(__func__) + ": ";
 
-    // std::cout << methodName << "making inlet from boiler" << std::endl;
+    SM_LOG(methodName << "making inlet from boiler");
 
     double                                 pressure      = boiler.getSteamPressure();
     SteamProperties::ThermodynamicQuantity quantityType  = SteamProperties::ThermodynamicQuantity::ENTHALPY;
@@ -11,7 +12,7 @@ std::vector<Inlet> InletFactory::make(const Boiler& boiler) const {
     double                                 massFlow      = boiler.getSteamMassFlow();
 
     const Inlet inlet = {pressure, quantityType, quantityValue, massFlow};
-    // std::cout << methodName << "inlet=" << inlet << std::endl;
+    SM_LOG(methodName << "inlet=" << inlet);
 
     return {inlet};
 }
@@ -19,7 +20,7 @@ std::vector<Inlet> InletFactory::make(const Boiler& boiler) const {
 Inlet InletFactory::make(const std::shared_ptr<PrvWithoutDesuperheating>& prv) const {
     const std::string methodName = std::string("InletFactory::") + std::string(__func__) + ": ";
 
-    // std::cout << methodName << "making inlet from PRV" << std::endl;
+    SM_LOG(methodName << "making inlet from PRV");
 
     double                                 pressure      = prv->getOutletPressure();
     SteamProperties::ThermodynamicQuantity quantityType  = SteamProperties::ThermodynamicQuantity::ENTHALPY;
@@ -27,14 +28,14 @@ Inlet InletFactory::make(const std::shared_ptr<PrvWithoutDesuperheating>& prv) c
     double                                 massFlow      = prv->getOutletMassFlow();
 
     const Inlet inlet = {pressure, quantityType, quantityValue, massFlow};
-    // std::cout << methodName << "inlet=" << inlet << std::endl;
+    SM_LOG(methodName << "inlet=" << inlet);
 
     return inlet;
 }
 
 Inlet InletFactory::make(const std::shared_ptr<Turbine>& turbine) const {
     const std::string methodName = std::string("InletFactory::") + std::string(__func__) + ": ";
-    // std::cout << methodName << "making inlet from turbine" << std::endl;
+    SM_LOG(methodName << "making inlet from turbine");
 
     const SteamSystemModelerTool::SteamPropertiesOutput& properties = turbine->getOutletProperties();
     double                                               pressure   = properties.pressure;
@@ -43,28 +44,28 @@ Inlet InletFactory::make(const std::shared_ptr<Turbine>& turbine) const {
     double                                 massFlow                 = turbine->getMassFlow();
 
     const Inlet inlet = {pressure, quantityType, quantityValue, massFlow};
-    // std::cout << methodName << "inlet=" << inlet << std::endl;
+    SM_LOG(methodName << "inlet=" << inlet);
 
     return inlet;
 }
 
 Inlet InletFactory::make(const std::shared_ptr<Turbine>& turbine, const double pressure) const {
     const std::string methodName = std::string("InletFactory::") + std::string(__func__) + ": ";
-    // std::cout << methodName << "making inlet from turbine with specified pressure" << std::endl;
+    SM_LOG(methodName << "making inlet from turbine with specified pressure");
 
     SteamProperties::ThermodynamicQuantity quantityType  = SteamProperties::ThermodynamicQuantity::QUALITY;
     double                                 quantityValue = 0;
     double                                 massFlow      = turbine->getMassFlow();
 
     const Inlet inlet = {pressure, quantityType, quantityValue, massFlow};
-    // std::cout << methodName << "inlet=" << inlet << std::endl;
+    SM_LOG(methodName << "inlet=" << inlet);
 
     return inlet;
 }
 
 Inlet InletFactory::makeFromOutletGas(const std::shared_ptr<FlashTank>& flashTank) const {
     const std::string methodName = std::string("InletFactory::") + std::string(__func__) + ": ";
-    // std::cout << methodName << "making inlet from flash tank outlet gas" << std::endl;
+    SM_LOG(methodName << "making inlet from flash tank outlet gas");
 
     const SteamSystemModelerTool::FluidProperties& properties = flashTank->getOutletGasSaturatedProperties();
 
@@ -73,7 +74,7 @@ Inlet InletFactory::makeFromOutletGas(const std::shared_ptr<FlashTank>& flashTan
 
 Inlet InletFactory::makeFromOutletLiquid(const std::shared_ptr<FlashTank>& flashTank) const {
     const std::string methodName = std::string("InletFactory::") + std::string(__func__) + ": ";
-    // std::cout << methodName << "making inlet from flash tank outlet liquid" << std::endl;
+    SM_LOG(methodName << "making inlet from flash tank outlet liquid");
 
     const SteamSystemModelerTool::FluidProperties& properties = flashTank->getOutletLiquidSaturatedProperties();
 
@@ -89,7 +90,7 @@ Inlet InletFactory::makeWithEnthalpy(const SteamSystemModelerTool::FluidProperti
     double                                 massFlow      = properties.massFlow;
 
     const Inlet inlet = {pressure, quantityType, quantityValue, massFlow};
-    // std::cout << methodName << "inlet=" << inlet << std::endl;
+    SM_LOG(methodName << "inlet=" << inlet);
 
     return inlet;
 }
@@ -97,7 +98,7 @@ Inlet InletFactory::makeWithEnthalpy(const SteamSystemModelerTool::FluidProperti
 Inlet InletFactory::makeWithTemperature(const std::shared_ptr<HeatExchanger::Output>& output) const {
     const std::string methodName = std::string("InletFactory::") + std::string(__func__) + ": ";
 
-    // std::cout << methodName << "making inlet from heat exchanger" << std::endl;
+    SM_LOG(methodName << "making inlet from heat exchanger");
 
     const SteamSystemModelerTool::FluidProperties& coldOutlet = output->coldOutlet;
 
@@ -107,7 +108,7 @@ Inlet InletFactory::makeWithTemperature(const std::shared_ptr<HeatExchanger::Out
     double                                 massFlow      = coldOutlet.massFlow;
 
     const Inlet inlet = {pressure, quantityType, quantityValue, massFlow};
-    // std::cout << methodName << "inlet=" << inlet << std::endl;
+    SM_LOG(methodName << "inlet=" << inlet);
 
     return inlet;
 }

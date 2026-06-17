@@ -1,4 +1,5 @@
 #include "steamModeler/service/SteamModelCalculator.h"
+#include "steamModeler/util/SteamModelerLogger.h"
 
 SteamModelCalculationsDomain SteamModelCalculator::calc(const bool isBaselineCalc, const double baselinePowerDemand,
                                                         const HeaderInput& headerInput, const BoilerInput& boilerInput,
@@ -17,57 +18,52 @@ SteamModelCalculationsDomain SteamModelCalculator::calc(const bool isBaselineCal
     const CondensingTurbine& condensingTurbineInput   = turbineInput.getCondensingTurbine();
     const PressureTurbine&   mediumToLowTurbineInput  = turbineInput.getMediumToLowTurbine();
 
-    //     std::cout << methodName << "calculating boiler" << std::endl;
+    SM_LOG(methodName << "calculating boiler");
     const Boiler& boiler = boilerFactory.make(headerInput, boilerInput, initialMassFlow);
-    //     std::cout << methodName << "boiler=" << boiler << std::endl;
+    SM_LOG(methodName << "boiler=" << boiler);
 
-    //     std::cout << methodName << "calculating blowdownFlashTank" << std::endl;
+    SM_LOG(methodName << "calculating blowdownFlashTank");
     const std::shared_ptr<FlashTank>& blowdownFlashTank = flashTankFactory.make(headerInput, boilerInput, boiler);
-    //     std::cout << methodName << "blowdownFlashTank=" << blowdownFlashTank << std::endl;
+    SM_LOG(methodName << "blowdownFlashTank=" << blowdownFlashTank);
 
-    //     std::cout << methodName << "running highPressureHeaderModeler" << std::endl;
+    SM_LOG(methodName << "running highPressureHeaderModeler");
     HighPressureHeaderCalculationsDomain highPressureHeaderCalculationsDomain = highPressureHeaderModeler.model(
         headerCountInput, highPressureHeaderInput, mediumPressureHeaderInput, lowPressureHeaderInput,
         highToMediumTurbineInput, highToLowTurbineInput, condensingTurbineInput, boiler);
-    //     std::cout << methodName << "highPressureHeaderCalculationsDomain=" << highPressureHeaderCalculationsDomain
-    // << std::endl;
+    SM_LOG(methodName << "highPressureHeaderCalculationsDomain=" << highPressureHeaderCalculationsDomain);
 
-    //     std::cout << methodName << "running mediumPressureHeaderModeler" << std::endl;
+    SM_LOG(methodName << "running mediumPressureHeaderModeler");
     const std::shared_ptr<MediumPressureHeaderCalculationsDomain>& mediumPressureHeaderCalculationsDomain =
         mediumPressureHeaderModeler.model(headerCountInput, highPressureHeaderInput, mediumPressureHeaderInput,
                                           lowPressureHeaderInput, highToMediumTurbineInput, highToLowTurbineInput,
                                           mediumToLowTurbineInput, condensingTurbineInput, boiler,
                                           highPressureHeaderCalculationsDomain);
-    //     std::cout << methodName << "mediumPressureHeaderCalculationsDomain=" <<
-    //     mediumPressureHeaderCalculationsDomain
-    //  << std::endl;
+    SM_LOG(methodName << "mediumPressureHeaderCalculationsDomain=" << mediumPressureHeaderCalculationsDomain);
 
-    //     std::cout << methodName << "running lowPressureHeaderModeler" << std::endl;
+    SM_LOG(methodName << "running lowPressureHeaderModeler");
     const std::shared_ptr<LowPressureHeaderCalculationsDomain>& lowPressureHeaderCalculationsDomain =
         lowPressureHeaderModeler.model(headerCountInput, highPressureHeaderInput, mediumPressureHeaderInput,
                                        lowPressureHeaderInput, highToLowTurbineInput, mediumToLowTurbineInput,
                                        condensingTurbineInput, boilerInput, boiler, blowdownFlashTank,
                                        highPressureHeaderCalculationsDomain, mediumPressureHeaderCalculationsDomain);
-    //     std::cout << methodName << "lowPressureHeaderCalculationsDomain=" << lowPressureHeaderCalculationsDomain
-    //   << std::endl;
+    SM_LOG(methodName << "lowPressureHeaderCalculationsDomain=" << lowPressureHeaderCalculationsDomain);
 
-    //     std::cout << methodName << "running makeupWaterAndCondensateHeaderModeler" << std::endl;
+    SM_LOG(methodName << "running makeupWaterAndCondensateHeaderModeler");
     MakeupWaterAndCondensateHeaderCalculationsDomain makeupWaterAndCondensateHeaderCalculationsDomain =
         makeupWaterAndCondensateHeaderModeler.model(
             headerCountInput, highPressureHeaderInput, mediumPressureHeaderInput, lowPressureHeaderInput, boilerInput,
             operationsInput, condensingTurbineInput, boiler, blowdownFlashTank, highPressureHeaderCalculationsDomain,
             mediumPressureHeaderCalculationsDomain, lowPressureHeaderCalculationsDomain);
-    //     std::cout << methodName << "makeupWaterAndCondensateHeaderCalculationsDomain="
-    //  << makeupWaterAndCondensateHeaderCalculationsDomain << std::endl;
+    SM_LOG(methodName << "makeupWaterAndCondensateHeaderCalculationsDomain=" << makeupWaterAndCondensateHeaderCalculationsDomain);
 
-    //     std::cout << methodName << "running deaeratorModeler" << std::endl;
+    SM_LOG(methodName << "running deaeratorModeler");
     Deaerator deaerator =
         deaeratorModeler.model(headerCountInput, boilerInput, boiler, highPressureHeaderCalculationsDomain,
                                mediumPressureHeaderCalculationsDomain, lowPressureHeaderCalculationsDomain,
                                makeupWaterAndCondensateHeaderCalculationsDomain);
-    //     std::cout << methodName << "deaerator=" << deaerator << std::endl;
+    SM_LOG(methodName << "deaerator=" << deaerator);
 
-    //     std::cout << methodName << "running powerBalanceChecker" << std::endl;
+    SM_LOG(methodName << "running powerBalanceChecker");
     const double deaeratorInletSteamMassFlow = deaerator.getInletSteamProperties().massFlow;
     const PowerBalanceCheckerCalculationsDomain& powerBalanceCheckerCalculationsDomain = powerBalanceChecker.check(
         headerCountInput, highPressureHeaderInput, mediumPressureHeaderInput, lowPressureHeaderInput,
@@ -75,8 +71,7 @@ SteamModelCalculationsDomain SteamModelCalculator::calc(const bool isBaselineCal
         operationsInput, boiler, blowdownFlashTank, deaeratorInletSteamMassFlow, highPressureHeaderCalculationsDomain,
         mediumPressureHeaderCalculationsDomain, lowPressureHeaderCalculationsDomain,
         makeupWaterAndCondensateHeaderCalculationsDomain);
-    //     std::cout << methodName << "powerBalanceCheckerCalculationsDomain=" << powerBalanceCheckerCalculationsDomain
-    //  << std::endl;
+    SM_LOG(methodName << "powerBalanceCheckerCalculationsDomain=" << powerBalanceCheckerCalculationsDomain);
 
     const std::shared_ptr<LowPressureVentedSteamCalculationsDomain>& lowPressureVentedSteamCalculationsDomain =
         powerBalanceCheckerCalculationsDomain.lowPressureVentedSteamCalculationsDomain;
@@ -84,23 +79,21 @@ SteamModelCalculationsDomain SteamModelCalculator::calc(const bool isBaselineCal
         deaerator = lowPressureVentedSteamCalculationsDomain->deaerator;
     }
 
-    //     std::cout << methodName << "running processSteamUsageCalculator" << std::endl;
+    SM_LOG(methodName << "running processSteamUsageCalculator");
     const ProcessSteamUsageCalculationsDomain& processSteamUsageCalculationsDomain =
         processSteamUsageModeler.model(headerCountInput, highPressureHeaderInput, mediumPressureHeaderInput,
                                        lowPressureHeaderInput, highPressureHeaderCalculationsDomain,
                                        mediumPressureHeaderCalculationsDomain, lowPressureHeaderCalculationsDomain);
-    //     std::cout << methodName << "processSteamUsageCalculationsDomain=" << processSteamUsageCalculationsDomain
-    //  << std::endl;
+    SM_LOG(methodName << "processSteamUsageCalculationsDomain=" << processSteamUsageCalculationsDomain);
 
-    //     std::cout << methodName << "running energyAndCostCalculator" << std::endl;
+    SM_LOG(methodName << "running energyAndCostCalculator");
     const MakeupWaterVolumeFlowCalculationsDomain& makeupWaterVolumeFlowCalculationsDomain =
         makeupWaterAndCondensateHeaderCalculationsDomain.makeupWaterVolumeFlowCalculationsDomain;
     const double makeupWaterVolumeFlowAnnual = makeupWaterVolumeFlowCalculationsDomain.makeupWaterVolumeFlowAnnual;
     const EnergyAndCostCalculationsDomain& energyAndCostCalculationsDomain = energyAndCostCalculator.calc(
         isBaselineCalc, baselinePowerDemand, operationsInput, boiler, highPressureHeaderCalculationsDomain,
         mediumPressureHeaderCalculationsDomain, makeupWaterVolumeFlowAnnual);
-    //     std::cout << methodName << "energyAndCostCalculationsDomain=" << energyAndCostCalculationsDomain <<
-    //     std::endl;
+    SM_LOG(methodName << "energyAndCostCalculationsDomain=" << energyAndCostCalculationsDomain);
 
     return {boiler,
             blowdownFlashTank,

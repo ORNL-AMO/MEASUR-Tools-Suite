@@ -1,6 +1,7 @@
 #include <string>
 
 #include <steamModeler/api/TurbineInput.h>
+#include "steamModeler/util/SteamModelerLogger.h"
 
 TurbineInput::TurbineInput(const CondensingTurbine& condensingTurbine, const PressureTurbine& highToLowTurbine,
                            const PressureTurbine& highToMediumTurbine, const PressureTurbine& mediumToLowTurbine)
@@ -19,7 +20,7 @@ std::ostream& operator<<(std::ostream& stream, const CondensingTurbineOperation&
             break;
         default:
             std::string msg = "CondensingTurbineOperation::operator<<: operator enum not handled";
-            // std::cout << msg << std::endl;
+            SM_LOG(msg);
             throw std::invalid_argument(msg);
     }
 
@@ -53,8 +54,8 @@ std::ostream& operator<<(std::ostream& stream, const PressureTurbineOperation& o
             stream << "-STEAM_FLOW";
             break;
         default:
-            std::string msg = "CondensingTurbineOperation::operator<<: operator enum not handled";
-            // std::cout << msg << std::endl;
+            std::string msg = "PressureTurbineOperation::operator<<: operator enum not handled";
+            SM_LOG(msg);
             throw std::invalid_argument(msg);
     }
 

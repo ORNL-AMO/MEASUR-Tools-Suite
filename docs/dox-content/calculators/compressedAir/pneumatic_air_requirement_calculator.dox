@@ -1,0 +1,168 @@
+/**
+ * @defgroup pneumatic_air_requirement_calculator Pneumatic Air Requirement Calculator
+ * @ingroup compressed_air_assessments
+ * @brief Calculates the compressed air consumption of a pneumatic cylinder.
+ * @details This calculator determines the volume of compressed air consumed per minute
+ *          by a pneumatic cylinder for both single-acting and double-acting piston
+ *          configurations. All formulas use U.S. customary units.
+ *
+ * A **pneumatic cylinder** (also called an air cylinder or linear actuator) converts
+ * compressed air energy into mechanical linear motion. The amount of air it consumes
+ * depends on its bore diameter, stroke length, cycle rate, and whether it is
+ * single-acting or double-acting:
+ *
+ * - **Single-Acting** – compressed air acts on one side of the piston only. The return
+ *   stroke is driven by a spring or gravity, consuming no compressed air. Air is
+ *   consumed once per cycle.
+ * - **Double-Acting** – compressed air acts alternately on both sides of the piston,
+ *   providing powered motion in both directions. The rod side of the cylinder has a
+ *   slightly smaller effective piston area because the piston rod occupies part of the
+ *   bore cross-section. Air is consumed on both strokes per cycle.
+ *
+ * Both methods first compute the cylinder's volumetric air intake per minute at the
+ * operating pressure (in cubic feet per minute, cfm). This is then multiplied by the
+ * **compression ratio** — the ratio of the absolute working pressure to atmospheric
+ * pressure — to convert the result to **standard cubic feet per minute (scfm)**,
+ * which is the free-air equivalent that the compressor must supply.
+ *
+ * The calculation methods are:
+ * 1. **Single-Acting** – computes the air consumption for a spring-return cylinder.
+ * 2. **Double-Acting** – computes the combined air consumption for both power strokes,
+ *    accounting for the reduced area on the rod side.
+ *
+ * Relevant formulas are documented below.
+ *
+ * @heading{Single-Acting Piston — Cylinder Air Intake Volume}
+ * @copydoc pneumatic_air_requirement_single_acting_volume_formula
+ *
+ * @heading{Compression Ratio}
+ * @copydoc pneumatic_air_requirement_compression_ratio_formula
+ *
+ * @heading{Free-Air Requirement (scfm)}
+ * @copydoc pneumatic_air_requirement_free_air_formula
+ *
+ * @heading{Double-Acting Piston — Cylinder Air Intake Volume}
+ * @copydoc pneumatic_air_requirement_double_acting_volume_formula
+ */
+
+/**
+ * @defgroup pneumatic_air_requirement_single_acting_volume_formula Single-Acting Piston Air Intake Volume Formula
+ * @ingroup pneumatic_air_requirement_calculator
+ * @brief Cylinder volumetric air intake per minute for a single-acting piston.
+ * @details Computes the volume of air swept by the piston bore on each power stroke,
+ *          converted from cubic inches to cubic feet per minute. The piston
+ *          cross-sectional area is the full circular bore area @math{\pi/4 \cdot D^2}.
+ *          Only one stroke per cycle consumes compressed air.
+ *
+ * @formula{pneumatic-air-requirement-single-acting-volume;
+ *   Q_{cyl} = \frac{\frac{\pi}{4} \cdot D^2 \cdot L \cdot n}{k_{in^3}}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{cyl}; Cylinder air intake volume per minute at cylinder conditions; \cubicFoot\per\minute}
+ * @symrow{D; Inner bore diameter of the cylinder; \inch}
+ * @symrow{L; Piston stroke length; \inch}
+ * @symrow{n; Number of complete cycles per minute; \per\minute}
+ * @symrow{k_{in^3}; Cubic inches per cubic foot (1728); \inch\cubed\per\cubicFoot}
+ * @endsymtable
+ *
+ * @note The factor @math{\pi/4 \approx 0.7854} is the ratio of a circle's area to the
+ *       area of its circumscribed square. It is computed from @math{\pi} rather than
+ *       the historical approximation of 0.785 used in legacy references.
+ *       @math{k_{in^3} = 1728 = 12^3} is the exact number of cubic inches in one cubic
+ *       foot (see @ref physics::conversions::kFt3ToIn3).
+ */
+
+/**
+ * @defgroup pneumatic_air_requirement_compression_ratio_formula Compression Ratio Formula
+ * @ingroup pneumatic_air_requirement_calculator
+ * @brief Ratio of absolute working pressure to atmospheric pressure.
+ * @details The compression ratio expresses how much the working air has been compressed
+ *          relative to free air at atmospheric conditions. Multiplying the cylinder
+ *          intake volume (cfm) by this ratio converts to the free-air equivalent
+ *          (scfm) that the compressor must supply.
+ *
+ * @formula{pneumatic-air-requirement-compression-ratio;
+ *   r_c = \frac{P_{gauge} + P_{atm}}{P_{atm}}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{r_c; Compression ratio (absolute working pressure / atmospheric pressure); \unitless}
+ * @symrow{P_{gauge}; Operating gauge pressure at the cylinder inlet; \psi}
+ * @symrow{P_{atm}; Atmospheric pressure (14.7 psia at sea level); \psi}
+ * @endsymtable
+ *
+ * @note @math{P_{atm} = 14.7} psia at sea level
+ *       (see @ref physics::us::kAtmosphericPressurePsi). At higher elevations the actual
+ *       atmospheric pressure is lower, which increases the compression ratio and the
+ *       air consumption. This formula assumes sea-level conditions.
+ */
+
+/**
+ * @defgroup pneumatic_air_requirement_free_air_formula Free-Air Requirement Formula
+ * @ingroup pneumatic_air_requirement_calculator
+ * @brief Free-air equivalent consumption of a pneumatic cylinder.
+ * @details Multiplies the cylinder volumetric intake (at cylinder conditions) by the
+ *          compression ratio to obtain the equivalent volume of free air at
+ *          atmospheric conditions that the compressor must supply. This result
+ *          is in standard cubic feet per minute (scfm).
+ *
+ * @formula{pneumatic-air-requirement-free-air;
+ *   Q_{free} = Q_{cyl} \cdot r_c
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{free}; Free-air equivalent consumption; \standardCubicFeetPerMinute}
+ * @symrow{Q_{cyl}; Cylinder air intake volume at cylinder conditions; \cubicFoot\per\minute}
+ * @symrow{r_c; Compression ratio; \unitless}
+ * @endsymtable
+ *
+ * @note The result @math{Q_{free}} is the quantity used when sizing a compressor or
+ *       calculating the compressed air supply requirement for a system containing one
+ *       or more pneumatic cylinders. Sum @math{Q_{free}} across all actuators to
+ *       obtain the total free-air demand of the system.
+ */
+
+/**
+ * @defgroup pneumatic_air_requirement_double_acting_volume_formula Double-Acting Piston Air Intake Volume Formula
+ * @ingroup pneumatic_air_requirement_calculator
+ * @brief Combined cylinder air intake per minute for a double-acting piston.
+ * @details A double-acting cylinder consumes air on both strokes. The forward (cap-end)
+ *          stroke acts on the full bore area; the return (rod-end) stroke acts on the
+ *          annular area between the bore and the piston rod. The net result is obtained
+ *          by summing the two swept volumes:
+ *
+ * @formula{pneumatic-air-requirement-double-acting-volume;
+ *   Q_{cyl} = \frac{\frac{\pi}{4} \cdot (2 D^2 - d_r^2) \cdot L \cdot n}{k_{in^3}}
+ * }
+ *
+ * This is equivalent to computing the single-acting volume for the bore alone and
+ * then adding the single-acting volume for the annular rod side:
+ *
+ * @formula{pneumatic-air-requirement-double-acting-expanded;
+ *   Q_{cyl} = \frac{2 \cdot k_{in^3} \cdot Q_{sa} - \frac{\pi}{4} \cdot d_r^2 \cdot L \cdot n}{k_{in^3}}
+ * }
+ *
+ * where @math{Q_{sa}} is the single-acting intake volume for the same bore, stroke,
+ * and cycle rate.
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{cyl}; Combined cylinder air intake per minute; \cubicFoot\per\minute}
+ * @symrow{Q_{sa}; Single-acting intake volume for the full bore; \cubicFoot\per\minute}
+ * @symrow{D; Inner bore diameter of the cylinder; \inch}
+ * @symrow{d_r; Piston rod diameter; \inch}
+ * @symrow{L; Piston stroke length; \inch}
+ * @symrow{n; Number of complete cycles per minute; \per\minute}
+ * @symrow{k_{in^3}; Cubic inches per cubic foot (1728); \inch\cubed\per\cubicFoot}
+ * @endsymtable
+ *
+ * @note The factor @math{(2D^2 - d_r^2)} reflects the combined piston areas: the
+ *       forward stroke sweeps @math{D^2 \cdot \pi/4} and the return stroke sweeps
+ *       @math{(D^2 - d_r^2) \cdot \pi/4}. Their sum is @math{(2D^2 - d_r^2) \cdot \pi/4}.
+ *       For a cylinder with no rod (or a very small rod relative to the bore), the
+ *       double-acting consumption approaches twice the single-acting value.
+ */
