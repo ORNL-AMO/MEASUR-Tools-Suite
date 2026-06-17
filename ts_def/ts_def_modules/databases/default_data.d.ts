@@ -1,6 +1,16 @@
-import {MotorData} from "../motorDriven/motor/motor";
-import {LightingData} from "../other/lighting_data";
-import {CompressorsData} from "../compressedAir/compressorsCalc";
+import { CompressorsData } from "../compressedAir/compressorsCalc";
+import {
+    MotorDataV,
+    CompressorsDataV,
+    LightingDataV,
+    GasLoadChargeMaterialV,
+    LiquidLoadChargeMaterialV,
+    SolidLoadChargeMaterialV,
+    GasFlueGasMaterialV,
+    SolidLiquidFlueGasMaterialV,
+    WallTypeV,
+    AtmosphereGasTypeV
+} from "../binding/registered_vectors";
 
 /**
  * Default Data module.
@@ -20,9 +30,6 @@ export interface GasLoadChargeMaterial {
     substance: string;
     /** Specific heat of vapor, units Btu/(lb*degF) */
     specificHeatVapor: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -45,9 +52,6 @@ export interface LiquidLoadChargeMaterial {
     vaporSpecificHeat: number;
     /** Boiling point, units degF */
     boilingPoint: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -70,9 +74,6 @@ export interface SolidLoadChargeMaterial {
     specificHeatLiquid: number;
     /** Melting point, units degF */
     meltingPoint: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -109,10 +110,6 @@ export interface GasFlueGasMaterial {
     heatingValueVolume: number;
     /** Specific gravity, unitless */
     specificGravity: number;
-    delete(): void;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-
 }
 
 /**
@@ -135,9 +132,6 @@ export interface SolidLiquidFlueGasMaterial {
     moisture: number;
     /** Inert ash, percent by mass */
     inertAsh: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -148,10 +142,6 @@ export interface WallType {
     wallDescription: string;
     /** Shape factor, unitless */
     shapeFactor: number;
-    delete(): void;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-
 }
 
 /**
@@ -162,9 +152,6 @@ export interface AtmosphereGasType {
     gasDescription: string;
     /** Specific heat, units Btu/(scf*degF) */
     specificHeat: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -176,49 +163,49 @@ export declare class DefaultData {
     /** Default constructor - no arguments required. */
     constructor();
 
-    /** @returns {@link MotorData} array. */
-    getMotorData(): MotorData[];
-    /** @returns compressor type 1 defaults as {@link CompressorsData} array. */
-    getCompressorType1Data(): CompressorsData[];
-    /** @returns compressor type 1 (greater than 100 kW) defaults as {@link CompressorsData} array. */
-    getCompressorType1_GT100kWData(): CompressorsData[];
-    /** @returns compressor type 2 defaults as {@link CompressorsData} array. */
-    getCompressorType2Data(): CompressorsData[];
-    /** @returns compressor type 3 defaults as {@link CompressorsData} array. */
-    getCompressorType3Data(): CompressorsData[];
-    /** @returns compressor type 4 defaults as {@link CompressorsData} array. */
-    getCompressorType4Data(): CompressorsData[];
-    /** @returns compressor type 5 defaults as {@link CompressorsData} array. */
-    getCompressorType5Data(): CompressorsData[];
-    /** @returns compressor type 6 defaults as {@link CompressorsData} array. */
-    getCompressorType6Data(): CompressorsData[];
-    /** @returns {@link LightingData} array. */
-    getLightingData(): LightingData[];
+    /** @returns {@link MotorData} vector. */
+    getMotorData(): MotorDataV;
+    /** @returns compressor type 1 defaults as {@link CompressorsData} vector. */
+    getCompressorType1Data(): CompressorsDataV;
+    /** @returns compressor type 1 (greater than 100 kW) defaults as {@link CompressorsData} vector. */
+    getCompressorType1_GT100kWData(): CompressorsDataV;
+    /** @returns compressor type 2 defaults as {@link CompressorsData} vector. */
+    getCompressorType2Data(): CompressorsDataV;
+    /** @returns compressor type 3 defaults as {@link CompressorsData} vector. */
+    getCompressorType3Data(): CompressorsDataV;
+    /** @returns compressor type 4 defaults as {@link CompressorsData} vector. */
+    getCompressorType4Data(): CompressorsDataV;
+    /** @returns compressor type 5 defaults as {@link CompressorsData} vector. */
+    getCompressorType5Data(): CompressorsDataV;
+    /** @returns compressor type 6 defaults as {@link CompressorsData} vector. */
+    getCompressorType6Data(): CompressorsDataV;
+    /** @returns {@link LightingData} vector. */
+    getLightingData(): LightingDataV;
 
     /** Frees the underlying resource; must be called when finished with the instance */
     delete(): void;
 }
 
-/** @returns {@link GasLoadChargeMaterial} array. */
-export function getDefaultGasLoadChargeMaterials(): GasLoadChargeMaterial[];
+/** @returns {@link GasLoadChargeMaterial} vector. */
+export function getDefaultGasLoadChargeMaterials(): GasLoadChargeMaterialV;
 
-/** @returns {@link LiquidLoadChargeMaterial} array. */
-export function getDefaultLiquidLoadChargeMaterials(): LiquidLoadChargeMaterial[];
+/** @returns {@link LiquidLoadChargeMaterial} vector. */
+export function getDefaultLiquidLoadChargeMaterials(): LiquidLoadChargeMaterialV;
 
-/** @returns {@link SolidLoadChargeMaterial} array. */
-export function getDefaultSolidLoadChargeMaterials(): SolidLoadChargeMaterial[];
+/** @returns {@link SolidLoadChargeMaterial} vector. */
+export function getDefaultSolidLoadChargeMaterials(): SolidLoadChargeMaterialV;
 
-/** @returns {@link GasFlueGasMaterial} array. */
-export function getDefaultGasFlueGasMaterials(): GasFlueGasMaterial[];
+/** @returns {@link GasFlueGasMaterial} vector. */
+export function getDefaultGasFlueGasMaterials(): GasFlueGasMaterialV;
 
-/** @returns {@link SolidLiquidFlueGasMaterial} array. */
-export function getDefaultSolidLiquidFlueGasMaterials(): SolidLiquidFlueGasMaterial[];
+/** @returns {@link SolidLiquidFlueGasMaterial} vector. */
+export function getDefaultSolidLiquidFlueGasMaterials(): SolidLiquidFlueGasMaterialV;
 
-/** @returns {@link WallType} array. */
-export function getDefaultWallTypes(): WallType[];
+/** @returns {@link WallType} vector. */
+export function getDefaultWallTypes(): WallTypeV;
 
-/** @returns {@link AtmosphereGasType} array. */
-export function getDefaultGasTypes(): AtmosphereGasType[];
+/** @returns {@link AtmosphereGasType} vector. */
+export function getDefaultGasTypes(): AtmosphereGasTypeV;
 
 export type DefaultDataModule = {
     DefaultData: typeof DefaultData;
