@@ -2,6 +2,7 @@ import { TraversePlane, PlaneDataNodeBindingData } from "../motorDriven/fans/fan
 import { LightingData } from "../other/lighting_data";
 import { MotorData } from "../motorDriven/motor/motor";
 import {
+    AtmosphereGasType,
     GasFlueGasMaterial,
     GasLoadChargeMaterial,
     LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial,
@@ -89,8 +90,8 @@ export declare interface SolidLiquidFlueGasMaterialV extends RegisteredVector<So
 /** A vector of {@link WallType} records, mapped from `std::vector<WallType>`. */
 export declare interface WallTypeV extends RegisteredVector<WallType> {}
 
-/** A vector of {@link GasType} records, mapped from `std::vector<GasType>`. */
-export declare interface AtmosphereGasTypeV extends RegisteredVector<GasType> {}
+/** A vector of {@link AtmosphereGasType} records, mapped from `std::vector<AtmosphereGasType>`. */
+export declare interface AtmosphereGasTypeV extends RegisteredVector<AtmosphereGasType> {}
 
 /** A vector of {@link TraversePlane} records, mapped from `std::vector<TraversePlane>`. */
 export declare interface TraversePlaneVector extends RegisteredVector<TraversePlane> {}
