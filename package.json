@@ -20,6 +20,8 @@
     "url": "https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues"
   },
   "homepage": "https://github.com/ORNL-AMO/MEASUR-Tools-Suite#readme",
+  "main": "bin/client.js",
+  "types": "ts_def/client.d.ts",
   "devDependencies": {
     "chai": "^6.0.1",
     "express": "^4.17.1",
