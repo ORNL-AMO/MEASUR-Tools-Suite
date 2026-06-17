@@ -25,6 +25,8 @@ Check out the [Master List of MEASUR Calculators](https://github.com/ORNL-AMO/AM
 npm install measur-tools-suite
 ```
 
+**JavaScript**
+
 ```js
 // Initialize module
 const moduleFactory = (await import('/path/to/client.js')).default;
@@ -32,10 +34,37 @@ const toolsSuiteModule = await moduleFactory({
 	locateFile: (filename) => '/path/to/client.wasm'
 });
 
-// Example call
+// Plain function call — returns a number directly
 const totalHeatLoss = toolsSuiteModule.wallTotalHeatLoss(
 	500, 80, 225, 10, 0.9, 1.394, 1
 );
+console.log('Wall total heat loss:', totalHeatLoss);
+
+// Class-based API — always call delete() to free WASM memory
+const doc = new toolsSuiteModule.DryerOperatingCost(1752, 50, 100, 24, 7, 52, 0.08, 0.2, 0.25);
+const res = doc.calculate(toolsSuiteModule.DryerType.Heatless);
+console.log('Water removed:', res.waterRemoved);
+res.delete();
+doc.delete();
+```
+
+**TypeScript** — named `import type` provides IDE autocompletion with zero runtime cost; enum values and constructors still come from the live module instance.
+
+```ts
+import type { DryerOperatingCostModule } from 'measur-tools-suite';
+
+const moduleFactory = (await import('/path/to/client.js')).default;
+const toolsSuiteModule = await moduleFactory({
+	locateFile: (filename) => '/path/to/client.wasm'
+});
+
+// Narrow to the typed sub-module for full IDE assistance
+const dryerModule = toolsSuiteModule as unknown as DryerOperatingCostModule;
+const doc = new dryerModule.DryerOperatingCost(1752, 50, 100, 24, 7, 52, 0.08, 0.2, 0.25);
+const res = doc.calculate(dryerModule.DryerType.Heatless);
+console.log('Water removed:', res.waterRemoved);
+res.delete();
+doc.delete();
 ```
 
 ### Building from Source
