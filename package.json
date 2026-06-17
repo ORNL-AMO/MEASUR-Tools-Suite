@@ -1,6 +1,6 @@
 {
   "name": "measur-tools-suite",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "engines": {
     "node": "20.19.4",
     "npm": "10.8.2"
