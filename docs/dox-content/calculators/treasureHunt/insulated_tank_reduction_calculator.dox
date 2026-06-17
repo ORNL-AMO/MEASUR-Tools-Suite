@@ -3,9 +3,9 @@
  * @ingroup treasure_hunt_calculators
  * @brief Calculates heat loss and annual energy cost for a hot cylindrical tank,
  *        with or without thermal insulation.
- * @details This calculator estimates how much heat a hot vertical cylindrical tank
- * loses to the surrounding air and the equivalent annual energy that must be
- * supplied to the heating system to compensate for those losses. Two cases are
+ * @details This calculator estimates how much heat a hot or cold vertical cylindrical tank
+ * exchanges with the surrounding air and the equivalent annual energy that must be
+ * supplied to the heating or cooling systems to compensate for those losses. Two cases are
  * supported:
  * - **Insulated tank** — the tank wall is wrapped in a layer of insulation; heat
  *   conducts through the tank wall and the insulation annulus before being
@@ -22,7 +22,7 @@
  *    and specific heat) at the ambient temperature using fourth-order polynomial
  *    fits to tabulated data.
  * 2. Compute the thermal diffusivity of air from the polynomial-fitted properties.
- * 3. Compute the Rayleigh number from the outer surface temperature (jacket or bare
+ * 3. Compute the Rayleigh number (Ra) from the outer surface temperature (jacket or bare
  *    tank wall), the ambient temperature, and the air properties.
  * 4. Derive the natural convection heat transfer coefficient at the outer surface
  *    using the Ra^(1/3) empirical correlation.
@@ -139,7 +139,7 @@
  *
  * @subheading{Symbols}
  * @symtable
- * @symrow{h_{nat}; Natural convection heat transfer coefficient; \btu\per\hour\foot\squared\degreeFahrenheit}
+ * @symrow{h_{nat}; Natural convection heat transfer coefficient; \btu\per\hour\foot\squared\degreeRankine}
  * @symrow{\mathrm{Ra}; Rayleigh number; \unitless}
  * @symrow{k; Thermal conductivity of air at ambient temperature; \btu\per\hour\foot\degreeFahrenheit}
  * @symrow{d; Tank outer diameter; \foot}
@@ -216,12 +216,12 @@
  * result is scaled by 10⁻⁵ to produce the output unit.
  *
  * @formula{insulated-tank-conv-cond;
- *   q_{cc} = \frac{U \cdot A \cdot \Delta T}{10^5}
+ *   q_{cc} = U \cdot A \cdot \Delta T
  * }
  *
  * @subheading{Symbols}
  * @symtable
- * @symrow{q_{cc}; Convective–conductive heat loss (÷10⁵); \btu\per\hour}
+ * @symrow{q_{cc}; Convective–conductive heat loss; \btu\per\hour}
  * @symrow{U; Overall heat transfer coefficient (@math{U_{ins}} or @math{U_{bare}}); \btu\per\hour\foot\squared\degreeFahrenheit}
  * @symrow{A; Lateral tank surface area (@math{\pi\,d\,H}); \foot\squared}
  * @symrow{\Delta T; Temperature difference (surface – ambient); \degreeRankine}
@@ -236,12 +236,13 @@
  * constant and the emissivity of the outermost surface (jacket or bare tank wall).
  *
  * @formula{insulated-tank-radiation;
- *   q_{rad} = \frac{\sigma\,\varepsilon\,(T_s^4 - T_\infty^4)}{10^5}
+ *   q_{rad} = \sigma\,\varepsilon\,A\,(T_s^4 - T_\infty^4)
  * }
  *
  * @subheading{Symbols}
  * @symtable
- * @symrow{q_{rad}; Radiative heat loss (÷10⁵); \btu\per\hour\foot\squared}
+ * @symrow{q_{rad}; Radiative heat loss; \btu\per\hour}
+ * @symrow{A; Lateral tank surface area (@math{\pi\,d\,H}); \foot\squared}
  * @symrow{\sigma; Stefan–Boltzmann constant (1.713441 × 10⁻⁹); \btu\per\hour\foot\squared\degreeRankine\tothe{4}}
  * @symrow{\varepsilon; Surface emissivity (jacket or bare tank); \unitless}
  * @symrow{T_s; Outer surface temperature (jacket or bare tank wall); \degreeRankine}
@@ -258,13 +259,13 @@
  * to the annual energy equivalent the heating system must supply.
  *
  * @formula{insulated-tank-annual;
- *   Q_{annual} = \frac{q_{total} \cdot t_{op}}{10 \cdot \eta}
+ *   Q_{annual} = \frac{q_{total} \cdot t_{op}}{\eta}
  * }
  *
  * @subheading{Symbols}
  * @symtable
- * @symrow{Q_{annual}; Annual heat loss (÷10⁶, efficiency-adjusted); \btu}
- * @symrow{q_{total}; Total instantaneous heat loss (@math{q_{cc} + q_{rad}}, ÷10⁵); \btu\per\hour}
+ * @symrow{Q_{annual}; Annual heat loss (efficiency-adjusted); \btu}
+ * @symrow{q_{total}; Total instantaneous heat loss (@math{q_{cc} + q_{rad}}); \btu\per\hour}
  * @symrow{t_{op}; Annual operating hours; \hour\per\year}
  * @symrow{\eta; Heating system efficiency (0–1); \unitless}
  * @endsymtable
