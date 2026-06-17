@@ -39,7 +39,10 @@ module.exports = function (config) {
                     },
                     {
                         test: /\.ts$/,
-                        use: 'ts-loader',
+                        use: {
+                            loader: 'ts-loader',
+                            options: { compilerOptions: { noEmit: false } }
+                        },
                         exclude: /node_modules/
                     }
                 ]
