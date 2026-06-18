@@ -57,9 +57,6 @@ export enum CompressedAirUtilityType {
 export interface FlowMeterMethodData {
     /** Instantaneous flow rate from the installed meter, units scfm (scf/min) */
     meterReading: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -77,9 +74,6 @@ export interface BagMethodData {
     bagFillTime: number;
     /** Internal volume of the bag, units scf */
     bagVolume: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -101,9 +95,6 @@ export interface PressureMethodData {
     numberOfNozzles: number;
     /** Compressed air supply pressure, units psi */
     supplyPressure: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -117,9 +108,6 @@ export interface PressureMethodData {
 export interface OtherMethodData {
     /** Annual compressed air consumption, units scf/year */
     consumption: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 // ---------------------------------------------------------------------------
@@ -167,9 +155,6 @@ export interface CompressedAirReductionInput {
     compressorElectricityData: CompressorElectricityData;
     /** Quantity multiplier (not applied to pressure method) */
     units: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -195,9 +180,6 @@ export interface CompressedAirReductionOutput {
     singleNozzleFlowRate: number;
     /** Annual compressed air consumption, units scf/year */
     consumption: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 // ---------------------------------------------------------------------------
@@ -290,12 +272,6 @@ export function otherMethodReduction(data: OtherMethodData): CompressedAirReduct
 export type CompressedAirReductionModule = {
     CompressedAirMeasurementMethod: typeof CompressedAirMeasurementMethod;
     CompressedAirUtilityType: typeof CompressedAirUtilityType;
-    FlowMeterMethodData: FlowMeterMethodData;
-    BagMethodData: BagMethodData;
-    PressureMethodData: PressureMethodData;
-    OtherMethodData: OtherMethodData;
-    CompressedAirReductionInput: CompressedAirReductionInput;
-    CompressedAirReductionOutput: CompressedAirReductionOutput;
     compressedAirReduction: typeof compressedAirReduction;
     flowMeterReduction: typeof flowMeterReduction;
     bagMethodReduction: typeof bagMethodReduction;

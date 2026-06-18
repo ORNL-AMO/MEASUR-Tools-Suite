@@ -52,9 +52,6 @@ export interface MultimeterData {
     averageCurrent: number;
     /** Power factor of the load (dimensionless, 0-1) */
     powerFactor: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -84,9 +81,6 @@ export interface NameplateData {
     motorAndDriveEfficiency: number;
     /** Motor load factor (dimensionless, 0-1) */
     loadFactor: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -100,9 +94,6 @@ export interface NameplateData {
 export interface PowerMeterData {
     /** Direct power reading from the power meter, units kW */
     power: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -116,9 +107,6 @@ export interface PowerMeterData {
 export interface ElectricityOtherMethodData {
     /** Annual energy consumption, units kWh/year */
     energy: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 // ---------------------------------------------------------------------------
@@ -159,9 +147,6 @@ export interface ElectricityReductionInput {
     otherMethodData: ElectricityOtherMethodData;
     /** Quantity multiplier (number of identical loads) */
     units: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -182,9 +167,6 @@ export interface ElectricityReductionOutput {
     energyCost: number;
     /** Power draw per load (single unit), units kW */
     power: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 // ---------------------------------------------------------------------------
@@ -283,12 +265,6 @@ export function electricityOtherReduction(
 
 export type ElectricityReductionModule = {
     ElectricityReductionMeasurementMethod: typeof ElectricityReductionMeasurementMethod;
-    MultimeterData: MultimeterData;
-    NameplateData: NameplateData;
-    PowerMeterData: PowerMeterData;
-    ElectricityOtherMethodData: ElectricityOtherMethodData;
-    ElectricityReductionInput: ElectricityReductionInput;
-    ElectricityReductionOutput: ElectricityReductionOutput;
     electricityReduction: typeof electricityReduction;
     multimeterReduction: typeof multimeterReduction;
     nameplateReduction: typeof nameplateReduction;

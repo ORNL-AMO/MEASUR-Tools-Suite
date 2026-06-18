@@ -1,16 +1,21 @@
 import { assert } from 'chai';
+import createModule, {
+    type CompressedAirReductionInput,
+    type CompressedAirReductionInputV,
+    type CompressedAirReductionOutput,
+    type MeasurToolsSuite,
+} from 'measur-tools-suite';
 
 describe('Compressed Air Reduction Tests', function () {
-    let moduleInstance;
+    let moduleInstance: MeasurToolsSuite;
     before(async function () {
-        const ToolsSuiteModule = (await import('../../../bin/client.js')).default;
-        moduleInstance = await ToolsSuiteModule({
-            locateFile: (filename) => '/base/bin/' + filename
+        moduleInstance = await createModule({
+            locateFile: (filename: string) => '/base/bin/' + filename
         });
     });
 
     it('should calculate CompressedAirReduction Flow Meter Method (compressed air utility) correctly', function () {
-        let inputData = {
+        const inputData: CompressedAirReductionInput = {
             hoursPerYear: 8640,
             utilityType: moduleInstance.CompressedAirUtilityType.CompressedAir,
             utilityCost: 0.12,
@@ -23,10 +28,10 @@ describe('Compressed Air Reduction Tests', function () {
             units: 1
         };
 
-        let inputVec = new moduleInstance.CompressedAirReductionInputV();
+        const inputVec: CompressedAirReductionInputV = new moduleInstance.CompressedAirReductionInputV();
         inputVec.push_back(inputData);
 
-        let results = moduleInstance.compressedAirReduction(inputVec);
+        const results: CompressedAirReductionOutput = moduleInstance.compressedAirReduction(inputVec);
         assert.approximately(results.consumption,           103680000.0, 0.01,   'consumption');
         assert.approximately(results.flowRate,              200.0,       0.001,  'flowRate');
         assert.approximately(results.singleNozzleFlowRate, 0.0,         0.001,  'singleNozzleFlowRate');
@@ -36,7 +41,7 @@ describe('Compressed Air Reduction Tests', function () {
     });
 
     it('should calculate CompressedAirReduction Flow Meter Method (electricity utility) correctly', function () {
-        let inputData = {
+        const inputData: CompressedAirReductionInput = {
             hoursPerYear: 8640,
             utilityType: moduleInstance.CompressedAirUtilityType.Electricity,
             utilityCost: 0.12,
@@ -49,10 +54,10 @@ describe('Compressed Air Reduction Tests', function () {
             units: 1
         };
 
-        let inputVec = new moduleInstance.CompressedAirReductionInputV();
+        const inputVec: CompressedAirReductionInputV = new moduleInstance.CompressedAirReductionInputV();
         inputVec.push_back(inputData);
 
-        let results = moduleInstance.compressedAirReduction(inputVec);
+        const results: CompressedAirReductionOutput = moduleInstance.compressedAirReduction(inputVec);
         assert.approximately(results.energyUse,            276480000.0,       0.01,   'energyUse');
         assert.approximately(results.energyCost,           33177600.0,        0.01,   'energyCost');
         assert.approximately(results.flowRate,             200000.0,          0.001,  'flowRate');
@@ -62,7 +67,7 @@ describe('Compressed Air Reduction Tests', function () {
     });
 
     it('should calculate CompressedAirReduction Bag Method (electricity utility) correctly', function () {
-        let inputData = {
+        const inputData: CompressedAirReductionInput = {
             hoursPerYear: 8640,
             utilityType: moduleInstance.CompressedAirUtilityType.Electricity,
             utilityCost: 0.12,
@@ -75,10 +80,10 @@ describe('Compressed Air Reduction Tests', function () {
             units: 2
         };
 
-        let inputVec = new moduleInstance.CompressedAirReductionInputV();
+        const inputVec: CompressedAirReductionInputV = new moduleInstance.CompressedAirReductionInputV();
         inputVec.push_back(inputData);
 
-        let results = moduleInstance.compressedAirReduction(inputVec);
+        const results: CompressedAirReductionOutput = moduleInstance.compressedAirReduction(inputVec);
         assert.approximately(results.energyUse,            119992.32,   0.01,  'energyUse');
         assert.approximately(results.energyCost,           14399.0784,  0.01,  'energyCost');
         assert.approximately(results.flowRate,             43.4,        0.001, 'flowRate');
@@ -88,7 +93,7 @@ describe('Compressed Air Reduction Tests', function () {
     });
 
     it('should calculate CompressedAirReduction Pressure Method (electricity utility) correctly', function () {
-        let inputData = {
+        const inputData: CompressedAirReductionInput = {
             hoursPerYear: 8640,
             utilityType: moduleInstance.CompressedAirUtilityType.Electricity,
             utilityCost: 0.12,
@@ -101,10 +106,10 @@ describe('Compressed Air Reduction Tests', function () {
             units: 1
         };
 
-        let inputVec = new moduleInstance.CompressedAirReductionInputV();
+        const inputVec: CompressedAirReductionInputV = new moduleInstance.CompressedAirReductionInputV();
         inputVec.push_back(inputData);
 
-        let results = moduleInstance.compressedAirReduction(inputVec);
+        const results: CompressedAirReductionOutput = moduleInstance.compressedAirReduction(inputVec);
         assert.approximately(results.energyUse,            2458.6094592,    0.001, 'energyUse');
         assert.approximately(results.energyCost,           295.033135104,   0.001, 'energyCost');
         assert.approximately(results.flowRate,             1.778508,        0.001, 'flowRate');
@@ -114,7 +119,7 @@ describe('Compressed Air Reduction Tests', function () {
     });
 
     it('should calculate CompressedAirReduction Pressure Method with multiple nozzles correctly', function () {
-        let inputData = {
+        const inputData: CompressedAirReductionInput = {
             hoursPerYear: 8640,
             utilityType: moduleInstance.CompressedAirUtilityType.Electricity,
             utilityCost: 0.12,
@@ -127,10 +132,10 @@ describe('Compressed Air Reduction Tests', function () {
             units: 3
         };
 
-        let inputVec = new moduleInstance.CompressedAirReductionInputV();
+        const inputVec: CompressedAirReductionInputV = new moduleInstance.CompressedAirReductionInputV();
         inputVec.push_back(inputData);
 
-        let results = moduleInstance.compressedAirReduction(inputVec);
+        const results: CompressedAirReductionOutput = moduleInstance.compressedAirReduction(inputVec);
         assert.approximately(results.flowRate,             363.9248,       0.001, 'flowRate');
         assert.approximately(results.singleNozzleFlowRate, 90.9812,       0.001, 'singleNozzleFlowRate');
         assert.approximately(results.consumption,          188658616.32,   0.01,  'consumption');
@@ -140,7 +145,7 @@ describe('Compressed Air Reduction Tests', function () {
     });
 
     it('should calculate CompressedAirReduction Other Method (electricity utility) correctly', function () {
-        let inputData = {
+        const inputData: CompressedAirReductionInput = {
             hoursPerYear: 8640,
             utilityType: moduleInstance.CompressedAirUtilityType.Electricity,
             utilityCost: 0.12,
@@ -153,10 +158,10 @@ describe('Compressed Air Reduction Tests', function () {
             units: 1
         };
 
-        let inputVec = new moduleInstance.CompressedAirReductionInputV();
+        const inputVec: CompressedAirReductionInputV = new moduleInstance.CompressedAirReductionInputV();
         inputVec.push_back(inputData);
 
-        let results = moduleInstance.compressedAirReduction(inputVec);
+        const results: CompressedAirReductionOutput = moduleInstance.compressedAirReduction(inputVec);
         assert.approximately(results.consumption, 200000.0,      0.01,  'consumption');
         assert.approximately(results.energyUse,   533.33333333,  0.001, 'energyUse');
         assert.approximately(results.energyCost,  64.0,          0.001, 'energyCost');
@@ -164,7 +169,7 @@ describe('Compressed Air Reduction Tests', function () {
     });
 
     it('should calculate 4 CompressedAirReductions (all methods) correctly', function () {
-        let inputs = [
+        const inputs: CompressedAirReductionInput[] = [
             // Flow meter with electricity (utilityCost=0.066)
             {
                 hoursPerYear: 8640,
@@ -219,12 +224,12 @@ describe('Compressed Air Reduction Tests', function () {
             }
         ];
 
-        let inputVec = new moduleInstance.CompressedAirReductionInputV();
+        const inputVec: CompressedAirReductionInputV = new moduleInstance.CompressedAirReductionInputV();
         for (let i = 0; i < inputs.length; i++) {
             inputVec.push_back(inputs[i]);
         }
 
-        let results = moduleInstance.compressedAirReduction(inputVec);
+        const results: CompressedAirReductionOutput = moduleInstance.compressedAirReduction(inputVec);
         assert.approximately(results.energyUse,            276540529.49,       0.01,  'energyUse');
         assert.approximately(results.energyCost,           18365580.96,        0.01,  'energyCost');
         assert.approximately(results.flowRate,             200045.178508,      0.001, 'flowRate');

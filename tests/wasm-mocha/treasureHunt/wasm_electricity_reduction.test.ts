@@ -1,16 +1,21 @@
 import { assert } from 'chai';
+import createModule, {
+    type ElectricityReductionInput,
+    type ElectricityReductionInputV,
+    type ElectricityReductionOutput,
+    type MeasurToolsSuite,
+} from 'measur-tools-suite';
 
 describe('Electricity Reduction Tests', function () {
-    let moduleInstance;
+    let moduleInstance: MeasurToolsSuite;
     before(async function () {
-        const ToolsSuiteModule = (await import('../../../bin/client.js')).default;
-        moduleInstance = await ToolsSuiteModule({
-            locateFile: (filename) => '/base/bin/' + filename
+        moduleInstance = await createModule({
+            locateFile: (filename: string) => '/base/bin/' + filename
         });
     });
 
     it('should calculate ElectricityReduction Multimeter Method (3-phase) correctly', function () {
-        let inputData = {
+        const inputData: ElectricityReductionInput = {
             operatingHours: 8640,
             electricityCost: 0.12,
             measurementMethod: moduleInstance.ElectricityReductionMeasurementMethod.Multimeter,
@@ -37,10 +42,10 @@ describe('Electricity Reduction Tests', function () {
             units: 1
         };
 
-        let inputVec = new moduleInstance.ElectricityReductionInputV();
+        const inputVec: ElectricityReductionInputV = new moduleInstance.ElectricityReductionInputV();
         inputVec.push_back(inputData);
 
-        let results = moduleInstance.electricityReduction(inputVec);
+        const results: ElectricityReductionOutput = moduleInstance.electricityReduction(inputVec);
         assert.approximately(results.energyUse, 407045.796185, 0.001, 'energyUse');
         assert.approximately(results.energyCost, 48845.495542, 0.001, 'energyCost');
         assert.approximately(results.power, 47.111781, 0.001, 'power');
@@ -48,7 +53,7 @@ describe('Electricity Reduction Tests', function () {
     });
 
     it('should calculate ElectricityReduction Multimeter Method (1-phase) correctly', function () {
-        let inputData = {
+        const inputData: ElectricityReductionInput = {
             operatingHours: 8640,
             electricityCost: 0.12,
             measurementMethod: moduleInstance.ElectricityReductionMeasurementMethod.Multimeter,
@@ -75,10 +80,10 @@ describe('Electricity Reduction Tests', function () {
             units: 1
         };
 
-        let inputVec = new moduleInstance.ElectricityReductionInputV();
+        const inputVec: ElectricityReductionInputV = new moduleInstance.ElectricityReductionInputV();
         inputVec.push_back(inputData);
 
-        let results = moduleInstance.electricityReduction(inputVec);
+        const results: ElectricityReductionOutput = moduleInstance.electricityReduction(inputVec);
         assert.approximately(results.energyUse, 235008, 0.001, 'energyUse');
         assert.approximately(results.energyCost, 28200.96, 0.001, 'energyCost');
         assert.approximately(results.power, 27.2, 0.001, 'power');
@@ -86,7 +91,7 @@ describe('Electricity Reduction Tests', function () {
     });
 
     it('should calculate ElectricityReduction Nameplate Method correctly', function () {
-        let inputData = {
+        const inputData: ElectricityReductionInput = {
             operatingHours: 8640,
             electricityCost: 0.12,
             measurementMethod: moduleInstance.ElectricityReductionMeasurementMethod.Nameplate,
@@ -113,10 +118,10 @@ describe('Electricity Reduction Tests', function () {
             units: 1
         };
 
-        let inputVec = new moduleInstance.ElectricityReductionInputV();
+        const inputVec: ElectricityReductionInputV = new moduleInstance.ElectricityReductionInputV();
         inputVec.push_back(inputData);
 
-        let results = moduleInstance.electricityReduction(inputVec);
+        const results: ElectricityReductionOutput = moduleInstance.electricityReduction(inputVec);
         assert.approximately(results.energyUse, 6950.9206, 0.001, 'energyUse');
         assert.approximately(results.energyCost, 834.11047, 0.001, 'energyCost');
         assert.approximately(results.power, 0.804505, 0.001, 'power');
@@ -124,7 +129,7 @@ describe('Electricity Reduction Tests', function () {
     });
 
     it('should calculate ElectricityReduction Nameplate Method correctly for multiple units', function () {
-        let inputData = {
+        const inputData: ElectricityReductionInput = {
             operatingHours: 8640,
             electricityCost: 0.12,
             measurementMethod: moduleInstance.ElectricityReductionMeasurementMethod.Nameplate,
@@ -151,10 +156,10 @@ describe('Electricity Reduction Tests', function () {
             units: 2
         };
 
-        let inputVec = new moduleInstance.ElectricityReductionInputV();
+        const inputVec: ElectricityReductionInputV = new moduleInstance.ElectricityReductionInputV();
         inputVec.push_back(inputData);
 
-        let results = moduleInstance.electricityReduction(inputVec);
+        const results: ElectricityReductionOutput = moduleInstance.electricityReduction(inputVec);
         assert.approximately(results.energyUse, 13901.841605, 0.001, 'energyUse');
         assert.approximately(results.energyCost, 1668.220993, 0.001, 'energyCost');
         assert.approximately(results.power, 0.804505, 0.001, 'power');
@@ -162,7 +167,7 @@ describe('Electricity Reduction Tests', function () {
     });
 
     it('should calculate ElectricityReduction Nameplate Method correctly for multiple units', function () {
-        let inputData = {
+        const inputData: ElectricityReductionInput = {
             operatingHours: 8640,
             electricityCost: 0.12,
             measurementMethod: moduleInstance.ElectricityReductionMeasurementMethod.PowerMeter,
@@ -189,10 +194,10 @@ describe('Electricity Reduction Tests', function () {
             units: 2
         };
 
-        let inputVec = new moduleInstance.ElectricityReductionInputV();
+        const inputVec: ElectricityReductionInputV = new moduleInstance.ElectricityReductionInputV();
         inputVec.push_back(inputData);
 
-        let results = moduleInstance.electricityReduction(inputVec);
+        const results: ElectricityReductionOutput = moduleInstance.electricityReduction(inputVec);
         assert.approximately(results.energyUse, 864000, 0.001, 'energyUse');
         assert.approximately(results.energyCost, 103680, 0.001, 'energyCost');
         assert.approximately(results.power, 50, 0.001, 'power');
@@ -200,7 +205,7 @@ describe('Electricity Reduction Tests', function () {
     });
 
     it('should calculate ElectricityReduction Other Method correctly', function () {
-        let inputData = {
+        const inputData: ElectricityReductionInput = {
             operatingHours: 8640,
             electricityCost: 0.12,
             measurementMethod: moduleInstance.ElectricityReductionMeasurementMethod.Other,
@@ -227,10 +232,10 @@ describe('Electricity Reduction Tests', function () {
             units: 2
         };
 
-        let inputVec = new moduleInstance.ElectricityReductionInputV();
+        const inputVec: ElectricityReductionInputV = new moduleInstance.ElectricityReductionInputV();
         inputVec.push_back(inputData);
 
-        let results = moduleInstance.electricityReduction(inputVec);
+        const results: ElectricityReductionOutput = moduleInstance.electricityReduction(inputVec);
         assert.approximately(results.energyUse, 432000, 0.001, 'energyUse');
         assert.approximately(results.energyCost, 51840, 0.001, 'energyCost');
         assert.strictEqual(results.power, 0, 'power');
@@ -238,7 +243,7 @@ describe('Electricity Reduction Tests', function () {
     });
 
     it('should calculate 5 ElectricityReductions (all methods) correctly', function () {
-        let measurInputData = {
+        const measurInputData: { electricityReductionInputVec: ElectricityReductionInput[] } = {
             electricityReductionInputVec: [
                 {
                     operatingHours: 8640,
@@ -293,12 +298,12 @@ describe('Electricity Reduction Tests', function () {
             ]
         };
 
-        let inputVec = new moduleInstance.ElectricityReductionInputV();
+        const inputVec: ElectricityReductionInputV = new moduleInstance.ElectricityReductionInputV();
         for (let i = 0; i < measurInputData.electricityReductionInputVec.length; i++) {
             inputVec.push_back(measurInputData.electricityReductionInputVec[i]);
         }
 
-        let results = moduleInstance.electricityReduction(inputVec);
+        const results: ElectricityReductionOutput = moduleInstance.electricityReduction(inputVec);
         assert.approximately(results.energyUse, 1945004.716785, 0.001, 'energyUse');
         assert.approximately(results.energyCost, 233400.566012, 0.001, 'energyCost');
         assert.approximately(results.power, 125.116287, 0.001, 'power');

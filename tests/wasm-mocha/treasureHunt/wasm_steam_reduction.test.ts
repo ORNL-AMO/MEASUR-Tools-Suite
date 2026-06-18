@@ -1,26 +1,33 @@
 import { assert } from 'chai';
+import createModule, {
+    type MeasurToolsSuite,
+    type SteamReductionInput,
+    type SteamReductionInputV,
+    type SteamReductionOutput,
+} from 'measur-tools-suite';
 
 describe('Steam Reduction Tests', function () {
-    let moduleInstance;
+    let moduleInstance: MeasurToolsSuite;
     before(async function () {
-        const ToolsSuiteModule = (await import('../../../bin/client.js')).default;
-        moduleInstance = await ToolsSuiteModule({
-            locateFile: (filename) => '/base/bin/' + filename
+        moduleInstance = await createModule({
+            locateFile: (filename: string) => '/base/bin/' + filename
         });
     });
 
-    function executeTest(inputVec, expectedSteamUse, expectedEnergyUse, expectedEnergyCost) {
-        let inputList = new moduleInstance.SteamReductionInputV();
-        for (let i = 0; i < inputVec.length; i++) {
-            inputList.push_back(inputVec[i]);
+    function executeTest(inputVec: SteamReductionInput[], expectedSteamUse: number, expectedEnergyUse: number, expectedEnergyCost: number) {
+        const inputList: SteamReductionInputV = new moduleInstance.SteamReductionInputV();
+        try {
+            for (let i = 0; i < inputVec.length; i++) {
+                inputList.push_back(inputVec[i]);
+            }
+
+            const results: SteamReductionOutput = moduleInstance.steamReduction(inputList);
+            assert.approximately(results.steamUse,   expectedSteamUse,   0.001, 'steamUse');
+            assert.approximately(results.energyUse,  expectedEnergyUse,  0.001, 'energyUse');
+            assert.approximately(results.energyCost, expectedEnergyCost, 0.001, 'energyCost');
+        } finally {
+            inputList.delete();
         }
-
-        let results = moduleInstance.steamReduction(inputList);
-        assert.approximately(results.steamUse,   expectedSteamUse,   0.001, 'steamUse');
-        assert.approximately(results.energyUse,  expectedEnergyUse,  0.001, 'energyUse');
-        assert.approximately(results.energyCost, expectedEnergyCost, 0.001, 'energyCost');
-
-        inputList.delete();
     }
 
     it('should calculate steamReduction (Flow Meter Method) correctly', function () {

@@ -59,9 +59,6 @@ export enum SteamUtilityType {
 export interface SteamFlowMeterMethodData {
     /** Flow rate (water m^3/min, steam kg/hr) */
     flowRate: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -75,9 +72,6 @@ export interface SteamFlowMeterMethodData {
 export interface SteamMassFlowNameplateData {
     /** Nameplate flow rate (water m^3/min, steam kg/hr) */
     flowRate: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -93,9 +87,6 @@ export interface SteamMassFlowMeasuredData {
     areaOfDuct: number;
     /** Measured air velocity in the duct, units m/min */
     airVelocity: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -122,9 +113,6 @@ export interface SteamMassFlowMethodData {
     inletTemperature: number;
     /** Outlet temperature, units degC */
     outletTemperature: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -138,9 +126,6 @@ export interface SteamMassFlowMethodData {
 export interface SteamOffsheetMethodData {
     /** Total annual energy consumption, units kJ/year */
     consumption: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 // ---------------------------------------------------------------------------
@@ -202,9 +187,6 @@ export interface SteamReductionInput {
     steamVariable: number;
     /** Feedwater temperature, units K */
     feedWaterTemperature: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -224,9 +206,6 @@ export interface SteamReductionOutput {
     energyUse: number;
     /** Annual energy cost, units $/year */
     energyCost: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 // ---------------------------------------------------------------------------
@@ -248,12 +227,5 @@ export function steamReduction(input_vec: SteamReductionInputV): SteamReductionO
 export type SteamReductionModule = {
     SteamMeasurementMethod: typeof SteamMeasurementMethod;
     SteamUtilityType: typeof SteamUtilityType;
-    SteamFlowMeterMethodData: SteamFlowMeterMethodData;
-    SteamMassFlowNameplateData: SteamMassFlowNameplateData;
-    SteamMassFlowMeasuredData: SteamMassFlowMeasuredData;
-    SteamMassFlowMethodData: SteamMassFlowMethodData;
-    SteamOffsheetMethodData: SteamOffsheetMethodData;
-    SteamReductionInput: SteamReductionInput;
-    SteamReductionOutput: SteamReductionOutput;
     steamReduction: typeof steamReduction;
 };

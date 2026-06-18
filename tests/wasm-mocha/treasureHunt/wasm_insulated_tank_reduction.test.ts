@@ -1,15 +1,15 @@
 import { assert } from 'chai';
+import createModule, { type InsulatedTankInput, type InsulatedTankOutput, type MeasurToolsSuite } from 'measur-tools-suite';
 
 describe('Insulated Tank Reduction Tests', function () {
-    let m;
+    let m: MeasurToolsSuite;
     before(async function () {
-        const ToolsSuiteModule = (await import('../../../bin/client.js')).default;
-        m = await ToolsSuiteModule({
-            locateFile: (filename) => '/base/bin/' + filename
+        m = await createModule({
+            locateFile: (filename: string) => '/base/bin/' + filename
         });
     });
 
-    function makeInput(data) {
+    function makeInput(data: InsulatedTankInput): InsulatedTankInput {
         return {
             operatingHours:         data.operatingHours,
             tankHeight:             data.tankHeight,
@@ -27,7 +27,7 @@ describe('Insulated Tank Reduction Tests', function () {
         };
     }
 
-    const baseInsulatedInput = {
+    const baseInsulatedInput: InsulatedTankInput = {
         operatingHours:         8760,
         tankHeight:             10,
         tankDiameter:           5,
@@ -44,13 +44,13 @@ describe('Insulated Tank Reduction Tests', function () {
     };
 
     it('should calculate heat loss for an insulated tank (case 1)', function () {
-        let result = m.insulatedTankReduction(makeInput(baseInsulatedInput));
+        const result: InsulatedTankOutput = m.insulatedTankReduction(makeInput(baseInsulatedInput));
         assert.approximately(result.heatLoss,       0.0444638799, 0.0001, 'heatLoss');
         assert.approximately(result.annualHeatLoss, 43.278176,    0.01,   'annualHeatLoss');
     });
 
     it('should calculate heat loss for an insulated tank (case 2)', function () {
-        let input = makeInput({
+        const input = makeInput({
             operatingHours:         8760,
             tankHeight:             50,
             tankDiameter:           1,
@@ -65,34 +65,34 @@ describe('Insulated Tank Reduction Tests', function () {
             jacketEmissivity:       0.1,
             surfaceTemperature:     759.67
         });
-        let result = m.insulatedTankReduction(input);
+        const result: InsulatedTankOutput = m.insulatedTankReduction(input);
         assert.approximately(result.heatLoss,       0.030515,  0.0001, 'heatLoss');
         assert.approximately(result.annualHeatLoss, 29.70135,  0.01,   'annualHeatLoss');
     });
 
     it('should calculate heat loss for a bare (uninsulated) tank', function () {
-        let input = makeInput({
+        const input = makeInput({
             ...baseInsulatedInput,
             insulationThickness:    0,
             insulationConductivity: 0
         });
-        let result = m.insulatedTankReduction(input);
+        const result: InsulatedTankOutput = m.insulatedTankReduction(input);
         assert.approximately(result.heatLoss,       1.1112001223, 0.001, 'heatLoss');
         assert.approximately(result.annualHeatLoss, 1081.568119,  0.1,   'annualHeatLoss');
     });
 
     it('should match insulatedTankHeatLoss output when insulation is present', function () {
-        let input    = makeInput(baseInsulatedInput);
-        let fromCalc = m.insulatedTankReduction(input);
-        let fromIns  = m.insulatedTankHeatLoss(input);
+        const input    = makeInput(baseInsulatedInput);
+        const fromCalc = m.insulatedTankReduction(input);
+        const fromIns  = m.insulatedTankHeatLoss(input);
         assert.approximately(fromCalc.heatLoss,       fromIns.heatLoss,       0.0001, 'heatLoss');
         assert.approximately(fromCalc.annualHeatLoss, fromIns.annualHeatLoss, 0.01,   'annualHeatLoss');
     });
 
     it('should match bareTankHeatLoss output when no insulation', function () {
-        let input    = makeInput({ ...baseInsulatedInput, insulationThickness: 0, insulationConductivity: 0 });
-        let fromCalc = m.insulatedTankReduction(input);
-        let fromBare = m.bareTankHeatLoss(input);
+        const input    = makeInput({ ...baseInsulatedInput, insulationThickness: 0, insulationConductivity: 0 });
+        const fromCalc = m.insulatedTankReduction(input);
+        const fromBare = m.bareTankHeatLoss(input);
         assert.approximately(fromCalc.heatLoss,       fromBare.heatLoss,       0.001, 'heatLoss');
         assert.approximately(fromCalc.annualHeatLoss, fromBare.annualHeatLoss, 0.1,   'annualHeatLoss');
     });
@@ -100,7 +100,7 @@ describe('Insulated Tank Reduction Tests', function () {
     it('should compute the natural convection coefficient correctly', function () {
         // h = 0.125 * Ra^(1/3) * k / d
         // For Ra = 1e9, k = 0.015, d = 5: h = 0.125 * 1000 * 0.015 / 5 = 0.375
-        let h = m.insulatedTankNaturalConvectionCoeff(1.0e9, 0.015, 5.0);
+        const h = m.insulatedTankNaturalConvectionCoeff(1.0e9, 0.015, 5.0);
         assert.approximately(h, 0.375, 0.0001, 'naturalConvectionCoeff');
     });
 });

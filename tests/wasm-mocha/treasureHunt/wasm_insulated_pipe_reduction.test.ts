@@ -1,21 +1,37 @@
 import { assert } from 'chai';
+import createModule, {
+    type DoubleVector,
+    type InsulatedPipeInput,
+    type InsulatedPipeOutput,
+    type MeasurToolsSuite,
+} from 'measur-tools-suite';
+
+type InsulatedPipeTestInput = Omit<InsulatedPipeInput, 'pipeMaterialCoefficients' | 'insulationMaterialCoefficients'> & {
+    pipeMaterialCoefficients: number[];
+    insulationMaterialCoefficients: number[];
+};
+
+type InsulatedPipeInputFixture = {
+    input: InsulatedPipeInput;
+    pipeMaterialCoefficients: DoubleVector;
+    insulationMaterialCoefficients: DoubleVector;
+};
 
 describe('Insulated Pipe Reduction Tests', function () {
-    let m;
+    let m: MeasurToolsSuite;
     before(async function () {
-        const ToolsSuiteModule = (await import('../../../bin/client.js')).default;
-        m = await ToolsSuiteModule({
-            locateFile: (filename) => '/base/bin/' + filename
+        m = await createModule({
+            locateFile: (filename: string) => '/base/bin/' + filename
         });
     });
 
-    function makeInput(data) {
-        let pipeMaterialCoefficients       = new m.DoubleVector();
-        let insulationMaterialCoefficients = new m.DoubleVector();
+    function makeInput(data: InsulatedPipeTestInput): InsulatedPipeInputFixture {
+        const pipeMaterialCoefficients: DoubleVector = new m.DoubleVector();
+        const insulationMaterialCoefficients: DoubleVector = new m.DoubleVector();
         data.pipeMaterialCoefficients.forEach(v => pipeMaterialCoefficients.push_back(v));
         data.insulationMaterialCoefficients.forEach(v => insulationMaterialCoefficients.push_back(v));
 
-        let input = {
+        const input: InsulatedPipeInput = {
             operatingHours:                data.operatingHours,
             pipeLength:                    data.pipeLength,
             pipeDiameter:                  data.pipeDiameter,
@@ -34,7 +50,7 @@ describe('Insulated Pipe Reduction Tests', function () {
     }
 
     it('should calculate heat loss for an insulated pipe correctly', function () {
-        let { input, pipeMaterialCoefficients, insulationMaterialCoefficients } = makeInput({
+        const { input, pipeMaterialCoefficients, insulationMaterialCoefficients } = makeInput({
             operatingHours:                8640,
             pipeLength:                    15.24,
             pipeDiameter:                  0.025399,
@@ -50,16 +66,18 @@ describe('Insulated Pipe Reduction Tests', function () {
             insulationMaterialCoefficients: [1.57526e-12, -2.02822e-9, 8.6328e-7, 0, 0.006729488]
         });
 
-        let result = m.insulatedPipeReduction(input);
-        assert.approximately(result.heatLossPerLength, 19.385877,        0.001, 'heatLossPerLength');
-        assert.approximately(result.annualHeatLoss,    2836231.3687633, 1.0,   'annualHeatLoss');
-
-        pipeMaterialCoefficients.delete();
-        insulationMaterialCoefficients.delete();
+        try {
+            const result: InsulatedPipeOutput = m.insulatedPipeReduction(input);
+            assert.approximately(result.heatLossPerLength, 19.385877,        0.001, 'heatLossPerLength');
+            assert.approximately(result.annualHeatLoss,    2836231.3687633, 1.0,   'annualHeatLoss');
+        } finally {
+            pipeMaterialCoefficients.delete();
+            insulationMaterialCoefficients.delete();
+        }
     });
 
     it('should calculate heat loss for a bare (uninsulated) pipe correctly', function () {
-        let { input, pipeMaterialCoefficients, insulationMaterialCoefficients } = makeInput({
+        const { input, pipeMaterialCoefficients, insulationMaterialCoefficients } = makeInput({
             operatingHours:                8640,
             pipeLength:                    15.24,
             pipeDiameter:                  0.025399,
@@ -75,12 +93,14 @@ describe('Insulated Pipe Reduction Tests', function () {
             insulationMaterialCoefficients: [1.57526e-12, -2.02822e-9, 8.6328e-7, 0, 0.006729488]
         });
 
-        let result = m.insulatedPipeReduction(input);
-        assert.approximately(result.heatLossPerLength, 278.8984025085, 0.001, 'heatLossPerLength');
-        assert.approximately(result.annualHeatLoss,    40803955.00651534,    1.0,   'annualHeatLoss');
-
-        pipeMaterialCoefficients.delete();
-        insulationMaterialCoefficients.delete();
+        try {
+            const result: InsulatedPipeOutput = m.insulatedPipeReduction(input);
+            assert.approximately(result.heatLossPerLength, 278.8984025085, 0.001, 'heatLossPerLength');
+            assert.approximately(result.annualHeatLoss,    40803955.00651534,    1.0,   'annualHeatLoss');
+        } finally {
+            pipeMaterialCoefficients.delete();
+            insulationMaterialCoefficients.delete();
+        }
     });
 
     it('should compute the Reynolds number correctly', function () {

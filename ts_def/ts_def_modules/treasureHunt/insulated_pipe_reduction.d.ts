@@ -8,6 +8,8 @@
  * tabulated data.
  */
 
+import type { DoubleVector } from "../binding/registered_vectors";
+
 // ---------------------------------------------------------------------------
 // Input / Output value objects
 // ---------------------------------------------------------------------------
@@ -57,12 +59,9 @@ export interface InsulatedPipeInput {
     /** Emissivity of the insulation jacket outer surface (dimensionless, 0-1) */
     jacketEmissivity: number;
     /** 4th-order polynomial fit coefficients (5 values, order 4 -> 0) for pipe thermal conductivity, units W/(m.K) */
-    pipeMaterialCoefficients: number[];
+    pipeMaterialCoefficients: DoubleVector;
     /** 4th-order polynomial fit coefficients (5 values, order 4 -> 0) for insulation thermal conductivity, units W/(m.K) */
-    insulationMaterialCoefficients: number[];
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
+    insulationMaterialCoefficients: DoubleVector;
 }
 
 /**
@@ -76,9 +75,6 @@ export interface InsulatedPipeOutput {
     heatLossPerLength: number;
     /** Annual heat loss for the full pipe, units Wh/year */
     annualHeatLoss: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 // ---------------------------------------------------------------------------
@@ -239,8 +235,6 @@ export function insulatedPipeConvectiveHeatTransferCoeff(
 ): number;
 
 export type InsulatedPipeReductionModule = {
-    InsulatedPipeInput: InsulatedPipeInput;
-    InsulatedPipeOutput: InsulatedPipeOutput;
     insulatedPipeReduction: typeof insulatedPipeReduction;
     insulatedPipeHeatLoss: typeof insulatedPipeHeatLoss;
     bareInsulatedPipeHeatLoss: typeof bareInsulatedPipeHeatLoss;

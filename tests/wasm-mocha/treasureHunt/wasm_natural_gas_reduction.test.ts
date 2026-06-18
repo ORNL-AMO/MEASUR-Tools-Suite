@@ -1,16 +1,21 @@
 import { assert } from 'chai';
+import createModule, {
+    type MeasurToolsSuite,
+    type NaturalGasReductionInput,
+    type NaturalGasReductionInputV,
+    type NaturalGasReductionOutput,
+} from 'measur-tools-suite';
 
 describe('Natural Gas Reduction Tests', function () {
-    let moduleInstance;
+    let moduleInstance: MeasurToolsSuite;
     before(async function () {
-        const ToolsSuiteModule = (await import('../../../bin/client.js')).default;
-        moduleInstance = await ToolsSuiteModule({
-            locateFile: (filename) => '/base/bin/' + filename
+        moduleInstance = await createModule({
+            locateFile: (filename: string) => '/base/bin/' + filename
         });
     });
 
     it('should calculate NaturalGasReduction Flow Meter Method correctly', function () {
-        let inputData = {
+        const inputData: NaturalGasReductionInput = {
             operatingHours: 8640,
             fuelCost: 0.12,
             measurementMethod: moduleInstance.NaturalGasMeasurementMethod.FlowMeter,
@@ -33,9 +38,9 @@ describe('Natural Gas Reduction Tests', function () {
             units: 2
         };
 
-        let inputVec = new moduleInstance.NaturalGasReductionInputV();
+        const inputVec: NaturalGasReductionInputV = new moduleInstance.NaturalGasReductionInputV();
         inputVec.push_back(inputData);
-        let results = moduleInstance.naturalGasReduction(inputVec);
+        const results: NaturalGasReductionOutput = moduleInstance.naturalGasReduction(inputVec);
         assert.approximately(results.energyUse, 88.992, 0.001, "energyUse");
         assert.approximately(results.energyCost, 10.67904, 0.001, "energyCost");
         assert.approximately(results.heatFlow, 0, 0.001, "heatFlow");
@@ -44,7 +49,7 @@ describe('Natural Gas Reduction Tests', function () {
     });
 
     it('should calculate NaturalGasReduction Air Mass Flow Nameplate correctly', function () {
-        let inputData = {
+        const inputData: NaturalGasReductionInput = {
             operatingHours: 8640,
             fuelCost: 0.12,
             measurementMethod: moduleInstance.NaturalGasMeasurementMethod.AirMassFlow,
@@ -67,9 +72,9 @@ describe('Natural Gas Reduction Tests', function () {
             units: 2
         };
 
-        let inputVec = new moduleInstance.NaturalGasReductionInputV();
+        const inputVec: NaturalGasReductionInputV = new moduleInstance.NaturalGasReductionInputV();
         inputVec.push_back(inputData);
-        let results = moduleInstance.naturalGasReduction(inputVec);
+        const results: NaturalGasReductionOutput = moduleInstance.naturalGasReduction(inputVec);
         assert.approximately(results.energyUse, 44.78976, 0.001, "energyUse");
         assert.approximately(results.energyCost, 5.37477, 0.001, "energyCost");
         assert.approximately(results.heatFlow, 0.002592, 0.000001, "heatFlow");
@@ -78,7 +83,7 @@ describe('Natural Gas Reduction Tests', function () {
     });
 
     it('should calculate NaturalGasReduction Air Mass Flow Measured correctly', function () {
-        let inputData = {
+        const inputData: NaturalGasReductionInput = {
             operatingHours: 8640,
             fuelCost: 0.12,
             measurementMethod: moduleInstance.NaturalGasMeasurementMethod.AirMassFlow,
@@ -101,9 +106,9 @@ describe('Natural Gas Reduction Tests', function () {
             units: 2
         };
 
-        let inputVec = new moduleInstance.NaturalGasReductionInputV();
+        const inputVec: NaturalGasReductionInputV = new moduleInstance.NaturalGasReductionInputV();
         inputVec.push_back(inputData);
-        let results = moduleInstance.naturalGasReduction(inputVec);
+        const results: NaturalGasReductionOutput = moduleInstance.naturalGasReduction(inputVec);
         assert.approximately(results.energyUse, 14929.92, 0.01, "energyUse");
         assert.approximately(results.energyCost, 1791.5904, 0.001, "energyCost");
         assert.approximately(results.heatFlow, 0.864, 0.001, "heatFlow");
@@ -112,7 +117,7 @@ describe('Natural Gas Reduction Tests', function () {
     });
 
     it('should calculate NaturalGasReduction Water Mass Flow correctly', function () {
-        let inputData = {
+        const inputData: NaturalGasReductionInput = {
             operatingHours: 8640,
             fuelCost: 0.12,
             measurementMethod: moduleInstance.NaturalGasMeasurementMethod.WaterMassFlow,
@@ -135,9 +140,9 @@ describe('Natural Gas Reduction Tests', function () {
             units: 2
         };
 
-        let inputVec = new moduleInstance.NaturalGasReductionInputV();
+        const inputVec: NaturalGasReductionInputV = new moduleInstance.NaturalGasReductionInputV();
         inputVec.push_back(inputData);
-        let results = moduleInstance.naturalGasReduction(inputVec);
+        const results: NaturalGasReductionOutput = moduleInstance.naturalGasReduction(inputVec);
         assert.approximately(results.energyUse, 276480, 0.001, "energyUse");
         assert.approximately(results.energyCost, 33177.6, 0.001, "energyCost");
         assert.approximately(results.heatFlow, 16, 0.001, "heatFlow");
@@ -146,7 +151,7 @@ describe('Natural Gas Reduction Tests', function () {
     });
 
     it('should calculate NaturalGasReduction Other Method correctly', function () {
-        let inputData = {
+        const inputData: NaturalGasReductionInput = {
             operatingHours: 8640,
             fuelCost: 0.12,
             measurementMethod: moduleInstance.NaturalGasMeasurementMethod.Other,
@@ -169,9 +174,9 @@ describe('Natural Gas Reduction Tests', function () {
             units: 2
         };
 
-        let inputVec = new moduleInstance.NaturalGasReductionInputV();
+        const inputVec: NaturalGasReductionInputV = new moduleInstance.NaturalGasReductionInputV();
         inputVec.push_back(inputData);
-        let results = moduleInstance.naturalGasReduction(inputVec);
+        const results: NaturalGasReductionOutput = moduleInstance.naturalGasReduction(inputVec);
         assert.approximately(results.energyUse, 2000, 0.001, "energyUse");
         assert.approximately(results.energyCost, 240, 0.001, "energyCost");
         assert.approximately(results.heatFlow, 0, 0.001, "heatFlow");
@@ -180,7 +185,7 @@ describe('Natural Gas Reduction Tests', function () {
     });
 
     it('should calculate NaturalGasReduction All Methods correctly', function () {
-        let inputs = [
+        const inputs: NaturalGasReductionInput[] = [
             // flow meter method
             {
                 operatingHours: 8640, fuelCost: 0.12,
@@ -238,11 +243,11 @@ describe('Natural Gas Reduction Tests', function () {
             }
         ];
 
-        let inputVec = new moduleInstance.NaturalGasReductionInputV();
+        const inputVec: NaturalGasReductionInputV = new moduleInstance.NaturalGasReductionInputV();
         for (let inp of inputs) {
             inputVec.push_back(inp);
         }
-        let results = moduleInstance.naturalGasReduction(inputVec);
+        const results: NaturalGasReductionOutput = moduleInstance.naturalGasReduction(inputVec);
         assert.approximately(results.energyUse, 293543.70176, 0.001, "energyUse");
         assert.approximately(results.energyCost, 35225.2442112, 0.001, "energyCost");
         assert.approximately(results.heatFlow, 16.866592, 0.0001, "heatFlow");
@@ -251,7 +256,7 @@ describe('Natural Gas Reduction Tests', function () {
     });
 
     it('should calculate flowMeterMethodReduction standalone correctly', function () {
-        let results = moduleInstance.flowMeterMethodReduction({ flowRate: 5 }, 8640, 0.12, 2);
+        const results: NaturalGasReductionOutput = moduleInstance.flowMeterMethodReduction({ flowRate: 5 }, 8640, 0.12, 2);
         assert.approximately(results.energyUse, 88.992, 0.001, "energyUse");
         assert.approximately(results.energyCost, 10.67904, 0.001, "energyCost");
         assert.approximately(results.heatFlow, 0, 0.001, "heatFlow");
@@ -259,7 +264,7 @@ describe('Natural Gas Reduction Tests', function () {
     });
 
     it('should calculate waterMassFlowMethodReduction standalone correctly', function () {
-        let results = moduleInstance.waterMassFlowMethodReduction(
+        const results: NaturalGasReductionOutput = moduleInstance.waterMassFlowMethodReduction(
             { waterFlow: 400, inletTemperature: 120, outletTemperature: 200, systemEfficiency: 1 }, 8640, 0.12, 2);
         assert.approximately(results.energyUse, 276480, 0.001, "energyUse");
         assert.approximately(results.energyCost, 33177.6, 0.001, "energyCost");
@@ -268,7 +273,7 @@ describe('Natural Gas Reduction Tests', function () {
     });
 
     it('should calculate naturalGasOtherMethodReduction standalone correctly', function () {
-        let results = moduleInstance.naturalGasOtherMethodReduction({ consumption: 2000 }, 0.12);
+        const results: NaturalGasReductionOutput = moduleInstance.naturalGasOtherMethodReduction({ consumption: 2000 }, 0.12);
         assert.approximately(results.energyUse, 2000, 0.001, "energyUse");
         assert.approximately(results.energyCost, 240, 0.001, "energyCost");
         assert.approximately(results.heatFlow, 0, 0.001, "heatFlow");

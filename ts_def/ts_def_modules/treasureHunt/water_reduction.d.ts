@@ -42,9 +42,6 @@ export enum WaterReductionMeasurementMethod {
 export interface MeteredFlowMethodData {
     /** Instantaneous flow rate from the meter, units gal/min */
     meterReading: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -65,9 +62,6 @@ export interface VolumeMeterMethodData {
     initialMeterReading: number;
     /** Duration of the measurement interval, units min */
     elapsedTime: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -84,9 +78,6 @@ export interface BucketMethodData {
     bucketVolume: number;
     /** Time required to fill the bucket, units s */
     bucketFillTime: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -100,9 +91,6 @@ export interface BucketMethodData {
 export interface WaterOtherMethodData {
     /** Annual water consumption, units gal/year */
     consumption: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 // ---------------------------------------------------------------------------
@@ -139,9 +127,6 @@ export interface WaterReductionInput {
     bucketMethodData: BucketMethodData;
     /** Data for the other method */
     otherMethodData: WaterOtherMethodData;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -158,9 +143,6 @@ export interface WaterReductionOutput {
     waterUse: number;
     /** Annual water cost, units $/year */
     waterCost: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 // ---------------------------------------------------------------------------
@@ -244,13 +226,6 @@ export function otherReduction(
 
 export type WaterReductionModule = {
     WaterReductionMeasurementMethod: typeof WaterReductionMeasurementMethod;
-    MeteredFlowMethodData: MeteredFlowMethodData;
-    VolumeMeterMethodData: VolumeMeterMethodData;
-    BucketMethodData: BucketMethodData;
-    WaterOtherMethodData: WaterOtherMethodData;
-    WaterReductionInput: WaterReductionInput;
-    WaterReductionOutput: WaterReductionOutput;
-    WaterReductionInputV: WaterReductionInputV;
     waterReduction: typeof waterReduction;
     meteredFlowReduction: typeof meteredFlowReduction;
     volumeMeterReduction: typeof volumeMeterReduction;

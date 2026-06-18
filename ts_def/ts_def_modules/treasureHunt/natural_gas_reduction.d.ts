@@ -42,9 +42,6 @@ export enum NaturalGasMeasurementMethod {
 export interface NaturalGasFlowMeterMethodData {
     /** Gas flow rate measured by the flow meter, units ft^3/hr */
     flowRate: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -58,9 +55,6 @@ export interface NaturalGasFlowMeterMethodData {
 export interface NaturalGasOtherMethodData {
     /** Annual natural gas consumption, units MMBtu/year */
     consumption: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -77,9 +71,6 @@ export interface AirMassFlowMeasuredData {
     areaOfDuct: number;
     /** Air velocity measured in the duct, units ft/min */
     airVelocity: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -93,9 +84,6 @@ export interface AirMassFlowMeasuredData {
 export interface AirMassFlowNameplateData {
     /** Nameplate air flow rate, units ft^3/min */
     airFlow: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -124,9 +112,6 @@ export interface AirMassFlowData {
     outletTemperature: number;
     /** System efficiency (dimensionless, 0-1) */
     systemEfficiency: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -149,9 +134,6 @@ export interface WaterMassFlowData {
     outletTemperature: number;
     /** System efficiency (dimensionless, 0-1) */
     systemEfficiency: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 // ---------------------------------------------------------------------------
@@ -191,9 +173,6 @@ export interface NaturalGasReductionInput {
     waterMassFlowData: WaterMassFlowData;
     /** Unit conversion multiplier applied to flow rates */
     units: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -217,9 +196,6 @@ export interface NaturalGasReductionOutput {
     heatFlow: number;
     /** Total gas or fluid flow, units ft^3/hr */
     totalFlow: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 // ---------------------------------------------------------------------------
@@ -312,14 +288,6 @@ export function naturalGasOtherMethodReduction(
 
 export type NaturalGasReductionModule = {
     NaturalGasMeasurementMethod: typeof NaturalGasMeasurementMethod;
-    NaturalGasFlowMeterMethodData: NaturalGasFlowMeterMethodData;
-    NaturalGasOtherMethodData: NaturalGasOtherMethodData;
-    AirMassFlowMeasuredData: AirMassFlowMeasuredData;
-    AirMassFlowNameplateData: AirMassFlowNameplateData;
-    AirMassFlowData: AirMassFlowData;
-    WaterMassFlowData: WaterMassFlowData;
-    NaturalGasReductionInput: NaturalGasReductionInput;
-    NaturalGasReductionOutput: NaturalGasReductionOutput;
     naturalGasReduction: typeof naturalGasReduction;
     flowMeterMethodReduction: typeof flowMeterMethodReduction;
     airMassFlowMethodReduction: typeof airMassFlowMethodReduction;

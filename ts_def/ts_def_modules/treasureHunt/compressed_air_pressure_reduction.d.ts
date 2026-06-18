@@ -40,9 +40,6 @@ export interface CompressedAirPressureReductionInput {
     atmosphericPressure: number;
     /** Rated compressor pressure, units psi */
     pressureRated: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -56,9 +53,6 @@ export interface CompressedAirPressureReductionOutput {
     energyUse: number;
     /** Annual energy cost, units $/year */
     energyCost: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 // ---------------------------------------------------------------------------
@@ -76,7 +70,5 @@ export function compressedAirPressureReduction(
 ): CompressedAirPressureReductionOutput;
 
 export type CompressedAirPressureReductionModule = {
-    CompressedAirPressureReductionInput: CompressedAirPressureReductionInput;
-    CompressedAirPressureReductionOutput: CompressedAirPressureReductionOutput;
     compressedAirPressureReduction: typeof compressedAirPressureReduction;
 };

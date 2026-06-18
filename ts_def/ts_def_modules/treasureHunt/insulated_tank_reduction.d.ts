@@ -60,9 +60,6 @@ export interface InsulatedTankInput {
     jacketEmissivity: number;
     /** Outer surface temperature (jacket or bare tank outer wall), units Rankine */
     surfaceTemperature: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -76,9 +73,6 @@ export interface InsulatedTankOutput {
     heatLoss: number;
     /** Annual heat loss (scaled, efficiency-adjusted), units BTU per 10^6 */
     annualHeatLoss: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 // ---------------------------------------------------------------------------
@@ -158,8 +152,6 @@ export function insulatedTankNaturalConvectionCoeff(
 ): number;
 
 export type InsulatedTankReductionModule = {
-    InsulatedTankInput: InsulatedTankInput;
-    InsulatedTankOutput: InsulatedTankOutput;
     insulatedTankReduction: typeof insulatedTankReduction;
     insulatedTankHeatLoss: typeof insulatedTankHeatLoss;
     bareTankHeatLoss: typeof bareTankHeatLoss;
