@@ -62,16 +62,37 @@ jobs:
           package_version="$(node -p "require('./package.json').version")"
 
           if [[ "$RELEASE_CHANNEL" == "beta" || "$RELEASE_CHANNEL" == "rc" ]]; then
-            latest_version="$(npm view "$package_name@${RELEASE_CHANNEL}" version 2>/dev/null || true)"
             prefix="${package_version}-${RELEASE_CHANNEL}."
-            next_increment=0
 
-            if [[ $latest_version == "$prefix"* ]]; then
-              curr_increment="${latest_version#"$prefix"}"
-              next_increment=$((curr_increment + 1))
+            # Fetch every published version and find the highest increment that matches
+            # this exact base version + channel (e.g. "1.2.1-beta."). Using all versions
+            # avoids the stale-dist-tag problem where @beta still points to an older
+            # base version from a different branch.
+            all_versions="$(npm view "$package_name" versions --json 2>/dev/null || echo '[]')"
+            highest=$(PREFIX="$prefix" node -e "
+              const prefix = process.env.PREFIX;
+              let data = '';
+              process.stdin.on('data', d => data += d);
+              process.stdin.on('end', () => {
+                try {
+                  const raw = JSON.parse(data);
+                  const arr = Array.isArray(raw) ? raw : (raw ? [raw] : []);
+                  const nums = arr
+                    .filter(v => v.startsWith(prefix))
+                    .map(v => parseInt(v.slice(prefix.length), 10))
+                    .filter(n => Number.isFinite(n));
+                  process.stdout.write(String(nums.length > 0 ? Math.max(...nums) : -1));
+                } catch(e) { process.stdout.write('-1'); }
+              });
+            " <<< "$all_versions")
+
+            if [[ "$highest" =~ ^[0-9]+$ ]]; then
+              next_increment=$((highest + 1))
+            else
+              next_increment=0
             fi
 
-            package_version="${package_version}-${RELEASE_CHANNEL}.${next_increment}"
+            package_version="${prefix}${next_increment}"
             npm --no-git-tag-version version "$package_version"
           fi
 

@@ -1,33 +1,54 @@
 import { assert } from 'chai';
+import createModule, { type MeasurToolsSuite, type SteamPropertiesOutput } from 'measur-tools-suite';
+
+type ExpectedSteamProperties = Pick<
+    SteamPropertiesOutput,
+    | 'temperature'
+    | 'pressure'
+    | 'quality'
+    | 'specificVolume'
+    | 'density'
+    | 'specificEnthalpy'
+    | 'specificEntropy'
+    | 'internalEnergy'
+    | 'specificIsobaricHeatCapacity_cp'
+    | 'specificIsochoricHeatCapacity_cv'
+    | 'speedOfSound_w'
+    | 'isentropicExponent'
+>;
 
 describe('Steam Properties', function () {
-    let moduleInstance;
+    let moduleInstance: MeasurToolsSuite;
     before(async function () {
-        const ToolsSuiteModule = (await import('../../../../bin/client.js')).default;
-        moduleInstance = await ToolsSuiteModule({
-            locateFile: (filename) => '/base/bin/' + filename
+        moduleInstance = await createModule({
+            locateFile: (filename: string) => '/base/bin/' + filename
         });
     });
 
-    function validateSteamProperties(pressure, temperature, expected) {
-        let steamProperties = new moduleInstance.SteamProperties(pressure, moduleInstance.ThermodynamicQuantity.TEMPERATURE, temperature);
-        let steamPropertiesRes = steamProperties.calculate();
+    function validateSteamProperties(pressure: number, temperature: number, expected: ExpectedSteamProperties): void {
+        const steamProperties = new moduleInstance.SteamProperties(pressure, moduleInstance.ThermodynamicQuantity.TEMPERATURE, temperature);
+        try {
+            const steamPropertiesRes: SteamPropertiesOutput = steamProperties.calculate();
+            try {
+                assert.approximately(steamPropertiesRes.temperature, expected.temperature, .01, "temperature");
+                assert.approximately(steamPropertiesRes.pressure, expected.pressure, .01, "pressure");
 
-        assert.approximately(steamPropertiesRes.temperature, expected.temperature, .01, "temperature");
-        assert.approximately(steamPropertiesRes.pressure, expected.pressure, .01, "pressure");
+                assert.approximately(steamPropertiesRes.specificVolume, expected.specificVolume, .01, "specificVolume");
+                assert.approximately(steamPropertiesRes.density, expected.density, .01, "density");
+                assert.approximately(steamPropertiesRes.specificEnthalpy, expected.specificEnthalpy, .01, "specificEnthalpy");
+                assert.approximately(steamPropertiesRes.specificEntropy, expected.specificEntropy, .01, "specificEntropy");
+                assert.approximately(steamPropertiesRes.internalEnergy, expected.internalEnergy, .01, "internalEnergy");
 
-        assert.approximately(steamPropertiesRes.specificVolume, expected.specificVolume, .01, "specificVolume");
-        assert.approximately(steamPropertiesRes.density, expected.density, .01, "density");
-        assert.approximately(steamPropertiesRes.specificEnthalpy, expected.specificEnthalpy, .01, "specificEnthalpy");
-        assert.approximately(steamPropertiesRes.specificEntropy, expected.specificEntropy, .01, "specificEntropy");
-        assert.approximately(steamPropertiesRes.internalEnergy, expected.internalEnergy, .01, "internalEnergy");
-
-        assert.approximately(steamPropertiesRes.specificIsobaricHeatCapacity_cp, expected.specificIsobaricHeatCapacity_cp, .01, "specificIsobaricHeatCapacity_cp");
-        assert.approximately(steamPropertiesRes.specificIsochoricHeatCapacity_cv, expected.specificIsochoricHeatCapacity_cv, .01, "specificIsochoricHeatCapacity_cv");
-        assert.approximately(steamPropertiesRes.speedOfSound_w, expected.speedOfSound_w, .01, "speedOfSound_w");
-        assert.approximately(steamPropertiesRes.isentropicExponent, expected.isentropicExponent, .01, "isentropicExponent");
-
-        steamPropertiesRes.delete();
+                assert.approximately(steamPropertiesRes.specificIsobaricHeatCapacity_cp, expected.specificIsobaricHeatCapacity_cp, .01, "specificIsobaricHeatCapacity_cp");
+                assert.approximately(steamPropertiesRes.specificIsochoricHeatCapacity_cv, expected.specificIsochoricHeatCapacity_cv, .01, "specificIsochoricHeatCapacity_cv");
+                assert.approximately(steamPropertiesRes.speedOfSound_w, expected.speedOfSound_w, .01, "speedOfSound_w");
+                assert.approximately(steamPropertiesRes.isentropicExponent, expected.isentropicExponent, .01, "isentropicExponent");
+            } finally {
+                steamPropertiesRes.delete();
+            }
+        } finally {
+            steamProperties.delete();
+        }
     }
 
     it('Calculates Steam Properties', function () {

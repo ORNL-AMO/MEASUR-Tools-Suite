@@ -18,7 +18,9 @@ export enum UtilityType {
  *
  * @property leakCost double, annual leak cost
  */
-export interface SteamLeakSurveyResults {
+export declare class SteamLeakSurveyResults {
+    private constructor();
+
     /** Leak rate, units lb/hr */
     leakRate: number;
     /** Steam loss, units klb/yr */
@@ -34,6 +36,8 @@ export interface SteamLeakSurveyResults {
 
 /** Implements plume-based steam leak-rate estimation, based on DOE's Quantify and Eliminate Steam Leaks. */
 export declare class QuantifySteamLeakByPlumeLength {
+    private constructor();
+
     /**
      * @param steamPressure double, steam pressure in psig
      * @param plumeLength double, visible plume length in feet
@@ -216,7 +220,7 @@ export declare class SteamLeakSurvey {
 
 export type SteamLeakSurveyModule = {
     UtilityType: typeof UtilityType;
-    SteamLeakSurveyResults: SteamLeakSurveyResults;
+    SteamLeakSurveyResults: typeof SteamLeakSurveyResults;
     QuantifySteamLeakByPlumeLength: typeof QuantifySteamLeakByPlumeLength;
     SteamLeakSurvey: typeof SteamLeakSurvey;
 };

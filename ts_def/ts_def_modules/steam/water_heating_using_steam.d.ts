@@ -44,9 +44,6 @@ export interface WaterHeatingUsingSteamOutput {
     waterSaved: number;
     /** Heat gain rate, units kJ/hr */
     heatGainRate: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -82,6 +79,5 @@ export function waterHeatingUsingSteam(
 ): WaterHeatingUsingSteamOutput;
 
 export type WaterHeatingUsingSteamModule = {
-    WaterHeatingUsingSteamOutput: WaterHeatingUsingSteamOutput;
     waterHeatingUsingSteam: typeof waterHeatingUsingSteam;
 };

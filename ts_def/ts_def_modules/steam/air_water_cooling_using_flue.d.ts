@@ -42,9 +42,6 @@ export interface AirWaterCoolingUsingFlueOutput {
     heatRecovery: number;
     /** Sensible heat recovered, units MMBtu/hr */
     sensibleHeatRecovery: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -77,6 +74,5 @@ export function airWaterCoolingUsingFlue(
 ): AirWaterCoolingUsingFlueOutput;
 
 export type AirWaterCoolingUsingFlueModule = {
-    AirWaterCoolingUsingFlueOutput: AirWaterCoolingUsingFlueOutput;
     airWaterCoolingUsingFlue: typeof airWaterCoolingUsingFlue;
 };

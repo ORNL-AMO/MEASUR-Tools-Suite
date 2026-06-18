@@ -1,24 +1,57 @@
 import { assert } from 'chai';
+import createModule, {
+    type FluidProperties,
+    type HeatLoss,
+    type MeasurToolsSuite,
+    type PrvWithoutDesuperheating,
+    type ProcessSteamUsage,
+    type SteamModelerOutput,
+    type SteamPropertiesOutput,
+    type Turbine
+} from 'measur-tools-suite';
+
+type EmbindDeletable = {
+    delete(): void;
+};
+
+type ExpectedValues = Record<string, number | undefined>;
+
+type ValidatedFluidProperties = EmbindDeletable & Partial<
+    Pick<
+        FluidProperties & ProcessSteamUsage & SteamPropertiesOutput,
+        | 'pressure'
+        | 'temperature'
+        | 'specificEnthalpy'
+        | 'specificEntropy'
+        | 'quality'
+        | 'specificVolume'
+        | 'massFlow'
+        | 'energyFlow'
+        | 'density'
+        | 'internalEnergy'
+        | 'processUsage'
+    >
+>;
 
 describe('Steam Modeler Tests', function () {
-    let m;
-    let results;
-    let cleanupModel;
+    let m: MeasurToolsSuite;
+    let results: SteamModelerOutput;
+    let cleanupModel: (() => void) | undefined;
 
     const DEFAULT_TOLERANCE = 0.1;
     const DEFAULT_RELATIVE_TOLERANCE = 0.05;
 
-    function isDefined(value) {
+    function isDefined(value: number | undefined | null): value is number {
         return value !== undefined && value !== null;
     }
 
-    function assertNumber(actual, expected, label, tolerance = null) {
+    function assertNumber(actual: number | undefined | null, expected: number, label: string, tolerance: number | null = null): void {
         assert.isNumber(actual, `${label} should be a number`);
         const computedTolerance = tolerance ?? Math.max(DEFAULT_TOLERANCE, Math.abs(expected) * DEFAULT_RELATIVE_TOLERANCE);
-        assert.approximately(actual, expected, computedTolerance, label);
+        assert.approximately(actual as number, expected, computedTolerance, label);
     }
 
-    function validateFluidProperties(header, fluidProperties, expected) {
+    function validateFluidProperties(header: string, fluidProperties: ValidatedFluidProperties, expected: ExpectedValues): void {
         assert.isOk(fluidProperties, `${header} should be defined`);
 
         if (isDefined(expected.pressure)) assertNumber(fluidProperties.pressure, expected.pressure, `${header}.pressure`);
@@ -35,8 +68,10 @@ describe('Steam Modeler Tests', function () {
         fluidProperties.delete();
     }
 
-    function validateTurbineOutput(header, turbine, expected) {
-        assert.isOk(turbine, `${header} should be defined`);
+    function validateTurbineOutput(header: string, turbine: Turbine | null, expected: ExpectedValues): void {
+        if (!turbine) {
+            assert.fail(`${header} should be defined`);
+        }
 
         const inletProperties = turbine.getInletProperties();
         const outletProperties = turbine.getOutletProperties();
@@ -69,8 +104,10 @@ describe('Steam Modeler Tests', function () {
         turbine.delete();
     }
 
-    function validatePrvOutput(header, prv, expected) {
-        assert.isOk(prv, `${header} should be defined`);
+    function validatePrvOutput(header: string, prv: PrvWithoutDesuperheating | null, expected: ExpectedValues): void {
+        if (!prv) {
+            assert.fail(`${header} should be defined`);
+        }
 
         const inletProperties = prv.getInletProperties();
         if (isDefined(expected.inletEnergyFlow)) assertNumber(prv.getInletEnergyFlow(), expected.inletEnergyFlow, `${header}.inletEnergyFlow`);
@@ -115,15 +152,23 @@ describe('Steam Modeler Tests', function () {
         prv.delete();
     }
 
-    function validateHeatLoss(pressureLevel, heatLoss, heatLossValue, expectedInlet, expectedOutlet) {
-        assert.isOk(heatLoss, `${pressureLevel} pressure heatLoss should be defined`);
+    function validateHeatLoss(
+        pressureLevel: string,
+        heatLoss: HeatLoss | null,
+        heatLossValue: number,
+        expectedInlet: ExpectedValues,
+        expectedOutlet: ExpectedValues
+    ): void {
+        if (!heatLoss) {
+            assert.fail(`${pressureLevel} pressure heatLoss should be defined`);
+        }
         assertNumber(heatLoss.getHeatLoss(), heatLossValue, `${pressureLevel}.heatLoss`);
         validateFluidProperties(`${pressureLevel} HeatLoss Inlet`, heatLoss.getInletProperties(), expectedInlet);
         validateFluidProperties(`${pressureLevel} HeatLoss Outlet`, heatLoss.getOutletProperties(), expectedOutlet);
         heatLoss.delete();
     }
 
-    function createSteamModelerResults() {
+    function createSteamModelerResults(): { modelResults: SteamModelerOutput; cleanup: () => void } {
         const boilerInput = {
             fuelType: 1,
             fuel: 1,
@@ -217,8 +262,8 @@ describe('Steam Modeler Tests', function () {
             useTurbine: true,
         };
 
-        const resources = [];
-        const register = (resource) => {
+        const resources: EmbindDeletable[] = [];
+        const register = <T extends EmbindDeletable>(resource: T): T => {
             resources.push(resource);
             return resource;
         };
@@ -334,13 +379,9 @@ describe('Steam Modeler Tests', function () {
         return {
             modelResults,
             cleanup: () => {
-                if (modelResults && typeof modelResults.delete === 'function') {
-                    modelResults.delete();
-                }
+                modelResults.delete();
                 for (let i = resources.length - 1; i >= 0; i -= 1) {
-                    if (resources[i] && typeof resources[i].delete === 'function') {
-                        resources[i].delete();
-                    }
+                    resources[i].delete();
                 }
 
             },
@@ -348,9 +389,8 @@ describe('Steam Modeler Tests', function () {
     }
 
     before(async function () {
-        const ToolsSuiteModule = (await import('../../../../bin/client.js')).default;
-        m = await ToolsSuiteModule({
-            locateFile: (filename) => '/base/bin/' + filename
+        m = await createModule({
+            locateFile: (filename: string) => '/base/bin/' + filename
         });
 
         const created = createSteamModelerResults();

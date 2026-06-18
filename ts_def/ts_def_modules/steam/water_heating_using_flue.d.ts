@@ -71,9 +71,6 @@ export interface WaterHeatingUsingFlueOutput {
     energySavingsBoiler: number;
     /** Annual cost savings, units $/yr */
     costSavingsBoiler: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -121,6 +118,5 @@ export function waterHeatingUsingFlue(
 
 export type WaterHeatingUsingFlueModule = {
     SteamConditionType: typeof SteamConditionType;
-    WaterHeatingUsingFlueOutput: WaterHeatingUsingFlueOutput;
     waterHeatingUsingFlue: typeof waterHeatingUsingFlue;
 };

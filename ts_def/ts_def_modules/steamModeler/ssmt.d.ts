@@ -27,7 +27,9 @@ export type { ThermodynamicQuantity, Solve, TurbineProperty };
  * All specific quantities are per unit mass (kJ/kg or m3/kg) for gas (steam)
  * and liquid (water) phases, plus evaporation (latent) values.
  */
-export interface SaturatedPropertiesOutput {
+export declare class SaturatedPropertiesOutput {
+    private constructor();
+
     /** Saturated pressure, units MPa */
     saturatedPressure: number;
     /** Saturated temperature, units K */
@@ -125,7 +127,7 @@ export declare class SteamPropertiesOutput {
  * @param specificEntropy Specific entropy, units kJ/(kg.K)
  * @param internalEnergy Internal energy, units MJ (optional, default 0)
  */
-export declare class FluidProperties {
+export declare class FluidProperties extends SteamPropertiesOutput {
     constructor(
         massFlow: number,
         energyFlow: number,
@@ -676,7 +678,9 @@ export declare class Turbine {
  * @property hotOutlet Outlet properties of the hot-side fluid
  * @property coldOutlet Outlet properties of the cold-side fluid
  */
-export interface HeatExchangerOutput {
+export declare class HeatExchangerOutput {
+    private constructor();
+
     /** Outlet properties of the hot-side fluid */
     hotOutlet: FluidProperties;
     /** Outlet properties of the cold-side fluid */
@@ -716,7 +720,7 @@ export declare class HeatExchanger {
 }
 
 export type SsmtModule = {
-    SaturatedPropertiesOutput: SaturatedPropertiesOutput;
+    SaturatedPropertiesOutput: typeof SaturatedPropertiesOutput;
     SteamPropertiesOutput: typeof SteamPropertiesOutput;
     FluidProperties: typeof FluidProperties;
     SaturatedPressure: typeof SaturatedPressure;
@@ -734,5 +738,5 @@ export type SsmtModule = {
     Header: typeof Header;
     Turbine: typeof Turbine;
     HeatExchanger: typeof HeatExchanger;
-    HeatExchangerOutput: HeatExchangerOutput;
+    HeatExchangerOutput: typeof HeatExchangerOutput;
 };
