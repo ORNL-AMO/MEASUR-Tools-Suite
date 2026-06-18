@@ -14,7 +14,9 @@
  * @property power_loss_electrical double, electrical power loss in kW
  * @property annual_energy_loss double, annual energy loss in kWh
  */
-export interface PumpValvePowerLossOutput {
+export declare class PumpValvePowerLossOutput {
+    private constructor();
+
     /** Pressure drop, units psi */
     pressure_drop: number;
     /** Head loss, units ft */
@@ -69,5 +71,5 @@ export declare class PumpValvePowerLoss {
 
 export type PumpValvePowerLossModule = {
     PumpValvePowerLoss: typeof PumpValvePowerLoss;
-    PumpValvePowerLossOutput: PumpValvePowerLossOutput;
+    PumpValvePowerLossOutput: typeof PumpValvePowerLossOutput;
 };

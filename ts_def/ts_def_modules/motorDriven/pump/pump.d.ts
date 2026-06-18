@@ -1,5 +1,6 @@
 import { Motor } from "../motor/motor";
 import { Drive, LoadEstimationMethod } from "../motor/motorEnum";
+import { PumpStyle, SpecificSpeed } from "../pumpFan/pumpFan";
 
 /**
  * Pump calculations.
@@ -133,25 +134,25 @@ export declare class HeadTool {
  */
 export declare class PumpResultInput {
     /**
-     * @param style Pump style selector (Pump::Style)
+     * @param style PumpStyle, pump style selector
      * @param pumpEfficiency double, pump efficiency
      * @param rpm double, pump speed in RPM
      * @param drive Drive enum, drive type
      * @param kviscosity double, kinematic viscosity
      * @param specificGravity double, specific gravity
      * @param stageCount int, number of stages
-     * @param speed Pump specific speed selector (Pump::SpecificSpeed)
+     * @param speed SpecificSpeed, pump specific speed selector
      * @param specifiedEfficiency double, specified optimal efficiency
      */
     constructor(
-        style: number,
+        style: PumpStyle,
         pumpEfficiency: number,
         rpm: number,
         drive: Drive,
         kviscosity: number,
         specificGravity: number,
         stageCount: number,
-        speed: number,
+        speed: SpecificSpeed,
         specifiedEfficiency: number
     );
 
