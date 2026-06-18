@@ -1,66 +1,81 @@
 import { assert } from 'chai';
+import createModule, {
+    type DoubleVector,
+    type DoubleVector2D,
+    type MeasurToolsSuite,
+    type RegisteredVector
+} from 'measur-tools-suite';
+
 describe('Process Cooling Tests', function () {
-    let moduleInstance;
+    let moduleInstance: MeasurToolsSuite;
+
     before(async function () {
-        const ToolsSuiteModule = (await import('../../../bin/client.js')).default;
-        moduleInstance = await ToolsSuiteModule({
-            locateFile: (filename) => '/base/bin/' + filename
+        moduleInstance = await createModule({
+            locateFile: (filename: string) => '/base/bin/' + filename
         });
     });
 
     it('Process Cooling Tests', function () {
-        function rnd(value) {
-            return Number(Math.round(value + 'e' + 2) + 'e-' + 2);
+        function rnd(value: number): number {
+            return Number(Math.round(Number(value + 'e' + 2)) + 'e-' + 2);
         }
 
-        function roundToThousandths(value) {
+        function roundToThousandths(value: number): number {
             return Math.round(value * 1000) / 1000;
         }
 
-        function logMessage(msg, header) { 
+        function logMessage(msg: string, header?: string | boolean): void {
             if (header) console.log(`[${header}] ${msg}`);
             else console.log(msg);
         }
 
-        let validateResults = function (results, expected) {
+        const validateResults = function (results: RegisteredVector<number>, expected: number[]): void {
             for (let i = 0; i < expected.length; i++) {
                 assert.equal(rnd(results.get(i)), rnd(expected[i]), "");
             }
         };
 
-        let validateArrays = function (results, expected, bin) {
+        const validateArrays = function (
+            results: RegisteredVector<number>,
+            expected: number[],
+            bin: Array<number | string>
+        ): void {
             for (let i = 0; i < expected.length; i++) {
-                assert.equal(rnd(results.get(i)), rnd(expected[i]), bin[i]);
-            }
-        };
-        
-        // *  expected results already in correct precision - use thousandths rounding and keep precision from original CWSAT vals
-        const validateArraysCWSAT = function (results, expected, bin) {
-            for (let i = 0; i < expected.length; i++) {
-                assert.equal(roundToThousandths(results.get(i)), expected[i], bin[i]);
+                assert.equal(rnd(results.get(i)), rnd(expected[i]), String(bin[i]));
             }
         };
 
-        const returnTestDoubleVector = (doublesArray) => {
-            let doubleVector = new moduleInstance.DoubleVector();
+        // *  expected results already in correct precision - use thousandths rounding and keep precision from original CWSAT vals
+        const validateArraysCWSAT = function (
+            results: RegisteredVector<number>,
+            expected: number[],
+            bin: Array<number | string>
+        ): void {
+            for (let i = 0; i < expected.length; i++) {
+                assert.equal(roundToThousandths(results.get(i)), expected[i], String(bin[i]));
+            }
+        };
+
+        const returnTestDoubleVector = (doublesArray: number[]): DoubleVector => {
+            const doubleVector = new moduleInstance.DoubleVector();
             doublesArray.forEach(x => {
                 doubleVector.push_back(x);
             });
             return doubleVector;
-        }
+        };
 
-        const returnTestDoubleVector2d = (doubles2dArray) => {
-            let doubleVector2d = new moduleInstance.DoubleVector2D();
-            let doubleVectors = [];
+        const returnTestDoubleVector2d = (doubles2dArray: number[][]): DoubleVector2D => {
+            const doubleVector2d = new moduleInstance.DoubleVector2D();
+            const doubleVectors: DoubleVector[] = [];
             for (let i = 0; i < doubles2dArray.length; i++) {
-                let innerArray = doubles2dArray[i];
-                let doubleVector = returnTestDoubleVector(innerArray);
+                const innerArray = doubles2dArray[i];
+                const doubleVector = returnTestDoubleVector(innerArray);
                 doubleVector2d.push_back(doubleVector);
                 doubleVectors.push(doubleVector);
             }
             doubleVectors.forEach(vector => vector.delete());
             return doubleVector2d;
-        }
+        };
 
 
         let chillerBins = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
@@ -748,7 +763,7 @@ describe('Process Cooling Tests', function () {
             chillersW.push_back(chiller2);
             chillersW.push_back(chiller3);
 
-            // *  NOTE flow rate CW value 3 from pump cw inputs 
+            // *  NOTE flow rate CW value 3 from pump cw inputs
             let wcs = new moduleInstance.WaterCooledSystemInput(44, false, 0, true, 85, false, 3, 0);
             let ti = new moduleInstance.TowerInput(1, 2, moduleInstance.FanMotorSpeedType.One, moduleInstance.TowerSizedBy.Tonnage, moduleInstance.CellFanType.AxialFan, 0, 2000);
             let pcW = new moduleInstance.ProcessCooling(_systemOperationAnnualHours, _dryBulbHourlyTemp, _wetBulbHourlyTemp, chillersW, ti, wcs);

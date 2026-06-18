@@ -1,3 +1,5 @@
+import { ChillerInputV, DoubleVector, DoubleVector2D, IntVector } from "../binding/registered_vectors";
+
 /**
  * Process Fluid Cooling Energy Calculations (CWSAT).
  *
@@ -91,15 +93,17 @@ export enum FanMotorSpeedType {
  * @property power 2-D array, units kW
  * @property energy 2-D array, units kWh
  */
-export interface ChillerOutput {
+export declare class ChillerOutput {
+    private constructor();
+
     /** 2-D array of efficiency values per chiller per load bin, units kW/ton */
-    efficiency: number[][];
+    efficiency: DoubleVector2D;
     /** 2-D array of hours per chiller per load bin, units hours */
-    hours: number[][];
+    hours: DoubleVector2D;
     /** 2-D array of power per chiller per load bin, units kW */
-    power: number[][];
+    power: DoubleVector2D;
     /** 2-D array of energy per chiller per load bin, units kWh */
-    energy: number[][];
+    energy: DoubleVector2D;
 
     /** Frees the underlying resource; must be called when finished with the instance */
     delete(): void;
@@ -110,9 +114,11 @@ export interface ChillerOutput {
  *
  * @property chillerPumpingEnergy array of pumping energy values, one entry per chiller, units kWh
  */
-export interface ChillerPumpingEnergyOutput {
+export declare class ChillerPumpingEnergyOutput {
+    private constructor();
+
     /** Pumping energy for each chiller, units kWh */
-    chillerPumpingEnergy: number[];
+    chillerPumpingEnergy: DoubleVector;
 
     /** Frees the underlying resource; must be called when finished with the instance */
     delete(): void;
@@ -128,13 +134,15 @@ export interface ChillerPumpingEnergyOutput {
  * @property hours array of hours in each wet-bulb bin, units hours
  * @property energy array of energy consumed in each wet-bulb bin, units kWh
  */
-export interface TowerOutput {
+export declare class TowerOutput {
+    private constructor();
+
     /** Wet-bulb temperature bin boundaries */
-    efficiency: number[];
+    efficiency: DoubleVector;
     /** Hours in each wet-bulb temperature bin, units hours */
-    hours: number[];
+    hours: DoubleVector;
     /** Energy consumed in each wet-bulb temperature bin, units kWh */
-    energy: number[];
+    energy: DoubleVector;
 
     /** Frees the underlying resource; must be called when finished with the instance */
     delete(): void;
@@ -266,7 +274,7 @@ export declare class ChillerInput {
      * @param age double, chiller age in years (0-20); efficiency degraded 1 % per year
      * @param installVSD boolean, install a VSD on the centrifugal compressor motor
      * @param useARIMonthlyLoadSchedule boolean, use ARI monthly load schedule (monthlyLoads may be empty if true)
-     * @param monthlyLoads number[][], 12 x 11 array of % load bins per calendar month;
+     * @param monthlyLoads DoubleVector2D, 12 x 11 array of % load bins per calendar month;
      *   pass a 1 x 11 array for a non-varying monthly schedule
      */
     constructor(
@@ -277,7 +285,7 @@ export declare class ChillerInput {
         age: number,
         installVSD: boolean,
         useARIMonthlyLoadSchedule: boolean,
-        monthlyLoads: number[][]
+        monthlyLoads: DoubleVector2D
     );
 
     /**
@@ -290,7 +298,7 @@ export declare class ChillerInput {
      * @param age double, years (0-20)
      * @param installVSD boolean
      * @param useARIMonthlyLoadSchedule boolean
-     * @param monthlyLoads number[][], 12 x 11 or 1 x 11 array
+     * @param monthlyLoads DoubleVector2D, 12 x 11 or 1 x 11 array
      * @param changeRefrig boolean, whether to replace the refrigerant
      * @param currentRefrig {@link RefrigerantType} current refrigerant
      * @param proposedRefrig {@link RefrigerantType} proposed replacement refrigerant
@@ -303,7 +311,7 @@ export declare class ChillerInput {
         age: number,
         installVSD: boolean,
         useARIMonthlyLoadSchedule: boolean,
-        monthlyLoads: number[][],
+        monthlyLoads: DoubleVector2D,
         changeRefrig: boolean,
         currentRefrig: RefrigerantType,
         proposedRefrig: RefrigerantType
@@ -319,9 +327,9 @@ export declare class ChillerInput {
      * @param age double, years (0-20)
      * @param installVSD boolean
      * @param useARIMonthlyLoadSchedule boolean
-     * @param monthlyLoads number[][], 12 x 11 or 1 x 11 array
-     * @param loadAtPercent number[], % loading points in ascending order (e.g. [25, 50, 75, 100])
-     * @param kwPerTonLoads number[], kW/ton values at each corresponding % loading point
+     * @param monthlyLoads DoubleVector2D, 12 x 11 or 1 x 11 array
+     * @param loadAtPercent DoubleVector, % loading points in ascending order (e.g. [25, 50, 75, 100])
+     * @param kwPerTonLoads DoubleVector, kW/ton values at each corresponding % loading point
      */
     constructor(
         chillerType: ChillerCompressorType,
@@ -331,9 +339,9 @@ export declare class ChillerInput {
         age: number,
         installVSD: boolean,
         useARIMonthlyLoadSchedule: boolean,
-        monthlyLoads: number[][],
-        loadAtPercent: number[],
-        kwPerTonLoads: number[]
+        monthlyLoads: DoubleVector2D,
+        loadAtPercent: DoubleVector,
+        kwPerTonLoads: DoubleVector
     );
 
     /**
@@ -346,9 +354,9 @@ export declare class ChillerInput {
      * @param age double, years (0-20)
      * @param installVSD boolean
      * @param useARIMonthlyLoadSchedule boolean
-     * @param monthlyLoads number[][], 12 x 11 or 1 x 11 array
-     * @param loadAtPercent number[], % loading points in ascending order
-     * @param kwPerTonLoads number[], kW/ton at each loading point
+     * @param monthlyLoads DoubleVector2D, 12 x 11 or 1 x 11 array
+     * @param loadAtPercent DoubleVector, % loading points in ascending order
+     * @param kwPerTonLoads DoubleVector, kW/ton at each loading point
      * @param currentRefrig {@link RefrigerantType} current refrigerant
      * @param proposedRefrig {@link RefrigerantType} proposed replacement refrigerant
      */
@@ -360,9 +368,9 @@ export declare class ChillerInput {
         age: number,
         installVSD: boolean,
         useARIMonthlyLoadSchedule: boolean,
-        monthlyLoads: number[][],
-        loadAtPercent: number[],
-        kwPerTonLoads: number[],
+        monthlyLoads: DoubleVector2D,
+        loadAtPercent: DoubleVector,
+        kwPerTonLoads: DoubleVector,
         currentRefrig: RefrigerantType,
         proposedRefrig: RefrigerantType
     );
@@ -386,19 +394,19 @@ export declare class ProcessCooling {
     /**
      * Water-cooled system constructor.
      *
-     * @param systemOperationAnnualHours int[], 8760-element array (values 0 or 1) indicating
+     * @param systemOperationAnnualHours IntVector, 8760-element array (values 0 or 1) indicating
      *   whether the system operates in each hour of the year
-     * @param weatherDryBulbHourlyTemp number[], 8760-element array of dry-bulb temperatures, units F
-     * @param weatherWetBulbHourlyTemp number[], 8760-element array of wet-bulb temperatures, units F
-     * @param chillerInputList {@link ChillerInput}[], list of chiller configurations
+     * @param weatherDryBulbHourlyTemp DoubleVector, 8760-element array of dry-bulb temperatures, units F
+     * @param weatherWetBulbHourlyTemp DoubleVector, 8760-element array of wet-bulb temperatures, units F
+     * @param chillerInputList ChillerInputV, list of chiller configurations
      * @param towerInput {@link TowerInput} cooling tower configuration
      * @param waterCooledSystemInput {@link WaterCooledSystemInput} water-cooled system parameters
      */
     constructor(
-        systemOperationAnnualHours: number[],
-        weatherDryBulbHourlyTemp: number[],
-        weatherWetBulbHourlyTemp: number[],
-        chillerInputList: ChillerInput[],
+        systemOperationAnnualHours: IntVector,
+        weatherDryBulbHourlyTemp: DoubleVector,
+        weatherWetBulbHourlyTemp: DoubleVector,
+        chillerInputList: ChillerInputV,
         towerInput: TowerInput,
         waterCooledSystemInput: WaterCooledSystemInput
     );
@@ -406,17 +414,17 @@ export declare class ProcessCooling {
     /**
      * Air-cooled system constructor.
      *
-     * @param systemOperationAnnualHours int[], 8760-element array (values 0 or 1)
-     * @param weatherDryBulbHourlyTemp number[], 8760-element array of dry-bulb temperatures, units F
-     * @param weatherWetBulbHourlyTemp number[], 8760-element array of wet-bulb temperatures, units F
-     * @param chillerInputList {@link ChillerInput}[], list of chiller configurations
+     * @param systemOperationAnnualHours IntVector, 8760-element array (values 0 or 1)
+     * @param weatherDryBulbHourlyTemp DoubleVector, 8760-element array of dry-bulb temperatures, units F
+     * @param weatherWetBulbHourlyTemp DoubleVector, 8760-element array of wet-bulb temperatures, units F
+     * @param chillerInputList ChillerInputV, list of chiller configurations
      * @param airCooledSystemInput {@link AirCooledSystemInput} air-cooled system parameters
      */
     constructor(
-        systemOperationAnnualHours: number[],
-        weatherDryBulbHourlyTemp: number[],
-        weatherWetBulbHourlyTemp: number[],
-        chillerInputList: ChillerInput[],
+        systemOperationAnnualHours: IntVector,
+        weatherDryBulbHourlyTemp: DoubleVector,
+        weatherWetBulbHourlyTemp: DoubleVector,
+        chillerInputList: ChillerInputV,
         airCooledSystemInput: AirCooledSystemInput
     );
 
@@ -446,35 +454,35 @@ export declare class ProcessCooling {
      * Returns the polynomial efficiency coefficients for a specific chiller.
      *
      * @param chillerIndex int, zero-based index into the chiller input list
-     * @returns number[] - 4 coefficients for a 3rd-degree polynomial (FullLoadEffKnown or custom),
+     * @returns DoubleVector - 4 coefficients for a 3rd-degree polynomial (FullLoadEffKnown or custom),
      *   or 7 coefficients for a 5th-degree polynomial
      */
-    getChillerEfficiencyCoeffs(chillerIndex: number): number[];
+    getChillerEfficiencyCoeffs(chillerIndex: number): DoubleVector;
 
     /**
      * Returns energy efficiency values for a chiller at the specified % load points.
      *
      * @param chillerIndex int, zero-based index into the chiller input list
-     * @param loadAtPercent number[], % loading values (0-100); may be in any order
-     * @returns number[] - energy efficiency (kW/ton) at each % loading point,
+     * @param loadAtPercent DoubleVector, % loading values (0-100); may be in any order
+     * @returns DoubleVector - energy efficiency (kW/ton) at each % loading point,
      *   in the same order as the input array
      */
-    getChillerEnergyEfficiency(chillerIndex: number, loadAtPercent: number[]): number[];
+    getChillerEnergyEfficiency(chillerIndex: number, loadAtPercent: DoubleVector): DoubleVector;
 
     /**
      * Generates the system operation annual hours array from weekly and monthly schedules.
      *
-     * @param weeklyOpStartHour int[], 7-element array - start hour of operation for each day of the week (0-23)
-     * @param weeklyOpStopHour int[], 7-element array - stop hour of operation for each day of the week (0-24)
-     * @param monthlyOpMaxHour int[], 12-element array - maximum operating hours for each calendar month (0-744);
+     * @param weeklyOpStartHour IntVector, 7-element array - start hour of operation for each day of the week (0-23)
+     * @param weeklyOpStopHour IntVector, 7-element array - stop hour of operation for each day of the week (0-24)
+     * @param monthlyOpMaxHour IntVector, 12-element array - maximum operating hours for each calendar month (0-744);
      *   use 0 for no operation; hours are capped at the maximum available hours in that month
-     * @returns int[], 8760-element array with values 0 or 1 based on the supplied schedules
+     * @returns IntVector, 8760-element array with values 0 or 1 based on the supplied schedules
      */
     static getSysOpAnnualHours(
-        weeklyOpStartHour: number[],
-        weeklyOpStopHour: number[],
-        monthlyOpMaxHour: number[]
-    ): number[];
+        weeklyOpStartHour: IntVector,
+        weeklyOpStopHour: IntVector,
+        monthlyOpMaxHour: IntVector
+    ): IntVector;
 
     /** Frees the underlying resource; must be called when finished with the instance */
     delete(): void;
@@ -488,9 +496,9 @@ export type ProcessCoolingModule = {
     TowerSizedBy: typeof TowerSizedBy;
     ChillerCompressorType: typeof ChillerCompressorType;
     FanMotorSpeedType: typeof FanMotorSpeedType;
-    ChillerOutput: ChillerOutput;
-    ChillerPumpingEnergyOutput: ChillerPumpingEnergyOutput;
-    TowerOutput: TowerOutput;
+    ChillerOutput: typeof ChillerOutput;
+    ChillerPumpingEnergyOutput: typeof ChillerPumpingEnergyOutput;
+    TowerOutput: typeof TowerOutput;
     WaterCooledSystemInput: typeof WaterCooledSystemInput;
     AirCooledSystemInput: typeof AirCooledSystemInput;
     PumpInput: typeof PumpInput;
