@@ -50,9 +50,6 @@ export interface CascadeHeatHighToLowOutput {
     secExcessAir: number;
     /** Secondary available heat, fraction */
     secAvailableHeat: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -101,6 +98,5 @@ export function calculateCascadeHeatHighToLow(
 ): CascadeHeatHighToLowOutput;
 
 export type CascadeHeatHighToLowModule = {
-    CascadeHeatHighToLowOutput: CascadeHeatHighToLowOutput;
     calculateCascadeHeatHighToLow: typeof calculateCascadeHeatHighToLow;
 };

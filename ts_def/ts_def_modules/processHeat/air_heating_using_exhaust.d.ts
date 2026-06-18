@@ -31,9 +31,6 @@ export interface AirHeatingUsingExhaustResults {
     heatCapacityFlue: number;
     /** Heat capacity of air */
     heatCapacityAir: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -96,7 +93,6 @@ export function airHeatingUsingExhaustWithSolidLiquidFlueGasMaterial(
 ): AirHeatingUsingExhaustResults;
 
 export type AirHeatingUsingExhaustModule = {
-    AirHeatingUsingExhaustResults: AirHeatingUsingExhaustResults;
     airHeatingUsingExhaustWithGasComposition: typeof airHeatingUsingExhaustWithGasComposition;
     airHeatingUsingExhaustWithSolidLiquidFlueGasMaterial: typeof airHeatingUsingExhaustWithSolidLiquidFlueGasMaterial;
 };

@@ -1,12 +1,12 @@
 import { assert } from 'chai';
+import createModule, { type MeasurToolsSuite } from 'measur-tools-suite';
 
 describe('Process Wall Heat Loss', function () {
-    let moduleInstance;
+    let moduleInstance: MeasurToolsSuite;
 
     before(async function () {
-        const ToolsSuiteModule = (await import('../../../../bin/client.js')).default;
-        moduleInstance = await ToolsSuiteModule({
-            locateFile: (filename) => '/base/bin/' + filename
+        moduleInstance = await createModule({
+            locateFile: (filename: string) => '/base/bin/' + filename
         });
     });
 
@@ -14,7 +14,7 @@ describe('Process Wall Heat Loss', function () {
         const wallTypes = moduleInstance.getDefaultWallTypes();
 
         // Expected wall types and their shape factors
-        const expected = [
+        const expected: Array<[string, number]> = [
             ['Horizontal cylinders', 1.016],
             ['Longer vertical cylinders', 1.235],
             ['Vertical plates', 1.394],
@@ -24,14 +24,18 @@ describe('Process Wall Heat Loss', function () {
             ['Horizontal plate facing down, cooler than air', 1.79],
         ];
 
-        // Assert the number of wall types
-        assert.equal(wallTypes.size(), expected.length, 'wallTypes length mismatch');
+        try {
+            // Assert the number of wall types
+            assert.equal(wallTypes.size(), expected.length, 'wallTypes length mismatch');
 
-        // Assert each shape factor's description and value
-        expected.forEach(([description, factor], i) => {
-            assert.equal(wallTypes.get(i).wallDescription, description, `Wall description ${i} mismatch`);
-            assert.equal(wallTypes.get(i).shapeFactor, factor, `Shape factor ${i} mismatch`);
-        });
+            // Assert each shape factor's description and value
+            expected.forEach(([description, factor], i) => {
+                assert.equal(wallTypes.get(i).wallDescription, description, `Wall description ${i} mismatch`);
+                assert.equal(wallTypes.get(i).shapeFactor, factor, `Shape factor ${i} mismatch`);
+            });
+        } finally {
+            wallTypes.delete();
+        }
     });
 
     it('should calculate the total heat loss for a wall (convective & radiative)', function () {

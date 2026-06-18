@@ -59,9 +59,6 @@ export interface O2EnrichmentResults {
     fuelConsumptionEnriched: number;
     /** Fuel savings with O2 enrichment, units % */
     fuelSavingsEnriched: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -94,6 +91,5 @@ export function calculateO2Enrichment(
 ): O2EnrichmentResults;
 
 export type O2EnrichmentModule = {
-    O2EnrichmentResults: O2EnrichmentResults;
     calculateO2Enrichment: typeof calculateO2Enrichment;
 };

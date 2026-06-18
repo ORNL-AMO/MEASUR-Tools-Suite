@@ -21,9 +21,6 @@ export interface EnergyInputExhaustGasLossesResult {
     heat_delivered: number;
     /** Exhaust gas losses, units BTU/hr */
     exhaust_gas_losses: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -87,7 +84,6 @@ export function energyInputTotalHeatLoss(
 ): number;
 
 export type EnergyInputExhaustGasHeatLossModule = {
-    EnergyInputExhaustGasLossesResult: EnergyInputExhaustGasLossesResult;
     energyInputExhaustGasHeatLossCalculate: typeof energyInputExhaustGasHeatLossCalculate;
     energyInputAvailableHeat: typeof energyInputAvailableHeat;
     energyInputHeatDelivered: typeof energyInputHeatDelivered;

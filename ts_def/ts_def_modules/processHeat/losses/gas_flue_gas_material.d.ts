@@ -31,9 +31,6 @@ export interface ProcessHeatProperties {
     density: number;
     /** Oxygen in flue gas, units % */
     flueGasO2: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -79,7 +76,6 @@ export function gasFlueGasMaterialProcessHeatProperties(
 ): ProcessHeatProperties;
 
 export type GasFlueGasMaterialModule = {
-    ProcessHeatProperties: ProcessHeatProperties;
     gasFlueGasMaterialTotalHeatLoss: typeof gasFlueGasMaterialTotalHeatLoss;
     gasFlueGasMaterialProcessHeatProperties: typeof gasFlueGasMaterialProcessHeatProperties;
 };

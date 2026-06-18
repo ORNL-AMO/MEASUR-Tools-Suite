@@ -1,12 +1,12 @@
 import { assert } from 'chai';
+import createModule, { type MeasurToolsSuite } from 'measur-tools-suite';
 
 describe('Process Fixture Heat Loss', function () {
-    let moduleInstance;
+    let moduleInstance: MeasurToolsSuite;
 
     before(async function () {
-        const ToolsSuiteModule = (await import('../../../../bin/client.js')).default;
-        moduleInstance = await ToolsSuiteModule({
-            locateFile: (filename) => '/base/bin/' + filename
+        moduleInstance = await createModule({
+            locateFile: (filename: string) => '/base/bin/' + filename
         });
     });
 

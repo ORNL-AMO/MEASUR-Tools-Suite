@@ -1,12 +1,12 @@
 import { assert } from 'chai';
+import createModule, { type MeasurToolsSuite } from 'measur-tools-suite';
 
 describe('Process Atmosphere Heat Loss', function () {
-    let moduleInstance;
+    let moduleInstance: MeasurToolsSuite;
 
     before(async function () {
-        const ToolsSuiteModule = (await import('../../../../bin/client.js')).default;
-        moduleInstance = await ToolsSuiteModule({
-            locateFile: (filename) => '/base/bin/' + filename
+        moduleInstance = await createModule({
+            locateFile: (filename: string) => '/base/bin/' + filename
         });
     });
 
@@ -15,7 +15,7 @@ describe('Process Atmosphere Heat Loss', function () {
         const gasTypes = moduleInstance.getDefaultGasTypes();
 
         // Expected gas types
-        const expected = [
+        const expected: Array<[string, number]> = [
             ['Nitrogen', 0.0185],
             ['Hydrogen', 0.0182],
             ['Exothermic Gas', 0.0185],
@@ -24,14 +24,18 @@ describe('Process Atmosphere Heat Loss', function () {
             ['Water Vapor', 0.0212]
         ];
 
-        // Assert the number of gas types
-        assert.equal(gasTypes.size(), expected.length, 'gasTypes length mismatch');
+        try {
+            // Assert the number of gas types
+            assert.equal(gasTypes.size(), expected.length, 'gasTypes length mismatch');
 
-        // Assert each gas type's description and specific heat
-        expected.forEach(([description, specificHeat], i) => {
-            assert.equal(gasTypes.get(i).gasDescription, description, `Gas description ${i} mismatch`);
-            assert.equal(gasTypes.get(i).specificHeat, specificHeat, `Specific heat ${i} mismatch`);
-        });
+            // Assert each gas type's description and specific heat
+            expected.forEach(([description, specificHeat], i) => {
+                assert.equal(gasTypes.get(i).gasDescription, description, `Gas description ${i} mismatch`);
+                assert.equal(gasTypes.get(i).specificHeat, specificHeat, `Specific heat ${i} mismatch`);
+            });
+        } finally {
+            gasTypes.delete();
+        }
     });
 
     // Test Atmosphere Total Heat Loss Calculation

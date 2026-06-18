@@ -25,9 +25,6 @@ export interface WaterHeatingUsingExhaustOutput {
     capacityChiller: number;
     /** Electrical energy, units Btu/hr */
     electricalEnergy: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -55,6 +52,5 @@ export function waterHeatingUsingExhaust(
 ): WaterHeatingUsingExhaustOutput;
 
 export type WaterHeatingUsingExhaustModule = {
-    WaterHeatingUsingExhaustOutput: WaterHeatingUsingExhaustOutput;
     waterHeatingUsingExhaust: typeof waterHeatingUsingExhaust;
 };

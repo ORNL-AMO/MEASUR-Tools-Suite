@@ -20,9 +20,6 @@ export interface FlowCalculationsEnergyUseResults {
     heatInput: number;
     /** Total flow, units SCF */
     totalFlow: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -53,6 +50,5 @@ export function flowCalculationsEnergyUse(
 ): FlowCalculationsEnergyUseResults;
 
 export type FlowCalculationsEnergyUseModule = {
-    FlowCalculationsEnergyUseResults: FlowCalculationsEnergyUseResults;
     flowCalculationsEnergyUse: typeof flowCalculationsEnergyUse;
 };
