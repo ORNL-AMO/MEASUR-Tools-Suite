@@ -331,11 +331,11 @@ export declare class MotorPerformance {
      *
      * @param lineFrequency Motor::LineFrequency, classification of line frequency in Hz
      *
+     * @param motorRpm double, RPM of motor
+     *
      * @param efficiencyClass Motor::EfficiencyClass, efficiency class of motor
      *
      * @param motorRatedPower double, rated power of motor in hp
-     *
-     * @param motorRpm double, RPM of motor
      *
      * @param specifiedEfficiency double, Specified efficiency of motor when the efficiency class = SPECIFIED as %
      *
@@ -348,9 +348,9 @@ export declare class MotorPerformance {
      */
     constructor(
         lineFrequency: LineFrequency,
+        motorRpm: number,
         efficiencyClass: MotorEfficiencyClass,
         motorRatedPower: number,
-        motorRpm: number,
         specifiedEfficiency: number,
         loadFactor: number,
         ratedVoltage: number,
