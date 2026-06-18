@@ -67,8 +67,8 @@ export type RegisteredVectorConstructor<TVector extends RegisteredVector<unknown
 /** A vector of {@link number} records, mapped from `std::vector<number>`. */
 export declare interface DoubleVector extends RegisteredVector<number> {}
 
-/** A vector of {@link number[]} records, mapped from `std::vector<std::vector<number>>`. */
-export declare interface DoubleVector2D extends RegisteredVector<number[]> {}
+/** A vector of {@link DoubleVector} records, mapped from `std::vector<std::vector<number>>`. */
+export declare interface DoubleVector2D extends RegisteredVector<DoubleVector> {}
 
 /** A vector of {@link CompressorsData} records, mapped from `std::vector<CompressorsData>`. */
 export declare interface CompressorsDataV extends RegisteredVector<CompressorsData> {}

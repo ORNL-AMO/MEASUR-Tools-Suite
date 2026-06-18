@@ -1,6 +1,7 @@
 import { GasType, BaseGasDensityInputType, FanType } from "./fanEnum";
 import { Motor } from "../motor/motor";
 import { Drive, LoadEstimationMethod } from "../motor/motorEnum";
+import type { DoubleVector2D, PlaneDataNodeBindingDataVector, TraversePlaneVector } from "../../binding/registered_vectors";
 
 /**
  * Fan calculations and AMCA 203 utilities.
@@ -104,7 +105,27 @@ export declare class FieldDataModified {
  * @property driveEfficiency double, drive efficiency as decimal
  * @property estimatedFLA double, estimated full-load amps in A
  */
-export interface FanOutput {
+export declare class FanOutput {
+    /**
+     * Constructor for FanOutput
+     */
+    constructor(
+        fanEfficiency: number,
+        motorRatedPower: number,
+        motorShaftPower: number,
+        fanShaftPower: number,
+        motorEfficiency: number,
+        motorPowerFactor: number,
+        motorCurrent: number,
+        motorPower: number,
+        annualEnergy: number,
+        annualCost: number,
+        fanEnergyIndex: number,
+        loadFactor: number,
+        driveEfficiency: number,
+        estimatedFLA: number
+    );
+
     fanEfficiency: number;
     motorRatedPower: number;
     motorShaftPower: number;
@@ -189,7 +210,7 @@ export declare class FlangePlane {
 }
 
 /** Traverse plane with velocity-pressure traverse data. */
-export declare class TraversePlane {
+export declare class TraversePlane extends VelocityPressureTraverseData {
     /**
      * Constructor for TraversePlane
      * @param area double
@@ -197,7 +218,7 @@ export declare class TraversePlane {
      * @param pbx double
      * @param psx double
      * @param pitotTubeCoefficient double
-     * @param traverseHoleData array of double array
+     * @param traverseHoleData vector of double vectors
      */
     constructor(
         area: number,
@@ -205,7 +226,7 @@ export declare class TraversePlane {
         pbx: number,
         psx: number,
         pitotTubeCoefficient: number,
-        traverseHoleData: number[][]
+        traverseHoleData: DoubleVector2D
     );
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -234,7 +255,7 @@ export declare class PlaneData {
      * @param fanInletFlange FlangePlane
      * @param fanOrEvaseOutletFlange FlangePlane
      * @param flowTraverse TraversePlane
-     * @param addlTravPlanes array of TraversePlane
+     * @param addlTravPlanes vector of TraversePlane
      * @param inletMstPlane MstPlane
      * @param outletMstPlane MstPlane
      * @param totalPressureLossBtwnPlanes1and4 double
@@ -245,7 +266,7 @@ export declare class PlaneData {
         fanInletFlange: FlangePlane,
         fanOrEvaseOutletFlange: FlangePlane,
         flowTraverse: TraversePlane,
-        addlTravPlanes: TraversePlane[],
+        addlTravPlanes: TraversePlaneVector,
         inletMstPlane: MstPlane,
         outletMstPlane: MstPlane,
         totalPressureLossBtwnPlanes1and4: number,
@@ -288,7 +309,19 @@ export declare class FanShaftPower {
  * @property pressureStatic double
  * @property staticPressureRise double
  */
-export interface Fan203Results {
+export declare class Fan203Results {
+    /**
+     * Constructor for Fan203Results
+     */
+    constructor(
+        kpc: number,
+        power: number,
+        flow: number,
+        pressureTotal: number,
+        pressureStatic: number,
+        staticPressureRise: number
+    );
+
     kpc: number;
     power: number;
     flow: number;
@@ -308,7 +341,18 @@ export interface Fan203Results {
  * @property asTested Fan203Results
  * @property converted Fan203Results
  */
-export interface Fan203Output {
+export declare class Fan203Output {
+    /**
+     * Constructor for Fan203Output
+     */
+    constructor(
+        fanEfficiencyTotalPressure: number,
+        fanEfficiencyStaticPressure: number,
+        fanEfficiencyStaticPressureRise: number,
+        asTested: Fan203Results,
+        converted: Fan203Results
+    );
+
     fanEfficiencyTotalPressure: number;
     fanEfficiencyStaticPressure: number;
     fanEfficiencyStaticPressureRise: number;
@@ -460,7 +504,18 @@ export declare class PlaneDataNodeBinding {
  * @property gasVelocityPressure double, pressure in inches of water (in WC)
  * @property gasTotalPressure double, pressure in inches of water (in WC)
  */
-export interface PlaneDataNodeBindingData {
+export declare class PlaneDataNodeBindingData {
+    /**
+     * Constructor for PlaneDataNodeBindingData
+     */
+    constructor(
+        gasDensity: number,
+        gasVelocity: number,
+        gasVolumeFlowRate: number,
+        gasVelocityPressure: number,
+        gasTotalPressure: number
+    );
+
     gasDensity: number;
     gasVelocity: number;
     gasVolumeFlowRate: number;
@@ -480,12 +535,19 @@ export interface PlaneDataNodeBindingData {
  * @property gasTotalPressure double, pressure in inches of water (in WC)
  * @property staticPressure double, pressure in inches of water (in WC)
  */
-export interface PlaneDataNodeBindingDataFlange {
-    gasDensity: number;
-    gasVelocity: number;
-    gasVolumeFlowRate: number;
-    gasVelocityPressure: number;
-    gasTotalPressure: number;
+export declare class PlaneDataNodeBindingDataFlange extends PlaneDataNodeBindingData {
+    /**
+     * Constructor for PlaneDataNodeBindingDataFlange
+     */
+    constructor(
+        gasDensity: number,
+        gasVelocity: number,
+        gasVolumeFlowRate: number,
+        gasVelocityPressure: number,
+        gasTotalPressure: number,
+        staticPressure: number
+    );
+
     staticPressure: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -501,13 +563,18 @@ export interface PlaneDataNodeBindingDataFlange {
  * @property outletMstPlane PlaneDataNodeBindingData
  * @property addlTravPlanes PlaneDataNodeBindingData array
  */
-export interface PlaneDataNodeBindingOutput {
+export declare class PlaneDataNodeBindingOutput {
+    /**
+     * Constructor for PlaneDataNodeBindingOutput
+     */
+    constructor(planeData: PlaneData);
+
     fanInletFlange: PlaneDataNodeBindingDataFlange;
     fanOrEvaseOutletFlange: PlaneDataNodeBindingDataFlange;
     flowTraverse: PlaneDataNodeBindingData;
     inletMstPlane: PlaneDataNodeBindingData;
     outletMstPlane: PlaneDataNodeBindingData;
-    addlTravPlanes: PlaneDataNodeBindingData[];
+    addlTravPlanes: PlaneDataNodeBindingDataVector;
 
     /** Frees the underlying resource; must be called when finished with the instance */
     delete(): void;
@@ -602,10 +669,10 @@ export type FanModule = {
     PlaneDataNodeBindingCalculate: typeof PlaneDataNodeBindingCalculate;
     OptimalFanEfficiency: typeof OptimalFanEfficiency;
     CompressibilityFactor: typeof CompressibilityFactor;
-    FanOutput: FanOutput;
-    Fan203Output: Fan203Output;
-    Fan203Results: Fan203Results;
-    PlaneDataNodeBindingOutput: PlaneDataNodeBindingOutput;
-    PlaneDataNodeBindingData: PlaneDataNodeBindingData;
-    PlaneDataNodeBindingDataFlange: PlaneDataNodeBindingDataFlange;
+    FanOutput: typeof FanOutput;
+    Fan203Output: typeof Fan203Output;
+    Fan203Results: typeof Fan203Results;
+    PlaneDataNodeBindingOutput: typeof PlaneDataNodeBindingOutput;
+    PlaneDataNodeBindingData: typeof PlaneDataNodeBindingData;
+    PlaneDataNodeBindingDataFlange: typeof PlaneDataNodeBindingDataFlange;
 };

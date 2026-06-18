@@ -30,7 +30,9 @@ export enum FlowMode {
  * @property annualEnergyNew double, modified annual energy in kWh
  * @property annualCostSavings double, annual cost savings in $
  */
-export interface FanAffinityLawsOutput {
+export declare class FanAffinityLawsOutput {
+    private constructor();
+
     /** Baseline annual energy, units kWh */
     annualEnergyBaseline: number;
     /** Modified annual energy, units kWh */
@@ -82,9 +84,6 @@ export interface FanAffinityLawsInput {
     flowMode: FlowMode;
     /** Desired flow rate (units depend on flow mode) */
     desiredFlowRate: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -151,6 +150,5 @@ export type FanAffinityLawsModule = {
     MotorControlType: typeof MotorControlType;
     FlowMode: typeof FlowMode;
     FanAffinityLaws: typeof FanAffinityLaws;
-    FanAffinityLawsOutput: FanAffinityLawsOutput;
-    FanAffinityLawsInput: FanAffinityLawsInput;
+    FanAffinityLawsOutput: typeof FanAffinityLawsOutput;
 };
