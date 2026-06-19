@@ -1,15 +1,11 @@
-#include <vector>
-
 #include <emscripten/bind.h>
 
-#include "compressedAir/AirSystemCapacity.h"
-#include "compressedAir/AirVelocity.h"
-#include "compressedAir/PipeData.h"
+#include "compressedAir/pipe_data.h"
 
 using namespace emscripten;
+using pipe_data::PipeData;
 
-// airSystemCapacity
-EMSCRIPTEN_BINDINGS(airSystemCapacity) {
+EMSCRIPTEN_BINDINGS(pipe_data) {
     class_<PipeData>("PipeData")
         .constructor<double, double, double, double, double, double, double, double, double, double, double, double,
                      double, double, double, double, double, double, double, double>()
@@ -33,23 +29,4 @@ EMSCRIPTEN_BINDINGS(airSystemCapacity) {
         .property("eighteen", &PipeData::eighteen)
         .property("twenty", &PipeData::twenty)
         .property("twentyFour", &PipeData::twentyFour);
-
-    class_<AirSystemCapacity>("AirSystemCapacity")
-        .constructor<PipeData, std::vector<double>>()
-        .function("calculate", &AirSystemCapacity::calculate);
-
-    class_<AirSystemCapacity::Output>("AirSystemCapacityOutput")
-        .constructor<double, std::vector<double>, double, double, PipeData>()
-        .property("totalPipeVolume", &AirSystemCapacity::Output::totalPipeVolume)
-        .property("totalReceiverVolume", &AirSystemCapacity::Output::totalReceiverVol)
-        .property("totalCapacityOfCompressedAirSystem", &AirSystemCapacity::Output::totalCapacityOfCompressedAirSystem)
-        .property("receiverCapacities", &AirSystemCapacity::Output::receiverCapacities)
-        .property("pipeLengths", &AirSystemCapacity::Output::pipeLengths);
-}
-
-// airVelocity
-EMSCRIPTEN_BINDINGS(airVelocity) {
-    class_<AirVelocity>("AirVelocity")
-        .constructor<double, double, double>()
-        .function("calculate", &AirVelocity::calculate);
 }

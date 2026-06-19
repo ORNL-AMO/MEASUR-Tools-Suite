@@ -10,6 +10,7 @@ Before changing code, read the relevant project guidance:
 - [BUILD.md](BUILD.md) for build, test, WebAssembly, package, and Docker commands.
 - [contributing/style-guide.md](contributing/style-guide.md) for C++ style and naming.
 - [contributing/documentation.md](contributing/documentation.md) for Doxygen and `.dox` documentation standards.
+- [.agents/README.md](.agents/README.md) when coordinating persona-driven namespace refactors and algorithm documentation.
 - [ts_def/README.md](ts_def/README.md) when adding or correcting TypeScript declarations.
 - [tests/wasm-mocha/README.md](tests/wasm-mocha/README.md) when adding or migrating WebAssembly Mocha tests.
 
@@ -38,6 +39,7 @@ docs/dox-content/     calculation documentation
 - Keep source, binding, TypeScript declaration, tests, and documentation in sync.
 - Do not invent new abstractions unless they reduce real duplication or match an established local pattern.
 - Preserve public API compatibility unless the user explicitly requests a breaking change. When a breaking change is necessary, document the old-to-new migration.
+- When a user explicitly approves a breaking namespace/module refactor, remove obsolete compatibility wrappers, legacy headers, legacy runtime constructors, and compatibility-only tests instead of keeping old support code in parallel.
 - Do not revert or overwrite unrelated user changes in a dirty worktree.
 - Use structured tools and parsers when available. Avoid brittle ad hoc text rewrites for structured data.
 
@@ -64,6 +66,17 @@ When asked to refactor code using namespaces or to split modules, work in this o
 4. **WebAssembly Unit Tests**: Update or add `tests/wasm-mocha/` tests. Move successfully migrated tests from `tests/wasm/` and delete the obsolete originals.
 5. **TypeScript Declarations**: Update `ts_def/` to match the exact embind runtime surface and follow [ts_def/README.md](ts_def/README.md).
 6. **Documentation**: Update `docs/dox-content/` and related docs if public behavior, formulas, usage, or module organization changed.
+
+For namespace refactors that include algorithm documentation, use the repo-neutral persona workflow in [.agents/README.md](.agents/README.md). The default sequence is:
+
+1. **Refactor Planner**: Map the target module across all layers and classify public API compatibility.
+2. **C++ Namespace Refactorer**: Update headers, source, namespace shape, Doxygen API comments, and C++ tests.
+3. **WebAssembly TypeScript Steward**: Update embind bindings, TypeScript declarations, module exports, and WASM Mocha tests.
+4. **Algorithm Docs Author**: Write or update engineer-facing `.dox` documentation with formulas, units, and symbol tables.
+5. **Verification Reviewer**: Check cross-layer consistency, public compatibility, documentation math, tests, and validation notes.
+
+Each persona must consume and update the shared handoff template in [.agents/templates/refactor-handoff.md](.agents/templates/refactor-handoff.md). Preserve public API compatibility by default unless the user explicitly approves a breaking change.
+When a breaking change is approved, the handoff must record the old-to-new migration and downstream layers should remove the superseded API surface rather than adding wrapper code for the deleted shape.
 
 ## WebAssembly and TypeScript Rules
 

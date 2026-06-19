@@ -76,18 +76,22 @@ Use these rules when comparing a declaration to an embind binding:
 Clean up embind class instances that the test creates or receives:
 
 ```ts
-const calculator = new moduleInstance.AirVelocity(1800, 100, 14.7);
-const result = calculator.calculate();
+const result = moduleInstance.calculateAirVelocity({
+    airFlow: 1800,
+    pipePressure: 100,
+    atmosphericPressure: 14.7
+});
 
 try {
     assert.approximately(result.oneHalf, 1845.510026, 0.01);
 } finally {
     result.delete();
-    calculator.delete();
 }
 ```
 
-Do not call `delete()` on plain value-object inputs or value-object results.
+Do not call `delete()` on plain value-object inputs or value-object results. If
+a value-object result contains embind class or vector instances, clean up those
+nested runtime objects.
 
 ## Migration Checklist
 

@@ -1,0 +1,63 @@
+/**
+ * @defgroup air_system_capacity_calculator Air System Capacity Calculator
+ * @ingroup compressed_air_assessments
+ * @brief Calculates total compressed air storage in distribution piping and receivers.
+ * @details This calculator estimates the total air volume that the compressed air
+ *          system can contain at one time, including air in the piping network and
+ *          receiver tanks. All formulas use U.S. customary units.
+ *
+ * The pipe contribution comes from @ref compressed_air_pipe_data. Receiver tank
+ * entries are entered in gallons and converted to cubic feet before summing.
+ *
+ * @heading{Total System Capacity}
+ * @copydoc air_system_capacity_total_formula
+ *
+ * @heading{Receiver Volume Conversion}
+ * @copydoc air_system_capacity_receiver_formula
+ *
+ * @heading{Pipe Volume}
+ * @copydoc pipe_data_volume_formula
+ */
+
+/**
+ * @defgroup air_system_capacity_total_formula Air System Capacity Formula
+ * @ingroup air_system_capacity_calculator
+ * @brief Total compressed air system capacity from pipe volume and receiver volume.
+ * @details The calculator adds the total contained pipe volume to the converted
+ *          receiver volume.
+ *
+ * @formula{air-system-capacity-total;
+ *   V_{system} = V_{pipe,total} + V_{receiver,total}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{V_{system}; Total compressed air system capacity; \cubicFoot}
+ * @symrow{V_{pipe,total}; Total contained pipe volume; \cubicFoot}
+ * @symrow{V_{receiver,total}; Total receiver volume; \cubicFoot}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup air_system_capacity_receiver_formula Receiver Volume Conversion Formula
+ * @ingroup air_system_capacity_calculator
+ * @brief Converts receiver capacities from gallons to cubic feet.
+ * @details Each receiver capacity is divided by the existing implementation
+ *          conversion factor, then the converted receiver volumes are summed.
+ *
+ * @formula{air-system-capacity-receiver-volume;
+ *   V_{receiver,j} = \frac{G_j}{k_{gal}}
+ * }
+ *
+ * @formula{air-system-capacity-total-receiver-volume;
+ *   V_{receiver,total} = \sum_j V_{receiver,j}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{V_{receiver,j}; Converted volume for receiver j; \cubicFoot}
+ * @symrow{G_j; Entered capacity for receiver j; \gallon}
+ * @symrow{k_{gal}; Gallons per cubic foot conversion factor (7.480515625); \gallon\per\cubicFoot}
+ * @symrow{V_{receiver,total}; Total converted receiver volume; \cubicFoot}
+ * @endsymtable
+ */

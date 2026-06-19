@@ -1,5 +1,5 @@
 import { assert } from 'chai';
-import createModule, { type AirVelocity, type MeasurToolsSuite, type PipeData } from 'measur-tools-suite';
+import createModule, { type AirVelocityInput, type MeasurToolsSuite, type PipeData } from 'measur-tools-suite';
 
 describe('Compressed Air Air Velocity', function () {
     let moduleInstance: MeasurToolsSuite;
@@ -11,16 +11,13 @@ describe('Compressed Air Air Velocity', function () {
     });
 
     it('should calculate air velocity for all standard nominal pipe sizes', function () {
-        const inp = {
+        const input: AirVelocityInput = {
             airFlow: 1800,
             pipePressure: 100,
             atmosphericPressure: 14.7
         };
 
-        const airVelocity: AirVelocity = new moduleInstance.AirVelocity(
-            inp.airFlow, inp.pipePressure, inp.atmosphericPressure
-        );
-        const result: PipeData = airVelocity.calculate();
+        const result: PipeData = moduleInstance.calculateAirVelocity(input);
 
         try {
             assert.approximately(result.oneHalf, 1845.510026, 0.01);
@@ -35,9 +32,16 @@ describe('Compressed Air Air Velocity', function () {
             assert.approximately(result.four, 43.491988, 0.01);
             assert.approximately(result.five, 27.68265, 0.01);
             assert.approximately(result.six, 19.164175, 0.01);
+            assert.approximately(result.eight, 11.068633, 0.01);
+            assert.approximately(result.ten, 7.021598, 0.01);
+            assert.approximately(result.twelve, 4.947748, 0.01);
+            assert.approximately(result.fourteen, 4.09204, 0.01);
+            assert.approximately(result.sixteen, 3.133294, 0.01);
+            assert.approximately(result.eighteen, 2.471665, 0.01);
+            assert.approximately(result.twenty, 1.991558, 0.01);
+            assert.approximately(result.twentyFour, 1.376904, 0.01);
         } finally {
             result.delete();
-            airVelocity.delete();
         }
     });
 });
