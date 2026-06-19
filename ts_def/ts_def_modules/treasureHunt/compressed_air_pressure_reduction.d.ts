@@ -15,7 +15,7 @@ import {CompressedAirPressureReductionInputV} from "../binding/registered_vector
  * Input data for a single compressed-air pressure reduction measure.
  *
  * @property isBaseline boolean, true for baseline calculation, false for modification calculation
- * @property hoursPerYear number, annual operating hours, units hours/year
+ * @property hoursPerYear number, annual operating hours, units hr/year, units hours/year
  * @property electricityCost number, electricity cost rate, units $/kWh
  * @property compressorPower number, compressor power, units kW
  * @property pressure number, baseline compressor discharge pressure, units psi
@@ -26,7 +26,7 @@ import {CompressedAirPressureReductionInputV} from "../binding/registered_vector
 export interface CompressedAirPressureReductionInput {
     /** True for baseline calculation, false for modification calculation */
     isBaseline: boolean;
-    /** Annual operating hours, units hours/year */
+    /** annual operating hours, units hr/year, units hours/year */
     hoursPerYear: number;
     /** Electricity cost rate, units $/kWh */
     electricityCost: number;

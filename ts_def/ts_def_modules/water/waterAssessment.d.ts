@@ -9,16 +9,16 @@
 /**
  * Result object returned by {@link WaterAssessment.calculateProcessWaterUse}.
  *
- * @property recirculatedWater double
- * @property incomingWater double
- * @property wasteDischargedAndRecycledOther double
+ * @property recirculatedWater Recirculated water flow, units gal/year.
+ * @property incomingWater Incoming water flow, units gal/year.
+ * @property wasteDischargedAndRecycledOther Waste discharged and recycled from other sources, units gal/year.
  */
 export interface ProcessWaterUseOutput {
-    /** Recirculated water flow */
+    /** Recirculated water flow, units gal/year. */
     recirculatedWater: number;
-    /** Incoming water flow */
+    /** Incoming water flow, units gal/year. */
     incomingWater: number;
-    /** Waste discharged and recycled from other sources */
+    /** Waste discharged and recycled from other sources, units gal/year. */
     wasteDischargedAndRecycledOther: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -28,22 +28,22 @@ export interface ProcessWaterUseOutput {
 /**
  * Result object returned by {@link WaterAssessment.calculateCoolingTowerLoss}.
  *
- * @property grossWaterUse double
- * @property evaporationLoss double
- * @property cycleOfConcentration double
- * @property makeupWater double
- * @property blowdownLoss double
+ * @property grossWaterUse Gross water use, units gal/year.
+ * @property evaporationLoss Evaporation loss, units gal/year.
+ * @property cycleOfConcentration Cycle of concentration, dimensionless.
+ * @property makeupWater Makeup water, units gal/year.
+ * @property blowdownLoss Blowdown loss, units gal/year.
  */
 export interface CoolingTowerLossOutput {
-    /** Gross water use */
+    /** Gross water use, units gal/year. */
     grossWaterUse: number;
-    /** Evaporation loss */
+    /** Evaporation loss, units gal/year. */
     evaporationLoss: number;
-    /** Cycle of concentration */
+    /** Cycle of concentration, dimensionless. */
     cycleOfConcentration: number;
-    /** Makeup water */
+    /** Makeup water, units gal/year. */
     makeupWater: number;
-    /** Blowdown loss */
+    /** Blowdown loss, units gal/year. */
     blowdownLoss: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -53,28 +53,28 @@ export interface CoolingTowerLossOutput {
 /**
  * Result object returned by {@link WaterAssessment.calculateBoilerWaterLosses}.
  *
- * @property cycleOfConcentration double
- * @property grossWaterUse double
- * @property makeupWater double
- * @property steamLoss double
- * @property blowdownLoss double
- * @property condensateReturn double
- * @property rateOfRecirculation double
+ * @property cycleOfConcentration Cycle of concentration, dimensionless.
+ * @property grossWaterUse Gross water use, units gal/year.
+ * @property makeupWater Makeup water, units gal/year.
+ * @property steamLoss Steam loss, units gal/year.
+ * @property blowdownLoss Blowdown loss, units gal/year.
+ * @property condensateReturn Condensate return, units gal/year.
+ * @property rateOfRecirculation Rate of recirculation, dimensionless.
  */
 export interface BoilerWaterLossOutput {
-    /** Cycle of concentration */
+    /** Cycle of concentration, dimensionless. */
     cycleOfConcentration: number;
-    /** Gross water use */
+    /** Gross water use, units gal/year. */
     grossWaterUse: number;
-    /** Makeup water */
+    /** Makeup water, units gal/year. */
     makeupWater: number;
-    /** Steam loss */
+    /** Steam loss, units gal/year. */
     steamLoss: number;
-    /** Blowdown loss */
+    /** Blowdown loss, units gal/year. */
     blowdownLoss: number;
-    /** Condensate return */
+    /** Condensate return, units gal/year. */
     condensateReturn: number;
-    /** Rate of recirculation */
+    /** Rate of recirculation, dimensionless. */
     rateOfRecirculation: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -91,10 +91,10 @@ export declare class WaterAssessment {
     /**
      * Calculate process water use.
      *
-     * @param waterRequired double
-     * @param waterConsumed double
-     * @param waterLoss double
-     * @param fractionGrossWaterRecirculated double
+     * @param waterRequired Water required by the process, units gal/year.
+     * @param waterConsumed Water consumed by the process, units gal/year.
+     * @param waterLoss Water lost from the process, units gal/year.
+     * @param fractionGrossWaterRecirculated Gross water recirculated, dimensionless fraction.
      * @returns {@link ProcessWaterUseOutput}
      */
     calculateProcessWaterUse(
@@ -107,13 +107,13 @@ export declare class WaterAssessment {
     /**
      * Calculate cooling tower losses.
      *
-     * @param hoursPerYear double
-     * @param tonnage double
-     * @param loadFactor double
-     * @param evaporationRateDegree double
-     * @param temperatureDrop double
-     * @param makeupConductivity double
-     * @param blowdownConductivity double
+     * @param hoursPerYear Annual operating hours, units hr/year.
+     * @param tonnage Cooling tower load, units refrigeration ton.
+     * @param loadFactor Cooling load factor, dimensionless fraction.
+     * @param evaporationRateDegree Evaporation rate per degree, dimensionless fraction/degF.
+     * @param temperatureDrop Cooling tower temperature drop, units degF.
+     * @param makeupConductivity Makeup water conductivity, units match blowdownConductivity.
+     * @param blowdownConductivity Blowdown water conductivity, units match makeupConductivity.
      * @returns {@link CoolingTowerLossOutput}
      */
     calculateCoolingTowerLoss(
@@ -129,13 +129,13 @@ export declare class WaterAssessment {
     /**
      * Calculate boiler water losses.
      *
-     * @param hoursPerYear double
-     * @param power double
-     * @param loadFactor double
-     * @param steamPerPower double
-     * @param feedWaterConductivity double
-     * @param makeupConductivity double
-     * @param blowdownConductivity double
+     * @param hoursPerYear Annual operating hours, units hr/year.
+     * @param power Boiler power, units hp.
+     * @param loadFactor Boiler load factor, dimensionless fraction.
+     * @param steamPerPower Steam generation rate per power, units lb/(hp.hr).
+     * @param feedWaterConductivity Feedwater conductivity, units match makeupConductivity.
+     * @param makeupConductivity Makeup water conductivity, units match blowdownConductivity.
+     * @param blowdownConductivity Blowdown water conductivity, units match makeupConductivity.
      * @returns {@link BoilerWaterLossOutput}
      */
     calculateBoilerWaterLosses(
@@ -151,10 +151,10 @@ export declare class WaterAssessment {
     /**
      * Calculate gross kitchen and restroom water use.
      *
-     * @param employeeCount double
-     * @param workdaysPerYear double
-     * @param dailyUsePerEmployee double
-     * @returns grossWaterUse double
+     * @param employeeCount Employee count.
+     * @param workdaysPerYear Workdays per year, units days/year.
+     * @param dailyUsePerEmployee Daily water use per employee, units gal/day.
+     * @returns Gross water use, units gal/year.
      */
     calculateKitchenRestroomGrossWaterUse(
         employeeCount: number,
@@ -165,9 +165,9 @@ export declare class WaterAssessment {
     /**
      * Calculate gross landscaping water use.
      *
-     * @param areaIrrigated double
-     * @param yearlyInchesIrrigated double
-     * @returns grossWaterUse double
+     * @param areaIrrigated Irrigated area, units acres.
+     * @param yearlyInchesIrrigated Annual irrigation depth, units in/year.
+     * @returns Gross water use, units gal/year.
      */
     calculateLandscapingGrossWaterUse(
         areaIrrigated: number,
@@ -177,11 +177,11 @@ export declare class WaterAssessment {
     /**
      * Calculate heat energy in wastewater discharge.
      *
-     * @param incomingTemp double
-     * @param outgoingTemp double
-     * @param heatingEfficiency double
-     * @param wasteWaterDischarge double
-     * @returns heatEnergyUseInDischarge double
+     * @param incomingTemp Incoming water temperature, units degF.
+     * @param outgoingTemp Outgoing water temperature, units degF.
+     * @param heatingEfficiency Heating efficiency, dimensionless fraction.
+     * @param wasteWaterDischarge Wastewater discharge, units gal/year.
+     * @returns Heat energy use in discharge, units MMBtu/year.
      */
     calculateHeatEnergyInDischarge(
         incomingTemp: number,
@@ -193,12 +193,12 @@ export declare class WaterAssessment {
     /**
      * Calculate added motor energy use.
      *
-     * @param numberUnits double
-     * @param hoursPerYear double
-     * @param ratedPower double
-     * @param loadFactor double
-     * @param systemEfficiency double
-     * @returns energyUse double
+     * @param numberUnits Equipment count.
+     * @param hoursPerYear Annual operating hours, units hr/year.
+     * @param ratedPower Rated motor power, units kW.
+     * @param loadFactor Motor load factor, dimensionless fraction.
+     * @param systemEfficiency System efficiency, dimensionless fraction.
+     * @returns Energy use, units kWh/year.
      */
     calculateAddedMotorEnergyUse(
         numberUnits: number,

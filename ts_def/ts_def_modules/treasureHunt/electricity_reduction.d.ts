@@ -15,7 +15,7 @@ import { ElectricityReductionInputV } from "../binding/registered_vectors";
 /**
  * Selects the measurement method used to determine electricity use for a single measure.
  *
- * - `Multimeter` - uses voltage, current, and power factor
+ * - `Multimeter` - uses voltage, current, and power factor, dimensionless
  * - `Nameplate`  - uses rated motor power, load factor, and efficiency
  * - `PowerMeter` - uses a direct power reading
  * - `Other`      - uses a directly supplied annual energy value
@@ -35,16 +35,16 @@ export enum ElectricityReductionMeasurementMethod {
  * Input data for the multimeter measurement method.
  *
  * Used when electrical power is measured with a clamp-on ammeter or multimeter.
- * The supply voltage, average current, and power factor are combined with the number
+ * The supply voltage, average current, and power factor, dimensionless are combined with the number
  * of phases to calculate total power draw.
  *
  * @property numberOfPhases number, number of electrical phases (1 or 3)
  * @property supplyVoltage number, supply voltage, units V
  * @property averageCurrent number, average current measured by the meter, units A
- * @property powerFactor number, power factor of the load (dimensionless, 0-1)
+ * @property powerFactor number, power factor, dimensionless of the load (dimensionless, 0-1)
  */
 export interface MultimeterData {
-    /** Number of electrical phases (1 or 3) */
+    /** Number of electrical phases, count (1 or 3). */
     numberOfPhases: number;
     /** Supply voltage, units V */
     supplyVoltage: number;
@@ -121,7 +121,7 @@ export interface ElectricityOtherMethodData {
  * data struct is used in the calculation. The `units` field is a quantity multiplier (e.g.,
  * number of identical loads).
  *
- * @property operatingHours number, annual operating hours, units hours/year
+ * @property operatingHours number, annual operating hours, units hr/year, units hours/year
  * @property electricityCost number, electricity cost rate, units $/kWh
  * @property measurementMethod {@link ElectricityReductionMeasurementMethod}, measurement method to apply
  * @property multimeterData {@link MultimeterData}, data for the multimeter method
@@ -131,7 +131,7 @@ export interface ElectricityOtherMethodData {
  * @property units number, quantity multiplier (number of identical loads)
  */
 export interface ElectricityReductionInput {
-    /** Annual operating hours, units hours/year */
+    /** annual operating hours, units hr/year, units hours/year */
     operatingHours: number;
     /** Electricity cost rate, units $/kWh */
     electricityCost: number;
@@ -145,7 +145,7 @@ export interface ElectricityReductionInput {
     powerMeterData: PowerMeterData;
     /** Data for the other method */
     otherMethodData: ElectricityOtherMethodData;
-    /** Quantity multiplier (number of identical loads) */
+    /** Quantity multiplier, count of identical loads. */
     units: number;
 }
 
@@ -188,13 +188,13 @@ export function electricityReduction(input_vec: ElectricityReductionInputV): Ele
 /**
  * Calculate annual energy use and cost using the multimeter measurement method.
  *
- * Computes power per load from the supply voltage, average current, power factor, and number
+ * Computes power per load from the supply voltage, average current, power factor, dimensionless, and number
  * of phases, then scales to annual energy use using the operating hours and the units multiplier.
  *
- * @param data {@link MultimeterData} with voltage (V), current (A), power factor, and number of phases.
- * @param operating_hours Annual operating hours, units hours/year.
+ * @param data {@link MultimeterData} with voltage (V), current (A), power factor, dimensionless, and number of phases.
+ * @param operating_hours annual operating hours, units hr/year, units hours/year.
  * @param electricity_cost Electricity cost rate, units $/kWh.
- * @param units Quantity multiplier (number of identical loads).
+ * @param units Quantity multiplier, count of identical loads.
  * @returns {@link ElectricityReductionOutput} with annual energy use (kWh/year),
  *   annual energy cost ($/year), and power per load (kW).
  */
@@ -214,9 +214,9 @@ export function multimeterReduction(
  *
  * @param data {@link NameplateData} with rated motor power (kW), load factor, operational and
  *   line frequencies (Hz), and motor-and-drive efficiency (%).
- * @param operating_hours Annual operating hours, units hours/year.
+ * @param operating_hours annual operating hours, units hr/year, units hours/year.
  * @param electricity_cost Electricity cost rate, units $/kWh.
- * @param units Quantity multiplier (number of identical loads).
+ * @param units Quantity multiplier, count of identical loads.
  * @returns {@link ElectricityReductionOutput} with annual energy use (kWh/year),
  *   annual energy cost ($/year), and power per load (kW).
  */
@@ -230,13 +230,13 @@ export function nameplateReduction(
 /**
  * Calculate annual energy use and cost using the power meter measurement method.
  *
- * Multiplies the direct power reading by the annual operating hours and the units multiplier
+ * Multiplies the direct power reading by the annual operating hours, units hr/year and the units multiplier
  * to obtain annual energy use.
  *
  * @param data {@link PowerMeterData} with the direct power reading, units kW.
- * @param operating_hours Annual operating hours, units hours/year.
+ * @param operating_hours annual operating hours, units hr/year, units hours/year.
  * @param electricity_cost Electricity cost rate, units $/kWh.
- * @param units Quantity multiplier (number of identical loads).
+ * @param units Quantity multiplier, count of identical loads.
  * @returns {@link ElectricityReductionOutput} with annual energy use (kWh/year),
  *   annual energy cost ($/year), and power per load (kW).
  */

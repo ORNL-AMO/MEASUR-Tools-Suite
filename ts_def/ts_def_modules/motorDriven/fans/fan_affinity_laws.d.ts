@@ -66,11 +66,11 @@ export interface FanAffinityLawsInput {
     electricityCost: number;
     /** Drive efficiency, units % */
     driveEfficiency: number;
-    /** Motor efficiency, units % */
+    /** motor efficiency, dimensionless, units % */
     motorEfficiency: number;
     /** Baseline flow percentage, units % */
     flowPercentBaseline: number;
-    /** Annual operating hours, units h */
+    /** annual operating hours, units hr/year, units h */
     operatingHours: number;
     /** Motor power, units kW */
     motorPower: number;
@@ -82,7 +82,7 @@ export interface FanAffinityLawsInput {
     motorControlTypeNew: MotorControlType;
     /** Flow mode */
     flowMode: FlowMode;
-    /** Desired flow rate (units depend on flow mode) */
+    /** Desired flow rate: units CFM when flowMode is Volume, units % when flowMode is Percent. */
     desiredFlowRate: number;
 }
 
@@ -99,8 +99,8 @@ export declare class FanAffinityLaws {
     /**
      * Constructor for FanAffinityLaws - Use this constructor when fan size is not changing.
      * @param electricityCost double, electric usage rate in $/kWh
-     * @param driveEfficiency double, Efficiency of the drive percentage (1 - 100)
-     * @param motorEfficiency double, Efficiency of the motor percentage (1 - 100)
+     * @param driveEfficiency Drive efficiency, units %.
+     * @param motorEfficiency Motor efficiency, units %.
      * @param flowPercentBaseline double, Flow rate change by percent (0 - 100)
      * @param operatingHours double, Hours for which the fan system operates per year - hours (1 - 8760 hours)
      * @param motorPower double, Motor Power in kW
@@ -108,9 +108,7 @@ export declare class FanAffinityLaws {
      * @param motorControlTypeCurrent MotorControlType enum, current motor control for the fan system
      * @param motorControlTypeNew MotorControlType enum, changed motor control for the fan system
      * @param flowMode FlowMode enum, mode for flow change - by percent or by volume
-     * @param desiredFlowRate double, Desired flow rate based on flow mode
-     *          If flow mode is volume desired flow rate is flow volume in CFM
-     *          If flow mode is percentage desired flow rate is flow percentage (0 - 100)
+     * @param desiredFlowRate Desired flow rate: units CFM when flowMode is Volume, units % when flowMode is Percent.
      */
     constructor(
         electricityCost: number,
@@ -136,8 +134,8 @@ export declare class FanAffinityLaws {
     /**
      * Compute annual baseline and changed energy based on current and changed state of motor Control
      *      at a desired flow rate by percent or by volume with changing fan size.
-     * @param fanDiameterCurrent double, Current fan diameter in inches
-     * @param fanDiameter double, Changed fan diameter in inches
+     * @param fanDiameterCurrent Current fan diameter, units in.
+     * @param fanDiameter Changed fan diameter, units in.
      * @returns {@link FanAffinityLawsOutput} struct containing annual energy baseline and changed annual energy in kWh
      */
     changeFanSize(fanDiameterCurrent: number, fanDiameter: number): FanAffinityLawsOutput;

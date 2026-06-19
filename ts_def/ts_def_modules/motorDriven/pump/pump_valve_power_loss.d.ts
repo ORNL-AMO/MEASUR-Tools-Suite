@@ -42,10 +42,10 @@ export declare class PumpValvePowerLoss {
     constructor();
 
     /**
-     * @param operating_hours double, annual operating hours.
-     * @param pump_efficiency double, pump hydraulic efficiency.
-     * @param motor_efficiency double, motor efficiency.
-     * @param specific_gravity double, specific gravity of the fluid.
+     * @param operating_hours double, annual operating hours, units hr/year.
+     * @param pump_efficiency Pump hydraulic efficiency, dimensionless fraction.
+     * @param motor_efficiency Motor efficiency, dimensionless fraction.
+     * @param specific_gravity double, specific gravity, dimensionless of the fluid.
      * @param flow_rate double, volumetric flow rate in gpm.
      * @param upstream_pressure double, upstream gauge pressure in PSI.
      * @param upstream_gauge_elevation double, upstream gauge elevation in feet.

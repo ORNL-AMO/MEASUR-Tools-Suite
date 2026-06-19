@@ -50,14 +50,14 @@ export type {
  */
 export declare class BoilerInput {
     /**
-     * @param fuelType double, fuel type identifier
-     * @param fuel double, fuel value
-     * @param combustionEfficiency double, combustion efficiency (%)
-     * @param blowdownRate double, blowdown rate as % of inlet mass flow
+     * @param fuelType Fuel type identifier, unitless enum value.
+     * @param fuel Fuel heating value, units MMBtu/unit fuel.
+     * @param combustionEfficiency Combustion efficiency, units %.
+     * @param blowdownRate Blowdown rate as percent of inlet mass flow, units %.
      * @param blowdownFlashed boolean, whether blowdown is flashed
      * @param preheatMakeupWater boolean, whether makeup water is preheated
      * @param steamTemperature double, steam temperature, units K
-     * @param deaeratorVentRate double, deaerator vent rate (%)
+     * @param deaeratorVentRate Deaerator vent rate, units %.
      * @param deaeratorPressure double, deaerator pressure, units MPa
      * @param approachTemperature double, approach temperature, units K
      */
@@ -85,8 +85,8 @@ export declare class HeaderWithPressure {
     /**
      * @param pressure double, header pressure, units MPa
      * @param processSteamUsage double, process steam usage, units kg/hr
-     * @param condensationRecoveryRate double, condensation recovery rate (%)
-     * @param heatLoss double, heat loss (%)
+     * @param condensationRecoveryRate Condensation recovery rate, units %.
+     * @param heatLoss Header heat loss, units %.
      * @param flashCondensate boolean, whether to flash condensate
      */
     constructor(
@@ -108,8 +108,8 @@ export declare class HeaderWithHighestPressure extends HeaderWithPressure {
     /**
      * @param pressure double, header pressure, units MPa
      * @param processSteamUsage double, process steam usage, units kg/hr
-     * @param condensationRecoveryRate double, condensation recovery rate (%)
-     * @param heatLoss double, heat loss (%)
+     * @param condensationRecoveryRate Condensation recovery rate, units %.
+     * @param heatLoss Header heat loss, units %.
      * @param condensateReturnTemperature double, condensate return temperature, units K
      * @param flashCondensateReturn boolean, whether to flash the condensate return
      */
@@ -130,8 +130,8 @@ export declare class HeaderNotHighestPressure extends HeaderWithPressure {
     /**
      * @param pressure double, header pressure, units MPa
      * @param processSteamUsage double, process steam usage, units kg/hr
-     * @param condensationRecoveryRate double, condensation recovery rate (%)
-     * @param heatLoss double, heat loss (%)
+     * @param condensationRecoveryRate Condensation recovery rate, units %.
+     * @param heatLoss Header heat loss, units %.
      * @param flashCondensateIntoHeader boolean, whether to flash condensate into the header
      * @param desuperheatSteamIntoNextHighest boolean, whether to desuperheat steam into the next highest pressure header
      * @param desuperheatSteamTemperature double, desuperheat steam temperature, units K
@@ -173,10 +173,10 @@ export declare class OperationsInput {
     /**
      * @param sitePowerImport double, site power import, units kW
      * @param makeUpWaterTemperature double, makeup water temperature, units K
-     * @param operatingHoursPerYear double, operating hours per year
-     * @param fuelCosts double, fuel costs ($ / MMBtu)
-     * @param electricityCosts double, electricity costs ($ / kWh)
-     * @param makeUpWaterCosts double, makeup water costs ($ / 1000 gallons)
+     * @param operatingHoursPerYear Operating hours per year, units hr/year.
+     * @param fuelCosts Fuel cost, units $/MMBtu.
+     * @param electricityCosts Electricity cost, units $/kWh.
+     * @param makeUpWaterCosts Makeup water cost, units $/1000 gal.
      */
     constructor(
         sitePowerImport: number,
@@ -238,7 +238,7 @@ export declare class PressureTurbine {
      * @param generationEfficiency double, generation efficiency (fraction 0-1)
      * @param operationType {@link PressureTurbineOperation} turbine operation mode
      * @param operationValue1 double, primary operation value (kg/hr or kW depending on mode)
-     * @param operationValue2 double, secondary operation value (used for range modes)
+     * @param operationValue2 Secondary operation value, units kg/hr or kW depending on operationType.
      * @param useTurbine boolean, whether to use this turbine in modelling
      */
     constructor(

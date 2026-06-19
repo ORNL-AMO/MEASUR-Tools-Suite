@@ -16,10 +16,10 @@ import type { DoubleVector2D, PlaneDataNodeBindingDataVector, TraversePlaneVecto
 export declare class FanInput {
     /**
      * Constructor for Fan Input
-     * @param fanSpeed double, Fan speed in RPM
-     * @param airDensity double
+     * @param fanSpeed Fan speed, units rpm.
+     * @param airDensity Air density, units lb/ft3.
      * @param drive Drive, enum for motor drive type (Direct, Belt, VFD)
-     * @param specifiedEfficiency double
+     * @param specifiedEfficiency Specified drive efficiency, dimensionless fraction.
      */
     constructor(fanSpeed: number, airDensity: number, drive: Drive, specifiedEfficiency: number);
 
@@ -33,15 +33,15 @@ export declare class FanInput {
 export declare class FieldDataBaseline {
     /**
      * To be used for Baseline Fan results
-     * @param measuredPower double
-     * @param measuredVoltage double
-     * @param measuredAmps double
-     * @param flowRate double
-     * @param inletPressure double
-     * @param outletPressure double
-     * @param compressibilityFactor double
+     * @param measuredPower Measured motor power, units kW.
+     * @param measuredVoltage Measured voltage, units V.
+     * @param measuredAmps Measured current, units A.
+     * @param flowRate Fan flow rate, units cfm.
+     * @param inletPressure Fan inlet pressure, units in. w.c.
+     * @param outletPressure Fan outlet pressure, units in. w.c.
+     * @param compressibilityFactor Compressibility factor, dimensionless.
      * @param loadEstimationMethod LoadEstimationMethod
-     * @param velocityPressure double
+     * @param velocityPressure Velocity pressure, units in. w.c.
      */
     constructor(
         measuredPower: number,
@@ -65,13 +65,13 @@ export declare class FieldDataBaseline {
 export declare class FieldDataModified {
     /**
      * To be used for Modified and Optimal Fan results
-     * @param measuredVoltage double
-     * @param measuredAmps double
-     * @param flowRate double
-     * @param inletPressure double
-     * @param outletPressure double
-     * @param compressibilityFactor double
-     * @param velocityPressure double
+     * @param measuredVoltage Measured voltage, units V.
+     * @param measuredAmps Measured current, units A.
+     * @param flowRate Fan flow rate, units cfm.
+     * @param inletPressure Fan inlet pressure, units in. w.c.
+     * @param outletPressure Fan outlet pressure, units in. w.c.
+     * @param compressibilityFactor Compressibility factor, dimensionless.
+     * @param velocityPressure Velocity pressure, units in. w.c.
      */
     constructor(
         measuredVoltage: number,
@@ -90,24 +90,38 @@ export declare class FieldDataModified {
 /**
  * Result object returned by fan system assessments.
  *
- * @property fanEfficiency double, fan efficiency as decimal
- * @property motorRatedPower double, motor rated power in hp
- * @property motorShaftPower double, motor shaft power in hp
- * @property fanShaftPower double, fan shaft power in hp
- * @property motorEfficiency double, motor efficiency as decimal
- * @property motorPowerFactor double, motor power factor (unitless)
- * @property motorCurrent double, motor current in A
- * @property motorPower double, motor electric power in kW
- * @property annualEnergy double, annual energy in kWh
- * @property annualCost double, annual cost in $
- * @property fanEnergyIndex double, fan energy index (unitless)
- * @property loadFactor double, load factor as decimal
- * @property driveEfficiency double, drive efficiency as decimal
- * @property estimatedFLA double, estimated full-load amps in A
+ * @property fanEfficiency Fan efficiency, dimensionless fraction.
+ * @property motorRatedPower Motor rated power, units hp.
+ * @property motorShaftPower Motor shaft power, units hp.
+ * @property fanShaftPower Fan shaft power, units hp.
+ * @property motorEfficiency Motor efficiency, dimensionless fraction.
+ * @property motorPowerFactor Motor power factor, dimensionless.
+ * @property motorCurrent Motor current, units A.
+ * @property motorPower Motor electric power, units kW.
+ * @property annualEnergy Annual energy, units kWh/year.
+ * @property annualCost Annual cost, units $/year.
+ * @property fanEnergyIndex Fan energy index, dimensionless.
+ * @property loadFactor Load factor, dimensionless fraction.
+ * @property driveEfficiency Drive efficiency, dimensionless fraction.
+ * @property estimatedFLA Estimated full-load current, units A.
  */
 export declare class FanOutput {
     /**
      * Constructor for FanOutput
+     * @param fanEfficiency Fan efficiency, dimensionless fraction.
+     * @param motorRatedPower Motor rated power, units hp.
+     * @param motorShaftPower Motor shaft power, units hp.
+     * @param fanShaftPower Fan shaft power, units hp.
+     * @param motorEfficiency Motor efficiency, dimensionless fraction.
+     * @param motorPowerFactor Motor power factor, dimensionless.
+     * @param motorCurrent Motor current, units A.
+     * @param motorPower Motor electric power, units kW.
+     * @param annualEnergy Annual energy, units kWh/year.
+     * @param annualCost Annual cost, units $/year.
+     * @param fanEnergyIndex Fan energy index, dimensionless.
+     * @param loadFactor Load factor, dimensionless fraction.
+     * @param driveEfficiency Drive efficiency, dimensionless fraction.
+     * @param estimatedFLA Estimated full-load current, units A.
      */
     constructor(
         fanEfficiency: number,
@@ -126,19 +140,33 @@ export declare class FanOutput {
         estimatedFLA: number
     );
 
+    /** Fan efficiency, dimensionless fraction. */
     fanEfficiency: number;
+    /** motor rated power units hp. */
     motorRatedPower: number;
+    /** motor shaft power units hp. */
     motorShaftPower: number;
+    /** fan shaft power units hp. */
     fanShaftPower: number;
+    /** Motor efficiency, dimensionless fraction. */
     motorEfficiency: number;
+    /** Motor power factor, dimensionless. */
     motorPowerFactor: number;
+    /** motor current units A. */
     motorCurrent: number;
+    /** motor electric power units kW. */
     motorPower: number;
+    /** Annual energy, units kWh/year. */
     annualEnergy: number;
+    /** Annual cost, units $/year. */
     annualCost: number;
+    /** Fan energy index, dimensionless. */
     fanEnergyIndex: number;
+    /** Load factor, dimensionless fraction. */
     loadFactor: number;
+    /** Drive efficiency, dimensionless fraction. */
     driveEfficiency: number;
+    /** estimated full-load amps units A. */
     estimatedFLA: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -151,7 +179,7 @@ export declare class FanResult {
      * Constructor for FanResult
      * @param fanInput FanInput
      * @param motor Motor
-     * @param operatingHours double, annual operating hours for energy and cost calculations
+     * @param operatingHours double, annual operating hours, units hr/year for energy and cost calculations
      * @param unitCost double, energy unit cost for annual cost calculation (e.g., $/kWh)
      */
     constructor(fanInput: FanInput, motor: Motor, operatingHours: number, unitCost: number);
@@ -164,7 +192,7 @@ export declare class FanResult {
 
     /**
      * @param fanFieldData Fan::FieldDataModified
-     * @param fanEfficiency double
+     * @param fanEfficiency Fan efficiency, dimensionless fraction.
      * @returns {@link FanOutput}, the results of a fan system assessment
      */
     calculateModified(fanFieldData: FieldDataModified, fanEfficiency: number): FanOutput;
@@ -177,11 +205,11 @@ export declare class FanResult {
 export declare class FanRatedInfo {
     /**
      * Constructor for FanRatedInfo
-     * @param fanSpeed double, Fan speed RPM
-     * @param motorSpeed double, Motor speed RPM
-     * @param fanSpeedCorrected double, Fan speed corrected to reference conditions RPM
-     * @param densityCorrected double, Gas density corrected to reference conditions  lb/scf
-     * @param pressureBarometricCorrected double, Barometric pressure corrected to reference conditions in Hg
+     * @param fanSpeed Fan speed, units rpm.
+     * @param motorSpeed Motor speed, units rpm.
+     * @param fanSpeedCorrected Fan speed corrected to reference conditions, units rpm.
+     * @param densityCorrected Gas density corrected to reference conditions, units lb/scf.
+     * @param pressureBarometricCorrected Barometric pressure corrected to reference conditions, units in Hg.
      */
     constructor(
         fanSpeed: number,
@@ -199,9 +227,9 @@ export declare class FanRatedInfo {
 export declare class FlangePlane {
     /**
      * Constructor for FlangePlane
-     * @param area double
-     * @param tdx double
-     * @param pbx double
+     * @param area Plane area, units ft2.
+     * @param tdx Dry-bulb temperature at the plane, units degF.
+     * @param pbx Barometric pressure at the plane, units in Hg.
      */
     constructor(area: number, tdx: number, pbx: number);
 
@@ -213,12 +241,12 @@ export declare class FlangePlane {
 export declare class TraversePlane extends VelocityPressureTraverseData {
     /**
      * Constructor for TraversePlane
-     * @param area double
-     * @param tdx double
-     * @param pbx double
-     * @param psx double
-     * @param pitotTubeCoefficient double
-     * @param traverseHoleData vector of double vectors
+     * @param area Plane area, units ft2.
+     * @param tdx Dry-bulb temperature at the plane, units degF.
+     * @param pbx Barometric pressure at the plane, units in Hg.
+     * @param psx Static pressure at the plane, units in. w.c.
+     * @param pitotTubeCoefficient Pitot tube coefficient, dimensionless.
+     * @param traverseHoleData Velocity-pressure traverse data, units in. w.c.
      */
     constructor(
         area: number,
@@ -237,10 +265,10 @@ export declare class TraversePlane extends VelocityPressureTraverseData {
 export declare class MstPlane {
     /**
      * Constructor for MstPlane
-     * @param area double
-     * @param tdx double
-     * @param pbx double
-     * @param psx double
+     * @param area Plane area, units ft2.
+     * @param tdx Dry-bulb temperature at the plane, units degF.
+     * @param pbx Barometric pressure at the plane, units in Hg.
+     * @param psx Static pressure at the plane, units in. w.c.
      */
     constructor(area: number, tdx: number, pbx: number, psx: number);
 
@@ -258,8 +286,8 @@ export declare class PlaneData {
      * @param addlTravPlanes vector of TraversePlane
      * @param inletMstPlane MstPlane
      * @param outletMstPlane MstPlane
-     * @param totalPressureLossBtwnPlanes1and4 double
-     * @param totalPressureLossBtwnPlanes2and5 double
+     * @param totalPressureLossBtwnPlanes1and4 Total pressure loss between planes 1 and 4, units in. w.c.
+     * @param totalPressureLossBtwnPlanes2and5 Total pressure loss between planes 2 and 5, units in. w.c.
      * @param plane5upstreamOfPlane2 boolean
      */
     constructor(
@@ -283,10 +311,10 @@ export declare class FanShaftPower {
     /**
      * Constructor for FanShaftPower
      * @param motorShaftPower double, motor shaft power in hp
-     * @param efficiencyMotor double, percentage
-     * @param efficiencyVFD double, percentage
-     * @param efficiencyBelt double, percentage
-     * @param sumSEF double
+     * @param efficiencyMotor Motor efficiency, units %.
+     * @param efficiencyVFD VFD efficiency, units %.
+     * @param efficiencyBelt Belt efficiency, units %.
+     * @param sumSEF Sum of static efficiency factors, dimensionless.
      */
     constructor(
         motorShaftPower: number,
@@ -302,16 +330,22 @@ export declare class FanShaftPower {
 
 /**
  * AMCA 203 intermediate result set.
- * @property kpc double
- * @property power double
- * @property flow double
- * @property pressureTotal double
- * @property pressureStatic double
- * @property staticPressureRise double
+ * @property kpc Compressibility coefficient, dimensionless.
+ * @property power Fan power, units hp.
+ * @property flow Fan flow, units cfm.
+ * @property pressureTotal Total pressure, units in. w.c.
+ * @property pressureStatic Static pressure, units in. w.c.
+ * @property staticPressureRise Static pressure rise, units in. w.c.
  */
 export declare class Fan203Results {
     /**
      * Constructor for Fan203Results
+     * @param kpc Compressibility coefficient, dimensionless.
+     * @param power Fan power, units hp.
+     * @param flow Fan flow, units cfm.
+     * @param pressureTotal Total pressure, units in. w.c.
+     * @param pressureStatic Static pressure, units in. w.c.
+     * @param staticPressureRise Static pressure rise, units in. w.c.
      */
     constructor(
         kpc: number,
@@ -322,11 +356,17 @@ export declare class Fan203Results {
         staticPressureRise: number
     );
 
+    /** Compressibility coefficient, dimensionless. */
     kpc: number;
+    /** Fan power, units hp. */
     power: number;
+    /** Fan flow, units cfm. */
     flow: number;
+    /** Total pressure, units in. w.c. */
     pressureTotal: number;
+    /** Static pressure, units in. w.c. */
     pressureStatic: number;
+    /** Static pressure rise, units in. w.c. */
     staticPressureRise: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -335,15 +375,20 @@ export declare class Fan203Results {
 
 /**
  * AMCA 203 output bundle.
- * @property fanEfficiencyTotalPressure double
- * @property fanEfficiencyStaticPressure double
- * @property fanEfficiencyStaticPressureRise double
+ * @property fanEfficiencyTotalPressure Fan total-pressure efficiency, dimensionless fraction.
+ * @property fanEfficiencyStaticPressure Fan static-pressure efficiency, dimensionless fraction.
+ * @property fanEfficiencyStaticPressureRise Fan static-pressure-rise efficiency, dimensionless fraction.
  * @property asTested Fan203Results
  * @property converted Fan203Results
  */
 export declare class Fan203Output {
     /**
      * Constructor for Fan203Output
+     * @param fanEfficiencyTotalPressure Fan total-pressure efficiency, dimensionless fraction.
+     * @param fanEfficiencyStaticPressure Fan static-pressure efficiency, dimensionless fraction.
+     * @param fanEfficiencyStaticPressureRise Fan static-pressure-rise efficiency, dimensionless fraction.
+     * @param asTested As-tested AMCA 203 results.
+     * @param converted Converted AMCA 203 results.
      */
     constructor(
         fanEfficiencyTotalPressure: number,
@@ -353,10 +398,15 @@ export declare class Fan203Output {
         converted: Fan203Results
     );
 
+    /** Fan total-pressure efficiency, dimensionless fraction. */
     fanEfficiencyTotalPressure: number;
+    /** Fan static-pressure efficiency, dimensionless fraction. */
     fanEfficiencyStaticPressure: number;
+    /** Fan static-pressure-rise efficiency, dimensionless fraction. */
     fanEfficiencyStaticPressureRise: number;
+    /** Fan203Results. */
     asTested: Fan203Results;
+    /** Fan203Results. */
     converted: Fan203Results;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -389,25 +439,25 @@ export declare class Fan203 {
 export declare class BaseGasDensity {
     /**
      * Constructor for BaseGasDensity
-     * @param dryBulbTemp double, temperature of inputted air in degF
-     * @param staticPressure double, pressure in Hg
-     * @param barometricPressure double in Hg
-     * @param gasDensity double, density of a gas in pounds per sqft,lb/scf
+     * @param dryBulbTemp Input air dry-bulb temperature, units degF.
+     * @param staticPressure Static pressure, units in. w.c.
+     * @param barometricPressure Barometric pressure, units in Hg.
+     * @param gasDensity Gas density, units lb/scf.
      * @param gasType GasType, type of gas
      */
     constructor(dryBulbTemp: number, staticPressure: number, barometricPressure: number, gasDensity: number, gasType: GasType);
 
+    /**
+     * Constructor for BaseGasDensity
+     * @param dryBulbTemp Input air dry-bulb temperature, units degF.
+     * @param staticPressure Static pressure, units in. w.c.
+     * @param barometricPressure Barometric pressure, units in Hg.
+     * @param relativeHumidityOrDewPoint Relative humidity, units %, or dew point, units degF, depending on inputType.
+     * @param gasType GasType
+     * @param inputType BaseGasDensityInputType
+     * @param specificGravity Specific gravity, dimensionless.
+     */
     constructor(
-        /**
-         * Constructor for BaseGasDensity
-         * @param dryBulbTemp double, temperature of inputted air in degF
-         * @param staticPressure double, pressure in inches of water (in WC)
-         * @param barometricPressure double, pressure in Hg
-         * @param relativeHumidityOrDewPoint double, elative humidity in % or Dewpoint in degF
-         * @param gasType GasType
-         * @param inputType BaseGasDensityInputType
-         * @param specificGravity double, specific gravity unitless
-         */
         dryBulbTemp: number,
         staticPressure: number,
         barometricPressure: number,
@@ -419,14 +469,14 @@ export declare class BaseGasDensity {
 
     /**
      * Constructor for BaseGasDensity
-     * @param dryBulbTemp double, temperature of inputted air in degF
-     * @param staticPressure double, pressure in inches of water (in WC)
-     * @param barometricPressure double, pressure in Hg
-     * @param wetBulbTemp double, temperature of inputted air in degF
+     * @param dryBulbTemp Input air dry-bulb temperature, units degF.
+     * @param staticPressure Static pressure, units in. w.c.
+     * @param barometricPressure Barometric pressure, units in Hg.
+     * @param wetBulbTemp Input air wet-bulb temperature, units degF.
      * @param gasType GasType
      * @param inputType BaseGasDensityInputType
-     * @param specificGravity double, specific gravity unitless
-     * @param cpGas double, specific heat of gas
+     * @param specificGravity Specific gravity, dimensionless.
+     * @param cpGas Gas specific heat, units Btu/(lb.degF).
      */
     constructor(
         dryBulbTemp: number,
@@ -439,27 +489,27 @@ export declare class BaseGasDensity {
         cpGas: number
     );
 
-    /** Getter for GasDensity */
+    /** @returns Gas density, units lb/scf. */
     getGasDensity(): number;
-    /** Getter for AbsolutePressureIn */
+    /** @returns Absolute pressure, units in Hg. */
     getAbsolutePressureIn(): number;
-    /** Getter for SaturatedHumidityRatio */
+    /** @returns Saturated humidity ratio, dimensionless. */
     getSaturatedHumidityRatio(): number;
-    /** Getter for DegreeOfSaturation */
+    /** @returns Degree of saturation, dimensionless. */
     getDegreeOfSaturation(): number;
-    /** Getter for HumidityRatio */
+    /** @returns Humidity ratio, dimensionless. */
     getHumidityRatio(): number;
-    /** Getter for SpecificVolume */
+    /** @returns Specific volume, units ft3/lb. */
     getSpecificVolume(): number;
-    /** Getter for Enthalpy */
+    /** @returns Enthalpy, units Btu/lb. */
     getEnthalpy(): number;
-    /** Getter for DewPoint */
+    /** @returns Dew point temperature, units degF. */
     getDewPoint(): number;
-    /** Getter for RelativeHumidity */
+    /** @returns Relative humidity, units %. */
     getRelativeHumidity(): number;
-    /** Getter for SaturationPressure */
+    /** @returns Saturation pressure, units in Hg. */
     getSaturationPressure(): number;
-    /** Getter for WetBulbTemp */
+    /** @returns Wet-bulb temperature, units degF. */
     getWetBulbTemp(): number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -474,7 +524,7 @@ export declare class VelocityPressureTraverseData {
     getPv3Value(): number;
 
     /**
-     * @returns double
+     * @returns Percent of traverse points that satisfy the 75 percent rule, units %.
      */
     get75percentRule(): number;
 
@@ -507,6 +557,11 @@ export declare class PlaneDataNodeBinding {
 export declare class PlaneDataNodeBindingData {
     /**
      * Constructor for PlaneDataNodeBindingData
+     * @param gasDensity Gas density, units lb/scf.
+     * @param gasVelocity Gas velocity, units ft/min.
+     * @param gasVolumeFlowRate Gas volume flow rate, units ft3/min.
+     * @param gasVelocityPressure Gas velocity pressure, units in. w.c.
+     * @param gasTotalPressure Gas total pressure, units in. w.c.
      */
     constructor(
         gasDensity: number,
@@ -516,10 +571,15 @@ export declare class PlaneDataNodeBindingData {
         gasTotalPressure: number
     );
 
+    /** density in pounds per sqft, lb/scf. */
     gasDensity: number;
+    /** velocity in ft/min. */
     gasVelocity: number;
+    /** ft3/min. */
     gasVolumeFlowRate: number;
+    /** pressure in inches of water (in WC). */
     gasVelocityPressure: number;
+    /** pressure in inches of water (in WC). */
     gasTotalPressure: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -538,6 +598,12 @@ export declare class PlaneDataNodeBindingData {
 export declare class PlaneDataNodeBindingDataFlange extends PlaneDataNodeBindingData {
     /**
      * Constructor for PlaneDataNodeBindingDataFlange
+     * @param gasDensity Gas density, units lb/scf.
+     * @param gasVelocity Gas velocity, units ft/min.
+     * @param gasVolumeFlowRate Gas volume flow rate, units ft3/min.
+     * @param gasVelocityPressure Gas velocity pressure, units in. w.c.
+     * @param gasTotalPressure Gas total pressure, units in. w.c.
+     * @param staticPressure Static pressure, units in. w.c.
      */
     constructor(
         gasDensity: number,
@@ -548,6 +614,7 @@ export declare class PlaneDataNodeBindingDataFlange extends PlaneDataNodeBinding
         staticPressure: number
     );
 
+    /** pressure in inches of water (in WC). */
     staticPressure: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -569,11 +636,17 @@ export declare class PlaneDataNodeBindingOutput {
      */
     constructor(planeData: PlaneData);
 
+    /** PlaneDataNodeBindingDataFlange. */
     fanInletFlange: PlaneDataNodeBindingDataFlange;
+    /** PlaneDataNodeBindingDataFlange. */
     fanOrEvaseOutletFlange: PlaneDataNodeBindingDataFlange;
+    /** PlaneDataNodeBindingData. */
     flowTraverse: PlaneDataNodeBindingData;
+    /** PlaneDataNodeBindingData. */
     inletMstPlane: PlaneDataNodeBindingData;
+    /** PlaneDataNodeBindingData. */
     outletMstPlane: PlaneDataNodeBindingData;
+    /** PlaneDataNodeBindingData array. */
     addlTravPlanes: PlaneDataNodeBindingDataVector;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -596,11 +669,11 @@ export declare class OptimalFanEfficiency {
     /**
      * Constructor for Optimal Fan Efficiency
      * @param fanType FanType
-     * @param fanSpeed double
-     * @param flowRate double
-     * @param inletPressure double
-     * @param outletPressure double
-     * @param compressibility double
+     * @param fanSpeed Fan speed, units rpm.
+     * @param flowRate Fan flow rate, units cfm.
+     * @param inletPressure Fan inlet pressure, units in. w.c.
+     * @param outletPressure Fan outlet pressure, units in. w.c.
+     * @param compressibility Compressibility factor, dimensionless.
      */
     constructor(
         fanType: FanType,
@@ -613,7 +686,7 @@ export declare class OptimalFanEfficiency {
 
     /**
      * Calculate Thermal Resistance
-     * @returns optimal fan efficiency, double as a %
+     * @returns Optimal fan efficiency, units %.
      */
     calculate(): number;
 
@@ -630,7 +703,7 @@ export declare class CompressibilityFactor {
      * @param outletPressure double, in inches of water column, gauge
      * @param barometricPressure double, in Hg
      * @param flowRate double, in cfm
-     * @param specificHeatRatio double, unitless
+     * @param specificHeatRatio Specific heat ratio, dimensionless.
      */
     constructor(
         moverShaftPower: number,
@@ -643,7 +716,7 @@ export declare class CompressibilityFactor {
 
     /**
      * Calculate Compressibility Factor
-     * @returns double Compressibility Factor
+     * @returns Compressibility factor, dimensionless.
      */
     calculate(): number;
 

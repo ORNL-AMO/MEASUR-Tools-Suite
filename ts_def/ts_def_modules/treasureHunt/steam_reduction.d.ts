@@ -140,12 +140,12 @@ export interface SteamOffsheetMethodData {
  * is used in the calculation. Steam properties are determined from the specified pressure and
  * thermodynamic variable.
  *
- * @property hoursPerYear number, annual operating hours, units hours/year
+ * @property hoursPerYear number, annual operating hours, units hr/year, units hours/year
  * @property utilityType {@link SteamUtilityType}, utility type for energy cost calculation
  * @property utilityCost number, utility cost rate ($/kg for steam, $/kJ for gas/other)
  * @property measurementMethod {@link SteamMeasurementMethod}, measurement method to apply
  * @property systemEfficiency number, system efficiency (dimensionless)
- * @property pressure number, steam pressure, units MPaa
+ * @property pressure Steam pressure, units MPa.
  * @property flowMeterMethodData {@link SteamFlowMeterMethodData}, data for flow meter method
  * @property airMassFlowMethodData {@link SteamMassFlowMethodData}, data for air mass flow method
  * @property waterMassFlowMethodData {@link SteamMassFlowMethodData}, data for water mass flow method
@@ -157,7 +157,7 @@ export interface SteamOffsheetMethodData {
  * @property feedWaterTemperature number, feedwater temperature, units K
  */
 export interface SteamReductionInput {
-    /** Annual operating hours, units hours/year */
+    /** annual operating hours, units hr/year, units hours/year */
     hoursPerYear: number;
     /** Utility type for energy cost calculation */
     utilityType: SteamUtilityType;
@@ -167,7 +167,7 @@ export interface SteamReductionInput {
     measurementMethod: SteamMeasurementMethod;
     /** System efficiency (dimensionless) */
     systemEfficiency: number;
-    /** Steam pressure, units MPaa */
+    /** Steam pressure, units MPa. */
     pressure: number;
     /** Data for the flow meter method */
     flowMeterMethodData: SteamFlowMeterMethodData;
@@ -183,7 +183,7 @@ export interface SteamReductionInput {
     boilerEfficiency: number;
     /** Thermodynamic quantity type for steam property lookup */
     steamVariableOption: ThermodynamicQuantity;
-    /** Steam thermodynamic variable value */
+    /** Steam thermodynamic variable value; units depend on steamVariableOption. */
     steamVariable: number;
     /** Feedwater temperature, units K */
     feedWaterTemperature: number;

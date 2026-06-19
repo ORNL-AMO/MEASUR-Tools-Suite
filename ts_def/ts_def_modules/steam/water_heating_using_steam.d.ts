@@ -53,13 +53,13 @@ export interface WaterHeatingUsingSteamOutput {
  * Uses process parameters to estimate the benefit of using vent steam for
  * water heating and boiler operation.
  *
- * @param pressure_steam_in Inlet steam pressure, units MPaa
+ * @param pressure_steam_in Inlet steam pressure, units MPa
  * @param flow_steam_rate Steam flow rate, units kg/hr
  * @param temperature_water_in Inlet water temperature, units K
- * @param pressure_water_out Outlet water pressure, units MPaa
+ * @param pressure_water_out Outlet water pressure, units MPa
  * @param flow_water_rate Water flow rate, units m3/hr
  * @param temp_makeup_water Makeup water temperature, units K
- * @param pres_makeup_water Makeup water pressure, units MPaa
+ * @param pres_makeup_water Makeup water pressure, units MPa
  * @param eff_water_heater Water heater efficiency, fraction
  * @param eff_boiler Boiler efficiency, fraction
  * @param operating_hours Operating hours, units hr

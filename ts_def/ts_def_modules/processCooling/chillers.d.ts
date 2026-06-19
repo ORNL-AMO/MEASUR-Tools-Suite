@@ -171,7 +171,7 @@ export declare class CoolingTowerOperatingConditionsData {
      * @param flowRate double, water flow rate, units gpm
      * @param coolingLoad double, cooling load, units MMBtu/h
      * @param operationalHours int, number of hours the cooling tower operates
-     * @param lossCorrectionFactor double, correction factor for evaporation loss
+     * @param lossCorrectionFactor Correction factor for evaporation loss, dimensionless.
      */
     constructor(
         flowRate: number,
@@ -190,7 +190,7 @@ export declare class CoolingTowerOperatingConditionsData {
 export declare class CoolingTowerWaterConservationData {
     /**
      * @param cyclesOfConcentration int, cycles of concentration
-     * @param driftLossFactor double, correction factor for drift loss
+     * @param driftLossFactor Correction factor for drift loss, dimensionless.
      */
     constructor(cyclesOfConcentration: number, driftLossFactor: number);
 

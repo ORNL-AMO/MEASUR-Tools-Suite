@@ -60,16 +60,18 @@ export declare class SaturatedPropertiesOutput {
 /**
  * Thermodynamic properties of steam/water at a given state.
  *
- * @param temperature Temperature, units K
- * @param pressure Pressure, units MPa
- * @param quality Quality, unitless (0-1)
- * @param specificVolume Specific volume, units m3/kg
- * @param density Density, units kg/m3
- * @param specificEnthalpy Specific enthalpy, units kJ/kg
- * @param specificEntropy Specific entropy, units kJ/(kg.K)
- * @param internalEnergy Internal energy, units MJ (optional, default 0)
  */
 export declare class SteamPropertiesOutput {
+    /**
+     * @param temperature Temperature, units K.
+     * @param pressure Pressure, units MPa.
+     * @param quality Quality, dimensionless fraction.
+     * @param specificVolume Specific volume, units m3/kg.
+     * @param density Density, units kg/m3.
+     * @param specificEnthalpy Specific enthalpy, units kJ/kg.
+     * @param specificEntropy Specific entropy, units kJ/(kg.K).
+     * @param internalEnergy Internal energy, units MJ.
+     */
     constructor(
         temperature: number,
         pressure: number,
@@ -85,7 +87,7 @@ export declare class SteamPropertiesOutput {
     temperature: number;
     /** Pressure, units MPa */
     pressure: number;
-    /** Quality, unitless */
+    /** Quality, dimensionless fraction. */
     quality: number;
     /** Specific volume, units m3/kg */
     specificVolume: number;
@@ -103,7 +105,7 @@ export declare class SteamPropertiesOutput {
     specificIsochoricHeatCapacity_cv: number;
     /** Speed of sound, units m/s */
     speedOfSound_w: number;
-    /** Isentropic exponent, unitless */
+    /** Isentropic exponent, dimensionless. */
     isentropicExponent: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -114,20 +116,21 @@ export declare class SteamPropertiesOutput {
  * Steam/fluid properties extended with mass flow and energy flow.
  *
  * Extends {@link SteamPropertiesOutput} with `massFlow` (kg/hr) and
- * `energyFlow` (kJ/hr or MJ/hr depending on context).
- *
- * @param massFlow Mass flow, units kg/hr
- * @param energyFlow Energy flow
- * @param temperature Temperature, units K
- * @param pressure Pressure, units MPa
- * @param quality Quality, unitless
- * @param specificVolume Specific volume, units m3/kg
- * @param density Density, units kg/m3
- * @param specificEnthalpy Specific enthalpy, units kJ/kg
- * @param specificEntropy Specific entropy, units kJ/(kg.K)
- * @param internalEnergy Internal energy, units MJ (optional, default 0)
+ * `energyFlow` (units kJ/hr or MJ/hr depending on context).
  */
 export declare class FluidProperties extends SteamPropertiesOutput {
+    /**
+     * @param massFlow Mass flow, units kg/hr.
+     * @param energyFlow Energy flow, units kJ/hr or MJ/hr depending on context.
+     * @param temperature Temperature, units K.
+     * @param pressure Pressure, units MPa.
+     * @param quality Quality, dimensionless fraction.
+     * @param specificVolume Specific volume, units m3/kg.
+     * @param density Density, units kg/m3.
+     * @param specificEnthalpy Specific enthalpy, units kJ/kg.
+     * @param specificEntropy Specific entropy, units kJ/(kg.K).
+     * @param internalEnergy Internal energy, units MJ.
+     */
     constructor(
         massFlow: number,
         energyFlow: number,
@@ -143,7 +146,7 @@ export declare class FluidProperties extends SteamPropertiesOutput {
 
     /** Mass flow, units kg/hr */
     massFlow: number;
-    /** Energy flow */
+    /** Energy flow, units kJ/hr or MJ/hr depending on context. */
     energyFlow: number;
 }
 
@@ -220,7 +223,7 @@ export declare class SteamProperties {
     /**
      * @param pressure Pressure, units MPa
      * @param quantityType {@link ThermodynamicQuantity} - TEMPERATURE (K), ENTHALPY (kJ/kg), ENTROPY (kJ/(kg.K)), or QUALITY (unitless)
-     * @param quantityValue Value of the specified thermodynamic quantity
+     * @param quantityValue Value of the specified thermodynamic quantity; units depend on quantityType (K, kJ/kg, kJ/(kg.K), or quality fraction).
      */
     constructor(
         pressure: number,
@@ -253,10 +256,10 @@ export declare class Boiler {
     /**
      * @param deaeratorPressure Deaerator pressure, units MPa
      * @param combustionEfficiency Combustion efficiency, units %
-     * @param blowdownRate Blowdown rate as % of inlet mass flow
+     * @param blowdownRate Blowdown rate as percent of inlet mass flow, units %.
      * @param steamPressure Steam pressure, units MPa
      * @param quantityType {@link ThermodynamicQuantity} - TEMPERATURE (K), ENTHALPY (kJ/kg), ENTROPY (kJ/(kg.K)), or QUALITY
-     * @param quantityValue Value of the specified thermodynamic quantity
+     * @param quantityValue Value of the specified thermodynamic quantity; units depend on quantityType (K, kJ/kg, kJ/(kg.K), or quality fraction).
      * @param steamMassFlow Steam mass flow, units kg/hr
      */
     constructor(
@@ -279,7 +282,7 @@ export declare class Boiler {
     getBoilerEnergy(): number;
     /** @returns Fuel energy, units MJ */
     getFuelEnergy(): number;
-    /** @returns Blowdown rate as % of inlet mass flow */
+    /** @returns Blowdown rate as percent of inlet mass flow, units %. */
     getBlowdownRate(): number;
     /** @returns Combustion efficiency, units % */
     getCombustionEfficiency(): number;
@@ -299,7 +302,7 @@ export declare class HeatLoss {
     /**
      * @param inletPressure Inlet pressure, units MPa
      * @param quantityType {@link ThermodynamicQuantity}
-     * @param quantityValue Value of the thermodynamic quantity
+     * @param quantityValue Value of the thermodynamic quantity; units depend on quantityType (K, kJ/kg, kJ/(kg.K), or quality fraction).
      * @param inletMassFlow Inlet mass flow, units kg/hr
      * @param percentHeatLoss Heat loss, units %
      */
@@ -319,7 +322,7 @@ export declare class HeatLoss {
     getHeatLoss(): number;
     /** @returns Inlet pressure, units MPa */
     getInletPressure(): number;
-    /** @returns Thermodynamic quantity value */
+    /** @returns Thermodynamic quantity value; units depend on quantityType (K, kJ/kg, kJ/(kg.K), or quality fraction). */
     getQuantityValue(): number;
     /** @returns Inlet mass flow, units kg/hr */
     getInletMassFlow(): number;
@@ -343,7 +346,7 @@ export declare class FlashTank {
     /**
      * @param inletWaterPressure Inlet water pressure, units MPa
      * @param quantityType {@link ThermodynamicQuantity}
-     * @param quantityValue Value of the thermodynamic quantity
+     * @param quantityValue Value of the thermodynamic quantity; units depend on quantityType (K, kJ/kg, kJ/(kg.K), or quality fraction).
      * @param inletWaterMassFlow Inlet water mass flow, units kg/hr
      * @param tankPressure Tank pressure, units MPa
      */
@@ -377,7 +380,7 @@ export declare class PrvWithoutDesuperheating {
     /**
      * @param inletPressure Inlet pressure, units MPa
      * @param quantityType {@link ThermodynamicQuantity}
-     * @param quantityValue Value of the thermodynamic quantity
+     * @param quantityValue Value of the thermodynamic quantity; units depend on quantityType (K, kJ/kg, kJ/(kg.K), or quality fraction).
      * @param inletMassFlow Inlet mass flow, units kg/hr
      * @param outletPressure Outlet pressure, units MPa
      */
@@ -418,12 +421,12 @@ export declare class PrvWithDesuperheating {
     /**
      * @param inletPressure Inlet pressure, units MPa
      * @param quantityType {@link ThermodynamicQuantity}
-     * @param quantityValue Value of the thermodynamic quantity
+     * @param quantityValue Value of the thermodynamic quantity; units depend on quantityType (K, kJ/kg, kJ/(kg.K), or quality fraction).
      * @param inletMassFlow Inlet mass flow, units kg/hr
      * @param outletPressure Outlet pressure, units MPa
      * @param feedwaterPressure Feedwater pressure, units MPa
      * @param feedwaterQuantityType {@link ThermodynamicQuantity} for feedwater
-     * @param feedwaterQuantityValue Value of the feedwater thermodynamic quantity
+     * @param feedwaterQuantityValue Value of the feedwater thermodynamic quantity; units depend on feedwaterQuantityType (K, kJ/kg, kJ/(kg.K), or quality fraction).
      * @param desuperheatingTemp Desuperheating temperature, units K
      */
     constructor(
@@ -493,10 +496,10 @@ export declare class Deaerator {
      * @param feedwaterMassFlow Feedwater mass flow, units kg/hr
      * @param waterPressure Inlet water pressure, units MPa
      * @param waterQuantityType {@link ThermodynamicQuantity} for water
-     * @param waterQuantityValue Value of the water thermodynamic quantity
+     * @param waterQuantityValue Value of the water thermodynamic quantity; units depend on waterQuantityType (K, kJ/kg, kJ/(kg.K), or quality fraction).
      * @param steamPressure Inlet steam pressure, units MPa
      * @param steamQuantityType {@link ThermodynamicQuantity} for steam
-     * @param steamQuantityValue Value of the steam thermodynamic quantity
+     * @param steamQuantityValue Value of the steam thermodynamic quantity; units depend on steamQuantityType (K, kJ/kg, kJ/(kg.K), or quality fraction).
      */
     constructor(
         deaeratorPressure: number,
@@ -534,7 +537,7 @@ export declare class Inlet {
     /**
      * @param pressure Inlet pressure, units MPa
      * @param quantityType {@link ThermodynamicQuantity}
-     * @param quantityValue Value of the thermodynamic quantity
+     * @param quantityValue Value of the thermodynamic quantity; units depend on quantityType (K, kJ/kg, kJ/(kg.K), or quality fraction).
      * @param massFlow Inlet mass flow, units kg/hr
      */
     constructor(
@@ -624,13 +627,13 @@ export declare class Turbine {
      * @param solveFor {@link Solve} - must be `IsentropicEfficiency`
      * @param inletPressure Inlet pressure, units MPa
      * @param inletQuantity {@link ThermodynamicQuantity} for inlet
-     * @param inletQuantityValue Inlet thermodynamic quantity value
-     * @param turbineProperty {@link TurbineProperty}
-     * @param generatorEfficiency Generator efficiency, fraction
-     * @param massFlowOrPowerOut Known turbine property value
+     * @param inletQuantityValue Inlet thermodynamic quantity value; units depend on inletQuantity (K, kJ/kg, kJ/(kg.K), or quality fraction).
+     * @param turbineProperty {@link TurbineProperty} selector for mass flow or power output.
+     * @param generatorEfficiency Generator efficiency, dimensionless fraction.
+     * @param massFlowOrPowerOut Known turbine property value; units kg/hr when turbineProperty is MassFlow, units kW when turbineProperty is PowerOut.
      * @param outletSteamPressure Outlet steam pressure, units MPa
      * @param outletQuantity {@link ThermodynamicQuantity} for outlet
-     * @param outletQuantityValue Outlet thermodynamic quantity value
+     * @param outletQuantityValue Outlet thermodynamic quantity value; units depend on outletQuantity (K, kJ/kg, kJ/(kg.K), or quality fraction).
      */
     constructor(
         solveFor: Solve,

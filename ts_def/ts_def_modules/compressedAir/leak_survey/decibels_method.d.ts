@@ -25,16 +25,27 @@
  * @property secondFlowB double, flow rate for point B in scfm.
  */
 export interface DecibelsMethodInput {
+    /** annual system operating time in hours. */
     operatingTime: number;
+    /** system line pressure at the leak location units psig. */
     linePressure: number;
+    /** ultrasonic decibel level measured at the leak location in decibel. */
     decibels: number;
+    /** lower ultrasonic decibel reference rating for point A in decibel. */
     decibelRatingA: number;
+    /** reference line pressure corresponding to point A units psig. */
     pressureA: number;
+    /** flow rate at point A units scfm. */
     firstFlowA: number;
+    /** flow rate at point A units scfm. */
     secondFlowA: number;
+    /** upper ultrasonic decibel reference rating for point B in decibel. */
     decibelRatingB: number;
+    /** reference line pressure corresponding to point B units psig. */
     pressureB: number;
+    /** flow rate for point B units scfm. */
     firstFlowB: number;
+    /** flow rate for point B units scfm. */
     secondFlowB: number;
 }
 
@@ -45,7 +56,9 @@ export interface DecibelsMethodInput {
  * @property annualConsumption double, estimated annual air loss from the leak in kscf.
  */
 export interface DecibelsMethodResult {
+    /** estimated compressed air leak flow rate units scfm. */
     leakRateEstimate: number;
+    /** estimated annual air loss from the leak units kscf. */
     annualConsumption: number;
 }
 

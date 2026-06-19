@@ -15,12 +15,12 @@ import { PumpStyle, SpecificSpeed } from "../pumpFan/pumpFan";
 export declare class HeadToolOutput {
     /**
      * Constructor for HeadToolOutput
-     * @param differentialElevationHead double
-     * @param differentialPressureHead double
-     * @param differentialVelocityHead double
-     * @param estimatedSuctionFrictionHead double
-     * @param estimatedDischargeFrictionHead double
-     * @param pumpHead double
+     * @param differentialElevationHead Differential elevation head, units ft.
+     * @param differentialPressureHead Differential pressure head, units ft.
+     * @param differentialVelocityHead Differential velocity head, units ft.
+     * @param estimatedSuctionFrictionHead Estimated suction friction head, units ft.
+     * @param estimatedDischargeFrictionHead Estimated discharge friction head, units ft.
+     * @param pumpHead Total pump head, units ft.
      */
     constructor(
         differentialElevationHead: number,
@@ -53,15 +53,15 @@ export declare class HeadToolOutput {
  */
 export declare class HeadToolSuctionTank {
     /**
-     * @param specificGravity double, specific gravity (unitless)
+     * @param specificGravity double, specific gravity, dimensionless (unitless)
      * @param flowRate double, flow rate in gpm
-     * @param suctionPipeDiameter double, suction pipe diameter
+     * @param suctionPipeDiameter Suction pipe diameter, units ft.
      * @param suctionTankGasOverPressure double, suction tank gas over pressure in psig
      * @param suctionTankFluidSurfaceElevation double, suction tank fluid surface elevation in ft
      * @param suctionLineLossCoefficients double, suction line loss coefficients (unitless)
-     * @param dischargePipeDiameter double, discharge pipe diameter
+     * @param dischargePipeDiameter Discharge pipe diameter, units ft.
      * @param dischargeGaugePressure double, discharge gauge pressure in psig
-     * @param dischargeGaugeElevation double, discharge gauge elevation
+     * @param dischargeGaugeElevation Discharge gauge elevation, units ft.
      * @param dischargeLineLossCoefficients double, discharge line loss coefficients (unitless)
      */
     constructor(
@@ -94,7 +94,7 @@ export declare class HeadTool {
     /**
      * Constructor for HeadTool with no Suction Tank, all inputs specified
      *
-     * @param specificGravity double, specific gravity - unitless
+     * @param specificGravity double, specific gravity, dimensionless - unitless
      * @param flowRate double, flow rate in gpm (gallons per minute)
      * @param suctionPipeDiameter double, diameter of suction pipe in feet
      * @param suctionGaugePressure double, gauge pressure of suction in psig (pounds per square inch guage)
@@ -135,14 +135,14 @@ export declare class HeadTool {
 export declare class PumpResultInput {
     /**
      * @param style PumpStyle, pump style selector
-     * @param pumpEfficiency double, pump efficiency
+     * @param pumpEfficiency double, pump efficiency, dimensionless
      * @param rpm double, pump speed in RPM
      * @param drive Drive enum, drive type
-     * @param kviscosity double, kinematic viscosity
-     * @param specificGravity double, specific gravity
-     * @param stageCount int, number of stages
+     * @param kviscosity Kinematic viscosity, units cSt.
+     * @param specificGravity double, specific gravity, dimensionless
+     * @param stageCount Pump stage count.
      * @param speed SpecificSpeed, pump specific speed selector
-     * @param specifiedEfficiency double, specified optimal efficiency
+     * @param specifiedEfficiency Specified optimal efficiency, dimensionless fraction.
      */
     constructor(
         style: PumpStyle,
@@ -192,18 +192,18 @@ export declare class PumpFieldData {
 export declare class PumpResults {
     /**
      * Constructor for PumpResults
-     * @param pump_efficiency double
-     * @param motor_rated_power double
-     * @param motor_shaft_power double
-     * @param mover_shaft_power double
-     * @param motor_efficiency double
-     * @param motor_power_factor double
-     * @param motor_current double
-     * @param motor_power double
-     * @param annual_energy double
-     * @param annual_cost double
-     * @param load_factor double
-     * @param drive_efficiency double
+     * @param pump_efficiency Pump efficiency, dimensionless fraction.
+     * @param motor_rated_power Motor rated power, units hp.
+     * @param motor_shaft_power Motor shaft power, units hp.
+     * @param mover_shaft_power Mover shaft power, units hp.
+     * @param motor_efficiency Motor efficiency, dimensionless fraction.
+     * @param motor_power_factor Motor power factor, dimensionless.
+     * @param motor_current Motor current, units A.
+     * @param motor_power Motor power, units kW.
+     * @param annual_energy Annual energy, units kWh/year.
+     * @param annual_cost Annual cost, units $/year.
+     * @param load_factor Load factor, dimensionless fraction.
+     * @param drive_efficiency Drive efficiency, dimensionless fraction.
      */
     constructor(
         pump_efficiency: number,
@@ -220,7 +220,7 @@ export declare class PumpResults {
         drive_efficiency: number
     );
 
-    /** Pump efficiency, unitless decimal */
+    /** Pump efficiency, dimensionless fraction. */
     pump_efficiency: number;
     /** Motor rated power, units hp */
     motor_rated_power: number;
@@ -228,9 +228,9 @@ export declare class PumpResults {
     motor_shaft_power: number;
     /** Mover shaft power, units hp */
     mover_shaft_power: number;
-    /** Motor efficiency, unitless decimal */
+    /** Motor efficiency, dimensionless fraction. */
     motor_efficiency: number;
-    /** Motor power factor, unitless */
+    /** Motor power factor, dimensionless, unitless */
     motor_power_factor: number;
     /** Motor current, units A */
     motor_current: number;
@@ -240,9 +240,9 @@ export declare class PumpResults {
     annual_energy: number;
     /** Annual cost, units $ */
     annual_cost: number;
-    /** Load factor, unitless decimal */
+    /** Load factor, dimensionless fraction. */
     load_factor: number;
-    /** Drive efficiency, unitless decimal */
+    /** Drive efficiency, dimensionless fraction. */
     drive_efficiency: number;
     /** Estimated full-load amps, units A */
     estimatedFLA: number;
@@ -260,8 +260,8 @@ export declare class PumpResult {
      * @param pumpInput Pump::Input, contains all pump-related data, passed by reference
      * @param motor Motor, contains all motor-related calculations, passed by reference
      * @param fieldData FieldData, contains all field data-related calculations, passed by reference
-     * @param operatingHours double, fraction(%) of calendar hours the equipment is operating
-     * @param unitCost double, per unit energy cost of electricity in $/kwh
+     * @param operatingHours Annual operating hours, units hr/year.
+     * @param unitCost Electricity unit cost, units $/kWh.
      */
     constructor(pumpInput: PumpResultInput, motor: Motor, fieldData: PumpFieldData, operatingHours: number, unitCost: number);
 
@@ -285,7 +285,7 @@ export declare class PumpResult {
 
     /**
      * Gets the optimization rating
-     * @returns double, optimization rating as %
+     * @returns Optimization rating, units %.
      */
     getOptimizationRating(): number;
 

@@ -27,12 +27,12 @@ export declare abstract class RegisteredVector<T> {
     /** Constructor for creating an array of elements of type <T> */
     constructor();
 
-    /** Returns the number of elements or size or length */
+    /** @returns Vector size, count. */
     size(): number;
 
     /**
      * Resizes and adds x elements of <T>
-     * @param size new size of the vector
+     * @param size new vector size, count
      * @param elementOfTypeT element of type <T> to add if the vector is resized to be larger than the current size; optional parameter, default value is determined by the implementation
      */
     resize(size: number, elementOfTypeT?: T): void;

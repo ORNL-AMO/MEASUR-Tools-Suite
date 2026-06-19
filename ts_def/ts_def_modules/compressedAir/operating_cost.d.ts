@@ -12,17 +12,24 @@
  * @property bhpUnloaded double, percentage of full-load BHP consumed when unloaded.
  * @property annualOperatingHours double, total compressor operating hours per year in hours.
  * @property runTimeLoaded double, percentage of operating time the compressor runs loaded.
- * @property efficiencyLoaded double, motor efficiency in the loaded condition as percentage.
- * @property efficiencyUnloaded double, motor efficiency in the unloaded condition as percentage.
+ * @property efficiencyLoaded double, motor efficiency, dimensionless in the loaded condition as percentage.
+ * @property efficiencyUnloaded double, motor efficiency, dimensionless in the unloaded condition as percentage.
  * @property costOfElectricity double, electricity unit cost in $/kWh.
  */
 export interface OperatingCostInput {
+    /** full-load motor brake horsepower in bhp. */
     motorBhp: number;
+    /** dimensionless % of full-load BHP consumed when unloaded. */
     bhpUnloaded: number;
+    /** total compressor operating hours per year in hours. */
     annualOperatingHours: number;
+    /** dimensionless % of operating time the compressor runs loaded. */
     runTimeLoaded: number;
+    /** motor efficiency, dimensionless in the loaded condition as dimensionless %. */
     efficiencyLoaded: number;
+    /** motor efficiency, dimensionless in the unloaded condition as dimensionless %. */
     efficiencyUnloaded: number;
+    /** electricity unit cost in $/kWh. */
     costOfElectricity: number;
 }
 
@@ -35,9 +42,13 @@ export interface OperatingCostInput {
  * @property totalAnnualCost double, total annual electricity cost in $/year.
  */
 export interface OperatingCostResult {
+    /** dimensionless % of operating time the compressor runs unloaded. */
     runTimeUnloaded: number;
+    /** annual electricity cost in the loaded condition units $/year. */
     costForLoaded: number;
+    /** annual electricity cost in the unloaded condition units $/year. */
     costForUnloaded: number;
+    /** total annual electricity cost units $/year. */
     totalAnnualCost: number;
 }
 

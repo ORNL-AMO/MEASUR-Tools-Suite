@@ -75,7 +75,7 @@ export declare class CHP {
     /**
      * Creates a CHP calculation instance.
      *
-     * @param annualOperatingHours double, annual operating hours
+     * @param annualOperatingHours double, annual operating hours, units hr/year
      * @param annualElectricityConsumption double, annual electricity consumption in kWh
      * @param annualThermalDemand double, annual thermal demand in MMBtu
      * @param boilerThermalFuelCosts double, boiler thermal fuel cost in $/MMBtu

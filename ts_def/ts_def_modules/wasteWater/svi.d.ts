@@ -21,13 +21,13 @@ export enum SVIParameter {
 /**
  * Graph data point for solids concentration and solids flux.
  *
- * @property SolidsConcentration double
- * @property SolidsFlux double
+ * @property SolidsConcentration Solids concentration, units g/L.
+ * @property SolidsFlux Solids flux, units kg/(m2.hr).
  */
 export declare class GraphDataPoint {
-    /** Solids concentration value */
+    /** Solids concentration, units g/L. */
     SolidsConcentration: number;
-    /** Solids flux value */
+    /** Solids flux, units kg/(m2.hr). */
     SolidsFlux: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -45,8 +45,8 @@ export declare class GraphDataPoint {
  * @property UnderFlowRateY1 double, units kg/m2h
  * @property OverFlowRateX2 double, units g/L
  * @property OverFlowRateY2 double, units kg/m2h
- * @property StatePointX double
- * @property StatePointY double
+ * @property StatePointX State point X solids concentration, units g/L.
+ * @property StatePointY State point Y solids flux, units kg/(m2.hr).
  * @property GraphData {@link GraphDataV}, computed graph data points
  */
 export interface SludgeVolumeIndexOutput {
@@ -66,9 +66,9 @@ export interface SludgeVolumeIndexOutput {
     OverFlowRateX2: number;
     /** Overflow rate Y2, units kg/m2h */
     OverFlowRateY2: number;
-    /** State point X */
+    /** State point X solids concentration, units g/L. */
     StatePointX: number;
-    /** State point Y */
+    /** State point Y solids flux, units kg/(m2.hr). */
     StatePointY: number;
     /** Computed graph data points */
     GraphData: GraphDataV;
@@ -86,7 +86,7 @@ export declare class SludgeVolumeIndex {
      *
      * @param sviParameter {@link SVIParameter}
      * @param sviValue double, units L/g
-     * @param numberOfClarifiers double
+     * @param numberOfClarifiers Clarifier count.
      * @param areaOfClarifier double, units m2
      * @param MLSS double, units kg/L
      * @param influentFlow double, units L/h

@@ -104,7 +104,7 @@ export interface WaterOtherMethodData {
  * is selected via {@link WaterReductionMeasurementMethod}; only the corresponding method data
  * struct is used in the calculation.
  *
- * @property hoursPerYear number, annual operating hours, units hours/year
+ * @property hoursPerYear number, annual operating hours, units hr/year, units hours/year
  * @property waterCost number, water cost rate, units $/gal
  * @property measurementMethod {@link WaterReductionMeasurementMethod}, measurement method to apply
  * @property meteredFlowMethodData {@link MeteredFlowMethodData}, data for metered flow method
@@ -113,7 +113,7 @@ export interface WaterOtherMethodData {
  * @property otherMethodData {@link WaterOtherMethodData}, data for other method
  */
 export interface WaterReductionInput {
-    /** Annual operating hours, units hours/year */
+    /** annual operating hours, units hr/year, units hours/year */
     hoursPerYear: number;
     /** Water cost rate, units $/gal */
     waterCost: number;
@@ -164,11 +164,11 @@ export function waterReduction(input_vec: WaterReductionInputV): WaterReductionO
 /**
  * Calculate annual water use and cost using the metered flow method.
  *
- * Multiplies meter reading by 60 (gal/min to gal/hr) and annual operating hours to obtain annual
+ * Multiplies meter reading by 60 (gal/min to gal/hr) and annual operating hours, units hr/year to obtain annual
  * water use, then calculates cost using water cost rate.
  *
  * @param data {@link MeteredFlowMethodData} with meter reading, units gal/min.
- * @param operating_hours Annual operating hours, units hours/year.
+ * @param operating_hours annual operating hours, units hr/year, units hours/year.
  * @param water_cost Water cost rate, units $/gal.
  * @returns {@link WaterReductionOutput} with annual water use and annual water cost.
  */
@@ -184,7 +184,7 @@ export function meteredFlowReduction(
  * Computes average flow from change in meter reading over elapsed time, then scales to annual use.
  *
  * @param data {@link VolumeMeterMethodData} with initial/final meter readings (gal) and elapsed time (min).
- * @param operating_hours Annual operating hours, units hours/year.
+ * @param operating_hours annual operating hours, units hr/year, units hours/year.
  * @param water_cost Water cost rate, units $/gal.
  * @returns {@link WaterReductionOutput} with annual water use and annual water cost.
  */
@@ -200,7 +200,7 @@ export function volumeMeterReduction(
  * Computes flow rate from bucket volume and fill time, then scales to annual use.
  *
  * @param data {@link BucketMethodData} with bucket volume (gal) and fill time (s).
- * @param operating_hours Annual operating hours, units hours/year.
+ * @param operating_hours annual operating hours, units hr/year, units hours/year.
  * @param water_cost Water cost rate, units $/gal.
  * @returns {@link WaterReductionOutput} with annual water use and annual water cost.
  */

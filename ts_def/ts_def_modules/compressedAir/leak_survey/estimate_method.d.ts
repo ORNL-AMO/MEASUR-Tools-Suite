@@ -12,7 +12,9 @@
  * @property leakRateEstimate double, estimated leak rate from visual/audible assessment in scfm.
  */
 export interface EstimateMethodInput {
+    /** annual system operating time in hours. */
     operatingTime: number;
+    /** estimated leak rate from visual/audible assessment units scfm. */
     leakRateEstimate: number;
 }
 
@@ -22,6 +24,7 @@ export interface EstimateMethodInput {
  * @property annualConsumption double, estimated annual air loss from the leak in kscf.
  */
 export interface EstimateMethodResult {
+    /** estimated annual air loss from the leak units kscf. */
     annualConsumption: number;
 }
 

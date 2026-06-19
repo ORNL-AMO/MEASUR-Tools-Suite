@@ -108,7 +108,7 @@ export interface GasFlueGasMaterial {
     heatingValue: number;
     /** Heating value by volume, units Btu/ft3 */
     heatingValueVolume: number;
-    /** Specific gravity, unitless */
+    /** specific gravity, dimensionless, unitless */
     specificGravity: number;
 }
 

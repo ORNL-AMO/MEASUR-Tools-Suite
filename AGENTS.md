@@ -1,33 +1,124 @@
-# Project Memory
+# Agent Development Guide
 
-When generating code, always follow the coding standards and conventions in the [Style Guide](../contributing/style-guide.md). When documenting code, always follow the documentation standards in [Documentation](../contributing/documentation.md). If either linked file is not available in context, ask the user to provide it before proceeding.
+This is the canonical repository guidance for AI agents and automation tools. Tool-specific files such as `.claude/CLAUDE.md` and `.github/copilot-instructions.md` should stay thin and point back here instead of duplicating policy.
 
-When tasked to refactor code using namespaces, follow these phases in order. In all phases, maintain a **one file per logical module** rule: each .h/.cpp pair produces exactly one corresponding binding file, one C++ test file, and one wasm test file.
+## Start Here
 
-**Phase 1 — Headers and Source**
-Update the .h and .cpp files to reflect the new structure.
+Before changing code, read the relevant project guidance:
 
-**Phase 2 — WebAssembly Bindings**
-For each .h/.cpp pair, create or update exactly one binding file in bindings-wasm/ (one binding file per logical module, matching its .h and .cpp filenames). If no existing binding file exists for a given pair, create one from scratch following the structure used in processHeat/bindings-wasm/.
+- [ARCHITECTURE.md](ARCHITECTURE.md) for repository layout, module boundaries, and the C++ to WebAssembly to TypeScript flow.
+- [BUILD.md](BUILD.md) for build, test, WebAssembly, package, and Docker commands.
+- [contributing/style-guide.md](contributing/style-guide.md) for C++ style and naming.
+- [contributing/documentation.md](contributing/documentation.md) for Doxygen and `.dox` documentation standards.
+- [ts_def/README.md](ts_def/README.md) when adding or correcting TypeScript declarations.
+- [tests/wasm-mocha/README.md](tests/wasm-mocha/README.md) when adding or migrating WebAssembly Mocha tests.
 
-**Phase 3 — C++ Unit Tests**
-Update the .cpp unit tests in tests/cpp to reflect the new structure. Each .cpp file must have its own dedicated test file. If an existing test file covers multiple classes that are being split into separate .cpp files, split the test file accordingly.
+If any referenced file is unavailable in context, ask the user for it before proceeding.
 
-**Phase 4 — WebAssembly Unit Tests**
-Update or add a unit test in tests/wasm-mocha for each binding file (one test file per binding file). Move old unit tests from tests/wasm to tests/wasm-mocha and update them to reflect the new structure. Once a test has been successfully migrated, delete the original file from tests/wasm.
+## Repository Context
 
-**Phase 5 — Documentation**
-Update the documentation in the docs/dox-content directory. Organize the content logically following the pattern that has already been established.
+MEASUR Tools Suite is a C++ calculation library with WebAssembly bindings for browser and Node.js use. The project exposes computational engines for the MEASUR / AMO-Tools-Desktop ecosystem.
 
-**Reference example:** refer to processHeat/ as the canonical example of how to structure the code, WebAssembly bindings, unit tests, and documentation.
+The core development pattern is:
 
-**Checklist (verify before finishing):**
-- [ ] Phase 1: All .h and .cpp files updated
-- [ ] Phase 2: One binding file per .h/.cpp pair; new files created where none existed
-- [ ] Phase 3: One C++ test file per .cpp file; split if needed
-- [ ] Phase 4: One wasm test file per binding file; old tests/wasm files migrated and deleted
-- [ ] Phase 5: Documentation updated and organized
+```text
+include/              public C++ headers
+src/                  C++ implementations
+bindings-wasm/        embind WebAssembly bindings
+ts_def/               TypeScript declaration files for the WASM package
+tests/cpp/            C++ unit tests
+tests/wasm-mocha/     browser-based WebAssembly tests
+docs/dox-content/     calculation documentation
+```
 
-## Context
+## Agent Operating Principles
 
-The MEASUR Tools Suite is a collection of industrial efficiency calculations written in C++ with WebAssembly bindings for browser and Node.js environments. The suite provides computational engines for the [MEASUR](https://github.com/ORNL-AMO/AMO-Tools-Desktop) (Manufacturing Energy Assessment Suite for Utility Reduction) application ecosystem.
+- Prefer small, reviewable changes that preserve existing module boundaries.
+- Read nearby implementation, bindings, declarations, and tests before editing.
+- Keep source, binding, TypeScript declaration, tests, and documentation in sync.
+- Do not invent new abstractions unless they reduce real duplication or match an established local pattern.
+- Preserve public API compatibility unless the user explicitly requests a breaking change. When a breaking change is necessary, document the old-to-new migration.
+- Do not revert or overwrite unrelated user changes in a dirty worktree.
+- Use structured tools and parsers when available. Avoid brittle ad hoc text rewrites for structured data.
+
+## One Module Rule
+
+Maintain one file per logical module whenever refactoring or adding calculations:
+
+- One `.h`/`.cpp` pair for the C++ module.
+- One matching binding file in `bindings-wasm/`.
+- One C++ test file for each C++ module where applicable.
+- One WebAssembly Mocha test file for each binding file.
+- One TypeScript declaration file for each public binding surface.
+- Documentation organized under `docs/dox-content/` following nearby examples.
+
+Use `processHeat/` as the canonical structural example when in doubt.
+
+## Namespace or Module Refactor Phases
+
+When asked to refactor code using namespaces or to split modules, work in this order:
+
+1. **Headers and Source**: Update `.h` and `.cpp` files first.
+2. **WebAssembly Bindings**: Create or update exactly one binding file in `bindings-wasm/` for each logical module.
+3. **C++ Unit Tests**: Update `tests/cpp/`; split tests when one old test covered multiple new modules.
+4. **WebAssembly Unit Tests**: Update or add `tests/wasm-mocha/` tests. Move successfully migrated tests from `tests/wasm/` and delete the obsolete originals.
+5. **TypeScript Declarations**: Update `ts_def/` to match the exact embind runtime surface and follow [ts_def/README.md](ts_def/README.md).
+6. **Documentation**: Update `docs/dox-content/` and related docs if public behavior, formulas, usage, or module organization changed.
+
+## WebAssembly and TypeScript Rules
+
+Match declarations to embind bindings:
+
+- `class_<T>("Name")` is a runtime class. Declare it as `export declare class Name` and include `delete(): void`.
+- `value_object<T>("Name")` is passed as a plain object. Declare it as an `interface`; do not require `delete()`.
+- `register_vector<T>("Name")` is a constructible runtime vector. Expose a constructor through the module type and clean instances up with `delete()`.
+- `enum_<T>("Name")` is a runtime enum. Add it to the module type only when the binding file exposes it.
+- Module types should include runtime properties only. Export type-only interfaces, but do not list them as module properties.
+- Document all public declarations. At minimum, every numeric property, parameter, and return value needs units or explicit dimensionless/unitless status.
+- Prefer importing from the package entrypoint in TypeScript tests:
+
+```ts
+import createModule, { type MeasurToolsSuite } from 'measur-tools-suite';
+```
+
+## Testing Expectations
+
+Choose verification based on the changed surface:
+
+- C++ source or headers: build and run relevant C++ tests.
+- WASM bindings or TypeScript declarations: run `./node_modules/.bin/tsc --noEmit` and relevant `npm run tests`.
+- Browser-facing changes: verify `bin/client.js` and `bin/client.wasm` are built and served correctly.
+- Documentation-only changes: run markdown or whitespace checks when available, and ensure links are correct.
+
+Common commands:
+
+```bash
+cmake -S . -B build-cpp
+cmake --build build-cpp
+./build-cpp/bin/cpp_tests
+emcmake cmake -S . -B build-wasm -DBUILD_WASM=ON
+emmake make -C build-wasm
+./node_modules/.bin/tsc --noEmit
+npm run tests
+git diff --check
+```
+
+Do not claim tests passed unless you ran them. If a command cannot run in the environment, report that plainly with the reason.
+
+## Documentation Expectations
+
+- Use Doxygen comments for public C++ classes, structs, functions, enums, and files.
+- Use `.dox` files for calculation-level documentation aimed at engineering users.
+- Keep formulas, units, and symbol tables consistent with [contributing/documentation.md](contributing/documentation.md).
+- Update examples when public WebAssembly or TypeScript usage changes.
+
+## Completion Checklist
+
+Before handing work back, verify:
+
+- [ ] Source changes match the existing module pattern.
+- [ ] Bindings match headers and runtime names exactly.
+- [ ] TypeScript declarations match embind semantics.
+- [ ] C++ and WASM tests cover the changed public behavior.
+- [ ] Documentation and examples are updated for public changes.
+- [ ] Formatting, whitespace, and generated artifacts are intentional.

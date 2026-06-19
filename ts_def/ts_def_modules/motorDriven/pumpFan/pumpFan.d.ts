@@ -37,19 +37,19 @@ export enum SpecificSpeed {
  * Result object returned by {@link MoverShaftPower.calculate}.
  *
  * @property moverShaftPower double, mover shaft power in hp
- * @property driveEfficiency double, drive efficiency as decimal value (0 - 1)
+ * @property driveEfficiency Drive efficiency, dimensionless fraction.
  */
 export declare class MoverShaftPowerOutput {
     /**
      * Constructor for MoverShaftPowerOutput
-     * @param moverShaftPower double, motor shaft power in hp
-     * @param driveEfficiency efficiency of the drive defined as a fraction, unitless
+     * @param moverShaftPower Mover shaft power, units hp.
+     * @param driveEfficiency Drive efficiency, dimensionless fraction.
      */
     constructor(moverShaftPower: number, driveEfficiency: number);
 
     /** Mover shaft power, units hp */
     moverShaftPower: number;
-    /** Drive efficiency, unitless decimal */
+    /** Drive efficiency, dimensionless fraction. */
     driveEfficiency: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -61,9 +61,9 @@ export declare class MoverShaftPowerOutput {
  */
 export declare class MoverShaftPower {
     /**
-     * @param motorShaftPower double, motor shaft power in hp
+     * @param motorShaftPower Motor shaft power, units hp.
      * @param drive Drive enum, drive type
-     * @param specifiedEfficiency double, user-specified drive efficiency
+     * @param specifiedEfficiency User-specified drive efficiency, dimensionless fraction.
      */
     constructor(motorShaftPower: number, drive: Drive, specifiedEfficiency: number);
 
@@ -83,13 +83,13 @@ export declare class MoverShaftPower {
 export declare class OptimalSpecificSpeedCorrection {
     /**
      * @param style PumpStyle enum, type of pump speed from either fixed or not fixed.
-     * @param specificSpeed double, specific speed in rpm*sqrt(gpm)/((ft/s)^(3/2))
+     * @param specificSpeed Specific speed, units rpm*sqrt(gpm)/(ft^(3/4)).
      */
     constructor(style: PumpStyle, specificSpeed: number);
 
     /**
      * Calculates the optimal specific speed correction
-     * @returns double, optimal specific speed correction as %
+     * @returns Optimal specific speed correction, units %.
      */
     calculate(): number;
 
@@ -100,20 +100,20 @@ export declare class OptimalSpecificSpeedCorrection {
 /**
  * Result object returned by {@link PumpEfficiency.calculate}.
  *
- * @property average double, achievable average pump efficiency as decimal
- * @property max double, maximum pump efficiency as decimal
+ * @property average Achievable average pump efficiency, dimensionless fraction.
+ * @property max Maximum pump efficiency, dimensionless fraction.
  */
 export declare class PumpEfficiencyResults {
     /**
      * Constructor for PumpEfficiencyResults
-     * @param average
-     * @param max
+     * @param average Achievable average pump efficiency, dimensionless fraction.
+     * @param max Maximum pump efficiency, dimensionless fraction.
      */
     constructor(average: number, max: number);
 
-    /** Achievable average pump efficiency, unitless decimal */
+    /** Achievable average pump efficiency, dimensionless fraction. */
     average: number;
-    /** Maximum pump efficiency, unitless decimal */
+    /** Maximum pump efficiency, dimensionless fraction. */
     max: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -121,17 +121,17 @@ export declare class PumpEfficiencyResults {
 }
 
 /**
- * Calculates achievable/maximum pump efficiency values.
+ * Calculates achievable and maximum pump efficiency values.
  */
 export declare class PumpEfficiency {
     /**
      * @param style PumpStyle enum
-     * @param pumpEfficiency double, operating pump efficiency
-     * @param rpm double, pump speed in RPM
-     * @param kinematicViscosity double, fluid kinematic viscosity
-     * @param stageCount double, number of stages
-     * @param flowRate double, flow rate in gpm
-     * @param head double, pump head in ft
+     * @param pumpEfficiency Operating pump efficiency, dimensionless fraction.
+     * @param rpm Pump speed, units rpm.
+     * @param kinematicViscosity Fluid kinematic viscosity, units cSt.
+     * @param stageCount Pump stage count.
+     * @param flowRate Flow rate, units gpm.
+     * @param head Pump head, units ft.
      */
     constructor(
         style: PumpStyle,
@@ -144,8 +144,8 @@ export declare class PumpEfficiency {
     );
 
     /**
-     * Calculates pump efficiency
-     * @returns {@link PumpEfficiencyResults} object containing the average and maximum pump efficiency values
+     * Calculates pump efficiency.
+     * @returns {@link PumpEfficiencyResults} object containing average and maximum pump efficiency, dimensionless fractions.
      */
     calculate(): PumpEfficiencyResults;
 

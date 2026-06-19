@@ -14,9 +14,13 @@
  * @property cyclesPerMin double, number of complete cycles per minute.
  */
 export interface PneumaticAirRequirementSingleActingInput {
+    /** inner bore diameter of the cylinder in inches. */
     cylinderDiameter: number;
+    /** piston travel distance per stroke in inches. */
     cylinderStroke: number;
+    /** operating gauge pressure at the cylinder inlet units psi. */
     airPressure: number;
+    /** Number of complete cycles per minute, units cycles/min. */
     cyclesPerMin: number;
 }
 
@@ -30,10 +34,15 @@ export interface PneumaticAirRequirementSingleActingInput {
  * @property cyclesPerMin double, number of complete cycles per minute.
  */
 export interface PneumaticAirRequirementDoubleActingInput {
+    /** inner bore diameter of the cylinder in inches. */
     cylinderDiameter: number;
+    /** piston travel distance per stroke in inches. */
     cylinderStroke: number;
+    /** diameter of the piston rod in inches. */
     pistonRodDiameter: number;
+    /** operating gauge pressure at the cylinder inlet units psi. */
     airPressure: number;
+    /** Number of complete cycles per minute, units cycles/min. */
     cyclesPerMin: number;
 }
 
@@ -45,8 +54,11 @@ export interface PneumaticAirRequirementDoubleActingInput {
  * @property airRequirementPneumaticCylinder double, free-air equivalent consumption in scfm.
  */
 export interface PneumaticAirRequirementResult {
+    /** cylinder air intake volume per minute at cylinder conditions units cfm. */
     volumeAirIntakePiston: number;
+    /** Ratio of absolute working pressure to atmospheric pressure, dimensionless. */
     compressionRatio: number;
+    /** free-air equivalent consumption units scfm. */
     airRequirementPneumaticCylinder: number;
 }
 

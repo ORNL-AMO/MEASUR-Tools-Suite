@@ -32,7 +32,7 @@ export enum LoadEstimationMethod {
 }
 
 /**
- * Enumeration representing the motor efficiency class.
+ * Enumeration representing the motor efficiency, dimensionless class.
  */
 export enum MotorEfficiencyClass {
     STANDARD =0,

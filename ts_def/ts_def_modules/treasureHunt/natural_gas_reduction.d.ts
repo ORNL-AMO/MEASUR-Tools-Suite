@@ -147,7 +147,7 @@ export interface WaterMassFlowData {
  * is selected via {@link NaturalGasMeasurementMethod}; only the corresponding method data struct
  * is used in the calculation.
  *
- * @property operatingHours number, annual operating hours, units hours/year
+ * @property operatingHours number, annual operating hours, units hr/year, units hours/year
  * @property fuelCost number, natural gas fuel cost rate, units $/MMBtu
  * @property measurementMethod {@link NaturalGasMeasurementMethod}, measurement method to apply
  * @property flowMeterMethodData {@link NaturalGasFlowMeterMethodData}, data for the flow meter method
@@ -157,7 +157,7 @@ export interface WaterMassFlowData {
  * @property units number, unit conversion multiplier applied to flow rates
  */
 export interface NaturalGasReductionInput {
-    /** Annual operating hours, units hours/year */
+    /** annual operating hours, units hr/year, units hours/year */
     operatingHours: number;
     /** Natural gas fuel cost rate, units $/MMBtu */
     fuelCost: number;
@@ -217,11 +217,11 @@ export function naturalGasReduction(input_vec: NaturalGasReductionInputV): Natur
 /**
  * Calculate annual natural gas energy use and cost using the flow meter method.
  *
- * Multiplies the flow rate by the unit conversion factor and annual operating hours,
+ * Multiplies the flow rate by the unit conversion factor and annual operating hours, units hr/year,
  * then applies natural gas energy content to obtain annual energy use.
  *
  * @param data {@link NaturalGasFlowMeterMethodData} with the measured gas flow rate.
- * @param operating_hours Annual operating hours, units hours/year.
+ * @param operating_hours annual operating hours, units hr/year, units hours/year.
  * @param fuel_cost Natural gas fuel cost rate, units $/MMBtu.
  * @param units Unit conversion multiplier applied to the flow rate.
  * @returns {@link NaturalGasReductionOutput} with annual energy use and annual energy cost.
@@ -240,7 +240,7 @@ export function flowMeterMethodReduction(
  * heat transferred to the air stream from the temperature differential.
  *
  * @param data {@link AirMassFlowData} with air flow and temperature parameters.
- * @param operating_hours Annual operating hours, units hours/year.
+ * @param operating_hours annual operating hours, units hr/year, units hours/year.
  * @param fuel_cost Natural gas fuel cost rate, units $/MMBtu.
  * @param units Unit conversion multiplier applied to the flow rate.
  * @returns {@link NaturalGasReductionOutput} with annual energy use, annual energy cost,
@@ -259,7 +259,7 @@ export function airMassFlowMethodReduction(
  * Calculates heat transferred to a water stream from water flow rate and temperature differential.
  *
  * @param data {@link WaterMassFlowData} with water flow and temperature parameters.
- * @param operating_hours Annual operating hours, units hours/year.
+ * @param operating_hours annual operating hours, units hr/year, units hours/year.
  * @param fuel_cost Natural gas fuel cost rate, units $/MMBtu.
  * @param units Unit conversion multiplier applied to the flow rate.
  * @returns {@link NaturalGasReductionOutput} with annual energy use, annual energy cost,

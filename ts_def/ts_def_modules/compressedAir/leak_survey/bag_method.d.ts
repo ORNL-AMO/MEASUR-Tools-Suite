@@ -13,8 +13,11 @@
  * @property bagVolume double, pre-measured volume of the measurement bag in cubic feet.
  */
 export interface BagMethodInput {
+    /** annual system operating time in hours. */
     operatingTime: number;
+    /** time for the measurement bag to fill with leaked air in seconds. */
     bagFillTime: number;
+    /** pre-measured volume of the measurement bag units ft3. */
     bagVolume: number;
 }
 
@@ -25,7 +28,9 @@ export interface BagMethodInput {
  * @property annualConsumption double, estimated annual air loss from the leak in kscf.
  */
 export interface BagMethodResult {
+    /** measured compressed air leak flow rate units scfm. */
     flowRate: number;
+    /** estimated annual air loss from the leak units kscf. */
     annualConsumption: number;
 }
 

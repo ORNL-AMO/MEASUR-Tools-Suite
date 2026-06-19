@@ -89,7 +89,7 @@ export interface BagMethodData {
  * @property supplyPressure number, compressed air supply pressure, units psi
  */
 export interface PressureMethodData {
-    /** Nozzle type index (0-12) used to select lookup table coefficients */
+    /** Nozzle type index used to select lookup table coefficients, unitless enum value 0-12. */
     nozzleType: number;
     /** Number of nozzles in the system */
     numberOfNozzles: number;
@@ -123,7 +123,7 @@ export interface OtherMethodData {
  * (e.g., number of identical leak points or equipment pieces). Note: `units` is not applied
  * by the pressure method.
  *
- * @property hoursPerYear number, annual operating hours, units hours/year
+ * @property hoursPerYear number, annual operating hours, units hr/year, units hours/year
  * @property utilityType {@link CompressedAirUtilityType}, utility type for cost calculation
  * @property utilityCost number, utility cost rate, units $/unit
  * @property measurementMethod {@link CompressedAirMeasurementMethod}, measurement method to apply
@@ -135,7 +135,7 @@ export interface OtherMethodData {
  * @property units number, quantity multiplier (not applied to pressure method)
  */
 export interface CompressedAirReductionInput {
-    /** Annual operating hours, units hours/year */
+    /** annual operating hours, units hr/year, units hours/year */
     hoursPerYear: number;
     /** Utility type for cost calculation */
     utilityType: CompressedAirUtilityType;
@@ -153,7 +153,7 @@ export interface CompressedAirReductionInput {
     otherMethodData: OtherMethodData;
     /** Data for the electricity utility calculation */
     compressorElectricityData: CompressorElectricityData;
-    /** Quantity multiplier (not applied to pressure method) */
+    /** Quantity multiplier, count of identical measures; not applied to pressure method. */
     units: number;
 }
 
@@ -203,13 +203,13 @@ export function compressedAirReduction(input_vec: CompressedAirReductionInputV):
 /**
  * Calculate annual compressed air consumption and flow rate using the flow meter method.
  *
- * Computes annual consumption as the product of the meter reading, annual operating hours,
+ * Computes annual consumption as the product of the meter reading, annual operating hours, units hr/year,
  * units multiplier, and a factor of 60 to convert from per-minute to per-hour.
  * Energy use and energy cost are zero; call {@link compressedAirReduction} for a full result.
  *
  * @param data {@link FlowMeterMethodData} with the flow meter reading, units scf/min.
- * @param hours_per_year Annual operating hours, units hours/year.
- * @param units Quantity multiplier (number of identical measures).
+ * @param hours_per_year annual operating hours, units hr/year, units hours/year.
+ * @param units Quantity multiplier, count of identical measures.
  * @returns {@link CompressedAirReductionOutput} with flow rate and consumption populated;
  *   energy use and energy cost are zero.
  */
@@ -223,12 +223,12 @@ export function flowMeterReduction(
  * Calculate annual compressed air consumption and flow rate using the bag method.
  *
  * Flow rate is derived from the bag volume and fill time. Annual consumption is computed
- * from the flow rate, annual operating hours, and both quantity multipliers (bags and units).
+ * from the flow rate, annual operating hours, units hr/year, and both quantity multipliers (bags and units).
  * Energy use and energy cost are zero; call {@link compressedAirReduction} for a full result.
  *
  * @param data {@link BagMethodData} with bag geometry, fill time, and number of bags.
- * @param hours_per_year Annual operating hours, units hours/year.
- * @param units Outer quantity multiplier (number of identical leak points or equipment pieces).
+ * @param hours_per_year annual operating hours, units hr/year, units hours/year.
+ * @param units Outer quantity multiplier, count of identical leak points or equipment pieces.
  * @returns {@link CompressedAirReductionOutput} with flow rate and consumption populated;
  *   energy use and energy cost are zero.
  */
@@ -248,7 +248,7 @@ export function bagMethodReduction(
  *
  * @param data {@link PressureMethodData} with nozzle type, number of nozzles, and
  *   supply pressure, units psi.
- * @param hours_per_year Annual operating hours, units hours/year.
+ * @param hours_per_year annual operating hours, units hr/year, units hours/year.
  * @returns {@link CompressedAirReductionOutput} with flow rates and consumption populated;
  *   energy use and energy cost are zero.
  */

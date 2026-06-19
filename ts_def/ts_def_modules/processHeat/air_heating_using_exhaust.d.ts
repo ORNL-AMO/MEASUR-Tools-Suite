@@ -27,9 +27,9 @@ export interface AirHeatingUsingExhaustResults {
     hxOutletExhaust: number;
     /** Annual energy savings, units MMBtu/yr */
     energySavings: number;
-    /** Heat capacity of flue gas */
+    /** Heat capacity of flue gas, units BTU/(hr.degF). */
     heatCapacityFlue: number;
-    /** Heat capacity of air */
+    /** Heat capacity of air, units BTU/(hr.degF). */
     heatCapacityAir: number;
 }
 
@@ -47,7 +47,7 @@ export interface AirHeatingUsingExhaustResults {
  * @param inlet_temperature Inlet air temperature, units degF
  * @param heater_efficiency Heater efficiency as fraction
  * @param hx_efficiency Heat exchanger efficiency as fraction
- * @param operating_hours Annual operating hours, units hr
+ * @param operating_hours annual operating hours, units hr/year, units hr
  * @returns {@link AirHeatingUsingExhaustResults} with all calculated outputs
  */
 export function airHeatingUsingExhaustWithGasComposition(
@@ -77,7 +77,7 @@ export function airHeatingUsingExhaustWithGasComposition(
  * @param inlet_temperature Inlet air temperature, units degF
  * @param heater_efficiency Heater efficiency as fraction
  * @param hx_efficiency Heat exchanger efficiency as fraction
- * @param operating_hours Annual operating hours, units hr
+ * @param operating_hours annual operating hours, units hr/year, units hr
  * @returns {@link AirHeatingUsingExhaustResults} with all calculated outputs
  */
 export function airHeatingUsingExhaustWithSolidLiquidFlueGasMaterial(

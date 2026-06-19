@@ -67,34 +67,62 @@ export enum ComputeFrom {
 
 /**
  * Data record for one default compressor entry.
- * @property idCompType integer
+ * @property idCompType Compressor type identifier, unitless enum value.
  * @property model string
- * @property hp double, watt
- * @property ratedCapacity double, scf/min
- * @property ratedPressure double, lb/in2
- * @property maxFllFlowPressure double, lb/in2
- * @property idControlType integer
- * @property unloadPoint double, lb/in2
- * @property minULSumpPressure double, lb/in2
- * @property blowdownTime double, minute
- * @property unloadSteps double, %
- * @property modulatingPressRange double, lb/in2
- * @property powerFLBHP double, kW
- * @property totPackageInputPower double, kW
- * @property specPackagePower double, kW
- * @property noLoadPowerFM double, kW
- * @property noLoadPowerUL double, kW
- * @property maxSurgePressure double, lb/in2
- * @property maxPressSurgeFlow double, lb/in2
- * @property minStonewallPressure double, lb/in2
- * @property minPressStonewallFlow double, lb/in2
- * @property designSurgeFlow double, lb/in2
- * @property designInTemp double, F
- * @property designInPressure double, lb/in2
- * @property ampsFL double
- * @property effFL double, %
+ * @property hp Compressor rated power, units hp.
+ * @property ratedCapacity Rated capacity, units scfm.
+ * @property ratedPressure Rated pressure, units psig.
+ * @property maxFllFlowPressure Maximum full-flow pressure, units psig.
+ * @property idControlType Control type identifier, unitless enum value.
+ * @property unloadPoint Unload point pressure, units psig.
+ * @property minULSumpPressure Minimum unload sump pressure, units psig.
+ * @property blowdownTime Blowdown time, units min.
+ * @property unloadSteps Unload steps, units %.
+ * @property modulatingPressRange Modulating pressure range, units psi.
+ * @property powerFLBHP Full-load brake horsepower, units hp.
+ * @property totPackageInputPower Total package input power, units kW.
+ * @property specPackagePower Specific package power, units kW/100 acfm.
+ * @property noLoadPowerFM No-load power for full modulation, units kW.
+ * @property noLoadPowerUL No-load power for unload control, units kW.
+ * @property maxSurgePressure Maximum surge pressure, units psig.
+ * @property maxPressSurgeFlow Maximum pressure surge flow, units acfm.
+ * @property minStonewallPressure Minimum stonewall pressure, units psig.
+ * @property minPressStonewallFlow Minimum pressure stonewall flow, units acfm.
+ * @property designSurgeFlow Design surge flow, units acfm.
+ * @property designInTemp Design inlet temperature, units degF.
+ * @property designInPressure Design inlet pressure, units psia.
+ * @property ampsFL Full-load current, units A.
+ * @property effFL Full-load efficiency, units %.
  */
 export declare class CompressorsData {
+    /**
+     * @param idCompType Compressor type identifier, unitless enum value.
+     * @param model Compressor model name.
+     * @param hp Compressor rated power, units hp.
+     * @param ratedCapacity Rated capacity, units scfm.
+     * @param ratedPressure Rated pressure, units psig.
+     * @param maxFllFlowPressure Maximum full-flow pressure, units psig.
+     * @param idControlType Control type identifier, unitless enum value.
+     * @param unloadPoint Unload point pressure, units psig.
+     * @param minULSumpPressure Minimum unload sump pressure, units psig.
+     * @param blowdownTime Blowdown time, units min.
+     * @param unloadSteps Unload steps, units %.
+     * @param modulatingPressRange Modulating pressure range, units psi.
+     * @param powerFLBHP Full-load brake horsepower, units hp.
+     * @param totPackageInputPower Total package input power, units kW.
+     * @param specPackagePower Specific package power, units kW/100 acfm.
+     * @param noLoadPowerFM No-load power for full modulation, units kW.
+     * @param noLoadPowerUL No-load power for unload control, units kW.
+     * @param maxSurgePressure Maximum surge pressure, units psig.
+     * @param maxPressSurgeFlow Maximum pressure surge flow, units acfm.
+     * @param minStonewallPressure Minimum stonewall pressure, units psig.
+     * @param minPressStonewallFlow Minimum pressure stonewall flow, units acfm.
+     * @param designSurgeFlow Design surge flow, units acfm.
+     * @param designInTemp Design inlet temperature, units degF.
+     * @param designInPressure Design inlet pressure, units psia.
+     * @param ampsFL Full-load current, units A.
+     * @param effFL Full-load efficiency, units %.
+     */
     constructor(
         idCompType: number,
         model: string,
@@ -124,33 +152,60 @@ export declare class CompressorsData {
         effFL: number
     );
 
+    /** @param id Sequential compressor record ID, unitless identifier. */
     setID(id: number): void;
+    /** @returns Sequential compressor record ID, unitless identifier. */
     ID(): number;
+    /** @returns Compressor type identifier, unitless enum value. */
     idCompType(): number;
     model(): string;
+    /** @returns Compressor rated power, units hp. */
     hp(): number;
+    /** @returns Rated capacity, units scfm. */
     ratedCapacity(): number;
+    /** @returns Rated pressure, units psig. */
     ratedPressure(): number;
+    /** @returns Maximum full-flow pressure, units psig. */
     maxFullFlowPressure(): number;
+    /** @returns Control type identifier, unitless enum value. */
     idControlType(): number;
+    /** @returns Unload point pressure, units psig. */
     unloadPoint(): number;
+    /** @returns Minimum unload sump pressure, units psig. */
     minULSumpPressure(): number;
+    /** @returns Blowdown time, units min. */
     blowdownTime(): number;
+    /** @returns Unload steps, units %. */
     unloadSteps(): number;
+    /** @returns Modulating pressure range, units psi. */
     modulatingPressRange(): number;
+    /** @returns Full-load brake horsepower, units hp. */
     powerFLBHP(): number;
+    /** @returns Total package input power, units kW. */
     totPackageInputPower(): number;
+    /** @returns Specific package power, units kW/100 acfm. */
     specPackagePower(): number;
+    /** @returns No-load power for full modulation, units kW. */
     noLoadPowerFM(): number;
+    /** @returns No-load power for unload control, units kW. */
     noLoadPowerUL(): number;
+    /** @returns Maximum surge pressure, units psig. */
     maxSurgePressure(): number;
+    /** @returns Maximum pressure surge flow, units acfm. */
     maxPressSurgeFlow(): number;
+    /** @returns Minimum stonewall pressure, units psig. */
     minStonewallPressure(): number;
+    /** @returns Minimum pressure stonewall flow, units acfm. */
     minPressStonewallFlow(): number;
+    /** @returns Design surge flow, units acfm. */
     designSurgeFlow(): number;
+    /** @returns Design inlet temperature, units degF. */
     designInTemp(): number;
+    /** @returns Design inlet pressure, units psia. */
     designInPressure(): number;
+    /** @returns Full-load current, units A. */
     ampsFL(): number;
+    /** @returns Full-load efficiency, units %. */
     effFL(): number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -159,16 +214,19 @@ export declare class CompressorsData {
 
 /**
  * Standard compressor calculation output.
- * @param kW_Calc double
- * @param C_Calc double
- * @param PerkW double
- * @param C_Per double
- *      Units for power kW and Capacity acfm
+ * @property kW_Calc Calculated compressor power, units kW.
+ * @property C_Calc Calculated compressor capacity, units acfm.
+ * @property PerkW Compressor power percentage, dimensionless percent or fraction.
+ * @property C_Per Compressor capacity percentage, dimensionless percent or fraction.
  */
 export declare class CompressorsOutput {
+    /** Calculated compressor power, units kW. */
     kW_Calc: number;
+    /** Calculated compressor capacity, units acfm. */
     C_Calc: number;
+    /** Compressor power percentage, dimensionless percent or fraction. */
     PerkW: number;
+    /** Compressor capacity percentage, dimensionless percent or fraction. */
     C_Per: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -185,11 +243,17 @@ export declare class CompressorsOutput {
  * @property blowPer double, units percentage / fraction
  */
 export declare class CompressorsOutputBlowOff {
+    /** Compressor power, units kW. */
     kW_Calc: number;
+    /** Compressor capacity, units acfm. */
     C_Calc: number;
+    /** Compressor percentage value, dimensionless percent or fraction. */
     PerkW: number;
+    /** Compressor percentage value, dimensionless percent or fraction. */
     C_Per: number;
+    /** Compressor capacity, units acfm. */
     C_blow: number;
+    /** Compressor percentage value, dimensionless percent or fraction. */
     blowPer: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -203,8 +267,11 @@ export declare class CompressorsOutputBlowOff {
  * @property PerC_lkred double percentage / fraction
  */
 export declare class ReduceAirLeaksOutput {
+    /** Compressor capacity, units acfm. */
     C_lkred: number;
+    /** Compressor capacity, units acfm. */
     C_usage_lkred: number;
+    /** PerC_lkred, dimensionless percent / fraction. */
     PerC_lkred: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -217,7 +284,9 @@ export declare class ReduceAirLeaksOutput {
  * @property CPer_af_red double percentage / fraction
  */
 export declare class ImproveEndUseEfficiencyOutput {
+    /** Compressor capacity, units acfm. */
     C_af_red: number;
+    /** CPer_af_red, dimensionless percent / fraction. */
     CPer_af_red: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -232,9 +301,13 @@ export declare class ImproveEndUseEfficiencyOutput {
  * @property PerC_rpred double percentage / fraction
  */
 export declare class ReduceSystemAirPressureOutput {
+    /** Compressor pressure, units psig. */
     P_fl_rpred: number;
+    /** Compressor power, units kW. */
     kW_fl_rpadj: number;
+    /** Compressor capacity, units acfm. */
     C_usage_rpred: number;
+    /** PerC_rpred, dimensionless percent / fraction. */
     PerC_rpred: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -248,8 +321,11 @@ export declare class ReduceSystemAirPressureOutput {
  * @property PerC_adj double percentage / fraction
  */
 export declare class AdjustCascadingSetPointOutput {
+    /** Compressor power, units kW. */
     kW_fl_adj: number;
+    /** Compressor capacity, units acfm. */
     C_usage_adj: number;
+    /** PerC_adj, dimensionless percent / fraction. */
     PerC_adj: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -263,8 +339,11 @@ export declare class AdjustCascadingSetPointOutput {
  * @property cost_savings double, units currency $$$
  */
 export declare class PressureReductionSavingOutput {
+    /** Compressor power, units kW. */
     kW_savings: number;
+    /** Annual energy savings, units kWh/year. */
     kWh_savings: number;
+    /** Annual cost savings, units $/year. */
     cost_savings: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -274,53 +353,54 @@ export declare class PressureReductionSavingOutput {
 /** Centrifugal compressor model with load/unload control. */
 export declare class Compressors_Centrifugal_LoadUnload {
     /**
-     * @param kWFl double, kW
-     * @param CFl  double, acfm
-     * @param kWNl kW_nl double, kW
+     * @param kWFl Full-load power, units kW.
+     * @param CFl Full-load capacity, units acfm.
+     * @param kWNl No-load power, units kW.
      */
     constructor(kWFl: number, CFl: number, kWNl: number);
 
     /**
-     * @param perkW double
+     * @param perkW Compressor power percentage, dimensionless percent or fraction.
      * @returns CompressorsOutput
      */
     calculateFromPerkW(perkW: number): CompressorsOutput;
 
     /**
-     * @param cPer double
+     * @param cPer Compressor capacity percentage, dimensionless percent or fraction.
      * @returns CompressorsOutput
      */
     calculateFromPerC(cPer: number): CompressorsOutput;
 
     /**
-     * @param kW double
+     * @param kW Measured compressor power, units kW.
      * @returns CompressorsOutput
      */
     calculateFromkWMeasured(kW: number): CompressorsOutput;
 
     /**
      *
-     * @param c double Capacity
+     * @param c Measured compressor capacity, units acfm.
      * @returns CompressorsOutput
      */
     calculateFromCMeasured(c: number): CompressorsOutput;
 
     /**
-     * @param v double Voltage
-     * @param i double Current
-     * @param pf double Power Factor
+     * @param v Measured voltage, units V.
+     * @param i Measured current, units A.
+     * @param pf Power factor, dimensionless.
      * @returns CompressorsOutput
      */
     calculateFromVIPFMeasured(v: number, i: number, pf: number): CompressorsOutput;
 
     /**
-     * @param capacity array of doubles Capacity at full load, max and min
-     * @param dischargePressure array of doubles DischargePressure at full load, max and min
-     * @param pFl double
-     * @param pMax double, not required for this control type
+     * @param capacity Capacity at full load, maximum, and minimum, units acfm.
+     * @param dischargePressure Discharge pressure at full load, maximum, and minimum, units psig.
+     * @param pFl Full-load pressure, units psig.
+     * @param pMax Maximum pressure, units psig; not required for this control type.
      */
     AdjustDischargePressure(capacity: number[], dischargePressure: number[], pFl: number, pMax: number): void;
 
+    /** Adjusted full-load compressor capacity, units acfm. */
     C_fl_Adjusted: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -330,57 +410,58 @@ export declare class Compressors_Centrifugal_LoadUnload {
 /** Centrifugal compressor model with modulation/unload control. */
 export declare class Compressors_Centrifugal_ModulationUnload {
     /**
-     * @param kWFl double, kW
-     * @param CFl double, acfm
-     * @param kWNl double, kW
-     * @param CMax double, acfm
-     * @param kWUl double, kW
-     * @param CUl double, acfm
+     * @param kWFl Full-load power, units kW.
+     * @param CFl Full-load capacity, units acfm.
+     * @param kWNl No-load power, units kW.
+     * @param CMax Maximum capacity, units acfm.
+     * @param kWUl Unload power, units kW.
+     * @param CUl Unload capacity, units acfm.
      */
     constructor(kWFl: number, CFl: number, kWNl: number, CMax: number, kWUl: number, CUl: number);
 
     /**
-     * @param perkW
+     * @param perkW Compressor power percentage, dimensionless percent or fraction.
      * @returns CompressorsOutput
      */
     calculateFromPerkW(perkW: number): CompressorsOutput;
 
     /**
-     * @param cPer double
+     * @param cPer Compressor capacity percentage, dimensionless percent or fraction.
      * @returns CompressorsOutput
      */
     calculateFromPerC(cPer: number): CompressorsOutput;
 
     /**
-     * @param kW double
+     * @param kW Measured compressor power, units kW.
      * @returns CompressorsOutput
      */
     calculateFromkWMeasured(kW: number): CompressorsOutput;
 
     /**
-     * @param c double
+     * @param c Measured compressor capacity, units acfm.
      * @returns CompressorsOutput
      */
     calculateFromCMeasured(c: number): CompressorsOutput;
 
     /**
-     * @param v double Voltage
-     * @param i double Current
-     * @param pf double Power Factor
+     * @param v Measured voltage, units V.
+     * @param i Measured current, units A.
+     * @param pf Power factor, dimensionless.
      * @returns CompressorsOutput
      */
     calculateFromVIPFMeasured(v: number, i: number, pf: number): CompressorsOutput;
 
     /**
-     * @param capacity array of doubles Capacity at full load, max and min
-     * @param dischargePressure array of doubles DischargePressure at full load, max and min
-     * @param pFl double
-     * @param pMax double
-     *      Units for power kW and Capacity acfm
+     * @param capacity Capacity at full load, maximum, and minimum, units acfm.
+     * @param dischargePressure Discharge pressure at full load, maximum, and minimum, units psig.
+     * @param pFl Full-load pressure, units psig.
+     * @param pMax Maximum pressure, units psig.
      */
     AdjustDischargePressure(capacity: number[], dischargePressure: number[], pFl: number, pMax: number): void;
 
+    /** Adjusted full-load compressor capacity, units acfm. */
     C_fl_Adjusted: number;
+    /** Adjusted maximum compressor capacity, units acfm. */
     C_max_Adjusted: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -399,48 +480,48 @@ export declare class Compressors_Centrifugal_BlowOff {
     constructor(kWFl: number, CFl: number, kWBlow: number, CBlow: number);
 
     /**
-     * @param perkW double
-     * @param blowPer double
+     * @param perkW Compressor power percentage, dimensionless percent or fraction.
+     * @param blowPer Blow-off percentage, dimensionless percent or fraction.
      * @returns CompressorsOutputBlowOff
      */
     calculateFromPerkW_BlowOff(perkW: number, blowPer: number): CompressorsOutputBlowOff;
 
     /**
-     * @param cPer double, units percentage / fraction
+     * @param cPer Compressor capacity percentage, dimensionless percent or fraction.
      * @returns CompressorsOutputBlowOff
      */
     calculateFromPerC_BlowOff(cPer: number): CompressorsOutputBlowOff;
 
     /**
-     * @param kW double, units kW
-     * @param blowPer double, units percentage / fraction
+     * @param kW Measured compressor power, units kW.
+     * @param blowPer Blow-off percentage, dimensionless percent or fraction.
      * @returns CompressorsOutputBlowOff
      */
     calculateFromkWMeasured_BlowOff(kW: number, blowPer: number): CompressorsOutputBlowOff;
 
     /**
-     * @param c double, capacity units acfm
+     * @param c Measured compressor capacity, units acfm.
      * @returns CompressorsOutputBlowOff
      */
     calculateFromCMeasured_BlowOff(c: number): CompressorsOutputBlowOff;
 
     /**
-     * @param v Voltage double
-     * @param i Current double, amps
-     * @param pf Power Factor double, percentage / fraction
-     * @param blowPer double, percentage / fraction
+     * @param v Measured voltage, units V.
+     * @param i Measured current, units A.
+     * @param pf Power factor, dimensionless.
+     * @param blowPer Blow-off percentage, dimensionless percent or fraction.
      */
     calculateFromVIPFMeasured_BlowOff(v: number, i: number, pf: number, blowPer: number): CompressorsOutputBlowOff;
 
     /**
-     * @param capacity array of doubles Capacity at full load, max and min
-     * @param dischargePressure array of doubles DischargePressure at full load, max and min
-     * @param pFl double
-     * @param pMax double, not required for this control type
-     *      Units for power kW and Capacity acfm
+     * @param capacity Capacity at full load, maximum, and minimum, units acfm.
+     * @param dischargePressure Discharge pressure at full load, maximum, and minimum, units psig.
+     * @param pFl Full-load pressure, units psig.
+     * @param pMax Maximum pressure, units psig; not required for this control type.
      */
     AdjustDischargePressure(capacity: number[], dischargePressure: number[], pFl: number, pMax: number): void;
 
+    /** Adjusted full-load compressor capacity, units acfm. */
     C_fl_Adjusted: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -450,58 +531,57 @@ export declare class Compressors_Centrifugal_BlowOff {
 /** Compressor model for modulation without unload control. */
 export declare class Compressors_ModulationWOUnload {
     /**
-     * @param kWFl double, kW
-     * @param CFl double, acfm
-     * @param kWNl double, kW
+     * @param kWFl Full-load power, units kW.
+     * @param CFl Full-load capacity, units acfm.
+     * @param kWNl No-load power, units kW.
      */
     constructor(kWFl: number, CFl: number, kWNl: number);
 
     /**
-     * @param perkW double
+     * @param perkW Compressor power percentage, dimensionless percent or fraction.
      * @returns CompressorsOutput
      */
     calculateFromPerkW(perkW: number): CompressorsOutput;
 
     /**
-     * @param cPer double
+     * @param cPer Compressor capacity percentage, dimensionless percent or fraction.
      * @returns CompressorsOutput
      */
     calculateFromPerC(cPer: number): CompressorsOutput;
 
     /**
-     * @param kW double
+     * @param kW Measured compressor power, units kW.
      * @returns CompressorsOutput
      */
     calculateFromkWMeasured(kW: number): CompressorsOutput;
 
     /**
-     * @param c double
+     * @param c Measured compressor capacity, units acfm.
      * @returns CompressorsOutput
      */
     calculateFromCMeasured(c: number): CompressorsOutput;
 
     /**
-     * @param v Voltage double
-     * @param i Current double
-     * @param pf Power Factor double
+     * @param v Measured voltage, units V.
+     * @param i Measured current, units A.
+     * @param pf Power factor, dimensionless.
      * @returns CompressorsOutput
      */
     calculateFromVIPFMeasured(v: number, i: number, pf: number): CompressorsOutput;
 
     /**
      *
-     * @param capacity double
-     * @param fullLoadBhp double
-     * @param polyExponent double
-     * @param pRatedDischarge double
-     * @param pRatedIn double
-     * @param eff double
-     * @param pFl double
-     * @param pMax double
-     * @param pIn double
-     * @param presAdj double
-     * @param pAtm double
-     *      Units for power kW and Capacity acfm
+     * @param capacity Compressor capacity, units acfm.
+     * @param fullLoadBhp Full-load brake horsepower, units hp.
+     * @param polyExponent Polytropic exponent, dimensionless.
+     * @param pRatedDischarge Rated discharge pressure, units psig.
+     * @param pRatedIn Rated inlet pressure, units psig.
+     * @param eff Compressor efficiency, units %.
+     * @param pFl Full-load pressure, units psig.
+     * @param pMax Maximum pressure, units psig.
+     * @param pIn Inlet pressure, units psig.
+     * @param presAdj Whether pressure adjustment is enabled.
+     * @param pAtm Atmospheric pressure, units psia.
      */
     Pressure_InletCorrection(
         capacity: number,
@@ -517,9 +597,13 @@ export declare class Compressors_ModulationWOUnload {
         pAtm: number
     ): void;
 
+    /** Adjusted full-load compressor capacity, units acfm. */
     C_fl_Adjusted: number;
+    /** Adjusted maximum compressor capacity, units acfm. */
     C_max_Adjusted: number;
+    /** Adjusted full-load compressor power, units kW. */
     kW_fl_Adjusted: number;
+    /** Adjusted maximum compressor power, units kW. */
     kW_max_Adjusted: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -529,59 +613,58 @@ export declare class Compressors_ModulationWOUnload {
 /** Compressor model for start/stop control. */
 export declare class Compressors_StartStop {
     /**
-     * @param kWFl double, kW
-     * @param CFl double, acfm
-     * @param kWPerMax double, percent
-     * @param kWPerFl double, percent
+     * @param kWFl Full-load power, units kW.
+     * @param CFl Full-load capacity, units acfm.
+     * @param kWPerMax Maximum power percentage, units %.
+     * @param kWPerFl Full-load power percentage, units %.
      */
     constructor(kWFl: number, CFl: number, kWPerMax: number, kWPerFl: number);
 
     /**
-     * @param perkW double
+     * @param perkW Compressor power percentage, dimensionless percent or fraction.
      * @returns CompressorsOutput
      */
     calculateFromPerkW(perkW: number): CompressorsOutput;
 
     /**
-     * @param cPer double
+     * @param cPer Compressor capacity percentage, dimensionless percent or fraction.
      * @returns CompressorsOutput
      */
     calculateFromPerC(cPer: number): CompressorsOutput;
 
     /**
-     * @param kW double
+     * @param kW Measured compressor power, units kW.
      * @returns CompressorsOutput
      */
     calculateFromkWMeasured(kW: number): CompressorsOutput;
 
     /**
-     * @param c double
+     * @param c Measured compressor capacity, units acfm.
      * @returns CompressorsOutput
      */
     calculateFromCMeasured(c: number): CompressorsOutput;
 
     /**
-     * @param v double Voltage
-     * @param i double Current
-     * @param pf double Power Factor
+     * @param v Measured voltage, units V.
+     * @param i Measured current, units A.
+     * @param pf Power factor, dimensionless.
      * @returns CompressorsOutput
      */
     calculateFromVIPFMeasured(v: number, i: number, pf: number): CompressorsOutput;
 
     /**
      *
-     * @param capacity double
-     * @param fullLoadBhp double
-     * @param polyExponent double
-     * @param pRatedDischarge double
-     * @param pRatedIn double
-     * @param eff double
-     * @param pFl double
-     * @param pMax double
-     * @param pIn double
-     * @param presAdj double
-     * @param pAtm double
-     *      Units for power kW and Capacity acfm
+     * @param capacity Compressor capacity, units acfm.
+     * @param fullLoadBhp Full-load brake horsepower, units hp.
+     * @param polyExponent Polytropic exponent, dimensionless.
+     * @param pRatedDischarge Rated discharge pressure, units psig.
+     * @param pRatedIn Rated inlet pressure, units psig.
+     * @param eff Compressor efficiency, units %.
+     * @param pFl Full-load pressure, units psig.
+     * @param pMax Maximum pressure, units psig.
+     * @param pIn Inlet pressure, units psig.
+     * @param presAdj Whether pressure adjustment is enabled.
+     * @param pAtm Atmospheric pressure, units psia.
      */
     Pressure_InletCorrection(
         capacity: number,
@@ -597,9 +680,13 @@ export declare class Compressors_StartStop {
         pAtm: number
     ): void;
 
+    /** Adjusted full-load compressor capacity, units acfm. */
     C_fl_Adjusted: number;
+    /** Adjusted maximum compressor capacity, units acfm. */
     C_max_Adjusted: number;
+    /** Adjusted full-load compressor power, units kW. */
     kW_fl_Adjusted: number;
+    /** Adjusted maximum compressor power, units kW. */
     kW_max_Adjusted: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -609,23 +696,23 @@ export declare class Compressors_StartStop {
 /** Compressor model for load/unload and related controls. */
 export declare class Compressors_LoadUnload {
     /**
-     * @param kWFl double, kW
-     * @param CFl double, acfm
-     * @param CStorage double, ft3
-     * @param kWMax double, kW
-     * @param PFl double, psig
-     * @param PMax double, psig
-     * @param PMod double, psig
-     * @param lfUl double, decimal
-     * @param PAtm double, psia
+     * @param kWFl Full-load power, units kW.
+     * @param CFl Full-load capacity, units acfm.
+     * @param CStorage Receiver storage capacity, units ft3.
+     * @param kWMax Maximum power, units kW.
+     * @param PFl Full-load pressure, units psig.
+     * @param PMax Maximum pressure, units psig.
+     * @param PMod Modulating pressure, units psig.
+     * @param lfUl Unload load factor, dimensionless fraction.
+     * @param PAtm Atmospheric pressure, units psia.
      * @param compType CompressorType
      * @param lubricantType Lubricant
      * @param cntrlType ControlType
-     * @param kWNl double, kW
-     * @param perCUl double, %
-     * @param tBlowdown double, sec
-     * @param PSumpUl double, psig
-     * @param noLoadPowerFM double, decimal
+     * @param kWNl No-load power, units kW.
+     * @param perCUl Unload capacity percentage, units %.
+     * @param tBlowdown Blowdown time, units sec.
+     * @param PSumpUl Unload sump pressure, units psig.
+     * @param noLoadPowerFM No-load power fraction for full modulation, dimensionless.
      */
     constructor(
         kWFl: number,
@@ -648,33 +735,33 @@ export declare class Compressors_LoadUnload {
     );
 
     /**
-     * @param perkW double, %
+     * @param perkW Compressor power percentage, units %.
      * @returns CompressorsOutput
      */
     calculateFromPerkW(perkW: number): CompressorsOutput;
 
     /**
-     * @param cPer double, %
+     * @param cPer Compressor capacity percentage, units %.
      * @returns CompressorsOutput
      */
     calculateFromPerC(cPer: number): CompressorsOutput;
 
     /**
-     * @param kW double, kW
+     * @param kW Measured compressor power, units kW.
      * @returns CompressorsOutput
      */
     calculateFromkWMeasured(kW: number): CompressorsOutput;
 
     /**
-     * @param c double, acfm
+     * @param c Measured compressor capacity, units acfm.
      * @returns CompressorsOutput
      */
     calculateFromCMeasured(c: number): CompressorsOutput;
 
     /**
-     * @param v double Voltage
-     * @param i double Current
-     * @param pf double Power Factor
+     * @param v Measured voltage, units V.
+     * @param i Measured current, units A.
+     * @param pf Power factor, dimensionless.
      * @returns CompressorsOutput
      */
     calculateFromVIPFMeasured(v: number, i: number, pf: number): CompressorsOutput;
@@ -682,14 +769,14 @@ export declare class Compressors_LoadUnload {
     /**
      * @param capacity double, acfm
      * @param fullLoadBhp double, hp
-     * @param polyExponent double
+     * @param polyExponent Polytropic exponent, dimensionless.
      * @param pRatedDischarge double, psig
      * @param pRatedIn double, psig
-     * @param eff double, %
+     * @param eff Compressor efficiency, units %.
      * @param pFl double, psig
      * @param pMax double, psig
      * @param pIn double, psig
-     * @param presAdj double, psig
+     * @param presAdj Whether pressure adjustment is enabled.
      * @param pAtm double, psia
      */
     Pressure_InletCorrection(
@@ -706,9 +793,13 @@ export declare class Compressors_LoadUnload {
         pAtm: number
     ): void;
 
+    /** Adjusted full-load compressor capacity, units acfm. */
     C_fl_Adjusted: number;
+    /** Adjusted maximum compressor capacity, units acfm. */
     C_max_Adjusted: number;
+    /** Adjusted full-load compressor power, units kW. */
     kW_fl_Adjusted: number;
+    /** Adjusted maximum compressor power, units kW. */
     kW_max_Adjusted: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -718,13 +809,13 @@ export declare class Compressors_LoadUnload {
 /** Variable-frequency-drive compressor model. */
 export declare class Compressor_VFD {
     /**
-     * @param fullLoadPower double
-     * @param midTurndownPower double
-     * @param turndownPower double
-     * @param noLoadPower double
-     * @param capacityFullFload double
-     * @param midTurndownAirflow double
-     * @param turndownAirflow double
+     * @param fullLoadPower Full-load power, units kW.
+     * @param midTurndownPower Mid-turndown power, units kW.
+     * @param turndownPower Turndown power, units kW.
+     * @param noLoadPower No-load power, units kW.
+     * @param capacityFullFload Full-load capacity, units acfm.
+     * @param midTurndownAirflow Mid-turndown airflow, units acfm.
+     * @param turndownAirflow Turndown airflow, units acfm.
      */
     constructor(
         fullLoadPower: number,
@@ -737,33 +828,33 @@ export declare class Compressor_VFD {
     );
 
     /**
-     * @param perkW double
+     * @param perkW Compressor power percentage, dimensionless percent or fraction.
      * @returns CompressorsOutput
      */
     calculateFromPerkW(perkW: number): CompressorsOutput;
 
     /**
-     * @param cPer double
+     * @param cPer Compressor capacity percentage, dimensionless percent or fraction.
      * @returns CompressorsOutput
      */
     calculateFromPerC(cPer: number): CompressorsOutput;
 
     /**
-     * @param kW double
+     * @param kW Measured compressor power, units kW.
      * @returns CompressorsOutput
      */
     calculateFromkWMeasured(kW: number): CompressorsOutput;
 
     /**
-     * @param c double
+     * @param c Measured compressor capacity, units acfm.
      * @returns CompressorsOutput
      */
     calculateFromCMeasured(c: number): CompressorsOutput;
 
     /**
-     * @param v double Voltage
-     * @param i double Current
-     * @param pf double power factor
+     * @param v Measured voltage, units V.
+     * @param i Measured current, units A.
+     * @param pf Power factor, dimensionless.
      * @returns CompressorsOutput
      */
     calculateFromVIPFMeasured(v: number, i: number, pf: number): CompressorsOutput;
@@ -775,23 +866,23 @@ export declare class Compressor_VFD {
 /** Compressor model for modulation with unload control. */
 export declare class Compressors_ModulationWithUnload {
     /**
-     * @param kWFl double, kW
-     * @param CFl double, acfm
-     * @param CStorage double, ft3
-     * @param kWMax double, kW
-     * @param kWNl double, kW
-     * @param PFl double, psig
-     * @param PMax double, psig
-     * @param PMod double, psig
-     * @param PAtm double, psia
-     * @param perCUl double, %
+     * @param kWFl Full-load power, units kW.
+     * @param CFl Full-load capacity, units acfm.
+     * @param CStorage Receiver storage capacity, units ft3.
+     * @param kWMax Maximum power, units kW.
+     * @param kWNl No-load power, units kW.
+     * @param PFl Full-load pressure, units psig.
+     * @param PMax Maximum pressure, units psig.
+     * @param PMod Modulating pressure, units psig.
+     * @param PAtm Atmospheric pressure, units psia.
+     * @param perCUl Unload capacity percentage, units %.
      * @param cntrlType ControlType
-     * @param tBlowdown double, sec
-     * @param PSumpUl double, psig
-     * @param noLoadPowerFM double, decimal
-     * @param kWUl double, kW
-     * @param PUl double, psig
-     * @param CUl double, acfm
+     * @param tBlowdown Blowdown time, units sec.
+     * @param PSumpUl Unload sump pressure, units psig.
+     * @param noLoadPowerFM No-load power fraction for full modulation, dimensionless.
+     * @param kWUl Unload power, units kW.
+     * @param PUl Unload pressure, units psig.
+     * @param CUl Unload capacity, units acfm.
      */
     constructor(
         kWFl: number,
@@ -814,20 +905,20 @@ export declare class Compressors_ModulationWithUnload {
     );
 
     /**
-     * @param kWFl double, kW
-     * @param CFl double, acfm
-     * @param CStorage double, ft3
-     * @param kWMax double, kW
-     * @param kWNl double, kW
-     * @param PFl double, psig
-     * @param PMax double, psig
-     * @param PMod double, psig
-     * @param PAtm double, psia
-     * @param perCUl double, %
+     * @param kWFl Full-load power, units kW.
+     * @param CFl Full-load capacity, units acfm.
+     * @param CStorage Receiver storage capacity, units ft3.
+     * @param kWMax Maximum power, units kW.
+     * @param kWNl No-load power, units kW.
+     * @param PFl Full-load pressure, units psig.
+     * @param PMax Maximum pressure, units psig.
+     * @param PMod Modulating pressure, units psig.
+     * @param PAtm Atmospheric pressure, units psia.
+     * @param perCUl Unload capacity percentage, units %.
      * @param cntrlType ControlType
-     * @param tBlowdown double, sec
-     * @param PSumpUl double, psig
-     * @param noLoadPowerFM double, decimal
+     * @param tBlowdown Blowdown time, units sec.
+     * @param PSumpUl Unload sump pressure, units psig.
+     * @param noLoadPowerFM No-load power fraction for full modulation, dimensionless.
      */
     constructor(
         kWFl: number,
@@ -847,33 +938,33 @@ export declare class Compressors_ModulationWithUnload {
     );
 
     /**
-     * @param perkW double
+     * @param perkW Compressor power percentage, dimensionless percent or fraction.
      * @returns CompressorsOutput
      */
     calculateFromPerkW(perkW: number): CompressorsOutput;
 
     /**
-     * @param cPer double
+     * @param cPer Compressor capacity percentage, dimensionless percent or fraction.
      * @returns CompressorsOutput
      */
     calculateFromPerC(cPer: number): CompressorsOutput;
 
     /**
-     * @param kW double
+     * @param kW Measured compressor power, units kW.
      * @returns CompressorsOutput
      */
     calculateFromkWMeasured(kW: number): CompressorsOutput;
 
     /**
-     * @param c double
+     * @param c Measured compressor capacity, units acfm.
      * @returns CompressorsOutput
      */
     calculateFromCMeasured(c: number): CompressorsOutput;
 
     /**
-     * @param v double Voltage
-     * @param i double Current
-     * @param pf double double Power Factor
+     * @param v Measured voltage, units V.
+     * @param i Measured current, units A.
+     * @param pf Power factor, dimensionless.
      * @returns CompressorsOutput
      */
     calculateFromVIPFMeasured(v: number, i: number, pf: number): CompressorsOutput;
@@ -881,14 +972,14 @@ export declare class Compressors_ModulationWithUnload {
     /**
      * @param capacity double, acfm
      * @param fullLoadBhp double, hp
-     * @param polyExponent double
+     * @param polyExponent Polytropic exponent, dimensionless.
      * @param pRatedDischarge double, psig
      * @param pRatedIn double, psig
-     * @param eff double, %
+     * @param eff Compressor efficiency, units %.
      * @param pFl double, psig
      * @param pMax double, psig
      * @param pIn double, psig
-     * @param presAdj double, psig
+     * @param presAdj Whether pressure adjustment is enabled.
      * @param pAtm double, psia
      */
     Pressure_InletCorrection(
@@ -905,9 +996,13 @@ export declare class Compressors_ModulationWithUnload {
         pAtm: number
     ): void;
 
+    /** Adjusted full-load compressor capacity, units acfm. */
     C_fl_Adjusted: number;
+    /** Adjusted maximum compressor capacity, units acfm. */
     C_max_Adjusted: number;
+    /** Adjusted full-load compressor power, units kW. */
     kW_fl_Adjusted: number;
+    /** Adjusted maximum compressor power, units kW. */
     kW_max_Adjusted: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -916,10 +1011,10 @@ export declare class Compressors_ModulationWithUnload {
 
 /**
  * Calculates reduced air usage from leak reduction.
- * @property CFl double, units acfm
- * @property CUsage double, units acfm
- * @property CLk double, units acfm
- * @property perCLkred double percentage / fraction
+ * @param CFl Full-load capacity, units acfm.
+ * @param CUsage Current air usage, units acfm.
+ * @param CLk Leak air usage, units acfm.
+ * @param perCLkred Leak reduction percentage, dimensionless percent or fraction.
  * @returns ReduceAirLeaksOutput
  */
 export function ReduceAirLeaks(
@@ -931,9 +1026,9 @@ export function ReduceAirLeaks(
 
 /**
  * Calculates reduced air usage from end-use efficiency improvements.
- * @property CFl double, units acfm
- * @property CUsage double, units acfm
- * @property CAvgafRed double, units acfm
+ * @param CFl Full-load capacity, units acfm.
+ * @param CUsage Current air usage, units acfm.
+ * @param CAvgafRed Average air flow reduction, units acfm.
  * @returns ImproveEndUseEfficiencyOutput
  */
 export function ImproveEndUseEfficiency(
@@ -944,13 +1039,13 @@ export function ImproveEndUseEfficiency(
 
 /**
  * Calculates adjusted usage and power when system pressure is reduced.
- * @property CFl double, units acfm
- * @property CUsage double, units acfm
- * @property PFl double, units psig
- * @property kWFl double, units kW
- * @property PRpred double, units psig
- * @property PAlt double, units psig
- * @property PAtm double, units psia
+ * @param CFl Full-load capacity, units acfm.
+ * @param CUsage Current air usage, units acfm.
+ * @param PFl Full-load pressure, units psig.
+ * @param kWFl Full-load power, units kW.
+ * @param PRpred Reduced system pressure, units psig.
+ * @param PAlt Site elevation pressure adjustment, units psig.
+ * @param PAtm Atmospheric pressure, units psia.
  * @returns ReduceSystemAirPressureOutput
  */
 export function ReduceSystemAirPressure(
@@ -965,13 +1060,13 @@ export function ReduceSystemAirPressure(
 
 /**
  * Calculates adjusted usage and power for cascading set-point changes.
- * @property CFl double, units acfm
- * @property CUsage double, units acfm
- * @property PFl double, units psig
- * @property kWFl double, units kW
- * @property PFlAdj double, units psig
- * @property PAlt double, units psig
- * @property PAtm double, units psia
+ * @param CFl Full-load capacity, units acfm.
+ * @param CUsage Current air usage, units acfm.
+ * @param PFl Full-load pressure, units psig.
+ * @param kWFl Full-load power, units kW.
+ * @param PFlAdj Adjusted full-load pressure, units psig.
+ * @param PAlt Site elevation pressure adjustment, units psig.
+ * @param PAtm Atmospheric pressure, units psia.
  * @returns AdjustCascadingSetPointOutput
  */
 export function AdjustCascadingSetPoint(
@@ -986,14 +1081,14 @@ export function AdjustCascadingSetPoint(
 
 /**
  * Calculates kW, energy, and cost savings from discharge pressure reduction.
- * @property operatingHours double
- * @property costPerkWh double, units /kWh
- * @property kWFlRated double, units kW
- * @property PFlRated double, units psig
- * @property dischargePresBaseline double, units psig
- * @property dischargePresMod double, units psig
- * @property PAlt double, units psig
- * @property PAtm double, units psig
+ * @param operatingHours Annual operating hours, units hr/year.
+ * @param costPerkWh Electricity unit cost, units $/kWh.
+ * @param kWFlRated Rated full-load power, units kW.
+ * @param PFlRated Rated full-load pressure, units psig.
+ * @param dischargePresBaseline Baseline discharge pressure, units psig.
+ * @param dischargePresMod Modified discharge pressure, units psig.
+ * @param PAlt Site elevation pressure adjustment, units psig.
+ * @param PAtm Atmospheric pressure, units psia.
  * @returns PressureReductionSavingOutput
  */
 export function PressureReductionSaving(
@@ -1009,12 +1104,12 @@ export function PressureReductionSaving(
 
 /**
  * Calculates adjusted full-load compressor power for a discharge pressure.
- * @property kWFlRated double, units kW
- * @property PFlRated double, units psig
- * @property PDischarge double, units psig
- * @property PAlt double, units psig
- * @property PAtm double, units psia
- * @returns double
+ * @param kWFlRated Rated full-load power, units kW.
+ * @param PFlRated Rated full-load pressure, units psig.
+ * @param PDischarge Discharge pressure, units psig.
+ * @param PAlt Site elevation pressure adjustment, units psig.
+ * @param PAtm Atmospheric pressure, units psia.
+ * @returns Adjusted full-load compressor power, units kW.
  */
 export function kWAdjusted(
     kWFlRated: number,

@@ -10,30 +10,33 @@ import { DoubleVector } from "../binding/registered_vectors";
 /**
  * Pipe data for compressed air calculators.
  * @details Holds values by nominal pipe size. This type is used by air system
- *          capacity and air velocity calculations.
+ *          capacity and air velocity calculations. Constructor inputs are pipe
+ *          lengths, units ft. Stored values are context-specific: the
+ *          AirSystemCapacity result contains pipe volumes, units ft3, while
+ *          AirVelocity returns velocity by pipe size, units ft/s.
  */
 export declare class PipeData {
     /**
-     * @param oneHalf double, nominal 1/2 in pipe value.
-     * @param threeFourths double, nominal 3/4 in pipe value.
-     * @param one double, nominal 1 in pipe value.
-     * @param oneAndOneFourth double, nominal 1-1/4 in pipe value.
-     * @param oneAndOneHalf double, nominal 1-1/2 in pipe value.
-     * @param two double, nominal 2 in pipe value.
-     * @param twoAndOneHalf double, nominal 2-1/2 in pipe value.
-     * @param three double, nominal 3 in pipe value.
-     * @param threeAndOneHalf double, nominal 3-1/2 in pipe value.
-     * @param four double, nominal 4 in pipe value.
-     * @param five double, nominal 5 in pipe value.
-     * @param six double, nominal 6 in pipe value.
-     * @param eight double, nominal 8 in pipe value.
-     * @param ten double, nominal 10 in pipe value.
-     * @param twelve double, nominal 12 in pipe value.
-     * @param fourteen double, nominal 14 in pipe value.
-     * @param sixteen double, nominal 16 in pipe value.
-     * @param eighteen double, nominal 18 in pipe value.
-     * @param twenty double, nominal 20 in pipe value.
-     * @param twentyFour double, nominal 24 in pipe value.
+     * @param oneHalf Nominal 1/2 in pipe length, units ft.
+     * @param threeFourths Nominal 3/4 in pipe length, units ft.
+     * @param one Nominal 1 in pipe length, units ft.
+     * @param oneAndOneFourth Nominal 1-1/4 in pipe length, units ft.
+     * @param oneAndOneHalf Nominal 1-1/2 in pipe length, units ft.
+     * @param two Nominal 2 in pipe length, units ft.
+     * @param twoAndOneHalf Nominal 2-1/2 in pipe length, units ft.
+     * @param three Nominal 3 in pipe length, units ft.
+     * @param threeAndOneHalf Nominal 3-1/2 in pipe length, units ft.
+     * @param four Nominal 4 in pipe length, units ft.
+     * @param five Nominal 5 in pipe length, units ft.
+     * @param six Nominal 6 in pipe length, units ft.
+     * @param eight Nominal 8 in pipe length, units ft.
+     * @param ten Nominal 10 in pipe length, units ft.
+     * @param twelve Nominal 12 in pipe length, units ft.
+     * @param fourteen Nominal 14 in pipe length, units ft.
+     * @param sixteen Nominal 16 in pipe length, units ft.
+     * @param eighteen Nominal 18 in pipe length, units ft.
+     * @param twenty Nominal 20 in pipe length, units ft.
+     * @param twentyFour Nominal 24 in pipe length, units ft.
      */
     constructor(
         oneHalf: number,
@@ -58,25 +61,45 @@ export declare class PipeData {
         twentyFour: number
     );
 
+    /** Value for nominal 1/2 in pipe; units ft3 for capacity results or ft/s for velocity results. */
     oneHalf: number;
+    /** Value for nominal 3/4 in pipe; units ft3 for capacity results or ft/s for velocity results. */
     threeFourths: number;
+    /** Value for nominal 1 in pipe; units ft3 for capacity results or ft/s for velocity results. */
     one: number;
+    /** Value for nominal 1-1/4 in pipe; units ft3 for capacity results or ft/s for velocity results. */
     oneAndOneFourth: number;
+    /** Value for nominal 1-1/2 in pipe; units ft3 for capacity results or ft/s for velocity results. */
     oneAndOneHalf: number;
+    /** Value for nominal 2 in pipe; units ft3 for capacity results or ft/s for velocity results. */
     two: number;
+    /** Value for nominal 2-1/2 in pipe; units ft3 for capacity results or ft/s for velocity results. */
     twoAndOneHalf: number;
+    /** Value for nominal 3 in pipe; units ft3 for capacity results or ft/s for velocity results. */
     three: number;
+    /** Value for nominal 3-1/2 in pipe; units ft3 for capacity results or ft/s for velocity results. */
     threeAndOneHalf: number;
+    /** Value for nominal 4 in pipe; units ft3 for capacity results or ft/s for velocity results. */
     four: number;
+    /** Value for nominal 5 in pipe; units ft3 for capacity results or ft/s for velocity results. */
     five: number;
+    /** Value for nominal 6 in pipe; units ft3 for capacity results or ft/s for velocity results. */
     six: number;
+    /** Value for nominal 8 in pipe; units ft3 for capacity results or ft/s for velocity results. */
     eight: number;
+    /** Value for nominal 10 in pipe; units ft3 for capacity results or ft/s for velocity results. */
     ten: number;
+    /** Value for nominal 12 in pipe; units ft3 for capacity results or ft/s for velocity results. */
     twelve: number;
+    /** Value for nominal 14 in pipe; units ft3 for capacity results or ft/s for velocity results. */
     fourteen: number;
+    /** Value for nominal 16 in pipe; units ft3 for capacity results or ft/s for velocity results. */
     sixteen: number;
+    /** Value for nominal 18 in pipe; units ft3 for capacity results or ft/s for velocity results. */
     eighteen: number;
+    /** Value for nominal 20 in pipe; units ft3 for capacity results or ft/s for velocity results. */
     twenty: number;
+    /** Value for nominal 24 in pipe; units ft3 for capacity results or ft/s for velocity results. */
     twentyFour: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -93,6 +116,13 @@ export declare class PipeData {
  * @property pipeLengths {@link PipeData}, per-size pipe values.
  */
 export declare class AirSystemCapacityOutput {
+    /**
+     * @param totalPipeVolume Total pipe volume, units ft3.
+     * @param receiverCapacities Receiver capacities converted from gallons, units ft3.
+     * @param totalReceiverVolume Total receiver volume, units ft3.
+     * @param totalCapacityOfCompressedAirSystem Total compressed air system capacity, units ft3.
+     * @param pipeLengths Per-size pipe volumes, units ft3.
+     */
     constructor(
         totalPipeVolume: number,
         receiverCapacities: DoubleVector,
@@ -101,10 +131,15 @@ export declare class AirSystemCapacityOutput {
         pipeLengths: PipeData
     );
 
+    /** Total pipe volume, units ft3. */
     totalPipeVolume: number;
+    /** Total receiver volume, units ft3. */
     totalReceiverVolume: number;
+    /** Total compressed air system capacity, units ft3. */
     totalCapacityOfCompressedAirSystem: number;
+    /** Receiver capacities converted from gallons, units ft3. */
     receiverCapacities: DoubleVector;
+    /** Per-size pipe volumes, units ft3. */
     pipeLengths: PipeData;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -116,8 +151,8 @@ export declare class AirSystemCapacityOutput {
  */
 export declare class AirSystemCapacity {
     /**
-     * @param pipeLengths PipeData, object containing values for different pipe sizes.
-     * @param receivers DoubleVector, vector of receiver volumes.
+     * @param pipeLengths Pipe lengths by nominal pipe size, units ft.
+     * @param receivers Receiver volumes, units gal.
      */
     constructor(pipeLengths: PipeData, receivers: DoubleVector);
 

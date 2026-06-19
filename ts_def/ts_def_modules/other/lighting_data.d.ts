@@ -12,14 +12,14 @@ export declare class LightingData {
      *
      * @param category string, fixture category
      * @param type string, fixture type
-     * @param lampsPerFixture double, number of lamps per fixture
+     * @param lampsPerFixture double, lamp count per fixture, count
      * @param lampWattage double, lamp wattage in W
      * @param lampOutput double, lamp luminous output in lumens
      * @param lampLife double, rated lamp life in hours
-     * @param lampCRI double, Color Rendering Index
-     * @param coefficientOfUtilization double, coefficient of utilization as decimal
-     * @param ballastFactor ballast factor (unitless)
-     * @param lumenDegradationFactor lumen degradation factor (unitless)
+     * @param lampCRI double, color rendering index, unitless
+     * @param coefficientOfUtilization double, coefficient of utilization, dimensionless decimal
+     * @param ballastFactor ballast factor, dimensionless (unitless)
+     * @param lumenDegradationFactor lumen degradation factor, dimensionless (unitless)
      */
     constructor(
         category: string,
@@ -37,14 +37,14 @@ export declare class LightingData {
     /**
      * Sets the sequential record ID.
      *
-     * @param id double, sequential ID of this lighting record
+     * @param id Sequential ID of this lighting record, unitless identifier.
      */
     setID(id: number): void;
 
     /**
      * Gets the sequential record ID.
      *
-     * @returns double, sequential ID
+     * @returns Sequential ID, unitless identifier.
      */
     ID(): number;
 
@@ -61,8 +61,8 @@ export declare class LightingData {
     type(): string;
 
     /**
-     * Gets number of lamps per fixture.
-     * @returns double, lamps per fixture
+     * Gets lamp count per fixture, count.
+     * @returns Lamps per fixture, count.
      */
     lampsPerFixture(): number;
 
@@ -85,26 +85,26 @@ export declare class LightingData {
     lampLife(): number;
 
     /**
-     * Gets lamp Color Rendering Index (CRI).
-     * @returns double, lamp CRI
+     * Gets lamp color rendering index, unitless (CRI).
+     * @returns Lamp color rendering index, unitless.
      */
     lampCRI(): number;
 
     /**
      * Gets coefficient of utilization.
-     * @returns double, coefficient of utilization as decimal
+     * @returns double, coefficient of utilization, dimensionless decimal
      */
     coefficientOfUtilization(): number;
 
     /**
-     * Gets ballast factor.
-     * @returns double, ballast factor
+     * Gets ballast factor, dimensionless.
+     * @returns double, ballast factor, dimensionless
      */
     ballastFactor(): number;
 
     /**
-     * Gets lumen degradation factor.
-     * @returns double, lumen degradation factor
+     * Gets lumen degradation factor, dimensionless.
+     * @returns double, lumen degradation factor, dimensionless
      */
     lumenDegradationFactor(): number;
 

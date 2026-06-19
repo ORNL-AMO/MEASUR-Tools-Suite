@@ -12,7 +12,9 @@
  * @property outletPressure double, outlet (downstream) absolute pressure in psia.
  */
 export interface PneumaticValveFlowRateInput {
+    /** inlet (upstream) absolute pressure units psia. */
     inletPressure: number;
+    /** outlet (downstream) absolute pressure units psia. */
     outletPressure: number;
 }
 
@@ -22,6 +24,7 @@ export interface PneumaticValveFlowRateInput {
  * @property flowRate double, air flow rate through a valve with Cv = 1 in scfm.
  */
 export interface PneumaticValveFlowRateResult {
+    /** air flow rate through a valve with Cv = 1 units scfm. */
     flowRate: number;
 }
 
@@ -33,8 +36,11 @@ export interface PneumaticValveFlowRateResult {
  * @property flowRate double, measured or required air flow rate in scfm.
  */
 export interface PneumaticValveCvInput {
+    /** inlet (upstream) absolute pressure units psia. */
     inletPressure: number;
+    /** outlet (downstream) absolute pressure units psia. */
     outletPressure: number;
+    /** measured or required air flow rate units scfm. */
     flowRate: number;
 }
 
@@ -44,6 +50,7 @@ export interface PneumaticValveCvInput {
  * @property flowCoefficient double, dimensionless valve flow coefficient (Cv).
  */
 export interface PneumaticValveCvResult {
+    /** dimensionless valve flow coefficient (Cv). */
     flowCoefficient: number;
 }
 

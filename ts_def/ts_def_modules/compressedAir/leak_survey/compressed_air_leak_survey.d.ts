@@ -51,15 +51,25 @@ export declare const enum UtilityTypeCA {
  * @property units number, multiplier to represent multiple identical leak points.
  */
 export interface CompressedAirLeakSurveyInput {
+    /** annual system operating time in hours per year. */
     hoursPerYear: number;
+    /** UtilityTypeCA, unitless enum selecting the cost basis for annual cost calculation. 0 = compressed air, 1 = electricity. */
     utilityType: UtilityTypeCA;
+    /** cost per unit of utility in $/kWh or $/scf depending on utilityType. */
     utilityCost: number;
+    /** MeasurementMethod, unitless enum selecting the field measurement method used to estimate leak flow rate. 0 = estimate, 1 = decibels, 2 = bag, 3 = orifice. */
     measurementMethod: MeasurementMethod;
+    /** EstimateMethodInput, input parameters for the estimate method. */
     estimateMethodInput: EstimateMethodInput;
+    /** DecibelsMethodInput, input parameters for the decibels method. */
     decibelsMethodInput: DecibelsMethodInput;
+    /** BagMethodInput, input parameters for the bag method. */
     bagMethodInput: BagMethodInput;
+    /** OrificeMethodInput, input parameters for the orifice method. */
     orificeMethodInput: OrificeMethodInput;
+    /** CompressorElectricityData, electricity data for converting leak flow to cost when utilityType is electricity. */
     compressorElectricityData: CompressorElectricityData;
+    /** Count of identical leak points represented by this row, count. */
     units: number;
 }
 
@@ -72,9 +82,13 @@ export interface CompressedAirLeakSurveyInput {
  * @property annualTotalFlowRate double, combined annual air volume lost to leaks in scf.
  */
 export interface CompressedAirLeakSurveyResult {
+    /** total annual electrical energy consumed by all leaks units kWh. */
     annualTotalElectricity: number;
+    /** total annual utility cost of all leaks units $/year. */
     annualTotalElectricityCost: number;
+    /** combined instantaneous flow rate of all leaks units scfm. */
     totalFlowRate: number;
+    /** combined annual air volume lost to leaks units scf. */
     annualTotalFlowRate: number;
 }
 

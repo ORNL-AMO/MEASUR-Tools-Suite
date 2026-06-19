@@ -17,12 +17,19 @@
  * @property numOrifices int, number of identical orifice leak points.
  */
 export interface OrificeMethodInput {
+    /** annual system operating time in hours. */
     operatingTime: number;
+    /** compressed air temperature at the leak point in degrees Fahrenheit. */
     airTemp: number;
+    /** local atmospheric (barometric) pressure units psia. */
     atmPressure: number;
+    /** orifice discharge coefficient (unitless). */
     dischargeCoef: number;
+    /** orifice (leak opening) diameter in inches. */
     diameter: number;
+    /** compressed air supply pressure (gauge) units psig. */
     supplyPressure: number;
+    /** Number of identical orifice leak points, count. */
     numOrifices: number;
 }
 
@@ -38,12 +45,19 @@ export interface OrificeMethodInput {
  * @property annualConsumption double, estimated annual compressed air loss in kscf.
  */
 export interface OrificeMethodResult {
+    /** air density at standard atmospheric conditions in lb/ft^3. */
     standardDensity: number;
+    /** air density at the isentropic sonic throat in lb/ft^3. */
     sonicDensity: number;
+    /** sonic air velocity at the orifice throat in ft/s. */
     leakVelocity: number;
+    /** mass flow rate of leaked air through one orifice in lbm/min. */
     leakRateLBMmin: number;
+    /** volumetric flow rate of leaked air through one orifice units scfm. */
     leakRateScfm: number;
+    /** total volumetric leak flow rate through all orifices units scfm. */
     leakRateEstimate: number;
+    /** estimated annual compressed air loss units kscf. */
     annualConsumption: number;
 }
 

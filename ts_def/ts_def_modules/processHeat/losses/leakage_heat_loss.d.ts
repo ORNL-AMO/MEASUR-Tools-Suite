@@ -20,7 +20,7 @@
  * @param leakage_gas_temperature Temperature of leaking gases, units degF
  * @param ambient_temperature Ambient temperature, units degF
  * @param coefficient_discharge Coefficient of discharge (flow coefficient), unitless
- * @param specific_gravity Specific gravity, unitless
+ * @param specific_gravity specific gravity, dimensionless, unitless
  * @param correction_factor Correction factor, unitless
  * @returns Total heat loss, units BTU/hr
  */

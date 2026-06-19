@@ -13,7 +13,7 @@
  *
  * @property heatingValue double, heating value of the fuel gas mixture, units Btu/SCF
  * @property heatingValueVolume double, heating value of the fuel gas mixture, units Btu/ft3
- * @property specificGravity double, specific gravity of the fuel gas mixture (unitless)
+ * @property specificGravity double, specific gravity, dimensionless of the fuel gas mixture (unitless)
  */
 export declare class GasCompositions {
     /**
@@ -53,7 +53,7 @@ export declare class GasCompositions {
     heatingValue: number;
     /** Heating value of the fuel gas mixture, units Btu/ft3 */
     heatingValueVolume: number;
-    /** Specific gravity of the fuel gas mixture, unitless */
+    /** specific gravity, dimensionless of the fuel gas mixture, unitless */
     specificGravity: number;
 
     /**

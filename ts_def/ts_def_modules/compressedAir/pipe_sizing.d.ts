@@ -14,9 +14,13 @@
  * @property atmosphericPressure double, local atmospheric pressure in psia.
  */
 export interface PipeSizingInput {
+    /** volumetric free-air flow rate units cfm. */
     airflow: number;
+    /** operating gauge pressure in the pipe units psig. */
     airlinePressure: number;
+    /** maximum allowable compressed-air velocity in ft/s. */
     designVelocity: number;
+    /** local atmospheric pressure units psia. */
     atmosphericPressure: number;
 }
 
@@ -27,7 +31,9 @@ export interface PipeSizingInput {
  * @property pipeDiameter double, minimum required internal pipe diameter in inches.
  */
 export interface PipeSizingResult {
+    /** minimum required internal pipe area in in^2. */
     crossSectionalArea: number;
+    /** minimum required internal pipe diameter in inches. */
     pipeDiameter: number;
 }
 

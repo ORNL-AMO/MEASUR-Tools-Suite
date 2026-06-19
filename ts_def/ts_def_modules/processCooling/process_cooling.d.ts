@@ -211,9 +211,9 @@ export declare class PumpInput {
     /**
      * @param variableFlow boolean, whether the pump uses variable flow
      * @param flowRate double, pump flow rate, units gpm/ton
-     * @param efficiency double, pump efficiency as a fraction (0-1)
+     * @param efficiency double, pump efficiency, dimensionless as a fraction (0-1)
      * @param motorSize double, motor size, units hp (set to 0 to estimate from flow rate and efficiency)
-     * @param motorEfficiency double, motor efficiency as a fraction (0-1)
+     * @param motorEfficiency double, motor efficiency, dimensionless as a fraction (0-1)
      */
     constructor(
         variableFlow: boolean,
@@ -232,8 +232,8 @@ export declare class PumpInput {
  */
 export declare class TowerInput {
     /**
-     * @param numTower int, number of towers
-     * @param numFanPerTower_Cells int, number of cells per tower
+     * @param numTower int, tower count
+     * @param numFanPerTower_Cells int, cell count per tower
      * @param fanSpeedType {@link FanMotorSpeedType} fan motor speed control type
      * @param towerSizing {@link TowerSizedBy} how the tower is sized; if Unknown, sized to match chiller capacity
      * @param towerCellFanType {@link CellFanType} cell fan type (AxialFan or CentrifugalFan; assume AxialFan if unknown)
@@ -274,7 +274,7 @@ export declare class ChillerInput {
      * @param age double, chiller age in years (0-20); efficiency degraded 1 % per year
      * @param installVSD boolean, install a VSD on the centrifugal compressor motor
      * @param useARIMonthlyLoadSchedule boolean, use ARI monthly load schedule (monthlyLoads may be empty if true)
-     * @param monthlyLoads DoubleVector2D, 12 x 11 array of % load bins per calendar month;
+     * @param monthlyLoads 12 x 11 array of load bins per calendar month, units %;
      *   pass a 1 x 11 array for a non-varying monthly schedule
      */
     constructor(
@@ -295,10 +295,10 @@ export declare class ChillerInput {
      * @param capacity double, chiller capacity, units ton
      * @param isFullLoadEffKnown boolean
      * @param fullLoadEff double, fraction (0.2-2.5)
-     * @param age double, years (0-20)
+     * @param age Chiller age, units years.
      * @param installVSD boolean
      * @param useARIMonthlyLoadSchedule boolean
-     * @param monthlyLoads DoubleVector2D, 12 x 11 or 1 x 11 array
+     * @param monthlyLoads 12 x 11 or 1 x 11 array of load bins, units %.
      * @param changeRefrig boolean, whether to replace the refrigerant
      * @param currentRefrig {@link RefrigerantType} current refrigerant
      * @param proposedRefrig {@link RefrigerantType} proposed replacement refrigerant
@@ -324,10 +324,10 @@ export declare class ChillerInput {
      * @param capacity double, chiller capacity, units ton
      * @param isFullLoadEffKnown boolean
      * @param fullLoadEff double, fraction (0.2-2.5)
-     * @param age double, years (0-20)
+     * @param age Chiller age, units years.
      * @param installVSD boolean
      * @param useARIMonthlyLoadSchedule boolean
-     * @param monthlyLoads DoubleVector2D, 12 x 11 or 1 x 11 array
+     * @param monthlyLoads 12 x 11 or 1 x 11 array of load bins, units %.
      * @param loadAtPercent DoubleVector, % loading points in ascending order (e.g. [25, 50, 75, 100])
      * @param kwPerTonLoads DoubleVector, kW/ton values at each corresponding % loading point
      */
@@ -351,10 +351,10 @@ export declare class ChillerInput {
      * @param capacity double, chiller capacity, units ton
      * @param isFullLoadEffKnown boolean
      * @param fullLoadEff double, fraction (0.2-2.5)
-     * @param age double, years (0-20)
+     * @param age Chiller age, units years.
      * @param installVSD boolean
      * @param useARIMonthlyLoadSchedule boolean
-     * @param monthlyLoads DoubleVector2D, 12 x 11 or 1 x 11 array
+     * @param monthlyLoads 12 x 11 or 1 x 11 array of load bins, units %.
      * @param loadAtPercent DoubleVector, % loading points in ascending order
      * @param kwPerTonLoads DoubleVector, kW/ton at each loading point
      * @param currentRefrig {@link RefrigerantType} current refrigerant
@@ -394,7 +394,7 @@ export declare class ProcessCooling {
     /**
      * Water-cooled system constructor.
      *
-     * @param systemOperationAnnualHours IntVector, 8760-element array (values 0 or 1) indicating
+     * @param systemOperationAnnualHours 8760-element array indicating operation state by hour, unitless 0 or 1 values;
      *   whether the system operates in each hour of the year
      * @param weatherDryBulbHourlyTemp DoubleVector, 8760-element array of dry-bulb temperatures, units F
      * @param weatherWetBulbHourlyTemp DoubleVector, 8760-element array of wet-bulb temperatures, units F
@@ -414,7 +414,7 @@ export declare class ProcessCooling {
     /**
      * Air-cooled system constructor.
      *
-     * @param systemOperationAnnualHours IntVector, 8760-element array (values 0 or 1)
+     * @param systemOperationAnnualHours 8760-element array indicating operation state by hour, unitless 0 or 1 values.
      * @param weatherDryBulbHourlyTemp DoubleVector, 8760-element array of dry-bulb temperatures, units F
      * @param weatherWetBulbHourlyTemp DoubleVector, 8760-element array of wet-bulb temperatures, units F
      * @param chillerInputList ChillerInputV, list of chiller configurations
@@ -453,7 +453,7 @@ export declare class ProcessCooling {
     /**
      * Returns the polynomial efficiency coefficients for a specific chiller.
      *
-     * @param chillerIndex int, zero-based index into the chiller input list
+     * @param chillerIndex Zero-based chiller index, count.
      * @returns DoubleVector - 4 coefficients for a 3rd-degree polynomial (FullLoadEffKnown or custom),
      *   or 7 coefficients for a 5th-degree polynomial
      */
@@ -462,7 +462,7 @@ export declare class ProcessCooling {
     /**
      * Returns energy efficiency values for a chiller at the specified % load points.
      *
-     * @param chillerIndex int, zero-based index into the chiller input list
+     * @param chillerIndex Zero-based chiller index, count.
      * @param loadAtPercent DoubleVector, % loading values (0-100); may be in any order
      * @returns DoubleVector - energy efficiency (kW/ton) at each % loading point,
      *   in the same order as the input array
@@ -472,8 +472,8 @@ export declare class ProcessCooling {
     /**
      * Generates the system operation annual hours array from weekly and monthly schedules.
      *
-     * @param weeklyOpStartHour IntVector, 7-element array - start hour of operation for each day of the week (0-23)
-     * @param weeklyOpStopHour IntVector, 7-element array - stop hour of operation for each day of the week (0-24)
+     * @param weeklyOpStartHour 7-element array with start hour of operation for each day of the week, units hour-of-day.
+     * @param weeklyOpStopHour 7-element array with stop hour of operation for each day of the week, units hour-of-day.
      * @param monthlyOpMaxHour IntVector, 12-element array - maximum operating hours for each calendar month (0-744);
      *   use 0 for no operation; hours are capped at the maximum available hours in that month
      * @returns IntVector, 8760-element array with values 0 or 1 based on the supplied schedules

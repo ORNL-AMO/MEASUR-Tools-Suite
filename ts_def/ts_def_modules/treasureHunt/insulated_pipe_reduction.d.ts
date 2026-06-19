@@ -21,14 +21,14 @@ import type { DoubleVector } from "../binding/registered_vectors";
  * arrays must each contain exactly 5 values representing polynomial fit coefficients
  * (order 4 down to order 0) for thermal conductivity as a function of temperature.
  *
- * @property operatingHours number, annual operating hours, units hours/year
+ * @property operatingHours number, annual operating hours, units hr/year, units hours/year
  * @property pipeLength number, total pipe length, units m
  * @property pipeDiameter number, outer pipe diameter, units m
  * @property pipeThickness number, pipe wall thickness, units m
  * @property pipeTemperature number, pipe inner surface (fluid) temperature, units K
  * @property ambientTemperature number, ambient air temperature, units K
  * @property windVelocity number, wind velocity across the pipe, units m/s
- * @property systemEfficiency number, heating system efficiency (dimensionless, 0-1)
+ * @property systemEfficiency number, heating system efficiency, dimensionless (dimensionless, 0-1)
  * @property insulationThickness number, insulation thickness; set <= 0 for uninsulated pipe, units m
  * @property pipeEmissivity number, emissivity of the bare pipe outer surface (dimensionless, 0-1)
  * @property jacketEmissivity number, emissivity of the insulation jacket outer surface (dimensionless, 0-1)
@@ -36,7 +36,7 @@ import type { DoubleVector } from "../binding/registered_vectors";
  * @property insulationMaterialCoefficients number[], 4th-order polynomial fit coefficients for insulation thermal conductivity
  */
 export interface InsulatedPipeInput {
-    /** Annual operating hours, units hours/year */
+    /** annual operating hours, units hr/year, units hours/year */
     operatingHours: number;
     /** Total pipe length, units m */
     pipeLength: number;
@@ -50,7 +50,7 @@ export interface InsulatedPipeInput {
     ambientTemperature: number;
     /** Wind velocity across the pipe, units m/s */
     windVelocity: number;
-    /** Heating system efficiency (dimensionless, 0-1) */
+    /** heating system efficiency, dimensionless (dimensionless, 0-1) */
     systemEfficiency: number;
     /** Insulation thickness; set <= 0 for uninsulated (bare) pipe, units m */
     insulationThickness: number;

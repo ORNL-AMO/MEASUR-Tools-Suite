@@ -13,8 +13,11 @@
  * @property airPressureOut double, outlet (cut-out) pressure in psia.
  */
 export interface ReceiverTankUsableCapacityInput {
+    /** tank volume units gal. */
     tankSize: number;
+    /** inlet (charging) pressure units psia. */
     airPressureIn: number;
+    /** outlet (cut-out) pressure units psia. */
     airPressureOut: number;
 }
 
@@ -24,6 +27,7 @@ export interface ReceiverTankUsableCapacityInput {
  * @property usableCapacity double, usable air storage capacity in scf.
  */
 export interface ReceiverTankUsableCapacityResult {
+    /** usable air storage capacity units scf. */
     usableCapacity: number;
 }
 
@@ -31,8 +35,11 @@ export interface ReceiverTankUsableCapacityResult {
  * Input parameters for the General sizing method.
  */
 export interface ReceiverTankGeneralInput {
+    /** Air demand drawn from the tank, units ft3. */
     airDemand: number;
+    /** Tolerable pressure drop across the tank, units psi. */
     allowablePressureDrop: number;
+    /** Local atmospheric pressure, units psia. */
     atmosphericPressure: number;
 }
 
@@ -40,6 +47,7 @@ export interface ReceiverTankGeneralInput {
  * Tank size result shared by multiple receiver tank sizing methods.
  */
 export interface ReceiverTankSizeResult {
+    /** Required receiver tank size, units gal. */
     tankSize: number;
 }
 
@@ -47,10 +55,15 @@ export interface ReceiverTankSizeResult {
  * Input parameters for the Dedicated Storage sizing method.
  */
 export interface ReceiverTankDedicatedStorageInput {
+    /** Duration of the air demand event, units min. */
     lengthOfDemand: number;
+    /** Required air flow during the demand event, units cfm. */
     airFlowRequirement: number;
+    /** Local atmospheric pressure, units psia. */
     atmosphericPressure: number;
+    /** Tank pressure before releasing air, units psia. */
     initialTankPressure: number;
+    /** Tank pressure after releasing air, units psia. */
     finalTankPressure: number;
 }
 
@@ -58,11 +71,17 @@ export interface ReceiverTankDedicatedStorageInput {
  * Input parameters for the Metered Storage sizing method.
  */
 export interface ReceiverTankMeteredStorageInput {
+    /** Duration of the air demand event, units min. */
     lengthOfDemand: number;
+    /** Required air flow during the demand event, units cfm. */
     airFlowRequirement: number;
+    /** Local atmospheric pressure, units psia. */
     atmosphericPressure: number;
+    /** Tank pressure before releasing air, units psia. */
     initialTankPressure: number;
+    /** Tank pressure after releasing air, units psia. */
     finalTankPressure: number;
+    /** Metering valve flow rate, units cfm. */
     meteredFlowControl: number;
 }
 
@@ -70,7 +89,9 @@ export interface ReceiverTankMeteredStorageInput {
  * Result of the Metered Storage sizing calculation.
  */
 export interface ReceiverTankMeteredStorageResult {
+    /** Required receiver tank size, units gal. */
     tankSize: number;
+    /** Time to refill the tank after a demand event, units s. */
     refillTime: number;
 }
 
@@ -78,10 +99,15 @@ export interface ReceiverTankMeteredStorageResult {
  * Input parameters for the Bridging Compressor Reaction Delay sizing method.
  */
 export interface ReceiverTankBridgingInput {
+    /** Distance from demand event to compressor room, units ft. */
     distanceToCompressorRoom: number;
+    /** Speed of compressed air in distribution piping, units ft/s. */
     speedOfAir: number;
+    /** Local atmospheric pressure, units psia. */
     atmosphericPressure: number;
+    /** Air demand at the event location, units cfm. */
     airDemandCfm: number;
+    /** Tolerable pressure drop at the event, units psi. */
     allowablePressureDrop: number;
 }
 
@@ -89,11 +115,17 @@ export interface ReceiverTankBridgingInput {
  * Input parameters for the Compressor Cycle sizing method.
  */
 export interface ReceiverTankCompressorCycleInput {
+    /** Compressor loaded time per cycle, units min. */
     loadTime: number;
+    /** Compressor unloaded time per cycle, units min. */
     unloadTime: number;
+    /** Rated compressor output at full load, units cfm. */
     compressorCapacity: number;
+    /** Pressure at which the compressor unloads, units psia. */
     unloadPressure: number;
+    /** Pressure at which the compressor fully loads, units psia. */
     fullLoadPressure: number;
+    /** Local atmospheric pressure, units psia. */
     atmosphericPressure: number;
 }
 
@@ -101,9 +133,13 @@ export interface ReceiverTankCompressorCycleInput {
  * Result of the Compressor Cycle sizing calculation.
  */
 export interface ReceiverTankCompressorCycleResult {
+    /** Required receiver tank size, units gal. */
     tankSize: number;
+    /** Effective net compressor capacity over a full cycle, units cfm. */
     effectiveCapacity: number;
+    /** Pressure band width, units psi. */
     pressureChange: number;
+    /** Required storage volume, units ft3. */
     volumeCf: number;
 }
 

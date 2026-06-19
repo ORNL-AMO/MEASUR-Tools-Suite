@@ -27,7 +27,7 @@ export declare class SteamLeakSurveyResults {
     steamLoss: number;
     /** Energy loss, units MMBtu/yr */
     energyLoss: number;
-    /** Annual leak cost */
+    /** Annual leak cost, units $/year. */
     leakCost: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -41,7 +41,8 @@ export declare class QuantifySteamLeakByPlumeLength {
     /**
      * @param steamPressure double, steam pressure in psig
      * @param plumeLength double, visible plume length in feet
-     * @param ambTemp double, ambient temperature in F
+     * @param ambTemp double, ambient temperature, units degF
+     * @returns Estimated leak rate, units lb/hr.
      */
     static estimate(steamPressure: number, plumeLength: number, ambTemp: number): number;
 }
@@ -52,13 +53,13 @@ export declare class QuantifySteamLeakByPlumeLength {
 export declare class SteamLeakSurvey {
     /**
      * Constructor for SteamLeakSurvey, when utility type is steam
-     * @param operatingTime double, operating time of the system hours per year
-     * @param steamTemp double, steam temperature F (must be greater than 212F)
+     * @param operatingTime double, operating time of the system, units hr/year
+     * @param steamTemp double, steam temperature, units degF (must be greater than 212F)
      * @param steamPressure double, steam pressure in psig
      * @param costOfElectricity double, $/kWh, default 0
      * @param leakPressure double, leak pressure in psig
-     * @param leakTemp double, leak temperature F
-     * @param feedwaterTemp double, feedwater temperature in F (must be below boiling point of water, max 212F)
+     * @param leakTemp double, leak temperature, units degF
+     * @param feedwaterTemp double, feedwater temperature, units degF (must be below boiling point of water, max 212F)
      * @param steamCost double, $/lb
      */
     constructor(
@@ -74,15 +75,15 @@ export declare class SteamLeakSurvey {
 
     /**
      * Constructor for SteamLeakSurvey, when utility type is electric
-     * @param operatingTime double, operating time of the system hours per year
-     * @param steamTemp double, steam temperature F (must be greater than 212F)
+     * @param operatingTime double, operating time of the system, units hr/year
+     * @param steamTemp double, steam temperature, units degF (must be greater than 212F)
      * @param steamPressure double, steam pressure in psig
      * @param costOfElectricity double, $/kWh, default 0
      * @param leakPressure double, leak pressure in psig
-     * @param leakTemp double, leak temperature F
-     * @param feedwaterTemp double, feedwater temperature in F (must be below boiling point of water, max 212F)
-     * @param boilerEfficiency double, boiler efficiency percentage (0 - 100 %)
-     * @param systemEfficiency double, system efficiency percentage (0 - 100 %)
+     * @param leakTemp double, leak temperature, units degF
+     * @param feedwaterTemp double, feedwater temperature, units degF (must be below boiling point of water, max 212F)
+     * @param boilerEfficiency Boiler efficiency, units %.
+     * @param systemEfficiency System efficiency, units %.
      */
     constructor(
         operatingTime: number,
@@ -98,15 +99,15 @@ export declare class SteamLeakSurvey {
 
     /**
      * Constructor for SteamLeakSurvey, when utility type is natural gas
-     * @param operatingTime double, operating time of the system hours per year
-     * @param steamTemp double, steam temperature F (must be greater than 212F)
+     * @param operatingTime double, operating time of the system, units hr/year
+     * @param steamTemp double, steam temperature, units degF (must be greater than 212F)
      * @param steamPressure double, steam pressure in psig
      * @param costOfElectricity double, $/kWh, default 0
      * @param leakPressure double, leak pressure in psig
-     * @param leakTemp double, leak temperature F
-     * @param feedwaterTemp double, feedwater temperature in F (must be below boiling point of water, max 212F)
-     * @param boilerEfficiency double, boiler efficiency percentage (1 - 100 %)
-     * @param systemEfficiency double, system efficiency percentage (1 - 100 %)
+     * @param leakTemp double, leak temperature, units degF
+     * @param feedwaterTemp double, feedwater temperature, units degF (must be below boiling point of water, max 212F)
+     * @param boilerEfficiency Boiler efficiency, units %.
+     * @param systemEfficiency System efficiency, units %.
      * @param fuelCost double, per MCF (unit cost of fuel for the boiler system), when utility type Natural Gas
      * @param fuelEnergyFactor double, MMBtu/MCF (energy content for a given volume of fuel, when unit is in $/volume)
      */
@@ -126,15 +127,15 @@ export declare class SteamLeakSurvey {
 
     /**
      * Constructor for SteamLeakSurvey, generic
-     * @param operatingTime double, operating time of the system hours per year
-     * @param steamTemp double, steam temperature F (must be greater than 212F)
+     * @param operatingTime double, operating time of the system, units hr/year
+     * @param steamTemp double, steam temperature, units degF (must be greater than 212F)
      * @param steamPressure double, steam pressure in psig
      * @param costOfElectricity double, $/kWh, default 0
      * @param leakPressure double, leak pressure in psig
-     * @param leakTemp double, leak temperature F
-     * @param feedwaterTemp double, feedwater temperature in F (must be below boiling point of water, max 212F)
-     * @param boilerEfficiency double, boiler efficiency percentage (0 - 100 %)
-     * @param systemEfficiency double, system efficiency percentage (0 - 100 %)
+     * @param leakTemp double, leak temperature, units degF
+     * @param feedwaterTemp double, feedwater temperature, units degF (must be below boiling point of water, max 212F)
+     * @param boilerEfficiency Boiler efficiency, units %.
+     * @param systemEfficiency System efficiency, units %.
      * @param utilityType utility type enumeration
      * @param fuelCost double, per MCF (unit cost of fuel for the boiler system), when utility type Natural Gas
      * @param fuelEnergyFactor double, MMBtu/MCF (energy content for a given volume of fuel, when unit is in $/volume)
@@ -159,15 +160,15 @@ export declare class SteamLeakSurvey {
     /**
      * Calculate steam cost based on utility type.
      *
-     * @returns steamCost computed based on fuel type steam or electric or natural gas
+     * @returns Steam cost computed from the configured utility type, units $/lb.
      */
     costOfSteam(): number;
 
     /**
      * Calculate steam cost based on utility type and turbine efficiency.
      *
-     * @param turbineEfficiency double, system efficiency percentage (0 - 100 %)
-     * @returns steamCost computed based on fuel type steam or electric or natural gas and turbine
+     * @param turbineEfficiency Turbine efficiency, units %.
+     * @returns Steam cost computed from the configured utility type and turbine efficiency, units $/lb.
      */
     costOfSteam(turbineEfficiency: number): number;
 
@@ -182,7 +183,7 @@ export declare class SteamLeakSurvey {
     /**
      * Calculate steam leak losses using an estimated leak rate and turbine efficiency.
      *
-     * @param turbineEfficiency double, system efficiency percentage (0 - 100 %)
+     * @param turbineEfficiency Turbine efficiency, units %.
      * @param leakRate double, lb/hr
      * @returns {@link SteamLeakSurveyResults}
      */
@@ -191,7 +192,7 @@ export declare class SteamLeakSurvey {
     /**
      * Calculate steam leak losses using the orifice method.
      *
-     * @param turbineEfficiency double, system efficiency percentage (0 - 100 %)
+     * @param turbineEfficiency Turbine efficiency, units %.
      * @param holeSize double, estimated diameter of orifice through which steam is leaking in inches
      * @param dischargeCoef double, discharge coefficient used to capture the effect of the shape of the leak rate as fraction (0 - 1)
      * @param atmPressure double, atmospheric pressure (standard pressure is 14.7 psia, range 0 - 20)
@@ -207,9 +208,9 @@ export declare class SteamLeakSurvey {
     /**
      * Calculate steam leak losses using the plume-length method.
      *
-     * @param turbineEfficiency double, system efficiency percentage (0 - 100 %)
-     * @param plumeLength double, feet (range 3 - 12 feet)
-     * @param ambTemp double, ambient temperature (usually between 45 and 90 degrees F)
+     * @param turbineEfficiency Turbine efficiency, units %.
+     * @param plumeLength double, units ft (range 3 - 12 ft)
+     * @param ambTemp double, ambient temperature, units degF (usually between 45 and 90 degF)
      * @returns {@link SteamLeakSurveyResults}
      */
     plumeMethodCalc(turbineEfficiency: number, plumeLength: number, ambTemp: number): SteamLeakSurveyResults;

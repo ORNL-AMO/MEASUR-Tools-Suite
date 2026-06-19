@@ -1,13 +1,13 @@
 /**
- * Power Factor (pf) Calculations - Power Triangle
+ * Power factor (pf) calculations - Power Triangle
  *
  * Calculates Apparent Power S, Real Power P, Reactive Power Q,
- * Phase Angle, Power Factor pf, and Capacitance based on two known inputs.
+ * phase angle, power factor, and capacitance based on two known inputs.
  *
  * Input combination must include two known parameters:
- *   1. Apparent Power + Real Power | Reactive Power | Phase Angle | Power Factor
- *   2. Real Power    + Reactive Power | Phase Angle | Power Factor
- *   3. Reactive Power + Phase Angle | Power Factor
+ *   1. Apparent Power + Real Power | Reactive Power | Phase Angle | power factor
+ *   2. Real Power    + Reactive Power | Phase Angle | power factor
+ *   3. Reactive Power + Phase Angle | power factor
  */
 
 /**
@@ -34,12 +34,12 @@ export enum PowerFactorModeType {
  * @property realPower double, units kW
  * @property reactivePower double, units kVAr
  * @property apparentPower double, units kVA
- * @property powerFactor double, units % as decimal value (0 - 1)
+ * @property powerFactor Power factor, dimensionless fraction.
  * @property phaseAngle double, units deg
  * @property realDemand double, units kW
  * @property demandPenalty double, units kW
- * @property proposedReactivePower double, units kVAr - reactive power required to reach the target power factor
- * @property proposedCapacitance double, units kVAr - capacitance required to correct to the target power factor
+ * @property proposedReactivePower Reactive power required to reach the target power factor, units kVAr.
+ * @property proposedCapacitance Capacitance required to correct to the target power factor, units kVAr.
  */
 export interface PowerFactorOutput {
     /** Real Power P, units kW */
@@ -48,7 +48,7 @@ export interface PowerFactorOutput {
     reactivePower: number;
     /** Apparent Power S, units kVA */
     apparentPower: number;
-    /** Power Factor pf, units % as decimal value (0 - 1) */
+    /** Power factor, dimensionless fraction. */
     powerFactor: number;
     /** Phase Angle, units deg */
     phaseAngle: number;
@@ -56,9 +56,9 @@ export interface PowerFactorOutput {
     realDemand: number;
     /** Demand Penalty, units kW */
     demandPenalty: number;
-    /** Proposed Reactive Power needed to reach target power factor, units kVAr */
+    /** Proposed reactive power needed to reach target power factor, units kVAr. */
     proposedReactivePower: number;
-    /** Proposed Capacitance needed to reach target power factor, units kVAr */
+    /** Proposed capacitance needed to reach target power factor, units kVAr. */
     proposedCapacitance: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -66,10 +66,10 @@ export interface PowerFactorOutput {
 }
 
 /**
- * Power Factor calculator.
+ * Power factor calculator.
  *
  * Computes all power-triangle quantities (P, Q, S, Angle, pf) and the capacitance
- * correction required to reach a target power factor, given any two known
+ * correction required to reach a target power factor given any two known
  * power-triangle parameters.
  */
 export declare class PowerFactor {
@@ -80,16 +80,16 @@ export declare class PowerFactor {
      * Perform power factor calculations.
      *
      * @param mode {@link PowerFactorModeType} - selects which two input parameters are supplied.
-     * @param input1 double - first known parameter (see mode for interpretation):
+     * @param input1 First known parameter; units depend on mode:
      *   - Apparent Power: units kVA
      *   - Real Power: units kW
      *   - Reactive Power: units kVAr
-     * @param input2 double - second known parameter (see mode for interpretation):
+     * @param input2 Second known parameter; units depend on mode:
      *   - Real Power: units kW
      *   - Reactive Power: units kVAr
      *   - Phase Angle: units deg
-     *   - Power Factor: units % as decimal value (0 - 1)
-     * @param inputPowerFactor double, Minimum Required / Target Power Factor as decimal (default 0.95)
+     *   - Power factor: dimensionless fraction.
+     * @param inputPowerFactor Minimum required or target power factor, dimensionless fraction (default 0.95).
      * @returns {@link PowerFactorOutput}
      */
     calculate(

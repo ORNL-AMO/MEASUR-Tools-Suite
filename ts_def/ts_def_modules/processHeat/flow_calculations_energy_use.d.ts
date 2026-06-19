@@ -26,7 +26,7 @@ export interface FlowCalculationsEnergyUseResults {
  * Calculates flow rate, heat input, and total flow for a fuel-fired furnace
  * using standard orifice meter equations for combustion gas flow measurement.
  *
- * @param specific_gravity Specific gravity of gas, unitless
+ * @param specific_gravity specific gravity, dimensionless of gas, unitless
  * @param orifice_diameter Orifice diameter, units in
  * @param inside_pipe_diameter Inside pipe diameter, units in
  * @param discharge_coefficient Discharge coefficient, unitless

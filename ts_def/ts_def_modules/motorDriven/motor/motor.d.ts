@@ -14,13 +14,13 @@ export declare class MotorData {
     /**
      * Constructor for motor data.
      *
-     * @param hp double, horsepower of the motor
+     * @param hp Motor power, units hp.
      *
-     * @param synchronousSpeed integer, synchronous speed of the motor in RPM
+     * @param synchronousSpeed Motor synchronous speed, units rpm.
      *
-     * @param poles integer, number of poles in the motor
+     * @param poles Motor pole count.
      *
-     * @param nominalEfficiency double, nominal efficiency of the motor as a fraction
+     * @param nominalEfficiency Nominal motor efficiency, dimensionless fraction.
      *
      * @param efficiencyClass MotorEfficiencyClass, efficiency class of the motor
      *
@@ -30,7 +30,7 @@ export declare class MotorData {
      *
      * @param lineFrequency LineFrequency, line frequency classification of the motor
      *
-     * @param voltageLimit integer, voltage limit for the motor
+     * @param voltageLimit Voltage limit selector, unitless enum value.
      *
      * @param catalog string, catalog reference for the motor
      */
@@ -46,15 +46,15 @@ export declare class MotorData {
         voltageLimit: number,
         catalog: string );
 
-    /** Gets motor data record ID. */
+    /** @returns Motor data record ID, unitless identifier. */
     getId(): number;
-    /** Getter for motor data property HP. */
+    /** @returns Motor power, units hp. */
     getHp(): number;
-    /** Getter for motor data property synchronous speed. */
+    /** @returns Motor synchronous speed, units rpm. */
     getSynchronousSpeed(): number;
-    /** Getter for motor data property poles. */
+    /** @returns Motor pole count. */
     getPoles(): number;
-    /** Getter for motor data property nominal efficiency. */
+    /** @returns Nominal motor efficiency, dimensionless fraction. */
     getNominalEfficiency(): number;
     /** Getter for motor data property efficiency class. */
     getEfficiencyClass(): MotorEfficiencyClass;
@@ -64,20 +64,20 @@ export declare class MotorData {
     getEnclosureType(): string;
     /** Getter for motor data property line frequency. */
     getLineFrequency(): LineFrequency;
-    /** Getter for motor data property voltage limit. */
+    /** @returns Voltage limit selector, unitless enum value. */
     getVoltageLimit(): number;
     /** Getter for motor data property catalog. */
     getCatalog(): string;
 
-    /** Sets motor data record ID. */
+    /** @param value Motor data record ID, unitless identifier. */
     setId(value: number): void;
-    /** Setter for motor data property HP. */
+    /** @param value Motor power, units hp. */
     setHp(value: number): void;
-    /** Setter for motor data property synchronous speed. */
+    /** @param value Motor synchronous speed, units rpm. */
     setSynchronousSpeed(value: number): void;
-    /** Setter for motor data property poles. */
+    /** @param value Motor pole count. */
     setPoles(value: number): void;
-    /** Setter for motor data property nominal efficiency. */
+    /** @param value Nominal motor efficiency, dimensionless fraction. */
     setNominalEfficiency(value: number): void;
     /** Setter for motor data property efficiency class. */
     setEfficiencyClass(value: MotorEfficiencyClass): void;
@@ -87,7 +87,7 @@ export declare class MotorData {
     setEnclosureType(value: string): void;
     /** Setter for motor data property line frequency. */
     setLineFrequency(value: LineFrequency): void;
-    /** Setter for motor data property voltage limit. */
+    /** @param value Voltage limit selector, unitless enum value. */
     setVoltageLimit(value: number): void;
     /** Setter for motor data property catalog. */
     setCatalog(value: string): void;
@@ -105,11 +105,11 @@ export declare class MotorEfficiency {
      *
      * @param lineFrequency LineFrequency, classification of line frequency in Hz
      *
-     * @param motorRpm double, RPM of motor
+     * @param motorRpm Motor speed, units rpm.
      *
      * @param efficiencyClass MotorEfficiencyClass, efficiency class of motor
      *
-     * @param motorRatedPower double, rated power of motor in hp
+     * @param motorRatedPower Rated motor power, units hp.
      *
      */
     constructor(
@@ -120,13 +120,13 @@ export declare class MotorEfficiency {
     );
 
     /**
-     * Calculate the motor efficiency based on the input parameters.
+     * Calculate motor efficiency based on the input parameters.
      *
-     * @param loadFactor double, load factor - unitless ratio
+     * @param loadFactor Load factor, dimensionless fraction.
      *
-     * @param specifiedEfficiency efficiency of SPECIFIED efficiency class motor as defined by fraction
+     * @param specifiedEfficiency Specified motor efficiency, dimensionless fraction.
      *
-     * @returns double The calculated motor efficiency %.
+     * @returns Calculated motor efficiency, dimensionless fraction.
      *
      */
     calculate(loadFactor : number, specifiedEfficiency : number): number;
@@ -142,17 +142,17 @@ export declare class EstimateFLA {
     /**
      * Constructor for estimating full load amps (FLA) of a motor.
      *
-     * @param motorRatedPower double, rated power of the motor in hp
+     * @param motorRatedPower Rated motor power, units hp.
      *
-     * @param motorRPM double, RPM of the motor
+     * @param motorRPM Motor speed, units rpm.
      *
      * @param lineFrequency LineFrequency, line frequency classification of the motor in Hz
      *
      * @param efficiencyClass MotorEfficiencyClass, efficiency class of the motor
      *
-     * @param specifiedEfficiency double, efficiency of SPECIFIED efficiency class motor defined as a fraction
+     * @param specifiedEfficiency Specified motor efficiency, dimensionless fraction.
      *
-     * @param ratedVoltage double, rated voltage of the motor in volts
+     * @param ratedVoltage Rated motor voltage, units V.
      *
      */
     constructor(
@@ -167,7 +167,7 @@ export declare class EstimateFLA {
     /**
      * Method to calculate the estimated full load amps (FLA) of the motor.
      *
-     * @returns double, The estimated full load amps (FLA).
+     * @returns Estimated full-load current, units A.
      *
      */
     getEstimatedFLA(): number;
@@ -185,19 +185,19 @@ export declare class Motor {
      *
      * @param lineFrequency LineFrequency, line frequency classification of the motor in Hz
      *
-     * @param motorRatedPower double, rated power of the motor in hp
+     * @param motorRatedPower Rated motor power, units hp.
      *
-     * @param motorRpm double, RPM of the motor
+     * @param motorRpm Motor speed, units rpm.
      *
      * @param efficiencyClass MotorEfficiencyClass, efficiency class of the motor
      *
-     * @param specifiedEfficiency double, specified % Efficiency of motor, unused unless efficiency class is SPECIFIED
+     * @param specifiedEfficiency Specified motor efficiency, dimensionless fraction.
      *
-     * @param motorRatedVoltage double, motor nameplate design voltage in volts
+     * @param motorRatedVoltage Motor nameplate voltage, units V.
      *
-     * @param fullLoadAmps double, current at full load in amps
+     * @param fullLoadAmps Full-load current, units A.
      *
-     * @param sizeMargin double, size margin as defined in %
+     * @param sizeMargin Size margin, units %.
      *
      */
     constructor(
@@ -221,18 +221,18 @@ export declare class MotorCurrent {
     /**
      * Constructor for calculating the motor current based on various parameters.
      *
-     * @param motorRatedPower double, Rated power of motor in hp
+     * @param motorRatedPower Rated motor power, units hp.
      *
-     * @param motorRPM double, RPM of motor.
+     * @param motorRPM Motor speed, units rpm.
      *
      * @param lineFrequency Motor::LineFrequency, classification of line Frequency of motor in Hz
      *
      * @param efficiencyClass Motor::EfficiencyClass, Efficiency class of motor.
-     * @param specifiedEfficiency double, Specified efficiency of motor when the efficiency class = SPECIFIED as %
+     * @param specifiedEfficiency Specified motor efficiency, dimensionless fraction.
      *
-     * @param loadFactor double, load factor - unitless
+     * @param loadFactor Load factor, dimensionless fraction.
      *
-     * @param ratedVoltage double, Rated voltage of the motor in Volts
+     * @param ratedVoltage Rated motor voltage, units V.
      *
      */
     constructor(
@@ -247,9 +247,9 @@ export declare class MotorCurrent {
     /**
      * calculates the motor current at a given load factor.
      *
-     * @param fullLoadAmps double, Current at full load in Amps
+     * @param fullLoadAmps Full-load current, units A.
      *
-     * @returns double, motor current in amps
+     * @returns Motor current, units A.
      *
      */
     calculateCurrent(fullLoadAmps: number): number;
@@ -264,15 +264,15 @@ export declare class MotorCurrent {
 export declare class MotorPowerFactor {
     /**
      * Constructor
-     * @param motorRatedPower double, Rated Power of motor in hp
+     * @param motorRatedPower Rated motor power, units hp.
      *
-     * @param loadFactor double, load factor - unitless
+     * @param loadFactor Load factor, dimensionless fraction.
      *
-     * @param motorCurrent double, current of motor in A
+     * @param motorCurrent Motor current, units A.
      *
-     * @param motorEfficiency double, motor efficiency as %
+     * @param motorEfficiency Motor efficiency, dimensionless fraction.
      *
-     * @param ratedVoltage double, rated voltage as V
+     * @param ratedVoltage Rated motor voltage, units V.
      *
      */
     constructor(
@@ -283,9 +283,9 @@ export declare class MotorPowerFactor {
         ratedVoltage: number );
 
     /**
-     * Calculates the motor power factor
+     * Calculates the motor power factor.
      *
-     * @returns double, power factor - unitless
+     * @returns Motor power factor, dimensionless.
      *
      */
     calculate(): number;
@@ -297,25 +297,28 @@ export declare class MotorPowerFactor {
 /**
  * Result object returned by {@link MotorPerformance.calculate}.
  *
- * @property current double, motor current in A
- * @property efficiency double, motor efficiency as decimal
- * @property powerFactor double, motor power factor (unitless)
+ * @property current Motor current, units A.
+ * @property efficiency Motor efficiency, dimensionless fraction.
+ * @property powerFactor Motor power factor, dimensionless.
  */
 export declare class MotorPerformanceOutput {
     /**
      * Constructor for the MotorPerformanceOutput class, which initializes the output with various parameters.
      *
-     * @param current
+     * @param current Motor current, units A.
      *
-     * @param efficiency
+     * @param efficiency Motor efficiency, dimensionless fraction.
      *
-     * @param powerFactor
+     * @param powerFactor Motor power factor, dimensionless.
      *
      */
     constructor(current: number, efficiency: number, powerFactor: number);
 
+    /** motor current units A. */
     current: number;
+    /** Motor efficiency, dimensionless fraction. */
     efficiency: number;
+    /** Motor power factor, dimensionless. */
     powerFactor: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
@@ -331,19 +334,19 @@ export declare class MotorPerformance {
      *
      * @param lineFrequency Motor::LineFrequency, classification of line frequency in Hz
      *
-     * @param motorRpm double, RPM of motor
+     * @param motorRpm Motor speed, units rpm.
      *
      * @param efficiencyClass Motor::EfficiencyClass, efficiency class of motor
      *
-     * @param motorRatedPower double, rated power of motor in hp
+     * @param motorRatedPower Rated motor power, units hp.
      *
-     * @param specifiedEfficiency double, Specified efficiency of motor when the efficiency class = SPECIFIED as %
+     * @param specifiedEfficiency Specified motor efficiency, dimensionless fraction.
      *
-     * @param loadFactor double, load factor - unitless
+     * @param loadFactor Load factor, dimensionless fraction.
      *
-     * @param ratedVoltage double, Rated voltage of the motor in Volts
+     * @param ratedVoltage Rated motor voltage, units V.
      *
-     * @param fullLoadAmps double, current at full load in Amps
+     * @param fullLoadAmps Full-load current, units A.
      *
      */
     constructor(
@@ -357,9 +360,9 @@ export declare class MotorPerformance {
         fullLoadAmps: number);
 
     /**
-     * Calculates the overall motor performance based on the input parameters and returns a MotorPerformanceOutput object containing the calculated current, efficiency, and power factor.
+     * Calculates the overall motor performance based on the input parameters and returns a MotorPerformanceOutput object containing the calculated current, efficiency, and power factor, dimensionless.
      *
-     * @returns {@link MotorPerformanceOutput}, an object containing the calculated current, efficiency, and power factor of the motor.
+     * @returns {@link MotorPerformanceOutput}, an object containing the calculated current, efficiency, and power factor, dimensionless of the motor.
      *
      */
     calculate(): MotorPerformanceOutput;
