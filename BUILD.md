@@ -179,17 +179,26 @@ Artifacts appear under `bin/`
 
 ### 6.5 WebAssembly Usage Example
 
-```js
-// Initialize module
-const moduleFactory = (await import('/path/to/client.js')).default;
-const toolsSuiteModule = await moduleFactory({
+```ts
+import createModule, { type MeasurToolsSuite } from 'measur-tools-suite';
+
+const toolsSuiteModule: MeasurToolsSuite = await createModule({
 	locateFile: (filename) => '/path/to/client.wasm'
 });
 
-// Example call
+// Example 1: wallTotalHeatLoss — returns a number directly
 const totalHeatLoss = toolsSuiteModule.wallTotalHeatLoss(
 	500, 80, 225, 10, 0.9, 1.394, 1
 );
+console.log('Wall total heat loss:', totalHeatLoss);
+
+// Example 2: DryerOperatingCost — class-based API
+// Always call delete() on class instances and output objects to free WASM memory
+const doc = new toolsSuiteModule.DryerOperatingCost(1752, 50, 100, 24, 7, 52, 0.08, 0.2, 0.25);
+const res = doc.calculate(toolsSuiteModule.DryerType.Heatless);
+console.log('DryerOperatingCost => Water removed:', res.waterRemoved);
+res.delete();
+doc.delete();
 ```
 
 ### 6.6 WebAssembly Tests (Browser)
