@@ -1,0 +1,43 @@
+/**
+ * @defgroup modulation_without_unload_compressor_assessment Modulation Without Unload Compressor Assessment
+ * @ingroup compressor_modeling
+ * @brief Compressor model for modulating control that does not unload.
+ * @details The final output is calculated package power and airflow at the requested point.
+ *          The model follows a power law between no-load and full-load power. When used as a
+ *          helper inside the load/unload model, the `without unload` flag is false and the
+ *          curve is anchored by the maximum modulating power floor instead.
+ *
+ * @heading{Power and Airflow Fractions}
+ * @copydoc modulation_without_unload_formula
+ */
+
+/**
+ * @defgroup modulation_without_unload_formula Modulation Without Unload Formula
+ * @ingroup modulation_without_unload_compressor_assessment
+ * @brief Power-law relationship between airflow fraction and power.
+ *
+ * @formula{mod-without-unload-power-from-airflow;
+ *   P = (P_{FL} - P_{NL})f_Q^m + P_{NL}
+ * }
+ * @formula{mod-without-unload-airflow-from-power;
+ *   Q = Q_{FL}\left(\frac{f_PP_{FL} - P_{NL}}{P_{FL} - P_{NL}}\right)^{1/m}
+ * }
+ *
+ * For helper mode, the power floor is the maximum modulating power:
+ * @formula{mod-without-unload-helper;
+ *   P = (P_{NL} - P_{max,mod})f_Q^m + P_{max,mod}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{P; Calculated package power; \kilo\watt}
+ * @symrow{Q; Calculated airflow; \acfm}
+ * @symrow{P_{FL}; Full-load package power; \kilo\watt}
+ * @symrow{Q_{FL}; Full-load airflow; \acfm}
+ * @symrow{P_{NL}; No-load package power; \kilo\watt}
+ * @symrow{P_{max,mod}; Maximum modulating power floor; \kilo\watt}
+ * @symrow{f_P; Fraction of full-load power; \unitless}
+ * @symrow{f_Q; Fraction of full-load airflow; \unitless}
+ * @symrow{m; Modulation exponent; \unitless}
+ * @endsymtable
+ */

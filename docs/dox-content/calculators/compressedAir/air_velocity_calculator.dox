@@ -1,6 +1,6 @@
 /**
  * @defgroup air_velocity_calculator Air Velocity Calculator
- * @ingroup compressed_air_assessments
+ * @ingroup compressed_air_calculators
  * @brief Calculates compressed air velocity through standard nominal pipe sizes.
  * @details This calculator estimates compressed air velocity for each supported
  *          nominal pipe size using free-air flow, line pressure, atmospheric pressure,

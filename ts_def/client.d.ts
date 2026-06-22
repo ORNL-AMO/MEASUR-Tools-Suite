@@ -2,13 +2,21 @@ export * from "./ts_def_modules/binding/registered_vectors";
 
 export * from "./ts_def_modules/compressedAir/compressedAir";
 export * from "./ts_def_modules/compressedAir/compressed_air_utils";
-export * from "./ts_def_modules/compressedAir/compressorsCalc";
 export * from "./ts_def_modules/compressedAir/dryer_operating_cost";
 export * from "./ts_def_modules/compressedAir/operating_cost";
 export * from "./ts_def_modules/compressedAir/pipe_sizing";
 export * from "./ts_def_modules/compressedAir/pneumatic_air_requirement";
 export * from "./ts_def_modules/compressedAir/pneumatic_valve";
 export * from "./ts_def_modules/compressedAir/receiver_tank";
+
+export * from "./ts_def_modules/compressedAir/assessment/compressor";
+export * from "./ts_def_modules/compressedAir/assessment/compressor_catalog";
+export * from "./ts_def_modules/compressedAir/assessment/compressor_eem";
+export * from "./ts_def_modules/compressedAir/assessment/centrifugal_compressor";
+export * from "./ts_def_modules/compressedAir/assessment/load_unload_compressor";
+export * from "./ts_def_modules/compressedAir/assessment/modulation_without_unload_compressor";
+export * from "./ts_def_modules/compressedAir/assessment/start_stop_compressor";
+export * from "./ts_def_modules/compressedAir/assessment/vfd_compressor";
 
 export * from "./ts_def_modules/compressedAir/leak_survey/bag_method";
 export * from "./ts_def_modules/compressedAir/leak_survey/compressed_air_leak_survey";
@@ -107,13 +115,19 @@ export type MeasurToolsSuite =
     // compressedAir
     import("./ts_def_modules/compressedAir/compressedAir").CompressedAirModule &
     import("./ts_def_modules/compressedAir/compressed_air_utils").CompressedAirUtilsModule &
-    import("./ts_def_modules/compressedAir/compressorsCalc").CompressorsCalcModule &
     import("./ts_def_modules/compressedAir/dryer_operating_cost").DryerOperatingCostModule &
     import("./ts_def_modules/compressedAir/operating_cost").OperatingCostModule &
     import("./ts_def_modules/compressedAir/pipe_sizing").PipeSizingModule &
     import("./ts_def_modules/compressedAir/pneumatic_air_requirement").PneumaticAirRequirementModule &
     import("./ts_def_modules/compressedAir/pneumatic_valve").PneumaticValveModule &
     import("./ts_def_modules/compressedAir/receiver_tank").ReceiverTankModule &
+    import("./ts_def_modules/compressedAir/assessment/compressor").CompressorAssessmentSharedModule &
+    import("./ts_def_modules/compressedAir/assessment/compressor_eem").CompressorEemModule &
+    import("./ts_def_modules/compressedAir/assessment/centrifugal_compressor").CentrifugalCompressorModule &
+    import("./ts_def_modules/compressedAir/assessment/load_unload_compressor").LoadUnloadCompressorModule &
+    import("./ts_def_modules/compressedAir/assessment/modulation_without_unload_compressor").ModulationWithoutUnloadCompressorModule &
+    import("./ts_def_modules/compressedAir/assessment/start_stop_compressor").StartStopCompressorModule &
+    import("./ts_def_modules/compressedAir/assessment/vfd_compressor").VfdCompressorModule &
     // compressedAir/leak_survey
     import("./ts_def_modules/compressedAir/leak_survey/bag_method").BagMethodModule &
     import("./ts_def_modules/compressedAir/leak_survey/compressed_air_leak_survey").CompressedAirLeakSurveyModule &

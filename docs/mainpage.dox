@@ -19,6 +19,8 @@
  *   - @ref heat_loss_calculators
  *   - @ref process_heat_calculators
  * - @ref compressed_air_assessments
+ *   - @ref compressed_air_calculators
+ *   - @ref compressor_modeling
  * - @ref fan_system_assessments
  * - @ref process_cooling_assessments
  * - @ref pumping_system_assessments
@@ -35,6 +37,21 @@
  * that help users analyze energy use and savings opportunities in industrial compressed air systems. They can baseline
  * existing and model future system operations improvements, and evaluate energy and dollar savings from many energy
  * efficiency measures.
+ *
+ * @defgroup compressed_air_calculators Compressed Air Calculators
+ * @ingroup compressed_air_assessments
+ * @brief Stand-alone compressed air calculators for sizing, storage, velocity, operating cost, pneumatic demand, and leak surveys.
+ *
+ * The Compressed Air Calculators module provides focused stand-alone calculations for compressed air system sizing,
+ * storage, velocity, pneumatic demand, operating cost, pipe properties, and leak survey methods. These calculators
+ * support targeted engineering questions and can be used independently from the larger compressor modeling workflow.
+ *
+ * @defgroup compressor_modeling Compressor Modeling
+ * @ingroup compressed_air_assessments
+ * @brief Compressor assessment models and supporting catalog, control, and energy efficiency measure topics.
+ *
+ * Compressor Modeling collects the assessment-oriented compressor performance models and supporting content in
+ * `compressedAir/assessment/`.
  *
  * @defgroup fan_system_assessments Fan System Assessments
  *

@@ -1,6 +1,6 @@
 /**
  * @defgroup orifice_method_calculator Orifice Method Calculator
- * @ingroup compressed_air_assessments
+ * @ingroup compressed_air_calculators
  * @brief Estimates compressed air leak flow rate and annual consumption using orifice pressure
  *        and geometry measurements.
  * @details This calculator implements the orifice method, which treats a compressed air leak

@@ -1,0 +1,43 @@
+/**
+ * @defgroup compressor_catalog_units Compressor Catalog Units
+ * @ingroup compressor_modeling
+ * @brief Field units for the passive compressor catalog records.
+ * @details `CompressorCatalogRecord` is a passive value object returned by `DefaultData`.
+ *          The catalog travels with the assessment models because its records supply control,
+ *          pressure, airflow, and power defaults used to construct assessment calculators.
+ *
+ * @heading{Field Units}
+ * @symtable
+ * @symrow{id; Sequential catalog record identifier; \unitless}
+ * @symrow{compressorTypeId; Compressor type identifier; \unitless}
+ * @symrow{model; Catalog model label; \unitless}
+ * @symrow{horsepower; Rated motor size; \horsepower}
+ * @symrow{ratedCapacityAcfm; Rated compressor capacity; \acfm}
+ * @symrow{ratedPressurePsig; Rated discharge pressure; \psig}
+ * @symrow{maxFullFlowPressurePsig; Maximum full-flow pressure; \psig}
+ * @symrow{controlTypeId; Control type identifier; \unitless}
+ * @symrow{unloadPointPercent; Unload point; \percent}
+ * @symrow{minUnloadSumpPressurePsig; Minimum unload sump pressure; \psig}
+ * @symrow{blowdownTimeSec; Blowdown time; \second}
+ * @symrow{unloadSteps; Number of unload steps; \unitless}
+ * @symrow{modulatingPressureRangePsig; Modulating pressure range; \psig}
+ * @symrow{fullLoadBhpPowerKw; Full-load brake-horsepower equivalent power; \kilo\watt}
+ * @symrow{totalPackageInputPowerKw; Total package input power; \kilo\watt}
+ * @symrow{specificPackagePower; Specific package power; \kilo\watt\per\acfm}
+ * @symrow{noLoadPowerFullyModulating; No-load fully modulating power fraction; \unitless}
+ * @symrow{noLoadPowerUnload; No-load unload power fraction; \unitless}
+ * @symrow{maxSurgePressurePsig; Maximum surge pressure; \psig}
+ * @symrow{maxSurgePressureFlowAcfm; Flow at maximum surge pressure; \acfm}
+ * @symrow{minStonewallPressurePsig; Minimum stonewall pressure; \psig}
+ * @symrow{minStonewallPressureFlowAcfm; Flow at minimum stonewall pressure; \acfm}
+ * @symrow{designSurgeFlowAcfm; Design surge flow; \acfm}
+ * @symrow{designInletTemperatureF; Design inlet temperature; \degreeFahrenheit}
+ * @symrow{designInletPressurePsia; Design inlet pressure; \psia}
+ * @symrow{fullLoadAmps; Full-load current; \ampere}
+ * @symrow{fullLoadEfficiencyPercent; Full-load efficiency; \percent}
+ * @endsymtable
+ *
+ * @note Numeric record IDs are assigned by `DefaultData` after loading each catalog vector.
+ *       The record objects are returned as plain WebAssembly value objects and do not require
+ *       manual deletion; only the vector container requires `delete()`.
+ */

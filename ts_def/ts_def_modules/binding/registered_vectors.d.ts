@@ -9,7 +9,7 @@ import {
     SolidLoadChargeMaterial, WallType
 } from "../databases/default_data";
 import { GasType } from "../motorDriven/fans/fanEnum";
-import { CompressorsData } from "../compressedAir/compressorsCalc";
+import { CompressorCatalogRecord } from "../compressedAir/assessment/compressor_catalog";
 import { CompressedAirLeakSurveyInput } from "../compressedAir/leak_survey/compressed_air_leak_survey";
 import { GasCompositions } from "../physics/gas_compositions";
 import { CalculationsTable } from "../wasteWater/wasteWater";
@@ -70,8 +70,8 @@ export declare interface DoubleVector extends RegisteredVector<number> {}
 /** A vector of {@link DoubleVector} records, mapped from `std::vector<std::vector<number>>`. */
 export declare interface DoubleVector2D extends RegisteredVector<DoubleVector> {}
 
-/** A vector of {@link CompressorsData} records, mapped from `std::vector<CompressorsData>`. */
-export declare interface CompressorsDataV extends RegisteredVector<CompressorsData> {}
+/** A vector of {@link CompressorCatalogRecord} records, mapped from `std::vector<CompressorCatalogRecord>`. */
+export declare interface CompressorCatalogRecordV extends RegisteredVector<CompressorCatalogRecord> {}
 
 /** A vector of {@link CompressedAirLeakSurveyInput} records, mapped from `std::vector<CompressedAirLeakSurveyInput>`. */
 export declare interface CompressedAirLeakSurveyInputV extends RegisteredVector<CompressedAirLeakSurveyInput> {}
@@ -149,7 +149,7 @@ export type RegisteredVectorsModule = {
     DoubleVector: RegisteredVectorConstructor<DoubleVector>;
     DoubleVector2D: RegisteredVectorConstructor<DoubleVector2D>;
 
-    CompressorsDataV: RegisteredVectorConstructor<CompressorsDataV>;
+    CompressorCatalogRecordV: RegisteredVectorConstructor<CompressorCatalogRecordV>;
     CompressedAirLeakSurveyInputV: RegisteredVectorConstructor<CompressedAirLeakSurveyInputV>;
 
     GasLoadChargeMaterialV: RegisteredVectorConstructor<GasLoadChargeMaterialV>;

@@ -1,0 +1,41 @@
+/**
+ * @defgroup start_stop_compressor_assessment Start/Stop Compressor Assessment
+ * @ingroup compressor_modeling
+ * @brief Compressor model for start/stop control.
+ * @details Start/stop control assumes average power is proportional to airflow fraction and
+ *          to the average of full-load and maximum power fractions. Results are reported as
+ *          calculated package power @unitb{\kilo\watt}, airflow @unitb{\acfm}, power fraction,
+ *          and airflow fraction.
+ *
+ * @heading{Start/Stop Power and Airflow}
+ * @copydoc start_stop_formula
+ */
+
+/**
+ * @defgroup start_stop_formula Start/Stop Formula
+ * @ingroup start_stop_compressor_assessment
+ * @brief Average power fraction for start/stop cycling.
+ *
+ * @formula{start-stop-average-fraction;
+ *   f_{avg} = \frac{f_{P,FL} + f_{P,max}}{2}
+ * }
+ * @formula{start-stop-power-from-airflow;
+ *   P = f_{avg} f_Q P_{FL}
+ * }
+ * @formula{start-stop-airflow-from-power;
+ *   Q = Q_{FL}\frac{f_P}{f_{avg}}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{f_{avg}; Average cycling power fraction; \unitless}
+ * @symrow{f_{P,FL}; Full-load power fraction; \unitless}
+ * @symrow{f_{P,max}; Maximum power fraction; \unitless}
+ * @symrow{P; Calculated package power; \kilo\watt}
+ * @symrow{Q; Calculated airflow; \acfm}
+ * @symrow{P_{FL}; Full-load package power; \kilo\watt}
+ * @symrow{Q_{FL}; Full-load airflow; \acfm}
+ * @symrow{f_P; Fraction of full-load power; \unitless}
+ * @symrow{f_Q; Fraction of full-load airflow; \unitless}
+ * @endsymtable
+ */
