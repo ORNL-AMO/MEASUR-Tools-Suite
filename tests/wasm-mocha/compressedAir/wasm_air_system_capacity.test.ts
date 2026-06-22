@@ -1,6 +1,5 @@
 import { assert } from 'chai';
 import createModule, {
-    type AirSystemCapacity,
     type AirSystemCapacityOutput,
     type DoubleVector,
     type MeasurToolsSuite,
@@ -62,18 +61,21 @@ describe('Compressed Air Air System Capacity', function () {
             pipeLengths.twenty, pipeLengths.twentyFour
         );
 
-        const airSystemCapacity: AirSystemCapacity = new moduleInstance.AirSystemCapacity(pipeData, receiverCapacities);
-        const result: AirSystemCapacityOutput = airSystemCapacity.calculate();
+        let result: AirSystemCapacityOutput | undefined;
 
         try {
+            result = moduleInstance.calculateAirSystemCapacity({
+                pipeLengths: pipeData,
+                receivers: receiverCapacities
+            });
             assert.approximately(result.totalPipeVolume, 155.28, 0.01);
             assert.approximately(result.totalReceiverVolume, 350.243236, 0.01);
             assert.approximately(result.totalCapacityOfCompressedAirSystem, 505.523236, 0.01);
         } finally {
-            result.delete();
+            result?.receiverCapacities.delete();
+            result?.pipeLengths.delete();
             receiverCapacities.delete();
             pipeData.delete();
-            airSystemCapacity.delete();
         }
     });
 
@@ -87,10 +89,13 @@ describe('Compressed Air Air System Capacity', function () {
             0, 0, 0, 0, 0, 0, 0, 0
         );
 
-        const airSystemCapacity: AirSystemCapacity = new moduleInstance.AirSystemCapacity(pipeData, receiverCapacities);
-        const result: AirSystemCapacityOutput = airSystemCapacity.calculate();
+        let result: AirSystemCapacityOutput | undefined;
 
         try {
+            result = moduleInstance.calculateAirSystemCapacity({
+                pipeLengths: pipeData,
+                receivers: receiverCapacities
+            });
             assert.approximately(result.pipeLengths.oneHalf, 6.3, 0.01);
             assert.approximately(result.pipeLengths.threeFourths, 7.4, 0.01);
             assert.approximately(result.pipeLengths.one, 6, 0.01);
@@ -104,10 +109,10 @@ describe('Compressed Air Air System Capacity', function () {
             assert.approximately(result.pipeLengths.five, 0, 0.01);
             assert.approximately(result.pipeLengths.six, 0, 0.01);
         } finally {
-            result.delete();
+            result?.receiverCapacities.delete();
+            result?.pipeLengths.delete();
             receiverCapacities.delete();
             pipeData.delete();
-            airSystemCapacity.delete();
         }
     });
 
@@ -121,24 +126,27 @@ describe('Compressed Air Air System Capacity', function () {
             0, 0, 0, 0, 0, 0, 0, 0
         );
 
-        const airSystemCapacity: AirSystemCapacity = new moduleInstance.AirSystemCapacity(pipeData, receiverCapacities);
-        const result: AirSystemCapacityOutput = airSystemCapacity.calculate();
-
-        const resultReceiverCapacities: number[] = [];
-        for (let i = 0; i < result.receiverCapacities.size(); i++) {
-            resultReceiverCapacities.push(result.receiverCapacities.get(i));
-        }
+        let result: AirSystemCapacityOutput | undefined;
 
         try {
+            result = moduleInstance.calculateAirSystemCapacity({
+                pipeLengths: pipeData,
+                receivers: receiverCapacities
+            });
+            const resultReceiverCapacities: number[] = [];
+            for (let i = 0; i < result.receiverCapacities.size(); i++) {
+                resultReceiverCapacities.push(result.receiverCapacities.get(i));
+            }
+
             assert.approximately(resultReceiverCapacities[0], 53.475936, 0.01);
             assert.approximately(resultReceiverCapacities[1], 66.84492, 0.01);
             assert.approximately(resultReceiverCapacities[2], 88.235294, 0.01);
             assert.approximately(resultReceiverCapacities[3], 141.71123, 0.01);
         } finally {
-            result.delete();
+            result?.receiverCapacities.delete();
+            result?.pipeLengths.delete();
             receiverCapacities.delete();
             pipeData.delete();
-            airSystemCapacity.delete();
         }
     });
 });

@@ -1,0 +1,92 @@
+/**
+ * @defgroup compressed_air_pipe_data Compressed Air Pipe Data
+ * @ingroup compressed_air_assessments
+ * @brief Shared nominal pipe-size data used by air system capacity and velocity calculations.
+ * @details The shared `PipeData` shape stores one value for each supported nominal pipe
+ *          size. The stored value depends on the calculation context:
+ *
+ * - In the air system capacity calculation, each value is contained pipe volume in ft3.
+ * - In the air velocity calculation, each value is calculated air velocity in ft/s.
+ *
+ * The tables below document the implementation coefficients used to convert pipe
+ * lengths to contained volume and to evaluate velocity by nominal pipe size.
+ *
+ * @heading{Pipe Volume}
+ * @copydoc pipe_data_volume_formula
+ *
+ * @heading{Total Pipe Volume}
+ * @copydoc pipe_data_total_volume_formula
+ *
+ * @heading{Implementation Tables}
+ * @copydoc pipe_data_implementation_tables
+ */
+
+/**
+ * @defgroup pipe_data_volume_formula Pipe Volume Formula
+ * @ingroup compressed_air_pipe_data
+ * @brief Contained pipe volume for one nominal pipe size.
+ * @details The length constructor multiplies each entered pipe length by a
+ *          per-foot volume coefficient for that nominal pipe size.
+ *
+ * @formula{pipe-data-volume;
+ *   V_i = L_i \cdot c_i
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{V_i; Contained pipe volume for nominal size i; \cubicFoot}
+ * @symrow{L_i; Installed pipe length for nominal size i; \foot}
+ * @symrow{c_i; Pipe volume coefficient for nominal size i; \cubicFoot\per\foot}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup pipe_data_total_volume_formula Total Pipe Volume Formula
+ * @ingroup compressed_air_pipe_data
+ * @brief Total contained pipe volume across all supported nominal pipe sizes.
+ * @details The total pipe volume is the sum of the per-size volumes calculated by
+ *          @ref pipe_data_volume_formula.
+ *
+ * @formula{pipe-data-total-volume;
+ *   V_{pipe,total} = \sum_i V_i
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{V_{pipe,total}; Total contained pipe volume; \cubicFoot}
+ * @symrow{V_i; Contained pipe volume for nominal size i; \cubicFoot}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup pipe_data_implementation_tables Pipe Data Implementation Tables
+ * @ingroup compressed_air_pipe_data
+ * @brief Coefficients and internal areas used by the shared pipe data implementation.
+ * @details The volume coefficients are used by the length constructor. The internal
+ *          areas are passed to the air velocity formula. The existing source does
+ *          not identify the external standard behind these values, so they are
+ *          documented here as implementation tables.
+ *
+ * | Nominal pipe size | Volume coefficient @unitb{\cubicFoot\per\foot} | Internal area @unitb{\inch\squared} |
+ * | --- | ---: | ---: |
+ * | 1/2 in | 0.0021 | 0.3 |
+ * | 3/4 in | 0.0037 | 0.53 |
+ * | 1 in | 0.006 | 0.86 |
+ * | 1-1/4 in | 0.0104 | 1.5 |
+ * | 1-1/2 in | 0.0141 | 2.04 |
+ * | 2 in | 0.0233 | 3.36 |
+ * | 2-1/2 in | 0.0333 | 4.79 |
+ * | 3 in | 0.0513 | 7.39 |
+ * | 3-1/2 in | 0.0687 | 9.89 |
+ * | 4 in | 0.0884 | 12.73 |
+ * | 5 in | 0.1389 | 20 |
+ * | 6 in | 0.2006 | 28.89 |
+ * | 8 in | 0.3442 | 50.02 |
+ * | 10 in | 0.5476 | 78.85 |
+ * | 12 in | 0.7763 | 111.9 |
+ * | 14 in | 0.9354 | 135.3 |
+ * | 16 in | 1.223 | 176.7 |
+ * | 18 in | 1.555 | 224 |
+ * | 20 in | 1.926 | 278 |
+ * | 24 in | 2.793 | 402.10 |
+ */

@@ -7,6 +7,7 @@ Use [../AGENTS.md](../AGENTS.md) as the source of truth for repository-wide agen
 - Follow [../ARCHITECTURE.md](../ARCHITECTURE.md) for module boundaries and repository layout.
 - Follow [../contributing/style-guide.md](../contributing/style-guide.md) for C++ implementation style.
 - Follow [../contributing/documentation.md](../contributing/documentation.md) for Doxygen and `.dox` documentation.
+- For persona-driven namespace refactors and algorithm docs, follow [../.agents/README.md](../.agents/README.md).
 - Keep C++ source, WebAssembly bindings, TypeScript declarations, and tests synchronized.
 - Prefer established examples in `processHeat/`, `bindings-wasm/`, and `tests/wasm-mocha/`.
 

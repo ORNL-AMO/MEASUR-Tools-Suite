@@ -7,6 +7,7 @@ Follow the canonical repository instructions in [../AGENTS.md](../AGENTS.md). Do
 - Read [../ARCHITECTURE.md](../ARCHITECTURE.md) before broad edits.
 - Read [../BUILD.md](../BUILD.md) before changing build, package, WASM, or test workflows.
 - Follow [../contributing/style-guide.md](../contributing/style-guide.md) and [../contributing/documentation.md](../contributing/documentation.md).
+- For persona-driven namespace refactors and algorithm docs, follow [../.agents/README.md](../.agents/README.md).
 - For TypeScript WASM tests, follow [../tests/wasm-mocha/README.md](../tests/wasm-mocha/README.md).
 
 ## Claude Workflow Notes
