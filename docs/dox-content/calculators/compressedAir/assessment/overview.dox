@@ -1,17 +1,18 @@
 /**
  * @defgroup compressor_modeling_overview Compressor Modeling Overview
- * @ingroup compressor_modeling
- * @brief Shared compressor modeling result definitions, electrical input conversion, and pressure/inlet correction.
- * @details The compressor assessment modules estimate compressor package power and airflow for
- *          centrifugal, modulation, start/stop, load/unload, and variable-frequency-drive
- *          compressor controls. The public results are intentionally reported first:
+ * @ingroup compressor_assessment_modeling
+ * @brief Shared compressor modeling outputs, electrical measurement conversion, and pressure/inlet correction.
+ * @details The compressor assessment models estimate two practical operating quantities:
+ *          how much electrical power a compressor package uses and how much compressed air it
+ *          delivers. The same result format is used for centrifugal, modulation, start/stop,
+ *          load/unload, and variable-frequency-drive controls. Results are reported as
  *          calculated package power @unitb{\kilo\watt}, calculated airflow @unitb{\acfm},
  *          power fraction @unitb{\unitless}, and airflow fraction @unitb{\unitless}.
  *
- * These models are part of a larger compressed-air assessment workflow. They preserve the
- * legacy numerical behavior while exposing namespaced C++ modules, one WebAssembly binding
- * per logical calculator, passive value-object results, and TypeScript declarations with
- * explicit units.
+ * A fraction is the operating value divided by the full-load reference value. For example,
+ * a power fraction of 0.75 means the compressor is using 75 percent of its full-load
+ * package power, and an airflow fraction of 0.60 means it is delivering 60 percent of
+ * its full-load airflow.
  *
  * @heading{Common Result Definitions}
  * @copydoc compressor_assessment_result_formula
@@ -26,10 +27,11 @@
 /**
  * @defgroup compressor_assessment_result_formula Compressor Assessment Result Formula
  * @ingroup compressor_modeling_overview
- * @brief Common result reconstruction from fractions.
- * @details Each control model first determines the power and airflow fractions for the requested
- *          input basis. The final reported power and airflow are then reconstructed from the
- *          full-load reference values.
+ * @brief Converting operating fractions into package power and delivered airflow.
+ * @details Each compressor control model first finds the operating point as a fraction of
+ *          full load. The final reported power and airflow are found by multiplying those
+ *          fractions by the full-load package power and full-load airflow. This keeps the
+ *          control-specific part of each model focused on the shape of the compressor curve.
  *
  * @formula{compressor-assessment-result-power;
  *   P_{calc} = f_P \cdot P_{FL}
@@ -52,10 +54,12 @@
 /**
  * @defgroup compressor_assessment_electrical_formula Compressor Assessment Electrical Formula
  * @ingroup compressor_modeling_overview
- * @brief Three-phase electrical input conversion used by measured electrical methods.
- * @details Methods named `calculateFromElectrical` convert voltage, current, and power factor
- *          to measured package power before applying the same model-specific measured-power
- *          path. The constant 1.732 is the square root of three rounded to the legacy value.
+ * @brief Three-phase electrical measurement conversion.
+ * @details When field data are supplied as line voltage, current, and power factor, the
+ *          first step is to convert those electrical measurements into package power. The
+ *          compressor model then treats that power in the same way it would treat a measured
+ *          kilowatt value. The constant 1.732 is the square root of three rounded to the
+ *          value used by the original assessment method.
  *
  * @formula{compressor-assessment-electrical-power;
  *   P_{meas} = \frac{V \cdot I \cdot PF \cdot 1.732}{1000}
@@ -76,10 +80,13 @@
  * @defgroup compressor_assessment_pressure_inlet_formula Compressor Assessment Pressure Inlet Correction
  * @ingroup compressor_modeling_overview
  * @brief Shared pressure and inlet correction for non-centrifugal models.
- * @details The pressure/inlet correction updates full-load and maximum power/airflow before
- *          model evaluation. Centrifugal compressor models use their discharge-pressure curve
- *          adjustment instead. For screw compressors the rated inlet pressure is used as the
- *          pressure-ratio base; otherwise atmospheric pressure is used.
+ * @details Compressor power and capacity change when discharge pressure, inlet pressure, and
+ *          site atmospheric pressure differ from the rated conditions. Before the operating
+ *          point is evaluated, the assessment adjusts the full-load reference power and
+ *          airflow to reflect those conditions. Centrifugal compressors use a separate
+ *          discharge-pressure curve. For screw compressors, the rated inlet pressure is used
+ *          as the pressure-ratio base; for other compressor types, atmospheric pressure is
+ *          used as the base.
  *
  * @formula{compressor-assessment-pressure-power;
  *   P_{adj} =
@@ -95,7 +102,8 @@
  *        {\left(\frac{P_{rated} + P_{in,rated}}{P_{in,rated}}\right)^{(n-1)/n} - 1}
  * }
  *
- * When pressure adjustment is enabled, the empirical atmospheric correction factors are:
+ * The empirical atmospheric correction factors are used when the pressure adjustment is
+ * enabled. They account for the effect of site atmospheric pressure on power and airflow:
  * @formula{compressor-assessment-pressure-factor-power;
  *   F_P = -0.0000577P_{atm}^3 + 0.000251P_{atm}^2 + 0.0466P_{atm} + 0.4442
  * }

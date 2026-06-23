@@ -1,9 +1,12 @@
 /**
  * @defgroup compressor_eem_assessment Compressor Energy Efficiency Measures
- * @ingroup compressor_modeling
+ * @ingroup compressor_assessment_modeling
  * @brief Compressor EEM calculations for leaks, end-use efficiency, pressure, set points, and savings.
- * @details EEM functions are stateless free functions. Each function returns the adjusted
- *          airflow, power, energy, or cost value directly as a passive value object.
+ * @details Energy efficiency measure calculations estimate how a proposed compressed-air
+ *          improvement changes airflow, pressure, power, energy, and cost. These calculations
+ *          do not decide whether a measure is practical or appropriate for a site. They
+ *          quantify the expected numerical change after the reduction amount, pressure change,
+ *          or operating schedule has been defined.
  *
  * @heading{Leak Reduction}
  * @copydoc compressor_eem_leak_formula
@@ -25,6 +28,9 @@
  * @defgroup compressor_eem_leak_formula Compressor EEM Leak Reduction Formula
  * @ingroup compressor_eem_assessment
  * @brief Airflow reduction from repairing compressed-air leaks.
+ * @details Leak repair reduces the portion of compressed air that is produced but not used
+ *          by productive equipment. The adjusted use airflow subtracts the repaired leak
+ *          airflow from the baseline use airflow.
  *
  * @formula{compressor-eem-leak-reduced;
  *   Q_{leak,red} = r_{leak}Q_{leak}
@@ -46,6 +52,10 @@
  * @defgroup compressor_eem_end_use_formula Compressor EEM End-Use Efficiency Formula
  * @ingroup compressor_eem_assessment
  * @brief Adjusted use airflow from end-use efficiency improvements.
+ * @details End-use improvements reduce the amount of compressed air required by tools,
+ *          processes, or equipment. The model subtracts the average airflow reduction from
+ *          the baseline use airflow and then expresses the result as a share of full-load
+ *          compressor airflow.
  *
  * @formula{compressor-eem-end-use;
  *   Q_{use,adj} = Q_{use} - Q_{red}
@@ -66,9 +76,13 @@
  * @defgroup compressor_eem_pressure_formula Compressor EEM Pressure Formula
  * @ingroup compressor_eem_assessment
  * @brief Adjusted power and use airflow after pressure changes.
- * @details Pressure-reduction and cascading-set-point calculations use the same adjusted
- *          power and airflow equations. The exponent 0.283 is the legacy pressure-power
- *          relationship retained by this assessment.
+ * @details Lower discharge pressure usually reduces both compressor power and compressed-air
+ *          use. The power equation estimates how full-load package power changes with the
+ *          absolute pressure ratio. The airflow equation applies the assessment pressure-flow
+ *          response factor, which assumes part of the connected demand falls as pressure is
+ *          reduced. Pressure-reduction and cascading-set-point measures use the same
+ *          equations. The exponent 0.283 is the retained assessment pressure-power
+ *          relationship.
  *
  * @formula{compressor-eem-pressure-power;
  *   P_{adj} = P_{FL}
@@ -96,10 +110,11 @@
 /**
  * @defgroup compressor_eem_profile_transform_formula Compressor EEM Profile Transform Formula
  * @ingroup compressor_eem_assessment
- * @brief Reusable pressure, receiver, and automatic sequencer transforms for profile EEMs.
- * @details The pressure-reduced airflow helper is shared by profile-level pressure EEMs.
- *          Receiver-volume and automatic-sequencer helpers return the numerical values that
- *          Desktop applies to form state and then passes back into profile calculations.
+ * @brief Pressure, receiver, and automatic sequencer transforms for profile EEMs.
+ * @details Profile-level pressure measures use the same pressure-reduced airflow relationship
+ *          as scalar pressure measures. Adding receiver volume increases the total storage
+ *          volume by the added amount. Automatic sequencer settings create a lower and upper
+ *          pressure target around the desired system target pressure.
  *
  * @formula{compressor-eem-pressure-reduced-airflow;
  *   Q_{adj} = Q_{use} -
@@ -137,6 +152,9 @@
  * @defgroup compressor_eem_savings_formula Compressor EEM Savings Formula
  * @ingroup compressor_eem_assessment
  * @brief Demand, energy, and cost savings from reduced discharge pressure.
+ * @details Demand savings are the difference between baseline power and modified power.
+ *          Annual energy savings are demand savings multiplied by annual operating hours.
+ *          Annual cost savings are energy savings multiplied by the electricity price.
  *
  * @formula{compressor-eem-power-savings;
  *   P_{save} = P_{base} - P_{mod}

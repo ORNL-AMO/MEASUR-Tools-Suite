@@ -1,11 +1,14 @@
 /**
- * @defgroup vfd_compressor_assessment Variable Frequency Drive Compressor Assessment
- * @ingroup compressor_modeling
+ * @defgroup vfd_compressor_assessment Variable Frequency Drive Compressor
+ * @ingroup compressor_control_models
  * @brief Compressor model for variable frequency drive control.
- * @details The VFD model reports calculated package power and airflow from a curve defined by
- *          no-load, turndown, mid-turndown, and full-load points. Below turndown airflow it
- *          uses a linear segment from no-load to turndown. From turndown to full load it fits
- *          a second-order curve through the turndown, mid-turndown, and full-load points.
+ * @details A variable frequency drive changes compressor speed to match demand. Because speed
+ *          changes affect both flow and power, the model uses a compressor performance curve
+ *          rather than a straight line from no load to full load. The curve is defined by
+ *          no-load, turndown, mid-turndown, and full-load points. Below turndown airflow, the
+ *          model uses a straight segment from no load to turndown. From turndown to full load,
+ *          it uses a smooth second-order curve through the turndown, mid-turndown, and
+ *          full-load points.
  *
  * @heading{VFD Piecewise Curve}
  * @copydoc vfd_compressor_formula
@@ -15,9 +18,10 @@
  * @defgroup vfd_compressor_formula VFD Compressor Formula
  * @ingroup vfd_compressor_assessment
  * @brief Piecewise VFD airflow-power curve.
- * @details Capacity-based inputs evaluate the power fraction directly from the airflow
- *          fraction. Power-based inputs invert the same curve, returning zero airflow
- *          and zero power when the requested power is below the no-load power.
+ * @details When the known quantity is airflow, the model reads the matching power fraction
+ *          from the curve. When the known quantity is power, the model works backward along
+ *          the same curve to estimate airflow. If the requested power is below the no-load
+ *          power, the compressor is treated as producing no useful airflow.
  *
  * @formula{vfd-piecewise-power;
  *   f_P =

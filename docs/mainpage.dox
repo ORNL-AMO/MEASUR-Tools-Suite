@@ -29,6 +29,9 @@
  * - @ref compressed_air_assessments
  *   - @ref compressed_air_calculators
  *   - @ref compressor_modeling
+ *     - @ref compressor_assessment_modeling
+ *     - @ref compressor_control_models
+ *     - @ref compressor_modeling_utilities
  * - @ref fan_system_assessments
  * - @ref process_cooling_assessments
  * - @ref pumping_system_assessments
@@ -57,10 +60,35 @@
  *
  * @defgroup compressor_modeling Compressor Modeling
  * @ingroup compressed_air_assessments
- * @brief Compressor assessment models and supporting catalog, control, and energy efficiency measure topics.
+ * @brief Compressor assessment workflow models, compressor control models, and supporting utility topics.
  *
  * Compressor Modeling collects the assessment-oriented compressor performance models and supporting content in
- * `compressedAir/assessment/`.
+ * `compressedAir/assessment/`. The topic is organized into three navigation groups:
+ * - @ref compressor_assessment_modeling for the overall assessment workflow, system profiles, and EEM savings logic.
+ * - @ref compressor_control_models for the individual compressor control models.
+ * - @ref compressor_modeling_utilities for performance-point generation and catalog units.
+ *
+ * @defgroup compressor_assessment_modeling Assessment Modeling
+ * @ingroup compressor_modeling
+ * @brief Overall compressed-air assessment workflow, profile allocation, and EEM savings documentation.
+ *
+ * Assessment Modeling explains how individual compressor results are assembled into baseline and adjusted system
+ * profiles, how airflow demand is allocated across multiple compressors, and how energy efficiency measures are
+ * translated into energy, cost, and payback results.
+ *
+ * @defgroup compressor_control_models Compressor Models
+ * @ingroup compressor_modeling
+ * @brief Individual compressor control models used to calculate package power and delivered airflow.
+ *
+ * Compressor Models contains the engineering algorithms for centrifugal, load/unload, modulation, start/stop, and
+ * variable-frequency-drive compressor controls.
+ *
+ * @defgroup compressor_modeling_utilities Modeling Utilities
+ * @ingroup compressor_modeling
+ * @brief Supporting compressor assessment utilities, default data, and generated performance points.
+ *
+ * Modeling Utilities contains supporting documentation used by the assessment workflow and compressor model pages,
+ * including generated performance points and compressor catalog units.
  *
  * @defgroup fan_system_assessments Fan System Assessments
  * @brief Fan-system assessment tools for evaluating energy use, operating scenarios, and potential efficiency improvements.

@@ -1,12 +1,15 @@
 /**
- * @defgroup centrifugal_compressor_assessment Centrifugal Compressor Assessment Models
- * @ingroup compressor_modeling
+ * @defgroup centrifugal_compressor_assessment Centrifugal Compressors
+ * @ingroup compressor_control_models
  * @brief Centrifugal load/unload, modulation/unload, and blow-off compressor calculations.
- * @details Centrifugal models return the same standard power and airflow outputs as the shared
- *          assessment result. Blow-off control also returns blow-off airflow and blow-off
- *          fraction. Discharge-pressure adjustment is curve based: a second-order curve is
- *          fitted from catalog capacity and pressure points, then evaluated at the requested
- *          full-load and optional maximum pressure.
+ * @details Centrifugal compressors are modeled with control curves that relate package power
+ *          to useful delivered airflow. The standard results are package power, delivered
+ *          airflow, power fraction, and airflow fraction. Blow-off control also reports the
+ *          airflow being compressed and vented rather than delivered to useful demand.
+ *
+ *          Discharge-pressure adjustment is based on the compressor pressure-capacity curve.
+ *          A smooth second-order curve is fit through the catalog pressure and capacity
+ *          points, then evaluated at the requested full-load and maximum-flow pressures.
  *
  * @heading{Load/Unload}
  * @copydoc centrifugal_load_unload_formula
@@ -22,7 +25,10 @@
  * @defgroup centrifugal_load_unload_formula Centrifugal Load/Unload Formula
  * @ingroup centrifugal_compressor_assessment
  * @brief Linear relationship between no-load and full-load power.
- * @details The load/unload model anchors the curve at no-load power and full-load power.
+ * @details For centrifugal load/unload control, the model treats the operating curve as a
+ *          straight line between no-load power and full-load power. As useful airflow moves
+ *          from zero to full load, the package power moves proportionally between those two
+ *          anchors.
  *
  * @formula{centrifugal-load-unload-airflow-from-power;
  *   f_Q = (f_P - f_{P,NL})\frac{1}{1 - f_{P,NL}}
@@ -43,8 +49,10 @@
  * @defgroup centrifugal_modulation_unload_formula Centrifugal Modulation/Unload Formula
  * @ingroup centrifugal_compressor_assessment
  * @brief Piecewise model through no-load, unload, full-load, and maximum-flow points.
- * @details Power-to-airflow calculations interpolate linearly between no-load and unload
- *          until unload power is reached, then interpolate to the maximum-flow point.
+ * @details Modulation/unload control uses two straight segments. At low power, the model
+ *          interpolates from no-load to the unload point. Above the unload point, it
+ *          interpolates through the higher-flow portion of the curve up to the maximum-flow
+ *          operating point.
  *
  * @formula{centrifugal-mod-unload-low;
  *   f_Q = (f_P - f_{P,NL})\frac{f_{Q,UL}}{f_{P,UL} - f_{P,NL}}
@@ -69,9 +77,11 @@
  * @defgroup centrifugal_blowoff_formula Centrifugal Blow-Off Formula
  * @ingroup centrifugal_compressor_assessment
  * @brief Useful airflow and blow-off airflow for centrifugal blow-off control.
- * @details Below the blow-off power point, useful airflow is the blow-off airflow fraction
- *          minus the specified blow-off fraction. Above that point, useful airflow follows
- *          a linear segment from the blow-off point to full load.
+ * @details Blow-off control keeps the compressor operating while venting part of the
+ *          compressed air. The model separates produced airflow from useful delivered
+ *          airflow. Below the blow-off power point, useful airflow is the produced airflow
+ *          fraction minus the blow-off fraction. Above that point, useful airflow follows a
+ *          straight line from the blow-off point to full load.
  *
  * @formula{centrifugal-blowoff-low;
  *   f_Q = f_{Q,BO} - f_{BO}

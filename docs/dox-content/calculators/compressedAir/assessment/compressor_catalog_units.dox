@@ -1,10 +1,11 @@
 /**
  * @defgroup compressor_catalog_units Compressor Catalog Units
- * @ingroup compressor_modeling
- * @brief Field units for the passive compressor catalog records.
- * @details `CompressorCatalogRecord` is a passive value object returned by `DefaultData`.
- *          The catalog travels with the assessment models because its records supply control,
- *          pressure, airflow, and power defaults used to construct assessment calculators.
+ * @ingroup compressor_modeling_utilities
+ * @brief Field units for compressor catalog records.
+ * @details The compressor catalog is a lookup table of default compressor records. Each
+ *          record supplies the rated size, control type, pressure, airflow, power, and design
+ *          values used to prefill compressor assessment inputs when site-specific data are not
+ *          available. The table below lists the units for each catalog field.
  *
  * @heading{Field Units}
  * @symtable
@@ -37,7 +38,6 @@
  * @symrow{fullLoadEfficiencyPercent; Full-load efficiency; \percent}
  * @endsymtable
  *
- * @note Numeric record IDs are assigned by `DefaultData` after loading each catalog vector.
- *       The record objects are returned as plain WebAssembly value objects and do not require
- *       manual deletion; only the vector container requires `delete()`.
+ * @note Numeric record IDs identify the catalog rows after the default data set is loaded.
+ *       They are identifiers only and do not carry engineering units.
  */

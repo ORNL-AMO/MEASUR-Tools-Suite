@@ -1,15 +1,18 @@
 /**
- * @defgroup load_unload_compressor_assessment Load/Unload Compressor Assessment Model
- * @ingroup compressor_modeling
+ * @defgroup load_unload_compressor_assessment Load/Unload Compressor
+ * @ingroup compressor_control_models
  * @brief Load/unload cycle model for screw and reciprocating compressors.
- * @details The final result is average package power and delivered airflow over a repeating
- *          storage cycle. For an airflow input, the model computes the power of one operating
- *          cycle directly. For a power input, it samples the cycle across 76 airflow points,
- *          fits a sixth-order curve, and evaluates the inverse relationship.
+ * @details A load/unload compressor uses receiver storage and a pressure band to cycle
+ *          between loaded operation and unloaded operation. The final result is the average
+ *          package power and delivered airflow over one repeating storage cycle. When airflow
+ *          demand is known, the model calculates the energy and time in each part of the
+ *          cycle directly. When measured power is known instead, the model builds a smooth
+ *          relationship between airflow and cycle power, then reads the airflow that matches
+ *          the measured power.
  *
- * The cycle can include modulation, blowdown, off-load time, reload, and reload pump-up.
- * Modulation-with-unload and variable-displacement-with-unload use the same cycle shell, but
- * delegate high-flow points to the modulation-without-unload curve.
+ * The repeating cycle can include loaded modulation, blowdown, unloaded or off time, reload,
+ * and reload pump-up. Modulation-with-unload and variable-displacement-with-unload use the
+ * same cycle structure, with a separate modulation curve for the high-flow loaded portion.
  *
  * @heading{Cycle Average Power}
  * @copydoc load_unload_average_power_formula
@@ -25,9 +28,11 @@
  * @defgroup load_unload_average_power_formula Load/Unload Average Power Formula
  * @ingroup load_unload_compressor_assessment
  * @brief Average package power over one load/unload cycle.
- * @details Runtime-weighted cycle power is calculated from the energy in each active stage.
- *          If the requested airflow is at or above the unload airflow, the model uses the
- *          modulation stage power directly.
+ * @details Each cycle stage has a duration and a package power. Multiplying power by time
+ *          gives the energy for that stage. The average cycle power is the total stage energy
+ *          divided by the total cycle time. If the requested airflow is at or above the
+ *          unload airflow, the compressor remains loaded and the model uses the modulation
+ *          stage power directly.
  *
  * @formula{load-unload-average-power;
  *   P_{cycle} =
@@ -55,9 +60,11 @@
  * @defgroup load_unload_runtime_formula Load/Unload Runtime Formula
  * @ingroup load_unload_compressor_assessment
  * @brief Core storage and blowdown runtime calculations.
- * @details Runtime depends on storage volume, atmospheric pressure, airflow demand, and the
- *          pressure band between full-load and unload pressure. Blowdown runtime is limited
- *          by the configured blowdown time.
+ * @details Receiver storage determines how long the system can supply demand while the
+ *          compressor is unloaded. More storage or a wider pressure band increases the time
+ *          available; higher airflow demand shortens it. Blowdown is the period when the
+ *          compressor package pressure decays after unloading, and it cannot exceed the
+ *          configured blowdown time.
  *
  * @formula{load-unload-unload-runtime;
  *   t_{unload} =
@@ -88,8 +95,10 @@
  * @defgroup load_unload_modulation_formula Load/Unload Modulation Formula
  * @ingroup load_unload_compressor_assessment
  * @brief Modulating power while the compressor remains loaded.
- * @details Modulating power is anchored by maximum power and the maximum modulating power.
- *          Variable-displacement unloading uses exponent 2; modulation unloading uses exponent 1.
+ * @details When the compressor is still loaded, package power is estimated from airflow using
+ *          a curve between maximum package power and the maximum modulating power floor.
+ *          Variable-displacement unloading uses a more curved response with exponent 2;
+ *          modulation unloading uses a straight response with exponent 1.
  *
  * @formula{load-unload-max-mod-power;
  *   P_{max,mod} = f_{P,FL}P_{max}

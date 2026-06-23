@@ -39,6 +39,15 @@
 - TypeScript declarations: split under `ts_def/ts_def_modules/compressedAir/assessment`; legacy `compressorsCalc.d.ts` removed; client and registered vector declarations updated.
 - WASM Mocha tests: typed tests under `tests/wasm-mocha/compressedAir/assessment`; legacy JS tests removed.
 - Algorithm docs: new `.dox` files under `docs/dox-content/calculators/compressedAir/assessment`.
+- Algorithm-docs-author follow-up: revised the compressed-air assessment `.dox` pages to lead
+  with engineering behavior, outputs, assumptions, and plain-English explanations before
+  formulas. Removed developer-facing language from algorithm pages.
+- Doxygen navigation follow-up: split `Compressor Modeling` into three child groups:
+  `Assessment Modeling`, `Compressor Models`, and `Modeling Utilities`, then moved the
+  assessment `.dox` page groups under those buckets while preserving the individual page
+  group IDs.
+- Documentation cleanup follow-up: removed the Desktop migration boundary page from the
+  Doxygen source and kept Desktop migration notes only in handoff material.
 
 ## Formulas And Units
 
@@ -58,6 +67,14 @@
   - `doxygen Doxyfile` exited 0, but printed the repo's existing BibTeX failure and unrelated documentation warnings.
   - `npm run tests` ran against stale `bin/client.*`; 230 existing tests passed and 10 new assessment tests failed because the new WASM constructors/functions were not present.
   - `git diff --check` passed.
+  - Algorithm-docs-author follow-up: `doxygen Doxyfile` exited 0 with the same repo-level
+    CLANG, BibTeX, and unrelated missing-parameter warnings; no compressed-air assessment
+    warnings were reported. `git diff --check` passed.
+  - Doxygen navigation follow-up: `doxygen Doxyfile` exited 0 with the same repo-level
+    warnings, `git diff --check` passed, and generated
+    `docs/html/group__compressor__modeling.html` shows the three child groups.
+  - Documentation cleanup follow-up: Desktop migration boundary documentation removed from
+    Doxygen source; validation re-run with the same existing repo-level warnings.
 - Commands still needed:
   - Re-run `emcmake cmake -S . -B build-wasm -DBUILD_WASM=ON`.
   - Re-run `emmake make -C build-wasm`.

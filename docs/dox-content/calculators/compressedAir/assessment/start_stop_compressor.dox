@@ -1,11 +1,13 @@
 /**
- * @defgroup start_stop_compressor_assessment Start/Stop Compressor Assessment
- * @ingroup compressor_modeling
+ * @defgroup start_stop_compressor_assessment Start/Stop Compressor
+ * @ingroup compressor_control_models
  * @brief Compressor model for start/stop control.
- * @details Start/stop control assumes average power is proportional to airflow fraction and
- *          to the average of full-load and maximum power fractions. Results are reported as
- *          calculated package power @unitb{\kilo\watt}, airflow @unitb{\acfm}, power fraction,
- *          and airflow fraction.
+ * @details A start/stop compressor is modeled as either running or off. Over a reporting
+ *          interval, the delivered airflow fraction represents the fraction of time the
+ *          compressor is running. Average package power is therefore the run-time fraction
+ *          multiplied by the average power level during the running portion of the cycle.
+ *          Results are reported as calculated package power @unitb{\kilo\watt}, airflow
+ *          @unitb{\acfm}, power fraction, and airflow fraction.
  *
  * @heading{Start/Stop Power and Airflow}
  * @copydoc start_stop_formula
@@ -15,6 +17,9 @@
  * @defgroup start_stop_formula Start/Stop Formula
  * @ingroup start_stop_compressor_assessment
  * @brief Average power fraction for start/stop cycling.
+ * @details The running portion of the cycle is represented by the average of the full-load
+ *          and maximum-flow power fractions. If the compressor runs for half of the interval,
+ *          the average interval power is half of that running power.
  *
  * @formula{start-stop-average-fraction;
  *   f_{avg} = \frac{f_{P,FL} + f_{P,max}}{2}
