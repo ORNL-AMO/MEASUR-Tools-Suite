@@ -23,9 +23,13 @@
  *   Q = Q_{FL}\left(\frac{f_PP_{FL} - P_{NL}}{P_{FL} - P_{NL}}\right)^{1/m}
  * }
  *
- * For helper mode, the power floor is the maximum modulating power:
- * @formula{mod-without-unload-helper;
- *   P = (P_{NL} - P_{max,mod})f_Q^m + P_{max,mod}
+ * For helper mode, the power floor is the maximum modulating power and the high
+ * anchor is the maximum package power:
+ * @formula{mod-without-unload-helper-power-from-airflow;
+ *   P = (P_{max} - P_{max,mod})f_Q^m + P_{max,mod}
+ * }
+ * @formula{mod-without-unload-helper-airflow-from-power;
+ *   Q = Q_{FL}\left(\frac{f_PP_{FL} - P_{max,mod}}{P_{max} - P_{max,mod}}\right)^{1/m}
  * }
  *
  * @subheading{Symbols}
@@ -35,6 +39,7 @@
  * @symrow{P_{FL}; Full-load package power; \kilo\watt}
  * @symrow{Q_{FL}; Full-load airflow; \acfm}
  * @symrow{P_{NL}; No-load package power; \kilo\watt}
+ * @symrow{P_{max}; Maximum package power in helper mode; \kilo\watt}
  * @symrow{P_{max,mod}; Maximum modulating power floor; \kilo\watt}
  * @symrow{f_P; Fraction of full-load power; \unitless}
  * @symrow{f_Q; Fraction of full-load airflow; \unitless}

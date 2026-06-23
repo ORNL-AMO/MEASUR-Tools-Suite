@@ -34,9 +34,10 @@ ModulationWithoutUnloadCompressor::calculateFromPowerFraction(double power_fract
             airflow = full_load_airflow_;
         }
         else {
-            const double max_mod_power = max_power_ * no_load_power_fraction_for_modulation_;
-            const double numerator     = no_load_power_ - max_mod_power;
-            const double denominator   = max_power_ - max_mod_power;
+            const double max_mod_power   = max_power_ * no_load_power_fraction_for_modulation_;
+            const double requested_power = power_fraction * full_load_power_;
+            const double numerator       = requested_power - max_mod_power;
+            const double denominator     = max_power_ - max_mod_power;
             airflow = std::pow(numerator / denominator, 1.0 / modulation_exponent_) * full_load_airflow_;
         }
     }
@@ -56,8 +57,8 @@ ModulationWithoutUnloadCompressor::calculateFromCapacityFraction(double airflow_
                 no_load_power_;
     }
     else {
-        const double max_mod_power = no_load_power_ * no_load_power_fraction_for_modulation_;
-        power = (no_load_power_ - max_mod_power) * std::pow(airflow_fraction, modulation_exponent_) +
+        const double max_mod_power = max_power_ * no_load_power_fraction_for_modulation_;
+        power = (max_power_ - max_mod_power) * std::pow(airflow_fraction, modulation_exponent_) +
                 max_mod_power;
     }
 
@@ -85,6 +86,7 @@ void ModulationWithoutUnloadCompressor::applyPressureInletCorrection(
                                                       rated_discharge_pressure, rated_inlet_pressure, efficiency,
                                                       full_load_pressure, max_pressure, inlet_pressure,
                                                       pressure_adjustment, atmospheric_pressure);
+    no_load_fraction_ = no_load_power_ / full_load_power_;
 }
 
 } // namespace compressed_air::assessment

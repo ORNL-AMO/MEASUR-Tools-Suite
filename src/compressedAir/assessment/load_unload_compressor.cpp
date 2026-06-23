@@ -235,9 +235,9 @@ CompressorPerformanceResult LoadUnloadCompressor::calculateFromPowerFraction(dou
         const double average_power = power_fraction * full_load_power_;
         if (average_power >= unload_power_) {
             return ModulationWithoutUnloadCompressor(
-                       full_load_power_, full_load_airflow_, average_power,
+                       full_load_power_, full_load_airflow_, no_load_power_,
                        control_ == CompressorControl::VariableDisplacementUnload ? 2.0 : 1.0, false,
-                       compressor_type_, no_load_power_fraction_for_modulation_, max_power_)
+                       compressor_type_, full_load_power_fraction_, max_power_)
                 .calculateFromPowerFraction(power_fraction);
         }
     }
@@ -257,9 +257,9 @@ CompressorPerformanceResult LoadUnloadCompressor::calculateFromCapacityFraction(
         const double unload_airflow = full_load_airflow_ * unload_capacity_percent_ / 100.0;
         if (full_load_airflow_ * airflow_fraction >= unload_airflow) {
             return ModulationWithoutUnloadCompressor(
-                       full_load_power_, full_load_airflow_, max_power_,
+                       full_load_power_, full_load_airflow_, no_load_power_,
                        control_ == CompressorControl::VariableDisplacementUnload ? 2.0 : 1.0, false,
-                       compressor_type_, no_load_power_fraction_for_modulation_)
+                       compressor_type_, full_load_power_fraction_, max_power_)
                 .calculateFromCapacityFraction(airflow_fraction);
         }
     }
@@ -401,12 +401,18 @@ void LoadUnloadCompressor::applyPressureInletCorrection(double capacity, double 
                                                         double full_load_pressure, double max_pressure,
                                                         double inlet_pressure, bool pressure_adjustment,
                                                         double atmospheric_pressure) {
-    CompressorModelBase::applyPressureInletCorrection(CompressorType::Screw, capacity, full_load_bhp, poly_exponent,
+    CompressorModelBase::applyPressureInletCorrection(compressor_type_, capacity, full_load_bhp, poly_exponent,
                                                       rated_discharge_pressure, rated_inlet_pressure, efficiency,
                                                       full_load_pressure, max_pressure, inlet_pressure,
                                                       pressure_adjustment, atmospheric_pressure);
 
     max_power_ = max_power_adjusted_;
+    no_load_fraction_ = no_load_power_ / full_load_power_;
+    if (control_ != CompressorControl::ModulationUnload) {
+        setUnloadCapacity();
+        setUnloadPower();
+        setUnloadPressure();
+    }
 }
 
 ModulationWithUnloadCompressor::ModulationWithUnloadCompressor(

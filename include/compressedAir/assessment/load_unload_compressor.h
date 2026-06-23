@@ -58,7 +58,7 @@ class LoadUnloadCompressor : public CompressorModelBase {
     CompressorType      compressor_type_;
     CompressorLubricant lubricant_;
     CompressorControl   control_;
-    const double        no_load_fraction_;
+    double              no_load_fraction_;
     const double        storage_volume_;
     const double        no_load_power_ = 1.0;
 
