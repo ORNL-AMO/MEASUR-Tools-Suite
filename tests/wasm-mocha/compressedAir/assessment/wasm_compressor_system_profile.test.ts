@@ -122,6 +122,87 @@ describe('Compressed Air Assessment - System Profile', function () {
         }
     });
 
+    it('caps measured-power baseline capacity at full load for modulation without unload', function () {
+        function desktopPoint(pressure: number, airflow: number, power: number): CompressorPerformancePoint {
+            return {
+                dischargePressurePsig: pressure,
+                isDefaultPressure: true,
+                airflowAcfm: airflow,
+                isDefaultAirflow: true,
+                powerKw: power,
+                isDefaultPower: true,
+            };
+        }
+
+        const compressors = new moduleInstance.CompressorProfileCompressorV();
+        const rows = new moduleInstance.CompressorProfileRowV();
+
+        try {
+            compressors.push_back({
+                compressorId: 'srocxit1z',
+                compressorType: moduleInstance.CompressorType.Screw,
+                control: moduleInstance.CompressorControl.ModulationWithoutUnload,
+                stage: moduleInstance.CompressorStage.Single,
+                lubricant: moduleInstance.CompressorLubricant.Injected,
+                automaticShutdown: false,
+                performancePoints: {
+                    fullLoad: desktopPoint(100, 18, 4.6),
+                    maxFullFlow: desktopPoint(110, 18, 4.6),
+                    midTurndown: desktopPoint(0, 0, 0),
+                    turndown: desktopPoint(0, 0, 0),
+                    unloadPoint: desktopPoint(0, 0, 0),
+                    noLoad: desktopPoint(105, 0, 3),
+                    blowoff: desktopPoint(0, 0, 0),
+                },
+                blowdownTimeSec: 40,
+                unloadSumpPressurePsig: 15,
+                noLoadPowerFractionForModulation: 0.65,
+                modulatingPressurePsig: 5,
+            });
+
+            rows.push_back({
+                compressorId: 'srocxit1z',
+                dayTypeId: 'cbpa0zvju',
+                timeIntervalHr: 0,
+                operatingOrder: 1,
+                powerKw: 5,
+                airflowAcfm: 0,
+                powerFraction: 0,
+                airflowFraction: 0.5,
+                systemPowerFraction: 0,
+                systemAirflowFraction: 0,
+                powerFactor: 0,
+                amps: 0,
+                volts: 0,
+            });
+
+            const result = moduleInstance.calculateBaselineProfile(compressors, rows, {
+                dayTypeId: 'cbpa0zvju',
+                inputBasis: moduleInstance.CompressorInputBasis.MeasuredPower,
+                controlMode: moduleInstance.CompressorSystemControlMode.Cascading,
+                atmosphericPressurePsia: 14.7,
+                totalAirStorageFt3: 200.5208333339,
+                additionalReceiverVolumeFt3: 0,
+                canShutdown: true,
+            });
+
+            try {
+                assert.strictEqual(result.size(), 1);
+                const calculated = result.get(0);
+
+                assert.approximately(calculated.powerKw, 5, 0.001);
+                assert.equal(calculated.airflowAcfm, 18);
+                assert.approximately(calculated.powerFraction, 1.0869565217, 0.0001);
+                assert.equal(calculated.airflowFraction, 1);
+            } finally {
+                result.delete();
+            }
+        } finally {
+            rows.delete();
+            compressors.delete();
+        }
+    });
+
     it('reallocates load-sharing flow and calculates savings', function () {
         const compressors = new moduleInstance.CompressorProfileCompressorV();
         const rows = new moduleInstance.CompressorProfileRowV();

@@ -67,6 +67,35 @@ TEST_CASE("Compressor system profile calculates baseline interval rows",
     CHECK(result[0].systemPowerFraction == Approx(0.75));
 }
 
+TEST_CASE("Compressor system profile caps measured-power capacity for modulation without unload",
+          "[compressed-air][assessment][system-profile]") {
+    CompressorProfileCompressor compressor = modulationCompressor("srocxit1z", 18, 4.6, 3);
+    compressor.noLoadPowerFractionForModulation = 0.65;
+    compressor.blowdownTimeSec = 40;
+    compressor.unloadSumpPressurePsig = 15;
+
+    CompressorProfileCompressorV compressors{compressor};
+    CompressorProfileRowV rows{profileRow("srocxit1z", 1)};
+    rows[0].dayTypeId = "cbpa0zvju";
+    rows[0].powerKw = 5;
+
+    CompressorProfileOptions options;
+    options.dayTypeId = "cbpa0zvju";
+    options.inputBasis = CompressorInputBasis::MeasuredPower;
+    options.controlMode = CompressorSystemControlMode::Cascading;
+    options.atmosphericPressurePsia = 14.7;
+    options.totalAirStorageFt3 = 200.5208333339;
+    options.canShutdown = true;
+
+    const auto result = calculateBaselineProfile(compressors, rows, options);
+
+    REQUIRE(result.size() == 1);
+    CHECK(result[0].powerKw == Approx(5));
+    CHECK(result[0].airflowAcfm == Approx(18));
+    CHECK(result[0].powerFraction == Approx(1.0869565217));
+    CHECK(result[0].airflowFraction == Approx(1));
+}
+
 TEST_CASE("Compressor system profile reallocates ordered compressor flow",
           "[compressed-air][assessment][system-profile]") {
     CompressorProfileCompressorV compressors{modulationCompressor("a", 1000, 100, 50),
