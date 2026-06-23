@@ -193,7 +193,7 @@
  * @defgroup o2_enrichment_excess_air_formula Excess Air Formula
  * @ingroup o2_enrichment_calculator
  *
- * @copydoc process_heat_excess_air_formula_doc
+ * @copydoc process_heat_excess_air_formula
  *
  * @par Implementation
  * See @ref process_heat_excess_air_formula for the complete formula, symbol definitions, and implementation details.
