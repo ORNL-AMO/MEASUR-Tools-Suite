@@ -1,6 +1,6 @@
 /**
  * @defgroup air_system_capacity_calculator Air System Capacity Calculator
- * @ingroup compressed_air_assessments
+ * @ingroup compressed_air_calculators
  * @brief Calculates total compressed air storage in distribution piping and receivers.
  * @details This calculator estimates the total air volume that the compressed air
  *          system can contain at one time, including air in the piping network and

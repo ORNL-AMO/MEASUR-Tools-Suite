@@ -1,0 +1,112 @@
+/**
+ * @defgroup load_unload_compressor_assessment Load/Unload Compressor Assessment Model
+ * @ingroup compressor_modeling
+ * @brief Load/unload cycle model for screw and reciprocating compressors.
+ * @details The final result is average package power and delivered airflow over a repeating
+ *          storage cycle. For an airflow input, the model computes the power of one operating
+ *          cycle directly. For a power input, it samples the cycle across 76 airflow points,
+ *          fits a sixth-order curve, and evaluates the inverse relationship.
+ *
+ * The cycle can include modulation, blowdown, off-load time, reload, and reload pump-up.
+ * Modulation-with-unload and variable-displacement-with-unload use the same cycle shell, but
+ * delegate high-flow points to the modulation-without-unload curve.
+ *
+ * @heading{Cycle Average Power}
+ * @copydoc load_unload_average_power_formula
+ *
+ * @heading{Cycle Runtime Terms}
+ * @copydoc load_unload_runtime_formula
+ *
+ * @heading{Modulation Power}
+ * @copydoc load_unload_modulation_formula
+ */
+
+/**
+ * @defgroup load_unload_average_power_formula Load/Unload Average Power Formula
+ * @ingroup load_unload_compressor_assessment
+ * @brief Average package power over one load/unload cycle.
+ * @details Runtime-weighted cycle power is calculated from the energy in each active stage.
+ *          If the requested airflow is at or above the unload airflow, the model uses the
+ *          modulation stage power directly.
+ *
+ * @formula{load-unload-average-power;
+ *   P_{cycle} =
+ *   \frac{E_{bd} + E_{off} + E_{reload} + E_{pump} + E_{mod}}
+ *        {t_{bd} + t_{off} + t_{reload} + t_{pump} + t_{mod}}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{P_{cycle}; Average package power for the operating cycle; \kilo\watt}
+ * @symrow{E_{bd}; Blowdown energy; \kilo\watt\second}
+ * @symrow{E_{off}; Off-load energy; \kilo\watt\second}
+ * @symrow{E_{reload}; Reload energy; \kilo\watt\second}
+ * @symrow{E_{pump}; Reload pump-up energy; \kilo\watt\second}
+ * @symrow{E_{mod}; Modulation energy; \kilo\watt\second}
+ * @symrow{t_{bd}; Blowdown runtime; \second}
+ * @symrow{t_{off}; Off-load runtime; \second}
+ * @symrow{t_{reload}; Reload runtime; \second}
+ * @symrow{t_{pump}; Reload pump-up runtime; \second}
+ * @symrow{t_{mod}; Modulation runtime; \second}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup load_unload_runtime_formula Load/Unload Runtime Formula
+ * @ingroup load_unload_compressor_assessment
+ * @brief Core storage and blowdown runtime calculations.
+ * @details Runtime depends on storage volume, atmospheric pressure, airflow demand, and the
+ *          pressure band between full-load and unload pressure. Blowdown runtime is limited
+ *          by the configured blowdown time.
+ *
+ * @formula{load-unload-unload-runtime;
+ *   t_{unload} =
+ *   \frac{V_s \cdot 60(P_{UL} - P_{FL})}{Q \cdot P_{atm}}
+ * }
+ * @formula{load-unload-blowdown-runtime;
+ *   t_{bd} = \min(t_{bd,set}, t_{unload})
+ * }
+ * @formula{load-unload-decay-time;
+ *   \tau_{bd} = \frac{t_{bd,set}}{\ln(1/\epsilon)}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{t_{unload}; Time available during unloaded decay; \second}
+ * @symrow{V_s; Receiver storage volume; \cubicFoot}
+ * @symrow{P_{UL}; Unload pressure; \psig}
+ * @symrow{P_{FL}; Full-load pressure; \psig}
+ * @symrow{Q; Airflow demand represented by the curve point; \acfm}
+ * @symrow{P_{atm}; Atmospheric pressure; \psia}
+ * @symrow{t_{bd,set}; Configured blowdown time; \second}
+ * @symrow{\tau_{bd}; Blowdown exponential decay time constant; \second}
+ * @symrow{\epsilon; Legacy decay tolerance (0.02); \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup load_unload_modulation_formula Load/Unload Modulation Formula
+ * @ingroup load_unload_compressor_assessment
+ * @brief Modulating power while the compressor remains loaded.
+ * @details Modulating power is anchored by maximum power and the maximum modulating power.
+ *          Variable-displacement unloading uses exponent 2; modulation unloading uses exponent 1.
+ *
+ * @formula{load-unload-max-mod-power;
+ *   P_{max,mod} = f_{P,FL}P_{max}
+ * }
+ * @formula{load-unload-mod-power;
+ *   P_{mod} =
+ *   (P_{max} - P_{max,mod})\left(\frac{Q}{Q_{FL}}\right)^m + P_{max,mod}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{P_{max,mod}; Maximum modulating power floor; \kilo\watt}
+ * @symrow{f_{P,FL}; Full-load power fraction used for modulation; \unitless}
+ * @symrow{P_{max}; Maximum package power; \kilo\watt}
+ * @symrow{P_{mod}; Modulation-stage package power; \kilo\watt}
+ * @symrow{Q; Airflow demand represented by the curve point; \acfm}
+ * @symrow{Q_{FL}; Full-load airflow; \acfm}
+ * @symrow{m; Modulation exponent, 1 for modulation and 2 for variable displacement; \unitless}
+ * @endsymtable
+ */

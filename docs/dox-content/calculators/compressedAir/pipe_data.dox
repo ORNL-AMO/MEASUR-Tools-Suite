@@ -1,6 +1,6 @@
 /**
  * @defgroup compressed_air_pipe_data Compressed Air Pipe Data
- * @ingroup compressed_air_assessments
+ * @ingroup compressed_air_calculators
  * @brief Shared nominal pipe-size data used by air system capacity and velocity calculations.
  * @details The shared `PipeData` shape stores one value for each supported nominal pipe
  *          size. The stored value depends on the calculation context:

@@ -1,7 +1,7 @@
 import { assert } from 'chai';
 import createModule, {
-    type CompressorsData,
-    type CompressorsDataV,
+    type CompressorCatalogRecord,
+    type CompressorCatalogRecordV,
     type DefaultData,
     type LightingData,
     type LightingDataV,
@@ -41,23 +41,25 @@ describe('DB Default Data Test', function () {
             listItems.delete();
         }
 
-        function compressorDataLog(item: CompressorsData): void {
-            logMessage(item.ID() + ', ' + item.idCompType() + ', ' +
-                item.model() + ', ' + item.hp() + ', ' + item.ratedCapacity() + ', ' +
-                item.ratedPressure() + ', ' + item.maxFullFlowPressure() + ', ' + item.idControlType() + ', ' +
-                item.unloadPoint() + ', ' + item.minULSumpPressure() + ', ' + item.blowdownTime() + ', ' +
-                item.unloadSteps() + ', ' + item.modulatingPressRange() + ', ' + item.powerFLBHP() + ', ' +
-                item.totPackageInputPower() + ', ' + item.specPackagePower() + ', ' + item.noLoadPowerFM() + ', ' +
-                item.noLoadPowerUL() + ', ' + item.maxSurgePressure() + ', ' + item.maxPressSurgeFlow() + ', ' +
-                item.minStonewallPressure() + ', ' + item.minPressStonewallFlow() + ', ' + item.designSurgeFlow() + ', ' +
-                item.designInTemp() + ', ' + item.designInPressure() + ', ' + item.ampsFL() + ', ' +
-                item.effFL());
+        function compressorDataLog(item: CompressorCatalogRecord): void {
+            logMessage(item.id + ', ' + item.compressorTypeId + ', ' +
+                item.model + ', ' + item.horsepower + ', ' + item.ratedCapacityAcfm + ', ' +
+                item.ratedPressurePsig + ', ' + item.maxFullFlowPressurePsig + ', ' + item.controlTypeId + ', ' +
+                item.unloadPointPercent + ', ' + item.minUnloadSumpPressurePsig + ', ' + item.blowdownTimeSec + ', ' +
+                item.unloadSteps + ', ' + item.modulatingPressureRangePsig + ', ' + item.fullLoadBhpPowerKw + ', ' +
+                item.totalPackageInputPowerKw + ', ' + item.specificPackagePower + ', ' +
+                item.noLoadPowerFullyModulating + ', ' + item.noLoadPowerUnload + ', ' +
+                item.maxSurgePressurePsig + ', ' + item.maxSurgePressureFlowAcfm + ', ' +
+                item.minStonewallPressurePsig + ', ' + item.minStonewallPressureFlowAcfm + ', ' +
+                item.designSurgeFlowAcfm + ', ' + item.designInletTemperatureF + ', ' +
+                item.designInletPressurePsia + ', ' + item.fullLoadAmps + ', ' +
+                item.fullLoadEfficiencyPercent);
         }
 
         function compressorsData(defaultData: DefaultData): void {
             logMessage('Compressors Data');
 
-            let listItems: CompressorsDataV = defaultData.getCompressorType1Data();
+            let listItems: CompressorCatalogRecordV = defaultData.getCompressorType1Data();
             let count: number = listItems.size();
             assert.equal(count, 308, "Select All Compressor Default Data for Type 1 < 100 kW");
             logMessage('Default Data (start - end):');
@@ -140,4 +142,3 @@ describe('DB Default Data Test', function () {
         db();
     });
 });
-

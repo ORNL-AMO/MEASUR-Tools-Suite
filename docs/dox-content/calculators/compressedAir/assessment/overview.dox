@@ -1,0 +1,125 @@
+/**
+ * @defgroup compressor_modeling_overview Compressor Modeling Overview
+ * @ingroup compressor_modeling
+ * @brief Shared compressor modeling result definitions, electrical input conversion, and pressure/inlet correction.
+ * @details The compressor assessment modules estimate compressor package power and airflow for
+ *          centrifugal, modulation, start/stop, load/unload, and variable-frequency-drive
+ *          compressor controls. The public results are intentionally reported first:
+ *          calculated package power @unitb{\kilo\watt}, calculated airflow @unitb{\acfm},
+ *          power fraction @unitb{\unitless}, and airflow fraction @unitb{\unitless}.
+ *
+ * These models are part of a larger compressed-air assessment workflow. They preserve the
+ * legacy numerical behavior while exposing namespaced C++ modules, one WebAssembly binding
+ * per logical calculator, passive value-object results, and TypeScript declarations with
+ * explicit units.
+ *
+ * @heading{Common Result Definitions}
+ * @copydoc compressor_assessment_result_formula
+ *
+ * @heading{Common Electrical Input Conversion}
+ * @copydoc compressor_assessment_electrical_formula
+ *
+ * @heading{Common Pressure and Inlet Correction}
+ * @copydoc compressor_assessment_pressure_inlet_formula
+ */
+
+/**
+ * @defgroup compressor_assessment_result_formula Compressor Assessment Result Formula
+ * @ingroup compressor_modeling_overview
+ * @brief Common result reconstruction from fractions.
+ * @details Each control model first determines the power and airflow fractions for the requested
+ *          input basis. The final reported power and airflow are then reconstructed from the
+ *          full-load reference values.
+ *
+ * @formula{compressor-assessment-result-power;
+ *   P_{calc} = f_P \cdot P_{FL}
+ * }
+ * @formula{compressor-assessment-result-airflow;
+ *   Q_{calc} = f_Q \cdot Q_{FL}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{P_{calc}; Calculated compressor package power; \kilo\watt}
+ * @symrow{Q_{calc}; Calculated compressor airflow; \acfm}
+ * @symrow{f_P; Fraction of full-load package power; \unitless}
+ * @symrow{f_Q; Fraction of full-load airflow; \unitless}
+ * @symrow{P_{FL}; Full-load package power; \kilo\watt}
+ * @symrow{Q_{FL}; Full-load airflow; \acfm}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup compressor_assessment_electrical_formula Compressor Assessment Electrical Formula
+ * @ingroup compressor_modeling_overview
+ * @brief Three-phase electrical input conversion used by measured electrical methods.
+ * @details Methods named `calculateFromElectrical` convert voltage, current, and power factor
+ *          to measured package power before applying the same model-specific measured-power
+ *          path. The constant 1.732 is the square root of three rounded to the legacy value.
+ *
+ * @formula{compressor-assessment-electrical-power;
+ *   P_{meas} = \frac{V \cdot I \cdot PF \cdot 1.732}{1000}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{P_{meas}; Measured three-phase package power; \kilo\watt}
+ * @symrow{V; Line voltage; \volt}
+ * @symrow{I; Current; \ampere}
+ * @symrow{PF; Power factor; \unitless}
+ * @symrow{1.732; Legacy square-root-of-three constant; \unitless}
+ * @symrow{1000; Watt-to-kilowatt conversion; \watt\per\kilo\watt}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup compressor_assessment_pressure_inlet_formula Compressor Assessment Pressure Inlet Correction
+ * @ingroup compressor_modeling_overview
+ * @brief Shared pressure and inlet correction for non-centrifugal models.
+ * @details The pressure/inlet correction updates full-load and maximum power/airflow before
+ *          model evaluation. Centrifugal compressor models use their discharge-pressure curve
+ *          adjustment instead. For screw compressors the rated inlet pressure is used as the
+ *          pressure-ratio base; otherwise atmospheric pressure is used.
+ *
+ * @formula{compressor-assessment-pressure-power;
+ *   P_{adj} =
+ *   F_P \cdot \frac{P_{atm}}{P_{in}} \cdot BHP_{FL} \cdot
+ *   \frac{0.746}{\eta} \cdot R_P
+ * }
+ * @formula{compressor-assessment-pressure-flow;
+ *   Q_{adj} = F_Q \cdot Q_{rated} \cdot \left(1 - 0.00075(P_d - P_{rated})\right)
+ * }
+ * @formula{compressor-assessment-pressure-ratio;
+ *   R_P =
+ *   \frac{\left(\frac{P_d + P_b}{P_b}\right)^{(n-1)/n} - 1}
+ *        {\left(\frac{P_{rated} + P_{in,rated}}{P_{in,rated}}\right)^{(n-1)/n} - 1}
+ * }
+ *
+ * When pressure adjustment is enabled, the empirical atmospheric correction factors are:
+ * @formula{compressor-assessment-pressure-factor-power;
+ *   F_P = -0.0000577P_{atm}^3 + 0.000251P_{atm}^2 + 0.0466P_{atm} + 0.4442
+ * }
+ * @formula{compressor-assessment-pressure-factor-flow;
+ *   F_Q = 0.000258P_{atm}^3 - 0.0116P_{atm}^2 + 0.176P_{atm} + 0.09992
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{P_{adj}; Adjusted package power; \kilo\watt}
+ * @symrow{Q_{adj}; Adjusted airflow; \acfm}
+ * @symrow{F_P; Atmospheric pressure correction for power; \unitless}
+ * @symrow{F_Q; Atmospheric pressure correction for airflow; \unitless}
+ * @symrow{P_{atm}; Atmospheric pressure; \psia}
+ * @symrow{P_{in}; Measured inlet pressure; \psia}
+ * @symrow{BHP_{FL}; Full-load brake horsepower; \horsepower}
+ * @symrow{0.746; Horsepower-to-kilowatt conversion; \kilo\watt\per\horsepower}
+ * @symrow{\eta; Motor efficiency; \unitless}
+ * @symrow{R_P; Polytropic pressure-ratio correction; \unitless}
+ * @symrow{Q_{rated}; Rated airflow capacity; \acfm}
+ * @symrow{P_d; Operating discharge pressure; \psig}
+ * @symrow{P_{rated}; Rated discharge pressure; \psig}
+ * @symrow{P_b; Pressure-ratio base pressure; \psia}
+ * @symrow{P_{in,rated}; Rated inlet pressure; \psia}
+ * @symrow{n; Polytropic exponent; \unitless}
+ * @endsymtable
+ */

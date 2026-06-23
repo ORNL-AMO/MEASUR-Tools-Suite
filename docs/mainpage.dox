@@ -1,24 +1,34 @@
 /**
  * @mainpage MEASUR Tools Suite
  *
- * MEASUR is a suite that includes a set of key software platforms and more than 80 calculators. Together, these tools
- * can help manufacturers improve industrial system efficiency and identify potential savings opportunities.
+ * MEASUR is a suite from Oak Ridge National Laboratory's Industrial Resources program that includes a set of key
+ * software platforms and more than 80 calculators. Together, these tools help manufacturers improve industrial system
+ * efficiency, quantify potential savings opportunities, and apply consistent engineering methods across energy systems.
  *
- * The software platforms in MEASUR are major updates to the system assessment tools developed by the department in the
- * 1990s. The new tools are more user-friendly and compatible with newer operating systems. By combining the system
- * assessment tools with calculators in one platform, MEASUR allows for an increased level of interoperability between
- * different tools. MEASUR is free to use and accessible in an open-source environment.
+ * The MEASUR Tools Suite documentation connects the calculation library to the engineering decisions it supports:
+ * assessment workflows, stand-alone calculators, formulas, units, default data, and implementation references. Use the
+ * Topics index as the primary map of the suite, then move into specific assessment areas or formulas as needed.
  *
  * @section ToolsSummary Tools Summary
  *
- * MEASUR's software tools include industrial system assessment tools capable of performing investment grade energy
+ * MEASUR's software tools include industrial system assessment tools capable of performing investment-grade energy
  * analysis alongside simple equipment and property calculators. Both the system assessment tools and the simple
  * calculators can be used as stand-alone tools for more focused analysis.
+ *
+ * @htmlonly
+ * <div class="ornl-topic-cta">
+ *   <strong>Start with the Topics index.</strong>
+ *   <span>Browse the suite by assessment area, calculator family, formula set, database, and shared physics model.</span>
+ *   <a href="topics.html">Explore Topics</a>
+ * </div>
+ * @endhtmlonly
  *
  * - @ref process_heating_assessments
  *   - @ref heat_loss_calculators
  *   - @ref process_heat_calculators
  * - @ref compressed_air_assessments
+ *   - @ref compressed_air_calculators
+ *   - @ref compressor_modeling
  * - @ref fan_system_assessments
  * - @ref process_cooling_assessments
  * - @ref pumping_system_assessments
@@ -30,13 +40,30 @@
  * - @ref physics
  *
  * @defgroup compressed_air_assessments Compressed Air Assessments
+ * @brief Assessment tools and calculators for modeling compressed air systems, compressor operation, leaks, storage, and operating cost.
  *
  * This portion of MEASUR includes tools such as AirMaster+ and related calculators. MEASUR includes a series of tools
  * that help users analyze energy use and savings opportunities in industrial compressed air systems. They can baseline
  * existing and model future system operations improvements, and evaluate energy and dollar savings from many energy
  * efficiency measures.
  *
+ * @defgroup compressed_air_calculators Compressed Air Calculators
+ * @ingroup compressed_air_assessments
+ * @brief Stand-alone compressed air calculators for sizing, storage, velocity, operating cost, pneumatic demand, and leak surveys.
+ *
+ * The Compressed Air Calculators module provides focused stand-alone calculations for compressed air system sizing,
+ * storage, velocity, pneumatic demand, operating cost, pipe properties, and leak survey methods. These calculators
+ * support targeted engineering questions and can be used independently from the larger compressor modeling workflow.
+ *
+ * @defgroup compressor_modeling Compressor Modeling
+ * @ingroup compressed_air_assessments
+ * @brief Compressor assessment models and supporting catalog, control, and energy efficiency measure topics.
+ *
+ * Compressor Modeling collects the assessment-oriented compressor performance models and supporting content in
+ * `compressedAir/assessment/`.
+ *
  * @defgroup fan_system_assessments Fan System Assessments
+ * @brief Fan-system assessment tools for evaluating energy use, operating scenarios, and potential efficiency improvements.
  *
  * This portion of MEASUR includes tools such as the Fan System Assessment Tool (FSAT) and related calculators. This
  * tool helps users identify and evaluate the potential energy savings opportunities in fan systems. Industrial users
@@ -45,14 +72,16 @@
  * automatic optimizer functionality which is built upon published fan efficiency data and motor performance data.
  *
  * @defgroup process_cooling_assessments Process Cooling Assessments
+ * @brief Chilled-water and process-cooling tools for estimating system performance, component operation, and savings opportunities.
  *
- * This portion of MEASUR includes tools such as the Chilled Water System Assessment (CWSA) tool and releated
- * calculators. This tool helps users understand and evalute the potential energy savings opportunities of chillers and
+ * This portion of MEASUR includes tools such as the Chilled Water System Assessment (CWSA) tool and related
+ * calculators. This tool helps users understand and evaluate the potential energy savings opportunities of chillers and
  * process cooling systems. Industrial users can better understand the current operating conditions of the components of
  * a process cooling system, including chillers, cooling towers, and pumps. The tool helps estimate the year-round
  * operating conditions and test "what-if" scenarios for various opportunities to reduce energy use.
  *
  * @defgroup process_heating_assessments Process Heating Assessments
+ * @brief Process-heating assessment tools for heat balances, furnace and oven analysis, and thermal efficiency opportunities.
  *
  * This portion of MEASUR includes tools such as the Process Heating Assessment and Survey Tool (PHAST) and related
  * calculators. This tool introduces methods to improve thermal and electrical efficiency of process heating equipment.
@@ -62,6 +91,7 @@
  *
  * @defgroup process_heat_calculators Process Heat Calculators
  * @ingroup process_heating_assessments
+ * @brief Stand-alone process-heat calculators for heat recovery, energy equivalency, exhaust-gas use, and process integration.
  *
  * The Process Heat Calculators module provides a suite of tools for evaluating energy flows, heat recovery opportunities, and process optimization in furnaces, kilns, ovens, 
  * and other process heating equipment. These calculators focus on modeling phenomena such as flue gas heat recovery, cascade heat exchange, and energy savings from process integration.
@@ -70,6 +100,7 @@
  *
  * @defgroup heat_loss_calculators Heat Loss Calculators
  * @ingroup process_heating_assessments
+ * @brief Process-heating loss calculators for exhaust gases, openings, walls, cooling streams, fixtures, and load materials.
  *
  * The heat loss calculators for process heating estimate energy losses from various components and operations in industrial heating systems. 
  * These calculators help users quantify heat lost through fixtures, walls, exhaust gases, openings, liquid and gas load/charge materials, 
@@ -78,6 +109,7 @@
  * 
  *
  * @defgroup pumping_system_assessments Pumping System Assessments
+ * @brief Pumping-system assessment tools for field-measured performance, system curves, energy use, and efficiency scenarios.
  *
  * This portion of MEASUR includes tools such as the Pump System Assessment Tool (PSAT) and related calculators.
  * MEASUR's pumping system tool helps evaluate the potential energy savings opportunities of pumping systems based on
@@ -89,6 +121,7 @@
  * share analyses with others.
  *
  * @defgroup steam_system_assessments Steam System Assessments
+ * @brief Steam-system assessment and modeling tools for boilers, turbines, flash tanks, steam flows, and savings measures.
  *
  * This portion of MEASUR includes tools such as the SSAT/SSMT and related calculators. This tool helps users identify
  * and evaluate the potential energy savings opportunities in steam systems. Industrial users can better understand the
@@ -97,6 +130,7 @@
  * opportunities to reduce energy use.
  *
  * @defgroup water_assessments Water Assessments
+ * @brief Plant-water assessment tools for water balances, process-water diagrams, facility costs, and efficiency targeting.
  *
  * This portion of MEASUR includes tools such as the Plant Water Profiler (PWP) and the water diagram. This tool helps
  * users create a water flow diagram and water balance, as well as calculate the true cost of water for a facility. This
@@ -104,6 +138,7 @@
  * efficiency measures.
  *
  * @defgroup waste_water_assessments Waste Water Assessments
+ * @brief Wastewater treatment assessment tools for aeration demand, sludge-process behavior, operating conditions, and energy savings.
  *
  * This portion of MEASUR includes tools such as the Bio-tiger wastewater model and related calculators. This tool helps
  * users identify and evaluate the potential energy savings opportunities in the aeration stage of large-scale
@@ -113,6 +148,7 @@
  * opportunities to reduce energy use.
  *
  * @defgroup treasure_hunt_calculators Energy Treasure Hunt Calculators
+ * @brief Rapid opportunity calculators for energy treasure hunts, energy sweeps, low-cost measures, and savings rollups.
  *
  * MEASUR's Treasure Hunt is a collection of calculators that can be used in an energy Treasure Hunt or Energy Sweep
  * type event. It pairs with the DOE Better Plants Treasure Hunt Toolkit. This tool helps industrial users quantify
@@ -123,6 +159,7 @@
  * Chest", share them between users, and roll them together in a comprehensive report.
  *
  * @defgroup equipment_and_property_calculators Simple Equipment and Property Calculators
+ * @brief Focused equipment, property, and conversion calculators for common industrial energy analysis tasks.
  *
  * The MEASUR software contains over 80 equipment and property calculators for simple energy-related calculations and
  * analyses. These calculators can aid users in identifying, assessing, and quantifying simple energy-saving
@@ -131,6 +168,7 @@
  * calculations and conversions.
  *
  * @defgroup databases Databases
+ * @brief Curated default material, gas, combustion, compressor, and equipment data used to pre-populate calculations.
  *
  * The MEASUR software utilizes default data to pre-populate many of its calculator fields. These databases include:
  *   - Load charge materials (solids, liquids, gases)
@@ -142,6 +180,7 @@
  *
  *
  * @defgroup physics Physics
+ * @brief Shared physical constants, gas-property models, unit conversions, and thermodynamic helpers used across MEASUR.
  * 
- * A collection physical constants, gas property models, and calculation utilities needed for accurate process heating, combustion, and energy analysis across the suite.
+ * A collection of physical constants, gas property models, and calculation utilities needed for accurate process heating, combustion, and energy analysis across the suite.
  */

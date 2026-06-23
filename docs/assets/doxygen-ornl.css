@@ -1,0 +1,737 @@
+/*
+ * ORNL-inspired Doxygen theme for the MEASUR Tools Suite.
+ * This file is loaded after Doxygen's generated styles through HTML_EXTRA_STYLESHEET.
+ */
+
+:root,
+html {
+  --ornl-ink: #111827;
+  --ornl-ink-soft: #334155;
+  --ornl-navy: #10233f;
+  --ornl-navy-deep: #071526;
+  --ornl-blue: #0b75bc;
+  --ornl-green: #68be28;
+  --ornl-gold: #f6c343;
+  --ornl-surface: #ffffff;
+  --ornl-surface-muted: #f4f7f8;
+  --ornl-border: #d7e0e5;
+  --ornl-border-strong: #9eb1bc;
+  --ornl-code-bg: #f7fafc;
+
+  --page-background-color: #f4f7f8;
+  --page-foreground-color: var(--ornl-ink);
+  --page-link-color: #005ea8;
+  --page-visited-link-color: #254f7a;
+  --page-external-link-color: #005ea8;
+
+  --header-background-color: #ffffff;
+  --header-separator-color: rgba(255, 255, 255, 0.14);
+  --title-background-color: #ffffff;
+  --title-separator-color: var(--ornl-border);
+  --separator-color: var(--ornl-blue);
+  --directory-separator-color: var(--ornl-border);
+
+  --nav-menu-background-color: var(--ornl-navy);
+  --nav-menu-foreground-color: var(--ornl-ink);
+  --nav-menu-active-bg: rgba(104, 190, 40, 0.18);
+  --nav-text-normal-color: #edf7ff;
+  --nav-arrow-color: rgba(255, 255, 255, 0.72);
+  --nav-arrow-selected-color: #ffffff;
+  --nav-menu-button-color: #ffffff;
+
+  --index-odd-item-bg-color: #f8fbfc;
+  --index-even-item-bg-color: #ffffff;
+  --index-header-color: var(--ornl-ink);
+  --index-separator-color: var(--ornl-border);
+
+  --blockquote-background-color: #eef7fb;
+  --blockquote-border-color: var(--ornl-blue);
+  --memdecl-background-color: #f8fbfc;
+  --memdecl-separator-color: var(--ornl-border);
+  --memdecl-border-color: var(--ornl-border);
+  --memdef-border-color: var(--ornl-border-strong);
+  --memdef-title-background-color: #eaf4f8;
+  --memdef-proto-background-color: #f2f7fa;
+  --memdef-proto-text-color: var(--ornl-navy);
+  --memdef-doc-background-color: #ffffff;
+  --table-cell-border-color: #cbd7dd;
+  --table-header-background-color: var(--ornl-navy);
+  --table-header-foreground-color: #ffffff;
+  --label-background-color: var(--ornl-blue);
+  --label-foreground-color: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  color: var(--ornl-ink);
+  background:
+    linear-gradient(180deg, rgba(16, 35, 63, 0.04) 0, rgba(16, 35, 63, 0) 260px),
+    var(--ornl-surface-muted);
+  font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+a,
+.contents a,
+a.el {
+  color: #005ea8;
+  text-decoration-color: rgba(0, 94, 168, 0.35);
+  text-underline-offset: 0.18em;
+}
+
+a:hover,
+a:focus-visible,
+.contents a:hover {
+  color: #00406f;
+  text-decoration-color: currentColor;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+span[onclick]:focus-visible {
+  outline: 3px solid rgba(104, 190, 40, 0.75);
+  outline-offset: 3px;
+}
+
+#top {
+  background: var(--ornl-navy);
+  color: #ffffff;
+  box-shadow: 0 8px 28px rgba(7, 21, 38, 0.16);
+}
+
+#titlearea {
+  color: #ffffff;
+  background:
+    linear-gradient(90deg, var(--ornl-navy-deep) 0, var(--ornl-navy) 55%, #133d51 100%);
+  border: 0;
+  padding: 20px max(24px, calc((100vw - 1180px) / 2 + 24px));
+}
+
+#titlearea table {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  border-collapse: collapse;
+}
+
+#titlearea td {
+  width: 100%;
+  vertical-align: middle;
+}
+
+#projectrow td {
+  width: auto;
+}
+
+#projectlogo {
+  padding: 0;
+  width: 72px;
+  vertical-align: middle;
+}
+
+#projectlogo img {
+  width: 54px;
+  height: 54px;
+  padding: 6px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.18);
+}
+
+#projectalign {
+  padding: 0 0 0 18px;
+}
+
+#projectname {
+  color: #ffffff;
+  font-size: clamp(1.4rem, 1.8vw, 2rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+
+#projectnumber {
+  display: inline-block;
+  margin-left: 10px;
+  color: #cde8f5;
+  font-size: 0.78rem;
+  font-weight: 700;
+  vertical-align: middle;
+}
+
+#projectbrief {
+  max-width: 860px;
+  margin-top: 8px;
+  color: #d9ebf4;
+  font-size: 0.98rem;
+  line-height: 1.45;
+}
+
+#main-nav {
+  min-height: 48px;
+  padding: 0 max(16px, calc((100vw - 1180px) / 2 + 16px));
+  background: var(--ornl-navy);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+#main-menu {
+  max-width: 1180px;
+}
+
+.sm-dox {
+  background: transparent;
+}
+
+.sm-dox a,
+.sm-dox a:hover,
+.sm-dox a:focus,
+.sm-dox a:active,
+.sm-dox a.current,
+.sm-dox a.highlighted {
+  color: #edf7ff;
+  border-radius: 6px;
+  font-size: 0.87rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 36px;
+}
+
+.sm-dox a:hover,
+.sm-dox a.current {
+  color: #ffffff;
+  background: rgba(104, 190, 40, 0.2);
+}
+
+.sm-dox ul {
+  background: #ffffff;
+  border: 1px solid var(--ornl-border);
+  box-shadow: 0 18px 34px rgba(7, 21, 38, 0.18);
+}
+
+.sm-dox ul a,
+.sm-dox ul a:hover,
+.sm-dox ul a:focus,
+.sm-dox ul a:active,
+.sm-dox ul a.highlighted {
+  color: var(--ornl-ink);
+  background-color: #ffffff;
+}
+
+.sm-dox ul a:hover {
+  color: #00406f;
+  background: #eef8fb;
+}
+
+.sm-dox ul a.highlighted,
+.sm-dox ul a:focus,
+.sm-dox ul a:active {
+  color: var(--ornl-navy);
+  background: #eef8fb;
+}
+
+#doc-content {
+  padding: 30px 24px 60px;
+}
+
+div.contents {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+div.header {
+  max-width: 1180px;
+  margin: 0 auto 18px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+}
+
+div.headertitle {
+  padding: 0;
+}
+
+.title {
+  color: var(--ornl-navy);
+  font-size: clamp(2rem, 4vw, 3.45rem);
+  font-weight: 850;
+  line-height: 1.05;
+  letter-spacing: 0;
+}
+
+.textblock,
+.contents > div:not(.directory) {
+  color: var(--ornl-ink-soft);
+}
+
+.textblock > p:first-child {
+  max-width: 920px;
+  color: var(--ornl-ink);
+  font-size: 1.12rem;
+  line-height: 1.65;
+}
+
+.contents h1,
+.contents h2,
+.contents h3,
+.groupheader {
+  color: var(--ornl-navy);
+  letter-spacing: 0;
+}
+
+.contents h1.doxsection,
+.contents h2.groupheader {
+  margin-top: 2.2rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 3px solid var(--ornl-green);
+  font-weight: 800;
+}
+
+.contents h3 {
+  margin-top: 1.8rem;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.contents hr {
+  height: 3px;
+  margin: 0.5rem 0 1.2rem;
+  background: linear-gradient(90deg, var(--ornl-green), var(--ornl-blue));
+  border: 0;
+}
+
+.ornl-topic-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin: 24px 0 28px;
+  padding: 18px 20px;
+  color: #ffffff;
+  background: linear-gradient(90deg, var(--ornl-navy) 0, #0f4d68 100%);
+  border-left: 6px solid var(--ornl-green);
+  border-radius: 8px;
+  box-shadow: 0 16px 30px rgba(7, 21, 38, 0.16);
+}
+
+.ornl-topic-cta strong {
+  color: #ffffff;
+  font-size: 1.05rem;
+}
+
+.ornl-topic-cta span {
+  color: #d9ebf4;
+}
+
+.ornl-topic-cta a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 16px;
+  color: var(--ornl-navy);
+  background: var(--ornl-green);
+  border-radius: 6px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.ornl-topic-cta a:hover,
+.ornl-topic-cta a:focus-visible {
+  color: #061521;
+  background: #8bdc4a;
+}
+
+ul {
+  padding-left: 1.35rem;
+}
+
+.textblock > ul,
+.contents > ul {
+  margin-top: 1.2rem;
+}
+
+.textblock li {
+  margin: 0.24rem 0;
+}
+
+div.directory {
+  overflow-x: visible;
+}
+
+.directory table,
+table.directory {
+  width: 100%;
+  margin: 16px 0 0;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid var(--ornl-border);
+  border-radius: 8px;
+  border-collapse: separate;
+  border-spacing: 0;
+  box-shadow: 0 14px 28px rgba(7, 21, 38, 0.08);
+}
+
+.directory tbody {
+  background: #ffffff;
+}
+
+.directory tr.odd,
+.directory tr.even,
+.directory tr:nth-child(even) {
+  background: #ffffff;
+}
+
+.directory tr {
+  transition: background-color 120ms ease, box-shadow 120ms ease;
+}
+
+.directory tr:hover {
+  background: #f5fbfd;
+}
+
+.directory td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--ornl-border);
+  vertical-align: top;
+}
+
+.directory tr:last-child td {
+  border-bottom: 0;
+}
+
+.directory td.entry {
+  min-width: 320px;
+  position: relative;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.directory td.desc {
+  color: var(--ornl-ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.48;
+}
+
+.directory td.entry a {
+  color: var(--ornl-navy);
+  font-size: 0.98rem;
+  line-height: 1.35;
+  text-decoration: none;
+}
+
+.directory td.entry a:hover {
+  color: #005ea8;
+  text-decoration: underline;
+}
+
+.directory tr:has(td.entry > span[style*="width:0px"]) td {
+  padding-top: 16px;
+  padding-bottom: 16px;
+  background: #ffffff;
+  border-top: 1px solid var(--ornl-border);
+}
+
+.directory tr:first-child:has(td.entry > span[style*="width:0px"]) td {
+  border-top: 0;
+}
+
+.directory tr:has(td.entry > span[style*="width:16px"]):has(td.entry span.arrow) td {
+  background: #f8fbfc;
+}
+
+.directory tr:has(td.entry > span[style*="width:32px"]) td {
+  background: #fbfdfe;
+}
+
+.directory tr:has(td.entry > span[style*="width:48px"]) td,
+.directory tr:has(td.entry > span[style*="width:64px"]) td {
+  background: #ffffff;
+}
+
+.directory tr:has(td.entry > span[style*="width:16px"]):has(td.entry span.arrow) td.entry {
+  border-left: 4px solid rgba(11, 117, 188, 0.36);
+}
+
+.directory tr:has(td.entry > span[style*="width:32px"]) td.entry {
+  border-left: 4px solid rgba(104, 190, 40, 0.36);
+}
+
+.directory tr:has(td.entry > span[style*="width:48px"]) td.entry,
+.directory tr:has(td.entry > span[style*="width:64px"]) td.entry {
+  border-left: 4px solid rgba(16, 35, 63, 0.14);
+}
+
+.directory tr:has(td.entry > span[style*="width:16px"]):has(td.entry span.arrow) td.entry a,
+.directory tr:has(td.entry > span[style*="width:32px"]) td.entry a,
+.directory tr:has(td.entry > span[style*="width:48px"]) td.entry a,
+.directory tr:has(td.entry > span[style*="width:64px"]) td.entry a {
+  font-weight: 750;
+}
+
+.directory tr:has(td.entry > span[style*="width:48px"]) td.entry a,
+.directory tr:has(td.entry > span[style*="width:64px"]) td.entry a {
+  color: #254f7a;
+}
+
+.directory tr:has(td.entry > span[style*="width:48px"]) td.desc,
+.directory tr:has(td.entry > span[style*="width:64px"]) td.desc {
+  color: #475569;
+  font-size: 0.9rem;
+}
+
+.directory .levels {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 12px;
+  color: var(--ornl-ink-soft);
+  font-size: 0.9rem;
+}
+
+.directory .levels span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  min-height: 30px;
+  margin-left: 0;
+  color: var(--ornl-navy);
+  background: #ffffff;
+  border: 1px solid var(--ornl-border);
+  border-radius: 6px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.directory .levels span:hover {
+  color: #ffffff;
+  background: var(--ornl-blue);
+}
+
+.arrow span,
+.arrowhead {
+  color: var(--ornl-blue);
+}
+
+table.doxtable {
+  width: 100%;
+  margin: 1.2rem 0;
+  overflow: hidden;
+  border: 1px solid var(--ornl-border);
+  border-radius: 8px;
+  border-collapse: separate;
+  border-spacing: 0;
+  box-shadow: 0 10px 24px rgba(7, 21, 38, 0.06);
+}
+
+table.doxtable th {
+  padding: 12px 14px;
+  color: #ffffff;
+  background: var(--ornl-navy);
+  border-color: rgba(255, 255, 255, 0.18);
+  font-weight: 800;
+}
+
+table.doxtable td {
+  padding: 11px 14px;
+  border-color: var(--ornl-border);
+}
+
+table.doxtable tr:nth-child(even) td {
+  background: #f8fbfc;
+}
+
+p.formulaDsp,
+.formulaDsp {
+  overflow-x: auto;
+  margin: 1.2rem 0;
+  padding: 18px 20px;
+  color: var(--ornl-navy);
+  background: #f7fafc;
+  border: 1px solid var(--ornl-border);
+  border-left: 5px solid var(--ornl-blue);
+  border-radius: 8px;
+}
+
+code,
+tt,
+pre.fragment,
+div.fragment {
+  background: var(--ornl-code-bg);
+  border-color: var(--ornl-border);
+  border-radius: 6px;
+}
+
+pre.fragment,
+div.fragment {
+  padding: 16px;
+  box-shadow: inset 0 0 0 1px rgba(215, 224, 229, 0.55);
+}
+
+.memitem {
+  border-color: var(--ornl-border);
+  border-radius: 8px;
+  box-shadow: 0 10px 24px rgba(7, 21, 38, 0.06);
+}
+
+.memproto,
+.memdoc {
+  border-color: var(--ornl-border);
+}
+
+.memproto {
+  border-radius: 8px 8px 0 0;
+}
+
+.memdoc {
+  border-radius: 0 0 8px 8px;
+}
+
+.paramname,
+.memname,
+.mlabel {
+  color: var(--ornl-navy);
+}
+
+blockquote {
+  border-left: 5px solid var(--ornl-green);
+  border-radius: 0 8px 8px 0;
+}
+
+#MSearchBox {
+  border-radius: 7px;
+}
+
+#MSearchField {
+  font-family: inherit;
+}
+
+#MSearchSelectWindow,
+#MSearchResultsWindow {
+  border-color: var(--ornl-border);
+  box-shadow: 0 18px 34px rgba(7, 21, 38, 0.18);
+}
+
+.footer,
+#nav-path {
+  color: var(--ornl-ink-soft);
+}
+
+#nav-path ul {
+  background: #ffffff;
+  border-top: 1px solid var(--ornl-border);
+}
+
+@media (max-width: 767px) {
+  #titlearea {
+    padding: 18px 16px;
+  }
+
+  #projectlogo {
+    width: 56px;
+  }
+
+  #projectalign {
+    padding-left: 12px;
+  }
+
+  #projectlogo img {
+    width: 44px;
+    height: 44px;
+    margin-bottom: 0;
+  }
+
+  #projectname {
+    font-size: 1.15rem;
+  }
+
+  #projectnumber {
+    display: inline-block;
+    margin: 0 0 0 6px;
+    font-size: 0.7rem;
+  }
+
+  #projectbrief {
+    max-width: none;
+    font-size: 0.88rem;
+  }
+
+  #main-nav {
+    min-height: 0;
+    padding: 0 12px;
+  }
+
+  .main-menu-btn {
+    margin: 6px 0 6px 4px;
+  }
+
+  .sm-dox {
+    padding-bottom: 10px;
+  }
+
+  .sm-dox a,
+  .sm-dox a:focus,
+  .sm-dox a:active,
+  .sm-dox a.highlighted {
+    min-height: 42px;
+    line-height: 42px;
+  }
+
+  #doc-content {
+    padding: 24px 14px 42px;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .ornl-topic-cta {
+    display: block;
+    padding: 18px;
+  }
+
+  .ornl-topic-cta a {
+    width: 100%;
+    justify-content: center;
+    margin-top: 14px;
+  }
+
+  .directory td {
+    display: block;
+    width: 100%;
+    padding: 11px 12px;
+  }
+
+  .directory td.entry {
+    min-width: 0;
+    padding-bottom: 4px;
+    white-space: normal;
+  }
+
+  .directory td.desc {
+    padding-top: 0;
+  }
+
+  .directory tr:has(td.entry > span[style*="width:0px"]) td {
+    padding-top: 12px;
+    padding-bottom: 8px;
+  }
+
+  .directory tr:has(td.entry > span[style*="width:16px"]):has(td.entry span.arrow) td.entry,
+  .directory tr:has(td.entry > span[style*="width:32px"]) td.entry,
+  .directory tr:has(td.entry > span[style*="width:48px"]) td.entry,
+  .directory tr:has(td.entry > span[style*="width:64px"]) td.entry {
+    border-left-width: 3px;
+  }
+}

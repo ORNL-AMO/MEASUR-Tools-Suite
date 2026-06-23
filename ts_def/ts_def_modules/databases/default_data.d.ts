@@ -1,7 +1,7 @@
-import { CompressorsData } from "../compressedAir/compressorsCalc";
+import { CompressorCatalogRecord } from "../compressedAir/assessment/compressor_catalog";
 import {
     MotorDataV,
-    CompressorsDataV,
+    CompressorCatalogRecordV,
     LightingDataV,
     GasLoadChargeMaterialV,
     LiquidLoadChargeMaterialV,
@@ -165,20 +165,20 @@ export declare class DefaultData {
 
     /** @returns {@link MotorData} vector. */
     getMotorData(): MotorDataV;
-    /** @returns compressor type 1 defaults as {@link CompressorsData} vector. */
-    getCompressorType1Data(): CompressorsDataV;
-    /** @returns compressor type 1 (greater than 100 kW) defaults as {@link CompressorsData} vector. */
-    getCompressorType1_GT100kWData(): CompressorsDataV;
-    /** @returns compressor type 2 defaults as {@link CompressorsData} vector. */
-    getCompressorType2Data(): CompressorsDataV;
-    /** @returns compressor type 3 defaults as {@link CompressorsData} vector. */
-    getCompressorType3Data(): CompressorsDataV;
-    /** @returns compressor type 4 defaults as {@link CompressorsData} vector. */
-    getCompressorType4Data(): CompressorsDataV;
-    /** @returns compressor type 5 defaults as {@link CompressorsData} vector. */
-    getCompressorType5Data(): CompressorsDataV;
-    /** @returns compressor type 6 defaults as {@link CompressorsData} vector. */
-    getCompressorType6Data(): CompressorsDataV;
+    /** @returns compressor type 1 defaults as {@link CompressorCatalogRecord} vector. */
+    getCompressorType1Data(): CompressorCatalogRecordV;
+    /** @returns compressor type 1 (greater than 100 kW) defaults as {@link CompressorCatalogRecord} vector. */
+    getCompressorType1_GT100kWData(): CompressorCatalogRecordV;
+    /** @returns compressor type 2 defaults as {@link CompressorCatalogRecord} vector. */
+    getCompressorType2Data(): CompressorCatalogRecordV;
+    /** @returns compressor type 3 defaults as {@link CompressorCatalogRecord} vector. */
+    getCompressorType3Data(): CompressorCatalogRecordV;
+    /** @returns compressor type 4 defaults as {@link CompressorCatalogRecord} vector. */
+    getCompressorType4Data(): CompressorCatalogRecordV;
+    /** @returns compressor type 5 defaults as {@link CompressorCatalogRecord} vector. */
+    getCompressorType5Data(): CompressorCatalogRecordV;
+    /** @returns compressor type 6 defaults as {@link CompressorCatalogRecord} vector. */
+    getCompressorType6Data(): CompressorCatalogRecordV;
     /** @returns {@link LightingData} vector. */
     getLightingData(): LightingDataV;
 

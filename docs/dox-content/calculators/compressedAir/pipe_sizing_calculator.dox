@@ -1,6 +1,6 @@
 /**
  * @defgroup pipe_sizing_calculator Pipe Sizing Calculator
- * @ingroup compressed_air_assessments
+ * @ingroup compressed_air_calculators
  * @brief Sizes compressed air distribution pipes to meet a target design velocity.
  * @details This calculator determines the minimum internal cross-sectional area and
  *          corresponding pipe diameter required to carry a given compressed air flow
