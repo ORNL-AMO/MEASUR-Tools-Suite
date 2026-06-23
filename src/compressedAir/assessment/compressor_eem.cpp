@@ -78,4 +78,25 @@ double adjustedPower(double rated_full_load_power, double rated_full_load_pressu
             (std::pow((rated_full_load_pressure + atmospheric_pressure) / atmospheric_pressure, 0.283) - 1.0));
 }
 
+double pressureReducedAirflow(double use_airflow, double adjusted_full_load_pressure,
+                              double altitude_pressure, double original_full_load_pressure,
+                              double atmospheric_pressure) {
+    if (adjusted_full_load_pressure == original_full_load_pressure) {
+        return use_airflow;
+    }
+
+    const double pressure_ratio =
+        (adjusted_full_load_pressure + altitude_pressure) /
+        (original_full_load_pressure + atmospheric_pressure);
+    return use_airflow - (use_airflow - use_airflow * pressure_ratio) * 0.6;
+}
+
+ReceiverVolumeResult addReceiverVolume(double current_receiver_volume, double added_receiver_volume) {
+    return {added_receiver_volume, current_receiver_volume + added_receiver_volume};
+}
+
+AutomaticSequencerSetPointResult automaticSequencerSetPoints(double target_pressure, double variance) {
+    return {target_pressure - variance, target_pressure + variance};
+}
+
 } // namespace compressed_air::assessment::compressor_eem

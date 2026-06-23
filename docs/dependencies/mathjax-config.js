@@ -102,9 +102,12 @@ window.MathJax = {
                 \DeclareSIUnit{\squareMeter}{m^2}
                 \DeclareSIUnit{\inchWaterColumn}{in\,WC}
                 \DeclareSIUnit{\kilowatt}{kW}
+                \DeclareSIUnit{\watt}{W}
                 \DeclareSIUnit{\atm}{atm}
                 \DeclareSIUnit{\lbmol}{lbmol}
                 \DeclareSIUnit{\year}{yr}
+                \DeclareSIUnit{\day}{day}
+                \DeclareSIUnit{\month}{mo}
                 \DeclareSIUnit{\ton}{ton}
                 \DeclareSIUnit{\squareInch}{in^2}
                 \DeclareSIUnit{\squareFoot}{ft^2}
@@ -112,7 +115,11 @@ window.MathJax = {
                 \DeclareSIUnit{\psi}{psi}
                 \DeclareSIUnit{\decibel}{dB}
                 \DeclareSIUnit{\hour}{h}
+                \DeclareSIUnit{\second}{s}
+                \DeclareSIUnit{\volt}{V}
+                \DeclareSIUnit{\ampere}{A}
                 \DeclareSIUnit{\bhp}{bhp}
+                \DeclareSIUnit{\hp}{hp}
                 \DeclareSIUnit{\psia}{psia}
                 \DeclareSIUnit{\psig}{psig}
             `);

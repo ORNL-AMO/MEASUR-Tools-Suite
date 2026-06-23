@@ -12,6 +12,8 @@ export * from "./ts_def_modules/compressedAir/receiver_tank";
 export * from "./ts_def_modules/compressedAir/assessment/compressor";
 export * from "./ts_def_modules/compressedAir/assessment/compressor_catalog";
 export * from "./ts_def_modules/compressedAir/assessment/compressor_eem";
+export * from "./ts_def_modules/compressedAir/assessment/compressor_performance_points";
+export * from "./ts_def_modules/compressedAir/assessment/compressor_system_profile";
 export * from "./ts_def_modules/compressedAir/assessment/centrifugal_compressor";
 export * from "./ts_def_modules/compressedAir/assessment/load_unload_compressor";
 export * from "./ts_def_modules/compressedAir/assessment/modulation_without_unload_compressor";
@@ -123,6 +125,8 @@ export type MeasurToolsSuite =
     import("./ts_def_modules/compressedAir/receiver_tank").ReceiverTankModule &
     import("./ts_def_modules/compressedAir/assessment/compressor").CompressorAssessmentSharedModule &
     import("./ts_def_modules/compressedAir/assessment/compressor_eem").CompressorEemModule &
+    import("./ts_def_modules/compressedAir/assessment/compressor_performance_points").CompressorPerformancePointsModule &
+    import("./ts_def_modules/compressedAir/assessment/compressor_system_profile").CompressorSystemProfileModule &
     import("./ts_def_modules/compressedAir/assessment/centrifugal_compressor").CentrifugalCompressorModule &
     import("./ts_def_modules/compressedAir/assessment/load_unload_compressor").LoadUnloadCompressorModule &
     import("./ts_def_modules/compressedAir/assessment/modulation_without_unload_compressor").ModulationWithoutUnloadCompressorModule &

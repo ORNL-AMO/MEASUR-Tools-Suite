@@ -38,6 +38,16 @@ struct PressureReductionSavingResult {
     double costSavings = 0.0; ///< Annual cost savings @unitb{\dollar}.
 };
 
+struct ReceiverVolumeResult {
+    double addedReceiverVolumeFt3 = 0.0; ///< Added receiver volume @unitb{\cubicFoot}.
+    double totalReceiverVolumeFt3 = 0.0; ///< Total receiver volume after addition @unitb{\cubicFoot}.
+};
+
+struct AutomaticSequencerSetPointResult {
+    double fullLoadPressurePsig = 0.0; ///< Sequencer full-load pressure @unitb{\psig}.
+    double upperPressurePsig = 0.0; ///< Sequencer upper pressure set point @unitb{\psig}.
+};
+
 ReduceAirLeaksResult reduceAirLeaks(double full_load_airflow, double use_airflow, double leak_airflow,
                                     double leak_reduction_fraction);
 
@@ -65,5 +75,13 @@ PressureReductionSavingResult pressureReductionSaving(double operating_hours, do
 
 double adjustedPower(double rated_full_load_power, double rated_full_load_pressure, double discharge_pressure,
                      double altitude_pressure = 14.69, double atmospheric_pressure = 14.69);
+
+double pressureReducedAirflow(double use_airflow, double adjusted_full_load_pressure,
+                              double altitude_pressure, double original_full_load_pressure,
+                              double atmospheric_pressure = 14.7);
+
+ReceiverVolumeResult addReceiverVolume(double current_receiver_volume, double added_receiver_volume);
+
+AutomaticSequencerSetPointResult automaticSequencerSetPoints(double target_pressure, double variance);
 
 } // namespace compressed_air::assessment::compressor_eem

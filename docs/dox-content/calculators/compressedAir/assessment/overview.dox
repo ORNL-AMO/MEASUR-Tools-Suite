@@ -111,8 +111,8 @@
  * @symrow{F_Q; Atmospheric pressure correction for airflow; \unitless}
  * @symrow{P_{atm}; Atmospheric pressure; \psia}
  * @symrow{P_{in}; Measured inlet pressure; \psia}
- * @symrow{BHP_{FL}; Full-load brake horsepower; \horsepower}
- * @symrow{0.746; Horsepower-to-kilowatt conversion; \kilo\watt\per\horsepower}
+ * @symrow{BHP_{FL}; Full-load brake horsepower; \hp}
+ * @symrow{0.746; Horsepower-to-kilowatt conversion; \kilo\watt\per\hp}
  * @symrow{\eta; Motor efficiency; \unitless}
  * @symrow{R_P; Polytropic pressure-ratio correction; \unitless}
  * @symrow{Q_{rated}; Rated airflow capacity; \acfm}

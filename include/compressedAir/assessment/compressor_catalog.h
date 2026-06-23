@@ -19,7 +19,7 @@ struct CompressorCatalogRecord {
     int         id                         = 0;   ///< Sequential catalog record ID @unitb{\unitless}.
     int         compressorTypeId           = 0;   ///< Compressor type identifier @unitb{\unitless}.
     std::string model                      = "";  ///< Compressor model name.
-    double      horsepower                 = 0.0; ///< Rated motor size @unitb{\horsepower}.
+    double      horsepower                 = 0.0; ///< Rated motor size @unitb{\hp}.
     double      ratedCapacityAcfm          = 0.0; ///< Rated compressor capacity @unitb{\acfm}.
     double      ratedPressurePsig          = 0.0; ///< Rated discharge pressure @unitb{\psig}.
     double      maxFullFlowPressurePsig    = 0.0; ///< Maximum full-flow pressure @unitb{\psig}.

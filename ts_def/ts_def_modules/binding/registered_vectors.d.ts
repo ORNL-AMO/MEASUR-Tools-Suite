@@ -22,6 +22,13 @@ import { ElectricityReductionInput } from "../treasureHunt/electricity_reduction
 import { CompressedAirReductionInput } from "../treasureHunt/compressed_air_reduction";
 import { CompressedAirPressureReductionInput } from "../treasureHunt/compressed_air_pressure_reduction";
 import { Inlet } from "../steamModeler/ssmt";
+import {
+    CompressorProfileCompressor,
+    CompressorProfileRow,
+    CompressorProfileTotal,
+    CompressorRuntimeState,
+    CompressorTrimSelection
+} from "../compressedAir/assessment/compressor_system_profile";
 
 export declare abstract class RegisteredVector<T> {
     /** Constructor for creating an array of elements of type <T> */
@@ -72,6 +79,21 @@ export declare interface DoubleVector2D extends RegisteredVector<DoubleVector> {
 
 /** A vector of {@link CompressorCatalogRecord} records, mapped from `std::vector<CompressorCatalogRecord>`. */
 export declare interface CompressorCatalogRecordV extends RegisteredVector<CompressorCatalogRecord> {}
+
+/** A vector of {@link CompressorProfileCompressor} records, mapped from `std::vector<CompressorProfileCompressor>`. */
+export declare interface CompressorProfileCompressorV extends RegisteredVector<CompressorProfileCompressor> {}
+
+/** A vector of {@link CompressorProfileRow} records, mapped from `std::vector<CompressorProfileRow>`. */
+export declare interface CompressorProfileRowV extends RegisteredVector<CompressorProfileRow> {}
+
+/** A vector of {@link CompressorProfileTotal} records, mapped from `std::vector<CompressorProfileTotal>`. */
+export declare interface CompressorProfileTotalV extends RegisteredVector<CompressorProfileTotal> {}
+
+/** A vector of {@link CompressorRuntimeState} records, mapped from `std::vector<CompressorRuntimeState>`. */
+export declare interface CompressorRuntimeStateV extends RegisteredVector<CompressorRuntimeState> {}
+
+/** A vector of {@link CompressorTrimSelection} records, mapped from `std::vector<CompressorTrimSelection>`. */
+export declare interface CompressorTrimSelectionV extends RegisteredVector<CompressorTrimSelection> {}
 
 /** A vector of {@link CompressedAirLeakSurveyInput} records, mapped from `std::vector<CompressedAirLeakSurveyInput>`. */
 export declare interface CompressedAirLeakSurveyInputV extends RegisteredVector<CompressedAirLeakSurveyInput> {}
@@ -150,6 +172,11 @@ export type RegisteredVectorsModule = {
     DoubleVector2D: RegisteredVectorConstructor<DoubleVector2D>;
 
     CompressorCatalogRecordV: RegisteredVectorConstructor<CompressorCatalogRecordV>;
+    CompressorProfileCompressorV: RegisteredVectorConstructor<CompressorProfileCompressorV>;
+    CompressorProfileRowV: RegisteredVectorConstructor<CompressorProfileRowV>;
+    CompressorProfileTotalV: RegisteredVectorConstructor<CompressorProfileTotalV>;
+    CompressorRuntimeStateV: RegisteredVectorConstructor<CompressorRuntimeStateV>;
+    CompressorTrimSelectionV: RegisteredVectorConstructor<CompressorTrimSelectionV>;
     CompressedAirLeakSurveyInputV: RegisteredVectorConstructor<CompressedAirLeakSurveyInputV>;
 
     GasLoadChargeMaterialV: RegisteredVectorConstructor<GasLoadChargeMaterialV>;

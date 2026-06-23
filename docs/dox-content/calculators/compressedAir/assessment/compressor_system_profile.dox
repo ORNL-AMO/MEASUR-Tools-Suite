@@ -1,0 +1,194 @@
+/**
+ * @defgroup compressor_system_profile_assessment Compressor System Profile
+ * @ingroup compressor_modeling
+ * @brief Multi-compressor baseline profile, reallocation, and savings calculations.
+ * @details The system-profile module returns calculated compressor interval rows, system
+ *          total rows, and day-type savings results. Inputs are already converted to the
+ *          Suite U.S. customary assessment units. Desktop remains responsible for UI
+ *          validation, unit conversion, persistence, reporting, and mapping its numeric IDs
+ *          to Suite enums.
+ *
+ * @heading{Profile Row Outputs}
+ * @copydoc compressor_profile_outputs
+ *
+ * @heading{Baseline Interval Calculation}
+ * @copydoc compressor_profile_baseline_formula
+ *
+ * @heading{Flow Reallocation}
+ * @copydoc compressor_profile_reallocation_formula
+ *
+ * @heading{Base-Trim and Load-Sharing Logic}
+ * @copydoc compressor_profile_selection_logic
+ *
+ * @heading{Pressure and Runtime Transforms}
+ * @copydoc compressor_profile_transform_formula
+ *
+ * @heading{Savings Rollup}
+ * @copydoc compressor_profile_savings_formula
+ */
+
+/**
+ * @defgroup compressor_profile_outputs Compressor Profile Outputs
+ * @ingroup compressor_system_profile_assessment
+ * @brief Output rows produced by baseline and adjusted profile calculations.
+ * @details `CompressorProfileRow` contains one compressor interval result: package power
+ *          @unitb{\kilo\watt}, airflow @unitb{\acfm}, compressor fractions, system fractions,
+ *          operating order, and optional electrical inputs. `CompressorProfileTotal` aggregates
+ *          all compressor rows at the same day type and interval. `CompressorProfileSavingsResult`
+ *          reports annual baseline energy, adjusted energy, savings, cost savings, and simple
+ *          payback.
+ *
+ * Returned profile and total collections are registered WebAssembly vectors. JavaScript and
+ * TypeScript callers should delete returned vectors after reading them.
+ */
+
+/**
+ * @defgroup compressor_profile_baseline_formula Compressor Profile Baseline Formula
+ * @ingroup compressor_system_profile_assessment
+ * @brief Per-compressor interval calculation from the selected input basis.
+ * @details For each profile row, Suite selects the compressor model that matches the compressor
+ *          type and control strategy. The row input is interpreted by `CompressorInputBasis`:
+ *          power fraction, capacity fraction, measured power, measured capacity, or electrical
+ *          measurement. The model returns compressor power and airflow, then system fractions
+ *          are calculated against the total full-load system capacity and power.
+ *
+ * @formula{compressor-profile-system-airflow-fraction;
+ *   f_{Q,sys,i} = \frac{Q_i}{\sum_j Q_{FL,j}}
+ * }
+ * @formula{compressor-profile-system-power-fraction;
+ *   f_{P,sys,i} = \frac{P_i}{\sum_j P_{FL,j}}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{f_{Q,sys,i}; Interval system airflow fraction for compressor i; \unitless}
+ * @symrow{f_{P,sys,i}; Interval system power fraction for compressor i; \unitless}
+ * @symrow{Q_i; Compressor interval airflow; \acfm}
+ * @symrow{P_i; Compressor interval power; \kilo\watt}
+ * @symrow{Q_{FL,j}; Full-load airflow of compressor j; \acfm}
+ * @symrow{P_{FL,j}; Full-load power of compressor j; \kilo\watt}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup compressor_profile_reallocation_formula Compressor Profile Flow Reallocation
+ * @ingroup compressor_system_profile_assessment
+ * @brief Reallocating total system demand to compressor rows.
+ * @details Reallocation starts from a total demand row and distributes airflow to available
+ *          compressors. In cascading mode, compressors run in operating-order sequence until
+ *          demand is met. Earlier compressors are filled up to full load; the final compressor
+ *          trims the remaining demand. When demand is zero and shutdown is allowed, compressor
+ *          rows are returned off.
+ *
+ * @formula{compressor-profile-ordered-allocation;
+ *   Q_i =
+ *   \begin{cases}
+ *     0, & \text{if compressor i is unavailable} \\
+ *     \min(Q_{FL,i}, Q_{rem}), & \text{otherwise}
+ *   \end{cases}
+ * }
+ * @formula{compressor-profile-remaining-demand;
+ *   Q_{rem,next} = \max(0, Q_{rem} - Q_i)
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_i; Allocated compressor airflow; \acfm}
+ * @symrow{Q_{FL,i}; Full-load airflow of compressor i; \acfm}
+ * @symrow{Q_{rem}; Remaining system demand before compressor i; \acfm}
+ * @symrow{Q_{rem,next}; Remaining system demand after compressor i; \acfm}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup compressor_profile_selection_logic Compressor Profile Selection Logic
+ * @ingroup compressor_system_profile_assessment
+ * @brief Base-trim and load-sharing compressor selection algorithms.
+ * @details Load-sharing mode evaluates available compressor combinations and selects the
+ *          combination with the lowest total package power for the requested demand. The
+ *          selected compressors split demand equally where possible. Base-trim mode uses
+ *          the selected trim compressor for each day type, evaluates feasible base-compressor
+ *          combinations around that trim compressor, and selects the lowest-power combination
+ *          that can meet demand.
+ *
+ * @formula{compressor-profile-combination-power;
+ *   P_{combo} = \sum_{i \in S} P_i(Q_i)
+ * }
+ * @formula{compressor-profile-best-combination;
+ *   S^* = \arg\min_{S \in \mathcal{S}_{feasible}} P_{combo}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{P_{combo}; Total combination package power; \kilo\watt}
+ * @symrow{S; Candidate compressor set; \unitless}
+ * @symrow{S^*; Selected compressor set; \unitless}
+ * @symrow{P_i(Q_i); Compressor model power at allocated airflow; \kilo\watt}
+ * @symrow{\mathcal{S}_{feasible}; Candidate sets with enough available capacity; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup compressor_profile_transform_formula Compressor Profile Transforms
+ * @ingroup compressor_system_profile_assessment
+ * @brief Pressure-change airflow and reduce-runtime handling.
+ * @details Pressure-change EEMs adjust use airflow with the same pressure response used by
+ *          the scalar EEM helper. Reduce-runtime inputs can mark compressors unavailable for
+ *          specific intervals. If `automaticShutdownTimer` is true, the row is treated as an
+ *          automatic-shutdown case when the compressor model supports it.
+ *
+ * @formula{compressor-profile-pressure-airflow;
+ *   Q_{adj} = Q_{use} -
+ *   \left(Q_{use} - Q_{use}\frac{P_{adj}+P_{alt}}{P_{orig}+P_{atm}}\right)0.6
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{adj}; Pressure-adjusted use airflow; \acfm}
+ * @symrow{Q_{use}; Baseline use airflow; \acfm}
+ * @symrow{P_{adj}; Adjusted full-load pressure; \psig}
+ * @symrow{P_{orig}; Original full-load pressure; \psig}
+ * @symrow{P_{alt}; Site altitude pressure; \psia}
+ * @symrow{P_{atm}; Atmospheric pressure; \psia}
+ * @symrow{0.6; Legacy pressure-flow response factor; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup compressor_profile_savings_formula Compressor Profile Savings Rollup
+ * @ingroup compressor_system_profile_assessment
+ * @brief Annual energy, cost, savings, and payback from profile rows.
+ * @details Savings are rolled up by day type. Compressor interval power is multiplied by the
+ *          profile interval duration and annual operating days. Auxiliary energy is added to
+ *          the adjusted case. Simple payback is reported in months when annual cost savings
+ *          are positive.
+ *
+ * @formula{compressor-profile-baseline-energy;
+ *   E_{base} = \left(\sum_i P_{base,i}\right)hN
+ * }
+ * @formula{compressor-profile-adjusted-energy;
+ *   E_{adj} = \left(\sum_i P_{adj,i}\right)hN + E_{aux}
+ * }
+ * @formula{compressor-profile-cost-savings;
+ *   C_{save} = (E_{base} - E_{adj})C_e
+ * }
+ * @formula{compressor-profile-payback;
+ *   PB = 12\frac{C_{impl} - C_{salvage}}{C_{save}}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{E_{base}; Baseline annual energy; \kilo\watt\hour}
+ * @symrow{E_{adj}; Adjusted annual energy; \kilo\watt\hour}
+ * @symrow{P_{base,i}; Baseline interval power for row i; \kilo\watt}
+ * @symrow{P_{adj,i}; Adjusted interval power for row i; \kilo\watt}
+ * @symrow{h; Interval duration; \hour}
+ * @symrow{N; Annual operating days; \day}
+ * @symrow{E_{aux}; Added auxiliary energy; \kilo\watt\hour}
+ * @symrow{C_e; Electricity cost; \dollar\per\kilo\watt\hour}
+ * @symrow{C_{save}; Annual cost savings; \dollar}
+ * @symrow{PB; Simple payback; \month}
+ * @symrow{C_{impl}; Implementation cost; \dollar}
+ * @symrow{C_{salvage}; Salvage value; \dollar}
+ * @endsymtable
+ */

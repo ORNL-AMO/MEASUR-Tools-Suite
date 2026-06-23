@@ -32,4 +32,9 @@ TEST_CASE("Compressor EEM assessment preserves legacy expected values", "[compre
     CHECK(pressureReductionSaving.costSavings == Approx(2083.18));
 
     CHECK(compressor_eem::adjustedPower(75, 125, 110, 14.7, 14.7) == Approx(69.9653));
+    CHECK(compressor_eem::pressureReducedAirflow(1000, 95, 14.7, 100, 14.7) == Approx(973.8448));
+
+    auto sequencerSetPoints = compressor_eem::automaticSequencerSetPoints(100, 4);
+    CHECK(sequencerSetPoints.fullLoadPressurePsig == Approx(96));
+    CHECK(sequencerSetPoints.upperPressurePsig == Approx(104));
 }

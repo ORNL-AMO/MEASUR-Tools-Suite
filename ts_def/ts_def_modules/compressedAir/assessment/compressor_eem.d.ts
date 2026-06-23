@@ -48,6 +48,22 @@ export interface PressureReductionSavingResult {
     costSavings: number;
 }
 
+/** Result for receiver volume addition. */
+export interface ReceiverVolumeResult {
+    /** Added receiver volume, units ft3. */
+    addedReceiverVolumeFt3: number;
+    /** Total receiver volume after addition, units ft3. */
+    totalReceiverVolumeFt3: number;
+}
+
+/** Result for automatic sequencer set-point calculation. */
+export interface AutomaticSequencerSetPointResult {
+    /** Sequencer full-load pressure, units psig. */
+    fullLoadPressurePsig: number;
+    /** Sequencer upper pressure set point, units psig. */
+    upperPressurePsig: number;
+}
+
 /**
  * @param fullLoadAirflowAcfm Full-load airflow, units acfm.
  * @param useAirflowAcfm Baseline use airflow, units acfm.
@@ -147,6 +163,40 @@ export function adjustedPower(
     atmosphericPressurePsia: number
 ): number;
 
+/**
+ * @param useAirflowAcfm Baseline use airflow, units acfm.
+ * @param adjustedFullLoadPressurePsig Adjusted full-load pressure, units psig.
+ * @param altitudePressurePsia Site altitude pressure, units psia.
+ * @param originalFullLoadPressurePsig Original full-load pressure, units psig.
+ * @param atmosphericPressurePsia Atmospheric pressure, units psia.
+ * @returns Pressure-reduced use airflow, units acfm.
+ */
+export function pressureReducedAirflow(
+    useAirflowAcfm: number,
+    adjustedFullLoadPressurePsig: number,
+    altitudePressurePsia: number,
+    originalFullLoadPressurePsig: number,
+    atmosphericPressurePsia: number
+): number;
+
+/**
+ * @param currentReceiverVolumeFt3 Current receiver volume, units ft3.
+ * @param addedReceiverVolumeFt3 Added receiver volume, units ft3.
+ */
+export function addReceiverVolume(
+    currentReceiverVolumeFt3: number,
+    addedReceiverVolumeFt3: number
+): ReceiverVolumeResult;
+
+/**
+ * @param targetPressurePsig Sequencer target pressure, units psig.
+ * @param variancePsig Sequencer pressure variance, units psig.
+ */
+export function automaticSequencerSetPoints(
+    targetPressurePsig: number,
+    variancePsig: number
+): AutomaticSequencerSetPointResult;
+
 export type CompressorEemModule = {
     reduceAirLeaks: typeof reduceAirLeaks;
     improveEndUseEfficiency: typeof improveEndUseEfficiency;
@@ -154,4 +204,7 @@ export type CompressorEemModule = {
     adjustCascadingSetPoint: typeof adjustCascadingSetPoint;
     pressureReductionSaving: typeof pressureReductionSaving;
     adjustedPower: typeof adjustedPower;
+    pressureReducedAirflow: typeof pressureReducedAirflow;
+    addReceiverVolume: typeof addReceiverVolume;
+    automaticSequencerSetPoints: typeof automaticSequencerSetPoints;
 };

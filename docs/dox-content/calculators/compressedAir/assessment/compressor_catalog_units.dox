@@ -11,7 +11,7 @@
  * @symrow{id; Sequential catalog record identifier; \unitless}
  * @symrow{compressorTypeId; Compressor type identifier; \unitless}
  * @symrow{model; Catalog model label; \unitless}
- * @symrow{horsepower; Rated motor size; \horsepower}
+ * @symrow{horsepower; Rated motor size; \hp}
  * @symrow{ratedCapacityAcfm; Rated compressor capacity; \acfm}
  * @symrow{ratedPressurePsig; Rated discharge pressure; \psig}
  * @symrow{maxFullFlowPressurePsig; Maximum full-flow pressure; \psig}

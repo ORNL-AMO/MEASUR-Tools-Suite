@@ -14,6 +14,9 @@
  * @heading{Pressure Reduction and Set Points}
  * @copydoc compressor_eem_pressure_formula
  *
+ * @heading{Reusable Profile Transforms}
+ * @copydoc compressor_eem_profile_transform_formula
+ *
  * @heading{Savings}
  * @copydoc compressor_eem_savings_formula
  */
@@ -87,6 +90,46 @@
  * @symrow{Q_{use,adj}; Adjusted use airflow; \acfm}
  * @symrow{Q_{use}; Baseline use airflow; \acfm}
  * @symrow{0.6; Legacy pressure-flow response factor; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup compressor_eem_profile_transform_formula Compressor EEM Profile Transform Formula
+ * @ingroup compressor_eem_assessment
+ * @brief Reusable pressure, receiver, and automatic sequencer transforms for profile EEMs.
+ * @details The pressure-reduced airflow helper is shared by profile-level pressure EEMs.
+ *          Receiver-volume and automatic-sequencer helpers return the numerical values that
+ *          Desktop applies to form state and then passes back into profile calculations.
+ *
+ * @formula{compressor-eem-pressure-reduced-airflow;
+ *   Q_{adj} = Q_{use} -
+ *   \left(Q_{use} - Q_{use}\frac{P_{adj}+P_{alt}}{P_{orig}+P_{atm}}\right)0.6
+ * }
+ * @formula{compressor-eem-receiver-volume;
+ *   V_{total} = V_{current} + V_{add}
+ * }
+ * @formula{compressor-eem-sequencer-low;
+ *   P_{FL,seq} = P_{target} - \Delta P
+ * }
+ * @formula{compressor-eem-sequencer-high;
+ *   P_{upper,seq} = P_{target} + \Delta P
+ * }
+ *
+ * @symtable
+ * @symrow{Q_{adj}; Pressure-adjusted use airflow; \acfm}
+ * @symrow{Q_{use}; Baseline use airflow; \acfm}
+ * @symrow{P_{adj}; Adjusted full-load pressure; \psig}
+ * @symrow{P_{orig}; Original full-load pressure; \psig}
+ * @symrow{P_{alt}; Site altitude pressure; \psia}
+ * @symrow{P_{atm}; Atmospheric pressure; \psia}
+ * @symrow{0.6; Legacy pressure-flow response factor; \unitless}
+ * @symrow{V_{total}; Total receiver volume after addition; \cubicFoot}
+ * @symrow{V_{current}; Current receiver volume; \cubicFoot}
+ * @symrow{V_{add}; Added receiver volume; \cubicFoot}
+ * @symrow{P_{FL,seq}; Sequencer full-load pressure; \psig}
+ * @symrow{P_{upper,seq}; Sequencer upper pressure; \psig}
+ * @symrow{P_{target}; Sequencer target pressure; \psig}
+ * @symrow{\Delta P; Sequencer pressure variance; \psig}
  * @endsymtable
  */
 

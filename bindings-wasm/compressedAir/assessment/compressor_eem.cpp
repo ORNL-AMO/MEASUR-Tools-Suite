@@ -32,10 +32,21 @@ EMSCRIPTEN_BINDINGS(compressor_eem_assessment)
         .field("energySavingsKwh", &eem::PressureReductionSavingResult::energySavingsKwh)
         .field("costSavings", &eem::PressureReductionSavingResult::costSavings);
 
+    value_object<eem::ReceiverVolumeResult>("ReceiverVolumeResult")
+        .field("addedReceiverVolumeFt3", &eem::ReceiverVolumeResult::addedReceiverVolumeFt3)
+        .field("totalReceiverVolumeFt3", &eem::ReceiverVolumeResult::totalReceiverVolumeFt3);
+
+    value_object<eem::AutomaticSequencerSetPointResult>("AutomaticSequencerSetPointResult")
+        .field("fullLoadPressurePsig", &eem::AutomaticSequencerSetPointResult::fullLoadPressurePsig)
+        .field("upperPressurePsig", &eem::AutomaticSequencerSetPointResult::upperPressurePsig);
+
     function("reduceAirLeaks", &eem::reduceAirLeaks);
     function("improveEndUseEfficiency", &eem::improveEndUseEfficiency);
     function("reduceSystemAirPressure", &eem::reduceSystemAirPressure);
     function("adjustCascadingSetPoint", &eem::adjustCascadingSetPoint);
     function("pressureReductionSaving", &eem::pressureReductionSaving);
     function("adjustedPower", &eem::adjustedPower);
+    function("pressureReducedAirflow", &eem::pressureReducedAirflow);
+    function("addReceiverVolume", &eem::addReceiverVolume);
+    function("automaticSequencerSetPoints", &eem::automaticSequencerSetPoints);
 }

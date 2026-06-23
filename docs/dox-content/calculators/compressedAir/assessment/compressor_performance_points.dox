@@ -1,0 +1,212 @@
+/**
+ * @defgroup compressor_performance_points_assessment Compressor Performance Points
+ * @ingroup compressor_modeling
+ * @brief Default compressor performance-point generation for assessment profile models.
+ * @details The performance-point generator returns the full set of points used by the
+ *          compressor assessment workflow: full-load, maximum full-flow, mid-turndown,
+ *          turndown, unload, no-load, and blow-off. Each point reports discharge pressure
+ *          @unitb{\psig}, airflow @unitb{\acfm}, package power @unitb{\kilo\watt}, and
+ *          default flags for each value. Desktop should continue to own form validation,
+ *          metric conversion, and UI labels; Suite owns these reusable numerical kernels.
+ *
+ * @heading{Generated Outputs}
+ * @copydoc compressor_performance_point_outputs
+ *
+ * @heading{Pressure-Adjusted Helpers}
+ * @copydoc compressor_performance_pressure_adjustment_formula
+ *
+ * @heading{No-Load and Unload Points}
+ * @copydoc compressor_performance_unload_formula
+ *
+ * @heading{Centrifugal and VFD Defaults}
+ * @copydoc compressor_performance_special_controls_formula
+ *
+ * @heading{Sequencer and Set-Point Adjustments}
+ * @copydoc compressor_performance_setpoint_formula
+ *
+ * @heading{Rated Metrics}
+ * @copydoc compressor_performance_rated_metrics_formula
+ */
+
+/**
+ * @defgroup compressor_performance_point_outputs Performance Point Outputs
+ * @ingroup compressor_performance_points_assessment
+ * @brief Output point definitions returned by `generatePerformancePoints`.
+ * @details A `CompressorPerformancePoints` result contains the following points:
+ *          full-load, maximum full-flow, mid-turndown, turndown, unload point, no-load,
+ *          and blow-off. Non-applicable points remain zero unless supplied by the caller
+ *          or generated for the selected compressor control.
+ *
+ * The generator respects each `isDefault*` flag. When a value is not marked default, the
+ * caller-provided value is preserved. When a value is default, Suite recalculates it from
+ * the nameplate, control, design, and atmospheric inputs using the formulas below.
+ *
+ * @subheading{Assumptions}
+ * Values are in U.S. customary compressed-air assessment units. Generated pressure values
+ * are rounded to one decimal place, airflow to whole @unitb{\acfm}, and power to one
+ * decimal place to match the Desktop characterization behavior.
+ */
+
+/**
+ * @defgroup compressor_performance_pressure_adjustment_formula Performance Point Pressure Adjustment
+ * @ingroup compressor_performance_points_assessment
+ * @brief Pressure-adjusted airflow and power used by generated points.
+ * @details Airflow decreases linearly with discharge pressure difference from the rated
+ *          pressure. Power is adjusted with the legacy pressure-ratio relationship. Screw
+ *          compressors use the supplied inlet pressure as the base pressure; other compressor
+ *          types use atmospheric pressure.
+ *
+ * @formula{performance-point-airflow-adjustment;
+ *   Q_{adj} = Q_{rated}\left(1 - 0.00075(P_d - P_{rated})\right)
+ * }
+ * @formula{performance-point-power-adjustment;
+ *   P_{adj} = P_{pkg}
+ *   \frac{\left(\frac{P_d + P_b}{P_b}\right)^{0.283} - 1}
+ *        {\left(\frac{P_{rated} + P_{atm}}{P_{atm}}\right)^{0.283} - 1}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{adj}; Pressure-adjusted airflow; \acfm}
+ * @symrow{Q_{rated}; Rated airflow capacity; \acfm}
+ * @symrow{P_d; Point discharge pressure; \psig}
+ * @symrow{P_{rated}; Rated full-load discharge pressure; \psig}
+ * @symrow{P_{adj}; Pressure-adjusted package power; \kilo\watt}
+ * @symrow{P_{pkg}; Rated package power; \kilo\watt}
+ * @symrow{P_b; Pressure-ratio base pressure; \psia}
+ * @symrow{P_{atm}; Atmospheric pressure; \psia}
+ * @symrow{0.00075; Legacy pressure-flow coefficient; \per\psig}
+ * @symrow{0.283; Legacy pressure-power exponent; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup compressor_performance_unload_formula Performance Point Unload Formulas
+ * @ingroup compressor_performance_points_assessment
+ * @brief No-load, unload airflow, unload pressure, and unload power formulas.
+ * @details No-load power is calculated from unload no-load percentage, package power, and
+ *          design efficiency. The unload point uses the configured unload capacity fraction
+ *          and the Desktop modulation exponent. Multi-step unloading uses the unload step
+ *          count as the exponent; otherwise the exponent is one.
+ *
+ * @formula{performance-point-no-load;
+ *   P_{NL} = \frac{r_{UL}}{100}P_{pkg}\frac{100}{\eta_d}
+ * }
+ * @formula{performance-point-unload-airflow;
+ *   Q_{UL} = Q_{FL}\frac{r_{UL,Q}}{100}
+ * }
+ * @formula{performance-point-unload-pressure;
+ *   P_{UL,d} = P_{MFF} + P_{mod}\left(1 - \frac{Q_{UL}}{Q_{FL}}\right)
+ * }
+ * @formula{performance-point-unload-power;
+ *   P_{UL} = P_{MFF}\left[
+ *      \left(1 - \frac{r_{FM}}{100}\right)
+ *      \left(\frac{r_{UL,Q}}{100}\right)^n +
+ *      \frac{r_{FM}}{100}
+ *   \right]
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{P_{NL}; No-load package power; \kilo\watt}
+ * @symrow{r_{UL}; No-load unload power percentage; \percent}
+ * @symrow{P_{pkg}; Package power; \kilo\watt}
+ * @symrow{\eta_d; Design efficiency; \percent}
+ * @symrow{Q_{UL}; Unload airflow; \acfm}
+ * @symrow{Q_{FL}; Full-load airflow; \acfm}
+ * @symrow{r_{UL,Q}; Unload point capacity; \percent}
+ * @symrow{P_{UL,d}; Unload discharge pressure; \psig}
+ * @symrow{P_{MFF}; Maximum full-flow pressure or power; \psig \text{ or } \kilo\watt}
+ * @symrow{P_{mod}; Modulating pressure range; \psig}
+ * @symrow{P_{UL}; Unload package power; \kilo\watt}
+ * @symrow{r_{FM}; Full-modulation no-load power percentage; \percent}
+ * @symrow{n; Modulation exponent; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup compressor_performance_special_controls_formula Performance Point Special Controls
+ * @ingroup compressor_performance_points_assessment
+ * @brief Centrifugal interpolation and VFD turndown point generation.
+ * @details Centrifugal unload airflow is interpolated from the compressor-specific full-load
+ *          pressure and capacity endpoints. VFD points use the configured turndown capacity
+ *          as the low-flow point and use the midpoint between full load and turndown as the
+ *          mid-turndown point.
+ *
+ * @formula{performance-point-vfd-turndown-airflow;
+ *   Q_{TD} = Q_{FL}\frac{r_{TD}}{100}
+ * }
+ * @formula{performance-point-vfd-mid-airflow;
+ *   Q_{MID} = \frac{Q_{FL}+Q_{TD}}{2}
+ * }
+ *
+ * VFD turndown and mid-turndown pressures are generated from the maximum full-flow pressure
+ * and modulating pressure range using the same unload pressure relationship. Their powers are
+ * pressure-adjusted from the rated package power and then reduced by the legacy VFD curve
+ * factors retained from Desktop.
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{Q_{TD}; VFD turndown airflow; \acfm}
+ * @symrow{Q_{MID}; VFD mid-turndown airflow; \acfm}
+ * @symrow{Q_{FL}; Full-load airflow; \acfm}
+ * @symrow{r_{TD}; Turndown capacity; \percent}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup compressor_performance_setpoint_formula Performance Point Set-Point Adjustments
+ * @ingroup compressor_performance_points_assessment
+ * @brief Sequencer, pressure-reduction, and cascading set-point transforms.
+ * @details These transforms adjust full-load and maximum full-flow pressure targets and then
+ *          regenerate any default pressure, airflow, or power fields. Manual values remain
+ *          unchanged because their default flags are false.
+ *
+ * @formula{performance-point-sequencer-full-load;
+ *   P_{FL,seq} = P_{target} - \Delta P_{seq}
+ * }
+ * @formula{performance-point-sequencer-max-flow;
+ *   P_{MFF,seq} = P_{target} + \Delta P_{seq}
+ * }
+ * @formula{performance-point-pressure-reduction;
+ *   P' = P - \Delta P_{sys}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{P_{FL,seq}; Sequencer full-load pressure; \psig}
+ * @symrow{P_{MFF,seq}; Sequencer maximum full-flow pressure; \psig}
+ * @symrow{P_{target}; Sequencer target pressure; \psig}
+ * @symrow{\Delta P_{seq}; Sequencer pressure variance; \psig}
+ * @symrow{P'; Reduced pressure set point; \psig}
+ * @symrow{P; Original pressure set point; \psig}
+ * @symrow{\Delta P_{sys}; System pressure reduction; \psig}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup compressor_performance_rated_metrics_formula Performance Point Rated Metrics
+ * @ingroup compressor_performance_points_assessment
+ * @brief Rated specific power and isentropic efficiency helper formulas.
+ * @details Rated specific power is reported as @unitb{\kilo\watt} per 100 @unitb{\acfm}. Rated
+ *          isentropic efficiency is derived from rated pressure and specific power using
+ *          the legacy Desktop relationship.
+ *
+ * @formula{performance-point-rated-specific-power;
+ *   SP_{rated} = \frac{100P_{pkg}}{Q_{FL}}
+ * }
+ * @formula{performance-point-rated-isentropic-efficiency;
+ *   \eta_{iso} = 100
+ *   \frac{\left(P_{FL}+14.7\right)^{0.283}-14.7^{0.283}}
+ *        {SP_{rated}}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{SP_{rated}; Rated specific power; \kilo\watt\text{ per 100 }\acfm}
+ * @symrow{P_{pkg}; Full-load package input power; \kilo\watt}
+ * @symrow{Q_{FL}; Rated full-load airflow; \acfm}
+ * @symrow{\eta_{iso}; Rated isentropic efficiency; \percent}
+ * @symrow{P_{FL}; Rated full-load pressure; \psig}
+ * @endsymtable
+ */

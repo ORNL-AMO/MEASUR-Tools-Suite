@@ -39,5 +39,16 @@ describe('Compressed Air Assessment - Compressor EEMs', function () {
         assert.approximately(savings.costSavings, 2083.18, 0.01);
 
         assert.approximately(moduleInstance.adjustedPower(75, 125, 110, 14.7, 14.7), 69.9653, 0.0001);
+        assert.approximately(moduleInstance.pressureReducedAirflow(1000, 95, 14.7, 100, 14.7), 973.8448, 0.001);
+    });
+
+    it('calculates reusable receiver and sequencer transforms', function () {
+        const receiver = moduleInstance.addReceiverVolume(140, 50);
+        assert.approximately(receiver.addedReceiverVolumeFt3, 50, 0.001);
+        assert.approximately(receiver.totalReceiverVolumeFt3, 190, 0.001);
+
+        const sequencer = moduleInstance.automaticSequencerSetPoints(100, 4);
+        assert.approximately(sequencer.fullLoadPressurePsig, 96, 0.001);
+        assert.approximately(sequencer.upperPressurePsig, 104, 0.001);
     });
 });
