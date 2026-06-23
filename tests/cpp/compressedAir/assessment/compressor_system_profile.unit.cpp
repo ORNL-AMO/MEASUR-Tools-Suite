@@ -1,5 +1,7 @@
 #include "compressedAir/assessment/compressor_system_profile.h"
 
+#include <limits>
+
 #include "catch.hpp"
 
 using namespace Catch;
@@ -87,7 +89,7 @@ TEST_CASE("Compressor system profile reallocates ordered compressor flow",
     CHECK(result[1].powerKw == Approx(42));
     CHECK(result[1].operatingOrder == 2);
 
-    const auto totals = calculateProfileTotals(compressors, result, 1);
+    const auto totals = calculateProfileTotals(compressors, result);
     REQUIRE(totals.size() == 1);
     CHECK(totals[0].airflowAcfm == Approx(1200));
     CHECK(totals[0].powerKw == Approx(142));
@@ -118,6 +120,32 @@ TEST_CASE("Compressor system profile selects least-power load-sharing combinatio
     CHECK(result[1].operatingOrder == 0);
 }
 
+TEST_CASE("Compressor system profile guards oversized load-sharing combinations",
+          "[compressed-air][assessment][system-profile]") {
+    CompressorProfileCompressorV compressors;
+    CompressorProfileRowV rows;
+    for (std::size_t i = 0; i < std::numeric_limits<std::size_t>::digits; ++i) {
+        const std::string id = "c" + std::to_string(i);
+        compressors.push_back(modulationCompressor(id, 100, 10, 5));
+        rows.push_back(profileRow(id, static_cast<int>(i + 1)));
+    }
+
+    CompressorProfileTotal demand;
+    demand.dayTypeId      = "weekday";
+    demand.timeIntervalHr = 0;
+    demand.airflowAcfm    = 500;
+
+    const auto result = reallocateProfileFlow(compressors, rows, CompressorProfileTotalV{demand},
+                                              profileOptions(CompressorSystemControlMode::LoadSharing));
+
+    REQUIRE(result.size() == rows.size());
+    for (const auto& row : result) {
+        CHECK(row.airflowAcfm == Approx(0));
+        CHECK(row.powerKw == Approx(0));
+        CHECK(row.operatingOrder == 0);
+    }
+}
+
 TEST_CASE("Compressor profile savings calculate energy cost and payback",
           "[compressed-air][assessment][system-profile]") {
     CompressorProfileRow baseline_a = profileRow("a", 1);
@@ -143,4 +171,10 @@ TEST_CASE("Compressor profile savings calculate energy cost and payback",
     CHECK(savings.costSavings == Approx(54.5));
     CHECK(savings.percentSavings == Approx(38.3803));
     CHECK(savings.paybackMonths == Approx(22.0183));
+}
+
+TEST_CASE("Compressor system profile pressure-reduced airflow uses atmospheric pressure",
+          "[compressed-air][assessment][system-profile]") {
+    CHECK(calculatePressureReducedAirflow(1000, 95, 12.2, 100, 12.2) == Approx(973.262));
+    CHECK(calculatePressureReducedAirflow(1000, 95, 12.2, -12.2, 12.2) == Approx(1000));
 }

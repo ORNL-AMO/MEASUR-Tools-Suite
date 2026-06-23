@@ -74,6 +74,10 @@ double calculatePressureAdjustedAirflow(double capacity_acfm, double point_press
 double calculatePressureAdjustedPower(CompressorType compressor_type, double inlet_pressure_psia,
                                       double point_pressure_psig, double rated_full_load_pressure_psig,
                                       double package_power_kw, double atmospheric_pressure_psia) {
+    if (inlet_pressure_psia <= 0.0 || atmospheric_pressure_psia <= 0.0) {
+        return 0.0;
+    }
+
     constexpr double polytropic_exponent = (1.4 - 1.0) / 1.4;
     double           pressure_factor     = atmospheric_pressure_psia / inlet_pressure_psia;
     double           operating_ratio     = (point_pressure_psig + atmospheric_pressure_psia) / atmospheric_pressure_psia;
@@ -87,22 +91,28 @@ double calculatePressureAdjustedPower(CompressorType compressor_type, double inl
         std::pow((rated_full_load_pressure_psig + inlet_pressure_psia) / inlet_pressure_psia,
                  polytropic_exponent) -
         1.0;
-    if (rated_ratio_term == 0.0) {
+    if (rated_ratio_term == 0.0 || !std::isfinite(rated_ratio_term)) {
         return 0.0;
     }
 
-    return pressure_factor * (std::pow(operating_ratio, polytropic_exponent) - 1.0) /
-           rated_ratio_term * package_power_kw;
+    const double adjusted_power = pressure_factor *
+                                  (std::pow(operating_ratio, polytropic_exponent) - 1.0) /
+                                  rated_ratio_term * package_power_kw;
+    return std::isfinite(adjusted_power) ? adjusted_power : 0.0;
 }
 
 double calculateNoLoadPower(double no_load_power_ul_percent, double package_power_kw,
                             double design_efficiency_percent) {
     if (no_load_power_ul_percent < 25.0) {
+        if (design_efficiency_percent <= 0.0) {
+            return 0.0;
+        }
+
         const double denominator =
             no_load_power_ul_percent /
             (no_load_power_ul_percent - 25.0 + 2521.834 / design_efficiency_percent) /
             design_efficiency_percent;
-        if (denominator == 0.0) {
+        if (denominator == 0.0 || !std::isfinite(denominator)) {
             return 0.0;
         }
         return no_load_power_ul_percent * package_power_kw / denominator / 10000.0;

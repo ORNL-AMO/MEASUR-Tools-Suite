@@ -106,8 +106,8 @@
 - `calculateBaselineProfile(compressors, profileRows, options): CompressorProfileRowV`
   - Inputs: `CompressorProfileCompressorV`, `CompressorProfileRowV`, `CompressorProfileOptions`.
   - Outputs: registered vector of calculated compressor rows. Caller must call `delete()`.
-- `calculateProfileTotals(compressors, profileRows, intervalHours): CompressorProfileTotalV`
-  - Inputs: compressor vector, calculated row vector, interval duration hours.
+- `calculateProfileTotals(compressors, profileRows): CompressorProfileTotalV`
+  - Inputs: compressor vector, calculated row vector.
   - Outputs: registered vector of total rows. Caller must call `delete()`.
 - `reallocateProfileFlow(compressors, previousProfileRows, demandRows, options, runtimeStates, trimSelections): CompressorProfileRowV`
   - Inputs: compressor vector, prior row vector, demand total vector, options, runtime state vector, trim selection vector.
@@ -118,7 +118,7 @@
 - `calculateCompressorProfileRow(compressor, inputBasis, inputValue, options, powerFactor, amps, volts): CompressorProfileRow`
   - Inputs: one compressor definition, input basis, numeric input value in basis units, options, electrical values.
   - Outputs: one calculated profile row.
-- `calculatePressureReducedAirflow(useAirflowAcfm, adjustedFullLoadPressurePsig, altitudePressurePsia, originalFullLoadPressurePsig): number`
+- `calculatePressureReducedAirflow(useAirflowAcfm, adjustedFullLoadPressurePsig, altitudePressurePsia, originalFullLoadPressurePsig, atmosphericPressurePsia): number`
   - Output: pressure-reduced airflow acfm.
 
 ### EEM Helpers

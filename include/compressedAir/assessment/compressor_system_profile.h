@@ -155,8 +155,7 @@ CompressorProfileRowV calculateBaselineProfile(const CompressorProfileCompressor
                                                const CompressorProfileRowV& profile_rows,
                                                const CompressorProfileOptions& options);
 CompressorProfileTotalV calculateProfileTotals(const CompressorProfileCompressorV& compressors,
-                                               const CompressorProfileRowV& profile_rows,
-                                               double interval_hours);
+                                               const CompressorProfileRowV& profile_rows);
 CompressorProfileRowV reallocateProfileFlow(const CompressorProfileCompressorV& compressors,
                                              const CompressorProfileRowV& previous_profile_rows,
                                              const CompressorProfileTotalV& demand_rows,
@@ -173,6 +172,7 @@ CompressorProfileRow calculateCompressorProfileRow(const CompressorProfileCompre
                                                    double volts = 0.0);
 double calculatePressureReducedAirflow(double use_airflow_acfm, double adjusted_full_load_pressure_psig,
                                        double altitude_pressure_psia,
-                                       double original_full_load_pressure_psig);
+                                       double original_full_load_pressure_psig,
+                                       double atmospheric_pressure_psia = 14.7);
 
 } // namespace compressed_air::assessment

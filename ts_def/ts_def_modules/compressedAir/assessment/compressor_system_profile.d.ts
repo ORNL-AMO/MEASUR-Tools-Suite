@@ -196,13 +196,11 @@ export function calculateBaselineProfile(
 /**
  * @param compressors Vector of compressor definitions.
  * @param profileRows Vector of calculated compressor profile rows.
- * @param intervalHours Profile interval duration, units hours.
  * @returns Vector of system total rows; call `delete()` on the returned vector.
  */
 export function calculateProfileTotals(
     compressors: CompressorProfileCompressorV,
-    profileRows: CompressorProfileRowV,
-    intervalHours: number
+    profileRows: CompressorProfileRowV
 ): CompressorProfileTotalV;
 
 /**
@@ -260,13 +258,15 @@ export function calculateCompressorProfileRow(
  * @param adjustedFullLoadPressurePsig Adjusted full-load pressure, units psig.
  * @param altitudePressurePsia Site altitude pressure, units psia.
  * @param originalFullLoadPressurePsig Original full-load pressure, units psig.
+ * @param atmosphericPressurePsia Atmospheric reference pressure, units psia.
  * @returns Pressure-reduced airflow, units acfm.
  */
 export function calculatePressureReducedAirflow(
     useAirflowAcfm: number,
     adjustedFullLoadPressurePsig: number,
     altitudePressurePsia: number,
-    originalFullLoadPressurePsig: number
+    originalFullLoadPressurePsig: number,
+    atmosphericPressurePsia: number
 ): number;
 
 export type CompressorSystemProfileModule = {

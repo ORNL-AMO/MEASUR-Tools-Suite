@@ -105,7 +105,7 @@ describe('Compressed Air Assessment - System Profile', function () {
                 assert.approximately(calculated.airflowFraction, 0.5, 0.0001);
                 assert.approximately(calculated.powerFraction, 0.75, 0.0001);
 
-                const totals = moduleInstance.calculateProfileTotals(compressors, result, 1);
+                const totals = moduleInstance.calculateProfileTotals(compressors, result);
                 try {
                     assert.strictEqual(totals.size(), 1);
                     assert.approximately(totals.get(0).airflowAcfm, 500, 0.001);
@@ -203,5 +203,13 @@ describe('Compressed Air Assessment - System Profile', function () {
             rows.delete();
             compressors.delete();
         }
+    });
+
+    it('calculates pressure-reduced airflow with caller-supplied atmospheric pressure', function () {
+        assert.approximately(
+            moduleInstance.calculatePressureReducedAirflow(1000, 95, 12.2, 100, 12.2),
+            973.262,
+            0.001
+        );
     });
 });

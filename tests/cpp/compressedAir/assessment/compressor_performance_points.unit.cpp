@@ -1,5 +1,7 @@
 #include "compressedAir/assessment/compressor_performance_points.h"
 
+#include <cmath>
+
 #include "catch.hpp"
 
 using namespace Catch;
@@ -89,4 +91,36 @@ TEST_CASE("Performance point scalar helpers expose Desktop formulas",
     CHECK(calculateUnloadPointDischargePressure(110, 5, 1048, 943.2) == Approx(110.5));
     CHECK(calculateRatedSpecificPower(166.5, 1048) == Approx(15.8874));
     CHECK(calculateRatedIsentropicEfficiency(15.8874, 100) == Approx(83.6711));
+}
+
+TEST_CASE("Pressure-adjusted power guards invalid pressure bases",
+          "[compressed-air][assessment][performance-points]") {
+    CHECK(calculatePressureAdjustedPower(CompressorType::Screw, 0, 100, 100, 166.5, 14.7) == Approx(0));
+    CHECK(calculatePressureAdjustedPower(CompressorType::Reciprocating, 14.5, 100, 100, 166.5, 0) == Approx(0));
+
+    auto input = screwModulationWithUnloadInput();
+    input.design.inputPressurePsia = 0;
+
+    const auto points = generatePerformancePoints(input);
+
+    CHECK(std::isfinite(points.fullLoad.powerKw));
+    CHECK(std::isfinite(points.maxFullFlow.powerKw));
+    CHECK(std::isfinite(points.unloadPoint.powerKw));
+    CHECK(points.fullLoad.powerKw == Approx(0));
+    CHECK(points.maxFullFlow.powerKw == Approx(0));
+    CHECK(points.unloadPoint.powerKw == Approx(0));
+}
+
+TEST_CASE("No-load power guards invalid design efficiency",
+          "[compressed-air][assessment][performance-points]") {
+    CHECK(calculateNoLoadPower(10, 166.5, 0) == Approx(0));
+
+    auto input = screwModulationWithUnloadInput();
+    input.design.designEfficiencyPct  = 0;
+    input.design.noLoadPowerULPercent = 10;
+
+    const auto points = generatePerformancePoints(input);
+
+    CHECK(std::isfinite(points.noLoad.powerKw));
+    CHECK(points.noLoad.powerKw == Approx(0));
 }

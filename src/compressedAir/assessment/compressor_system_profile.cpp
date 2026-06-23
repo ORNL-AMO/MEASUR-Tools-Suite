@@ -295,6 +295,10 @@ CompressorPerformanceResult calculateCentrifugal(const CompressorProfileCompress
 
 std::vector<std::vector<std::string>> combinations(const std::vector<std::string>& values) {
     std::vector<std::vector<std::string>> result;
+    if (values.size() >= std::numeric_limits<std::size_t>::digits) {
+        return result;
+    }
+
     const std::size_t limit = std::size_t{1} << values.size();
     for (std::size_t mask = 1; mask < limit; ++mask) {
         std::vector<std::string> combo;
@@ -423,9 +427,7 @@ CompressorProfileRowV calculateBaselineProfile(const CompressorProfileCompressor
 }
 
 CompressorProfileTotalV calculateProfileTotals(const CompressorProfileCompressorV& compressors,
-                                               const CompressorProfileRowV& profile_rows,
-                                               double interval_hours) {
-    (void)interval_hours;
+                                               const CompressorProfileRowV& profile_rows) {
     CompressorProfileTotalV totals;
     const double system_capacity = totalFullLoadAirflow(compressors);
     const double system_power    = totalFullLoadPower(compressors);
@@ -725,14 +727,20 @@ CompressorProfileSavingsResult calculateProfileSavings(const CompressorProfileRo
 
 double calculatePressureReducedAirflow(double use_airflow_acfm, double adjusted_full_load_pressure_psig,
                                        double altitude_pressure_psia,
-                                       double original_full_load_pressure_psig) {
+                                       double original_full_load_pressure_psig,
+                                       double atmospheric_pressure_psia) {
     if (adjusted_full_load_pressure_psig == original_full_load_pressure_psig) {
+        return use_airflow_acfm;
+    }
+
+    const double denominator = original_full_load_pressure_psig + atmospheric_pressure_psia;
+    if (denominator == 0.0) {
         return use_airflow_acfm;
     }
 
     const double pressure_ratio =
         (adjusted_full_load_pressure_psig + altitude_pressure_psia) /
-        (original_full_load_pressure_psig + 14.7);
+        denominator;
     return use_airflow_acfm - (use_airflow_acfm - use_airflow_acfm * pressure_ratio) * 0.6;
 }
 

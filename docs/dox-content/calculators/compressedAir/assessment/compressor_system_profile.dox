@@ -133,9 +133,11 @@
  * @ingroup compressor_system_profile_assessment
  * @brief Pressure-change airflow and reduce-runtime handling.
  * @details Pressure-change EEMs adjust use airflow with the same pressure response used by
- *          the scalar EEM helper. Reduce-runtime inputs can mark compressors unavailable for
- *          specific intervals. If `automaticShutdownTimer` is true, the row is treated as an
- *          automatic-shutdown case when the compressor model supports it.
+ *          the scalar EEM helper. The helper uses both the site altitude pressure and the
+ *          atmospheric reference pressure supplied by the caller. Reduce-runtime inputs can
+ *          mark compressors unavailable for specific intervals. If `automaticShutdownTimer`
+ *          is true, the row is treated as an automatic-shutdown case when the compressor model
+ *          supports it.
  *
  * @formula{compressor-profile-pressure-airflow;
  *   Q_{adj} = Q_{use} -
