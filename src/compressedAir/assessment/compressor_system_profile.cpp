@@ -52,6 +52,22 @@ const CompressorRuntimeState* findRuntimeState(const CompressorRuntimeStateV& ru
     return it == runtime_states.end() ? nullptr : &(*it);
 }
 
+double unloadPointCapacityPercent(const CompressorProfileCompressor& compressor) {
+    const double full_load_airflow = compressor.performancePoints.fullLoad.airflowAcfm;
+    if (full_load_airflow == 0.0) {
+        return 100.0;
+    }
+
+    const double unload_airflow = compressor.performancePoints.unloadPoint.airflowAcfm;
+    if ((compressor.control == CompressorControl::LoadUnload ||
+         compressor.control == CompressorControl::MultiStepUnloading) &&
+        unload_airflow == 0.0) {
+        return 100.0;
+    }
+
+    return (unload_airflow / full_load_airflow) * 100.0;
+}
+
 std::vector<std::size_t> intervalRowIndices(const CompressorProfileRowV& rows, const std::string& day_type_id,
                                             double time_interval) {
     std::vector<std::size_t> indices;
@@ -141,10 +157,7 @@ CompressorPerformanceResult calculatePositiveDisplacement(const CompressorProfil
             points.fullLoad.powerKw, points.fullLoad.airflowAcfm, receiverVolume(options),
             points.maxFullFlow.powerKw, points.noLoad.powerKw, points.fullLoad.dischargePressurePsig,
             points.maxFullFlow.dischargePressurePsig, compressor.modulatingPressurePsig,
-            options.atmosphericPressurePsia,
-            points.fullLoad.airflowAcfm == 0.0
-                ? 100.0
-                : (points.unloadPoint.airflowAcfm / points.fullLoad.airflowAcfm) * 100.0,
+            options.atmosphericPressurePsia, unloadPointCapacityPercent(compressor),
             compressor.control, compressor.blowdownTimeSec, compressor.unloadSumpPressurePsig,
             compressor.noLoadPowerFractionForModulation, points.unloadPoint.powerKw,
             points.unloadPoint.dischargePressurePsig, points.unloadPoint.airflowAcfm);
@@ -207,10 +220,7 @@ CompressorPerformanceResult calculatePositiveDisplacement(const CompressorProfil
             points.maxFullFlow.dischargePressurePsig, compressor.modulatingPressurePsig,
             points.fullLoad.powerKw == 0.0 ? 0.0 : points.noLoad.powerKw / points.fullLoad.powerKw,
             options.atmosphericPressurePsia, compressor.compressorType, compressor.lubricant,
-            compressor.control, points.noLoad.powerKw,
-            points.fullLoad.airflowAcfm == 0.0
-                ? 100.0
-                : (points.unloadPoint.airflowAcfm / points.fullLoad.airflowAcfm) * 100.0,
+            compressor.control, points.noLoad.powerKw, unloadPointCapacityPercent(compressor),
             compressor.blowdownTimeSec, compressor.unloadSumpPressurePsig,
             compressor.noLoadPowerFractionForModulation, points.unloadPoint.powerKw,
             points.unloadPoint.dischargePressurePsig, points.unloadPoint.airflowAcfm);

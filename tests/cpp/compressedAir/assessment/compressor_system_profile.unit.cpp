@@ -28,6 +28,24 @@ CompressorProfileCompressor modulationCompressor(const std::string& id, double a
     return compressor;
 }
 
+CompressorProfileCompressor loadUnloadCompressor(const std::string& id, double airflow, double full_power,
+                                                  double max_power, double no_load_power) {
+    CompressorProfileCompressor compressor;
+    compressor.compressorId                   = id;
+    compressor.compressorType                 = CompressorType::Screw;
+    compressor.control                        = CompressorControl::LoadUnload;
+    compressor.stage                          = CompressorStage::Single;
+    compressor.lubricant                      = CompressorLubricant::Injected;
+    compressor.performancePoints.fullLoad     = point(175, airflow, full_power);
+    compressor.performancePoints.maxFullFlow  = point(185, airflow, max_power);
+    compressor.performancePoints.noLoad       = point(15, 0, no_load_power);
+    compressor.performancePoints.unloadPoint  = point(0, 0, 0);
+    compressor.blowdownTimeSec                = 40;
+    compressor.unloadSumpPressurePsig         = 15;
+    compressor.modulatingPressurePsig         = 0;
+    return compressor;
+}
+
 CompressorProfileRow profileRow(const std::string& compressor_id, int order) {
     CompressorProfileRow row;
     row.compressorId   = compressor_id;
@@ -94,6 +112,47 @@ TEST_CASE("Compressor system profile caps measured-power capacity for modulation
     CHECK(result[0].airflowAcfm == Approx(18));
     CHECK(result[0].powerFraction == Approx(1.0869565217));
     CHECK(result[0].airflowFraction == Approx(1));
+}
+
+TEST_CASE("Compressor system profile calculates desktop two-compressor measured-power load/unload row",
+          "[compressed-air][assessment][system-profile]") {
+    CompressorProfileCompressor modulation = modulationCompressor("srocxit1z", 18, 4.6, 3);
+    modulation.noLoadPowerFractionForModulation = 0.65;
+    modulation.blowdownTimeSec                  = 40;
+    modulation.unloadSumpPressurePsig           = 15;
+
+    CompressorProfileCompressorV compressors{
+        modulation,
+        loadUnloadCompressor("8sxdv5qti", 12, 4.6, 4.7, 1.7),
+    };
+    CompressorProfileRowV rows{profileRow("srocxit1z", 2), profileRow("8sxdv5qti", 1)};
+    for (auto& row : rows) {
+        row.dayTypeId = "cbpa0zvju";
+        row.powerKw   = 5;
+    }
+    rows[0].airflowFraction = 0.5;
+
+    CompressorProfileOptions options;
+    options.dayTypeId               = "cbpa0zvju";
+    options.inputBasis              = CompressorInputBasis::MeasuredPower;
+    options.controlMode             = CompressorSystemControlMode::Cascading;
+    options.atmosphericPressurePsia = 14.7;
+    options.totalAirStorageFt3      = 200.52093668342548;
+    options.canShutdown             = true;
+
+    const auto result = calculateBaselineProfile(compressors, rows, options);
+
+    REQUIRE(result.size() == 2);
+    CHECK(result[0].airflowAcfm == Approx(18));
+    CHECK(result[0].airflowFraction == Approx(1));
+    CHECK(result[0].systemAirflowFraction == Approx(0.6));
+    CHECK(result[0].systemPowerFraction == Approx(0.5434782609));
+
+    CHECK(result[1].powerKw == Approx(5));
+    CHECK(result[1].airflowAcfm == Approx(13.99).margin(0.01));
+    CHECK(result[1].airflowFraction == Approx(1.1656).margin(0.0001));
+    CHECK(result[1].systemAirflowFraction == Approx(13.99 / 30).margin(0.001));
+    CHECK(result[1].systemPowerFraction == Approx(0.5434782609));
 }
 
 TEST_CASE("Compressor system profile reallocates ordered compressor flow",

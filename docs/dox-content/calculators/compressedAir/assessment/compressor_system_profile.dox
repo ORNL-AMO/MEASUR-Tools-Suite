@@ -51,6 +51,12 @@
  *          fractions then compare that compressor's interval result with the total full-load
  *          capacity and power of all compressors in the system.
  *
+ *          For load/unload and multi-step unloading compressors, an omitted unload airflow
+ *          point is treated as the standard 100 percent unload-capacity setting. This keeps
+ *          the cycle model anchored at full-load airflow when the assessment has no separate
+ *          unload-point airflow value, rather than interpreting the missing point as zero
+ *          unload capacity.
+ *
  * @formula{compressor-profile-system-airflow-fraction;
  *   f_{Q,sys,i} = \frac{Q_i}{\sum_j Q_{FL,j}}
  * }

@@ -61,6 +61,20 @@ TEST_CASE("Load/unload compressor assessment preserves legacy expected values", 
     CHECK(helperResult.airflowFraction == Approx(0.9035542));
 }
 
+TEST_CASE("Load/unload measured power above full load uses the high-end load/unload curve",
+          "[compressed-air][assessment]") {
+    auto compressor = LoadUnloadCompressor(4.6, 12, 200.52093668342548, 4.7, 175, 185, 0, 1.7 / 4.6, 14.7,
+                                           CompressorType::Screw, CompressorLubricant::Injected,
+                                           CompressorControl::LoadUnload, 1.7, 100, 40, 15, 0);
+
+    const auto result = compressor.calculateFromMeasuredPower(5);
+
+    CHECK(result.powerKw == Approx(5));
+    CHECK(result.airflowAcfm == Approx(13.9871));
+    CHECK(result.powerFraction == Approx(1.0869565217));
+    CHECK(result.airflowFraction == Approx(1.165591));
+}
+
 TEST_CASE("Load/unload pressure inlet correction uses compressor type and refreshes unload state",
           "[compressed-air][assessment]") {
     const double storage_volume = 1048 / 7.481;
