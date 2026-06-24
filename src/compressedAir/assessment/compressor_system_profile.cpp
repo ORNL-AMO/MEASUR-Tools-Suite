@@ -53,6 +53,10 @@ const CompressorRuntimeState* findRuntimeState(const CompressorRuntimeStateV& ru
 }
 
 double unloadPointCapacityPercent(const CompressorProfileCompressor& compressor) {
+    if (compressor.unloadPointCapacityPct > 0.0) {
+        return compressor.unloadPointCapacityPct;
+    }
+
     const double full_load_airflow = compressor.performancePoints.fullLoad.airflowAcfm;
     if (full_load_airflow == 0.0) {
         return 100.0;
@@ -88,6 +92,23 @@ CompressorProfileRow zeroRow(CompressorProfileRow row) {
     row.systemAirflowFraction = 0.0;
     row.operatingOrder        = 0;
     return row;
+}
+
+double inputValueForRow(const CompressorProfileRow& row, CompressorInputBasis input_basis) {
+    switch (input_basis) {
+    case CompressorInputBasis::PowerFraction:
+        return row.powerFraction;
+    case CompressorInputBasis::CapacityFraction:
+        return row.airflowFraction;
+    case CompressorInputBasis::MeasuredPower:
+        return row.powerKw;
+    case CompressorInputBasis::MeasuredCapacity:
+        return row.airflowAcfm;
+    case CompressorInputBasis::Electrical:
+        return row.powerFactor;
+    }
+
+    return 0.0;
 }
 
 CompressorProfileRow resultRow(CompressorProfileRow row, const CompressorPerformanceResult& result,
@@ -153,14 +174,16 @@ CompressorPerformanceResult calculatePositiveDisplacement(const CompressorProfil
     }
     case CompressorControl::ModulationUnload:
     case CompressorControl::VariableDisplacementUnload: {
+        const bool use_unload_point = compressor.control == CompressorControl::ModulationUnload;
         ModulationWithUnloadCompressor model(
             points.fullLoad.powerKw, points.fullLoad.airflowAcfm, receiverVolume(options),
             points.maxFullFlow.powerKw, points.noLoad.powerKw, points.fullLoad.dischargePressurePsig,
             points.maxFullFlow.dischargePressurePsig, compressor.modulatingPressurePsig,
             options.atmosphericPressurePsia, unloadPointCapacityPercent(compressor),
             compressor.control, compressor.blowdownTimeSec, compressor.unloadSumpPressurePsig,
-            compressor.noLoadPowerFractionForModulation, points.unloadPoint.powerKw,
-            points.unloadPoint.dischargePressurePsig, points.unloadPoint.airflowAcfm);
+            compressor.noLoadPowerFractionForModulation, use_unload_point ? points.unloadPoint.powerKw : 0.0,
+            use_unload_point ? points.unloadPoint.dischargePressurePsig : 0.0,
+            use_unload_point ? points.unloadPoint.airflowAcfm : 0.0);
         switch (input_basis) {
         case CompressorInputBasis::PowerFraction:
             return model.calculateFromPowerFraction(input_value);
@@ -222,8 +245,7 @@ CompressorPerformanceResult calculatePositiveDisplacement(const CompressorProfil
             options.atmosphericPressurePsia, compressor.compressorType, compressor.lubricant,
             compressor.control, points.noLoad.powerKw, unloadPointCapacityPercent(compressor),
             compressor.blowdownTimeSec, compressor.unloadSumpPressurePsig,
-            compressor.noLoadPowerFractionForModulation, points.unloadPoint.powerKw,
-            points.unloadPoint.dischargePressurePsig, points.unloadPoint.airflowAcfm);
+            compressor.noLoadPowerFractionForModulation, 0.0, 0.0, 0.0);
         switch (input_basis) {
         case CompressorInputBasis::PowerFraction:
             return model.calculateFromPowerFraction(input_value);
@@ -398,25 +420,7 @@ CompressorProfileRowV calculateBaselineProfile(const CompressorProfileCompressor
             continue;
         }
 
-        double input_value = 0.0;
-        switch (options.inputBasis) {
-        case CompressorInputBasis::PowerFraction:
-            input_value = row.powerFraction;
-            break;
-        case CompressorInputBasis::CapacityFraction:
-            input_value = row.airflowFraction;
-            break;
-        case CompressorInputBasis::MeasuredPower:
-            input_value = row.powerKw;
-            break;
-        case CompressorInputBasis::MeasuredCapacity:
-            input_value = row.airflowAcfm;
-            break;
-        case CompressorInputBasis::Electrical:
-            input_value = row.powerFactor;
-            break;
-        }
-
+        const double input_value = inputValueForRow(row, options.inputBasis);
         output = calculateCompressorProfileRow(*compressor, options.inputBasis, input_value, options,
                                                row.powerFactor, row.amps, row.volts);
         output.dayTypeId       = row.dayTypeId;
@@ -494,8 +498,8 @@ CompressorProfileRowV reallocateProfileFlow(const CompressorProfileCompressorV& 
             if (trim_it != trim_selections.end()) {
                 const auto* trim_compressor = findCompressor(compressors, trim_it->compressorId);
                 if (trim_compressor != nullptr) {
-                    const double additional_airflow =
-                        demand.airflowAcfm - trim_compressor->performancePoints.fullLoad.airflowAcfm;
+                    const double trim_capacity = trim_compressor->performancePoints.fullLoad.airflowAcfm;
+                    const double additional_airflow = demand.airflowAcfm - trim_capacity;
                     if (additional_airflow <= 0.0) {
                         for (const auto index : indices) {
                             output[index].operatingOrder =
@@ -527,15 +531,15 @@ CompressorProfileRowV reallocateProfileFlow(const CompressorProfileCompressorV& 
                                     combo_airflow += compressor->performancePoints.fullLoad.airflowAcfm;
                                 }
                             }
-                            if (additional_airflow - combo_airflow <= 0.0) {
+                            if (combo_airflow >= additional_airflow) {
                                 selected_size = combo.size();
                                 found_size    = true;
                                 break;
                             }
                         }
 
+                        std::vector<std::string> selected_ids;
                         if (found_size) {
-                            std::vector<std::string> selected_ids;
                             double selected_power = std::numeric_limits<double>::infinity();
                             for (const auto& combo : combos) {
                                 if (combo.size() != selected_size) {
@@ -550,24 +554,27 @@ CompressorProfileRowV reallocateProfileFlow(const CompressorProfileCompressorV& 
                                         combo_power += compressor->performancePoints.fullLoad.powerKw;
                                     }
                                 }
-                                if (additional_airflow - combo_airflow <= 0.0 && combo_power < selected_power) {
+                                if (combo_airflow >= additional_airflow && combo_power < selected_power) {
                                     selected_power = combo_power;
                                     selected_ids   = combo;
                                 }
                             }
+                        }
+                        else {
+                            selected_ids = base_ids;
+                        }
 
-                            int base_order = 1;
-                            for (const auto index : indices) {
-                                if (output[index].compressorId == trim_it->compressorId) {
-                                    output[index].operatingOrder = static_cast<int>(selected_size) + 1;
-                                }
-                                else if (std::find(selected_ids.begin(), selected_ids.end(),
-                                                   output[index].compressorId) != selected_ids.end()) {
-                                    output[index].operatingOrder = base_order++;
-                                }
-                                else {
-                                    output[index].operatingOrder = 0;
-                                }
+                        int base_order = 1;
+                        for (const auto index : indices) {
+                            if (output[index].compressorId == trim_it->compressorId) {
+                                output[index].operatingOrder = static_cast<int>(selected_ids.size()) + 1;
+                            }
+                            else if (std::find(selected_ids.begin(), selected_ids.end(),
+                                               output[index].compressorId) != selected_ids.end()) {
+                                output[index].operatingOrder = base_order++;
+                            }
+                            else {
+                                output[index].operatingOrder = 0;
                             }
                         }
                     }

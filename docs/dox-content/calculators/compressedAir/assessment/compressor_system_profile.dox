@@ -55,7 +55,9 @@
  *          point is treated as the standard 100 percent unload-capacity setting. This keeps
  *          the cycle model anchored at full-load airflow when the assessment has no separate
  *          unload-point airflow value, rather than interpreting the missing point as zero
- *          unload capacity.
+ *          unload capacity. When an assessment supplies an explicit unload-capacity setting,
+ *          that percentage is used directly; otherwise the percentage is derived from the
+ *          unload airflow point and the full-load airflow point.
  *
  * @formula{compressor-profile-system-airflow-fraction;
  *   f_{Q,sys,i} = \frac{Q_i}{\sum_j Q_{FL,j}}
@@ -112,9 +114,16 @@
  * @details Load-sharing operation looks at the available compressor combinations that can meet
  *          the requested demand and selects the combination with the lowest total package
  *          power. The selected compressors split demand equally where possible. Base-trim
- *          operation keeps a selected trim compressor available for each day type, then
- *          evaluates feasible base-compressor combinations around that trim compressor and
- *          selects the lowest-power combination that can meet demand.
+ *          operation keeps a selected trim compressor available for each day type. The trim
+ *          compressor is the adjustable compressor. If the requested airflow is within trim
+ *          capacity, only the trim compressor runs. When demand exceeds trim capacity, the
+ *          algorithm finds the smallest number of base compressors that can cover the excess
+ *          airflow over trim capacity, then chooses the lowest full-load power combination
+ *          within that size. The selected base compressors are evaluated before the trim
+ *          compressor. Each selected base is first tried at full load, but if that would
+ *          exceed the remaining demand, that base compressor is recalculated at the smaller
+ *          remaining airflow. The trim compressor is evaluated last and supplies any
+ *          remaining airflow.
  *
  * @formula{compressor-profile-combination-power;
  *   P_{combo} = \sum_{i \in S} P_i(Q_i)

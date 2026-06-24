@@ -46,6 +46,7 @@ describe('Compressed Air Assessment - System Profile', function () {
             },
             blowdownTimeSec: 0.003,
             unloadSumpPressurePsig: 15,
+            unloadPointCapacityPct: 0,
             noLoadPowerFractionForModulation: 0.7,
             modulatingPressurePsig: 5,
         };
@@ -78,6 +79,83 @@ describe('Compressed Air Assessment - System Profile', function () {
             totalAirStorageFt3: 140,
             additionalReceiverVolumeFt3: 0,
             canShutdown: true,
+        };
+    }
+
+    function baseTrimVariableDisplacementCompressor(
+        id: string,
+        modulatingPressure: number,
+        unloadPressure: number
+    ): CompressorProfileCompressor {
+        return {
+            compressorId: id,
+            compressorType: moduleInstance.CompressorType.Screw,
+            control: moduleInstance.CompressorControl.VariableDisplacementUnload,
+            stage: moduleInstance.CompressorStage.Single,
+            lubricant: moduleInstance.CompressorLubricant.Injected,
+            automaticShutdown: true,
+            performancePoints: {
+                fullLoad: point(100, 365, 63.8),
+                maxFullFlow: point(100, 365, 63.8),
+                midTurndown: point(0, 0, 0),
+                turndown: point(0, 0, 0),
+                unloadPoint: point(unloadPressure, 182, 45),
+                noLoad: point(15, 0, 35),
+                blowoff: point(0, 0, 0),
+            },
+            blowdownTimeSec: 40,
+            unloadSumpPressurePsig: 15,
+            unloadPointCapacityPct: 40,
+            noLoadPowerFractionForModulation: 0.57,
+            modulatingPressurePsig: modulatingPressure,
+        };
+    }
+
+    function baseTrimVfdCompressor(): CompressorProfileCompressor {
+        return {
+            compressorId: 'p8p62x1d2',
+            compressorType: moduleInstance.CompressorType.Screw,
+            control: moduleInstance.CompressorControl.Vfd,
+            stage: moduleInstance.CompressorStage.Single,
+            lubricant: moduleInstance.CompressorLubricant.Injected,
+            automaticShutdown: false,
+            performancePoints: {
+                fullLoad: point(115, 342, 66.9),
+                maxFullFlow: point(0, 0, 0),
+                midTurndown: point(117.4, 205, 45),
+                turndown: point(119.1, 109, 25.9),
+                unloadPoint: point(0, 0, 0),
+                noLoad: point(15, 0, 4.6),
+                blowoff: point(0, 0, 0),
+            },
+            blowdownTimeSec: 40,
+            unloadSumpPressurePsig: 15,
+            unloadPointCapacityPct: 0,
+            noLoadPowerFractionForModulation: 0.65,
+            modulatingPressurePsig: 20,
+        };
+    }
+
+    function baseTrimProfileRow(
+        compressorId: string,
+        operatingOrder: number,
+        powerFactor: number,
+        amps: number
+    ): CompressorProfileRow {
+        return {
+            compressorId,
+            dayTypeId: 'hvb0u7041',
+            timeIntervalHr: 11,
+            operatingOrder,
+            powerKw: 0,
+            airflowAcfm: 0,
+            powerFraction: 0,
+            airflowFraction: 0,
+            systemPowerFraction: 0,
+            systemAirflowFraction: 0,
+            powerFactor,
+            amps,
+            volts: 480,
         };
     }
 
@@ -156,6 +234,7 @@ describe('Compressed Air Assessment - System Profile', function () {
                 },
                 blowdownTimeSec: 40,
                 unloadSumpPressurePsig: 15,
+                unloadPointCapacityPct: 0,
                 noLoadPowerFractionForModulation: 0.65,
                 modulatingPressurePsig: 5,
             });
@@ -237,6 +316,7 @@ describe('Compressed Air Assessment - System Profile', function () {
                 },
                 blowdownTimeSec: 40,
                 unloadSumpPressurePsig: 15,
+                unloadPointCapacityPct: 0,
                 noLoadPowerFractionForModulation: 0.65,
                 modulatingPressurePsig: 5,
             });
@@ -320,6 +400,7 @@ describe('Compressed Air Assessment - System Profile', function () {
                 },
                 blowdownTimeSec: 40,
                 unloadSumpPressurePsig: 15,
+                unloadPointCapacityPct: 0,
                 noLoadPowerFractionForModulation: 0.65,
                 modulatingPressurePsig: 5,
             });
@@ -342,6 +423,7 @@ describe('Compressed Air Assessment - System Profile', function () {
                 },
                 blowdownTimeSec: 40,
                 unloadSumpPressurePsig: 15,
+                unloadPointCapacityPct: 0,
                 noLoadPowerFractionForModulation: 0,
                 modulatingPressurePsig: 0,
             });
@@ -493,6 +575,267 @@ describe('Compressed Air Assessment - System Profile', function () {
             demandRows.delete();
             rows.delete();
             compressors.delete();
+        }
+    });
+
+    it('reallocates base-trim flow for the desktop interval 11 payload', function () {
+        const compressors = new moduleInstance.CompressorProfileCompressorV();
+        const rows = new moduleInstance.CompressorProfileRowV();
+        const demandRows = new moduleInstance.CompressorProfileTotalV();
+        const runtimeStates = new moduleInstance.CompressorRuntimeStateV();
+        const trimSelections = new moduleInstance.CompressorTrimSelectionV();
+
+        try {
+            compressors.push_back(baseTrimVariableDisplacementCompressor('diagqi3k4', 15, 109));
+            compressors.push_back(baseTrimVariableDisplacementCompressor('3qo7b7u3w', 16.7, 110));
+            compressors.push_back(baseTrimVfdCompressor());
+
+            rows.push_back(baseTrimProfileRow('diagqi3k4', 2, 0.87, 77));
+            rows.push_back(baseTrimProfileRow('3qo7b7u3w', 3, 0.87, 56));
+            rows.push_back(baseTrimProfileRow('p8p62x1d2', 1, 0.87, 79));
+            demandRows.push_back({
+                dayTypeId: 'hvb0u7041',
+                timeIntervalHr: 11,
+                airflowAcfm: 677.1060361264512,
+                powerKw: 153.3360384,
+                totalPowerKw: 153.3360384,
+                airflowFraction: 0.6316287650433314,
+                powerFraction: 0.7883600946015424,
+                auxiliaryPowerKw: 0,
+            });
+            trimSelections.push_back({
+                dayTypeId: 'hvb0u7041',
+                compressorId: 'p8p62x1d2',
+            });
+
+            const result = moduleInstance.reallocateProfileFlow(
+                compressors,
+                rows,
+                demandRows,
+                {
+                    dayTypeId: 'hvb0u7041',
+                    inputBasis: moduleInstance.CompressorInputBasis.Electrical,
+                    controlMode: moduleInstance.CompressorSystemControlMode.BaseTrim,
+                    atmosphericPressurePsia: 14.7,
+                    totalAirStorageFt3: 5000,
+                    additionalReceiverVolumeFt3: 0,
+                    canShutdown: true,
+                },
+                runtimeStates,
+                trimSelections
+            );
+
+            try {
+                let baseRow: CompressorProfileRow;
+                let trimRow: CompressorProfileRow;
+                let unusedBaseRow: CompressorProfileRow;
+                for (let index = 0; index < result.size(); index++) {
+                    const row = result.get(index);
+                    if (row.compressorId == 'diagqi3k4') {
+                        baseRow = row;
+                    }
+                    if (row.compressorId == 'p8p62x1d2') {
+                        trimRow = row;
+                    }
+                    if (row.compressorId == '3qo7b7u3w') {
+                        unusedBaseRow = row;
+                    }
+                }
+
+                assert.exists(baseRow);
+                assert.exists(trimRow);
+                assert.exists(unusedBaseRow);
+
+                assert.strictEqual(baseRow.operatingOrder, 1);
+                assert.approximately(baseRow.powerKw, 63.8, 0.001);
+                assert.approximately(baseRow.airflowAcfm, 365, 0.001);
+                assert.approximately(baseRow.airflowFraction, 1, 0.0001);
+                assert.approximately(baseRow.powerFraction, 1, 0.0001);
+
+                assert.strictEqual(trimRow.operatingOrder, 2);
+                assert.approximately(trimRow.powerKw, 62.658691, 0.001);
+                assert.approximately(trimRow.airflowAcfm, 312.106036, 0.001);
+                assert.approximately(trimRow.airflowFraction, 0.9125907, 0.0001);
+                assert.approximately(trimRow.powerFraction, 0.9366023, 0.0001);
+
+                assert.strictEqual(unusedBaseRow.operatingOrder, 0);
+                assert.approximately(unusedBaseRow.powerKw, 0, 0.001);
+                assert.approximately(unusedBaseRow.airflowAcfm, 0, 0.001);
+            } finally {
+                result.delete();
+            }
+        } finally {
+            trimSelections.delete();
+            runtimeStates.delete();
+            demandRows.delete();
+            rows.delete();
+            compressors.delete();
+        }
+    });
+
+    it('allows selected base compressors below full load in base-trim mode', function () {
+        const compressors = new moduleInstance.CompressorProfileCompressorV();
+        const rows = new moduleInstance.CompressorProfileRowV();
+        const demandRows = new moduleInstance.CompressorProfileTotalV();
+        const runtimeStates = new moduleInstance.CompressorRuntimeStateV();
+        const trimSelections = new moduleInstance.CompressorTrimSelectionV();
+
+        try {
+            compressors.push_back(baseTrimVariableDisplacementCompressor('diagqi3k4', 15, 109));
+            compressors.push_back(baseTrimVariableDisplacementCompressor('3qo7b7u3w', 16.7, 110));
+            compressors.push_back(baseTrimVfdCompressor());
+
+            rows.push_back(baseTrimProfileRow('diagqi3k4', 2, 0.87, 77));
+            rows.push_back(baseTrimProfileRow('3qo7b7u3w', 3, 0.87, 56));
+            rows.push_back(baseTrimProfileRow('p8p62x1d2', 1, 0.87, 79));
+            demandRows.push_back({
+                dayTypeId: 'hvb0u7041',
+                timeIntervalHr: 11,
+                airflowAcfm: 350,
+                powerKw: 0,
+                totalPowerKw: 0,
+                airflowFraction: 0,
+                powerFraction: 0,
+                auxiliaryPowerKw: 0,
+            });
+            trimSelections.push_back({
+                dayTypeId: 'hvb0u7041',
+                compressorId: 'p8p62x1d2',
+            });
+
+            const result = moduleInstance.reallocateProfileFlow(
+                compressors,
+                rows,
+                demandRows,
+                {
+                    dayTypeId: 'hvb0u7041',
+                    inputBasis: moduleInstance.CompressorInputBasis.Electrical,
+                    controlMode: moduleInstance.CompressorSystemControlMode.BaseTrim,
+                    atmosphericPressurePsia: 14.7,
+                    totalAirStorageFt3: 5000,
+                    additionalReceiverVolumeFt3: 0,
+                    canShutdown: true,
+                },
+                runtimeStates,
+                trimSelections
+            );
+
+            try {
+                let baseRow: CompressorProfileRow;
+                let trimRow: CompressorProfileRow;
+                for (let index = 0; index < result.size(); index++) {
+                    const row = result.get(index);
+                    if (row.compressorId == 'diagqi3k4') {
+                        baseRow = row;
+                    }
+                    if (row.compressorId == 'p8p62x1d2') {
+                        trimRow = row;
+                    }
+                }
+
+                assert.exists(baseRow);
+                assert.exists(trimRow);
+                assert.strictEqual(baseRow.operatingOrder, 1);
+                assert.approximately(baseRow.airflowAcfm, 350, 0.001);
+                assert.approximately(baseRow.airflowFraction, 350 / 365, 0.0001);
+                assert.strictEqual(trimRow.operatingOrder, 2);
+                assert.approximately(trimRow.airflowAcfm, 0, 0.001);
+                assert.approximately(trimRow.airflowFraction, 0, 0.0001);
+            } finally {
+                result.delete();
+            }
+        } finally {
+            trimSelections.delete();
+            runtimeStates.delete();
+            demandRows.delete();
+            rows.delete();
+            compressors.delete();
+        }
+    });
+
+    it('selects the smallest lowest-power base set in base-trim mode', function () {
+        function calculate(airflowDemand: number) {
+            const compressors = new moduleInstance.CompressorProfileCompressorV();
+            const rows = new moduleInstance.CompressorProfileRowV();
+            const demandRows = new moduleInstance.CompressorProfileTotalV();
+            const runtimeStates = new moduleInstance.CompressorRuntimeStateV();
+            const trimSelections = new moduleInstance.CompressorTrimSelectionV();
+
+            compressors.push_back(modulationCompressor('baseA', 8, 80, 40));
+            compressors.push_back(modulationCompressor('baseB', 7, 7, 3.5));
+            compressors.push_back(modulationCompressor('trim', 4, 4, 2));
+            rows.push_back(profileRow('baseA', 2));
+            rows.push_back(profileRow('baseB', 3));
+            rows.push_back(profileRow('trim', 1));
+            demandRows.push_back({
+                dayTypeId: 'weekday',
+                timeIntervalHr: 0,
+                airflowAcfm: airflowDemand,
+                powerKw: 0,
+                totalPowerKw: 0,
+                airflowFraction: 0,
+                powerFraction: 0,
+                auxiliaryPowerKw: 0,
+            });
+            trimSelections.push_back({
+                dayTypeId: 'weekday',
+                compressorId: 'trim',
+            });
+
+            const result = moduleInstance.reallocateProfileFlow(
+                compressors,
+                rows,
+                demandRows,
+                profileOptions(moduleInstance.CompressorSystemControlMode.BaseTrim),
+                runtimeStates,
+                trimSelections
+            );
+
+            trimSelections.delete();
+            runtimeStates.delete();
+            demandRows.delete();
+            rows.delete();
+            compressors.delete();
+            return result;
+        }
+
+        const trimOnly = calculate(4);
+        try {
+            assert.approximately(trimOnly.get(0).airflowAcfm, 0, 0.001);
+            assert.approximately(trimOnly.get(1).airflowAcfm, 0, 0.001);
+            assert.approximately(trimOnly.get(2).airflowAcfm, 4, 0.001);
+        } finally {
+            trimOnly.delete();
+        }
+
+        const oneBase = calculate(10);
+        try {
+            assert.approximately(oneBase.get(0).airflowAcfm, 0, 0.001);
+            assert.approximately(oneBase.get(1).airflowAcfm, 7, 0.001);
+            assert.strictEqual(oneBase.get(1).operatingOrder, 1);
+            assert.approximately(oneBase.get(2).airflowAcfm, 3, 0.001);
+            assert.strictEqual(oneBase.get(2).operatingOrder, 2);
+        } finally {
+            oneBase.delete();
+        }
+
+        const partialBase = calculate(5);
+        try {
+            assert.approximately(partialBase.get(0).airflowAcfm, 0, 0.001);
+            assert.approximately(partialBase.get(1).airflowAcfm, 5, 0.001);
+            assert.approximately(partialBase.get(1).airflowFraction, 5 / 7, 0.0001);
+            assert.approximately(partialBase.get(2).airflowAcfm, 0, 0.001);
+        } finally {
+            partialBase.delete();
+        }
+
+        const allBases = calculate(16);
+        try {
+            assert.approximately(allBases.get(0).airflowAcfm, 8, 0.001);
+            assert.approximately(allBases.get(1).airflowAcfm, 7, 0.001);
+            assert.approximately(allBases.get(2).airflowAcfm, 1, 0.001);
+        } finally {
+            allBases.delete();
         }
     });
 

@@ -40,6 +40,7 @@ struct CompressorProfileCompressor {
     CompressorPerformancePoints performancePoints; ///< Compressor performance points.
     double                      blowdownTimeSec = 0.003; ///< Blowdown time @unitb{\second}.
     double                      unloadSumpPressurePsig = 15.0; ///< Unload sump pressure @unitb{\psig}.
+    double                      unloadPointCapacityPct = 0.0; ///< Explicit unload capacity @unitb{\percent}; zero derives from performance points.
     double                      noLoadPowerFractionForModulation = 0.7; ///< Modulation floor fraction @unitb{\unitless}.
     double                      modulatingPressurePsig = 0.0; ///< Modulating pressure range @unitb{\psig}.
 };

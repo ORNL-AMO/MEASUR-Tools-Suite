@@ -24,6 +24,7 @@ EMSCRIPTEN_BINDINGS(compressor_system_profile_assessment)
         .field("performancePoints", &CompressorProfileCompressor::performancePoints)
         .field("blowdownTimeSec", &CompressorProfileCompressor::blowdownTimeSec)
         .field("unloadSumpPressurePsig", &CompressorProfileCompressor::unloadSumpPressurePsig)
+        .field("unloadPointCapacityPct", &CompressorProfileCompressor::unloadPointCapacityPct)
         .field("noLoadPowerFractionForModulation",
                &CompressorProfileCompressor::noLoadPowerFractionForModulation)
         .field("modulatingPressurePsig", &CompressorProfileCompressor::modulatingPressurePsig);

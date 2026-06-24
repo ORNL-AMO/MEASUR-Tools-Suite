@@ -106,12 +106,16 @@
 - `calculateBaselineProfile(compressors, profileRows, options): CompressorProfileRowV`
   - Inputs: `CompressorProfileCompressorV`, `CompressorProfileRowV`, `CompressorProfileOptions`.
   - Outputs: registered vector of calculated compressor rows. Caller must call `delete()`.
+- `CompressorProfileCompressor.unloadPointCapacityPct`
+  - Map from Desktop `compressor.compressorControls.unloadPointCapacity`.
+  - Units: percent. Pass zero only when Suite should derive the value from the unload airflow and full-load airflow points.
 - `calculateProfileTotals(compressors, profileRows): CompressorProfileTotalV`
   - Inputs: compressor vector, calculated row vector.
   - Outputs: registered vector of total rows. Caller must call `delete()`.
 - `reallocateProfileFlow(compressors, previousProfileRows, demandRows, options, runtimeStates, trimSelections): CompressorProfileRowV`
   - Inputs: compressor vector, prior row vector, demand total vector, options, runtime state vector, trim selection vector.
   - Outputs: registered vector of adjusted compressor rows. Caller must call `delete()`.
+  - Base-trim mode uses `trimSelections` to select the trim compressor. If demand is within trim capacity, only the trim compressor runs. When demand exceeds trim capacity, Suite selects the smallest base-compressor set that covers the excess over trim capacity, chooses the lowest full-load power combination within that size, evaluates selected bases before the trim compressor, and recalculates a selected base below full load if full load would exceed remaining demand. The trim compressor is evaluated last and receives any remaining airflow.
 - `calculateProfileSavings(baselineRows, adjustedRows, input): CompressorProfileSavingsResult`
   - Inputs: baseline row vector, adjusted row vector, electricity cost dollars/kWh, interval hours, operating days, auxiliary energy kWh/year, implementation cost dollars, salvage dollars.
   - Outputs: annual baseline/adjusted energy kWh, annual baseline/adjusted cost dollars, energy savings kWh, cost savings dollars, percent savings, payback months.

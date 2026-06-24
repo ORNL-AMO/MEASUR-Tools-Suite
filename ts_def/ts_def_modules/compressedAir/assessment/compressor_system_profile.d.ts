@@ -43,6 +43,8 @@ export interface CompressorProfileCompressor {
     blowdownTimeSec: number;
     /** Unload sump pressure, units psig. */
     unloadSumpPressurePsig: number;
+    /** Explicit unload capacity, units percent; pass zero to derive from performance points. */
+    unloadPointCapacityPct: number;
     /** Modulation floor fraction, dimensionless. */
     noLoadPowerFractionForModulation: number;
     /** Modulating pressure range, units psig. */
