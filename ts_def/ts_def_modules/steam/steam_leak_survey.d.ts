@@ -29,6 +29,12 @@ export declare class SteamLeakSurveyResults {
     energyLoss: number;
     /** Annual leak cost, units $/year. */
     leakCost: number;
+    /** Steam unit cost used in this calculation, units $/lb. */
+    steamUnitCost: number;
+    /** Steam specific enthalpy at steam conditions, units Btu/lb. */
+    steamSpecificEnthalpy: number;
+    /** Isentropic enthalpy at leak pressure, units Btu/lb. */
+    isentropicEnthalpy: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
     delete(): void;

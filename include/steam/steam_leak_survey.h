@@ -27,10 +27,12 @@ public:
     enum class UtilityType { steam, electric, natural_gas };
 
     struct SteamLeakSurveyResults {
-        SteamLeakSurveyResults(const double leakRate, const double steamLoss, const double energyLoss, const double leakCost)
-            : leakRate(leakRate), steamLoss(steamLoss), energyLoss(energyLoss), leakCost(leakCost) {}
+        SteamLeakSurveyResults(const double leakRate, const double steamLoss, const double energyLoss, const double leakCost,
+                               const double steamUnitCost = 0, const double steamSpecificEnthalpy = 0, const double isentropicEnthalpy = 0)
+            : leakRate(leakRate), steamLoss(steamLoss), energyLoss(energyLoss), leakCost(leakCost),
+              steamUnitCost(steamUnitCost), steamSpecificEnthalpy(steamSpecificEnthalpy), isentropicEnthalpy(isentropicEnthalpy) {}
 
-        const double leakRate, steamLoss, energyLoss, leakCost;
+        const double leakRate, steamLoss, energyLoss, leakCost, steamUnitCost, steamSpecificEnthalpy, isentropicEnthalpy;
     };
 
     /**
@@ -233,7 +235,7 @@ public:
         const double leakCost = steamLoss * costOfSteam(turbineEfficiency) * 1000 *
             (leakEnthalpy - feedwaterEnthalpy) / (steamSpecificEnthalpy - feedwaterEnthalpy);
 
-        return {leakRate, steamLoss, energyLoss, leakCost};
+        return {leakRate, steamLoss, energyLoss, leakCost, steamCost, steamSpecificEnthalpy, isentropicEnthalpy};
     }
 
     double operatingTime = 0, steamPressure = 0, leakPressure = 0, costOfElectricity = 0, steamCost = 0;

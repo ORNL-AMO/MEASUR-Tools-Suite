@@ -10,6 +10,9 @@ auto validateSteamLeaks = [](SteamLeakSurvey::SteamLeakSurveyResults const& resu
     CHECK(Approx(results.steamLoss) == expected.steamLoss);
     CHECK(Approx(results.energyLoss) == expected.energyLoss);
     CHECK(Approx(results.leakCost) == expected.leakCost);
+    CHECK(Approx(results.steamUnitCost) == expected.steamUnitCost);
+    CHECK(Approx(results.steamSpecificEnthalpy) == expected.steamSpecificEnthalpy);
+    CHECK(Approx(results.isentropicEnthalpy) == expected.isentropicEnthalpy);
 };
 
 TEST_CASE("Steam Leak of a boiler system:", "[steamLeakSurvey]") {
@@ -26,23 +29,28 @@ TEST_CASE("Steam Leak of a boiler system:", "[steamLeakSurvey]") {
     CHECK(Approx(steamLeakNaturalGas.costOfSteam()) == 0.03266);
 
     const auto steamLeak = SteamLeakSurvey(8760, 500, 300, 0.1, 200, 400, 70, 80, 75, 15.50, 1.038);
+    const auto steamUnitCost = steamLeak.costOfSteam();
+    const auto prvResult = steamLeak.estimateMethodPRVCalc(500);
+    const auto steamSpecificEnthalpy = prvResult.steamSpecificEnthalpy;
+    const auto isentropicEnthalpy = prvResult.isentropicEnthalpy;
+
     INFO("Estimate Method (PRV): ");
-    validateSteamLeaks(steamLeak.estimateMethodPRVCalc(500),
-             {500, 4380, 5291.35,  137405.72});
+    validateSteamLeaks(prvResult,
+             {500, 4380, 5291.35, 137405.72, steamUnitCost, steamSpecificEnthalpy, isentropicEnthalpy});
     INFO("Passed");
 
     INFO("Estimate Method (Backpressure Turbine): ");
     validateSteamLeaks(steamLeak.estimateMethodTurbineCalc(90, 500),
-             {500, 4380, 5291.35, 133436.27});
+             {500, 4380, 5291.35, 133436.27, steamUnitCost, steamSpecificEnthalpy, isentropicEnthalpy});
     INFO("Passed");
 
     INFO("Orifice Method: ");
     validateSteamLeaks(steamLeak.orificeMethodCalc(90, 0.25, 0.8748, 14.70),
-             {482.71, 4228.58, 5108.42, 128823.25});
+             {482.71, 4228.58, 5108.42, 128823.25, steamUnitCost, steamSpecificEnthalpy, isentropicEnthalpy});
     INFO("Passed");
 
     INFO("Plume Method: ");
     validateSteamLeaks(steamLeak.plumeMethodCalc(90, 8, 80),
-             {447.426, 3919.45, 4734.97, 119405.69});
+             {447.426, 3919.45, 4734.97, 119405.69, steamUnitCost, steamSpecificEnthalpy, isentropicEnthalpy});
     INFO("Passed");
 }
