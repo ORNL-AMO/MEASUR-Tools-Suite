@@ -416,7 +416,7 @@ describe('Process Cooling Tests', function () {
 
             logMessage('Chiller #1 Energy Efficiency: ', true);
             let chillerEnergyEfficiency = pcW.getChillerEnergyEfficiency(0, loadPercent);
-            validateResults(chillerEnergyEfficiency, [1.1817, 0.986643, 0.903321, 1.12092]);
+            validateResults(chillerEnergyEfficiency, [1.17, 0.9768744, 0.8943772, 1.109825]);
 
             logMessage('Chiller #1 Energy Coeff: ', true);
             let chillerEnergyCoeff = pcW.getChillerEfficiencyCoeffs(0);

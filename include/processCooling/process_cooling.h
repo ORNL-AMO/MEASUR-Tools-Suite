@@ -402,6 +402,7 @@ class ProcessCooling {
         RefrigerantType proposedRefrig;
 
         vector<double> customCoeffs;
+        vector<double> customCoeffs_eff;
 
       private:
         void InitNonVaryingMonthlyLoad() {
@@ -440,11 +441,14 @@ class ProcessCooling {
                 y[i] = kwPerTonLoads[i] * x[i] / kwPerTonLoadAtMaxLoad;
             }
             vector<double> coeff = solveForCoefficients(x, y);
+            vector<double> coeff_eff = solveForCoefficients(x, kwPerTonLoads);
 
             size = static_cast<int>(coeff.size());
             customCoeffs.resize(size, 0);
+            customCoeffs_eff.resize(size, 0);
             for (int i = 0; i < size; i++) {
                 customCoeffs[i] = coeff[i];
+                customCoeffs_eff[i] = coeff_eff[i];
             }
         }
 

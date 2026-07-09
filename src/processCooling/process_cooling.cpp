@@ -240,7 +240,16 @@ vector<double> ProcessCooling::getChillerEnergyEfficiency(const int chillerIndex
         if (loadAtPercent[i] < 0.0 || loadAtPercent[i] > 100.0) {
             throw runtime_error("Invalid chiller load percentage, must be between 0 and 100 inclusive.");
         }
-        energyEfficiency[i] = getChillerEffAtLoad(chillerIndex, loadAtPercent[i], chillers[chillerIndex].isFullLoadEffKnown);
+
+        if (chillers[chillerIndex].isCustomChiller) {
+            energyEfficiency[i] =
+                chillers[chillerIndex].customCoeffs_eff[0] * pow(loadAtPercent[i] / 100.0f, 3) +
+                chillers[chillerIndex].customCoeffs_eff[1] * pow(loadAtPercent[i] / 100.0f, 2) +
+                chillers[chillerIndex].customCoeffs_eff[2] * (loadAtPercent[i] / 100.0f) +
+                chillers[chillerIndex].customCoeffs_eff[3];
+        } else {
+            energyEfficiency[i] = getChillerEffAtLoad(chillerIndex, loadAtPercent[i], chillers[chillerIndex].isFullLoadEffKnown);
+        }
     }
 
     return energyEfficiency;
