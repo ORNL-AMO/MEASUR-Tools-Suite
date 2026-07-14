@@ -1383,12 +1383,14 @@ TEST_CASE("Process Fluid Cooling Energy Calculations:", "[processCooling]") {
     validateArrays(chillerOutputWC.energy[0], {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1035169.2});
 
     INFO("Chiller #1 Energy Efficiency: ");
-    auto chillerEnergyEfficiency = pcWCCC.getChillerEnergyEfficiency(0, {100, 75, 50, 25});
+    auto chillerEnergyEfficiency = pcWCCC.getChillerEnergyEfficiency(0, {100, 75, 50, 25}, false);
     validateArrays(chillerEnergyEfficiency, {1.17, 0.9768744, 0.8943772, 1.109825});
+    chillerEnergyEfficiency = pcWCCC.getChillerEnergyEfficiency(0, {100, 75, 50, 25}, true);
+    validateArrays(chillerEnergyEfficiency, {1.1817, 0.986643, 0.903321, 1.12092});
 
     INFO("Chiller #1 Energy Coeff: ");
     auto chillerEnergyCoeff = pcWCCC.getChillerEfficiencyCoeffs(0);
-    validateArrays(chillerEnergyCoeff, {0.329501, 0.297098, 0.213301, 0.1601});
+    validateArrays(chillerEnergyCoeff, {-1.99804, 5.38063, -4.02312, 1.81053});
 
     INFO("Chiller #1 Pump Output: ");
     chillerPumpingEnergyOutputWC = pcWCCC.calculatePumpEnergy(ProcessCooling::PumpInput(true, 2.4, 0.75, 1, 0.85));

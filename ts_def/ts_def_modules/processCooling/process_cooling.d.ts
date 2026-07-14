@@ -464,10 +464,11 @@ export declare class ProcessCooling {
      *
      * @param chillerIndex Zero-based chiller index, count.
      * @param loadAtPercent DoubleVector, % loading values (0-100); may be in any order
+     * @param applyFactoring boolean, whether to apply aging and full load effeciency factoring to the energy efficiency calculation
      * @returns DoubleVector - energy efficiency (kW/ton) at each % loading point,
      *   in the same order as the input array
      */
-    getChillerEnergyEfficiency(chillerIndex: number, loadAtPercent: DoubleVector): DoubleVector;
+    getChillerEnergyEfficiency(chillerIndex: number, loadAtPercent: DoubleVector, applyFactoring: boolean): DoubleVector;
 
     /**
      * Generates the system operation annual hours array from weekly and monthly schedules.

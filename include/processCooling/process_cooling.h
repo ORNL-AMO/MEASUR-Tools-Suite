@@ -21,7 +21,6 @@
 
 #include <algorithm>
 #include <cmath>
-#include <fstream>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -576,10 +575,11 @@ class ProcessCooling {
      *
      * @param chillerIndex integer, zero based index of chiller from the chillers input provided
      * @param loadAtPercent double array, % loading, between 0 and 100, can be either ascending or descending or in any order
+     * @param applyFactoring boolean, whether to apply aging and full load effeciency factoring to the energy efficiency calculation
      *
      * @return an array of energy efficiency values for % loads, corresponding to the same order of input loadAtPercent array
      */
-    vector<double> getChillerEnergyEfficiency(int chillerIndex, const vector<double>& loadAtPercent) const;
+    vector<double> getChillerEnergyEfficiency(int chillerIndex, const vector<double>& loadAtPercent, bool applyFactoring) const;
 
   private:
     ProcessCooling(const vector<int>& systemOperationAnnualHours, const vector<double>& weatherDryBulbHourlyTemp,
@@ -587,7 +587,7 @@ class ProcessCooling {
                    const AirCooledSystemInput& airCooledSystemInput, const TowerInput& towerInput,
                    const WaterCooledSystemInput& waterCooledSystemInput);
 
-    vector<int>    systemOperationAnnual;
+    vector<int> systemOperationAnnual;
     vector<double> dryBulbHourlyTemp;
     vector<double> wetBulbHourlyTemp;
 
@@ -596,11 +596,11 @@ class ProcessCooling {
     AirCooledSystemInput   airCooledSystem;
     CoolingSystemType      coolingType;
 
-    double         FCTemp = 0; // Free Cooling Temperature
+    double    FCTemp = 0; // Free Cooling Temperature
     vector<double> CWTHourly;
 
-    int                    numChillers;
-    vector<ChillerInput>   chillers;
+    int       numChillers;
+    vector<ChillerInput> chillers;
     vector<vector<double>> chillerHourlyLoad;
     vector<vector<double>> chillerHourlyLoadOperational;
     vector<vector<double>> chillerEfficiencyCoeffs;
@@ -609,8 +609,6 @@ class ProcessCooling {
     vector<vector<double>> chillerHourlyPower;
 
     int getChillerCapacityIndex(ChillerCompressorType chillerType, double capacity) const;
-
-    double getChillerEffAtLoad(int c, double load, bool isFullLoadEffKnown) const;
 
     void annualChillerLoadProfile();
 
@@ -622,8 +620,9 @@ class ProcessCooling {
 
     void setTowerFanHPTonnage();
 
-    double getPercentFanPower(double wetBulbTemp, double percentWaterFlow, double range, double desiredApproach,
-                              int yearHourIndex);
+    double getChillerEffAtLoad(int c, double load, bool isFullLoadEffKnown, bool applyFactoring) const;
+
+    double getPercentFanPower(double wetBulbTemp, double percentWaterFlow, double range, double desiredApproach, int yearHourIndex);
 
     double getPercentWaterFlow(int yearHourIndex) const;
 

@@ -415,12 +415,14 @@ describe('Process Cooling Tests', function () {
             validateArrays(chillerOutput.energy.get(0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1035169.2], chillerBins);
 
             logMessage('Chiller #1 Energy Efficiency: ', true);
-            let chillerEnergyEfficiency = pcW.getChillerEnergyEfficiency(0, loadPercent);
+            let chillerEnergyEfficiency = pcW.getChillerEnergyEfficiency(0, loadPercent, false);
             validateResults(chillerEnergyEfficiency, [1.17, 0.9768744, 0.8943772, 1.109825]);
+            chillerEnergyEfficiency = pcW.getChillerEnergyEfficiency(0, loadPercent, true);
+            validateResults(chillerEnergyEfficiency, [1.1817, 0.986643, 0.903321, 1.12092]);
 
             logMessage('Chiller #1 Energy Coeff: ', true);
             let chillerEnergyCoeff = pcW.getChillerEfficiencyCoeffs(0);
-            validateResults(chillerEnergyCoeff, [0.329501, 0.297098, 0.213301, 0.1601]);
+            validateResults(chillerEnergyCoeff, [-1.99804, 5.38063, -4.02312, 1.81053]);
 
             logMessage('Pump # 1 Output: ', true);
             let pumpInputW = new moduleInstance.PumpInput(true, 2.4, 0.75, 1, 0.85);
