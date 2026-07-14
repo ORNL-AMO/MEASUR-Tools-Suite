@@ -233,7 +233,7 @@ vector<double> ProcessCooling::getChillerEfficiencyCoeffs(const int chillerIndex
     return efficiencyCoeffs;
 }
 
-vector<double> ProcessCooling::getChillerEnergyEfficiency(const int chillerIndex, const vector<double>& loadAtPercent, const bool applyFactoring) const {
+vector<double> ProcessCooling::getChillerARIEnergyEfficiency(const int chillerIndex, const vector<double>& loadAtPercent, const bool applyFactoring) const {
     if (numChillers == 0 || chillerIndex < 0 || chillerIndex >= numChillers) {
         throw runtime_error("Invalid chiller index or chillers count, should match the number of chillers provided in the input.");
     }

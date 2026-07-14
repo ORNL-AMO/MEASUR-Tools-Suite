@@ -460,15 +460,17 @@ export declare class ProcessCooling {
     getChillerEfficiencyCoeffs(chillerIndex: number): DoubleVector;
 
     /**
-     * Returns energy efficiency values for a chiller at the specified % load points.
+     * Returns ARI energy efficiency values for a chiller at the specified % load points for plotting chiller performance curve.
      *
      * @param chillerIndex Zero-based chiller index, count.
      * @param loadAtPercent DoubleVector, % loading values (0-100); may be in any order
      * @param applyFactoring boolean, whether to apply aging and full load effeciency factoring to the energy efficiency calculation
      * @returns DoubleVector - energy efficiency (kW/ton) at each % loading point,
      *   in the same order as the input array
+     *   The data represents the ARI efficiency (kW/Ton) of the chiller from interpolation with or without factoring for aging / full load efficiency.
+     *   This data can be used to chart the chiller performance chart.
      */
-    getChillerEnergyEfficiency(chillerIndex: number, loadAtPercent: DoubleVector, applyFactoring: boolean): DoubleVector;
+    getChillerARIEnergyEfficiency(chillerIndex: number, loadAtPercent: DoubleVector, applyFactoring: boolean): DoubleVector;
 
     /**
      * Generates the system operation annual hours array from weekly and monthly schedules.
