@@ -575,7 +575,7 @@ class ProcessCooling {
      *
      * @param chillerIndex integer, zero based index of chiller from the chillers input provided
      * @param loadAtPercent double array, % loading, between 0 and 100, can be either ascending or descending or in any order
-     * @param applyFactoring boolean, whether to apply aging and full load effeciency factoring to the energy efficiency calculation
+     * @param applyFactoring boolean, whether to apply aging and full load efficiency factoring to the energy efficiency calculation
      *
      * @return an array of ARI energy efficiency values for % loads, corresponding to the same order of input loadAtPercent array
      *   The data represents the ARI efficiency (kW/Ton) of the chiller from interpolation with or without factoring for aging / full load efficiency.
