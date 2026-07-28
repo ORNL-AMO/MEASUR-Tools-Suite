@@ -1,6 +1,6 @@
 /**
  * @defgroup estimate_method_calculator Estimate Method Calculator
- * @ingroup compressed_air_assessments
+ * @ingroup compressed_air_calculators
  * @brief Estimates annual compressed air consumption from a leak using visual and audible assessment.
  * @details This calculator implements the estimate method, a rapid field technique for evaluating
  *          compressed air leak severity without specialized measurement equipment. An operator

@@ -25,6 +25,8 @@ Check out the [Master List of MEASUR Calculators](https://github.com/ORNL-AMO/AM
 npm install measur-tools-suite
 ```
 
+**JavaScript**
+
 ```js
 // Initialize module
 const moduleFactory = (await import('/path/to/client.js')).default;
@@ -32,10 +34,34 @@ const toolsSuiteModule = await moduleFactory({
 	locateFile: (filename) => '/path/to/client.wasm'
 });
 
-// Example call
+// Plain function call — returns a number directly
 const totalHeatLoss = toolsSuiteModule.wallTotalHeatLoss(
 	500, 80, 225, 10, 0.9, 1.394, 1
 );
+console.log('Wall total heat loss:', totalHeatLoss);
+
+// Class-based API — always call delete() to free WASM memory
+const doc = new toolsSuiteModule.DryerOperatingCost(1752, 50, 100, 24, 7, 52, 0.08, 0.2, 0.25);
+const res = doc.calculate(toolsSuiteModule.DryerType.Heatless);
+console.log('Water removed:', res.waterRemoved);
+res.delete();
+doc.delete();
+```
+
+**TypeScript** — `MeasurToolsSuite` is the fully-typed module instance; no casts needed.
+
+```ts
+import createModule, { type MeasurToolsSuite } from 'measur-tools-suite';
+
+const toolsSuiteModule: MeasurToolsSuite = await createModule({
+	locateFile: (filename) => '/path/to/client.wasm'
+});
+
+const doc = new toolsSuiteModule.DryerOperatingCost(1752, 50, 100, 24, 7, 52, 0.08, 0.2, 0.25);
+const res = doc.calculate(toolsSuiteModule.DryerType.Heatless);
+console.log('Water removed:', res.waterRemoved);
+res.delete();
+doc.delete();
 ```
 
 ### Building from Source

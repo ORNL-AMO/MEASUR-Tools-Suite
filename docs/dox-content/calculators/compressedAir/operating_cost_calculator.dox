@@ -1,6 +1,6 @@
 /**
  * @defgroup operating_cost_calculator Operating Cost Calculator
- * @ingroup compressed_air_assessments
+ * @ingroup compressed_air_calculators
  * @brief Calculates the annual electricity cost of a compressor operating in
  *        load/unload control mode.
  * @details This calculator quantifies the annual electricity cost of a compressor

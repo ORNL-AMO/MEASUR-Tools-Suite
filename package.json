@@ -1,6 +1,6 @@
 {
   "name": "measur-tools-suite",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "engines": {
     "node": "20.19.4",
     "npm": "10.8.2"
@@ -9,7 +9,7 @@
     "test:browser": "karma start",
     "tests": "npx karma start --browsers ChromeHeadlessNoSandbox --auto-watch false"
   },
-  "description": "Calculation library for the Department of Energy Advanced Manufacturing and Materials Technologies Office and the Industrial Efficiency & Decarbonization Office (DOE AMMTO IEDO)  suite of tools",
+  "description": "Oak Ridge National Lab's Industrial Resources calculation library for MEASUR.",
   "author": "Gina Accawi <accawigk@ornl.gov>",
   "license": "MIT",
   "repository": {
@@ -20,7 +20,11 @@
     "url": "https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues"
   },
   "homepage": "https://github.com/ORNL-AMO/MEASUR-Tools-Suite#readme",
+  "main": "bin/client.js",
+  "types": "ts_def/client.d.ts",
   "devDependencies": {
+    "@types/chai": "^5.2.3",
+    "@types/mocha": "^10.0.10",
     "chai": "^6.0.1",
     "express": "^4.17.1",
     "jquery": "^3.4.1",
@@ -29,6 +33,8 @@
     "karma-mocha": "^2.0.1",
     "karma-mocha-reporter": "^2.2.5",
     "karma-webpack": "^5.0.1",
-    "mocha": "^11.7.1"
+    "mocha": "^11.7.1",
+    "ts-loader": "^9.6.1",
+    "typescript": "^6.0.3"
   }
 }

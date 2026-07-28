@@ -37,8 +37,8 @@ std::shared_ptr<MediumPressureHeaderCalculationsDomain> MediumPressureHeaderMode
             }
         } catch (const ReducedSteamException& e) {
             // TODO extract methods
-            const std::string& actionMessage = e.getActionMessage();
-            SM_LOG(methodName << "ReducedSteamException: " << actionMessage << "; rerunning MediumPressureHeaderModeler with updated highToLowPressureTurbine");
+            // const std::string& actionMessage = e.getActionMessage();
+            // SM_LOG(methodName << "ReducedSteamException: " << actionMessage << "; rerunning MediumPressureHeaderModeler with updated highToLowPressureTurbine");
             const std::shared_ptr<Turbine>& highToLowPressureTurbine      = e.getHighToLowPressureTurbineUpdated();
             const std::shared_ptr<Turbine>& highToLowPressureTurbineIdeal = e.getHighToLowPressureTurbineIdealUpdated();
 

@@ -88,7 +88,7 @@ EMSCRIPTEN_BINDINGS(processCooling_class) {
         .function("calculateChillerEnergy", &ProcessCooling::calculateChillerEnergy)
         .function("calculatePumpEnergy", &ProcessCooling::calculatePumpEnergy)
         .function("getChillerEfficiencyCoeffs", &ProcessCooling::getChillerEfficiencyCoeffs)
-        .function("getChillerEnergyEfficiency", &ProcessCooling::getChillerEnergyEfficiency)
+        .function("getChillerARIEnergyEfficiency", &ProcessCooling::getChillerARIEnergyEfficiency)
         .class_function("getSysOpAnnualHours", &ProcessCooling::getSysOpAnnualHours);
 
     register_vector<int>("IntVector");

@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = function (config) {
     config.set({
         port: 3000,
@@ -13,22 +15,35 @@ module.exports = function (config) {
             { pattern: 'bin/client.js', included: false, served: true, watched: false },
             { pattern: 'bin/client.wasm', included: false, served: true, watched: false },
             'tests/wasm-mocha/**/*.test.js',
+            'tests/wasm-mocha/**/*.test.ts',
             // Add any additional files or patterns as needed
         ],
         preprocessors: {
-            'tests/wasm-mocha/**/*.test.js': ['webpack']
+            'tests/wasm-mocha/**/*.test.js': ['webpack'],
+            'tests/wasm-mocha/**/*.test.ts': ['webpack']
         },
         webpack: {
             mode: 'development',
             experiments: { asyncWebAssembly: true },
             resolve: {
-                extensions: ['.js', '.wasm'],
+                extensions: ['.ts', '.js', '.wasm'],
+                alias: {
+                    'measur-tools-suite': path.resolve(__dirname, 'bin/client.js')
+                }
             },
             module: {
                 rules: [
                     {
                         test: /\.wasm$/,
                         type: 'webassembly/async'
+                    },
+                    {
+                        test: /\.ts$/,
+                        use: {
+                            loader: 'ts-loader',
+                            options: { compilerOptions: { noEmit: false } }
+                        },
+                        exclude: /node_modules/
                     }
                 ]
             }

@@ -51,7 +51,6 @@ static const HeaderInput makeHeaderInput(int headerCount) {
     const bool                                       mp_flashCondensateIntoHeader       = false;
     const bool                                       mp_desuperheatSteamIntoNextHighest = false;
     const double                                     mp_desuperheatSteamTemperature     = 255.3722222222222;
-    const bool                                       mp_useBaselineProcessSteamUsage    = true;
     const std::shared_ptr<HeaderNotHighestPressure>& mediumPressureHeader = std::make_shared<HeaderNotHighestPressure>(
         mp_pressure, mp_processSteamUsage, mp_condensationRecoveryRate, mp_heatLoss, mp_flashCondensateIntoHeader,
         mp_desuperheatSteamIntoNextHighest, mp_desuperheatSteamTemperature);
@@ -64,7 +63,6 @@ static const HeaderInput makeHeaderInput(int headerCount) {
     const bool                                       lp_flashCondensateIntoHeader       = false;
     const bool                                       lp_desuperheatSteamIntoNextHighest = false;
     const double                                     lp_desuperheatSteamTemperature     = 255.3722222222222;
-    const bool                                       lp_useBaselineProcessSteamUsage    = true;
     const std::shared_ptr<HeaderNotHighestPressure>& lowPressureHeader = std::make_shared<HeaderNotHighestPressure>(
         lp_pressure, lp_processSteamUsage, lp_condensationRecoveryRate, lp_heatLoss, lp_flashCondensateIntoHeader,
         lp_desuperheatSteamIntoNextHighest, lp_desuperheatSteamTemperature);

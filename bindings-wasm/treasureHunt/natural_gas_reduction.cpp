@@ -5,7 +5,7 @@ using namespace emscripten;
 using namespace natural_gas_reduction;
 
 EMSCRIPTEN_BINDINGS(natural_gas_reduction_module) {
-    value_object<FlowMeterMethodData>("FlowMeterMethodData")
+    value_object<FlowMeterMethodData>("NaturalGasFlowMeterMethodData")
         .field("flowRate", &FlowMeterMethodData::flow_rate);
 
     value_object<NaturalGasOtherMethodData>("NaturalGasOtherMethodData")
@@ -85,9 +85,9 @@ EMSCRIPTEN_BINDINGS(natural_gas_reduction_module) {
     //   returns: NaturalGasReductionOutput
     function("waterMassFlowMethodReduction", &waterMassFlowMethodReduction);
 
-    // otherMethodReduction(data: NaturalGasOtherMethodData, fuel_cost: double) -> NaturalGasReductionOutput
+    // naturalGasOtherMethodReduction(data: NaturalGasOtherMethodData, fuel_cost: double) -> NaturalGasReductionOutput
     //   data: NaturalGasOtherMethodData with annual gas consumption [MMBtu/yr]
     //   fuel_cost: fuel cost rate [$/MMBtu]
     //   returns: NaturalGasReductionOutput
-    function("otherMethodReduction", &otherMethodReduction);
+    function("naturalGasOtherMethodReduction", &otherMethodReduction);
 }

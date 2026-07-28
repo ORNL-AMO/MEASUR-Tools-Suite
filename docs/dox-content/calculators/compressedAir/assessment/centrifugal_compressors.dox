@@ -1,0 +1,97 @@
+/**
+ * @defgroup centrifugal_compressor_assessment Centrifugal Compressor Assessment Models
+ * @ingroup compressor_modeling
+ * @brief Centrifugal load/unload, modulation/unload, and blow-off compressor calculations.
+ * @details Centrifugal models return the same standard power and airflow outputs as the shared
+ *          assessment result. Blow-off control also returns blow-off airflow and blow-off
+ *          fraction. Discharge-pressure adjustment is curve based: a second-order curve is
+ *          fitted from catalog capacity and pressure points, then evaluated at the requested
+ *          full-load and optional maximum pressure.
+ *
+ * @heading{Load/Unload}
+ * @copydoc centrifugal_load_unload_formula
+ *
+ * @heading{Modulation With Unload}
+ * @copydoc centrifugal_modulation_unload_formula
+ *
+ * @heading{Blow-Off}
+ * @copydoc centrifugal_blowoff_formula
+ */
+
+/**
+ * @defgroup centrifugal_load_unload_formula Centrifugal Load/Unload Formula
+ * @ingroup centrifugal_compressor_assessment
+ * @brief Linear relationship between no-load and full-load power.
+ * @details The load/unload model anchors the curve at no-load power and full-load power.
+ *
+ * @formula{centrifugal-load-unload-airflow-from-power;
+ *   f_Q = (f_P - f_{P,NL})\frac{1}{1 - f_{P,NL}}
+ * }
+ * @formula{centrifugal-load-unload-power-from-airflow;
+ *   f_P = (1 - f_{P,NL})f_Q + f_{P,NL}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{f_P; Fraction of full-load power; \unitless}
+ * @symrow{f_Q; Fraction of full-load airflow; \unitless}
+ * @symrow{f_{P,NL}; No-load power divided by full-load power; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup centrifugal_modulation_unload_formula Centrifugal Modulation/Unload Formula
+ * @ingroup centrifugal_compressor_assessment
+ * @brief Piecewise model through no-load, unload, full-load, and maximum-flow points.
+ * @details Power-to-airflow calculations interpolate linearly between no-load and unload
+ *          until unload power is reached, then interpolate to the maximum-flow point.
+ *
+ * @formula{centrifugal-mod-unload-low;
+ *   f_Q = (f_P - f_{P,NL})\frac{f_{Q,UL}}{f_{P,UL} - f_{P,NL}}
+ *   \quad \text{for } f_P < f_{P,UL}
+ * }
+ * @formula{centrifugal-mod-unload-high;
+ *   f_Q = f_P\frac{1 - f_{Q,base}}{1 - f_{P,UL}} +
+ *         1 - \frac{1 - f_{Q,base}}{1 - f_{P,UL}}
+ *   \quad \text{for } f_P \ge f_{P,UL}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{f_{P,NL}; No-load power fraction; \unitless}
+ * @symrow{f_{P,UL}; Unload power fraction; \unitless}
+ * @symrow{f_{Q,UL}; Unload airflow divided by full-load airflow; \unitless}
+ * @symrow{f_{Q,base}; Unload airflow divided by maximum airflow; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup centrifugal_blowoff_formula Centrifugal Blow-Off Formula
+ * @ingroup centrifugal_compressor_assessment
+ * @brief Useful airflow and blow-off airflow for centrifugal blow-off control.
+ * @details Below the blow-off power point, useful airflow is the blow-off airflow fraction
+ *          minus the specified blow-off fraction. Above that point, useful airflow follows
+ *          a linear segment from the blow-off point to full load.
+ *
+ * @formula{centrifugal-blowoff-low;
+ *   f_Q = f_{Q,BO} - f_{BO}
+ *   \quad \text{for } f_P \le f_{P,BO}
+ * }
+ * @formula{centrifugal-blowoff-high;
+ *   f_Q = \frac{1 - f_{Q,BO}}{1 - f_{P,BO}}
+ *         \left(f_P - 1 + \frac{1 - f_{P,BO}}{1 - f_{Q,BO}}\right)
+ *   \quad \text{for } f_P > f_{P,BO}
+ * }
+ * @formula{centrifugal-blowoff-airflow;
+ *   Q_{BO} = (f_{Q,BO} - f_Q)Q_{FL}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{f_{P,BO}; Blow-off package power divided by full-load power; \unitless}
+ * @symrow{f_{Q,BO}; Blow-off airflow divided by full-load airflow; \unitless}
+ * @symrow{f_{BO}; User-specified blow-off fraction; \unitless}
+ * @symrow{Q_{BO}; Calculated blow-off airflow; \acfm}
+ * @symrow{Q_{FL}; Full-load airflow; \acfm}
+ * @endsymtable
+ */

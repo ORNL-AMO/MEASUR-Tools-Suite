@@ -9,8 +9,8 @@
 
 #include "default_data.h"
 
-std::vector<CompressorsData> DefaultData::compressors_type1_data() {
-    std::vector<CompressorsData> v;
+std::vector<compressed_air::assessment::CompressorCatalogRecord> DefaultData::compressors_type1_data() {
+    std::vector<compressed_air::assessment::CompressorCatalogRecord> v;
     v.reserve(308);
     v.emplace_back(1,"5 hp/3.7 kW",5,18,100,110,1,50,15,40,2,5,5.300000191,4.599999905,25.89999962,65,50,-9999,-9999,-9999,-9999,-9999,68,14.5,7.5,85 );
     v.emplace_back(1,"5 hp/3.7 kW",5,19,100,100,2,50,15,40,2,20,5.5,4.800000191,25.89999962,65,50,-9999,-9999,-9999,-9999,-9999,68,14.5,7.5,85 );

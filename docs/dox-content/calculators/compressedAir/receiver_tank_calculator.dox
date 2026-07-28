@@ -1,6 +1,6 @@
 /**
  * @defgroup receiver_tank_calculator Receiver Tank Calculator
- * @ingroup compressed_air_assessments
+ * @ingroup compressed_air_calculators
  * @brief Sizes compressed air receiver tanks and calculates usable air capacity.
  * @details This calculator provides four engineering methods for sizing receiver tanks
  *          in a compressed air system and a standalone method for computing the usable

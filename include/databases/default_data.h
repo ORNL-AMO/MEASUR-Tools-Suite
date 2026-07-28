@@ -2,17 +2,18 @@
 
 #include <vector>
 
+#include "compressedAir/assessment/compressor_catalog.h"
 #include "motorDriven/motor/MotorData.h"
-#include "processHeat/losses/solid_liquid_flue_gas_material.h"
-#include "compressedAir/compressors_data.h"
 #include "other/lighting_data.h"
+#include "processHeat/losses/solid_liquid_flue_gas_material.h"
 
 class MotorData;
-class CompressorsData;
 class LightingData;
 
 class DefaultData {
 public:
+    using CompressorCatalogRecord = compressed_air::assessment::CompressorCatalogRecord;
+
     DefaultData() = default;
 
     virtual ~DefaultData() = default;
@@ -26,65 +27,65 @@ public:
         return motorData;
     }
 
-    std::vector<CompressorsData> getCompressorType1Data() {
-        std::vector<CompressorsData> compressorData = compressors_type1_data();
+    std::vector<CompressorCatalogRecord> getCompressorType1Data() {
+        std::vector<CompressorCatalogRecord> compressorData = compressors_type1_data();
         auto size = (int)compressorData.size();
         for(auto i = 0; i < size; i++) {
-            compressorData.at(i).setID(i + 1);
+            compressorData.at(i).id = i + 1;
         }
         return compressorData;
     }
 
-    std::vector<CompressorsData> getCompressorType1_GT100kWData() {
-        std::vector<CompressorsData> compressorData = compressors_type1_GT_100kW_data();
+    std::vector<CompressorCatalogRecord> getCompressorType1_GT100kWData() {
+        std::vector<CompressorCatalogRecord> compressorData = compressors_type1_GT_100kW_data();
         auto size = (int)compressorData.size();
         for(auto i = 0; i < size; i++) {
-            compressorData.at(i).setID(i + 1);
+            compressorData.at(i).id = i + 1;
         }
         return compressorData;
     }
 
-    std::vector<CompressorsData> getCompressorType2Data() {
-        std::vector<CompressorsData> compressorData = compressors_type2_data();
+    std::vector<CompressorCatalogRecord> getCompressorType2Data() {
+        std::vector<CompressorCatalogRecord> compressorData = compressors_type2_data();
         auto size = (int)compressorData.size();
         for(auto i = 0; i < size; i++) {
-            compressorData.at(i).setID(i + 1);
+            compressorData.at(i).id = i + 1;
         }
         return compressorData;
     }
 
-    std::vector<CompressorsData> getCompressorType3Data() {
-        std::vector<CompressorsData> compressorData = compressors_type3_data();
+    std::vector<CompressorCatalogRecord> getCompressorType3Data() {
+        std::vector<CompressorCatalogRecord> compressorData = compressors_type3_data();
         auto size = (int)compressorData.size();
         for(auto i = 0; i < size; i++) {
-            compressorData.at(i).setID(i + 1);
+            compressorData.at(i).id = i + 1;
         }
         return compressorData;
     }
 
-    std::vector<CompressorsData> getCompressorType4Data() {
-        std::vector<CompressorsData> compressorData = compressors_type4_data();
+    std::vector<CompressorCatalogRecord> getCompressorType4Data() {
+        std::vector<CompressorCatalogRecord> compressorData = compressors_type4_data();
         auto size = (int)compressorData.size();
         for(auto i = 0; i < size; i++) {
-            compressorData.at(i).setID(i + 1);
+            compressorData.at(i).id = i + 1;
         }
         return compressorData;
     }
 
-    std::vector<CompressorsData> getCompressorType5Data() {
-        std::vector<CompressorsData> compressorData = compressors_type5_data();
+    std::vector<CompressorCatalogRecord> getCompressorType5Data() {
+        std::vector<CompressorCatalogRecord> compressorData = compressors_type5_data();
         auto size = (int)compressorData.size();
         for(auto i = 0; i < size; i++) {
-            compressorData.at(i).setID(i + 1);
+            compressorData.at(i).id = i + 1;
         }
         return compressorData;
     }
 
-    std::vector<CompressorsData> getCompressorType6Data() {
-        std::vector<CompressorsData> compressorData = compressors_type6_data();
+    std::vector<CompressorCatalogRecord> getCompressorType6Data() {
+        std::vector<CompressorCatalogRecord> compressorData = compressors_type6_data();
         auto size = (int)compressorData.size();
         for(auto i = 0; i < size; i++) {
-            compressorData.at(i).setID(i + 1);
+            compressorData.at(i).id = i + 1;
         }
         return compressorData;
     }
@@ -99,13 +100,13 @@ public:
     }
 
 private:
-    std::vector<MotorData>                  get_default_motor_data();
-    std::vector<CompressorsData>            compressors_type1_data();
-    std::vector<CompressorsData>            compressors_type1_GT_100kW_data();
-    std::vector<CompressorsData>            compressors_type2_data();
-    std::vector<CompressorsData>            compressors_type3_data();
-    std::vector<CompressorsData>            compressors_type4_data();
-    std::vector<CompressorsData>            compressors_type5_data();
-    std::vector<CompressorsData>            compressors_type6_data();
-    std::vector<LightingData>               get_default_lighting_data();
+    std::vector<MotorData>                get_default_motor_data();
+    std::vector<CompressorCatalogRecord>  compressors_type1_data();
+    std::vector<CompressorCatalogRecord>  compressors_type1_GT_100kW_data();
+    std::vector<CompressorCatalogRecord>  compressors_type2_data();
+    std::vector<CompressorCatalogRecord>  compressors_type3_data();
+    std::vector<CompressorCatalogRecord>  compressors_type4_data();
+    std::vector<CompressorCatalogRecord>  compressors_type5_data();
+    std::vector<CompressorCatalogRecord>  compressors_type6_data();
+    std::vector<LightingData>             get_default_lighting_data();
 };

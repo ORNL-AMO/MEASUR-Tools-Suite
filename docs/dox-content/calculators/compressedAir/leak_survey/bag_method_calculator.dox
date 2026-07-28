@@ -1,6 +1,6 @@
 /**
  * @defgroup bag_method_calculator Bag Method Calculator
- * @ingroup compressed_air_assessments
+ * @ingroup compressed_air_calculators
  * @brief Estimates compressed air leak flow rate and annual consumption using the bag fill-time method.
  * @details This calculator implements the bag method, a practical field technique for measuring
  *          compressed air leaks. A measurement bag (typically a trash bag with a known volume)

@@ -1,6 +1,6 @@
 /**
  * @defgroup compressed_air_leak_survey_calculator Compressed Air Leak Survey Calculator
- * @ingroup compressed_air_assessments
+ * @ingroup compressed_air_calculators
  * @brief Aggregates the annual energy cost and air flow impact of multiple compressed
  *        air leaks across an industrial facility.
  * @details A **compressed air leak survey** is a systematic facility walk-down in which
