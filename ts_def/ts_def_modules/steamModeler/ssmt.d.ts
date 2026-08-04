@@ -14,6 +14,7 @@ import type {
     Solve,
     TurbineProperty,
 } from './ssmtEnum';
+import type { InletVector } from '../binding/registered_vectors';
 
 export type { ThermodynamicQuantity, Solve, TurbineProperty };
 
@@ -564,9 +565,10 @@ export declare class Inlet {
 export declare class Header {
     /**
      * @param headerPressure Header pressure, units MPa
-     * @param inletVec Array of {@link Inlet} objects
+     * @param inletVec Registered WASM vector of {@link Inlet} objects. Call
+     * `delete()` when finished with the vector.
      */
-    constructor(headerPressure: number, inletVec: Inlet[]);
+    constructor(headerPressure: number, inletVec: InletVector);
 
     /** @returns {@link SteamPropertiesOutput} combined header steam properties */
     getHeaderProperties(): SteamPropertiesOutput;
@@ -576,8 +578,11 @@ export declare class Header {
     getInletEnergyFlow(): number;
     /** @returns Total inlet mass flow, units kg/hr */
     getInletMassFlow(): number;
-    /** @returns Array of {@link Inlet} objects */
-    getInlets(): Inlet[];
+    /**
+     * @returns Registered WASM vector of {@link Inlet} objects. Call `delete()`
+     * when finished with the vector.
+     */
+    getInlets(): InletVector;
 
     /** Frees the underlying resource; must be called when finished with the instance */
     delete(): void;

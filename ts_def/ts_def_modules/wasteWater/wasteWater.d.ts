@@ -5,7 +5,7 @@
  * process outputs with and without the full iteration calculations table.
  */
 
-import { CalculationsTableV } from "../binding/registered_vectors";
+import type { CalculationsTableV, DoubleVector } from "../binding/registered_vectors";
 
 /**
  * Iteration row of intermediate wastewater-treatment calculations.
@@ -67,8 +67,11 @@ export declare class CalculationsTable {
     /** Solids retention time, units days. */
     SRT: number;
 
-    /** @returns Numeric array view of this row in model-defined order */
-    getArray(): number[];
+    /**
+     * @returns Registered WASM vector of row values in model-defined order.
+     * Call `delete()` when finished.
+     */
+    getArray(): DoubleVector;
 
     /** Frees the underlying resource; must be called when finished with the instance */
     delete(): void;

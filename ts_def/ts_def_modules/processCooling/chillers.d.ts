@@ -4,6 +4,8 @@
  * Chiller Efficiency (Temperature Reset Capacity, Staging).
  */
 
+import type { DoubleVector } from '../binding/registered_vectors';
+
 // ---------------------------------------------------------------------------
 // Enumerations
 // ---------------------------------------------------------------------------
@@ -103,10 +105,16 @@ export interface PowerEnergyConsumptionOutput {
  * @property savingsEnergy double, units kWh
  */
 export interface StagingPowerConsumptionOutput {
-    /** Power consumption for each baseline chiller load, units kW */
-    baselinePowerList: number[];
-    /** Power consumption for each modification chiller load, units kW */
-    modPowerList: number[];
+    /**
+     * Registered WASM vector of baseline chiller power values, units kW.
+     * Call `delete()` when finished.
+     */
+    baselinePowerList: DoubleVector;
+    /**
+     * Registered WASM vector of modification chiller power values, units kW.
+     * Call `delete()` when finished.
+     */
+    modPowerList: DoubleVector;
     /** Total baseline power, units kW */
     baselineTotalPower: number;
     /** Total baseline energy, units kWh */
@@ -328,8 +336,8 @@ export function ChillerCapacityEfficiency(
  * @param operatingHours double, operating hours, units hours
  * @param waterSupplyTemp double, chilled water supply temperature, units F
  * @param waterEnteringTemp double, condenser water entering temperature, units F
- * @param baselineLoadList list of doubles for each baseline chiller load, units ton
- * @param modLoadList list of doubles for each modification chiller load, units ton
+ * @param baselineLoadList Registered WASM vector of baseline chiller loads, units ton
+ * @param modLoadList Registered WASM vector of modification chiller loads, units ton
  * @returns {@link StagingPowerConsumptionOutput}
  */
 export function ChillerStagingEfficiency(
@@ -342,8 +350,8 @@ export function ChillerStagingEfficiency(
     operatingHours: number,
     waterSupplyTemp: number,
     waterEnteringTemp: number,
-    baselineLoadList: number[],
-    modLoadList: number[]
+    baselineLoadList: DoubleVector,
+    modLoadList: DoubleVector
 ): StagingPowerConsumptionOutput;
 
 export type ChillersModule = {
