@@ -29,9 +29,9 @@ npm install measur-tools-suite
 
 ```js
 // Initialize module
-const moduleFactory = (await import('/path/to/client.js')).default;
+const moduleFactory = (await import('measur-tools-suite')).default;
 const toolsSuiteModule = await moduleFactory({
-	locateFile: (filename) => '/path/to/client.wasm'
+	locateFile: (filename) => `/path/to/${filename}`
 });
 
 // Plain function call — returns a number directly
@@ -54,7 +54,7 @@ doc.delete();
 import createModule, { type MeasurToolsSuite } from 'measur-tools-suite';
 
 const toolsSuiteModule: MeasurToolsSuite = await createModule({
-	locateFile: (filename) => '/path/to/client.wasm'
+	locateFile: (filename) => `/path/to/${filename}`
 });
 
 const doc = new toolsSuiteModule.DryerOperatingCost(1752, 50, 100, 24, 7, 52, 0.08, 0.2, 0.25);
@@ -64,6 +64,10 @@ res.delete();
 doc.delete();
 ```
 
+Package consumers should import `measur-tools-suite`, not `bin/client.js`
+directly. Deploy the package's `bin/client.wasm` with your application and use
+`locateFile` to return its public URL.
+
 ### Building from Source
 
 ```bash
@@ -72,8 +76,8 @@ cmake -S . -B build-cpp
 cmake --build build-cpp
 
 # WebAssembly build (requires Emscripten)
-emcmake cmake -DBUILD_WASM=ON
-emmake make
+emcmake cmake -S . -B build-wasm -DBUILD_WASM=ON
+emmake make -C build-wasm
 
 # Packaging
 cmake -S . -B build-pkg -DBUILD_PACKAGE=ON -DBUILD_TESTING=OFF
