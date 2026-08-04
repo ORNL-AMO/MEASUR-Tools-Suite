@@ -50,7 +50,7 @@ jobs:
       - name: Setup valgrind
         if: inputs.release_channel == 'beta'
         run: |
-          sudo apt-get install -y valgrind
+          sudo apt-get install -y --fix-missing valgrind
           valgrind --version
 
       - name: Set package version
