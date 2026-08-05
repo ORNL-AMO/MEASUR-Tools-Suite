@@ -50,7 +50,8 @@ jobs:
       - name: Setup valgrind
         if: inputs.release_channel == 'beta'
         run: |
-          sudo apt-get install -y valgrind
+          sudo apt-get update
+          sudo apt-get install -y libc6-dbg valgrind
           valgrind --version
 
       - name: Set package version
@@ -116,8 +117,6 @@ jobs:
           cp build-wasm/bin/client.wasm bin/client.wasm
           rm -f bin/measur_tools_suite.js
           rm -f bin/measur_tools_suite.wasm
-          cp -r ts_def/. bin/
-          cp package.json bin/package.json
 
       - name: Run tests
         if: inputs.release_channel == 'beta'

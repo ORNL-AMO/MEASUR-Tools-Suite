@@ -22,7 +22,9 @@ Package entrypoint          bin/client.js + bin/client.wasm
 TypeScript entrypoint       ts_def/client.d.ts
 ```
 
-The public npm package exposes the WebAssembly module factory from `bin/client.js` and TypeScript declarations from `ts_def/client.d.ts`.
+Consumers import the public npm package root. Its `package.json` resolves the
+WebAssembly module factory to `bin/client.js` and TypeScript declarations to
+`ts_def/client.d.ts`; `bin/client.wasm` is the accompanying runtime asset.
 
 ## Repository Map
 

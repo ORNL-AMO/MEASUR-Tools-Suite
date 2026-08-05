@@ -172,10 +172,12 @@ emcc --version  # should show Emscripten version
 
 With emsdk activated, configure and build:
 ```bash
-emcmake cmake -DBUILD_WASM=ON
-emmake make
+emcmake cmake -S . -B build-wasm -DBUILD_WASM=ON
+emmake make -C build-wasm
 ```
-Artifacts appear under `bin/`
+The build emits `build-wasm/bin/client.js` and
+`build-wasm/bin/client.wasm`. Release automation stages those two files in
+`bin/`, which is the canonical location used by tests and npm packaging.
 
 ### 6.5 WebAssembly Usage Example
 
@@ -183,7 +185,7 @@ Artifacts appear under `bin/`
 import createModule, { type MeasurToolsSuite } from 'measur-tools-suite';
 
 const toolsSuiteModule: MeasurToolsSuite = await createModule({
-	locateFile: (filename) => '/path/to/client.wasm'
+	locateFile: (filename) => `/path/to/${filename}`
 });
 
 // Example 1: wallTotalHeatLoss — returns a number directly
