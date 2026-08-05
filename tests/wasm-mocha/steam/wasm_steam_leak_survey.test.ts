@@ -1,7 +1,7 @@
 import { assert } from 'chai';
 import createModule, { type MeasurToolsSuite, type SteamLeakSurveyResults } from 'measur-tools-suite';
 
-type ExpectedSteamLeakResults = Pick<SteamLeakSurveyResults, 'leakRate' | 'steamLoss' | 'energyLoss' | 'leakCost' | 'steamUnitCost' | 'steamSpecificEnthalpy' | 'isentropicEnthalpy'>;
+type ExpectedSteamLeakResults = Pick<SteamLeakSurveyResults, 'leakRate' | 'steamLoss' | 'energyLoss' | 'leakCost' | 'steamUnitCost' | 'steamSpecificEnthalpy' | 'isentropicEnthalpy' | 'feedwaterEnthalpy' | 'leakEnthalpy'>;
 
 describe('Steam Leak Survey', function () {
     let moduleInstance: MeasurToolsSuite;
@@ -20,6 +20,8 @@ describe('Steam Leak Survey', function () {
             assert.approximately(results.steamUnitCost, expected.steamUnitCost, .001, "steamUnitCost");
             assert.approximately(results.steamSpecificEnthalpy, expected.steamSpecificEnthalpy, .01, "steamSpecificEnthalpy");
             assert.approximately(results.isentropicEnthalpy, expected.isentropicEnthalpy, .01, "isentropicEnthalpy");
+            assert.approximately(results.feedwaterEnthalpy, expected.feedwaterEnthalpy, .01, "feedwaterEnthalpy");
+            assert.approximately(results.leakEnthalpy, expected.leakEnthalpy, .01, "leakEnthalpy");
         } finally {
             results.delete();
         }
@@ -49,18 +51,20 @@ describe('Steam Leak Survey', function () {
             const prvResult = steamLeak.estimateMethodPRVCalc(500);
             const steamSpecificEnthalpy = prvResult.steamSpecificEnthalpy;
             const isentropicEnthalpy = prvResult.isentropicEnthalpy;
+            const feedwaterEnthalpy = prvResult.feedwaterEnthalpy;
+            const leakEnthalpy = prvResult.leakEnthalpy;
 
             validateSteamLeakResults(prvResult,
-                {leakRate: 500, steamLoss: 4380, energyLoss: 5291.35, leakCost: 137405.72, steamUnitCost, steamSpecificEnthalpy, isentropicEnthalpy});
+                {leakRate: 500, steamLoss: 4380, energyLoss: 5291.35, leakCost: 137405.72, steamUnitCost, steamSpecificEnthalpy, isentropicEnthalpy, feedwaterEnthalpy, leakEnthalpy});
 
             validateSteamLeakResults(steamLeak.estimateMethodTurbineCalc(90, 500),
-                {leakRate: 500, steamLoss: 4380, energyLoss: 5291.35, leakCost: 133436.27, steamUnitCost, steamSpecificEnthalpy, isentropicEnthalpy});
+                {leakRate: 500, steamLoss: 4380, energyLoss: 5291.35, leakCost: 133436.27, steamUnitCost, steamSpecificEnthalpy, isentropicEnthalpy, feedwaterEnthalpy, leakEnthalpy});
 
             validateSteamLeakResults(steamLeak.orificeMethodCalc(90, 0.25, 0.8748, 14.70),
-                {leakRate: 482.71, steamLoss: 4228.58, energyLoss: 5108.42, leakCost: 128823.25, steamUnitCost, steamSpecificEnthalpy, isentropicEnthalpy});
+                {leakRate: 482.71, steamLoss: 4228.58, energyLoss: 5108.42, leakCost: 128823.25, steamUnitCost, steamSpecificEnthalpy, isentropicEnthalpy, feedwaterEnthalpy, leakEnthalpy});
 
             validateSteamLeakResults(steamLeak.plumeMethodCalc(90, 8, 80),
-                {leakRate: 447.426, steamLoss: 3919.45, energyLoss: 4734.97, leakCost: 119405.69, steamUnitCost, steamSpecificEnthalpy, isentropicEnthalpy});
+                {leakRate: 447.426, steamLoss: 3919.45, energyLoss: 4734.97, leakCost: 119405.69, steamUnitCost, steamSpecificEnthalpy, isentropicEnthalpy, feedwaterEnthalpy, leakEnthalpy});
         } finally {
             steamLeak.delete();
         }

@@ -23,7 +23,9 @@ EMSCRIPTEN_BINDINGS(steam_leak_survey_class) {
         .property("leakCost", &SteamLeakSurvey::SteamLeakSurveyResults::leakCost)
         .property("steamUnitCost", &SteamLeakSurvey::SteamLeakSurveyResults::steamUnitCost)
         .property("steamSpecificEnthalpy", &SteamLeakSurvey::SteamLeakSurveyResults::steamSpecificEnthalpy)
-        .property("isentropicEnthalpy", &SteamLeakSurvey::SteamLeakSurveyResults::isentropicEnthalpy);
+        .property("isentropicEnthalpy", &SteamLeakSurvey::SteamLeakSurveyResults::isentropicEnthalpy)
+        .property("feedwaterEnthalpy", &SteamLeakSurvey::SteamLeakSurveyResults::feedwaterEnthalpy)
+        .property("leakEnthalpy", &SteamLeakSurvey::SteamLeakSurveyResults::leakEnthalpy);
 
     // Parameters for SteamLeakSurvey constructor when utility type is steam
     //   operatingTime (hours pre year), steamTemp (F), steamPressure (psig), costOfElectricity ($/kWh),

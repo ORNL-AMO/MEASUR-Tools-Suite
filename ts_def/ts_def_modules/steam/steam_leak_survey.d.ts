@@ -35,6 +35,10 @@ export declare class SteamLeakSurveyResults {
     steamSpecificEnthalpy: number;
     /** Isentropic enthalpy at leak pressure, units Btu/lb. */
     isentropicEnthalpy: number;
+    /** Feedwater specific enthalpy used in this calculation, units Btu/lb. */
+    feedwaterEnthalpy: number;
+    /** Leak specific enthalpy at leak conditions, units Btu/lb. */
+    leakEnthalpy: number;
 
     /** Frees the underlying resource; must be called when finished with the instance */
     delete(): void;
