@@ -121,7 +121,7 @@ public:
         const auto feedwaterTempK = physics::conversions::fahrenheitToKelvin(feedwaterTemp);
 
         const auto steamProperties = SteamProperties(steamPressureMPa, SteamProperties::ThermodynamicQuantity::TEMPERATURE, steamTempK).calculate();
-        specificHeatRatio = steamProperties.isentropicExponent;
+        specificHeatRatio = steamProperties.specificIsobaricHeatCapacity_cp / steamProperties.specificIsochoricHeatCapacity_cv;
         steamSpecificEnthalpy = steamProperties.specificEnthalpy;
         isentropicEnthalpy = SteamProperties(leakPressureMPa, SteamProperties::ThermodynamicQuantity::ENTROPY,steamProperties.specificEntropy).calculate().specificEnthalpy;
         leakEnthalpy = SteamProperties(leakPressureMPa, SteamProperties::ThermodynamicQuantity::TEMPERATURE,leakTempK).calculate().specificEnthalpy;

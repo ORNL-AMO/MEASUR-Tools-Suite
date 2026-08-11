@@ -49,7 +49,7 @@ describe('Steam Leak Survey', function () {
                 {leakRate: 500, steamLoss: 4380, energyLoss: 5291.35, leakCost: 133436.27});
 
             validateSteamLeakResults(steamLeak.orificeMethodCalc(90, 0.25, 0.8748, 14.70),
-                {leakRate: 482.71, steamLoss: 4228.58, energyLoss: 5108.42, leakCost: 128823.25});
+                {leakRate: 497.93, steamLoss: 4361.83, energyLoss: 5269.39, leakCost: 132882.69});
 
             validateSteamLeakResults(steamLeak.plumeMethodCalc(90, 8, 80),
                 {leakRate: 447.426, steamLoss: 3919.45, energyLoss: 4734.97, leakCost: 119405.69});
