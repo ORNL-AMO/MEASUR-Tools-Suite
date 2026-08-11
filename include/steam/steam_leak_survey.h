@@ -231,7 +231,7 @@ public:
         const double energyLoss = leakEnthalpy * steamLoss / 1000;
 
         const double leakCost = steamLoss * costOfSteam(turbineEfficiency) * 1000 *
-            (leakEnthalpy - feedwaterEnthalpy) / (steamSpecificEnthalpy - feedwaterEnthalpy);
+            (turbineEfficiency != 0 ? (leakEnthalpy - feedwaterEnthalpy) / (steamSpecificEnthalpy - feedwaterEnthalpy) : 1);
 
         return {leakRate, steamLoss, energyLoss, leakCost};
     }
