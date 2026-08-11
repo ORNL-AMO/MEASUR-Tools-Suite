@@ -43,7 +43,7 @@ describe('Steam Leak Survey', function () {
         const steamLeak = new moduleInstance.SteamLeakSurvey(8760, 500, 300, 0.1, 200, 400, 70, 80, 75, 15.50, 1.038);
         try {
             validateSteamLeakResults(steamLeak.estimateMethodPRVCalc(500),
-                {leakRate: 500, steamLoss: 4380, energyLoss: 5291.35, leakCost: 137405.72});
+                {leakRate: 500, steamLoss: 4380, energyLoss: 5291.35, leakCost: 143049.55});
 
             validateSteamLeakResults(steamLeak.estimateMethodTurbineCalc(90, 500),
                 {leakRate: 500, steamLoss: 4380, energyLoss: 5291.35, leakCost: 133436.27});

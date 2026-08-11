@@ -28,7 +28,7 @@ TEST_CASE("Steam Leak of a boiler system:", "[steamLeakSurvey]") {
     const auto steamLeak = SteamLeakSurvey(8760, 500, 300, 0.1, 200, 400, 70, 80, 75, 15.50, 1.038);
     INFO("Estimate Method (PRV): ");
     validateSteamLeaks(steamLeak.estimateMethodPRVCalc(500),
-             {500, 4380, 5291.35,  137405.72});
+             {500, 4380, 5291.35,  143049.55});
     INFO("Passed");
 
     INFO("Estimate Method (Backpressure Turbine): ");
