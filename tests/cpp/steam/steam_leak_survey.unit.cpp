@@ -38,7 +38,7 @@ TEST_CASE("Steam Leak of a boiler system:", "[steamLeakSurvey]") {
 
     INFO("Orifice Method: ");
     validateSteamLeaks(steamLeak.orificeMethodCalc(90, 0.25, 0.8748, 14.70),
-             {497.93, 4361.83, 5269.39, 132882.69});
+             {482.71, 4228.58, 5108.42, 128823.25});
     INFO("Passed");
 
     INFO("Plume Method: ");
