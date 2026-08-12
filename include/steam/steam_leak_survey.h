@@ -121,7 +121,7 @@ public:
         const auto feedwaterTempK = physics::conversions::fahrenheitToKelvin(feedwaterTemp);
 
         const auto steamProperties = SteamProperties(steamPressureMPa, SteamProperties::ThermodynamicQuantity::TEMPERATURE, steamTempK).calculate();
-        specificHeatRatio = steamProperties.specificIsobaricHeatCapacity_cp / steamProperties.specificIsochoricHeatCapacity_cv;
+        specificHeatRatio = steamProperties.isentropicExponent;
         steamSpecificEnthalpy = steamProperties.specificEnthalpy;
         isentropicEnthalpy = SteamProperties(leakPressureMPa, SteamProperties::ThermodynamicQuantity::ENTROPY,steamProperties.specificEntropy).calculate().specificEnthalpy;
         leakEnthalpy = SteamProperties(leakPressureMPa, SteamProperties::ThermodynamicQuantity::TEMPERATURE,leakTempK).calculate().specificEnthalpy;
@@ -202,7 +202,7 @@ public:
      * leakCost MMBtu/lb-MCF
      */
     SteamLeakSurveyResults plumeMethodCalc(const double turbineEfficiency, const double plumeLength, const double ambTemp) const {
-        const double leakRate = QuantifySteamLeakByPlumeLength::estimate(steamPressure, plumeLength, ambTemp);    // lb/hr
+        const double leakRate = QuantifySteamLeakByPlumeLength::estimate(leakPressure, plumeLength, ambTemp);    // lb/hr
 
         return calculate(leakRate, turbineEfficiency);
     }
@@ -231,7 +231,7 @@ public:
         const double energyLoss = leakEnthalpy * steamLoss / 1000;
 
         const double leakCost = steamLoss * costOfSteam(turbineEfficiency) * 1000 *
-            (leakEnthalpy - feedwaterEnthalpy) / (steamSpecificEnthalpy - feedwaterEnthalpy);
+            (turbineEfficiency != 0 ? (leakEnthalpy - feedwaterEnthalpy) / (steamSpecificEnthalpy - feedwaterEnthalpy) : 1);
 
         return {leakRate, steamLoss, energyLoss, leakCost};
     }
