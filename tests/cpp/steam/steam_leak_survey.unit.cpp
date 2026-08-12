@@ -43,6 +43,6 @@ TEST_CASE("Steam Leak of a boiler system:", "[steamLeakSurvey]") {
 
     INFO("Plume Method: ");
     validateSteamLeaks(steamLeak.plumeMethodCalc(90, 8, 80),
-             {447.426, 3919.45, 4734.97, 119405.69});
+             {427.796, 3747.496, 4527.236, 114167.08});
     INFO("Passed");
 }

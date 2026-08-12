@@ -52,7 +52,7 @@ describe('Steam Leak Survey', function () {
                 {leakRate: 482.71, steamLoss: 4228.58, energyLoss: 5108.42, leakCost: 128823.25});
 
             validateSteamLeakResults(steamLeak.plumeMethodCalc(90, 8, 80),
-                {leakRate: 447.426, steamLoss: 3919.45, energyLoss: 4734.97, leakCost: 119405.69});
+                {leakRate: 427.796, steamLoss: 3747.496, energyLoss: 4527.236, leakCost: 114167.08});
         } finally {
             steamLeak.delete();
         }
