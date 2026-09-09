@@ -151,20 +151,20 @@
  * @ingroup compressed_air_leak_survey_calculator
  * @brief Annual air volume for survey entries using the bag method.
  * @details The bag sub-calculator returns an annual consumption in kscf that already
- *          accounts for the operating time and number of units specified in the bag
- *          method input. The survey applies its own @c units multiplier to this result
- *          without the 1000× conversion to standard cubic feet. The reported
- *          @c annual_total_flow_rate therefore carries units of kscf for bag-method
- *          entries, while estimate, decibels, and orifice entries contribute in scf.
+ *          accounts for the operating time specified in the bag method input. The
+ *          survey converts this result to standard cubic feet before applying its
+ *          own @c units multiplier so that aggregate survey totals use scf for all
+ *          measurement methods.
  *
  * @formula{leak-survey-bag-annual;
- *   V_{annual} = C_{bag} \cdot n
+ *   V_{annual} = C_{bag} \cdot 1000 \cdot n
  * }
  *
  * @subheading{Symbols}
  * @symtable
- * @symrow{V_{annual}; Annual compressed air volume for this survey entry; \kscf}
+ * @symrow{V_{annual}; Annual compressed air volume for this survey entry; \scf}
  * @symrow{C_{bag}; Annual consumption from bag_method::calculate; \kscf}
+ * @symrow{1000; Kiloscf to standard cubic feet conversion; \unitless}
  * @symrow{n; Number of identical leak points (units multiplier); \unitless}
  * @endsymtable
  *
