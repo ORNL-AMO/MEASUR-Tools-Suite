@@ -19,7 +19,8 @@ enum class Style {
     DOUBLE_SUCTION,
     VERTICAL_TURBINE,
     LARGE_END_SUCTION,
-    SPECIFIED_OPTIMAL_EFFICIENCY
+    SPECIFIED_OPTIMAL_EFFICIENCY,
+    POSITIVE_DISPLACEMENT
 };
 
 struct FieldData {
@@ -46,27 +47,47 @@ struct Input {
     /**
      * Constructor
      * @param style Style, classification of style of pump being used.
-     * @param pumpEfficiency double, pump % efficiency at the specified operating conditions
+     * @param pumpEfficiency double, pump efficiency at the specified operating conditions, dimensionless fraction
      * @param rpm double, pump RPM to define its operating speed
      * @param drive Drive, type of drive the pump uses from either direct or belt drive.
      * @param kviscosity double, kinematic viscosity of the fluid being pumped in centistokes.
      * @param specificGravity double, specific gravity- unitless
      * @param stageCount int, the number of pump stages
      * @param speed Speed, type of pump speed from either fixed or not fixed.
+     * @param specifiedEfficiency double, specified drive efficiency, dimensionless fraction
      */
     Input(const Style style, double pumpEfficiency, const double rpm, const Motor::Drive drive, const double kviscosity,
           const double specificGravity, const int stageCount, const SpecificSpeed speed, double specifiedEfficiency)
+        : Input(style, pumpEfficiency, rpm, drive, kviscosity, specificGravity, stageCount, speed, specifiedEfficiency,
+                0.0) {};
+
+    /**
+     * Constructor
+     * @param style Style, classification of style of pump being used.
+     * @param pumpEfficiency double, pump efficiency at the specified operating conditions, dimensionless fraction
+     * @param rpm double, pump RPM to define its operating speed
+     * @param drive Drive, type of drive the pump uses from either direct or belt drive.
+     * @param kviscosity double, kinematic viscosity of the fluid being pumped in centistokes.
+     * @param specificGravity double, specific gravity- unitless
+     * @param stageCount int, the number of pump stages
+     * @param speed Speed, type of pump speed from either fixed or not fixed.
+     * @param specifiedEfficiency double, specified drive efficiency, dimensionless fraction
+     * @param differentialPressurePsi double, pump differential pressure in psi for positive-displacement pumps
+     */
+    Input(const Style style, double pumpEfficiency, const double rpm, const Motor::Drive drive, const double kviscosity,
+          const double specificGravity, const int stageCount, const SpecificSpeed speed, double specifiedEfficiency,
+          const double differentialPressurePsi)
         : style(style), pumpEfficiency(pumpEfficiency), rpm(rpm), drive(drive), kviscosity(kviscosity),
           specificGravity(specificGravity), stageCount(stageCount), speed(speed),
-          specifiedEfficiency(specifiedEfficiency) {
-              /**
-               * Convert percent values to fractions for proper calculation
-               */
-              //   this->specifiedEfficiency = Conversion(specifiedEfficiency).percentToFraction();
-              //   this->pumpEfficiency = Conversion(pumpEfficiency).percentToFraction();
-              //   this->specifiedEfficiency = specifiedEfficiency / 100.0;
-              //   this->pumpEfficiency = pumpEfficiency / 100.0;
-          };
+          specifiedEfficiency(specifiedEfficiency), differentialPressurePsi(differentialPressurePsi) {
+        /**
+         * Convert percent values to fractions for proper calculation
+         */
+        //   this->specifiedEfficiency = Conversion(specifiedEfficiency).percentToFraction();
+        //   this->pumpEfficiency = Conversion(pumpEfficiency).percentToFraction();
+        //   this->specifiedEfficiency = specifiedEfficiency / 100.0;
+        //   this->pumpEfficiency = pumpEfficiency / 100.0;
+    };
 
     const Style         style;
     double              pumpEfficiency, rpm;
@@ -75,5 +96,6 @@ struct Input {
     const int           stageCount;
     const SpecificSpeed speed;
     double              specifiedEfficiency;
+    const double        differentialPressurePsi;
 };
 } // namespace Pump

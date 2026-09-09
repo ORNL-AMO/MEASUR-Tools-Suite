@@ -76,4 +76,97 @@ describe('Pump Results Existing', function () {
             pumpInput.delete();
         }
     });
+
+    it('should calculate positive displacement Pump results calculateExisting correctly', function () {
+        const positiveDisplacementPumpStyle = moduleInstance.PumpStyle.POSITIVE_DISPLACEMENT as unknown as {
+            value: number;
+        };
+        assert.strictEqual(positiveDisplacementPumpStyle.value, 12, 'PumpStyle.POSITIVE_DISPLACEMENT');
+
+        const pumpStyle = moduleInstance.PumpStyle.POSITIVE_DISPLACEMENT;
+        const pumpEfficiency = 80 / 100;
+        const rpm = 1780;
+        const drive = moduleInstance.Drive.DIRECT_DRIVE;
+        const kviscosity = 1.0;
+        const specificGravity = 1.0;
+        const stageCount = 1;
+        const speed = moduleInstance.SpecificSpeed.NOT_FIXED_SPEED;
+        const specifiedEfficiency = 1.0;
+        const differentialPressurePsi = 50;
+        const pumpInput = new moduleInstance.PumpResultInput(
+            pumpStyle,
+            pumpEfficiency,
+            rpm,
+            drive,
+            kviscosity,
+            specificGravity,
+            stageCount,
+            speed,
+            specifiedEfficiency,
+            differentialPressurePsi
+        );
+
+        const lineFrequency = moduleInstance.LineFrequency.FREQ60;
+        const motorRatedPower = 200;
+        const motorRpm = 1780;
+        const efficiencyClass = moduleInstance.MotorEfficiencyClass.PREMIUM;
+        const specifiedMotorEfficiency = 95;
+        const motorRatedVoltage = 460;
+        const fullLoadAmps = 225.0;
+        const sizeMargin = 0;
+        const motor = new moduleInstance.Motor(
+            lineFrequency,
+            motorRatedPower,
+            motorRpm,
+            efficiencyClass,
+            specifiedMotorEfficiency,
+            motorRatedVoltage,
+            fullLoadAmps,
+            sizeMargin
+        );
+
+        const flowRate = 100;
+        const head = 999;
+        const loadEstimationMethod = moduleInstance.LoadEstimationMethod.POWER;
+        const motorPower = 80;
+        const motorAmps = 125.857;
+        const voltage = 480;
+        const operatingHours = 8760;
+        const unitCost = 0.05;
+        const fieldData = new moduleInstance.PumpFieldData(
+            flowRate,
+            head,
+            loadEstimationMethod,
+            motorPower,
+            motorAmps,
+            voltage
+        );
+        const pumpResult = new moduleInstance.PumpResult(pumpInput, motor, fieldData, operatingHours, unitCost);
+        let calculatedResults: PumpResults | undefined;
+
+        try {
+            calculatedResults = pumpResult.calculateExisting();
+
+            const hydraulicHp = flowRate * differentialPressurePsi / 1714.231;
+            assert.approximately(
+                calculatedResults.pump_efficiency,
+                hydraulicHp / calculatedResults.mover_shaft_power,
+                0.000001,
+                'pump_efficiency'
+            );
+            assert.approximately(calculatedResults.motor_power, motorPower, 0.001, 'motor_power');
+            assert.approximately(
+                calculatedResults.annual_energy,
+                motorPower * operatingHours / 1000,
+                0.001,
+                'annual_energy'
+            );
+        } finally {
+            calculatedResults?.delete();
+            pumpResult.delete();
+            fieldData.delete();
+            motor.delete();
+            pumpInput.delete();
+        }
+    });
 });
