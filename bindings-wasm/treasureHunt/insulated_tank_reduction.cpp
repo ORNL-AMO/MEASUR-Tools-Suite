@@ -39,17 +39,17 @@ EMSCRIPTEN_BINDINGS(insulated_tank_reduction_module) {
     //   input.insulationConductivity:insulation thermal conductivity [BTU/(hr·ft·°F)]
     //   input.jacketEmissivity:      insulation jacket outer surface emissivity [0–1, dimensionless]
     //   input.surfaceTemperature:    outer surface temperature (jacket or bare tank) [°R]
-    //   returns: heatLoss [BTU/hr per 10^5], annualHeatLoss [BTU per 10^6]
+    //   returns: heatLoss [BTU/hr], annualHeatLoss [BTU/yr]
     function("insulatedTankReduction", &calculate);
 
     // insulatedTankHeatLoss(input: InsulatedTankInput) -> InsulatedTankOutput
     //   Same input fields as insulatedTankReduction. Computes heat loss for an insulated tank.
-    //   returns: heatLoss [BTU/hr per 10^5], annualHeatLoss [BTU per 10^6]
+    //   returns: heatLoss [BTU/hr], annualHeatLoss [BTU/yr]
     function("insulatedTankHeatLoss", &insulatedTankHeatLoss);
 
     // bareTankHeatLoss(input: InsulatedTankInput) -> InsulatedTankOutput
     //   Same input fields as insulatedTankReduction. Computes heat loss for a bare (uninsulated) tank.
-    //   returns: heatLoss [BTU/hr per 10^5], annualHeatLoss [BTU per 10^6]
+    //   returns: heatLoss [BTU/hr], annualHeatLoss [BTU/yr]
     function("bareTankHeatLoss", &bareTankHeatLoss);
 
     // insulatedTankRayleighNumber(thermal_expansion, surface_temperature, ambient_temperature,
