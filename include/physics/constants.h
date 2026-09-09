@@ -299,6 +299,14 @@ inline constexpr double kLbPerFt3ToKgPerM3 = 16.018463;
 inline constexpr double kBhpToKw = 0.746;
 
 /**
+ * @brief Pump hydraulic horsepower divisor for flow in gpm and pressure in psi
+ *        @unitb{\gallon\per\minute\PSI\per\horsepower}
+ * @details Used as the denominator in pump calculations where horsepower is computed from
+ *          flow rate in gallons per minute and pressure in pounds per square inch.
+ */
+inline constexpr double kPumpGpmPsiPerHp = 1714.231;
+
+/**
  * @brief BTU per ton of refrigeration @unitb{Btu/Ton}
  * @details Used for refrigeration capacity calculations. Source: ASHRAE Handbook.
  */

@@ -34,6 +34,7 @@ export * from "./ts_def_modules/motorDriven/motor/motor";
 export * from "./ts_def_modules/motorDriven/motor/motorEnum";
 
 export * from "./ts_def_modules/motorDriven/pump/pump";
+export * from "./ts_def_modules/motorDriven/pump/positive_displacement_pump";
 export * from "./ts_def_modules/motorDriven/pump/pump_valve_power_loss";
 
 export * from "./ts_def_modules/motorDriven/pumpFan/pumpFan";
@@ -145,6 +146,7 @@ export type MeasurToolsSuite =
     import("./ts_def_modules/motorDriven/motor/motor").MotorModule &
     // motorDriven/pump
     import("./ts_def_modules/motorDriven/pump/pump").PumpModule &
+    import("./ts_def_modules/motorDriven/pump/positive_displacement_pump").PositiveDisplacementPumpModule &
     import("./ts_def_modules/motorDriven/pump/pump_valve_power_loss").PumpValvePowerLossModule &
     // motorDriven/pumpFan
     import("./ts_def_modules/motorDriven/pumpFan/pumpFan").PumpFanModule &
