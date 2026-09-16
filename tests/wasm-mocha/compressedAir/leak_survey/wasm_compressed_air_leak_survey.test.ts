@@ -20,6 +20,7 @@ const measurementMethods = {
 };
 
 const utilityTypes = {
+    CompressedAir: 0 as UtilityTypeCA,
     Electricity: 1 as UtilityTypeCA
 };
 
@@ -204,10 +205,40 @@ describe('Compressed Air Leak Survey', function () {
             defaultOrifice, 0.40, 0.16, 2);
         const result: CompressedAirLeakSurveyResult = runSurvey(input);
 
-        assert.approximately(result.annualTotalElectricity,     0.3456,   0.001);
-        assert.approximately(result.annualTotalElectricityCost, 0.041472, 0.0001);
+        assert.approximately(result.annualTotalElectricity,     345.6,   0.001);
+        assert.approximately(result.annualTotalElectricityCost, 41.472, 0.0001);
         assert.approximately(result.totalFlowRate,              144.0,    0.01);
-        assert.approximately(result.annualTotalFlowRate,        129.6,    0.01);
+        assert.approximately(result.annualTotalFlowRate,        129600,    0.01);
+    });
+
+    it('should calculate bag method with compressed air utility cost', function () {
+        const input: CompressedAirLeakSurveyInput = buildInput(8640, utilityTypes.CompressedAir, 0.001,
+            measurementMethods.Bag, 0.1, defaultDecibels,
+            { operatingTime: 15, bagFillTime: 10, bagVolume: 12 },
+            defaultOrifice, 0.40, 0.16, 2);
+        const result: CompressedAirLeakSurveyResult = runSurvey(input);
+
+        assert.approximately(result.annualTotalElectricity,     0.0,    0.001);
+        assert.approximately(result.annualTotalElectricityCost, 129.6,  0.0001);
+        assert.approximately(result.totalFlowRate,              144.0,  0.01);
+        assert.approximately(result.annualTotalFlowRate,        129600, 0.01);
+    });
+
+    it('should aggregate physically equivalent bag and estimate method rows', function () {
+        const bagInput: CompressedAirLeakSurveyInput = buildInput(8760, utilityTypes.Electricity, 0.12,
+            measurementMethods.Bag, 0.1, defaultDecibels,
+            { operatingTime: 8760, bagFillTime: 10, bagVolume: 12 },
+            defaultOrifice, 0.40, 0.16, 1);
+        const estimateInput: CompressedAirLeakSurveyInput = buildInput(8760, utilityTypes.Electricity, 0.12,
+            measurementMethods.Estimate, 72, defaultDecibels,
+            { operatingTime: 8760, bagFillTime: 12, bagVolume: 8.68 },
+            defaultOrifice, 0.40, 0.16, 1);
+        const result: CompressedAirLeakSurveyResult = moduleInstance.calculateCompressedAirLeakSurvey([bagInput, estimateInput]);
+
+        assert.approximately(result.annualTotalElectricity,     201830.4,   0.001);
+        assert.approximately(result.annualTotalElectricityCost, 24219.648,  0.0001);
+        assert.approximately(result.totalFlowRate,              144.0,      0.01);
+        assert.approximately(result.annualTotalFlowRate,        75686400,   0.01);
     });
 
     it('should calculate orifice method with electricity', function () {

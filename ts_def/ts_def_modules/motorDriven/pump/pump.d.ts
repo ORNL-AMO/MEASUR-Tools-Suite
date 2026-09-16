@@ -156,6 +156,31 @@ export declare class PumpResultInput {
         specifiedEfficiency: number
     );
 
+    /**
+     * @param style PumpStyle, pump style selector
+     * @param pumpEfficiency double, pump efficiency, dimensionless
+     * @param rpm double, pump speed in RPM
+     * @param drive Drive enum, drive type
+     * @param kviscosity Kinematic viscosity, units cSt.
+     * @param specificGravity double, specific gravity, dimensionless
+     * @param stageCount Pump stage count.
+     * @param speed SpecificSpeed, pump specific speed selector
+     * @param specifiedEfficiency Specified optimal efficiency, dimensionless fraction.
+     * @param differentialPressurePsi Differential pressure for positive-displacement pumps, units psi.
+     */
+    constructor(
+        style: PumpStyle,
+        pumpEfficiency: number,
+        rpm: number,
+        drive: Drive,
+        kviscosity: number,
+        specificGravity: number,
+        stageCount: number,
+        speed: SpecificSpeed,
+        specifiedEfficiency: number,
+        differentialPressurePsi: number
+    );
+
     /** Frees the underlying resource; must be called when finished with the instance */
     delete(): void;
 }

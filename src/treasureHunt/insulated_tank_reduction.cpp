@@ -107,12 +107,12 @@ InsulatedTankOutput insulatedTankHeatLoss(const InsulatedTankInput& input) {
          + 1.0 / kInnerConvectionCoeff);
 
     double delta_t        = input.surface_temperature - input.ambient_temperature;
-    double conv_cond_loss = overall_coeff * tank_area * delta_t / 1e5;
+    double conv_cond_loss = overall_coeff * tank_area * delta_t;
     double rad_loss       = physics::us::kStefanBoltzmann * input.jacket_emissivity
-                          * (std::pow(input.surface_temperature, 4) - std::pow(input.ambient_temperature, 4))
-                          / 1e5;
+                          * tank_area
+                          * (std::pow(input.surface_temperature, 4) - std::pow(input.ambient_temperature, 4));
     double heat_loss        = conv_cond_loss + rad_loss;
-    double annual_heat_loss = (heat_loss * static_cast<double>(input.operating_hours) / 10.0)
+    double annual_heat_loss = (heat_loss * static_cast<double>(input.operating_hours))
                             / input.system_efficiency;
     return {heat_loss, annual_heat_loss};
 }
@@ -138,12 +138,12 @@ InsulatedTankOutput bareTankHeatLoss(const InsulatedTankInput& input) {
          + 1.0 / kInnerConvectionCoeff);
 
     double delta_t        = input.tank_temperature - input.ambient_temperature;
-    double conv_cond_loss = overall_coeff * tank_area * delta_t / 1e5;
+    double conv_cond_loss = overall_coeff * tank_area * delta_t;
     double rad_loss       = physics::us::kStefanBoltzmann * input.tank_emissivity
-                          * (std::pow(input.tank_temperature, 4) - std::pow(input.ambient_temperature, 4))
-                          / 1e5;
+                          * tank_area
+                          * (std::pow(input.tank_temperature, 4) - std::pow(input.ambient_temperature, 4));
     double heat_loss        = conv_cond_loss + rad_loss;
-    double annual_heat_loss = (heat_loss * static_cast<double>(input.operating_hours) / 10.0)
+    double annual_heat_loss = (heat_loss * static_cast<double>(input.operating_hours))
                             / input.system_efficiency;
     return {heat_loss, annual_heat_loss};
 }

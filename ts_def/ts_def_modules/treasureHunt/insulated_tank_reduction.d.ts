@@ -65,13 +65,13 @@ export interface InsulatedTankInput {
 /**
  * Result object returned by {@link insulatedTankReduction} and heat-loss helper functions.
  *
- * @property heatLoss number, instantaneous heat loss (scaled), units BTU/hr per 10^5
- * @property annualHeatLoss number, annual heat loss (scaled, efficiency-adjusted), units BTU per 10^6
+ * @property heatLoss number, instantaneous heat loss, units BTU/hr
+ * @property annualHeatLoss number, annual heat loss adjusted for system efficiency, units BTU/year
  */
 export interface InsulatedTankOutput {
-    /** Instantaneous heat loss (scaled), units BTU/hr per 10^5 */
+    /** Instantaneous heat loss, units BTU/hr */
     heatLoss: number;
-    /** Annual heat loss (scaled, efficiency-adjusted), units BTU per 10^6 */
+    /** Annual heat loss adjusted for system efficiency, units BTU/year */
     annualHeatLoss: number;
 }
 

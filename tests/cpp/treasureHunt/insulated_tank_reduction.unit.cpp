@@ -51,8 +51,8 @@ TEST_CASE("Insulated Tank - with insulation", "[insulated_tank_reduction]") {
     input.surface_temperature     = 959.67;
 
     InsulatedTankOutput output = calculate(input);
-    CHECK(output.heat_loss        == Approx(0.04446693395883733));
-    CHECK(output.annual_heat_loss == Approx(43.2811490532683365));
+    CHECK(output.heat_loss        == Approx(189650.5652766416));
+    CHECK(output.annual_heat_loss == Approx(1845932168.6926448));
 }
 
 TEST_CASE("Insulated Tank - with insulation 2", "[insulated_tank_reduction]") {
@@ -72,8 +72,8 @@ TEST_CASE("Insulated Tank - with insulation 2", "[insulated_tank_reduction]") {
     input.surface_temperature     = 759.67;
 
     InsulatedTankOutput output = calculate(input);
-    CHECK(output.heat_loss        == Approx(0.030515));
-    CHECK(output.annual_heat_loss == Approx(29.70135));
+    CHECK(output.heat_loss        == Approx(9689.742295741327));
+    CHECK(output.annual_heat_loss == Approx(94313491.67854892));
 }
 
 TEST_CASE("Insulated Tank - no insulation (bare)", "[insulated_tank_reduction]") {
@@ -93,8 +93,8 @@ TEST_CASE("Insulated Tank - no insulation (bare)", "[insulated_tank_reduction]")
     input.surface_temperature     = 959.67;
 
     InsulatedTankOutput output = calculate(input);
-    CHECK(output.heat_loss        == Approx(1.1112001223));
-    CHECK(output.annual_heat_loss == Approx(1081.568119));
+    CHECK(output.heat_loss        == Approx(275745.9475979308));
+    CHECK(output.annual_heat_loss == Approx(2683927223.286526));
 }
 
 TEST_CASE("Insulated Tank - emissivity validation throws", "[insulated_tank_reduction]") {

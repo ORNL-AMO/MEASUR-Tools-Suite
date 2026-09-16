@@ -17,6 +17,7 @@
 #include "motorDriven/pumpFan/MoverEfficiency.h"
 #include "motorDriven/pumpFan/MoverShaftPower.h"
 #include "motorDriven/pumpFan/OptimalPumpShaftPower.h"
+#include "physics/constants.h"
 
 PumpResult::Output PumpResult::calculateExisting() {
     /**
@@ -58,9 +59,16 @@ PumpResult::Output PumpResult::calculateExisting() {
     // existing.driveEfficiency = moverShaftPower.driveEfficiency;
 
     double pumpEfficiency;
-    pumpEfficiency =
-        MoverEfficiency(pumpInput.specificGravity, fieldData.flowRate, fieldData.head, moverShaftPower.moverShaftPower)
-            .calculate();
+    if (pumpInput.style == Pump::Style::POSITIVE_DISPLACEMENT) {
+        const double hydraulicHp =
+            fieldData.flowRate * pumpInput.differentialPressurePsi / physics::conversions::kPumpGpmPsiPerHp;
+        pumpEfficiency = hydraulicHp / moverShaftPower.moverShaftPower;
+    }
+    else {
+        pumpEfficiency = MoverEfficiency(pumpInput.specificGravity, fieldData.flowRate, fieldData.head,
+                                         moverShaftPower.moverShaftPower)
+                             .calculate();
+    }
     // existing.pumpEfficiency = MoverEfficiency(pumpInput.specificGravity, fieldData.flowRate, fieldData.head,
     // existing.moverShaftPower).calculate();
 

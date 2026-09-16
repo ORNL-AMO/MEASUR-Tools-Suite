@@ -159,9 +159,9 @@ struct Result {
  *       the returned @c annual_consumption (in kscf) is converted to scf by
  *       multiplying by 1000 before applying the @c units multiplier.
  *
- * @note For the **bag method**, @c annual_total_flow_rate accumulates the sub-calculator's
- *       @c annual_consumption (in kscf) multiplied by @c units directly, without
- *       the 1000× conversion. This preserves the original calculation behavior.
+ * @note For the **bag method**, the sub-calculator's @c annual_consumption
+ *       (in kscf) is converted to scf by multiplying by 1000 before applying
+ *       the @c units multiplier.
  *
  * **Annual Electricity (utility_type = 1):**
  * @formula{leak-survey-electricity;

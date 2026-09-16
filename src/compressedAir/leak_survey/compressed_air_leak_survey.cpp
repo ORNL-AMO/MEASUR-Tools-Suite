@@ -27,7 +27,7 @@ Result calculate(const std::vector<Input>& inputs) {
         } else if (input.measurement_method == static_cast<int>(MeasurementMethod::kBag)) {
             auto bag_result = bag_method::calculate(input.bag_input);
             tmp_flow_rate   = bag_result.flow_rate * input.units;
-            tmp_annual_flow = bag_result.annual_consumption * input.units;
+            tmp_annual_flow = bag_result.annual_consumption * 1000.0 * input.units;
 
         } else if (input.measurement_method == static_cast<int>(MeasurementMethod::kOrifice)) {
             auto orf_result = orifice_method::calculate(input.orifice_input);

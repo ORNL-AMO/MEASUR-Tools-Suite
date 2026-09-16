@@ -98,10 +98,42 @@ TEST_CASE("CompressedAirLeakSurvey - Bag Method, Electricity",
                            kDefaultOrifice,
                            {0.40, 0.16}, 2);
     auto result = calculate({input});
-    CHECK(result.annual_total_electricity      == Approx(0.3456));
-    CHECK(result.annual_total_electricity_cost == Approx(0.041472));
+    CHECK(result.annual_total_electricity      == Approx(345.6));
+    CHECK(result.annual_total_electricity_cost == Approx(41.472));
     CHECK(result.total_flow_rate               == Approx(144.0));
-    CHECK(result.annual_total_flow_rate        == Approx(129.6));
+    CHECK(result.annual_total_flow_rate        == Approx(129600));
+}
+
+TEST_CASE("CompressedAirLeakSurvey - Bag Method, Compressed Air Utility",
+          "[CompressedAir][CompressedAirLeakSurvey][BagMethod]") {
+    auto input = makeInput(8640, 0, 0.001, 2,
+                           {8640, 0.1}, kDefaultDecibels,
+                           bag_method::Input{15, 10, 12},
+                           kDefaultOrifice,
+                           {0.40, 0.16}, 2);
+    auto result = calculate({input});
+    CHECK(result.annual_total_electricity      == Approx(0.0));
+    CHECK(result.annual_total_electricity_cost == Approx(129.6));
+    CHECK(result.total_flow_rate               == Approx(144.0));
+    CHECK(result.annual_total_flow_rate        == Approx(129600));
+}
+
+TEST_CASE("CompressedAirLeakSurvey - Mixed Bag and Estimate Methods",
+          "[CompressedAir][CompressedAirLeakSurvey][BagMethod][EstimateMethod]") {
+    auto bag_input = makeInput(8760, 1, 0.12, 2,
+                               {8760, 0.1}, kDefaultDecibels,
+                               bag_method::Input{8760, 10, 12},
+                               kDefaultOrifice,
+                               {0.40, 0.16}, 1);
+    auto estimate_input = makeInput(8760, 1, 0.12, 0,
+                                    {8760, 72}, kDefaultDecibels,
+                                    kDefaultBag, kDefaultOrifice,
+                                    {0.40, 0.16}, 1);
+    auto result = calculate({bag_input, estimate_input});
+    CHECK(result.annual_total_electricity      == Approx(201830.4));
+    CHECK(result.annual_total_electricity_cost == Approx(24219.648));
+    CHECK(result.total_flow_rate               == Approx(144.0));
+    CHECK(result.annual_total_flow_rate        == Approx(75686400));
 }
 
 TEST_CASE("CompressedAirLeakSurvey - Orifice Method, Electricity",

@@ -45,8 +45,8 @@ describe('Insulated Tank Reduction Tests', function () {
 
     it('should calculate heat loss for an insulated tank (case 1)', function () {
         const result: InsulatedTankOutput = m.insulatedTankReduction(makeInput(baseInsulatedInput));
-        assert.approximately(result.heatLoss,       0.0444638799, 0.0001, 'heatLoss');
-        assert.approximately(result.annualHeatLoss, 43.278176,    0.01,   'annualHeatLoss');
+        assert.approximately(result.heatLoss,       189650.5653,    0.1,  'heatLoss');
+        assert.approximately(result.annualHeatLoss, 1845932168.6926, 10.0, 'annualHeatLoss');
     });
 
     it('should calculate heat loss for an insulated tank (case 2)', function () {
@@ -66,8 +66,8 @@ describe('Insulated Tank Reduction Tests', function () {
             surfaceTemperature:     759.67
         });
         const result: InsulatedTankOutput = m.insulatedTankReduction(input);
-        assert.approximately(result.heatLoss,       0.030515,  0.0001, 'heatLoss');
-        assert.approximately(result.annualHeatLoss, 29.70135,  0.01,   'annualHeatLoss');
+        assert.approximately(result.heatLoss,       9689.7423,    0.1,  'heatLoss');
+        assert.approximately(result.annualHeatLoss, 94313491.6785, 10.0, 'annualHeatLoss');
     });
 
     it('should calculate heat loss for a bare (uninsulated) tank', function () {
@@ -77,8 +77,8 @@ describe('Insulated Tank Reduction Tests', function () {
             insulationConductivity: 0
         });
         const result: InsulatedTankOutput = m.insulatedTankReduction(input);
-        assert.approximately(result.heatLoss,       1.1112001223, 0.001, 'heatLoss');
-        assert.approximately(result.annualHeatLoss, 1081.568119,  0.1,   'annualHeatLoss');
+        assert.approximately(result.heatLoss,       275745.9476,    0.1,  'heatLoss');
+        assert.approximately(result.annualHeatLoss, 2683927223.2865, 10.0, 'annualHeatLoss');
     });
 
     it('should match insulatedTankHeatLoss output when insulation is present', function () {

@@ -53,8 +53,8 @@ struct InsulatedTankInput {
  * @brief Output results for the insulated tank heat loss calculation.
  */
 struct InsulatedTankOutput {
-    double heat_loss        = 0.0; ///< Instantaneous heat loss (scaled) @unitb{\btu\per\hour per 10^5}
-    double annual_heat_loss = 0.0; ///< Annual heat loss (scaled, efficiency-adjusted) @unitb{\btu per 10^6}
+    double heat_loss        = 0.0; ///< Instantaneous heat loss @unitb{\btu\per\hour}
+    double annual_heat_loss = 0.0; ///< Annual heat loss, adjusted for system efficiency @unitb{\btu\per\year}
 };
 
 /**

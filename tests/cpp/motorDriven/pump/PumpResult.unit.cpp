@@ -8,6 +8,7 @@
 using namespace Catch;
 #include "motorDriven/motor/EstimateFLA.h"
 #include "motorDriven/pump/Pump.h"
+#include "physics/constants.h"
 
 TEST_CASE("PumpResults Premium existing", "[PumpResults]") {
     double pumpEfficiency = 0.80, pump_rated_speed = 1780, kinematic_viscosity = 1.0, specific_gravity = 1.0;
@@ -45,6 +46,40 @@ TEST_CASE("PumpResults Premium existing", "[PumpResults]") {
     CHECK(ex.annualCost * 1000.0 == Approx(35040));
     CHECK(pumpResult.getAnnualSavingsPotential() * 1000 == Approx(0));
     CHECK(pumpResult.getOptimizationRating() == Approx(0));
+}
+
+TEST_CASE("PumpResults positive displacement existing", "[PumpResults]") {
+    double pumpEfficiency = 0.80, pump_rated_speed = 1780, kinematic_viscosity = 1.0, specific_gravity = 1.0;
+    int    stages = 1;
+    double motor_rated_power = 200, motor_rated_speed = 1780, efficiency = 95, motor_rated_voltage = 460;
+    double motor_rated_fla = 225.0, margin = 0, operating_hours = 8760, cost_kw_hour = 0.05, flow_rate = 100;
+    double head = 999.0, differential_pressure_psi = 50.0, motor_field_power = 80, motor_field_current = 125.857;
+    double motor_field_voltage = 480, specified_efficiency = 1.0;
+
+    Pump::Style                 style(Pump::Style::POSITIVE_DISPLACEMENT);
+    Motor::Drive                drive(Motor::Drive::DIRECT_DRIVE);
+    Pump::SpecificSpeed         fixed_speed(Pump::SpecificSpeed::NOT_FIXED_SPEED);
+    Motor::LineFrequency        lineFrequency(Motor::LineFrequency::FREQ60);
+    Motor::EfficiencyClass      efficiencyClass(Motor::EfficiencyClass::PREMIUM);
+    Motor::LoadEstimationMethod loadEstimationMethod(Motor::LoadEstimationMethod::POWER);
+
+    Pump::Input pump(style, pumpEfficiency, pump_rated_speed, drive, kinematic_viscosity, specific_gravity, stages,
+                     fixed_speed, specified_efficiency, differential_pressure_psi);
+    Motor       motor(lineFrequency, motor_rated_power, motor_rated_speed, efficiencyClass, efficiency,
+                      motor_rated_voltage, motor_rated_fla, margin);
+    Pump::FieldData fd(flow_rate, head, loadEstimationMethod, motor_field_power, motor_field_current,
+                       motor_field_voltage);
+    PumpResult      pumpResult(pump, motor, fd, operating_hours, cost_kw_hour);
+
+    auto const& ex = pumpResult.calculateExisting();
+
+    const double hydraulicHp = flow_rate * differential_pressure_psi / physics::conversions::kPumpGpmPsiPerHp;
+    CHECK(static_cast<int>(Pump::Style::POSITIVE_DISPLACEMENT) == 12);
+    CHECK(pump.differentialPressurePsi == Approx(differential_pressure_psi));
+    CHECK(ex.pumpEfficiency == Approx(hydraulicHp / ex.moverShaftPower));
+    CHECK(ex.motorPower == Approx(motor_field_power));
+    CHECK(ex.annualEnergy == Approx(motor_field_power * operating_hours / 1000.0));
+    CHECK(ex.annualCost * 1000.0 == Approx(motor_field_power * operating_hours * cost_kw_hour));
 }
 
 TEST_CASE("PumpResults existing and modified", "[PumpResults]") {

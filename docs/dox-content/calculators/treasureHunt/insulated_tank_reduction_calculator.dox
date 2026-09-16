@@ -212,8 +212,7 @@
  * @ingroup insulated_tank_reduction_calculator
  * @brief Total convective and conductive heat loss through the tank system.
  * @details The overall coefficient, lateral tank surface area, and temperature
- * difference are combined to produce the convective–conductive heat loss. The
- * result is scaled by 10⁻⁵ to produce the output unit.
+ * difference are combined to produce the convective–conductive heat loss.
  *
  * @formula{insulated-tank-conv-cond;
  *   q_{cc} = U \cdot A \cdot \Delta T
@@ -255,8 +254,8 @@
  * @ingroup insulated_tank_reduction_calculator
  * @brief Annual heat loss for the tank, adjusted for system efficiency.
  * @details The total instantaneous heat loss is multiplied by annual operating
- * hours and divided by a factor of 10 and the heating system efficiency to convert
- * to the annual energy equivalent the heating system must supply.
+ * hours and divided by the heating system efficiency to calculate the annual
+ * energy equivalent the heating system must supply.
  *
  * @formula{insulated-tank-annual;
  *   Q_{annual} = \frac{q_{total} \cdot t_{op}}{\eta}
@@ -264,7 +263,7 @@
  *
  * @subheading{Symbols}
  * @symtable
- * @symrow{Q_{annual}; Annual heat loss (efficiency-adjusted); \btu}
+ * @symrow{Q_{annual}; Annual heat loss (efficiency-adjusted); \btu\per\year}
  * @symrow{q_{total}; Total instantaneous heat loss (@math{q_{cc} + q_{rad}}); \btu\per\hour}
  * @symrow{t_{op}; Annual operating hours; \hour\per\year}
  * @symrow{\eta; Heating system efficiency (0–1); \unitless}
