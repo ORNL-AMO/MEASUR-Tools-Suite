@@ -8,7 +8,7 @@
  * fraction. Use this model only when the compressor actually stops between load periods; unloaded
  * running belongs in a load/unload model.
  *
- * @image html assets/ca-start-stop.svg "Normalized start/stop curve from the 89.5 kW, 560 acfm test fixture."
+ * @image html ca-start-stop.svg "Normalized start/stop curve from the 89.5 kW, 560 acfm test fixture."
  *
  * @heading{Performance Curve and Outputs}
  * @formula{start-stop-average-fraction;

@@ -8,7 +8,7 @@
  * full load. A measured airflow evaluates this curve directly; a measured power evaluates its
  * analytical inverse. Apply the result reconstruction independently to every measured interval.
  *
- * @image html assets/ca-vfd.svg "Normalized VFD curve from the 174.4 kW, 1009 acfm test fixture."
+ * @image html ca-vfd.svg "Normalized VFD curve from the 174.4 kW, 1009 acfm test fixture."
  *
  * @heading{Performance Curve}
  * @formula{vfd-piecewise-power;
@@ -45,6 +45,7 @@
  * @heading{Fully Substituted Example}
  * The tested fixture uses @math{P_{FL}=174.4\ \mathrm{kW}}, @math{Q_{FL}=1009\ \mathrm{acfm}},
  * turndown @math{(Q_{TD},P_{TD})=(202\ \mathrm{acfm},55.8\ \mathrm{kW})}, and
+ * midrange @math{(Q_{mid},P_{mid})=(605\ \mathrm{acfm},115\ \mathrm{kW})}, with
  * @math{P_{NL}=11.2\ \mathrm{kW}}. At @math{f_Q=0.31}, the quadratic segment returns
  * @math{f_P=0.4132}. The dimensional result is
  * @math{P=0.4132(174.4)=72.07\ \mathrm{kW}} and

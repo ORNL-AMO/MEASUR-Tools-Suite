@@ -93,6 +93,7 @@ window.MathJax = {
                 \DeclareSIUnit{\scfm}{scfm}
                 \DeclareSIUnit{\actualCubicFeetPerMinute}{acfm}
                 \DeclareSIUnit{\acfm}{acfm}
+                \DeclareSIUnit{\hundredAcfm}{100\,acfm}
                 \DeclareSIUnit{\kilostandardCubicFeet}{kscf}
                 \DeclareSIUnit{\kscf}{kscf}
                 \DeclareSIUnit{\cubicFoot}{ft^3}

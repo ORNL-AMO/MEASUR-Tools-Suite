@@ -8,7 +8,7 @@
  * anchors for pressure and inlet conditions first when required. The same curve is also the modulation
  * submodel used above the unload point by modulation-with-unload and variable-displacement controls.
  *
- * @image html assets/ca-modulation-without-unload.svg "Normalized modulation-without-unload curve from the 85.4 kW, 473 acfm test fixture."
+ * @image html ca-modulation-without-unload.svg "Normalized modulation-without-unload curve from the 85.4 kW, 473 acfm test fixture."
  *
  * @heading{Performance Curve and Outputs}
  * @formula{mod-without-unload-power-from-airflow;

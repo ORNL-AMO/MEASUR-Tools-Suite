@@ -9,9 +9,9 @@
  * @ref compressor_assessment_result_formula to recover dimensional results.
  *
  * @heading{Performance Curves}
- * @image html assets/ca-centrifugal-load-unload.svg "Normalized centrifugal load/unload curve; test fixture P_FL=452.3 kW, Q_FL=3138 acfm, P_NL=71.3 kW."
- * @image html assets/ca-centrifugal-blowoff.svg "Normalized centrifugal blow-off curve; bypass flow is shown as an internal balance."
- * @image html assets/ca-centrifugal-modulation-unload.svg "Normalized centrifugal modulation/unload curve with the unload transition labeled."
+ * @image html ca-centrifugal-load-unload.svg "Normalized centrifugal load/unload curve; test fixture P_FL=452.3 kW, Q_FL=3138 acfm, P_NL=71.3 kW."
+ * @image html ca-centrifugal-blowoff.svg "Normalized centrifugal blow-off curve; bypass flow is shown as an internal balance."
+ * @image html ca-centrifugal-modulation-unload.svg "Normalized centrifugal modulation/unload curve with the unload transition labeled."
  *
  * @heading{Inputs and Origins}
  *
@@ -95,8 +95,9 @@
  *   1, & f_Q\ge f_{Q,max}
  *   \end{cases}
  * }
- * For a power input, the inverse curve uses the same power transition and returns dimensional
- * airflow on the full-load or maximum-flow basis used by the source algorithm.
+ * For a power input, invert the same two segments. Every reported airflow fraction uses the
+ * full-load basis @math{f_Q=Q/Q_{FL}}, including the segment above unload. Dimensional airflow is
+ * therefore always reconstructed as @math{Q=f_QQ_{FL}}.
  * @symtable
  * @symrow{f_{P,NL}; No-load power divided by full-load power; \unitless}
  * @symrow{f_{P,UL}; Unload power divided by full-load power; \unitless}
@@ -112,7 +113,10 @@
  * @math{Q_{UL}=2731\ \mathrm{acfm}}, and @math{Q_{max}=3005\ \mathrm{acfm}}, the unload
  * fractions are @math{f_{P,UL}=0.9107} and @math{f_{Q,UL}=0.8703}. At
  * @math{f_Q=0.8693}, the low segment gives @math{f_P=0.9098}; at exactly
- * @math{f_Q=0.8703}, both segments give @math{f_P=0.9107}. The transition is therefore continuous.
+ * @math{f_Q=0.8703}, both segments give @math{f_P=0.9107}. At @math{f_P=0.94}, inversion of the
+ * high segment gives @math{f_Q=0.8990} and @math{Q=0.8990(3138)=2821.0\ \mathrm{acfm}}. Passing
+ * @math{f_Q=0.8990} back through the capacity calculation returns @math{f_P=0.94}, demonstrating
+ * that the two paths use the same basis. The transition is continuous.
  */
 
 /**

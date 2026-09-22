@@ -139,7 +139,7 @@ TEST_CASE("Centrifugal compressor assessment preserves legacy expected values", 
     CHECK(resMuL.powerKw == Approx(425.162));
     CHECK(resMuL.airflowAcfm == Approx(2820.95));
     CHECK(resMuL.powerFraction == Approx(0.94));
-    CHECK(resMuL.airflowFraction == Approx(0.93875));
+    CHECK(resMuL.airflowFraction == Approx(0.898963));
     resMuL = ccMuL.calculateFromCapacityFraction(0.24);
     CHECK(resMuL.powerKw == Approx(165.226));
     CHECK(resMuL.airflowAcfm == Approx(753.12));
@@ -149,7 +149,7 @@ TEST_CASE("Centrifugal compressor assessment preserves legacy expected values", 
     CHECK(resMuL.powerKw == Approx(425.162));
     CHECK(resMuL.airflowAcfm == Approx(2820.95));
     CHECK(resMuL.powerFraction == Approx(0.94));
-    CHECK(resMuL.airflowFraction == Approx(0.93875));
+    CHECK(resMuL.airflowFraction == Approx(0.898963));
     resMuL = ccMuL.calculateFromMeasuredCapacity(753.12);
     CHECK(resMuL.powerKw == Approx(165.226));
     CHECK(resMuL.airflowAcfm == Approx(753.12));
@@ -166,7 +166,7 @@ TEST_CASE("Centrifugal compressor assessment preserves legacy expected values", 
     CHECK(resMuL.powerKw == Approx(425.162));
     CHECK(resMuL.airflowAcfm == Approx(2820.95));
     CHECK(resMuL.powerFraction == Approx(0.94));
-    CHECK(resMuL.airflowFraction == Approx(0.93875).epsilon(0.005));
+    CHECK(resMuL.airflowFraction == Approx(0.898963));
     resMuL = ccMuL.calculateFromCapacityFraction(0.24);
     CHECK(resMuL.powerKw == Approx(165.226));
     CHECK(resMuL.airflowAcfm == Approx(753.12));
@@ -176,7 +176,7 @@ TEST_CASE("Centrifugal compressor assessment preserves legacy expected values", 
     CHECK(resMuL.powerKw == Approx(425.162));
     CHECK(resMuL.airflowAcfm == Approx(2820.95));
     CHECK(resMuL.powerFraction == Approx(0.94));
-    CHECK(resMuL.airflowFraction == Approx(0.93875).epsilon(0.005));
+    CHECK(resMuL.airflowFraction == Approx(0.898963));
     resMuL = ccMuL.calculateFromMeasuredCapacity(753.12);
     CHECK(resMuL.powerKw == Approx(165.226));
     CHECK(resMuL.airflowAcfm == Approx(753.12));
@@ -221,4 +221,11 @@ TEST_CASE("Centrifugal modulation selects curve segments by airflow", "[compress
     CHECK(below.powerFraction == Approx(low_segment_power(unload_fraction - 0.001)));
     CHECK(at.powerFraction == Approx(unload_power_fraction));
     CHECK(above.powerFraction == Approx(high_segment_power(unload_fraction + 0.001)));
+
+    const auto from_power = compressor.calculateFromPowerFraction(0.94);
+    const auto round_trip = compressor.calculateFromCapacityFraction(from_power.airflowFraction);
+    CHECK(from_power.airflowFraction == Approx(from_power.airflowAcfm / full_load_airflow));
+    CHECK(round_trip.powerFraction == Approx(from_power.powerFraction));
+    CHECK(round_trip.airflowFraction == Approx(from_power.airflowFraction));
+    CHECK(round_trip.airflowAcfm == Approx(from_power.airflowAcfm));
 }

@@ -140,7 +140,6 @@ CentrifugalModulationUnloadCompressor::CentrifugalModulationUnloadCompressor(dou
     unload_power_fraction_   = unload_power / full_load_power;
     max_airflow_fraction_    = max_airflow / full_load_airflow;
     unload_airflow_fraction_ = unload_airflow / full_load_airflow;
-    unload_base_fraction_    = unload_airflow / max_airflow;
 }
 
 CompressorPerformanceResult
@@ -155,15 +154,14 @@ CentrifugalModulationUnloadCompressor::calculateFromPowerFraction(double power_f
                             (unload_power_fraction_ - no_load_power_fraction_));
     }
     else if (power_fraction >= unload_power_fraction_) {
-        airflow_fraction = ((1.0 - unload_base_fraction_) / (max_power_fraction_ - unload_power_fraction_)) *
-                               power_fraction +
-                           (1.0 - (1.0 - unload_base_fraction_) /
-                                      (max_power_fraction_ - unload_power_fraction_));
+        airflow_fraction = unload_airflow_fraction_ +
+                           ((max_airflow_fraction_ - unload_airflow_fraction_) /
+                            (max_power_fraction_ - unload_power_fraction_)) *
+                               (power_fraction - unload_power_fraction_);
     }
 
-    return {power_fraction * full_load_power_,
-            (airflow_fraction < unload_base_fraction_ ? full_load_airflow_ : max_airflow_) * airflow_fraction,
-            power_fraction, airflow_fraction};
+    return {power_fraction * full_load_power_, full_load_airflow_ * airflow_fraction, power_fraction,
+            airflow_fraction};
 }
 
 CompressorPerformanceResult
@@ -218,7 +216,6 @@ void CentrifugalModulationUnloadCompressor::adjustDischargePressure(const std::v
 
         max_airflow_fraction_    = max_airflow_ / full_load_airflow_;
         unload_airflow_fraction_ = unload_airflow_ / full_load_airflow_;
-        unload_base_fraction_    = unload_airflow_ / max_airflow_;
     }
 }
 

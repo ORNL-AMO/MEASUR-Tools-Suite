@@ -41,7 +41,7 @@
  * @symrow{fullLoadBrakeHorsepower; Full-load mechanical shaft power; \horsepower}
  * @symrow{fullLoadBhpPowerKw; Deprecated compatibility name containing the same BHP value, not kW; \horsepower}
  * @symrow{totalPackageInputPowerKw; Full-load electrical package input power; \kilo\watt}
- * @symrow{specificPackagePower; Package kW per 100 acfm of rated capacity (value uses a 100-acfm basis); \kilo\watt\per\acfm}
+ * @symrow{specificPackagePower; Package power per 100 acfm of rated capacity; \kilo\watt\per\hundredAcfm}
  * @symrow{noLoadPowerFullyModulating; No-load power as a percentage of full-load package power; \percent}
  * @symrow{noLoadPowerUnload; Unloaded power as a percentage of full-load package power; \percent}
  * @symrow{maxSurgePressurePsig; Centrifugal maximum surge pressure; \psig}
@@ -68,7 +68,7 @@
  * @symrow{BHP_{FL}; Full-load mechanical shaft power; \horsepower}
  * @symrow{0.746; Brake-horsepower-to-kilowatt conversion; \kilo\watt\per\horsepower}
  * @symrow{\eta_m; Full-load motor efficiency expressed from 0 to 1; \unitless}
- * @symrow{SP; Specific package power on a 100-acfm basis; \kilo\watt\per\acfm}
+ * @symrow{SP; Specific package power on a 100-acfm basis; \kilo\watt\per\hundredAcfm}
  * @symrow{Q_{rated}; Rated delivered capacity; \acfm}
  * @symrow{100; Scaling basis for specific package power; \unitless}
  * @endsymtable

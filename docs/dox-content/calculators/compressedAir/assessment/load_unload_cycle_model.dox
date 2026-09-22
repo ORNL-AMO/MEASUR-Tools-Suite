@@ -9,7 +9,7 @@
  * displacement-with-unload use the same cycle below the unload point and the modulation submodel
  * above it.
  *
- * @image html assets/ca-positive-displacement-load-unload.svg "Normalized positive-displacement load/unload curve from the 166.5 kW, 1048 acfm test fixture."
+ * @image html ca-positive-displacement-load-unload.svg "Normalized positive-displacement load/unload curve from the 166.5 kW, 1048 acfm test fixture."
  *
  * @heading{Final Outputs}
  * For an airflow observation, calculate the complete cycle directly to obtain @math{P_{cycle}}, then
@@ -248,7 +248,10 @@
  * For the tested modulation-with-unload fixture @math{P_{FL}=166.5\ \mathrm{kW}},
  * @math{Q_{FL}=1048\ \mathrm{acfm}}, @math{P_{max}=175.5\ \mathrm{kW}},
  * @math{P_{NL}=107.5\ \mathrm{kW}}, @math{V_s=1048/7.481=140.09\ \mathrm{ft^3}},
- * @math{P_{FL,g}=100\ \mathrm{psig}}, @math{P_{max,g}=110\ \mathrm{psig}}, and
+ * @math{P_{FL,g}=100\ \mathrm{psig}}, @math{P_{max,g}=110\ \mathrm{psig}},
+ * @math{\Delta P_{mod}=5\ \mathrm{psi}}, and @math{P_{atm}=14.7\ \mathrm{psia}}. The remaining
+ * cycle inputs are 100 percent unload capacity, variable-displacement control, 0.003 s blowdown,
+ * 15 psig minimum unload sump pressure, and the inherited 0.70 modulation no-load factor. At
  * @math{Q=0.895(1048)=937.96\ \mathrm{acfm}}, the calculated stages are:
  *
  * | Stage | Runtime (s) | Average power (kW) | Energy (kW-s) |
