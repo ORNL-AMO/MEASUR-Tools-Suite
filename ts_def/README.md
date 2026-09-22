@@ -98,33 +98,24 @@ export interface PipeSizingInput {
 
 Because this is a `value_object`, callers pass a plain object and do not call `delete()`.
 
-## Example Runtime Class
+## Example Stateless Calculator
 
 ```ts
 /**
- * Dryer operating cost calculator.
+ * Complete, frontend-validated dryer operating-cost inputs.
  */
-export declare class DryerOperatingCost {
-    /**
-     * @param airflow Dryer airflow, units scfm
-     * @param inletPressure Inlet pressure, units psig
-     * @param averageSystemDemand Average system demand, units %
-     */
-    constructor(airflow: number, inletPressure: number, averageSystemDemand: number);
-
-    /**
-     * Calculate dryer operating cost for the selected dryer type.
-     * @param dryerType Dryer type enum.
-     * @returns Annual dryer operating cost results.
-     */
-    calculate(dryerType: DryerType): DryerOperatingCostOutput;
-
-    /** Frees the underlying embind resource. Call when finished with the instance. */
-    delete(): void;
+export interface DryerOperatingCostInput {
+    dryerType: DryerType;
+    // Remaining required fields omitted from this abbreviated example.
 }
+
+/** Calculate dryer operating cost from a complete input object. */
+export declare function calculateDryerOperatingCost(
+    input: DryerOperatingCostInput
+): DryerOperatingCostResult;
 ```
 
-Because this is a `class_`, callers must clean up instances and class outputs with `delete()`.
+Because the input and result are `value_object` bindings, callers use plain objects and do not call `delete()`.
 
 ## Validation Checklist
 

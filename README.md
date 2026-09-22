@@ -39,13 +39,6 @@ const totalHeatLoss = toolsSuiteModule.wallTotalHeatLoss(
 	500, 80, 225, 10, 0.9, 1.394, 1
 );
 console.log('Wall total heat loss:', totalHeatLoss);
-
-// Class-based API — always call delete() to free WASM memory
-const doc = new toolsSuiteModule.DryerOperatingCost(1752, 50, 100, 24, 7, 52, 0.08, 0.2, 0.25);
-const res = doc.calculate(toolsSuiteModule.DryerType.Heatless);
-console.log('Water removed:', res.waterRemoved);
-res.delete();
-doc.delete();
 ```
 
 **TypeScript** — `MeasurToolsSuite` is the fully-typed module instance; no casts needed.
@@ -56,12 +49,6 @@ import createModule, { type MeasurToolsSuite } from 'measur-tools-suite';
 const toolsSuiteModule: MeasurToolsSuite = await createModule({
 	locateFile: (filename) => `/path/to/${filename}`
 });
-
-const doc = new toolsSuiteModule.DryerOperatingCost(1752, 50, 100, 24, 7, 52, 0.08, 0.2, 0.25);
-const res = doc.calculate(toolsSuiteModule.DryerType.Heatless);
-console.log('Water removed:', res.waterRemoved);
-res.delete();
-doc.delete();
 ```
 
 Package consumers should import `measur-tools-suite`, not `bin/client.js`

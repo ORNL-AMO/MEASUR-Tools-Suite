@@ -194,13 +194,26 @@ const totalHeatLoss = toolsSuiteModule.wallTotalHeatLoss(
 );
 console.log('Wall total heat loss:', totalHeatLoss);
 
-// Example 2: DryerOperatingCost — class-based API
-// Always call delete() on class instances and output objects to free WASM memory
-const doc = new toolsSuiteModule.DryerOperatingCost(1752, 50, 100, 24, 7, 52, 0.08, 0.2, 0.25);
-const res = doc.calculate(toolsSuiteModule.DryerType.Heatless);
+// Example 2: Dryer operating cost — stateless value-object API
+const res = toolsSuiteModule.calculateDryerOperatingCost({
+	dryerType: toolsSuiteModule.DryerType.Heatless,
+	flowRate: 1752,
+	pressure: 50,
+	temperature: 100,
+	annualOperatingHours: 8736,
+	costOfElectricity: 0.08,
+	costOfCompressedAir: 0.2,
+	costOfCoolingWater: 0.25,
+	heaterPower: 0,
+	heatingHoursPerDay: 0,
+	purgeRate: 15,
+	purgeFlowRate: 0,
+	designDDCPercentage: 16.33,
+	regenerationCycleLength: 4,
+	motorPower: 0,
+	purgeInputMode: toolsSuiteModule.PurgeInputMode.PercentOfDryerCapacity
+});
 console.log('DryerOperatingCost => Water removed:', res.waterRemoved);
-res.delete();
-doc.delete();
 ```
 
 ### 6.6 WebAssembly Tests (Browser)
