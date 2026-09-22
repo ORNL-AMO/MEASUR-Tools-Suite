@@ -1,8 +1,8 @@
-/** Passive default compressor catalog record used by assessment workflows. */
+/** Default compressor catalog record used by assessment workflows. A value of -9999 means unavailable or not applicable. */
 export interface CompressorCatalogRecord {
     /** Sequential catalog record ID, dimensionless. */
     id: number;
-    /** Compressor type identifier, dimensionless. */
+    /** Catalog compressor-family ID: 1 single-stage injected screw, 2 two-stage injected screw, 3 two-stage lubricant-free screw, 4 single-stage reciprocating, 5 two-stage reciprocating, 6 multiple-stage centrifugal. */
     compressorTypeId: number;
     /** Compressor model name. */
     model: string;
@@ -14,7 +14,7 @@ export interface CompressorCatalogRecord {
     ratedPressurePsig: number;
     /** Maximum full-flow pressure, units psig. */
     maxFullFlowPressurePsig: number;
-    /** Control type identifier, dimensionless. */
+    /** Catalog control-family ID: 1 modulation, 2 modulation/unload, 3 variable displacement/unload, 4 load/unload, 5 multi-step unloading, 6 start/stop, 7-10 centrifugal blow-off/unloading variants, 11 VFD. */
     controlTypeId: number;
     /** Unload point, units percent. */
     unloadPointPercent: number;
@@ -26,15 +26,17 @@ export interface CompressorCatalogRecord {
     unloadSteps: number;
     /** Modulating pressure range, units psig. */
     modulatingPressureRangePsig: number;
-    /** Full-load brake horsepower equivalent power, units kW. */
+    /** Full-load shaft power, units bhp. */
+    fullLoadBrakeHorsepower: number;
+    /** @deprecated Use fullLoadBrakeHorsepower. This compatibility alias also contains bhp, despite its name. */
     fullLoadBhpPowerKw: number;
     /** Total package input power, units kW. */
     totalPackageInputPowerKw: number;
-    /** Specific package power, units kW/acfm. */
+    /** Specific package power, units kW/100 acfm. */
     specificPackagePower: number;
-    /** No-load fully modulating power fraction, dimensionless. */
+    /** No-load fully modulating power, units percent. */
     noLoadPowerFullyModulating: number;
-    /** No-load unload power fraction, dimensionless. */
+    /** No-load unload power, units percent. */
     noLoadPowerUnload: number;
     /** Maximum surge pressure, units psig. */
     maxSurgePressurePsig: number;

@@ -1,125 +1,166 @@
 /**
- * @defgroup compressor_modeling_overview Compressor Modeling Overview
+ * @defgroup compressor_modeling_overview Compressor Modeling: From a Measured Point to Power and Airflow
  * @ingroup compressor_modeling
- * @brief Shared compressor modeling result definitions, electrical input conversion, and pressure/inlet correction.
- * @details The compressor assessment modules estimate compressor package power and airflow for
- *          centrifugal, modulation, start/stop, load/unload, and variable-frequency-drive
- *          compressor controls. The public results are intentionally reported first:
- *          calculated package power @unitb{\kilo\watt}, calculated airflow @unitb{\acfm},
- *          power fraction @unitb{\unitless}, and airflow fraction @unitb{\unitless}.
+ * @brief An engineer-facing guide to the compressor performance models used by the assessment.
+ * @details
+ * These calculations turn one measured operating observation into compressor package power and
+ * delivered airflow. They are performance-curve models, not equipment simulations: the selected
+ * compressor construction and control method determine the curve shape, while catalog or measured
+ * reference points establish its scale.
  *
- * These models are part of a larger compressed-air assessment workflow. They preserve the
- * legacy numerical behavior while exposing namespaced C++ modules, one WebAssembly binding
- * per logical calculator, passive value-object results, and TypeScript declarations with
- * explicit units.
+ * Apply the following sequence independently to every interval in a measured profile:
  *
- * @heading{Common Result Definitions}
+ * 1. Select the compressor construction and a compatible control method.
+ * 2. Establish full-load, no-load, unload, turndown, and maximum-flow reference points as required.
+ * 3. Correct the reference points for operating pressure and inlet conditions when applicable.
+ * 4. Normalize the interval observation to power fraction or airflow fraction.
+ * 5. Evaluate the control-specific normalized performance curve.
+ * 6. Reconstruct package power in kW and delivered airflow in acfm.
+ *
+ * The result from one interval does not carry state into the next. Repeating these steps for every
+ * measured interval produces a power and airflow profile suitable for energy and opportunity analysis.
+ *
+ * @heading{Applicability}
+ *
+ * | Compressor construction | Lubricant configuration | Supported control models | Important limits |
+ * |---|---|---|---|
+ * | Centrifugal | Not used by these models | Load/unload, blow-off, modulation/unload | Pressure correction uses the supplied three-point capacity curve. |
+ * | Rotary screw | Lubricant-injected or oil-free | Load/unload, modulation with unload, variable displacement with unload, modulation without unload, start/stop, VFD | The shared pressure correction uses rated inlet pressure as its pressure-ratio base. |
+ * | Reciprocating | `None` | Load/unload and start/stop | The shared pressure correction uses atmospheric pressure as its pressure-ratio base. |
+ *
+ * Storage volume is currently used by every load/unload cycle evaluation. Whether storage should be
+ * restricted to narrower equipment configurations remains an engineering validation item; this
+ * documentation describes the executable behavior rather than silently changing it.
+ *
+ * @heading{Where Inputs Come From}
+ *
+ * | Origin | Typical quantities | How to use them |
+ * |---|---|---|
+ * | User measurement | interval kW, voltage, current, power factor, acfm, operating pressure | Supplies the operating point evaluated for that interval. Power factor is a fraction from 0 to 1. |
+ * | Manufacturer or catalog data | full-load acfm, BHP, package kW, pressure points, no-load power, turndown | Establishes reference anchors. A catalog value of -9999 means unavailable or not applicable and must not be used as a number. |
+ * | User-selected or engineering default | compressor type, control, lubricant, storage, cycle timings | Selects the model and fills quantities that are not measured. Confirm defaults against the actual compressor controls. |
+ * | Derived quantity | normalized fractions, corrected anchors, cycle times, stage energy | Calculated internally from the preceding inputs. |
+ *
+ * @heading{Common Outputs}
  * @copydoc compressor_assessment_result_formula
  *
- * @heading{Common Electrical Input Conversion}
+ * @heading{Electrical Measurements}
  * @copydoc compressor_assessment_electrical_formula
  *
- * @heading{Common Pressure and Inlet Correction}
+ * @heading{Pressure and Inlet Correction}
  * @copydoc compressor_assessment_pressure_inlet_formula
+ *
+ * @heading{Pressure and Power Language}
+ * Brake horsepower (BHP) is mechanical shaft power; package kW is electrical input power and is
+ * higher than shaft kW because the motor is not perfectly efficient. The rounded conversion used
+ * by this library is 0.746 kW per bhp. A pressure marked psig is measured relative to the local
+ * atmosphere. A pressure marked psia is absolute; pressure ratios must use absolute pressure.
+ *
+ * @heading{Assumptions and Limits}
+ * - Reference values must describe the same compressor and operating configuration.
+ * - Fractions are dimensionless values, normally from 0 to 1. Catalog percentages must be divided
+ *   by 100 before use as fractions.
+ * - The empirical pressure corrections and control curves are inherited engineering correlations;
+ *   they do not replace a manufacturer performance map outside the documented range.
+ * - Blow-off airflow remains available in the calculation interface because it is needed to balance
+ *   the centrifugal model. In the engineering narrative it is a bypass-flow intermediate, not a
+ *   primary MEASUR result.
+ *
+ * Source basis: <em>Compressed Air Compressor Modeling Calculations</em>, revision June 2020;
+ * <em>Compressed Air Assessment Calculations</em>, revision June 2020; and
+ * <em>Compressed Air Energy Efficiency Measure Calculations</em>, revision June 2020.
  */
 
 /**
- * @defgroup compressor_assessment_result_formula Compressor Assessment Result Formula
+ * @defgroup compressor_assessment_result_formula Dimensional Result Reconstruction
  * @ingroup compressor_modeling_overview
- * @brief Common result reconstruction from fractions.
- * @details Each control model first determines the power and airflow fractions for the requested
- *          input basis. The final reported power and airflow are then reconstructed from the
- *          full-load reference values.
- *
+ * @brief Convert normalized curve results back to package power and airflow.
+ * @details
  * @formula{compressor-assessment-result-power;
- *   P_{calc} = f_P \cdot P_{FL}
+ *   P = f_P P_{FL}
  * }
  * @formula{compressor-assessment-result-airflow;
- *   Q_{calc} = f_Q \cdot Q_{FL}
+ *   Q = f_Q Q_{FL}
  * }
- *
- * @subheading{Symbols}
  * @symtable
- * @symrow{P_{calc}; Calculated compressor package power; \kilo\watt}
- * @symrow{Q_{calc}; Calculated compressor airflow; \acfm}
- * @symrow{f_P; Fraction of full-load package power; \unitless}
- * @symrow{f_Q; Fraction of full-load airflow; \unitless}
- * @symrow{P_{FL}; Full-load package power; \kilo\watt}
- * @symrow{Q_{FL}; Full-load airflow; \acfm}
+ * @symrow{P; Calculated package input power; \kilo\watt}
+ * @symrow{Q; Calculated delivered airflow; \acfm}
+ * @symrow{f_P; Full-load power fraction; \unitless}
+ * @symrow{f_Q; Full-load airflow fraction; \unitless}
+ * @symrow{P_{FL}; Corrected full-load package power; \kilo\watt}
+ * @symrow{Q_{FL}; Corrected full-load airflow; \acfm}
  * @endsymtable
+ *
+ * @subheading{Example}
+ * If the selected curve returns @math{f_P=0.82} and @math{f_Q=0.60} for a compressor with
+ * @math{P_{FL}=452.3\ \mathrm{kW}} and @math{Q_{FL}=3138\ \mathrm{acfm}}, then
+ * @math{P=0.82(452.3)=370.9\ \mathrm{kW}} and
+ * @math{Q=0.60(3138)=1882.8\ \mathrm{acfm}}.
  */
 
 /**
- * @defgroup compressor_assessment_electrical_formula Compressor Assessment Electrical Formula
+ * @defgroup compressor_assessment_electrical_formula Three-Phase Electrical Measurement
  * @ingroup compressor_modeling_overview
- * @brief Three-phase electrical input conversion used by measured electrical methods.
- * @details Methods named `calculateFromElectrical` convert voltage, current, and power factor
- *          to measured package power before applying the same model-specific measured-power
- *          path. The constant 1.732 is the square root of three rounded to the legacy value.
- *
+ * @brief Convert line voltage, line current, and power factor to measured package power.
+ * @details
  * @formula{compressor-assessment-electrical-power;
- *   P_{meas} = \frac{V \cdot I \cdot PF \cdot 1.732}{1000}
+ *   P_{meas}=\frac{V I PF (1.732)}{1000}
  * }
- *
- * @subheading{Symbols}
  * @symtable
- * @symrow{P_{meas}; Measured three-phase package power; \kilo\watt}
- * @symrow{V; Line voltage; \volt}
- * @symrow{I; Current; \ampere}
- * @symrow{PF; Power factor; \unitless}
- * @symrow{1.732; Legacy square-root-of-three constant; \unitless}
- * @symrow{1000; Watt-to-kilowatt conversion; \watt\per\kilo\watt}
+ * @symrow{P_{meas}; Measured three-phase package input power; \kilo\watt}
+ * @symrow{V; Line-to-line voltage; \volt}
+ * @symrow{I; Line current; \ampere}
+ * @symrow{PF; Power factor expressed from 0 to 1; \unitless}
+ * @symrow{1.732; Rounded square root of three retained by the source algorithm; \unitless}
+ * @symrow{1000; Watts per kilowatt; \watt\per\kilo\watt}
  * @endsymtable
+ *
+ * @subheading{Example}
+ * At 440 V, 246.7 A, and @math{PF=0.50},
+ * @math{P_{meas}=440(246.7)(0.50)(1.732)/1000=94.0\ \mathrm{kW}}. A value of 50 for power
+ * factor is invalid here; 50 percent must be entered as 0.50.
  */
 
 /**
- * @defgroup compressor_assessment_pressure_inlet_formula Compressor Assessment Pressure Inlet Correction
+ * @defgroup compressor_assessment_pressure_inlet_formula Pressure and Inlet Correction
  * @ingroup compressor_modeling_overview
- * @brief Shared pressure and inlet correction for non-centrifugal models.
- * @details The pressure/inlet correction updates full-load and maximum power/airflow before
- *          model evaluation. Centrifugal compressor models use their discharge-pressure curve
- *          adjustment instead. For screw compressors the rated inlet pressure is used as the
- *          pressure-ratio base; otherwise atmospheric pressure is used.
+ * @brief Correct positive-displacement reference power and airflow to operating conditions.
+ * @details Centrifugal compressors instead use the three-point quadratic described on
+ * @ref centrifugal_compressor_assessment. For screw compressors @math{P_b=P_{in,rated}}; for
+ * reciprocating compressors @math{P_b=P_{atm}}.
  *
  * @formula{compressor-assessment-pressure-power;
- *   P_{adj} =
- *   F_P \cdot \frac{P_{atm}}{P_{in}} \cdot BHP_{FL} \cdot
- *   \frac{0.746}{\eta} \cdot R_P
+ *   P_{adj}=F_P\frac{P_{atm}}{P_{in}}BHP_{FL}\frac{0.746}{\eta}R_P
  * }
  * @formula{compressor-assessment-pressure-flow;
- *   Q_{adj} = F_Q \cdot Q_{rated} \cdot \left(1 - 0.00075(P_d - P_{rated})\right)
+ *   Q_{adj}=F_Q Q_{rated}\left[1-0.00075(P_d-P_{rated})\right]
  * }
  * @formula{compressor-assessment-pressure-ratio;
- *   R_P =
- *   \frac{\left(\frac{P_d + P_b}{P_b}\right)^{(n-1)/n} - 1}
- *        {\left(\frac{P_{rated} + P_{in,rated}}{P_{in,rated}}\right)^{(n-1)/n} - 1}
+ *   R_P=\frac{[(P_d+P_b)/P_b]^{(n-1)/n}-1}
+ *              {[(P_{rated}+P_{in,rated})/P_{in,rated}]^{(n-1)/n}-1}
  * }
- *
- * When pressure adjustment is enabled, the empirical atmospheric correction factors are:
  * @formula{compressor-assessment-pressure-factor-power;
- *   F_P = -0.0000577P_{atm}^3 + 0.000251P_{atm}^2 + 0.0466P_{atm} + 0.4442
+ *   F_P=-0.0000577P_{atm}^3+0.000251P_{atm}^2+0.0466P_{atm}+0.4442
  * }
  * @formula{compressor-assessment-pressure-factor-flow;
- *   F_Q = 0.000258P_{atm}^3 - 0.0116P_{atm}^2 + 0.176P_{atm} + 0.09992
+ *   F_Q=0.000258P_{atm}^3-0.0116P_{atm}^2+0.176P_{atm}+0.09992
  * }
- *
- * @subheading{Symbols}
  * @symtable
- * @symrow{P_{adj}; Adjusted package power; \kilo\watt}
- * @symrow{Q_{adj}; Adjusted airflow; \acfm}
- * @symrow{F_P; Atmospheric pressure correction for power; \unitless}
- * @symrow{F_Q; Atmospheric pressure correction for airflow; \unitless}
- * @symrow{P_{atm}; Atmospheric pressure; \psia}
- * @symrow{P_{in}; Measured inlet pressure; \psia}
- * @symrow{BHP_{FL}; Full-load brake horsepower; \horsepower}
- * @symrow{0.746; Horsepower-to-kilowatt conversion; \kilo\watt\per\horsepower}
- * @symrow{\eta; Motor efficiency; \unitless}
+ * @symrow{P_{adj}; Corrected package input power; \kilo\watt}
+ * @symrow{Q_{adj}; Corrected airflow; \acfm}
+ * @symrow{F_P,F_Q; Empirical altitude factors, or 1 when disabled; \unitless}
+ * @symrow{P_{atm}; Local atmospheric pressure; \psia}
+ * @symrow{P_{in}; Operating inlet pressure; \psia}
+ * @symrow{BHP_{FL}; Full-load mechanical shaft power; \horsepower}
+ * @symrow{0.746; Brake-horsepower-to-kilowatt conversion; \kilo\watt\per\horsepower}
+ * @symrow{\eta; Motor efficiency entered from 0 to 1; \unitless}
  * @symrow{R_P; Polytropic pressure-ratio correction; \unitless}
- * @symrow{Q_{rated}; Rated airflow capacity; \acfm}
- * @symrow{P_d; Operating discharge pressure; \psig}
- * @symrow{P_{rated}; Rated discharge pressure; \psig}
- * @symrow{P_b; Pressure-ratio base pressure; \psia}
- * @symrow{P_{in,rated}; Rated inlet pressure; \psia}
+ * @symrow{Q_{rated}; Manufacturer rated capacity; \acfm}
+ * @symrow{P_d; Operating discharge gauge pressure; \psig}
+ * @symrow{P_{rated}; Rated discharge gauge pressure; \psig}
+ * @symrow{P_b; Compressor-type pressure-ratio base; \psia}
+ * @symrow{P_{in,rated}; Rated inlet absolute pressure; \psia}
  * @symrow{n; Polytropic exponent; \unitless}
+ * @symrow{0.00075; Empirical capacity-pressure coefficient; \per\psi}
  * @endsymtable
  */

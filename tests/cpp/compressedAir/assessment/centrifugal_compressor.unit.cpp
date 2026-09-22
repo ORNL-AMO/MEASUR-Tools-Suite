@@ -35,7 +35,7 @@ TEST_CASE("Centrifugal compressor assessment preserves legacy expected values", 
     CHECK(resBOff.airflowFraction == Approx(0.01));
     CHECK(resBOff.blowOffAirflowAcfm == Approx(2478.62));
     CHECK(resBOff.blowOffFraction == Approx(0.789873));
-    resBOff = ccBlow.calculateFromElectrical(440, 0.02152, 50, 0.6798);
+    resBOff = ccBlow.calculateFromElectrical(440, 2.152, 0.5, 0.6798);
     CHECK(resBOff.powerKw == Approx(0.82));
     CHECK(resBOff.airflowAcfm == Approx(376.788));
     CHECK(resBOff.powerFraction == Approx(0.0018129518));
@@ -72,7 +72,7 @@ TEST_CASE("Centrifugal compressor assessment preserves legacy expected values", 
     CHECK(resBOff.airflowFraction == Approx(0.01));
     CHECK(resBOff.blowOffAirflowAcfm == Approx(2478.62));
     CHECK(resBOff.blowOffFraction == Approx(0.789873));
-    resBOff = ccBlow.calculateFromElectrical(440, 0.02152, 50, 0.6798);
+    resBOff = ccBlow.calculateFromElectrical(440, 2.152, 0.5, 0.6798);
     CHECK(resBOff.powerKw == Approx(0.82));
     CHECK(resBOff.airflowAcfm == Approx(376.788));
     CHECK(resBOff.powerFraction == Approx(0.0018129518));
@@ -101,7 +101,7 @@ TEST_CASE("Centrifugal compressor assessment preserves legacy expected values", 
     CHECK(resLul.airflowAcfm == Approx(753.12));
     CHECK(resLul.powerFraction == Approx(0.3598).epsilon(0.005));
     CHECK(resLul.airflowFraction == Approx(0.24));
-    resLul = cclUL.calculateFromElectrical(440, 2.152, 50);
+    resLul = cclUL.calculateFromElectrical(440, 215.2, 0.5);
     CHECK(resLul.powerKw == Approx(82));
     CHECK(resLul.airflowAcfm == Approx(88.126));
     CHECK(resLul.powerFraction == Approx(0.1813).epsilon(0.005));
@@ -128,7 +128,7 @@ TEST_CASE("Centrifugal compressor assessment preserves legacy expected values", 
     CHECK(resLul.airflowAcfm == Approx(753.12));
     CHECK(resLul.powerFraction == Approx(0.3598).epsilon(0.005));
     CHECK(resLul.airflowFraction == Approx(0.24));
-    resLul = cclUL.calculateFromElectrical(440, 2.152, 50);
+    resLul = cclUL.calculateFromElectrical(440, 215.2, 0.5);
     CHECK(resLul.powerKw == Approx(82));
     CHECK(resLul.airflowAcfm == Approx(88.126));
     CHECK(resLul.powerFraction == Approx(0.1813).epsilon(0.005));
@@ -155,7 +155,7 @@ TEST_CASE("Centrifugal compressor assessment preserves legacy expected values", 
     CHECK(resMuL.airflowAcfm == Approx(753.12));
     CHECK(resMuL.powerFraction == Approx(0.365302));
     CHECK(resMuL.airflowFraction == Approx(0.24));
-    resMuL = ccMuL.calculateFromElectrical(440, 2.152, 50);
+    resMuL = ccMuL.calculateFromElectrical(440, 215.2, 0.5);
     CHECK(resMuL.powerKw == Approx(82));
     CHECK(resMuL.airflowAcfm == Approx(85.7932));
     CHECK(resMuL.powerFraction == Approx(0.1813).epsilon(0.005));
@@ -182,9 +182,43 @@ TEST_CASE("Centrifugal compressor assessment preserves legacy expected values", 
     CHECK(resMuL.airflowAcfm == Approx(753.12));
     CHECK(resMuL.powerFraction == Approx(0.365302));
     CHECK(resMuL.airflowFraction == Approx(0.24));
-    resMuL = ccMuL.calculateFromElectrical(440, 2.467, 50);
+    resMuL = ccMuL.calculateFromElectrical(440, 246.7, 0.5);
     CHECK(resMuL.powerKw == Approx(94.003));
     CHECK(resMuL.airflowAcfm == Approx(182.033));
     CHECK(resMuL.powerFraction == Approx(0.20783));
     CHECK(resMuL.airflowFraction == Approx(0.058).epsilon(0.005));
+}
+
+TEST_CASE("Centrifugal modulation selects curve segments by airflow", "[compressed-air][assessment]") {
+    constexpr double full_load_power   = 452.3;
+    constexpr double full_load_airflow = 3138.0;
+    constexpr double no_load_power     = 71.3;
+    constexpr double max_airflow       = 3005.0;
+    constexpr double unload_power      = 411.9;
+    constexpr double unload_airflow    = 2731.0;
+
+    auto compressor = CentrifugalModulationUnloadCompressor(full_load_power, full_load_airflow, no_load_power,
+                                                             max_airflow, unload_power, unload_airflow);
+    const double unload_fraction = unload_airflow / full_load_airflow;
+    const double max_fraction    = max_airflow / full_load_airflow;
+    const double unload_power_fraction = unload_power / full_load_power;
+    const double no_load_power_fraction = no_load_power / full_load_power;
+
+    const auto below = compressor.calculateFromCapacityFraction(unload_fraction - 0.001);
+    const auto at    = compressor.calculateFromCapacityFraction(unload_fraction);
+    const auto above = compressor.calculateFromCapacityFraction(unload_fraction + 0.001);
+
+    const auto low_segment_power = [&](double airflow_fraction) {
+        return no_load_power_fraction +
+               (unload_power_fraction - no_load_power_fraction) * airflow_fraction / unload_fraction;
+    };
+    const auto high_segment_power = [&](double airflow_fraction) {
+        return unload_power_fraction +
+               (1.0 - unload_power_fraction) * (airflow_fraction - unload_fraction) /
+                   (max_fraction - unload_fraction);
+    };
+
+    CHECK(below.powerFraction == Approx(low_segment_power(unload_fraction - 0.001)));
+    CHECK(at.powerFraction == Approx(unload_power_fraction));
+    CHECK(above.powerFraction == Approx(high_segment_power(unload_fraction + 0.001)));
 }

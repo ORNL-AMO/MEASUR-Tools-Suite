@@ -1,97 +1,151 @@
 /**
- * @defgroup centrifugal_compressor_assessment Centrifugal Compressor Assessment Models
+ * @defgroup centrifugal_compressor_assessment Centrifugal Compressor Models
  * @ingroup compressor_modeling
- * @brief Centrifugal load/unload, modulation/unload, and blow-off compressor calculations.
- * @details Centrifugal models return the same standard power and airflow outputs as the shared
- *          assessment result. Blow-off control also returns blow-off airflow and blow-off
- *          fraction. Discharge-pressure adjustment is curve based: a second-order curve is
- *          fitted from catalog capacity and pressure points, then evaluated at the requested
- *          full-load and optional maximum pressure.
+ * @brief Load/unload, blow-off, and modulation/unload performance curves for centrifugal compressors.
+ * @details
+ * These models estimate package kW and useful acfm from normalized curve anchors. Select the control
+ * actually active during the measured interval. Establish pressure-corrected capacity anchors first,
+ * then normalize the measured point, evaluate the appropriate segment, and use
+ * @ref compressor_assessment_result_formula to recover dimensional results.
  *
- * @heading{Load/Unload}
+ * @heading{Performance Curves}
+ * @image html assets/ca-centrifugal-load-unload.svg "Normalized centrifugal load/unload curve; test fixture P_FL=452.3 kW, Q_FL=3138 acfm, P_NL=71.3 kW."
+ * @image html assets/ca-centrifugal-blowoff.svg "Normalized centrifugal blow-off curve; bypass flow is shown as an internal balance."
+ * @image html assets/ca-centrifugal-modulation-unload.svg "Normalized centrifugal modulation/unload curve with the unload transition labeled."
+ *
+ * @heading{Inputs and Origins}
+ *
+ * | Quantity | Origin | Unit |
+ * |---|---|---|
+ * | Full-load package power and airflow | measured test or manufacturer data | kW, acfm |
+ * | No-load package power | measured unloaded operation or catalog | kW |
+ * | Unload power and airflow | controller transition point or catalog | kW, acfm |
+ * | Maximum airflow | manufacturer stonewall/full-flow point | acfm |
+ * | Blow-off power and airflow | manufacturer map or measured bypass condition | kW, acfm |
+ * | Capacity-pressure anchors | maximum surge, rated/full load, and minimum stonewall | acfm at psig |
+ *
+ * @heading{Pressure-Capacity Correction}
+ * Three catalog anchors define a quadratic capacity map:
+ * @formula{centrifugal-pressure-fit;
+ *   Q(P_g)=aP_g^2+bP_g+c
+ * }
+ * where the three @math{(P_g,Q)} pairs are maximum surge, rated/full load, and minimum
+ * stonewall. Evaluate this fit at the requested full-load pressure to replace @math{Q_{FL}}.
+ * For modulation/unload, evaluate it again at maximum pressure to replace @math{Q_{max}}.
+ * Pressure is gauge pressure because the empirical map is fitted directly to psig catalog points.
+ *
+ * @heading{Load/Unload Curve}
  * @copydoc centrifugal_load_unload_formula
  *
- * @heading{Modulation With Unload}
+ * @heading{Modulation/Unload Curve}
  * @copydoc centrifugal_modulation_unload_formula
  *
- * @heading{Blow-Off}
+ * @heading{Blow-Off Curve}
  * @copydoc centrifugal_blowoff_formula
+ *
+ * @heading{Assumptions and Limits}
+ * - Piecewise segments are used only between their defining anchors; extrapolation beyond a
+ *   manufacturer map is not a validated centrifugal performance prediction.
+ * - Capacity-based modulation/unload evaluation changes segments at the unload airflow fraction,
+ *   not at the unload power fraction.
+ * - Blow-off airflow is a bypass-flow intermediate retained by the library. Useful delivered
+ *   airflow and package power are the assessment outputs normally presented to users.
+ *
+ * Source basis: <em>Compressed Air Compressor Modeling Calculations</em>, revision June 2020.
  */
 
 /**
- * @defgroup centrifugal_load_unload_formula Centrifugal Load/Unload Formula
+ * @defgroup centrifugal_load_unload_formula Centrifugal Load/Unload Calculation
  * @ingroup centrifugal_compressor_assessment
- * @brief Linear relationship between no-load and full-load power.
- * @details The load/unload model anchors the curve at no-load power and full-load power.
- *
- * @formula{centrifugal-load-unload-airflow-from-power;
- *   f_Q = (f_P - f_{P,NL})\frac{1}{1 - f_{P,NL}}
- * }
+ * @brief Linear interpolation between no-load and full-load anchors.
+ * @details
  * @formula{centrifugal-load-unload-power-from-airflow;
- *   f_P = (1 - f_{P,NL})f_Q + f_{P,NL}
+ *   f_P=f_{P,NL}+(1-f_{P,NL})f_Q
  * }
- *
- * @subheading{Symbols}
+ * @formula{centrifugal-load-unload-airflow-from-power;
+ *   f_Q=\frac{f_P-f_{P,NL}}{1-f_{P,NL}}
+ * }
  * @symtable
- * @symrow{f_P; Fraction of full-load power; \unitless}
- * @symrow{f_Q; Fraction of full-load airflow; \unitless}
+ * @symrow{f_P; Package power divided by full-load package power; \unitless}
+ * @symrow{f_Q; Delivered airflow divided by full-load airflow; \unitless}
+ * @symrow{f_{P,NL}; No-load package power divided by full-load package power; \unitless}
+ * @endsymtable
+ *
+ * @subheading{Fully Substituted Example}
+ * With @math{P_{FL}=452.3\ \mathrm{kW}}, @math{Q_{FL}=3138\ \mathrm{acfm}}, and
+ * @math{P_{NL}=71.3\ \mathrm{kW}}, @math{f_{P,NL}=71.3/452.3=0.1576}. For
+ * @math{f_Q=0.24}, @math{f_P=0.1576+(1-0.1576)(0.24)=0.3598}. Therefore
+ * @math{P=0.3598(452.3)=162.7\ \mathrm{kW}} and
+ * @math{Q=0.24(3138)=753.1\ \mathrm{acfm}}.
+ */
+
+/**
+ * @defgroup centrifugal_modulation_unload_formula Centrifugal Modulation/Unload Calculation
+ * @ingroup centrifugal_compressor_assessment
+ * @brief Piecewise interpolation through no-load, unload, and maximum-flow anchors.
+ * @details
+ * For an airflow input, use the low segment below unload and the high segment from unload to
+ * maximum airflow:
+ * @formula{centrifugal-mod-unload-capacity;
+ *   f_P=\begin{cases}
+ *   f_{P,NL}+\dfrac{f_{P,UL}-f_{P,NL}}{f_{Q,UL}}f_Q,
+ *     & f_Q<f_{Q,UL}\\
+ *   f_{P,UL}+\dfrac{1-f_{P,UL}}{f_{Q,max}-f_{Q,UL}}(f_Q-f_{Q,UL}),
+ *     & f_{Q,UL}\le f_Q<f_{Q,max}\\
+ *   1, & f_Q\ge f_{Q,max}
+ *   \end{cases}
+ * }
+ * For a power input, the inverse curve uses the same power transition and returns dimensional
+ * airflow on the full-load or maximum-flow basis used by the source algorithm.
+ * @symtable
  * @symrow{f_{P,NL}; No-load power divided by full-load power; \unitless}
- * @endsymtable
- */
-
-/**
- * @defgroup centrifugal_modulation_unload_formula Centrifugal Modulation/Unload Formula
- * @ingroup centrifugal_compressor_assessment
- * @brief Piecewise model through no-load, unload, full-load, and maximum-flow points.
- * @details Power-to-airflow calculations interpolate linearly between no-load and unload
- *          until unload power is reached, then interpolate to the maximum-flow point.
- *
- * @formula{centrifugal-mod-unload-low;
- *   f_Q = (f_P - f_{P,NL})\frac{f_{Q,UL}}{f_{P,UL} - f_{P,NL}}
- *   \quad \text{for } f_P < f_{P,UL}
- * }
- * @formula{centrifugal-mod-unload-high;
- *   f_Q = f_P\frac{1 - f_{Q,base}}{1 - f_{P,UL}} +
- *         1 - \frac{1 - f_{Q,base}}{1 - f_{P,UL}}
- *   \quad \text{for } f_P \ge f_{P,UL}
- * }
- *
- * @subheading{Symbols}
- * @symtable
- * @symrow{f_{P,NL}; No-load power fraction; \unitless}
- * @symrow{f_{P,UL}; Unload power fraction; \unitless}
+ * @symrow{f_{P,UL}; Unload power divided by full-load power; \unitless}
  * @symrow{f_{Q,UL}; Unload airflow divided by full-load airflow; \unitless}
- * @symrow{f_{Q,base}; Unload airflow divided by maximum airflow; \unitless}
+ * @symrow{f_{Q,max}; Maximum airflow divided by full-load airflow; \unitless}
+ * @symrow{f_P; Package power fraction; \unitless}
+ * @symrow{f_Q; Airflow fraction; \unitless}
  * @endsymtable
+ *
+ * @subheading{Fully Substituted Example}
+ * For @math{P_{FL}=452.3\ \mathrm{kW}}, @math{Q_{FL}=3138\ \mathrm{acfm}},
+ * @math{P_{NL}=71.3\ \mathrm{kW}}, @math{P_{UL}=411.9\ \mathrm{kW}},
+ * @math{Q_{UL}=2731\ \mathrm{acfm}}, and @math{Q_{max}=3005\ \mathrm{acfm}}, the unload
+ * fractions are @math{f_{P,UL}=0.9107} and @math{f_{Q,UL}=0.8703}. At
+ * @math{f_Q=0.8693}, the low segment gives @math{f_P=0.9098}; at exactly
+ * @math{f_Q=0.8703}, both segments give @math{f_P=0.9107}. The transition is therefore continuous.
  */
 
 /**
- * @defgroup centrifugal_blowoff_formula Centrifugal Blow-Off Formula
+ * @defgroup centrifugal_blowoff_formula Centrifugal Blow-Off Calculation
  * @ingroup centrifugal_compressor_assessment
- * @brief Useful airflow and blow-off airflow for centrifugal blow-off control.
- * @details Below the blow-off power point, useful airflow is the blow-off airflow fraction
- *          minus the specified blow-off fraction. Above that point, useful airflow follows
- *          a linear segment from the blow-off point to full load.
- *
+ * @brief Separate useful airflow from the bypass flow needed to hold the compressor stable.
+ * @details
  * @formula{centrifugal-blowoff-low;
- *   f_Q = f_{Q,BO} - f_{BO}
- *   \quad \text{for } f_P \le f_{P,BO}
+ *   f_Q=f_{Q,BO}-f_{BO}\quad\text{for }f_P\le f_{P,BO}
  * }
  * @formula{centrifugal-blowoff-high;
- *   f_Q = \frac{1 - f_{Q,BO}}{1 - f_{P,BO}}
- *         \left(f_P - 1 + \frac{1 - f_{P,BO}}{1 - f_{Q,BO}}\right)
- *   \quad \text{for } f_P > f_{P,BO}
+ *   f_Q=\frac{1-f_{Q,BO}}{1-f_{P,BO}}
+ *   \left[f_P-1+\frac{1-f_{P,BO}}{1-f_{Q,BO}}\right]
  * }
- * @formula{centrifugal-blowoff-airflow;
- *   Q_{BO} = (f_{Q,BO} - f_Q)Q_{FL}
+ * @formula{centrifugal-blowoff-bypass;
+ *   Q_{BO}=(f_{Q,BO}-f_Q)Q_{FL}
  * }
- *
- * @subheading{Symbols}
  * @symtable
- * @symrow{f_{P,BO}; Blow-off package power divided by full-load power; \unitless}
+ * @symrow{f_{P,BO}; Blow-off package power divided by full-load package power; \unitless}
  * @symrow{f_{Q,BO}; Blow-off airflow divided by full-load airflow; \unitless}
- * @symrow{f_{BO}; User-specified blow-off fraction; \unitless}
- * @symrow{Q_{BO}; Calculated blow-off airflow; \acfm}
+ * @symrow{f_{BO}; Bypass airflow divided by full-load airflow; \unitless}
+ * @symrow{Q_{BO}; Calculated bypass or blow-off airflow; \acfm}
  * @symrow{Q_{FL}; Full-load airflow; \acfm}
+ * @symrow{f_P; Package power fraction; \unitless}
+ * @symrow{f_Q; Useful delivered airflow fraction; \unitless}
  * @endsymtable
+ *
+ * @subheading{Fully Substituted Example}
+ * With @math{P_{FL}=452.3\ \mathrm{kW}}, @math{Q_{FL}=3138\ \mathrm{acfm}},
+ * @math{P_{BO}=370.9\ \mathrm{kW}}, @math{Q_{BO,anchor}=2510\ \mathrm{acfm}}, and a
+ * bypass fraction 0.6798, @math{f_{P,BO}=0.8200} and @math{f_{Q,BO}=0.7999}. Because the
+ * measured power fraction 0.82 is at the blow-off anchor,
+ * @math{f_Q=0.7999-0.6798=0.1201}. Thus useful airflow is
+ * @math{0.1201(3138)=376.8\ \mathrm{acfm}} and the bypass intermediate is
+ * @math{0.6798(3138)=2133.2\ \mathrm{acfm}}.
  */

@@ -62,7 +62,7 @@ CompressorBlowOffResult CentrifugalBlowOffCompressor::calculateFromMeasuredCapac
 CompressorBlowOffResult CentrifugalBlowOffCompressor::calculateFromElectrical(double voltage, double current,
                                                                               double power_factor,
                                                                               double blow_off_fraction) {
-    return calculateFromMeasuredPower(voltage * current * power_factor * 1.732 / 1000.0, blow_off_fraction);
+    return calculateFromMeasuredPower(threePhasePowerKw(voltage, current, power_factor), blow_off_fraction);
 }
 
 void CentrifugalBlowOffCompressor::adjustDischargePressure(const std::vector<double>& capacity,
@@ -113,7 +113,7 @@ CompressorPerformanceResult CentrifugalLoadUnloadCompressor::calculateFromMeasur
 
 CompressorPerformanceResult CentrifugalLoadUnloadCompressor::calculateFromElectrical(double voltage, double current,
                                                                                      double power_factor) {
-    return calculateFromMeasuredPower(voltage * current * power_factor * 1.732 / 1000.0);
+    return calculateFromMeasuredPower(threePhasePowerKw(voltage, current, power_factor));
 }
 
 void CentrifugalLoadUnloadCompressor::adjustDischargePressure(const std::vector<double>& capacity,
@@ -169,7 +169,7 @@ CentrifugalModulationUnloadCompressor::calculateFromPowerFraction(double power_f
 CompressorPerformanceResult
 CentrifugalModulationUnloadCompressor::calculateFromCapacityFraction(double airflow_fraction) {
     double power_fraction = 1.0;
-    if (airflow_fraction < unload_power_fraction_) {
+    if (airflow_fraction < unload_airflow_fraction_) {
         power_fraction = ((unload_power_fraction_ - no_load_power_fraction_) /
                           (unload_airflow_fraction_ - no_load_airflow_fraction_)) *
                              airflow_fraction +
@@ -200,7 +200,7 @@ CompressorPerformanceResult CentrifugalModulationUnloadCompressor::calculateFrom
 CompressorPerformanceResult CentrifugalModulationUnloadCompressor::calculateFromElectrical(double voltage,
                                                                                           double current,
                                                                                           double power_factor) {
-    return calculateFromMeasuredPower(voltage * current * power_factor * 1.732 / 1000.0);
+    return calculateFromMeasuredPower(threePhasePowerKw(voltage, current, power_factor));
 }
 
 void CentrifugalModulationUnloadCompressor::adjustDischargePressure(const std::vector<double>& capacity,

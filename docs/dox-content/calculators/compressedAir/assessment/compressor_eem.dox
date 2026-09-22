@@ -1,9 +1,21 @@
 /**
  * @defgroup compressor_eem_assessment Compressor Energy Efficiency Measures
  * @ingroup compressor_modeling
- * @brief Compressor EEM calculations for leaks, end-use efficiency, pressure, set points, and savings.
- * @details EEM functions are stateless free functions. Each function returns the adjusted
- *          airflow, power, energy, or cost value directly as a passive value object.
+ * @brief Engineering calculations for leak repair, end-use efficiency, pressure, set points, and savings.
+ * @details Start with a documented baseline airflow, package-power profile, operating pressure,
+ *          annual hours, and electricity cost. Apply one proposed change to those baseline values,
+ *          recalculate the affected airflow or power, and compare baseline with the modified case.
+ *          Keep fractions from 0 to 1 distinct from percentages. Airflow is acfm, power is kW,
+ *          annual energy is kWh, and pressure ratios use absolute pressure even when user set points
+ *          are entered as psig.
+ *
+ * @heading{Input Origins and Review Checks}
+ * - Leak and end-use airflow should come from a survey or a traceable engineering estimate.
+ * - Package power should come from measured kW or the matching control model, not motor nameplate hp.
+ * - Pressure and altitude values must identify whether they are gauge or absolute.
+ * - Repeat the modified calculation for each affected profile interval before summing annual energy.
+ * - Empirical exponents and response factors are inherited source correlations and should not be
+ *   extrapolated outside the assessment range without manufacturer or SME review.
  *
  * @heading{Leak Reduction}
  * @copydoc compressor_eem_leak_formula
@@ -16,6 +28,8 @@
  *
  * @heading{Savings}
  * @copydoc compressor_eem_savings_formula
+ *
+ * Source basis: <em>Compressed Air Energy Efficiency Measure Calculations</em>, revision June 2020.
  */
 
 /**

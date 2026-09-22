@@ -17,23 +17,27 @@ namespace compressed_air::assessment {
  */
 struct CompressorCatalogRecord {
     int         id                         = 0;   ///< Sequential catalog record ID @unitb{\unitless}.
-    int         compressorTypeId           = 0;   ///< Compressor type identifier @unitb{\unitless}.
+    int         compressorTypeId           = 0;   ///< Catalog compressor-family ID 1-6; see @ref compressor_catalog_units.
     std::string model                      = "";  ///< Compressor model name.
     double      horsepower                 = 0.0; ///< Rated motor size @unitb{\horsepower}.
     double      ratedCapacityAcfm          = 0.0; ///< Rated compressor capacity @unitb{\acfm}.
     double      ratedPressurePsig          = 0.0; ///< Rated discharge pressure @unitb{\psig}.
     double      maxFullFlowPressurePsig    = 0.0; ///< Maximum full-flow pressure @unitb{\psig}.
-    int         controlTypeId              = 0;   ///< Control type identifier @unitb{\unitless}.
+    int         controlTypeId              = 0;   ///< Catalog control-family ID 1-11; see @ref compressor_catalog_units.
     double      unloadPointPercent         = 0.0; ///< Unload point @unitb{\percent}.
     double      minUnloadSumpPressurePsig  = 0.0; ///< Minimum unload sump pressure @unitb{\psig}.
     double      blowdownTimeSec            = 0.0; ///< Blowdown time @unitb{\second}.
     double      unloadSteps                = 0.0; ///< Unload steps @unitb{\unitless}.
     double      modulatingPressureRangePsig = 0.0; ///< Modulating pressure range @unitb{\psig}.
-    double      fullLoadBhpPowerKw         = 0.0; ///< Full-load brake horsepower equivalent power @unitb{\kilo\watt}.
+    union {
+        double fullLoadBrakeHorsepower = 0.0; ///< Full-load brake horsepower @unitb{\horsepower}.
+        /** @deprecated Use fullLoadBrakeHorsepower. Compatibility alias containing the same BHP value. */
+        double fullLoadBhpPowerKw;
+    };
     double      totalPackageInputPowerKw   = 0.0; ///< Total package input power @unitb{\kilo\watt}.
-    double      specificPackagePower       = 0.0; ///< Specific package power @unitb{\kilo\watt\per\acfm}.
-    double      noLoadPowerFullyModulating = 0.0; ///< No-load fully modulating power fraction @unitb{\unitless}.
-    double      noLoadPowerUnload          = 0.0; ///< No-load unload power fraction @unitb{\unitless}.
+    double      specificPackagePower       = 0.0; ///< Specific package power, kW per 100 acfm.
+    double      noLoadPowerFullyModulating = 0.0; ///< No-load fully modulating power @unitb{\percent}.
+    double      noLoadPowerUnload          = 0.0; ///< No-load unload power @unitb{\percent}.
     double      maxSurgePressurePsig       = 0.0; ///< Maximum surge pressure @unitb{\psig}.
     double      maxSurgePressureFlowAcfm   = 0.0; ///< Flow at maximum surge pressure @unitb{\acfm}.
     double      minStonewallPressurePsig   = 0.0; ///< Minimum stonewall pressure @unitb{\psig}.
@@ -61,7 +65,7 @@ struct CompressorCatalogRecord {
           maxFullFlowPressurePsig(max_full_flow_pressure), controlTypeId(control_type_id),
           unloadPointPercent(unload_point), minUnloadSumpPressurePsig(min_unload_sump_pressure),
           blowdownTimeSec(blowdown_time), unloadSteps(unload_step_count),
-          modulatingPressureRangePsig(modulating_pressure_range), fullLoadBhpPowerKw(full_load_bhp_power),
+          modulatingPressureRangePsig(modulating_pressure_range), fullLoadBrakeHorsepower(full_load_bhp_power),
           totalPackageInputPowerKw(total_package_input_power), specificPackagePower(specific_package_power_value),
           noLoadPowerFullyModulating(no_load_power_fully_modulating_value),
           noLoadPowerUnload(no_load_power_unload_value), maxSurgePressurePsig(max_surge_pressure),

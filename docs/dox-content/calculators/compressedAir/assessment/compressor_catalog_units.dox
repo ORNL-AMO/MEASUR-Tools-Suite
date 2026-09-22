@@ -1,43 +1,84 @@
 /**
- * @defgroup compressor_catalog_units Compressor Catalog Units
+ * @defgroup compressor_catalog_units Compressor Catalog: Meaning, Units, and Data Quality
  * @ingroup compressor_modeling
- * @brief Field units for the passive compressor catalog records.
- * @details `CompressorCatalogRecord` is a passive value object returned by `DefaultData`.
- *          The catalog travels with the assessment models because its records supply control,
- *          pressure, airflow, and power defaults used to construct assessment calculators.
+ * @brief How to interpret compressor catalog records before using them as model inputs.
+ * @details
+ * A catalog record is a set of manufacturer-like reference values used to establish a performance
+ * curve. It is not a measured operating point. Always check control compatibility, units, and the
+ * unavailable-data sentinel before constructing a model.
  *
- * @heading{Field Units}
+ * @warning A numeric value of -9999 means <em>unavailable or not applicable</em>. Do not convert,
+ * interpolate, average, or otherwise treat it as engineering data.
+ *
+ * @heading{Engineering Identifiers}
+ *
+ * `compressorTypeId` maps to: 1 single-stage lubricant-injected rotary screw, 2 two-stage
+ * lubricant-injected rotary screw, 3 two-stage lubricant-free rotary screw, 4 single-stage
+ * reciprocating, 5 two-stage reciprocating, and 6 multiple-stage centrifugal.
+ *
+ * `controlTypeId` maps to: 1 inlet modulation without unloading, 2 inlet modulation with unloading,
+ * 3 variable displacement with unloading, 4 load/unload, 5 multi-step unloading, 6 start/stop,
+ * 7 inlet butterfly modulation with blow-off, 8 inlet butterfly modulation with unloading,
+ * 9 inlet guide-vane modulation with blow-off, 10 inlet guide-vane modulation with unloading,
+ * and 11 VFD. Select by engineering meaning and confirm the actual compressor controller; never
+ * infer a control curve from the ID alone when the equipment record is ambiguous.
+ *
+ * @heading{Field Dictionary}
  * @symtable
  * @symrow{id; Sequential catalog record identifier; \unitless}
- * @symrow{compressorTypeId; Compressor type identifier; \unitless}
- * @symrow{model; Catalog model label; \unitless}
- * @symrow{horsepower; Rated motor size; \horsepower}
- * @symrow{ratedCapacityAcfm; Rated compressor capacity; \acfm}
- * @symrow{ratedPressurePsig; Rated discharge pressure; \psig}
- * @symrow{maxFullFlowPressurePsig; Maximum full-flow pressure; \psig}
- * @symrow{controlTypeId; Control type identifier; \unitless}
- * @symrow{unloadPointPercent; Unload point; \percent}
- * @symrow{minUnloadSumpPressurePsig; Minimum unload sump pressure; \psig}
- * @symrow{blowdownTimeSec; Blowdown time; \second}
- * @symrow{unloadSteps; Number of unload steps; \unitless}
- * @symrow{modulatingPressureRangePsig; Modulating pressure range; \psig}
- * @symrow{fullLoadBhpPowerKw; Full-load brake-horsepower equivalent power; \kilo\watt}
- * @symrow{totalPackageInputPowerKw; Total package input power; \kilo\watt}
- * @symrow{specificPackagePower; Specific package power; \kilo\watt\per\acfm}
- * @symrow{noLoadPowerFullyModulating; No-load fully modulating power fraction; \unitless}
- * @symrow{noLoadPowerUnload; No-load unload power fraction; \unitless}
- * @symrow{maxSurgePressurePsig; Maximum surge pressure; \psig}
- * @symrow{maxSurgePressureFlowAcfm; Flow at maximum surge pressure; \acfm}
- * @symrow{minStonewallPressurePsig; Minimum stonewall pressure; \psig}
- * @symrow{minStonewallPressureFlowAcfm; Flow at minimum stonewall pressure; \acfm}
- * @symrow{designSurgeFlowAcfm; Design surge flow; \acfm}
+ * @symrow{compressorTypeId; Catalog compressor-family identifier; \unitless}
+ * @symrow{model; Motor-size and catalog model label; \unitless}
+ * @symrow{horsepower; Rated motor nameplate size; \horsepower}
+ * @symrow{ratedCapacityAcfm; Rated delivered capacity; \acfm}
+ * @symrow{ratedPressurePsig; Rated discharge gauge pressure; \psig}
+ * @symrow{maxFullFlowPressurePsig; Maximum full-flow gauge pressure; \psig}
+ * @symrow{controlTypeId; Catalog control-family identifier; \unitless}
+ * @symrow{unloadPointPercent; Airflow at the unload transition; \percent}
+ * @symrow{minUnloadSumpPressurePsig; Minimum unloaded sump gauge pressure; \psig}
+ * @symrow{blowdownTimeSec; Blowdown duration; \second}
+ * @symrow{unloadSteps; Number of discrete unloading steps; \unitless}
+ * @symrow{modulatingPressureRangePsig; Modulating pressure band; \psig}
+ * @symrow{fullLoadBrakeHorsepower; Full-load mechanical shaft power; \horsepower}
+ * @symrow{fullLoadBhpPowerKw; Deprecated compatibility name containing the same BHP value, not kW; \horsepower}
+ * @symrow{totalPackageInputPowerKw; Full-load electrical package input power; \kilo\watt}
+ * @symrow{specificPackagePower; Package kW per 100 acfm of rated capacity (value uses a 100-acfm basis); \kilo\watt\per\acfm}
+ * @symrow{noLoadPowerFullyModulating; No-load power as a percentage of full-load package power; \percent}
+ * @symrow{noLoadPowerUnload; Unloaded power as a percentage of full-load package power; \percent}
+ * @symrow{maxSurgePressurePsig; Centrifugal maximum surge pressure; \psig}
+ * @symrow{maxSurgePressureFlowAcfm; Airflow at maximum surge pressure; \acfm}
+ * @symrow{minStonewallPressurePsig; Centrifugal minimum stonewall pressure; \psig}
+ * @symrow{minStonewallPressureFlowAcfm; Airflow at minimum stonewall pressure; \acfm}
+ * @symrow{designSurgeFlowAcfm; Centrifugal design surge airflow; \acfm}
  * @symrow{designInletTemperatureF; Design inlet temperature; \degreeFahrenheit}
- * @symrow{designInletPressurePsia; Design inlet pressure; \psia}
- * @symrow{fullLoadAmps; Full-load current; \ampere}
- * @symrow{fullLoadEfficiencyPercent; Full-load efficiency; \percent}
+ * @symrow{designInletPressurePsia; Design inlet absolute pressure; \psia}
+ * @symrow{fullLoadAmps; Full-load line current; \ampere}
+ * @symrow{fullLoadEfficiencyPercent; Full-load motor efficiency; \percent}
  * @endsymtable
  *
- * @note Numeric record IDs are assigned by `DefaultData` after loading each catalog vector.
- *       The record objects are returned as plain WebAssembly value objects and do not require
- *       manual deletion; only the vector container requires `delete()`.
+ * @heading{Consistency Checks}
+ * For a usable record, the following values should agree within catalog rounding:
+ * @formula{catalog-bhp-check;
+ *   P_{package}\approx\frac{BHP_{FL}(0.746)}{\eta_m}
+ * }
+ * @formula{catalog-specific-power-check;
+ *   SP=\frac{100P_{package}}{Q_{rated}}
+ * }
+ * @symtable
+ * @symrow{P_{package}; Full-load electrical package input power; \kilo\watt}
+ * @symrow{BHP_{FL}; Full-load mechanical shaft power; \horsepower}
+ * @symrow{0.746; Brake-horsepower-to-kilowatt conversion; \kilo\watt\per\horsepower}
+ * @symrow{\eta_m; Full-load motor efficiency expressed from 0 to 1; \unitless}
+ * @symrow{SP; Specific package power on a 100-acfm basis; \kilo\watt\per\acfm}
+ * @symrow{Q_{rated}; Rated delivered capacity; \acfm}
+ * @symrow{100; Scaling basis for specific package power; \unitless}
+ * @endsymtable
+ * where motor efficiency @math{\eta_m} is converted from percent to a 0-to-1 fraction and
+ * specific package power @math{SP} is reported in kW/100 acfm.
+ *
+ * @subheading{Example}
+ * A catalog row containing 5.3 bhp, 85 percent motor efficiency, 4.6 package kW, and 18 acfm gives
+ * @math{5.3(0.746)/0.85=4.65\ \mathrm{kW}} and
+ * @math{100(4.6)/18=25.6\ \mathrm{kW/100\ acfm}}. These agree with the rounded catalog entries
+ * 4.6 kW and 25.9 kW/100 acfm. Its no-load values 65 and 50 mean 65 percent and 50 percent,
+ * respectively; they are not fractions 65 and 50.
  */
