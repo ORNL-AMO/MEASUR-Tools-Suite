@@ -91,7 +91,6 @@
  * - The model is intended for operating points from zero through full-load airflow. Use manufacturer
  *   data when cycling behavior, sequencing, or receiver interaction differs materially.
  *
- * Source basis: <em>Compressed Air Compressor Modeling Calculations</em>, revision June 2020.
  */
 
 /**

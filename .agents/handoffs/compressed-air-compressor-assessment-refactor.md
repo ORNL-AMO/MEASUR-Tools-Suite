@@ -81,20 +81,20 @@
 
 ## Formula Provenance and Behavior Reconciliation
 
-| Formula family | Primary internal source | Executable authority and reconciliation |
+| Formula family | Verification basis | Executable authority and reconciliation |
 |---|---|---|
-| Centrifugal piecewise curves and three-point pressure fit | *Compressed Air Compressor Modeling Calculations*, June 2020 | C++ model plus boundary/golden tests; transition comparison corrected where dimensions were inconsistent |
-| Positive-displacement load/unload cycle | *Compressed Air Compressor Modeling Calculations*, June 2020 | Named `CycleState` implementation is shared by direct and sampled inverse paths; all five stage energies documented |
-| Modulation, start/stop, and VFD | *Compressed Air Compressor Modeling Calculations*, June 2020 | Existing equations retained, dimensional reconstruction and worked examples added |
-| Pressure/inlet and electrical correction | *Compressed Air Assessment Calculations*, June 2020 | Shared implementation; 0.746 constant and three-phase conversion centralized for assessment models |
-| EEM calculations | *Compressed Air Energy Efficiency Measure Calculations*, June 2020 | Formulas retained; input provenance, gauge/absolute pressure, and per-interval application clarified |
+| Centrifugal piecewise curves and three-point pressure fit | Historical implementation and regression fixtures | C++ model plus boundary/golden tests; transition comparison corrected where dimensions were inconsistent |
+| Positive-displacement load/unload cycle | Historical implementation and regression fixtures | Named `CycleState` implementation is shared by direct and sampled inverse paths; all five stage energies documented |
+| Modulation, start/stop, and VFD | Historical implementation and regression fixtures | Existing equations retained, dimensional reconstruction and worked examples added |
+| Pressure/inlet and electrical correction | Historical implementation and regression fixtures | Shared implementation; 0.746 constant and three-phase conversion centralized for assessment models |
+| EEM calculations | Historical implementation and regression fixtures | Formulas retained; input provenance, gauge/absolute pressure, and per-interval application clarified |
 | Catalog interpretation | Embedded default-data tables and reviewed catalog documentation | Values cross-checked using BHP conversion and kW/100 acfm relationships |
 
-When Word prose conflicts with executable behavior, the tested implementation is documented unless
-engineering intent is clear enough to correct safely. The principal example is polynomial order:
-source prose mentions a fourth-order inverse in one place, while the implementation and historical
-behavior use a sixth-order fit; the public documentation now states sixth order and discloses the
-sampling method.
+When historical prose conflicts with executable behavior, the tested implementation is documented
+unless engineering intent is clear enough to correct safely. The principal example is polynomial
+order: an earlier description mentions a fourth-order inverse, while the implementation and
+historical behavior use a sixth-order fit; the public documentation states sixth order and discloses
+the sampling method.
 
 ## Validation
 

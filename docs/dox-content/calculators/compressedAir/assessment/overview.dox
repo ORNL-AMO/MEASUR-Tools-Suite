@@ -66,9 +66,6 @@
  *   the centrifugal model. In the engineering narrative it is a bypass-flow intermediate, not a
  *   primary MEASUR result.
  *
- * Source basis: <em>Compressed Air Compressor Modeling Calculations</em>, revision June 2020;
- * <em>Compressed Air Assessment Calculations</em>, revision June 2020; and
- * <em>Compressed Air Energy Efficiency Measure Calculations</em>, revision June 2020.
  */
 
 /**

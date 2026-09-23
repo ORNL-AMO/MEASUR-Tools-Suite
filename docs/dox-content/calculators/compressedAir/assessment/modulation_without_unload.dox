@@ -54,5 +54,4 @@
  * - The exponent is an empirical control-shape parameter, not a thermodynamic exponent.
  * - Apply the curve independently to every measured profile interval.
  *
- * Source basis: <em>Compressed Air Compressor Modeling Calculations</em>, revision June 2020.
  */

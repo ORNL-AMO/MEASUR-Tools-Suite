@@ -51,7 +51,6 @@
  * - Blow-off airflow is a bypass-flow intermediate retained by the library. Useful delivered
  *   airflow and package power are the assessment outputs normally presented to users.
  *
- * Source basis: <em>Compressed Air Compressor Modeling Calculations</em>, revision June 2020.
  */
 
 /**

@@ -57,5 +57,4 @@
  *   a validated VFD prediction.
  * - Anchor points must be ordered consistently and describe the same pressure condition.
  *
- * Source basis: <em>Compressed Air Compressor Modeling Calculations</em>, revision June 2020.
  */

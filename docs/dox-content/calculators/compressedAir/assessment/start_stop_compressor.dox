@@ -52,5 +52,4 @@
  * - Pressure correction follows the selected screw or reciprocating pressure-ratio basis described
  *   in @ref compressor_assessment_pressure_inlet_formula.
  *
- * Source basis: <em>Compressed Air Compressor Modeling Calculations</em>, revision June 2020.
  */
