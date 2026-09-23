@@ -20,7 +20,7 @@ TEST_CASE("Load/unload compressor assessment preserves legacy expected values", 
     resLUL = cLUL.calculateFromMeasuredCapacity(937);
     CHECK(resLUL.airflowAcfm == Approx(937));
     CHECK(resLUL.airflowFraction == Approx(0.89408));
-    resLUL = cLUL.calculateFromElectrical(440, 2.467, 50);
+    resLUL = cLUL.calculateFromElectrical(440, 246.7, 0.5);
     CHECK(resLUL.powerKw == Approx(94.002568));
     CHECK(resLUL.powerFraction == Approx(0.56458));
 
@@ -30,6 +30,7 @@ TEST_CASE("Load/unload compressor assessment preserves legacy expected values", 
     CHECK(resMUL.powerKw == Approx(156.51));
     CHECK(resMUL.powerFraction == Approx(0.94));
     resMUL = cMUL.calculateFromCapacityFraction(0.895);
+    CHECK(resMUL.powerKw == Approx(163.6762).margin(0.001));
     CHECK(resMUL.airflowAcfm == Approx(937.96));
     CHECK(resMUL.airflowFraction == Approx(0.895));
     resMUL = cMUL.calculateFromMeasuredPower(156);
@@ -38,7 +39,7 @@ TEST_CASE("Load/unload compressor assessment preserves legacy expected values", 
     resMUL = cMUL.calculateFromMeasuredCapacity(937);
     CHECK(resMUL.airflowAcfm == Approx(937));
     CHECK(resMUL.airflowFraction == Approx(0.89408));
-    resMUL = cMUL.calculateFromElectrical(440, 2.467, 50);
+    resMUL = cMUL.calculateFromElectrical(440, 246.7, 0.5);
     CHECK(resMUL.powerKw == Approx(0));
     CHECK(resMUL.powerFraction == Approx(0));
 
@@ -46,19 +47,19 @@ TEST_CASE("Load/unload compressor assessment preserves legacy expected values", 
     CHECK(resMUL.airflowAcfm == Approx(1016.56));
     CHECK(resMUL.airflowFraction == Approx(0.97));
 
-    auto cMULHelper = ModulationWithUnloadCompressor(
+    auto cMULSubmodel = ModulationWithUnloadCompressor(
         166.5, 1048, 1048 / 7.481, 175.5, 107.5, 100, 110, 5, 14.7, 90);
-    auto helperResult = cMULHelper.calculateFromPowerFraction(0.996);
-    CHECK(helperResult.powerKw == Approx(165.834));
-    CHECK(helperResult.airflowAcfm == Approx(946.9248));
-    CHECK(helperResult.powerFraction == Approx(0.996));
-    CHECK(helperResult.airflowFraction == Approx(0.9035542));
+    auto submodelResult = cMULSubmodel.calculateFromPowerFraction(0.996);
+    CHECK(submodelResult.powerKw == Approx(165.834));
+    CHECK(submodelResult.airflowAcfm == Approx(946.9248));
+    CHECK(submodelResult.powerFraction == Approx(0.996));
+    CHECK(submodelResult.airflowFraction == Approx(0.9035542));
 
-    helperResult = cMULHelper.calculateFromCapacityFraction(0.9035542);
-    CHECK(helperResult.powerKw == Approx(165.834));
-    CHECK(helperResult.airflowAcfm == Approx(946.9248));
-    CHECK(helperResult.powerFraction == Approx(0.996));
-    CHECK(helperResult.airflowFraction == Approx(0.9035542));
+    submodelResult = cMULSubmodel.calculateFromCapacityFraction(0.9035542);
+    CHECK(submodelResult.powerKw == Approx(165.834));
+    CHECK(submodelResult.airflowAcfm == Approx(946.9248));
+    CHECK(submodelResult.powerFraction == Approx(0.996));
+    CHECK(submodelResult.airflowFraction == Approx(0.9035542));
 }
 
 TEST_CASE("Load/unload pressure inlet correction uses compressor type and refreshes unload state",
@@ -84,4 +85,22 @@ TEST_CASE("Load/unload pressure inlet correction uses compressor type and refres
     CHECK(corrected_result.airflowAcfm == Approx(expected_result.airflowAcfm));
     CHECK(corrected_result.powerFraction == Approx(expected_result.powerFraction));
     CHECK(corrected_result.airflowFraction == Approx(expected_result.airflowFraction));
+}
+
+TEST_CASE("Short load/unload constructor uses unloaded load factor", "[compressed-air][assessment]") {
+    auto high_no_load = LoadUnloadCompressor(100, 500, 100, 105, 100, 110, 5, 0.6);
+    auto low_no_load  = LoadUnloadCompressor(100, 500, 100, 105, 100, 110, 5, 0.2);
+
+    CHECK(high_no_load.calculateFromPowerFraction(0.59).powerKw == 0.0);
+    CHECK(low_no_load.calculateFromPowerFraction(0.59).powerKw == Approx(59.0));
+}
+
+TEST_CASE("Load/unload direct and inverse calculations round trip", "[compressed-air][assessment]") {
+    auto compressor = LoadUnloadCompressor(166.5, 1048, 1048 / 7.481, 175.5, 100, 110, 5, 0.5);
+
+    for (double airflow_fraction = 0.1; airflow_fraction <= 0.9; airflow_fraction += 0.1) {
+        const auto forward = compressor.calculateFromCapacityFraction(airflow_fraction);
+        const auto inverse = compressor.calculateFromPowerFraction(forward.powerFraction);
+        CHECK(inverse.airflowFraction == Approx(airflow_fraction).margin(0.03));
+    }
 }

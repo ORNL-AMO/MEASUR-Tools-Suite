@@ -16,9 +16,24 @@ namespace compressed_air::assessment {
  */
 class LoadUnloadCompressor : public CompressorModelBase {
   public:
+    /**
+     * @brief Construct a basic load/unload cycle model and derive no-load power from a fraction.
+     * @param[in] full_load_power Full-load package input power @unitb{\kilo\watt}.
+     * @param[in] full_load_airflow Full-load delivered airflow @unitb{\acfm}.
+     * @param[in] storage_volume Effective receiver/system storage @unitb{\cubicFoot}.
+     * @param[in] max_power Maximum package input power @unitb{\kilo\watt}.
+     * @param[in] full_load_pressure Full-load discharge pressure @unitb{\psig}.
+     * @param[in] max_pressure Maximum discharge pressure @unitb{\psig}.
+     * @param[in] modulating_pressure Modulating pressure range @unitb{\psi}.
+     * @param[in] unloaded_load_factor No-load/full-load power fraction from 0 to 1 @unitb{\unitless}.
+     */
     LoadUnloadCompressor(double full_load_power, double full_load_airflow, double storage_volume, double max_power,
                          double full_load_pressure, double max_pressure, double modulating_pressure,
-                         double unloaded_load_factor, double atmospheric_pressure = 14.7,
+                         double unloaded_load_factor);
+
+    LoadUnloadCompressor(double full_load_power, double full_load_airflow, double storage_volume, double max_power,
+                         double full_load_pressure, double max_pressure, double modulating_pressure,
+                         double unloaded_load_factor, double atmospheric_pressure,
                          CompressorType compressor_type = CompressorType::Reciprocating,
                          CompressorLubricant lubricant = CompressorLubricant::None,
                          CompressorControl control = CompressorControl::LoadUnload, double no_load_power = 1.0,
@@ -48,6 +63,28 @@ class LoadUnloadCompressor : public CompressorModelBase {
                                       double atmospheric_pressure = 14.69);
 
   private:
+    struct CycleState {
+        double modulation_runtime           = 0.0;
+        double average_modulation_power      = 0.0;
+        double average_discharge_pressure    = 0.0;
+        double blowdown_runtime              = 0.0;
+        double average_blowdown_power        = 0.0;
+        double blowdown_energy               = 0.0;
+        double off_load_runtime              = 0.0;
+        double off_load_power                = 0.0;
+        double off_load_energy               = 0.0;
+        double reload_runtime                = 0.0;
+        double average_reload_power          = 0.0;
+        double reload_energy                 = 0.0;
+        double receiver_pumpup_runtime       = 0.0;
+        double average_receiver_pumpup_power = 0.0;
+        double receiver_pumpup_energy        = 0.0;
+        double modulation_energy             = 0.0;
+        double cycle_runtime                 = 0.0;
+        double average_cycle_power           = 0.0;
+    };
+
+    CycleState calculateCycleState(double curve_airflow) const;
     double curveFit(double value, bool capacity_vs_power) const;
 
     double              max_power_;

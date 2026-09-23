@@ -119,6 +119,15 @@ class CompressorModelBase {
 
     static double roundDouble(double value);
 
+    /**
+     * @brief Convert a balanced three-phase electrical measurement to package power.
+     * @param[in] voltage Line-to-line voltage @unitb{\volt}.
+     * @param[in] current Line current @unitb{\ampere}.
+     * @param[in] power_factor Power factor expressed as a fraction from 0 to 1 @unitb{\unitless}.
+     * @return Three-phase package input power @unitb{\kilo\watt}.
+     */
+    static double threePhasePowerKw(double voltage, double current, double power_factor);
+
     void applyPressureInletCorrection(CompressorType compressor_type, double capacity, double full_load_bhp,
                                       double poly_exponent, double rated_discharge_pressure,
                                       double rated_inlet_pressure, double efficiency, double full_load_pressure,
