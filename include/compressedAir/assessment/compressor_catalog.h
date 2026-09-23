@@ -30,7 +30,7 @@ struct CompressorCatalogRecord {
     double      unloadSteps                = 0.0; ///< Unload steps @unitb{\unitless}.
     double      modulatingPressureRangePsig = 0.0; ///< Modulating pressure range @unitb{\psig}.
     union {
-        double fullLoadBrakeHorsepower = 0.0; ///< Full-load brake horsepower @unitb{\horsepower}.
+        double fullLoadBrakeHorsepower = 0.0; ///< Full-load brake horsepower @unitb{\bhp}.
         /** @deprecated Use fullLoadBrakeHorsepower. Compatibility alias containing the same BHP value. */
         double fullLoadBhpPowerKw;
     };

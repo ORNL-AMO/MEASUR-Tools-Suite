@@ -113,6 +113,7 @@ window.MathJax = {
                 \DeclareSIUnit{\psi}{psi}
                 \DeclareSIUnit{\decibel}{dB}
                 \DeclareSIUnit{\hour}{h}
+                \DeclareSIUnit{\horsepower}{hp}
                 \DeclareSIUnit{\bhp}{bhp}
                 \DeclareSIUnit{\psia}{psia}
                 \DeclareSIUnit{\psig}{psig}

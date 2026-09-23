@@ -148,8 +148,8 @@
  * @symrow{F_P,F_Q; Empirical altitude factors, or 1 when disabled; \unitless}
  * @symrow{P_{atm}; Local atmospheric pressure; \psia}
  * @symrow{P_{in}; Operating inlet pressure; \psia}
- * @symrow{BHP_{FL}; Full-load mechanical shaft power; \horsepower}
- * @symrow{0.746; Brake-horsepower-to-kilowatt conversion; \kilo\watt\per\horsepower}
+ * @symrow{BHP_{FL}; Full-load mechanical shaft power; \bhp}
+ * @symrow{0.746; Brake-horsepower-to-kilowatt conversion; \kilo\watt\per\bhp}
  * @symrow{\eta; Motor efficiency entered from 0 to 1; \unitless}
  * @symrow{R_P; Polytropic pressure-ratio correction; \unitless}
  * @symrow{Q_{rated}; Manufacturer rated capacity; \acfm}
