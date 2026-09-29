@@ -43,7 +43,8 @@ PowerBalanceCheckerCalculationsDomain PowerBalanceChecker::check(
                     headerCountInput, highPressureHeaderInput, mediumPressureHeaderInput, lowPressureHeaderInput,
                     condensingTurbineInput, operationsInput, boilerInput, boiler, highPressureHeaderCalculationsDomain,
                     mediumPressureHeaderCalculationsDomain, lowPressureHeaderCalculationsDomain,
-                    makeupWaterAndCondensateHeaderCalculationsDomain, deaeratorInletSteamMassFlowUpdated,
+                    makeupWaterAndCondensateHeaderCalculationsDomain, blowdownFlashTank,
+                    deaeratorInletSteamMassFlowUpdated,
                     recalcMakeupWaterAndMassFlow);
             SM_LOG(methodName << "lowPressureVentedSteamCalculationsDomain=" << lowPressureVentedSteamCalculationsDomain);
             lowPressureVentedSteamCalculationsDomainPtr =
@@ -67,7 +68,8 @@ PowerBalanceCheckerCalculationsDomain PowerBalanceChecker::check(
                     headerCountInput, highPressureHeaderInput, mediumPressureHeaderInput, lowPressureHeaderInput,
                     condensingTurbineInput, operationsInput, boilerInput, boiler, highPressureHeaderCalculationsDomain,
                     mediumPressureHeaderCalculationsDomain, lowPressureHeaderCalculationsDomain,
-                    makeupWaterAndCondensateHeaderCalculationsDomain, deaeratorInletSteamMassFlowUpdated,
+                    makeupWaterAndCondensateHeaderCalculationsDomain, blowdownFlashTank,
+                    deaeratorInletSteamMassFlowUpdated,
                     recalcMakeupWaterAndMassFlow);
             SM_LOG(methodName << "lowPressureVentedSteamCalculationsDomain=" << lowPressureVentedSteamCalculationsDomain);
             lowPressureVentedSteamCalculationsDomainPtr =

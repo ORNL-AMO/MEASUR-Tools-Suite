@@ -5,7 +5,7 @@
 using namespace Catch;
 
 TEST_CASE("boilerInputConstructor", "[boiler input constructor]") {
-    auto actual = BoilerInput(1, 1, 1, 1, true, true, 1, 1, 1, 1);
+    auto actual = BoilerInput(1, 1, 1, 1, true, true, 1, 1, 1, 1, false);
     CHECK(actual.getFuelType() == 1);
     CHECK(actual.getFuel() == 1);
     CHECK(actual.getCombustionEfficiency() == 1);
@@ -16,4 +16,5 @@ TEST_CASE("boilerInputConstructor", "[boiler input constructor]") {
     CHECK(actual.getDeaeratorVentRate() == 1);
     CHECK(actual.getDeaeratorPressure() == 1);
     CHECK(actual.getApproachTemperature() == 1);
+    CHECK(actual.isSendBlowdownToDeaerator() == false);
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include <steamModeler/api/BoilerInput.h>
 #include <steamModeler/api/HeaderInput.h>
 #include <steamModeler/api/OperationsInput.h>
@@ -7,6 +9,7 @@
 #include <steamModeler/Boiler.h>
 #include <steamModeler/domain/FluidPropertiesFactory.h>
 #include <steamModeler/domain/LowPressureVentedSteamCalculationsDomain.h>
+#include <steamModeler/FlashTank.h>
 #include <steamModeler/HeatExchanger.h>
 #include <steamModeler/PRV.h>
 #include <steamModeler/service/DeaeratorModeler.h>
@@ -28,6 +31,7 @@ class LowPressureVentedSteamCalculator {
          const std::shared_ptr<MediumPressureHeaderCalculationsDomain>& mediumPressureHeaderCalculationsDomain,
          const std::shared_ptr<LowPressureHeaderCalculationsDomain>&    lowPressureHeaderCalculationsDomain,
          MakeupWaterAndCondensateHeaderCalculationsDomain& makeupWaterAndCondensateHeaderCalculationsDomain,
+         const std::shared_ptr<FlashTank>& blowdownFlashTank,
          const double deaeratorInletSteamMassFlow, const bool recalcMakeupWaterAndMassFlow) const;
 
   private:

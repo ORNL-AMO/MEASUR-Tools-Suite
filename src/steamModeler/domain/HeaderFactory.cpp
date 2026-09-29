@@ -189,15 +189,12 @@ const Header HeaderFactory::make(
     }
 
     // Blowdown flash tank outlet gas
-    const bool isBlowdownFlashed = boilerInput.isBlowdownFlashed();
+    const bool isBlowdownFlashed = boilerInput.isBlowdownFlashed() && !boilerInput.isSendBlowdownToDeaerator();
     SM_LOG(methodName << "boilerInput.isBlowdownFlashed=" << isBlowdownFlashed);
 
     if (isBlowdownFlashed) {
-        SM_LOG(methodName << "boilerInput.isBlowdownFlashed=true, adding blowdownFlashTank");
-
         const Inlet& inlet = inletFactory.makeFromOutletGas(blowdownFlashTank);
         SM_LOG(methodName << "blowdownFlashTankInlet=" << inlet);
-
         inlets.push_back(inlet);
     }
     else {
