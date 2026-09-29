@@ -2,7 +2,7 @@
 
 #include <emscripten/bind.h>
 
-#include "compressedAir/compressors_data.h"
+#include "compressedAir/assessment/compressor_catalog.h"
 #include "databases/compressors_type1_data.h"
 #include "databases/compressors_type1_GT_100kW_data.h"
 #include "databases/compressors_type2_data.h"

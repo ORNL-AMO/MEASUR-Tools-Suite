@@ -12,6 +12,7 @@ set(TOOLS_SUITE_VERSION "${CMAKE_VERSION_MAJOR}.${CMAKE_VERSION_MINOR}.${CMAKE_V
 option(BUILD_PACKAGE "Build package" OFF)
 option(BUILD_TESTING "Build testing targets" ON)
 option(BUILD_WASM "Build wasm" OFF)
+option(STEAM_MODELER_LOGGING "Enable SteamModeler debug logging" OFF)
 
 # Set a default build type if none was specified
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
@@ -30,7 +31,7 @@ if(BUILD_WASM)
   set(CMAKE_CXX_STANDARD 20)
   set(CMAKE_CXX_FLAGS "-fexceptions -O3 -std=c++20")
   # set(CMAKE_EXE_LINKER_FLAGS "--no-entry --bind -s WASM=1 -s ASSERTIONS=1 -s ERROR_ON_UNDEFINED_SYMBOLS=0")
-  set(CMAKE_EXE_LINKER_FLAGS "--no-entry --bind -s WASM=1 -s ASSERTIONS=1 -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s SINGLE_FILE=0 -s MODULARIZE=1 -s EXPORT_ES6=0 -s ENVIRONMENT=web")
+  set(CMAKE_EXE_LINKER_FLAGS "--no-entry --bind -s WASM=1 -s ASSERTIONS=1 -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s SINGLE_FILE=0 -s MODULARIZE=1 -s EXPORT_ES6=0 -s ENVIRONMENT=web -s ALLOW_MEMORY_GROWTH=1 -s INITIAL_MEMORY=33554432")
 else()
   include(cmake/CompilerFlags.cmake)
   set(CMAKE_CXX_STANDARD 20)
@@ -71,6 +72,10 @@ add_library(measur_tools_suite STATIC ${SOURCE_FILES} ${SOURCE_FILES_WASM} ${INC
 
 if(UNIX AND NOT APPLE)
   target_link_libraries(measur_tools_suite dl)
+endif()
+
+if(STEAM_MODELER_LOGGING)
+  target_compile_definitions(measur_tools_suite PUBLIC STEAM_MODELER_LOGGING=1)
 endif()
 
 include_directories(SYSTEM)

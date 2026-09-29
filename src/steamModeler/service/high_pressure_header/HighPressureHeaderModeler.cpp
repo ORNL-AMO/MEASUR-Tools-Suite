@@ -1,4 +1,5 @@
 #include "steamModeler/service/high_pressure_header/HighPressureHeaderModeler.h"
+#include "steamModeler/util/SteamModelerLogger.h"
 
 HighPressureHeaderCalculationsDomain
 HighPressureHeaderModeler::model(const int headerCountInput, const HeaderWithHighestPressure& highPressureHeaderInput,
@@ -10,52 +11,51 @@ HighPressureHeaderModeler::model(const int headerCountInput, const HeaderWithHig
     const std::string methodName = std::string("HighPressureHeaderModeler::") + std::string(__func__) + ": ";
 
     // 2A. Calculate High Pressure Header
-    //     std::cout << methodName << "calculating high pressure header" << std::endl;
+    SM_LOG(methodName << "calculating high pressure header");
     const SteamSystemModelerTool::FluidProperties& highPressureHeaderOutputOriginal =
         highPressureHeaderCalculator.calc(highPressureHeaderInput, boiler);
-    //     std::cout << methodName << "highPressureHeaderOutputOriginal=" << highPressureHeaderOutputOriginal <<
-    //     std::endl;
+    SM_LOG(methodName << "highPressureHeaderOutputOriginal=" << highPressureHeaderOutputOriginal);
 
     // 2B. Calculate Heat Loss of steam in high pressure header
-    //     std::cout << methodName << "calculating highPressureHeader heat loss" << std::endl;
+    SM_LOG(methodName << "calculating highPressureHeader heat loss");
     const HeatLoss& heatLoss = heatLossFactory.make(highPressureHeaderInput, highPressureHeaderOutputOriginal);
-    //     std::cout << methodName << "highPressureHeader heatLoss=" << heatLoss << std::endl;
+    SM_LOG(methodName << "highPressureHeader heatLoss=" << heatLoss);
 
-    //     std::cout << methodName << "updating highPressureHeader with heat loss" << std::endl;
+    SM_LOG(methodName << "updating highPressureHeader with heat loss");
     const SteamSystemModelerTool::FluidProperties& highPressureHeaderOutput = fluidPropertiesFactory.make(heatLoss);
-    //     std::cout << methodName << "highPressureHeaderOutput=" << highPressureHeaderOutput << std::endl;
+    SM_LOG(methodName << "highPressureHeaderOutput=" << highPressureHeaderOutput);
 
     // 2C. Calculate High Pressure Condensate
-    //     std::cout << methodName << "calculating high pressure condensate" << std::endl;
+    SM_LOG(methodName << "calculating high pressure condensate");
     const SteamSystemModelerTool::FluidProperties& highPressureCondensate =
         highPressureCondensateCalculator.calc(highPressureHeaderInput, boiler);
-    //     std::cout << methodName << "highPressureCondensate=" << highPressureCondensate << std::endl;
+    SM_LOG(methodName << "highPressureCondensate=" << highPressureCondensate);
 
     // 2D. Calculate High Pressure Flash Tank if 3 header and on
-    //     std::cout << methodName << "calculating high pressure flash tank" << std::endl;
+    SM_LOG(methodName << "calculating high pressure flash tank");
     const std::shared_ptr<FlashTank>& highPressureCondensateFlashTank = highPressureFlashTankCalculator.calc(
         headerCountInput, mediumPressureHeaderInput, lowPressureHeaderInput, highPressureCondensate);
-    // std::cout << methodName << "highPressureCondensateFlashTank=" << highPressureCondensateFlashTank << std::endl;
+    SM_LOG(methodName << "highPressureCondensateFlashTank=" << highPressureCondensateFlashTank);
 
     // 2E. Calculate condensing turbine
-    //     std::cout << methodName << "calculating condensing turbine" << std::endl;
+    SM_LOG(methodName << "calculating condensing turbine");
     const std::shared_ptr<Turbine>& condensingTurbine =
         condensingTurbineCalculator.calc(condensingTurbineInput, highPressureHeaderOutput, false);
-    //     std::cout << methodName << "condensingTurbine=" << condensingTurbine << std::endl;
+    SM_LOG(methodName << "condensingTurbine=" << condensingTurbine);
     const std::shared_ptr<Turbine>& condensingTurbineIdeal =
         condensingTurbineCalculator.calc(condensingTurbineInput, highPressureHeaderOutput, true);
-    //     std::cout << methodName << "condensingTurbineIdeal=" << condensingTurbineIdeal << std::endl;
+    SM_LOG(methodName << "condensingTurbineIdeal=" << condensingTurbineIdeal);
 
     // 2F. Calculate high to low steam turbine if in use
-    //     std::cout << methodName << "calculating highToLowPressureTurbine" << std::endl;
+    SM_LOG(methodName << "calculating highToLowPressureTurbine");
     const std::shared_ptr<Turbine>& highToLowPressureTurbine = highToLowSteamTurbineCalculator.calc(
         headerCountInput, highToLowTurbineInput, highPressureHeaderOutput, highPressureHeaderInput,
         condensingTurbineInput, condensingTurbine, lowPressureHeaderInput, boiler, false);
-    //     std::cout << methodName << "highToLowPressureTurbine=" << highToLowPressureTurbine << std::endl;
+    SM_LOG(methodName << "highToLowPressureTurbine=" << highToLowPressureTurbine);
     const std::shared_ptr<Turbine>& highToLowPressureTurbineIdeal = highToLowSteamTurbineCalculator.calc(
         headerCountInput, highToLowTurbineInput, highPressureHeaderOutput, highPressureHeaderInput,
         condensingTurbineInput, condensingTurbine, lowPressureHeaderInput, boiler, true);
-    //     std::cout << methodName << "highToLowPressureTurbineIdeal=" << highToLowPressureTurbineIdeal << std::endl;
+    SM_LOG(methodName << "highToLowPressureTurbineIdeal=" << highToLowPressureTurbineIdeal);
 
     // 2G. Calculate high to medium steam turbine if in use
     const HighToMediumSteamTurbineCalculationsDomain& highToMediumSteamTurbineCalculationsDomain =
@@ -96,14 +96,13 @@ HighToMediumSteamTurbineCalculationsDomain HighPressureHeaderModeler::calcHighTo
     const std::shared_ptr<Turbine>& highToLowPressureTurbineIdeal) const {
     const std::string methodName = std::string("HighPressureHeaderModeler::") + std::string(__func__) + ": ";
 
-    //     std::cout << methodName << "calculating high to medium steam turbine" << std::endl;
+    SM_LOG(methodName << "calculating high to medium steam turbine");
     const HighToMediumSteamTurbineCalculationsDomain& highToMediumSteamTurbineCalculationsDomain =
         highToMediumSteamTurbineCalculator.calc(
             headerCountInput, highPressureHeaderOutput, highPressureHeaderInput, condensingTurbineInput,
             condensingTurbine, highToLowTurbineInput, highToLowPressureTurbine, highToLowPressureTurbineIdeal,
             highToMediumTurbineInput, mediumPressureHeaderInput, lowPressureHeaderInput, boiler);
-    //     std::cout << methodName << "highToMediumSteamTurbineCalculationsDomain="
-    //       << highToMediumSteamTurbineCalculationsDomain << std::endl;
+    SM_LOG(methodName << "highToMediumSteamTurbineCalculationsDomain=" << highToMediumSteamTurbineCalculationsDomain);
 
     return highToMediumSteamTurbineCalculationsDomain;
 }

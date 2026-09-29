@@ -1,4 +1,5 @@
 #include "steamModeler/domain/HeatLossFactory.h"
+#include "steamModeler/util/SteamModelerLogger.h"
 
 const HeatLoss HeatLossFactory::make(const HeaderWithHighestPressure&               highestPressureHeaderInput,
                                      const SteamSystemModelerTool::FluidProperties& headerOutput) const {
@@ -23,7 +24,7 @@ const HeatLoss HeatLossFactory::make(const SteamSystemModelerTool::FluidProperti
 
     HeatLoss heatLoss = {inletPressure, quantityType, quantityValue, inletMassFlow, percentHeatLoss};
 
-    // std::cout << methodName << "heatLoss=" << heatLoss << std::endl;
+    SM_LOG(methodName << "heatLoss=" << heatLoss);
 
     return heatLoss;
 }

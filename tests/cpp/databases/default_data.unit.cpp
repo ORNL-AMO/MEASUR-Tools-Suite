@@ -13,7 +13,7 @@ using namespace Catch;
 #include "databases/compressors_type5_data.h"
 #include "databases/compressors_type6_data.h"
 #include "databases/lighting_data.h"
-#include <compressedAir/compressors_data.h>
+#include <compressedAir/assessment/compressor_catalog.h>
 #include <other/lighting_data.h>
 #include "motorDriven/motor/MotorData.h"
 #include "processHeat/losses/solid_liquid_flue_gas_material.h"
@@ -36,15 +36,15 @@ TEST_CASE( "DefaultData CompressorType1 - getCompressorData", "[databases]" ) {
 
     {
         auto const& outputFirstCD = outputs[0];
-        CHECK(1 == outputFirstCD.ID());
-        CHECK("5 hp/3.7 kW" == outputFirstCD.model());
-        CHECK(85 == outputFirstCD.effFL());
+        CHECK(1 == outputFirstCD.id);
+        CHECK("5 hp/3.7 kW" == outputFirstCD.model);
+        CHECK(85 == outputFirstCD.fullLoadEfficiencyPercent);
 
         auto length = (int)outputs.size();
         auto const& outputLastCD = outputs[length - 1];
-        CHECK(length == outputLastCD.ID());
-        CHECK("125 hp/90 kW" == outputLastCD.model());
-        CHECK(92.40000153 == outputLastCD.effFL());
+        CHECK(length == outputLastCD.id);
+        CHECK("125 hp/90 kW" == outputLastCD.model);
+        CHECK(92.40000153 == outputLastCD.fullLoadEfficiencyPercent);
     }
 }
 
@@ -57,15 +57,15 @@ TEST_CASE( "DefaultData CompressorType1_GT100kW - getCompressorData", "[database
 
     {
         auto const& outputFirstCD = outputs[0];
-        CHECK(1 == outputFirstCD.ID());
-        CHECK("150 hp/110 kW" == outputFirstCD.model());
-        CHECK(93 == outputFirstCD.effFL());
+        CHECK(1 == outputFirstCD.id);
+        CHECK("150 hp/110 kW" == outputFirstCD.model);
+        CHECK(93 == outputFirstCD.fullLoadEfficiencyPercent);
 
         auto length = (int)outputs.size();
         auto const& outputLastCD = outputs[length - 1];
-        CHECK(length == outputLastCD.ID());
-        CHECK("500 hp/375 kW" == outputLastCD.model());
-        CHECK(94.5 == outputLastCD.effFL());
+        CHECK(length == outputLastCD.id);
+        CHECK("500 hp/375 kW" == outputLastCD.model);
+        CHECK(94.5 == outputLastCD.fullLoadEfficiencyPercent);
     }
 }
 
@@ -78,15 +78,15 @@ TEST_CASE( "DefaultData CompressorType2 - getCompressorData", "[databases]" ) {
 
     {
         auto const& outputFirstCD = outputs[0];
-        CHECK(1 == outputFirstCD.ID());
-        CHECK("100 hp/75 kW" == outputFirstCD.model());
-        CHECK(91.69999695 == outputFirstCD.effFL());
+        CHECK(1 == outputFirstCD.id);
+        CHECK("100 hp/75 kW" == outputFirstCD.model);
+        CHECK(91.69999695 == outputFirstCD.fullLoadEfficiencyPercent);
 
         auto length = (int)outputs.size();
         auto const& outputLastCD = outputs[length - 1];
-        CHECK(length == outputLastCD.ID());
-        CHECK("600 hp/450 kW" == outputLastCD.model());
-        CHECK(94.5 == outputLastCD.effFL());
+        CHECK(length == outputLastCD.id);
+        CHECK("600 hp/450 kW" == outputLastCD.model);
+        CHECK(94.5 == outputLastCD.fullLoadEfficiencyPercent);
     }
 }
 
@@ -99,15 +99,15 @@ TEST_CASE( "DefaultData CompressorType3 - getCompressorData", "[databases]" ) {
 
     {
         auto const& outputFirstCD = outputs[0];
-        CHECK(1 == outputFirstCD.ID());
-        CHECK("50 hp/37 kW" == outputFirstCD.model());
-        CHECK(91.69999695 == outputFirstCD.effFL());
+        CHECK(1 == outputFirstCD.id);
+        CHECK("50 hp/37 kW" == outputFirstCD.model);
+        CHECK(91.69999695 == outputFirstCD.fullLoadEfficiencyPercent);
 
         auto length = (int)outputs.size();
         auto const& outputLastCD = outputs[length - 1];
-        CHECK(length == outputLastCD.ID());
-        CHECK("500 hp/375 kW" == outputLastCD.model());
-        CHECK(94.5 == outputLastCD.effFL());
+        CHECK(length == outputLastCD.id);
+        CHECK("500 hp/375 kW" == outputLastCD.model);
+        CHECK(94.5 == outputLastCD.fullLoadEfficiencyPercent);
     }
 }
 
@@ -120,15 +120,15 @@ TEST_CASE( "DefaultData CompressorType4 - getCompressorData", "[databases]" ) {
 
     {
         auto const& outputFirstCD = outputs[0];
-        CHECK(1 == outputFirstCD.ID());
-        CHECK("5 hp/3.7 kW" == outputFirstCD.model());
-        CHECK(85 == outputFirstCD.effFL());
+        CHECK(1 == outputFirstCD.id);
+        CHECK("5 hp/3.7 kW" == outputFirstCD.model);
+        CHECK(85 == outputFirstCD.fullLoadEfficiencyPercent);
 
         auto length = (int)outputs.size();
         auto const& outputLastCD = outputs[length - 1];
-        CHECK(length == outputLastCD.ID());
-        CHECK("350 hp/260 kW" == outputLastCD.model());
-        CHECK(94.5 == outputLastCD.effFL());
+        CHECK(length == outputLastCD.id);
+        CHECK("350 hp/260 kW" == outputLastCD.model);
+        CHECK(94.5 == outputLastCD.fullLoadEfficiencyPercent);
     }
 }
 
@@ -141,15 +141,15 @@ TEST_CASE( "DefaultData CompressorType5 - getCompressorData", "[databases]" ) {
 
     {
         auto const& outputFirstCD = outputs[0];
-        CHECK(1 == outputFirstCD.ID());
-        CHECK("5 hp/3.7 kW" == outputFirstCD.model());
-        CHECK(85 == outputFirstCD.effFL());
+        CHECK(1 == outputFirstCD.id);
+        CHECK("5 hp/3.7 kW" == outputFirstCD.model);
+        CHECK(85 == outputFirstCD.fullLoadEfficiencyPercent);
 
         auto length = (int)outputs.size();
         auto const& outputLastCD = outputs[length - 1];
-        CHECK(length == outputLastCD.ID());
-        CHECK("400 hp/300 kW" == outputLastCD.model());
-        CHECK(94.5 == outputLastCD.effFL());
+        CHECK(length == outputLastCD.id);
+        CHECK("400 hp/300 kW" == outputLastCD.model);
+        CHECK(94.5 == outputLastCD.fullLoadEfficiencyPercent);
     }
 }
 
@@ -162,15 +162,15 @@ TEST_CASE( "DefaultData CompressorType6 - getCompressorData", "[databases]" ) {
 
     {
         auto const& outputFirstCD = outputs[0];
-        CHECK(1 == outputFirstCD.ID());
-        CHECK("example centrifugal/0 kW" == outputFirstCD.model());
-        CHECK(94.5 == outputFirstCD.effFL());
+        CHECK(1 == outputFirstCD.id);
+        CHECK("example centrifugal/0 kW" == outputFirstCD.model);
+        CHECK(94.5 == outputFirstCD.fullLoadEfficiencyPercent);
 
         auto length = (int)outputs.size();
         auto const& outputLastCD = outputs[length - 1];
-        CHECK(length == outputLastCD.ID());
-        CHECK("example centrifugal/0 kW" == outputLastCD.model());
-        CHECK(94.5 == outputLastCD.effFL());
+        CHECK(length == outputLastCD.id);
+        CHECK("example centrifugal/0 kW" == outputLastCD.model);
+        CHECK(94.5 == outputLastCD.fullLoadEfficiencyPercent);
     }
 }
 

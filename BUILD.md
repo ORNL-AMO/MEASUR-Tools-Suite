@@ -67,11 +67,12 @@ Install only what you need for the scenario you plan to use.
 
 ## 4. CMake Options
 
-| Option          | Default | Purpose                             |
-| --------------- | ------- | ----------------------------------- |
-| `BUILD_TESTING` | ON      | Build C++ unit tests (`cpp_tests`)  |
-| `BUILD_WASM`    | OFF     | Build WebAssembly module (`client`) |
-| `BUILD_PACKAGE` | OFF     | Enable install + packaging targets  |
+| Option                   | Default | Purpose                                                              |
+| ------------------------ | ------- | -------------------------------------------------------------------- |
+| `BUILD_TESTING`          | ON      | Build C++ unit tests (`cpp_tests`)                                   |
+| `BUILD_WASM`             | OFF     | Build WebAssembly module (`client`)                                  |
+| `BUILD_PACKAGE`          | OFF     | Enable install + packaging targets                                   |
+| `STEAM_MODELER_LOGGING`  | 0       | Enable verbose SteamModeler debug output (see [§10](#10-steammodeler-debug-logging)) |
 
 Mutually influential behavior:
 - When `BUILD_WASM=ON` the build disables `BUILD_TESTING` & `BUILD_PACKAGE` internally (see `CMakeLists.txt`). Toggle intentionally—do not expect tests with WASM in a single configure.
@@ -171,24 +172,48 @@ emcc --version  # should show Emscripten version
 
 With emsdk activated, configure and build:
 ```bash
-emcmake cmake -DBUILD_WASM=ON
-emmake make
+emcmake cmake -S . -B build-wasm -DBUILD_WASM=ON
+emmake make -C build-wasm
 ```
-Artifacts appear under `bin/`
+The build emits `build-wasm/bin/client.js` and
+`build-wasm/bin/client.wasm`. Release automation stages those two files in
+`bin/`, which is the canonical location used by tests and npm packaging.
 
 ### 6.5 WebAssembly Usage Example
 
-```js
-// Initialize module
-const moduleFactory = (await import('/path/to/client.js')).default;
-const toolsSuiteModule = await moduleFactory({
-	locateFile: (filename) => '/path/to/client.wasm'
+```ts
+import createModule, { type MeasurToolsSuite } from 'measur-tools-suite';
+
+const toolsSuiteModule: MeasurToolsSuite = await createModule({
+	locateFile: (filename) => `/path/to/${filename}`
 });
 
-// Example call
+// Example 1: wallTotalHeatLoss — returns a number directly
 const totalHeatLoss = toolsSuiteModule.wallTotalHeatLoss(
 	500, 80, 225, 10, 0.9, 1.394, 1
 );
+console.log('Wall total heat loss:', totalHeatLoss);
+
+// Example 2: Dryer operating cost — stateless value-object API
+const res = toolsSuiteModule.calculateDryerOperatingCost({
+	dryerType: toolsSuiteModule.DryerType.Heatless,
+	flowRate: 1752,
+	pressure: 50,
+	temperature: 100,
+	annualOperatingHours: 8736,
+	costOfElectricity: 0.08,
+	costOfCompressedAir: 0.2,
+	costOfCoolingWater: 0.25,
+	heaterPower: 0,
+	heatingHoursPerDay: 0,
+	purgeRate: 15,
+	purgeFlowRate: 0,
+	designDDCPercentage: 16.33,
+	regenerationCycleLength: 4,
+	motorPower: 0,
+	purgeInputMode: toolsSuiteModule.PurgeInputMode.PercentOfDryerCapacity
+});
+console.log('DryerOperatingCost => Water removed:', res.waterRemoved);
 ```
 
 ### 6.6 WebAssembly Tests (Browser)
@@ -434,6 +459,47 @@ docker exec -it measur-tools-suite-build /bin/bash
 # Stop container
 docker compose down
 ```
+
+---
+
+## 10. SteamModeler Debug Logging
+
+The SteamModeler and all of its supporting classes include verbose debug logging that is **disabled by default** so it never appears in production or WebAssembly builds.
+
+The toggle lives in a single header: `include/steamModeler/util/SteamModelerLogger.h`
+
+```cpp
+#ifndef STEAM_MODELER_LOGGING
+#define STEAM_MODELER_LOGGING 0   // 0 = silent (default), 1 = verbose
+#endif
+```
+
+### Enabling logging
+
+**Option A — Edit the header (local debug session)**
+
+Change the define to `1` and rebuild:
+
+```cpp
+#define STEAM_MODELER_LOGGING 1
+```
+
+**Option B — Compiler flag (no source changes required)**
+
+Pass the flag at configure time:
+
+```bash
+cmake -S . -B build-cpp -DSTEAM_MODELER_LOGGING=1
+cmake --build build-cpp
+```
+
+Or directly via the compiler (without CMake):
+
+```bash
+make CXXFLAGS="-DSTEAM_MODELER_LOGGING=1"
+```
+
+> **Note:** Always revert to `0` (or remove the flag) before building the WASM module for production. Debug output through `std::cout` is visible in the browser DevTools console when `STEAM_MODELER_LOGGING=1` is set in a WASM build.
 
 ---
 

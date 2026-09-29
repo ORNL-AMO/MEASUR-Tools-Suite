@@ -1,6 +1,6 @@
 /**
  * @defgroup decibels_method_calculator Decibels Method Calculator
- * @ingroup compressed_air_assessments
+ * @ingroup compressed_air_calculators
  * @brief Estimates compressed air leak flow rate and annual consumption using bilinear
  *        interpolation from ultrasonic decibel and line pressure measurements.
  * @details This calculator implements the decibels method, a non-contact field technique

@@ -29,6 +29,8 @@
  * - **Bridging Compressor Reaction Delay** – sizes a tank that bridges the
  *   compressor reaction time for a demand event located at a known distance from
  *   the compressor room.
+ * - **Compressor Cycle** – sizes a tank based on the compressor's duty cycle
+ *   (load/unload times and rated capacity) and the operating pressure band.
  *
  * @see @ref receiver_tank_calculator
  */
@@ -302,5 +304,73 @@ struct BridgingInput {
  * @return SizeResult containing the required tank size in gallons.
  */
 SizeResult calculateBridgingSize(const BridgingInput& input);
+
+// ============================================================
+//  Compressor Cycle Method
+// ============================================================
+
+/**
+ * @ingroup receiver_tank_calculator
+ * @struct CompressorCycleInput
+ * @brief Input parameters for the Compressor Cycle sizing method.
+ */
+struct CompressorCycleInput {
+    double load_time            = 0.0; ///< Compressor loaded time per cycle @unitb{\minute}
+    double unload_time          = 0.0; ///< Compressor unloaded time per cycle @unitb{\minute}
+    double compressor_capacity  = 0.0; ///< Rated compressor output at full load @unitb{\cubicFoot\per\minute}
+    double unload_pressure      = 0.0; ///< Pressure at which the compressor unloads @unitb{\psi}
+    double full_load_pressure   = 0.0; ///< Pressure at which the compressor fully loads @unitb{\psi}
+    double atmospheric_pressure = physics::us::kAtmosphericPressurePsi; ///< Local atmospheric pressure @unitb{\psi}
+};
+
+/**
+ * @ingroup receiver_tank_calculator
+ * @struct CompressorCycleResult
+ * @brief Result of the Compressor Cycle sizing calculation.
+ */
+struct CompressorCycleResult {
+    double tank_size           = 0.0; ///< Required receiver tank size (liquid storage volume) @unitb{\gallon}
+    double effective_capacity  = 0.0; ///< Effective net compressor capacity over a full cycle @unitb{\cubicFoot\per\minute}
+    double pressure_change     = 0.0; ///< Pressure band width (@math{P_{unload} - P_{load}}) @unitb{\psi}
+    double volume_cf           = 0.0; ///< Required storage volume (area storage volume) @unitb{\cubicFoot}
+};
+
+/**
+ * @brief Calculates receiver tank size from the compressor duty cycle and pressure band.
+ * @details Sizes a receiver tank so that the compressor can run at its natural load/unload
+ *          cycle without short-cycling. The effective net capacity is the fraction of the
+ *          compressor's rated output actually consumed during a cycle, and the required
+ *          storage volume is the amount of air that must be stored during the unloaded
+ *          interval to keep system pressure within the operating band.
+ *
+ * @formula{receiver-tank-compressor-cycle-size;
+ *   V_{required} = \frac{Q_{comp} \cdot t_{load} \cdot t_{unload} \cdot P_{atm}}
+ *                       {60 \cdot (t_{load} + t_{unload}) \cdot (P_{unload} - P_{load})} \cdot k_{gal}
+ * }
+ *
+ * where:
+ * @symtable
+ * @symrow{V_{required}; Required receiver tank size; \gallon}
+ * @symrow{Q_{comp}; Rated compressor capacity at full load; \cubicFoot\per\minute}
+ * @symrow{t_{load}; Compressor loaded time per cycle; \minute}
+ * @symrow{t_{unload}; Compressor unloaded time per cycle; \minute}
+ * @symrow{P_{atm}; Atmospheric pressure; \psi}
+ * @symrow{P_{unload}; Compressor unload pressure; \psi}
+ * @symrow{P_{load}; Compressor full-load pressure; \psi}
+ * @symrow{60; Seconds per minute conversion; \second\per\minute}
+ * @symrow{k_{gal}; Gallons per cubic foot (7.48); \gallon\per\cubicFoot}
+ * @endsymtable
+ *
+ * @note The numerator factor @math{Q_{comp} \cdot t_{load} / (t_{load} + t_{unload})} is the
+ *       effective net capacity — the average flow the compressor delivers over a full cycle.
+ *       Multiplying by @math{t_{unload}} converts that rate to the volume (ft³) that must be
+ *       buffered during the unloaded phase.
+ *
+ * @param[in] input  CompressorCycleInput
+ * @return CompressorCycleResult containing the required tank size in gallons together with
+ *         the intermediate results: effective capacity (cfm), pressure change (psi), and
+ *         area storage volume (ft³).
+ */
+CompressorCycleResult calculateCompressorCycleSize(const CompressorCycleInput& input);
 
 } // namespace receiver_tank

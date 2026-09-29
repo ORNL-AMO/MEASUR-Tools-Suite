@@ -25,18 +25,35 @@ Check out the [Master List of MEASUR Calculators](https://github.com/ORNL-AMO/AM
 npm install measur-tools-suite
 ```
 
+**JavaScript**
+
 ```js
 // Initialize module
-const moduleFactory = (await import('/path/to/client.js')).default;
+const moduleFactory = (await import('measur-tools-suite')).default;
 const toolsSuiteModule = await moduleFactory({
-	locateFile: (filename) => '/path/to/client.wasm'
+	locateFile: (filename) => `/path/to/${filename}`
 });
 
-// Example call
+// Plain function call — returns a number directly
 const totalHeatLoss = toolsSuiteModule.wallTotalHeatLoss(
 	500, 80, 225, 10, 0.9, 1.394, 1
 );
+console.log('Wall total heat loss:', totalHeatLoss);
 ```
+
+**TypeScript** — `MeasurToolsSuite` is the fully-typed module instance; no casts needed.
+
+```ts
+import createModule, { type MeasurToolsSuite } from 'measur-tools-suite';
+
+const toolsSuiteModule: MeasurToolsSuite = await createModule({
+	locateFile: (filename) => `/path/to/${filename}`
+});
+```
+
+Package consumers should import `measur-tools-suite`, not `bin/client.js`
+directly. Deploy the package's `bin/client.wasm` with your application and use
+`locateFile` to return its public URL.
 
 ### Building from Source
 
@@ -46,8 +63,8 @@ cmake -S . -B build-cpp
 cmake --build build-cpp
 
 # WebAssembly build (requires Emscripten)
-emcmake cmake -DBUILD_WASM=ON
-emmake make
+emcmake cmake -S . -B build-wasm -DBUILD_WASM=ON
+emmake make -C build-wasm
 
 # Packaging
 cmake -S . -B build-pkg -DBUILD_PACKAGE=ON -DBUILD_TESTING=OFF

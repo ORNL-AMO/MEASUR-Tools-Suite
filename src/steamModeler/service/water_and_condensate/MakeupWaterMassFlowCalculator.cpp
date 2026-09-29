@@ -1,4 +1,5 @@
 #include "steamModeler/service/water_and_condensate/MakeupWaterMassFlowCalculator.h"
+#include "steamModeler/util/SteamModelerLogger.h"
 
 SteamSystemModelerTool::FluidProperties MakeupWaterMassFlowCalculator::calc(
     const int headerCountInput, const HeaderWithHighestPressure& highPressureHeaderInput,
@@ -13,18 +14,18 @@ SteamSystemModelerTool::FluidProperties MakeupWaterMassFlowCalculator::calc(
     const double                                                   lowPressureVentedSteam) const {
     const std::string methodName = std::string("MakeupWaterMassFlowCalculator::") + std::string(__func__) + ": ";
 
-    // std::cout << methodName << "calculating inletHeaderFlow" << std::endl;
+    SM_LOG(methodName << "calculating inletHeaderFlow");
     const double inletHeaderFlow =
         calcInletHeaderFlow(headerCountInput, highPressureHeaderInput, lowPressureHeaderInput,
                             highPressureHeaderCalculationsDomain, lowPressureHeaderCalculationsDomain);
 
-    // std::cout << methodName << "calculating makeupWaterMassFlow" << std::endl;
+    SM_LOG(methodName << "calculating makeupWaterMassFlow");
     const double makeupWaterMassFlow = calcMakeupWaterMassFlow(
         headerCountInput, mediumPressureHeaderInput, lowPressureHeaderInput, condensingTurbineInput, boilerInput,
         boiler, returnCondensate, inletHeaderFlow, highPressureHeaderCalculationsDomain,
         mediumPressureHeaderCalculationsDomain, lowPressureHeaderCalculationsDomain, lowPressureVentedSteam);
 
-    // std::cout << methodName << "calculating energyFlow" << std::endl;
+    SM_LOG(methodName << "calculating energyFlow");
     const double energyFlow = calcMakeupWaterEnergyFlow(makeupWaterMassFlow, makeupWaterOutput);
 
     return {makeupWaterMassFlow, energyFlow, makeupWaterOutput};
@@ -38,13 +39,13 @@ double MakeupWaterMassFlowCalculator::calcInletHeaderFlow(
     const std::string methodName = std::string("MakeupWaterMassFlowCalculator::") + std::string(__func__) + ": ";
 
     if (headerCountInput == 1) {
-        // std::cout << methodName << "only 1 header, calculating inletHeaderFlow from high pressure" << std::endl;
+        SM_LOG(methodName << "only 1 header, calculating inletHeaderFlow from high pressure");
         const SteamSystemModelerTool::FluidProperties& highPressureHeaderOutput =
             highPressureHeaderCalculationsDomain.highPressureHeaderOutput;
         return calcInletHeaderFlow(highPressureHeaderOutput, highPressureHeaderInput);
     }
     else {
-        // std::cout << methodName << "multiple headers, calculating inletHeaderFlow from low pressure" << std::endl;
+        SM_LOG(methodName << "multiple headers, calculating inletHeaderFlow from low pressure");
         const SteamSystemModelerTool::FluidProperties& lowPressureHeaderOutput =
             lowPressureHeaderCalculationsDomain->lowPressureHeaderOutput;
         return calcInletHeaderFlow(lowPressureHeaderOutput, lowPressureHeaderInput);
@@ -60,8 +61,7 @@ double MakeupWaterMassFlowCalculator::calcInletHeaderFlow(
     const double processSteamUsage = highPressureHeaderInput.getProcessSteamUsage();
     const double result            = massFlow - processSteamUsage;
 
-    // std::cout << methodName << "massFlow=" << massFlow << " - processSteamUsage=" << processSteamUsage
-    //  << ": result=" << result << std::endl;
+    SM_LOG(methodName << "massFlow=" << massFlow << " - processSteamUsage=" << processSteamUsage << ": result=" << result);
 
     return result;
 }
@@ -75,8 +75,7 @@ double MakeupWaterMassFlowCalculator::calcInletHeaderFlow(
     const double processSteamUsage = lowPressureHeaderInput->getProcessSteamUsage();
     const double result            = massFlow - processSteamUsage;
 
-    // std::cout << methodName << "massFlow=" << massFlow << " - processSteamUsage=" << processSteamUsage
-    //  << ": result=" << result << std::endl;
+    SM_LOG(methodName << "massFlow=" << massFlow << " - processSteamUsage=" << processSteamUsage << ": result=" << result);
 
     return result;
 }
@@ -95,63 +94,44 @@ double MakeupWaterMassFlowCalculator::calcMakeupWaterMassFlow(
     double makeupWaterMassFlow = calcMakeupWaterMassFlow(boilerInput, boiler);
 
     if (headerCountInput > 1) {
-        // std::cout << methodName << "multiple headers, adjusting makeupWaterMassFlow" << std::endl;
+        SM_LOG(methodName << "multiple headers, adjusting makeupWaterMassFlow");
 
         if (headerCountInput == 3 && mediumPressureHeaderInput->isDesuperheatSteamIntoNextHighest()) {
-            // std::cout << methodName
-            //   << "mediumPressureHeaderInput.isDesuperheatSteamIntoNextHighest,"
-            //   << " adding highToMediumPressurePrv feedwaterMassFlow to makeupWaterMassFlow" << std::endl;
+            SM_LOG(methodName << "mediumPressureHeaderInput.isDesuperheatSteamIntoNextHighest," << " adding highToMediumPressurePrv feedwaterMassFlow to makeupWaterMassFlow");
             const std::shared_ptr<PrvWithoutDesuperheating>& highToMediumPressurePrv =
                 mediumPressureHeaderCalculationsDomain->highToMediumPressurePrv;
             makeupWaterMassFlow =
                 addPrvFeedwaterMassFlowToMakeupWaterMassFlow(highToMediumPressurePrv, makeupWaterMassFlow);
         }
         else {
-            // std::cout << methodName
-            //   << "not 3 headers and not mediumPressureHeaderInput.isDesuperheatSteamIntoNextHighest,"
-            //   << " skipping highToMediumPressurePrv feedwaterMassFlow"
-            //   << std::endl;
+            SM_LOG(methodName << "not 3 headers and not mediumPressureHeaderInput.isDesuperheatSteamIntoNextHighest," << " skipping highToMediumPressurePrv feedwaterMassFlow");
         }
 
         if (lowPressureHeaderInput->isDesuperheatSteamIntoNextHighest()) {
-            // std::cout << methodName
-            //   << "lowPressureHeaderInput.isDesuperheatSteamIntoNextHighest,"
-            //   << " adding lowPressurePrv feedwaterMassFlow to makeupWaterMassFlow" << std::endl;
+            SM_LOG(methodName << "lowPressureHeaderInput.isDesuperheatSteamIntoNextHighest," << " adding lowPressurePrv feedwaterMassFlow to makeupWaterMassFlow");
             const std::shared_ptr<PrvWithoutDesuperheating>& lowPressurePrv =
                 lowPressureHeaderCalculationsDomain->lowPressurePrv;
             makeupWaterMassFlow = addPrvFeedwaterMassFlowToMakeupWaterMassFlow(lowPressurePrv, makeupWaterMassFlow);
         }
         else {
-            // std::cout << methodName
-            //   << "not lowPressureHeaderInput.isDesuperheatSteamIntoNextHighest,"
-            //   << " skipping lowPressurePrv feedwaterMassFlow"
-            //   << std::endl;
+            SM_LOG(methodName << "not lowPressureHeaderInput.isDesuperheatSteamIntoNextHighest," << " skipping lowPressurePrv feedwaterMassFlow");
         }
 
         if (condensingTurbineInput.isUseTurbine()) {
-            // std::cout << methodName
-            //   << "condensingTurbine exists, subtracting its mass flow from makeupWaterMassFlow" << std::endl;
+            SM_LOG(methodName << "condensingTurbine exists, subtracting its mass flow from makeupWaterMassFlow");
             const std::shared_ptr<Turbine>& condensingTurbine = highPressureHeaderCalculationsDomain.condensingTurbine;
             const double                    massFlow          = condensingTurbine->getMassFlow();
             makeupWaterMassFlow -= massFlow;
-            // std::cout << methodName << "massFlow=" << massFlow << ": result=" << makeupWaterMassFlow << std::endl;
+            SM_LOG(methodName << "massFlow=" << massFlow << ": result=" << makeupWaterMassFlow);
         }
         else {
-            // std::cout << methodName
-            //   << "not condensingTurbineInput.isUseTurbine,"
-            //   << " skipping condensingTurbine massFlow"
-            //   << std::endl;
+            SM_LOG(methodName << "not condensingTurbineInput.isUseTurbine," << " skipping condensingTurbine massFlow");
         }
     }
 
     const double returnCondensateMassFlow = returnCondensate.massFlow;
     const double result = makeupWaterMassFlow - returnCondensateMassFlow - inletHeaderFlow + lowPressureVentedSteam;
-    // std::cout << methodName << "makeupWaterMassFlow=" << makeupWaterMassFlow
-    //   << " - returnCondensateMassFlow=" << returnCondensateMassFlow
-    //   << " - inletHeaderFlow=" << inletHeaderFlow
-    //   << " + lowPressureVentedSteam=" << lowPressureVentedSteam
-    //   << ": result=" << result
-    //   << std::endl;
+    SM_LOG(methodName << "makeupWaterMassFlow=" << makeupWaterMassFlow << " - returnCondensateMassFlow=" << returnCondensateMassFlow << " - inletHeaderFlow=" << inletHeaderFlow << " + lowPressureVentedSteam=" << lowPressureVentedSteam << ": result=" << result);
 
     return result;
 }
@@ -164,8 +144,7 @@ double MakeupWaterMassFlowCalculator::calcMakeupWaterMassFlow(const BoilerInput&
     const double deaeratorVentRate = boilerInput.getDeaeratorVentRate();
     const double result            = massFlow * (1 + deaeratorVentRate / 100);
 
-    // std::cout << methodName << "massFlow=" << massFlow << " * (1 + deaeratorVentRate=" << deaeratorVentRate
-    //   << " / 100): result=" << result << std::endl;
+    SM_LOG(methodName << "massFlow=" << massFlow << " * (1 + deaeratorVentRate=" << deaeratorVentRate << " / 100): result=" << result);
 
     return result;
 }
@@ -177,8 +156,7 @@ double MakeupWaterMassFlowCalculator::addPrvFeedwaterMassFlowToMakeupWaterMassFl
     const double feedwaterMassFlow = getFeedwaterMassFlow(prv);
     const double result            = makeupWaterMassFlow + feedwaterMassFlow;
 
-    // std::cout << methodName << "makeupWaterMassFlow=" << makeupWaterMassFlow
-    //  << " + feedwaterMassFlow=" << feedwaterMassFlow << ": result=" << result << std::endl;
+    SM_LOG(methodName << "makeupWaterMassFlow=" << makeupWaterMassFlow << " + feedwaterMassFlow=" << feedwaterMassFlow << ": result=" << result);
 
     return result;
 }
@@ -203,8 +181,7 @@ double MakeupWaterMassFlowCalculator::calcMakeupWaterEnergyFlow(
     const double specificEnthalpy = makeupWater.specificEnthalpy;
     const double result           = massFlow * specificEnthalpy;
 
-    // std::cout << methodName << "massFlow=" << massFlow << " * specificEnthalpy=" << specificEnthalpy
-    //  << ": result=" << result << std::endl;
+    SM_LOG(methodName << "massFlow=" << massFlow << " * specificEnthalpy=" << specificEnthalpy << ": result=" << result);
 
     return result;
 }

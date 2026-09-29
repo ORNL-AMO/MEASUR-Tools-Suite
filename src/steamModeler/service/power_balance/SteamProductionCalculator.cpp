@@ -1,4 +1,5 @@
 #include "steamModeler/service/power_balance/SteamProductionCalculator.h"
+#include "steamModeler/util/SteamModelerLogger.h"
 
 double SteamProductionCalculator::calc(
     const int headerCountInput, const std::shared_ptr<HeaderNotHighestPressure>& mediumPressureHeaderInput,
@@ -9,7 +10,7 @@ double SteamProductionCalculator::calc(
     const std::shared_ptr<LowPressureHeaderCalculationsDomain>&    lowPressureHeaderCalculationsDomain) const {
     const std::string methodName = std::string("SteamProductionCalculator::") + std::string(__func__) + ": ";
 
-    // std::cout << methodName << "calculating steamProduction" << std::endl;
+    SM_LOG(methodName << "calculating steamProduction");
 
     const double boilerOutputMassFlow = boiler.getSteamProperties().massFlow;
 
@@ -23,10 +24,7 @@ double SteamProductionCalculator::calc(
     // steam production = steam produced by (boiler) + (flash tanks) + (PRV feedwater)
     const double steamProduction = boilerOutputMassFlow + flashTankAdditionalSteam + prvAdditionalSteam;
 
-    // std::cout << methodName << "boilerOutputMassFlow=" << boilerOutputMassFlow
-    //   << ", flashTankAdditionalSteam=" << flashTankAdditionalSteam
-    //   << ", prvAdditionalSteam=" << prvAdditionalSteam
-    //   << ": steamProduction=" << steamProduction << std::endl;
+    SM_LOG(methodName << "boilerOutputMassFlow=" << boilerOutputMassFlow << ", flashTankAdditionalSteam=" << flashTankAdditionalSteam << ", prvAdditionalSteam=" << prvAdditionalSteam << ": steamProduction=" << steamProduction);
 
     return steamProduction;
 }
@@ -41,7 +39,7 @@ double SteamProductionCalculator::calcFlashTankAdditionalSteam(
     const std::shared_ptr<LowPressureHeaderCalculationsDomain>& lowPressureHeaderCalculationsDomain) const {
     const std::string methodName = std::string("SteamProductionCalculator::") + std::string(__func__) + ": ";
 
-    // std::cout << methodName << "calculating flashTankAdditionalSteam" << std::endl;
+    SM_LOG(methodName << "calculating flashTankAdditionalSteam");
 
     double flashTankAdditionalSteam = 0;
 
@@ -54,12 +52,11 @@ double SteamProductionCalculator::calcFlashTankAdditionalSteam(
             const SteamSystemModelerTool::FluidProperties& outletGasSaturatedProperties =
                 blowdownFlashTank->getOutletGasSaturatedProperties();
             const double massFlow = outletGasSaturatedProperties.massFlow;
-            // std::cout << methodName
-            //          << "boiler blowdown is flashed, adding blowdownFlashTank massFlow=" << massFlow << std::endl;
+            SM_LOG(methodName << "boiler blowdown is flashed, adding blowdownFlashTank massFlow=" << massFlow);
             flashTankAdditionalSteam += massFlow;
         }
         else {
-            // std::cout << methodName << "blowdown is not flashed, not adding blowdownFlashTank massFlow" << std::endl;
+            SM_LOG(methodName << "blowdown is not flashed, not adding blowdownFlashTank massFlow");
         }
 
         // steam added by flash tank into low pressure header
@@ -68,9 +65,7 @@ double SteamProductionCalculator::calcFlashTankAdditionalSteam(
                 const SteamSystemModelerTool::FluidProperties& outletGasSaturatedProperties =
                     highPressureCondensateFlashTank->getOutletGasSaturatedProperties();
                 const double massFlow = outletGasSaturatedProperties.massFlow;
-                // std::cout << methodName
-                //   << "lowPressureHeader condensate is flashed and headerCountInput==2"
-                //   << ", adding highPressureCondensateFlashTank massFlow=" << massFlow << std::endl;
+                SM_LOG(methodName << "lowPressureHeader condensate is flashed and headerCountInput==2" << ", adding highPressureCondensateFlashTank massFlow=" << massFlow);
                 flashTankAdditionalSteam += massFlow;
             }
             else if (headerCountInput == 3) {
@@ -82,16 +77,12 @@ double SteamProductionCalculator::calcFlashTankAdditionalSteam(
                 const SteamSystemModelerTool::FluidProperties& outletGasSaturatedProperties =
                     mediumPressureCondensateFlashTank->getOutletGasSaturatedProperties();
                 const double massFlow = outletGasSaturatedProperties.massFlow;
-                // std::cout << methodName
-                //   << "lowPressureHeader condensate is flashed and headerCountInput==3"
-                //   << ", adding mediumPressureCondensateFlashTank massFlow=" << massFlow << std::endl;
+                SM_LOG(methodName << "lowPressureHeader condensate is flashed and headerCountInput==3" << ", adding mediumPressureCondensateFlashTank massFlow=" << massFlow);
                 flashTankAdditionalSteam += massFlow;
             }
         }
         else {
-            // std::cout << methodName
-            //   << "lowPressureHeader condensate is not flashed, not adding highPressureCondensateFlashTank massFlow"
-            //   << std::endl;
+            SM_LOG(methodName << "lowPressureHeader condensate is not flashed, not adding highPressureCondensateFlashTank massFlow");
         }
 
         if (headerCountInput == 3) {
@@ -100,19 +91,16 @@ double SteamProductionCalculator::calcFlashTankAdditionalSteam(
                 const SteamSystemModelerTool::FluidProperties& outletGasSaturatedProperties =
                     highPressureCondensateFlashTank->getOutletGasSaturatedProperties();
                 const double massFlow = outletGasSaturatedProperties.massFlow;
-                // std::cout << methodName
-                //   << "headerCountInput==3, adding highPressureCondensateFlashTank massFlow=" << massFlow
-                //   << std::endl;
+                SM_LOG(methodName << "headerCountInput==3, adding highPressureCondensateFlashTank massFlow=" << massFlow);
                 flashTankAdditionalSteam += massFlow;
             }
         }
     }
     else {
-        // std::cout << methodName << "headerCountInput=" << headerCountInput
-        //   << " (not > 1), not adding boiler, medium, or high pressureCondensateFlashTank massFlow" << std::endl;
+        SM_LOG(methodName << "headerCountInput=" << headerCountInput << " (not > 1), not adding boiler, medium, or high pressureCondensateFlashTank massFlow");
     }
 
-    // std::cout << methodName << "flashTankAdditionalSteam=" << flashTankAdditionalSteam << std::endl;
+    SM_LOG(methodName << "flashTankAdditionalSteam=" << flashTankAdditionalSteam);
 
     return flashTankAdditionalSteam;
 }
@@ -125,49 +113,40 @@ double SteamProductionCalculator::calcPrvAdditionalSteam(
     const std::shared_ptr<LowPressureHeaderCalculationsDomain>&    lowPressureHeaderCalculationsDomain) const {
     const std::string methodName = std::string("SteamProductionCalculator::") + std::string(__func__) + ": ";
 
-    // std::cout << methodName << "calculating prvAdditionalSteam" << std::endl;
+    SM_LOG(methodName << "calculating prvAdditionalSteam");
 
     double prvAdditionalSteam = 0;
 
     if (headerCountInput > 1) {
         // steam added by desuperheating feedwater
         if (lowPressureHeaderInput->isDesuperheatSteamIntoNextHighest()) {
-            // std::cout << methodName
-            //   << "headerCountInput > 1 and lowPressureHeader isDesuperheatSteamIntoNextHighest is true"
-            //   << ", adding lowPressurePrv massFlow" << std::endl;
+            SM_LOG(methodName << "headerCountInput > 1 and lowPressureHeader isDesuperheatSteamIntoNextHighest is true" << ", adding lowPressurePrv massFlow");
             const std::shared_ptr<PrvWithoutDesuperheating>& lowPressurePrv =
                 lowPressureHeaderCalculationsDomain->lowPressurePrv;
             prvAdditionalSteam = addPrvMassFlow(prvAdditionalSteam, lowPressurePrv);
         }
         else {
-            // std::cout << methodName
-            //   << "headerCountInput not > 1 or lowPressureHeader isDesuperheatSteamIntoNextHighest is false"
-            //   << ", not adding lowPressurePrv massFlow" << std::endl;
+            SM_LOG(methodName << "headerCountInput not > 1 or lowPressureHeader isDesuperheatSteamIntoNextHighest is false" << ", not adding lowPressurePrv massFlow");
         }
 
         if (headerCountInput == 3) {
             // steam added by desuperheating feedwater
             if (mediumPressureHeaderInput->isDesuperheatSteamIntoNextHighest()) {
-                // std::cout << methodName
-                //   << "headerCountInput == 3 and mediumPressureHeader isDesuperheatSteamIntoNextHighest is true"
-                //   << ", adding highToMediumPressurePrv massFlow" << std::endl;
+                SM_LOG(methodName << "headerCountInput == 3 and mediumPressureHeader isDesuperheatSteamIntoNextHighest is true" << ", adding highToMediumPressurePrv massFlow");
                 const std::shared_ptr<PrvWithoutDesuperheating>& highToMediumPressurePrv =
                     mediumPressureHeaderCalculationsDomain->highToMediumPressurePrv;
                 prvAdditionalSteam = addPrvMassFlow(prvAdditionalSteam, highToMediumPressurePrv);
             }
             else {
-                // std::cout << methodName
-                //   << "headerCountInput not == 3 or mediumPressureHeader isDesuperheatSteamIntoNextHighest is false"
-                //   << ", not adding highToMediumPressurePrv massFlow" << std::endl;
+                SM_LOG(methodName << "headerCountInput not == 3 or mediumPressureHeader isDesuperheatSteamIntoNextHighest is false" << ", not adding highToMediumPressurePrv massFlow");
             }
         }
     }
     else {
-        // std::cout << methodName << "headerCountInput=" << headerCountInput
-        //<< " (not > 1), no PRVs to calc additional steam for" << std::endl;
+        SM_LOG(methodName << "headerCountInput=" << headerCountInput << " (not > 1), no PRVs to calc additional steam for");
     }
 
-    // std::cout << methodName << "prvAdditionalSteam=" << prvAdditionalSteam << std::endl;
+    SM_LOG(methodName << "prvAdditionalSteam=" << prvAdditionalSteam);
 
     return prvAdditionalSteam;
 }
@@ -181,8 +160,7 @@ double SteamProductionCalculator::addPrvMassFlow(double                         
     const double diff           = outletMassFlow - inletMassFlow;
     const double result         = prvAdditionalSteam + diff;
 
-    // std::cout << methodName << "outletMassFlow=" << outletMassFlow << ", inletMassFlow=" << inletMassFlow
-    //  << ", diff=" << diff << ": result=" << result << std::endl;
+    SM_LOG(methodName << "outletMassFlow=" << outletMassFlow << ", inletMassFlow=" << inletMassFlow << ", diff=" << diff << ": result=" << result);
 
     return result;
 }

@@ -12,8 +12,7 @@ EMSCRIPTEN_BINDINGS(compressedAirReduction_module) {
 
     value_object<BagMethodData>("BagMethodData")
         .field("bagFillTime",  &BagMethodData::bag_fill_time)
-        .field("bagVolume",    &BagMethodData::bag_volume)
-        .field("numberOfBags", &BagMethodData::number_of_bags);
+        .field("bagVolume",    &BagMethodData::bag_volume);
 
     value_object<PressureMethodData>("PressureMethodData")
         .field("nozzleType",      &PressureMethodData::nozzle_type)

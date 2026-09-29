@@ -199,7 +199,7 @@ ProcessHeatProperties processHeatProperties(GasComposition compositions, const d
 }
 
 double totalHeatLoss(double flue_gas_temperature, double excess_air_percentage, double combustion_air_temperature,
-                     GasComposition& compositions, double fuel_temperature) {
+                     const GasComposition& compositions, double fuel_temperature) {
     double                combustion_air_moisture = 60;
     double                excess_air              = 0;
     ProcessHeatProperties process_heat_properties_results =

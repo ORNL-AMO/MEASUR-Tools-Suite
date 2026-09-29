@@ -1,4 +1,5 @@
 #include "steamModeler/service/water_and_condensate/MakeupWaterAndCondensateHeaderModeler.h"
+#include "steamModeler/util/SteamModelerLogger.h"
 
 MakeupWaterAndCondensateHeaderCalculationsDomain MakeupWaterAndCondensateHeaderModeler::model(
     const int headerCountInput, const HeaderWithHighestPressure& highPressureHeaderInput,
@@ -13,68 +14,64 @@ MakeupWaterAndCondensateHeaderCalculationsDomain MakeupWaterAndCondensateHeaderM
         std::string("MakeupWaterAndCondensateHeaderModeler::") + std::string(__func__) + ": ";
 
     // 5A. Calculate Combined Return Condensate
-    //     std::cout << methodName << "calculating combinedCondensateHeader" << std::endl;
+    SM_LOG(methodName << "calculating combinedCondensateHeader");
     const Header& combinedCondensateHeader =
         combinedCondensateCalculator.calc(headerCountInput, highPressureHeaderCalculationsDomain,
                                           mediumPressureHeaderCalculationsDomain, lowPressureHeaderCalculationsDomain);
-    //     std::cout << methodName << "combinedCondensateHeader=" << combinedCondensateHeader << std::endl;
+    SM_LOG(methodName << "combinedCondensateHeader=" << combinedCondensateHeader);
 
-    //     std::cout << methodName << "calculating combinedCondensate" << std::endl;
+    SM_LOG(methodName << "calculating combinedCondensate");
     const SteamSystemModelerTool::FluidProperties& combinedCondensate =
         fluidPropertiesFactory.make(combinedCondensateHeader);
-    //     std::cout << methodName << "combinedCondensate=" << combinedCondensate << std::endl;
+    SM_LOG(methodName << "combinedCondensate=" << combinedCondensate);
 
     // 5B. Calculate return condensate
-    //     std::cout << methodName << "calculating returnCondensate" << std::endl;
+    SM_LOG(methodName << "calculating returnCondensate");
     const SteamSystemModelerTool::FluidProperties& returnCondensate =
         returnCondensateCalculator.calc(highPressureHeaderInput, combinedCondensateHeader);
-    //     std::cout << methodName << "returnCondensate=" << returnCondensate << std::endl;
+    SM_LOG(methodName << "returnCondensate=" << returnCondensate);
 
     // 5C. Flash return condensate if selected
-    //     std::cout << methodName << "calculating flash returnCondensate" << std::endl;
+    SM_LOG(methodName << "calculating flash returnCondensate");
     const ReturnCondensateCalculationsDomain& returnCondensateCalculationsDomain =
         returnCondensateCalculator.flash(highPressureHeaderInput, returnCondensate);
     const SteamSystemModelerTool::FluidProperties returnCondensateFlashed =
         returnCondensateCalculationsDomain.returnCondensateFlashed;
-    //     std::cout << methodName << "returnCondensateCalculationsDomain=" << returnCondensateCalculationsDomain <<
-    //     std::endl;
+    SM_LOG(methodName << "returnCondensateCalculationsDomain=" << returnCondensateCalculationsDomain);
 
     // 5D. Calculate Makeup Water
-    //     std::cout << methodName << "calculating makeupWaterOnly" << std::endl;
+    SM_LOG(methodName << "calculating makeupWaterOnly");
     const SteamSystemModelerTool::SteamPropertiesOutput& makeupWaterOnly = makeupWaterCalculator.calc(operationsInput);
-    //     std::cout << methodName << "makeupWaterOnly=" << makeupWaterOnly << std::endl;
+    SM_LOG(methodName << "makeupWaterOnly=" << makeupWaterOnly);
 
     // 5E. Calculate makeup water mass flow
-    //     std::cout << methodName << "calculating makeupWater" << std::endl;
+    SM_LOG(methodName << "calculating makeupWater");
     const double                                   lowPressureVentedSteam = 0; // don't have a value yet
     const SteamSystemModelerTool::FluidProperties& makeupWater            = makeupWaterMassFlowCalculator.calc(
         headerCountInput, highPressureHeaderInput, mediumPressureHeaderInput, lowPressureHeaderInput,
         condensingTurbineInput, boilerInput, boiler, returnCondensateFlashed, makeupWaterOnly,
         highPressureHeaderCalculationsDomain, mediumPressureHeaderCalculationsDomain,
         lowPressureHeaderCalculationsDomain, lowPressureVentedSteam);
-    //     std::cout << methodName << "makeupWater=" << makeupWater << std::endl;
+    SM_LOG(methodName << "makeupWater=" << makeupWater);
 
-    //     std::cout << methodName << "calculating makeupWaterVolumeFlow" << std::endl;
+    SM_LOG(methodName << "calculating makeupWaterVolumeFlow");
     const MakeupWaterVolumeFlowCalculationsDomain& makeupWaterVolumeFlowCalculationsDomain =
         makeupWaterVolumeFlowCalculator.calc(makeupWater, operationsInput);
-    //     std::cout << methodName << "makeupWaterVolumeFlowCalculationsDomain=" <<
-    //     makeupWaterVolumeFlowCalculationsDomain
-    //   << std::endl;
+    SM_LOG(methodName << "makeupWaterVolumeFlowCalculationsDomain=" << makeupWaterVolumeFlowCalculationsDomain);
 
     // 5F. Run heat exchange if pre heating makeup water
-    //     std::cout << methodName << "calculating heatExchangerOutput" << std::endl;
+    SM_LOG(methodName << "calculating heatExchangerOutput");
     std::shared_ptr<HeatExchanger::Output> heatExchangerOutput =
         heatExchangerCalculator.calc(boilerInput, boiler, makeupWater, blowdownFlashTank);
-    //     std::cout << methodName << "heatExchangerOutput=" << heatExchangerOutput << std::endl;
+    SM_LOG(methodName << "heatExchangerOutput=" << heatExchangerOutput);
 
     // 5G. Calculate makeup water and condensate combined
-    //     std::cout << methodName << "calculating makeupWaterAndCondensateHeaderOutput" << std::endl;
+    SM_LOG(methodName << "calculating makeupWaterAndCondensateHeaderOutput");
     const SteamSystemModelerTool::FluidProperties& makeupWaterAndCondensateHeaderOutput =
         makeupWaterAndCondensateHeaderCalculator.calc(boilerInput, condensingTurbineInput, returnCondensateFlashed,
                                                       heatExchangerOutput, makeupWater,
                                                       highPressureHeaderCalculationsDomain);
-    //     std::cout << methodName << "makeupWaterAndCondensateHeaderOutput=" << makeupWaterAndCondensateHeaderOutput
-    // << std::endl;
+    SM_LOG(methodName << "makeupWaterAndCondensateHeaderOutput=" << makeupWaterAndCondensateHeaderOutput);
 
     return {combinedCondensate,
             returnCondensateFlashed,

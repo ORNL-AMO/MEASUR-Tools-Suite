@@ -1,6 +1,6 @@
 /**
  * @defgroup pneumatic_valve_calculator Pneumatic Valve Calculator
- * @ingroup compressed_air_assessments
+ * @ingroup compressed_air_calculators
  * @brief Calculates pneumatic valve air flow rate and valve flow coefficient (Cv).
  * @details This calculator provides two engineering methods for sizing and selecting
  *          pneumatic valves in compressed air distribution systems. All formulas use

@@ -1,4 +1,5 @@
 #include "steamModeler/service/low_pressure_header/LowPressureHeaderCalculator.h"
+#include "steamModeler/util/SteamModelerLogger.h"
 
 SteamSystemModelerTool::FluidProperties LowPressureHeaderCalculator::calc(
     const int headerCountInput, const std::shared_ptr<HeaderNotHighestPressure>& lowPressureHeaderInput,
@@ -16,7 +17,7 @@ SteamSystemModelerTool::FluidProperties LowPressureHeaderCalculator::calc(
         headerFactory.make(headerCountInput, lowPressureHeaderInput, highToLowTurbineInput, mediumToLowTurbineInput,
                            boilerInput, lowPressurePrv, highToLowPressureTurbine, blowdownFlashTank,
                            lowPressureFlashedSteamIntoHeaderCalculatorDomain, mediumPressureHeaderCalculationsDomain);
-    // std::cout << methodName << "lowPressureHeader=" << lowPressureHeader << std::endl;
+    SM_LOG(methodName << "lowPressureHeader=" << lowPressureHeader);
 
     return fluidPropertiesFactory.make(lowPressureHeader);
 }

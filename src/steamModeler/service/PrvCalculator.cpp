@@ -1,4 +1,5 @@
 #include "steamModeler/service/PrvCalculator.h"
+#include "steamModeler/util/SteamModelerLogger.h"
 
 PrvWithDesuperheating PrvCalculator::calcHighToMediumPrvWithDesuperheating(
     const HeaderWithHighestPressure& highPressureHeaderInput, const PressureTurbine& highToLowTurbineInput,
@@ -61,11 +62,7 @@ double PrvCalculator::getTurbineMassFlow(const std::shared_ptr<Turbine>& turbine
     double massFlow          = 0;
 
     if (turbine == nullptr) {
-        // std::cout << "PrvCalculator::getTurbineMassFlow:"
-        //           << " ERROR: Turbine instance '"
-        //           << turbineName
-        //           << "' expected to exist but was null/not existing; using 0"
-        //           << std::endl;
+        SM_LOG("PrvCalculator::getTurbineMassFlow:" << " ERROR: Turbine instance '" << turbineName << "' expected to exist but was null/not existing; using 0");
     }
     else {
         massFlow = turbine->getMassFlow();

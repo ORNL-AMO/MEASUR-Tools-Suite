@@ -1,5 +1,7 @@
 #pragma once
 
+#include <steamModeler/util/SteamModelerLogger.h>
+
 #include <memory>
 
 #include <steamModeler/Boiler.h>
@@ -16,6 +18,6 @@ class RestarterService {
     void restartIfNotEnoughSteam(const double additionalSteamNeeded, const Boiler& boiler) const;
 
   private:
-    void logMessage(const std::string& message) const;
+    void logMessage([[maybe_unused]] const std::string& message) const;
 };
 

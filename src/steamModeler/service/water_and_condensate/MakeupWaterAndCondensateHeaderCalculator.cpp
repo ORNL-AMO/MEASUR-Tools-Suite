@@ -1,4 +1,5 @@
 #include "steamModeler/service/water_and_condensate/MakeupWaterAndCondensateHeaderCalculator.h"
+#include "steamModeler/util/SteamModelerLogger.h"
 
 SteamSystemModelerTool::FluidProperties MakeupWaterAndCondensateHeaderCalculator::calc(
     const BoilerInput& boilerInput, const CondensingTurbine& condensingTurbineInput,
@@ -32,12 +33,11 @@ SteamSystemModelerTool::FluidProperties MakeupWaterAndCondensateHeaderCalculator
     const Header& makeupWaterAndCondensateHeader =
         headerFactory.make(boilerDeaeratorPressure, returnCondensate, boilerInput, heatExchangerOutput,
                            makeupWaterAndMassFlow, condensingTurbineInput, condensingTurbine);
-    //     std::cout << methodName << "makeupWaterAndCondensateHeader=" << makeupWaterAndCondensateHeader << std::endl;
+    SM_LOG(methodName << "makeupWaterAndCondensateHeader=" << makeupWaterAndCondensateHeader);
 
     const SteamSystemModelerTool::FluidProperties& fluidProperties =
         fluidPropertiesFactory.make(makeupWaterAndCondensateHeader);
-    //     std::cout << methodName << "makeupWaterAndCondensateHeader as FluidProperties=" << fluidProperties <<
-    //     std::endl;
+    SM_LOG(methodName << "makeupWaterAndCondensateHeader as FluidProperties=" << fluidProperties);
 
     return fluidProperties;
 }
@@ -52,9 +52,7 @@ SteamSystemModelerTool::SteamPropertiesOutput MakeupWaterAndCondensateHeaderCalc
 
     SteamProperties steamProperties = {pressure, SteamProperties::ThermodynamicQuantity::ENTHALPY, specificEnthalpy};
     const SteamSystemModelerTool::SteamPropertiesOutput& steamPropertiesOutput = steamProperties.calculate();
-    //     std::cout << methodName << "pressure=" << pressure << ", specificEnthalpy=" << specificEnthalpy
-    //       << ", ThermodynamicQuantity=ENTHALPY" << "; result steamPropertiesOutput=" << steamPropertiesOutput
-    //       << std::endl;
+    SM_LOG(methodName << "pressure=" << pressure << ", specificEnthalpy=" << specificEnthalpy << ", ThermodynamicQuantity=ENTHALPY" << "; result steamPropertiesOutput=" << steamPropertiesOutput);
 
     return steamPropertiesOutput;
 }

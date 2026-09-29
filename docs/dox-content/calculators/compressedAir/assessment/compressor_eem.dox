@@ -1,0 +1,117 @@
+/**
+ * @defgroup compressor_eem_assessment Compressor Energy Efficiency Measures
+ * @ingroup compressor_modeling
+ * @brief Compressor EEM calculations for leaks, end-use efficiency, pressure, set points, and savings.
+ * @details EEM functions are stateless free functions. Each function returns the adjusted
+ *          airflow, power, energy, or cost value directly as a passive value object.
+ *
+ * @heading{Leak Reduction}
+ * @copydoc compressor_eem_leak_formula
+ *
+ * @heading{End-Use Efficiency}
+ * @copydoc compressor_eem_end_use_formula
+ *
+ * @heading{Pressure Reduction and Set Points}
+ * @copydoc compressor_eem_pressure_formula
+ *
+ * @heading{Savings}
+ * @copydoc compressor_eem_savings_formula
+ */
+
+/**
+ * @defgroup compressor_eem_leak_formula Compressor EEM Leak Reduction Formula
+ * @ingroup compressor_eem_assessment
+ * @brief Airflow reduction from repairing compressed-air leaks.
+ *
+ * @formula{compressor-eem-leak-reduced;
+ *   Q_{leak,red} = r_{leak}Q_{leak}
+ * }
+ * @formula{compressor-eem-leak-use;
+ *   Q_{use,adj} = Q_{use} - Q_{leak,red}
+ * }
+ *
+ * @symtable
+ * @symrow{Q_{leak,red}; Reduced leak airflow; \acfm}
+ * @symrow{r_{leak}; Leak reduction fraction; \unitless}
+ * @symrow{Q_{leak}; Baseline leak airflow; \acfm}
+ * @symrow{Q_{use,adj}; Adjusted use airflow; \acfm}
+ * @symrow{Q_{use}; Baseline use airflow; \acfm}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup compressor_eem_end_use_formula Compressor EEM End-Use Efficiency Formula
+ * @ingroup compressor_eem_assessment
+ * @brief Adjusted use airflow from end-use efficiency improvements.
+ *
+ * @formula{compressor-eem-end-use;
+ *   Q_{use,adj} = Q_{use} - Q_{red}
+ * }
+ * @formula{compressor-eem-end-use-fraction;
+ *   f_{use,adj} = \frac{Q_{use,adj}}{Q_{FL}}
+ * }
+ *
+ * @symtable
+ * @symrow{Q_{use,adj}; Adjusted use airflow; \acfm}
+ * @symrow{Q_{red}; Average airflow reduction; \acfm}
+ * @symrow{f_{use,adj}; Adjusted use airflow fraction; \unitless}
+ * @symrow{Q_{FL}; Full-load airflow; \acfm}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup compressor_eem_pressure_formula Compressor EEM Pressure Formula
+ * @ingroup compressor_eem_assessment
+ * @brief Adjusted power and use airflow after pressure changes.
+ * @details Pressure-reduction and cascading-set-point calculations use the same adjusted
+ *          power and airflow equations. The exponent 0.283 is the legacy pressure-power
+ *          relationship retained by this assessment.
+ *
+ * @formula{compressor-eem-pressure-power;
+ *   P_{adj} = P_{FL}
+ *   \frac{\left(\frac{P_{adj,FL}+P_{alt}}{P_{alt}}\right)^{0.283} - 1}
+ *        {\left(\frac{P_{FL,g}+P_{atm}}{P_{atm}}\right)^{0.283} - 1}
+ * }
+ * @formula{compressor-eem-pressure-airflow;
+ *   Q_{use,adj} = Q_{use} -
+ *   \left(Q_{use} - Q_{use}\frac{P_{adj,FL}+P_{alt}}{P_{FL,g}+P_{atm}}\right)0.6
+ * }
+ *
+ * @symtable
+ * @symrow{P_{adj}; Adjusted full-load power; \kilo\watt}
+ * @symrow{P_{FL}; Baseline full-load power; \kilo\watt}
+ * @symrow{P_{adj,FL}; Adjusted full-load gauge pressure; \psig}
+ * @symrow{P_{FL,g}; Baseline full-load gauge pressure; \psig}
+ * @symrow{P_{alt}; Altitude pressure; \psia}
+ * @symrow{P_{atm}; Atmospheric pressure; \psia}
+ * @symrow{Q_{use,adj}; Adjusted use airflow; \acfm}
+ * @symrow{Q_{use}; Baseline use airflow; \acfm}
+ * @symrow{0.6; Legacy pressure-flow response factor; \unitless}
+ * @endsymtable
+ */
+
+/**
+ * @defgroup compressor_eem_savings_formula Compressor EEM Savings Formula
+ * @ingroup compressor_eem_assessment
+ * @brief Demand, energy, and cost savings from reduced discharge pressure.
+ *
+ * @formula{compressor-eem-power-savings;
+ *   P_{save} = P_{base} - P_{mod}
+ * }
+ * @formula{compressor-eem-energy-savings;
+ *   E_{save} = P_{save}H
+ * }
+ * @formula{compressor-eem-cost-savings;
+ *   C_{save} = E_{save}C_e
+ * }
+ *
+ * @symtable
+ * @symrow{P_{save}; Demand savings; \kilo\watt}
+ * @symrow{P_{base}; Baseline adjusted power; \kilo\watt}
+ * @symrow{P_{mod}; Modified adjusted power; \kilo\watt}
+ * @symrow{E_{save}; Annual energy savings; \kilo\watt\hour}
+ * @symrow{H; Annual operating hours; \hour}
+ * @symrow{C_{save}; Annual cost savings; \dollar}
+ * @symrow{C_e; Electricity cost; \dollar\per\kilo\watt\hour}
+ * @endsymtable
+ */

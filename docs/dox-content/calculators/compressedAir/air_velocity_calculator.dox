@@ -1,0 +1,45 @@
+/**
+ * @defgroup air_velocity_calculator Air Velocity Calculator
+ * @ingroup compressed_air_calculators
+ * @brief Calculates compressed air velocity through standard nominal pipe sizes.
+ * @details This calculator estimates compressed air velocity for each supported
+ *          nominal pipe size using free-air flow, line pressure, atmospheric pressure,
+ *          and the internal area table documented in @ref compressed_air_pipe_data.
+ *          All formulas use U.S. customary units.
+ *
+ * Main headers and branches are typically designed near 20 ft/s and should not
+ * exceed 30 ft/s. Line drops and feed lines are commonly limited to 30 ft/s with
+ * an upper limit of 50 ft/s.
+ *
+ * @heading{Velocity By Pipe Size}
+ * @copydoc air_velocity_formula
+ */
+
+/**
+ * @defgroup air_velocity_formula Air Velocity Formula
+ * @ingroup air_velocity_calculator
+ * @brief Compressed air velocity for one nominal pipe size.
+ * @details The free-air flow rate is first scaled to line pressure using the
+ *          ratio of atmospheric pressure to absolute line pressure. The result is
+ *          divided by each pipe's internal area. The factor 144 converts square
+ *          feet to square inches, and the factor 60 converts minutes to seconds.
+ *
+ * @formula{air-velocity;
+ *   v_i = Q \cdot \frac{P_{atm}}{P_{line} + P_{atm}} \cdot \frac{k_{144}}{A_i} \cdot \frac{1}{k_{60}}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{v_i; Compressed air velocity for nominal pipe size i; \foot\per\second}
+ * @symrow{Q; Volumetric free-air flow rate; \standardCubicFeetPerMinute}
+ * @symrow{P_{atm}; Atmospheric absolute pressure; \psia}
+ * @symrow{P_{line}; Pipe gauge pressure; \psig}
+ * @symrow{k_{144}; Square inches per square foot (144); \inch\squared\per\squareFoot}
+ * @symrow{A_i; Internal area for nominal pipe size i; \inch\squared}
+ * @symrow{k_{60}; Seconds per minute (60); \second\per\minute}
+ * @endsymtable
+ *
+ * @note The internal areas used by this calculation are in square inches. This
+ *       matches the formula's 144 in2/ft2 conversion and the implementation table
+ *       in @ref compressed_air_pipe_data.
+ */

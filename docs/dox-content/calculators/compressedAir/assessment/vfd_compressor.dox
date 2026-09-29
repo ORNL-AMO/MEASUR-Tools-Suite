@@ -1,0 +1,54 @@
+/**
+ * @defgroup vfd_compressor_assessment Variable Frequency Drive Compressor Assessment
+ * @ingroup compressor_modeling
+ * @brief Compressor model for variable frequency drive control.
+ * @details The VFD model reports calculated package power and airflow from a curve defined by
+ *          no-load, turndown, mid-turndown, and full-load points. Below turndown airflow it
+ *          uses a linear segment from no-load to turndown. From turndown to full load it fits
+ *          a second-order curve through the turndown, mid-turndown, and full-load points.
+ *
+ * @heading{VFD Piecewise Curve}
+ * @copydoc vfd_compressor_formula
+ */
+
+/**
+ * @defgroup vfd_compressor_formula VFD Compressor Formula
+ * @ingroup vfd_compressor_assessment
+ * @brief Piecewise VFD airflow-power curve.
+ * @details Capacity-based inputs evaluate the power fraction directly from the airflow
+ *          fraction. Power-based inputs invert the same curve, returning zero airflow
+ *          and zero power when the requested power is below the no-load power.
+ *
+ * @formula{vfd-piecewise-power;
+ *   f_P =
+ *   \begin{cases}
+ *     1, & \text{if } f_Q > 1 \\
+ *     \frac{f_{P,TD} - f_{P,NL}}{f_{Q,TD}} f_Q + f_{P,NL},
+ *       & \text{if } f_Q < f_{Q,TD} \\
+ *     a f_Q^2 + b f_Q + c,
+ *       & \text{if } f_{Q,TD} \le f_Q \le 1
+ *   \end{cases}
+ * }
+ *
+ * @formula{vfd-piecewise-airflow;
+ *   f_Q =
+ *   \begin{cases}
+ *     1, & \text{if } f_P = 1 \\
+ *     0, & \text{if } f_P < f_{P,NL} \\
+ *     \frac{f_{Q,TD}}{f_{P,TD} - f_{P,NL}}(f_P - f_{P,NL}),
+ *       & \text{if } f_{P,NL} \le f_P < f_{P,TD} \\
+ *     \frac{-b + \sqrt{b^2 - 4a(c - f_P)}}{2a},
+ *       & \text{if } f_P \ge f_{P,TD}
+ *   \end{cases}
+ * }
+ *
+ * @subheading{Symbols}
+ * @symtable
+ * @symrow{f_P; Fraction of full-load power; \unitless}
+ * @symrow{f_Q; Fraction of full-load airflow; \unitless}
+ * @symrow{f_{P,TD}; Turndown power fraction; \unitless}
+ * @symrow{f_{P,NL}; No-load power fraction; \unitless}
+ * @symrow{f_{Q,TD}; Turndown airflow fraction; \unitless}
+ * @symrow{a,b,c; Second-order curve-fit coefficients; \unitless}
+ * @endsymtable
+ */

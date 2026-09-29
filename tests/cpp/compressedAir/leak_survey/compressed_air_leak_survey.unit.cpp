@@ -10,7 +10,7 @@ namespace {
 // Default sub-method inputs shared across test cases (only the selected method matters)
 const estimate_method::Input  kDefaultEstimate  = {0, 0.1};
 const decibels_method::Input  kDefaultDecibels  = {0, 130, 25, 20, 150, 1.04, 1.2, 30, 125, 1.85, 1.65};
-const bag_method::Input       kDefaultBag       = {8760, 12, 8.68, 1};
+const bag_method::Input       kDefaultBag       = {8760, 12, 8.68};
 const orifice_method::Input   kDefaultOrifice   = {0.0, 250.0, 14.7, 1.0, 6.0, 6.2, 4};
 const compressed_air_utils::CompressorElectricityData kDefaultElecData = {0.40, 0.16};
 
@@ -54,7 +54,7 @@ TEST_CASE("CompressedAirLeakSurvey - Estimate Method, Electricity (3840 hr)",
           "[CompressedAir][CompressedAirLeakSurvey][EstimateMethod]") {
     auto input = makeInput(3840, 1, 0.12, 0,
                            {3840, 0.1}, kDefaultDecibels,
-                           bag_method::Input{3840, 12, 8.68, 1},
+                           bag_method::Input{3840, 12, 8.68},
                            kDefaultOrifice,
                            {0.25, 0.16}, 1);
     auto result = calculate({input});
@@ -80,7 +80,7 @@ TEST_CASE("CompressedAirLeakSurvey - Decibels Method, Electricity",
           "[CompressedAir][CompressedAirLeakSurvey][DecibelsMethod]") {
     auto input = makeInput(8640, 1, 0.12, 1,
                            {8640, 0.1}, kDefaultDecibels,
-                           bag_method::Input{15, 10, 12, 1},
+                           bag_method::Input{15, 10, 12},
                            kDefaultOrifice,
                            {0.40, 0.16}, 1);
     auto result = calculate({input});
@@ -94,21 +94,53 @@ TEST_CASE("CompressedAirLeakSurvey - Bag Method, Electricity",
           "[CompressedAir][CompressedAirLeakSurvey][BagMethod]") {
     auto input = makeInput(8640, 1, 0.12, 2,
                            {8640, 0.1}, kDefaultDecibels,
-                           bag_method::Input{15, 10, 12, 1},
+                           bag_method::Input{15, 10, 12},
                            kDefaultOrifice,
                            {0.40, 0.16}, 2);
     auto result = calculate({input});
-    CHECK(result.annual_total_electricity      == Approx(0.3456));
-    CHECK(result.annual_total_electricity_cost == Approx(0.041472));
+    CHECK(result.annual_total_electricity      == Approx(345.6));
+    CHECK(result.annual_total_electricity_cost == Approx(41.472));
     CHECK(result.total_flow_rate               == Approx(144.0));
-    CHECK(result.annual_total_flow_rate        == Approx(129.6));
+    CHECK(result.annual_total_flow_rate        == Approx(129600));
+}
+
+TEST_CASE("CompressedAirLeakSurvey - Bag Method, Compressed Air Utility",
+          "[CompressedAir][CompressedAirLeakSurvey][BagMethod]") {
+    auto input = makeInput(8640, 0, 0.001, 2,
+                           {8640, 0.1}, kDefaultDecibels,
+                           bag_method::Input{15, 10, 12},
+                           kDefaultOrifice,
+                           {0.40, 0.16}, 2);
+    auto result = calculate({input});
+    CHECK(result.annual_total_electricity      == Approx(0.0));
+    CHECK(result.annual_total_electricity_cost == Approx(129.6));
+    CHECK(result.total_flow_rate               == Approx(144.0));
+    CHECK(result.annual_total_flow_rate        == Approx(129600));
+}
+
+TEST_CASE("CompressedAirLeakSurvey - Mixed Bag and Estimate Methods",
+          "[CompressedAir][CompressedAirLeakSurvey][BagMethod][EstimateMethod]") {
+    auto bag_input = makeInput(8760, 1, 0.12, 2,
+                               {8760, 0.1}, kDefaultDecibels,
+                               bag_method::Input{8760, 10, 12},
+                               kDefaultOrifice,
+                               {0.40, 0.16}, 1);
+    auto estimate_input = makeInput(8760, 1, 0.12, 0,
+                                    {8760, 72}, kDefaultDecibels,
+                                    kDefaultBag, kDefaultOrifice,
+                                    {0.40, 0.16}, 1);
+    auto result = calculate({bag_input, estimate_input});
+    CHECK(result.annual_total_electricity      == Approx(201830.4));
+    CHECK(result.annual_total_electricity_cost == Approx(24219.648));
+    CHECK(result.total_flow_rate               == Approx(144.0));
+    CHECK(result.annual_total_flow_rate        == Approx(75686400));
 }
 
 TEST_CASE("CompressedAirLeakSurvey - Orifice Method, Electricity",
           "[CompressedAir][CompressedAirLeakSurvey][OrificeMethod]") {
     auto input = makeInput(8640, 1, 0.12, 3,
                            {8640, 0.1}, kDefaultDecibels,
-                           bag_method::Input{15, 10, 12, 1},
+                           bag_method::Input{15, 10, 12},
                            orifice_method::Input{0.0, 550.0, 14.7, 1.0, 0.375, 100.0, 4},
                            {0.40, 0.16}, 1);
     auto result = calculate({input});

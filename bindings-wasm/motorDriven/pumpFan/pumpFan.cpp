@@ -19,7 +19,8 @@ EMSCRIPTEN_BINDINGS(pump_enums) {
         .value("DOUBLE_SUCTION", Pump::Style::DOUBLE_SUCTION)
         .value("VERTICAL_TURBINE", Pump::Style::VERTICAL_TURBINE)
         .value("LARGE_END_SUCTION", Pump::Style::LARGE_END_SUCTION)
-        .value("SPECIFIED_OPTIMAL_EFFICIENCY", Pump::Style::SPECIFIED_OPTIMAL_EFFICIENCY);
+        .value("SPECIFIED_OPTIMAL_EFFICIENCY", Pump::Style::SPECIFIED_OPTIMAL_EFFICIENCY)
+        .value("POSITIVE_DISPLACEMENT", Pump::Style::POSITIVE_DISPLACEMENT);
 
     enum_<Pump::SpecificSpeed>("SpecificSpeed")
         .value("FIXED_SPEED", Pump::SpecificSpeed::FIXED_SPEED)

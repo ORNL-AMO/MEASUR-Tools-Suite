@@ -34,7 +34,9 @@ EMSCRIPTEN_BINDINGS(head_tool_output) {
 // resultsExisting & resultsModified
 EMSCRIPTEN_BINDINGS(pump_results) {
     class_<Pump::Input>("PumpResultInput")
-        .constructor<Pump::Style, double, double, Motor::Drive, double, double, int, Pump::SpecificSpeed, double>();
+        .constructor<Pump::Style, double, double, Motor::Drive, double, double, int, Pump::SpecificSpeed, double>()
+        .constructor<Pump::Style, double, double, Motor::Drive, double, double, int, Pump::SpecificSpeed, double,
+                     double>();
 
     class_<Pump::FieldData>("PumpFieldData")
         .constructor<double, double, Motor::LoadEstimationMethod, double, double, double>();

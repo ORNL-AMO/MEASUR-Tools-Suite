@@ -73,13 +73,12 @@ struct FlowMeterMethodData {
  * @brief Input data for the bag measurement method.
  * @details The bag method estimates compressed air flow rate by measuring how long it takes to
  * fill a known-volume bag. The bag volume divided by the fill time (converted to minutes) gives
- * the flow rate in scfm. Multiple bags can be tested simultaneously using @p number_of_bags.
+ * the flow rate in scfm.
  * @see compressed_air_reduction_bag_formula
  */
 struct BagMethodData {
     double bag_fill_time  = 0.0; ///< Time to fill the bag with compressed air @unitb{\second}
     double bag_volume     = 0.0; ///< Internal volume of the bag @unitb{\cubic\foot}
-    int    number_of_bags = 1;   ///< Number of bags tested simultaneously (bag quantity multiplier)
 };
 
 /**

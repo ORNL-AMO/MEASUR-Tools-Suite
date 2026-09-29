@@ -1,4 +1,5 @@
 #include <steamModeler/api/HeaderInput.h>
+#include "steamModeler/util/SteamModelerLogger.h"
 
 HeaderWithPressure::HeaderWithPressure(double pressure, double processSteamUsage, double condensationRecoveryRate,
                                        double heatLoss, bool flashCondensate)
@@ -71,7 +72,7 @@ int HeaderInput::getHeaderCount() const {
     if (lowPressureHeader != nullptr)
         headerCount++;
 
-    // std::cout << "HeaderInput::getHeaderCount: headerCount=" << headerCount << std::endl;
+    SM_LOG("HeaderInput::getHeaderCount: headerCount=" << headerCount);
 
     return headerCount;
 }

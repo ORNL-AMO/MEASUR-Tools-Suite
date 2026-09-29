@@ -10,9 +10,9 @@ void RestarterService::restartIfNotEnoughSteam(const std::shared_ptr<Turbine>& t
     const double neededMassFlow        = turbine->getMassFlow();
     const double additionalSteamNeeded = neededMassFlow - availableMassFlow;
 
-    // std::cout << methodName
-    //   << "neededMassFlow=" << neededMassFlow << ", availableMassFlow=" << availableMassFlow
-    //   << ", additionalSteamNeeded=" << additionalSteamNeeded << std::endl;
+    SM_LOG(methodName
+           << "neededMassFlow=" << neededMassFlow << ", availableMassFlow=" << availableMassFlow
+           << ", additionalSteamNeeded=" << additionalSteamNeeded);
 
     restartIfNotEnoughSteam(additionalSteamNeeded, boiler);
 }
@@ -32,9 +32,9 @@ void RestarterService::restartIfNotEnoughSteam(const double additionalSteamNeede
 
     const double tolerance = 1e-3;
 
-    // std::cout << methodName
-    //   << "checking if the steam amount shortage is within tolerance; additionalSteamNeeded="
-    //   << additionalSteamNeeded << "; tolerance=+-" << tolerance << std::endl;
+    SM_LOG(methodName
+           << "checking if the steam amount shortage is within tolerance; additionalSteamNeeded="
+           << additionalSteamNeeded << "; tolerance=+-" << tolerance);
 
     // if need more than .0001
     if (absAdditionalSteamNeeded > tolerance) {
@@ -53,11 +53,9 @@ void RestarterService::restartIfNotEnoughSteam(const double additionalSteamNeede
     }
 }
 
-void RestarterService::logMessage(const std::string& message) const {
-    std::string message_        = message;
-    message_                    = message_; // keep this or fix unused variable
+void RestarterService::logMessage([[maybe_unused]] const std::string& message) const {
     const std::string delimeter = "======== ";
-    // std::cout << delimeter << std::endl;
-    // std::cout << delimeter << message << std::endl;
-    // std::cout << delimeter << std::endl;
+    SM_LOG(delimeter);
+    SM_LOG(delimeter << message);
+    SM_LOG(delimeter);
 }

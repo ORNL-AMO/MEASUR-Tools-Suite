@@ -1,4 +1,5 @@
 #include <steamModeler/service/medium_pressure_header/MediumPressureCondensateCalculator.h>
+#include "steamModeler/util/SteamModelerLogger.h"
 
 const SteamSystemModelerTool::FluidProperties MediumPressureCondensateCalculator::calc(
     const std::shared_ptr<HeaderNotHighestPressure>& mediumPressureHeaderInput) const {
@@ -13,7 +14,7 @@ const SteamSystemModelerTool::FluidProperties MediumPressureCondensateCalculator
     const double massFlow   = massFlowCalculator.calc(mediumPressureHeaderInput);
     const double energyFlow = energyFlowCalculator.calc(massFlow, steamPropertiesOutput);
 
-    // std::cout << methodName << "calculated massFlow=" << massFlow << ", energyFlow=" << energyFlow << std::endl;
+    SM_LOG(methodName << "calculated massFlow=" << massFlow << ", energyFlow=" << energyFlow);
 
     return SteamSystemModelerTool::FluidProperties(massFlow, energyFlow, steamPropertiesOutput);
 }

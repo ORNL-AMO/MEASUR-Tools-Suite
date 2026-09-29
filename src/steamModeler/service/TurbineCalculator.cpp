@@ -1,4 +1,5 @@
 #include "steamModeler/service/TurbineCalculator.h"
+#include "steamModeler/util/SteamModelerLogger.h"
 
 Turbine TurbineCalculator::calc(const SteamSystemModelerTool::FluidProperties& headerProperties,
                                 const HeaderWithHighestPressure& highPressureHeaderInput, const int headerCountInput,
@@ -47,7 +48,7 @@ Turbine::TurbineProperty TurbineCalculator::determineTurbineProperty(const Press
             break;
         default:
             std::string msg = "TurbineCalculator::determineTurbineProperty: operationType enum not handled=";
-            // std::cout << msg << operationType << std::endl;
+            SM_LOG(msg << operationType);
             throw std::invalid_argument(msg);
     }
 
@@ -104,7 +105,7 @@ double TurbineCalculator::adjustMassFlowOrPowerOut(const double           massFl
         } break;
         default:
             std::string msg = "TurbineCalculator::adjustMassFlowOrPowerOut: operationType enum not handled";
-            // std::cout << msg << std::endl;
+            SM_LOG(msg);
             throw std::invalid_argument(msg);
     }
 

@@ -1,5 +1,6 @@
 #include <steamModeler/Header.h>
 #include <steamModeler/service/high_pressure_header/HighPressureHeaderCalculator.h>
+#include "steamModeler/util/SteamModelerLogger.h"
 
 SteamSystemModelerTool::FluidProperties
 HighPressureHeaderCalculator::calc(const HeaderWithHighestPressure& highPressureHeaderInput,
@@ -8,7 +9,7 @@ HighPressureHeaderCalculator::calc(const HeaderWithHighestPressure& highPressure
 
     const double headerPressure     = highPressureHeaderInput.getPressure();
     Header       highPressureHeader = headerFactory.make(headerPressure, boiler);
-    // std::cout << methodName << "highPressureHeader=" << highPressureHeader << std::endl;
+    SM_LOG(methodName << "highPressureHeader=" << highPressureHeader);
 
     return fluidPropertiesFactory.make(highPressureHeader);
 }

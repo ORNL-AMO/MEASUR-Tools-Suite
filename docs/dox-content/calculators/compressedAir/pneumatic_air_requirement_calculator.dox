@@ -1,6 +1,6 @@
 /**
  * @defgroup pneumatic_air_requirement_calculator Pneumatic Air Requirement Calculator
- * @ingroup compressed_air_assessments
+ * @ingroup compressed_air_calculators
  * @brief Calculates the compressed air consumption of a pneumatic cylinder.
  * @details This calculator determines the volume of compressed air consumed per minute
  *          by a pneumatic cylinder for both single-acting and double-acting piston

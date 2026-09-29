@@ -1,4 +1,5 @@
 #include "steamModeler/Header.h"
+#include "steamModeler/SaturatedProperties.h"
 
 Inlet::Inlet(const double pressure, const SteamProperties::ThermodynamicQuantity quantityType,
              const double quantityValue, const double massFlow)
@@ -19,7 +20,14 @@ void Header::calculate() {
         inletMassFlow += inlet.getMassFlow();
     }
 
-    specificEnthalpy = (inletMassFlow == 0.0) ? 0.0 : inletEnergyFlow / inletMassFlow;
+    //ADDED logic to handle 0 mass flow case, 
+    //where specific enthalpy is determined from saturated properties at header pressure
+    if (inletMassFlow == 0.0) {
+        const auto sp = SaturatedProperties(headerPressure, SaturatedTemperature(headerPressure).calculate()).calculate();
+        specificEnthalpy = sp.gasSpecificEnthalpy;
+    } else {
+        specificEnthalpy = inletEnergyFlow / inletMassFlow;
+    }
     headerProperties =
         SteamProperties(headerPressure, SteamProperties::ThermodynamicQuantity::ENTHALPY, specificEnthalpy).calculate();
 }

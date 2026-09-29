@@ -76,20 +76,21 @@ class QuantifySteamLeakByPlumeLength {
             {{0, 0}},
             {{0, 0}}
         } };
-        int r2 = pressures[1], r1 = pressures[0], r = static_cast<int>(std::round(pressure));
+        int r2 = pressures[1], r1 = pressures[0];
+        double r = pressure;
         steamLossRange[0][0] = interpolate(r2, r1, r, steamLossData[0][lengthIndexL][tempIndexL], steamLossData[1][lengthIndexL][tempIndexL]);
         steamLossRange[0][1] = interpolate(r2, r1, r, steamLossData[0][lengthIndexH][tempIndexL], steamLossData[1][lengthIndexH][tempIndexL]);
         steamLossRange[1][0] = interpolate(r2, r1, r, steamLossData[0][lengthIndexL][tempIndexH], steamLossData[1][lengthIndexL][tempIndexH]);
         steamLossRange[1][1] = interpolate(r2, r1, r, steamLossData[0][lengthIndexH][tempIndexH], steamLossData[1][lengthIndexH][tempIndexH]);
 
-        r2 = temps[tempIndexH], r1 = temps[tempIndexL], r = static_cast<int>(std::round(ambTemp));
+        r2 = temps[tempIndexH], r1 = temps[tempIndexL], r = ambTemp;
         const double steamLossL = interpolate(r2, r1, r, steamLossRange[0][0], steamLossRange[1][0]);
         const double steamLossH = interpolate(r2, r1, r, steamLossRange[0][1], steamLossRange[1][1]);
 
-        r2 = lengths[lengthIndexH], r1 = lengths[lengthIndexL], r = static_cast<int>(std::round(plumeLength));
+        r2 = lengths[lengthIndexH], r1 = lengths[lengthIndexL], r = plumeLength;
         return interpolate(r2, r1, r, steamLossL, steamLossH);
     }
 
     private:
-        static double interpolate(const int r2, const int r1, const int r, const double l, const double u) { return (u - l) / (r2 - r1) * (r - r1) + l; }
+        static double interpolate(const int r2, const int r1, const double r, const double l, const double u) { return (u - l) / (r2 - r1) * (r - r1) + l; }
 };
