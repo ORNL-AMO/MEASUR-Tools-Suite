@@ -62,7 +62,7 @@ CompressorBlowOffResult CentrifugalBlowOffCompressor::calculateFromMeasuredCapac
 CompressorBlowOffResult CentrifugalBlowOffCompressor::calculateFromElectrical(double voltage, double current,
                                                                               double power_factor,
                                                                               double blow_off_fraction) {
-    return calculateFromMeasuredPower(voltage * current * power_factor * 1.732 / 1000.0, blow_off_fraction);
+    return calculateFromMeasuredPower(threePhasePowerKw(voltage, current, power_factor), blow_off_fraction);
 }
 
 void CentrifugalBlowOffCompressor::adjustDischargePressure(const std::vector<double>& capacity,
@@ -113,7 +113,7 @@ CompressorPerformanceResult CentrifugalLoadUnloadCompressor::calculateFromMeasur
 
 CompressorPerformanceResult CentrifugalLoadUnloadCompressor::calculateFromElectrical(double voltage, double current,
                                                                                      double power_factor) {
-    return calculateFromMeasuredPower(voltage * current * power_factor * 1.732 / 1000.0);
+    return calculateFromMeasuredPower(threePhasePowerKw(voltage, current, power_factor));
 }
 
 void CentrifugalLoadUnloadCompressor::adjustDischargePressure(const std::vector<double>& capacity,
@@ -140,7 +140,6 @@ CentrifugalModulationUnloadCompressor::CentrifugalModulationUnloadCompressor(dou
     unload_power_fraction_   = unload_power / full_load_power;
     max_airflow_fraction_    = max_airflow / full_load_airflow;
     unload_airflow_fraction_ = unload_airflow / full_load_airflow;
-    unload_base_fraction_    = unload_airflow / max_airflow;
 }
 
 CompressorPerformanceResult
@@ -155,21 +154,20 @@ CentrifugalModulationUnloadCompressor::calculateFromPowerFraction(double power_f
                             (unload_power_fraction_ - no_load_power_fraction_));
     }
     else if (power_fraction >= unload_power_fraction_) {
-        airflow_fraction = ((1.0 - unload_base_fraction_) / (max_power_fraction_ - unload_power_fraction_)) *
-                               power_fraction +
-                           (1.0 - (1.0 - unload_base_fraction_) /
-                                      (max_power_fraction_ - unload_power_fraction_));
+        airflow_fraction = unload_airflow_fraction_ +
+                           ((max_airflow_fraction_ - unload_airflow_fraction_) /
+                            (max_power_fraction_ - unload_power_fraction_)) *
+                               (power_fraction - unload_power_fraction_);
     }
 
-    return {power_fraction * full_load_power_,
-            (airflow_fraction < unload_base_fraction_ ? full_load_airflow_ : max_airflow_) * airflow_fraction,
-            power_fraction, airflow_fraction};
+    return {power_fraction * full_load_power_, full_load_airflow_ * airflow_fraction, power_fraction,
+            airflow_fraction};
 }
 
 CompressorPerformanceResult
 CentrifugalModulationUnloadCompressor::calculateFromCapacityFraction(double airflow_fraction) {
     double power_fraction = 1.0;
-    if (airflow_fraction < unload_power_fraction_) {
+    if (airflow_fraction < unload_airflow_fraction_) {
         power_fraction = ((unload_power_fraction_ - no_load_power_fraction_) /
                           (unload_airflow_fraction_ - no_load_airflow_fraction_)) *
                              airflow_fraction +
@@ -200,7 +198,7 @@ CompressorPerformanceResult CentrifugalModulationUnloadCompressor::calculateFrom
 CompressorPerformanceResult CentrifugalModulationUnloadCompressor::calculateFromElectrical(double voltage,
                                                                                           double current,
                                                                                           double power_factor) {
-    return calculateFromMeasuredPower(voltage * current * power_factor * 1.732 / 1000.0);
+    return calculateFromMeasuredPower(threePhasePowerKw(voltage, current, power_factor));
 }
 
 void CentrifugalModulationUnloadCompressor::adjustDischargePressure(const std::vector<double>& capacity,
@@ -218,7 +216,6 @@ void CentrifugalModulationUnloadCompressor::adjustDischargePressure(const std::v
 
         max_airflow_fraction_    = max_airflow_ / full_load_airflow_;
         unload_airflow_fraction_ = unload_airflow_ / full_load_airflow_;
-        unload_base_fraction_    = unload_airflow_ / max_airflow_;
     }
 }
 

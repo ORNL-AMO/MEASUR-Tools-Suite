@@ -4,8 +4,14 @@ namespace compressed_air::assessment {
 
 StartStopCompressor::StartStopCompressor(double full_load_power, double full_load_airflow,
                                          double max_power_fraction, double full_load_power_fraction)
+    : StartStopCompressor(full_load_power, full_load_airflow, max_power_fraction, full_load_power_fraction,
+                          CompressorType::Screw) {}
+
+StartStopCompressor::StartStopCompressor(double full_load_power, double full_load_airflow,
+                                         double max_power_fraction, double full_load_power_fraction,
+                                         CompressorType compressor_type)
     : CompressorModelBase(full_load_power, full_load_airflow), max_power_fraction_(max_power_fraction),
-      full_load_power_fraction_(full_load_power_fraction) {
+      full_load_power_fraction_(full_load_power_fraction), compressor_type_(compressor_type) {
     max_power_ = max_power_fraction * full_load_power;
 }
 
@@ -39,7 +45,7 @@ CompressorPerformanceResult StartStopCompressor::calculateFromMeasuredCapacity(d
 
 CompressorPerformanceResult StartStopCompressor::calculateFromElectrical(double voltage, double current,
                                                                          double power_factor) {
-    return calculateFromMeasuredPower(voltage * current * power_factor * 1.732 / 1000.0);
+    return calculateFromMeasuredPower(threePhasePowerKw(voltage, current, power_factor));
 }
 
 void StartStopCompressor::applyPressureInletCorrection(double capacity, double full_load_bhp, double poly_exponent,
@@ -48,7 +54,7 @@ void StartStopCompressor::applyPressureInletCorrection(double capacity, double f
                                                        double full_load_pressure, double max_pressure,
                                                        double inlet_pressure, bool pressure_adjustment,
                                                        double atmospheric_pressure) {
-    CompressorModelBase::applyPressureInletCorrection(CompressorType::Screw, capacity, full_load_bhp, poly_exponent,
+    CompressorModelBase::applyPressureInletCorrection(compressor_type_, capacity, full_load_bhp, poly_exponent,
                                                       rated_discharge_pressure, rated_inlet_pressure, efficiency,
                                                       full_load_pressure, max_pressure, inlet_pressure,
                                                       pressure_adjustment, atmospheric_pressure);

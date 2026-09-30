@@ -10,7 +10,7 @@ export declare class LoadUnloadCompressor {
      * @param fullLoadPressurePsig Full-load pressure, units psig.
      * @param maxPressurePsig Maximum pressure, units psig.
      * @param modulatingPressurePsig Modulating pressure range, units psig.
-     * @param unloadedLoadFactor Unloaded load factor, dimensionless.
+     * @param unloadedLoadFactor No-load package power divided by full-load package power, dimensionless value from 0 to 1.
      */
     constructor(
         fullLoadPowerKw: number,
@@ -30,7 +30,7 @@ export declare class LoadUnloadCompressor {
      * @param fullLoadPressurePsig Full-load pressure, units psig.
      * @param maxPressurePsig Maximum pressure, units psig.
      * @param modulatingPressurePsig Modulating pressure range, units psig.
-     * @param unloadedLoadFactor Unloaded load factor, dimensionless.
+     * @param unloadedLoadFactor Deprecated compatibility input in this overload; explicit noLoadPowerKw is authoritative.
      * @param atmosphericPressurePsia Atmospheric pressure, units psia.
      * @param compressorType Compressor type, dimensionless enum.
      * @param lubricant Lubricant type, dimensionless enum.
@@ -62,7 +62,7 @@ export declare class LoadUnloadCompressor {
      * @param fullLoadPressurePsig Full-load pressure, units psig.
      * @param maxPressurePsig Maximum pressure, units psig.
      * @param modulatingPressurePsig Modulating pressure range, units psig.
-     * @param unloadedLoadFactor Unloaded load factor, dimensionless.
+     * @param unloadedLoadFactor Deprecated compatibility input in this overload; explicit noLoadPowerKw is authoritative.
      * @param atmosphericPressurePsia Atmospheric pressure, units psia.
      * @param compressorType Compressor type, dimensionless enum.
      * @param lubricant Lubricant type, dimensionless enum.
@@ -113,7 +113,7 @@ export declare class LoadUnloadCompressor {
     /**
      * @param voltage Electrical voltage, units V.
      * @param current Electrical current, units A.
-     * @param powerFactor Power factor, dimensionless.
+     * @param powerFactor Power factor, dimensionless value from 0 to 1.
      */
     calculateFromElectrical(voltage: number, current: number, powerFactor: number): CompressorPerformanceResult;
     /**

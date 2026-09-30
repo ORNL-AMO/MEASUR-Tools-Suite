@@ -32,7 +32,7 @@ export declare class VariableFrequencyDriveCompressor {
     /**
      * @param voltage Electrical voltage, units V.
      * @param current Electrical current, units A.
-     * @param powerFactor Power factor, dimensionless.
+     * @param powerFactor Power factor, dimensionless value from 0 to 1.
      */
     calculateFromElectrical(voltage: number, current: number, powerFactor: number): CompressorPerformanceResult;
     /** Frees the underlying resource; must be called when finished with the instance. */

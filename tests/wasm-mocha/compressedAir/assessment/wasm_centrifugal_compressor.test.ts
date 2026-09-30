@@ -76,7 +76,23 @@ describe('Compressed Air Assessment - Centrifugal Compressors', function () {
             assert.approximately(result.powerKw, 425.162, 0.001);
             assert.approximately(result.airflowAcfm, 2820.95, 0.01);
             assert.approximately(result.powerFraction, 0.94, 0.0001);
-            assert.approximately(result.airflowFraction, 0.93875, 0.005);
+            assert.approximately(result.airflowFraction, 0.898963, 0.000001);
+
+            const unloadFraction = 2731 / 3138;
+            const below = compressor.calculateFromCapacityFraction(unloadFraction - 0.001);
+            const at = compressor.calculateFromCapacityFraction(unloadFraction);
+            const above = compressor.calculateFromCapacityFraction(unloadFraction + 0.001);
+            assert.isBelow(below.powerFraction, 411.9 / 452.3);
+            assert.approximately(at.powerFraction, 411.9 / 452.3, 0.000001);
+            assert.isAbove(above.powerFraction, 411.9 / 452.3);
+
+            const roundTrip = compressor.calculateFromCapacityFraction(result.airflowFraction);
+            assert.approximately(result.airflowFraction, result.airflowAcfm / 3138, 0.000001);
+            assert.approximately(roundTrip.powerFraction, result.powerFraction, 0.000001);
+            assert.approximately(roundTrip.airflowAcfm, result.airflowAcfm, 0.001);
+
+            const electrical = compressor.calculateFromElectrical(440, 246.7, 0.5);
+            assert.approximately(electrical.powerKw, 94.003, 0.001);
         } finally {
             compressor.delete();
         }

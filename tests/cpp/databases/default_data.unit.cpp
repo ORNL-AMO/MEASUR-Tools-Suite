@@ -39,6 +39,15 @@ TEST_CASE( "DefaultData CompressorType1 - getCompressorData", "[databases]" ) {
         CHECK(1 == outputFirstCD.id);
         CHECK("5 hp/3.7 kW" == outputFirstCD.model);
         CHECK(85 == outputFirstCD.fullLoadEfficiencyPercent);
+        CHECK(outputFirstCD.fullLoadBrakeHorsepower == outputFirstCD.fullLoadBhpPowerKw);
+        CHECK(outputFirstCD.fullLoadBrakeHorsepower * 0.746 /
+                  (outputFirstCD.fullLoadEfficiencyPercent / 100.0) ==
+              Approx(outputFirstCD.totalPackageInputPowerKw).margin(0.1));
+        CHECK(outputFirstCD.totalPackageInputPowerKw * 100.0 / outputFirstCD.ratedCapacityAcfm ==
+              Approx(outputFirstCD.specificPackagePower).margin(0.5));
+        CHECK(outputFirstCD.noLoadPowerFullyModulating == Approx(65.0));
+        CHECK(outputFirstCD.noLoadPowerUnload == Approx(50.0));
+        CHECK(outputFirstCD.maxSurgePressurePsig == -9999.0);
 
         auto length = (int)outputs.size();
         auto const& outputLastCD = outputs[length - 1];

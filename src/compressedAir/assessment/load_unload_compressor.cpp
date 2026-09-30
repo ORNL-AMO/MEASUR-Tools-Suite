@@ -10,6 +10,19 @@
 
 namespace compressed_air::assessment {
 
+namespace {
+constexpr double kLegacyReceiverPumpupReferencePressurePsig = 200.0;
+constexpr int    kCurveIntervalCount                         = 76;
+} // namespace
+
+LoadUnloadCompressor::LoadUnloadCompressor(double full_load_power, double full_load_airflow, double storage_volume,
+                                           double max_power, double full_load_pressure, double max_pressure,
+                                           double modulating_pressure, double unloaded_load_factor)
+    : LoadUnloadCompressor(full_load_power, full_load_airflow, storage_volume, max_power, full_load_pressure,
+                           max_pressure, modulating_pressure, unloaded_load_factor, 14.7,
+                           CompressorType::Reciprocating, CompressorLubricant::None, CompressorControl::LoadUnload,
+                           full_load_power * unloaded_load_factor) {}
+
 LoadUnloadCompressor::LoadUnloadCompressor(double full_load_power, double full_load_airflow, double storage_volume,
                                            double max_power, double full_load_pressure, double max_pressure,
                                            double modulating_pressure, double unloaded_load_factor,
@@ -88,121 +101,132 @@ void LoadUnloadCompressor::setModulationExponent(CompressorControl control) {
     modulation_exponent_ = control == CompressorControl::VariableDisplacementUnload ? 2.0 : 1.0;
 }
 
-double LoadUnloadCompressor::curveFit(double value, bool capacity_vs_power) const {
+LoadUnloadCompressor::CycleState LoadUnloadCompressor::calculateCycleState(double curve_airflow) const {
+    CycleState state;
     const double max_mod_power = full_load_power_fraction_ * max_power_;
     const double blowdown_decay_time = blowdown_time_ / std::log(1.0 / tolerance_);
     const double shutdown_decay_time = shutdown_time_ / std::log(1.0 / tolerance_);
 
-    std::vector<double> percent_capacity;
-    std::vector<double> percent_power;
-    const double        capacity_decrement = full_load_airflow_ / 76.0;
-    double              curve_airflow      = full_load_airflow_;
-    do {
-        double modulation_runtime = 0.0;
-        double average_modulation_power = 0.0;
-        if (unload_airflow_ != full_load_airflow_) {
-            if (curve_airflow < unload_airflow_) {
-                modulation_runtime =
-                    ((modulating_pressure_ * storage_volume_) / (atmospheric_pressure_ * full_load_airflow_)) *
-                    std::log((full_load_airflow_ - curve_airflow) / (unload_airflow_ - curve_airflow)) * 60.0;
-                if (modulation_runtime == 0.0) {
-                    modulation_runtime = 1.0;
-                }
-
-                const double average_pressure_1 =
-                    max_pressure_ + modulating_pressure_ - curve_airflow * modulating_pressure_ / full_load_airflow_;
-                const double average_pressure_2 =
-                    ((curve_airflow * modulating_pressure_) / full_load_airflow_) - modulating_pressure_;
-                const double average_pressure_3 =
-                    modulating_pressure_ * storage_volume_ / atmospheric_pressure_ / full_load_airflow_;
-                const double average_pressure_4 =
-                    (1.0 - std::exp(-atmospheric_pressure_ * full_load_airflow_ / modulating_pressure_ /
-                                    storage_volume_ * modulation_runtime / 60.0)) /
-                    modulation_runtime * 60.0;
-                const double average_pressure =
-                    average_pressure_1 + average_pressure_2 * average_pressure_3 * average_pressure_4;
-                average_modulation_power =
-                    (max_power_ - max_mod_power) *
-                        std::pow((max_pressure_ + modulating_pressure_ - average_pressure) / modulating_pressure_,
-                                 modulation_exponent_) +
-                    max_mod_power;
-            }
-            else {
-                average_modulation_power =
-                    (max_power_ - max_mod_power) * std::pow(curve_airflow / full_load_airflow_, modulation_exponent_) +
-                    max_mod_power;
-            }
-        }
-
-        double curve_power = 0.0;
+    if (unload_airflow_ != full_load_airflow_) {
         if (curve_airflow < unload_airflow_) {
-            const double unload_decay_runtime =
-                storage_volume_ * 60.0 * (unload_pressure_ - full_load_pressure_) /
-                (curve_airflow * atmospheric_pressure_);
-            const double blowdown_runtime = std::min(blowdown_time_, unload_decay_runtime);
-
-            const double average_blowdown_power =
-                no_load_power_ +
-                (((unload_power_ - max_mod_power) * std::exp(-blowdown_runtime / shutdown_decay_time) +
-                  max_mod_power) -
-                 no_load_power_) *
-                    ((1.0 - std::exp(-blowdown_runtime / blowdown_decay_time)) *
-                     (blowdown_decay_time / blowdown_runtime));
-            const double blowdown_energy = blowdown_runtime * average_blowdown_power;
-
-            const double off_load_runtime = unload_decay_runtime - blowdown_runtime;
-            const double off_load_power   = full_load_power_ * no_load_fraction_;
-            const double off_load_energy  = off_load_runtime * off_load_power;
-
-            const double sump_pressure_after_blowdown =
-                unload_sump_pressure_ + (unload_pressure_ - unload_sump_pressure_) *
-                                            std::exp(-blowdown_runtime / blowdown_decay_time);
-            const double reload_runtime =
-                reload_time_ * ((unload_pressure_ - sump_pressure_after_blowdown) /
-                                (unload_pressure_ - (unload_pressure_ - unload_sump_pressure_) * tolerance_));
-            double minimum_blowdown_power = 0.0;
-            if (blowdown_runtime == blowdown_time_) {
-                minimum_blowdown_power = no_load_power_;
+            state.modulation_runtime =
+                ((modulating_pressure_ * storage_volume_) / (atmospheric_pressure_ * full_load_airflow_)) *
+                std::log((full_load_airflow_ - curve_airflow) / (unload_airflow_ - curve_airflow)) * 60.0;
+            if (state.modulation_runtime == 0.0) {
+                state.modulation_runtime = 1.0;
             }
-            else {
-                minimum_blowdown_power =
-                    no_load_power_ +
-                    ((((unload_power_ - max_mod_power) * std::exp(-blowdown_runtime / shutdown_decay_time) +
-                       max_mod_power) -
-                      no_load_power_) *
-                     std::exp(-blowdown_runtime / blowdown_decay_time));
-            }
-            const double average_reload_power = (minimum_blowdown_power + full_load_power_) / 2.0;
-            const double reload_energy        = reload_runtime * average_reload_power;
 
-            const double reload_pumpup_runtime =
-                60.0 * storage_volume_ *
-                ((max_pressure_ - full_load_pressure_ +
-                  (reload_runtime / 60.0) * atmospheric_pressure_ * (curve_airflow / storage_volume_)) /
-                 (atmospheric_pressure_ * (full_load_airflow_ - curve_airflow)));
-            const double average_reload_pumpup_power =
-                ((1.0 - (atmospheric_pressure_ * curve_airflow * reload_runtime) /
-                            (storage_volume_ * 60.0 * 200.0)) *
-                     full_load_power_ +
-                 max_power_) /
-                2.0;
-            const double reload_pumpup_energy = reload_pumpup_runtime * average_reload_pumpup_power;
-
-            const double modulation_energy =
-                unload_airflow_ != full_load_airflow_ ? modulation_runtime * average_modulation_power : 0.0;
-
-            const double cycle_runtime =
-                blowdown_runtime + off_load_runtime + reload_runtime + reload_pumpup_runtime + modulation_runtime;
-            curve_power =
-                (blowdown_energy + off_load_energy + reload_energy + reload_pumpup_energy + modulation_energy) /
-                cycle_runtime;
+            const double average_pressure_1 =
+                max_pressure_ + modulating_pressure_ - curve_airflow * modulating_pressure_ / full_load_airflow_;
+            const double average_pressure_2 =
+                ((curve_airflow * modulating_pressure_) / full_load_airflow_) - modulating_pressure_;
+            const double average_pressure_3 =
+                modulating_pressure_ * storage_volume_ / atmospheric_pressure_ / full_load_airflow_;
+            const double average_pressure_4 =
+                (1.0 - std::exp(-atmospheric_pressure_ * full_load_airflow_ / modulating_pressure_ /
+                                storage_volume_ * state.modulation_runtime / 60.0)) /
+                state.modulation_runtime * 60.0;
+            state.average_discharge_pressure =
+                average_pressure_1 + average_pressure_2 * average_pressure_3 * average_pressure_4;
+            state.average_modulation_power =
+                (max_power_ - max_mod_power) *
+                    std::pow((max_pressure_ + modulating_pressure_ - state.average_discharge_pressure) /
+                                 modulating_pressure_,
+                             modulation_exponent_) +
+                max_mod_power;
         }
         else {
-            curve_power = average_modulation_power;
+            state.average_modulation_power =
+                (max_power_ - max_mod_power) * std::pow(curve_airflow / full_load_airflow_, modulation_exponent_) +
+                max_mod_power;
         }
+    }
+
+    if (curve_airflow < unload_airflow_) {
+        const double unload_decay_runtime = storage_volume_ * 60.0 * (unload_pressure_ - full_load_pressure_) /
+                                            (curve_airflow * atmospheric_pressure_);
+        state.blowdown_runtime = std::min(blowdown_time_, unload_decay_runtime);
+
+        state.average_blowdown_power =
+            no_load_power_ +
+            (((unload_power_ - max_mod_power) * std::exp(-state.blowdown_runtime / shutdown_decay_time) +
+              max_mod_power) -
+             no_load_power_) *
+                ((1.0 - std::exp(-state.blowdown_runtime / blowdown_decay_time)) *
+                 (blowdown_decay_time / state.blowdown_runtime));
+        state.blowdown_energy = state.blowdown_runtime * state.average_blowdown_power;
+
+        state.off_load_runtime = unload_decay_runtime - state.blowdown_runtime;
+        state.off_load_power   = full_load_power_ * no_load_fraction_;
+        state.off_load_energy  = state.off_load_runtime * state.off_load_power;
+
+        const double sump_pressure_after_blowdown =
+            unload_sump_pressure_ +
+            (unload_pressure_ - unload_sump_pressure_) *
+                std::exp(-state.blowdown_runtime / blowdown_decay_time);
+        state.reload_runtime =
+            reload_time_ * ((unload_pressure_ - sump_pressure_after_blowdown) /
+                            (unload_pressure_ - (unload_pressure_ - unload_sump_pressure_) * tolerance_));
+        double minimum_blowdown_power = 0.0;
+        if (state.blowdown_runtime == blowdown_time_) {
+            minimum_blowdown_power = no_load_power_;
+        }
+        else {
+            minimum_blowdown_power =
+                no_load_power_ +
+                ((((unload_power_ - max_mod_power) * std::exp(-state.blowdown_runtime / shutdown_decay_time) +
+                   max_mod_power) -
+                  no_load_power_) *
+                 std::exp(-state.blowdown_runtime / blowdown_decay_time));
+        }
+        state.average_reload_power = (minimum_blowdown_power + full_load_power_) / 2.0;
+        state.reload_energy        = state.reload_runtime * state.average_reload_power;
+
+        state.receiver_pumpup_runtime =
+            60.0 * storage_volume_ *
+            ((max_pressure_ - full_load_pressure_ +
+              (state.reload_runtime / 60.0) * atmospheric_pressure_ * (curve_airflow / storage_volume_)) /
+             (atmospheric_pressure_ * (full_load_airflow_ - curve_airflow)));
+        state.average_receiver_pumpup_power =
+            ((1.0 - (atmospheric_pressure_ * curve_airflow * state.reload_runtime) /
+                        (storage_volume_ * 60.0 * kLegacyReceiverPumpupReferencePressurePsig)) *
+                 full_load_power_ +
+             max_power_) /
+            2.0;
+        state.receiver_pumpup_energy = state.receiver_pumpup_runtime * state.average_receiver_pumpup_power;
+
+        state.modulation_energy = unload_airflow_ != full_load_airflow_
+                                      ? state.modulation_runtime * state.average_modulation_power
+                                      : 0.0;
+
+        state.cycle_runtime = state.blowdown_runtime + state.off_load_runtime + state.reload_runtime +
+                              state.receiver_pumpup_runtime + state.modulation_runtime;
+        state.average_cycle_power =
+            (state.blowdown_energy + state.off_load_energy + state.reload_energy + state.receiver_pumpup_energy +
+             state.modulation_energy) /
+            state.cycle_runtime;
+    }
+    else {
+        state.average_cycle_power = state.average_modulation_power;
+    }
+
+    return state;
+}
+
+double LoadUnloadCompressor::curveFit(double value, bool capacity_vs_power) const {
+    std::vector<double> percent_capacity;
+    std::vector<double> percent_power;
+    percent_capacity.reserve(kCurveIntervalCount + 1);
+    percent_power.reserve(kCurveIntervalCount + 1);
+
+    const double capacity_decrement = full_load_airflow_ / static_cast<double>(kCurveIntervalCount);
+    double       curve_airflow      = full_load_airflow_;
+    do {
+        const CycleState cycle = calculateCycleState(curve_airflow);
 
         percent_capacity.push_back(curve_airflow / full_load_airflow_);
-        percent_power.push_back(curve_airflow != full_load_airflow_ ? curve_power / full_load_power_ : 1.0);
+        percent_power.push_back(curve_airflow != full_load_airflow_ ? cycle.average_cycle_power / full_load_power_
+                                                                    : 1.0);
 
         if (curve_airflow == 0.0001) {
             break;
@@ -269,115 +293,8 @@ CompressorPerformanceResult LoadUnloadCompressor::calculateFromCapacityFraction(
         curve_airflow = 0.00000000001;
     }
 
-    const double max_mod_power      = full_load_power_fraction_ * max_power_;
-    const double blowdown_decay_time = blowdown_time_ / std::log(1.0 / tolerance_);
-    const double shutdown_decay_time = shutdown_time_ / std::log(1.0 / tolerance_);
-
-    double modulation_runtime = 0.0;
-    double average_modulation_power = 0.0;
-    if (unload_airflow_ != full_load_airflow_) {
-        if (curve_airflow < unload_airflow_) {
-            modulation_runtime =
-                ((modulating_pressure_ * storage_volume_) / (atmospheric_pressure_ * full_load_airflow_)) *
-                std::log((full_load_airflow_ - curve_airflow) / (unload_airflow_ - curve_airflow)) * 60.0;
-            if (modulation_runtime == 0.0) {
-                modulation_runtime = 1.0;
-            }
-
-            const double average_pressure_1 =
-                max_pressure_ + modulating_pressure_ - curve_airflow * modulating_pressure_ / full_load_airflow_;
-            const double average_pressure_2 =
-                ((curve_airflow * modulating_pressure_) / full_load_airflow_) - modulating_pressure_;
-            const double average_pressure_3 =
-                modulating_pressure_ * storage_volume_ / atmospheric_pressure_ / full_load_airflow_;
-            const double average_pressure_4 =
-                (1.0 - std::exp(-atmospheric_pressure_ * full_load_airflow_ / modulating_pressure_ / storage_volume_ *
-                                modulation_runtime / 60.0)) /
-                modulation_runtime * 60.0;
-            const double average_pressure =
-                average_pressure_1 + average_pressure_2 * average_pressure_3 * average_pressure_4;
-            average_modulation_power =
-                (max_power_ - max_mod_power) *
-                    std::pow((max_pressure_ + modulating_pressure_ - average_pressure) / modulating_pressure_,
-                             modulation_exponent_) +
-                max_mod_power;
-        }
-        else {
-            average_modulation_power =
-                (max_power_ - max_mod_power) * std::pow(curve_airflow / full_load_airflow_, modulation_exponent_) +
-                max_mod_power;
-        }
-    }
-
-    double curve_power = 0.0;
-    if (curve_airflow < unload_airflow_) {
-        const double unload_decay_runtime =
-            storage_volume_ * 60.0 * (unload_pressure_ - full_load_pressure_) /
-            (curve_airflow * atmospheric_pressure_);
-        const double blowdown_runtime = std::min(blowdown_time_, unload_decay_runtime);
-
-        const double average_blowdown_power =
-            no_load_power_ +
-            (((unload_power_ - max_mod_power) * std::exp(-blowdown_runtime / shutdown_decay_time) +
-              max_mod_power) -
-             no_load_power_) *
-                ((1.0 - std::exp(-blowdown_runtime / blowdown_decay_time)) * blowdown_decay_time /
-                 blowdown_runtime);
-
-        const double blowdown_energy = blowdown_runtime * average_blowdown_power;
-
-        const double off_load_runtime = unload_decay_runtime - blowdown_runtime;
-        const double off_load_power   = full_load_power_ * no_load_fraction_;
-        const double off_load_energy  = off_load_runtime * off_load_power;
-
-        const double sump_pressure_after_blowdown =
-            unload_sump_pressure_ +
-            (unload_pressure_ - unload_sump_pressure_) * std::exp(-blowdown_runtime / blowdown_decay_time);
-        const double reload_runtime =
-            reload_time_ * ((unload_pressure_ - sump_pressure_after_blowdown) /
-                            (unload_pressure_ - (unload_pressure_ - unload_sump_pressure_) * tolerance_));
-        double minimum_blowdown_power = 0.0;
-        if (blowdown_runtime == blowdown_time_) {
-            minimum_blowdown_power = no_load_power_;
-        }
-        else {
-            minimum_blowdown_power =
-                no_load_power_ +
-                ((((unload_power_ - max_mod_power) * std::exp(-blowdown_runtime / shutdown_decay_time) +
-                   max_mod_power) -
-                  no_load_power_) *
-                 std::exp(-blowdown_runtime / blowdown_decay_time));
-        }
-
-        const double average_reload_power = (minimum_blowdown_power + full_load_power_) / 2.0;
-        const double reload_energy        = reload_runtime * average_reload_power;
-
-        const double reload_pumpup_runtime =
-            60.0 * storage_volume_ *
-            ((max_pressure_ - full_load_pressure_ +
-              (reload_runtime / 60.0) * atmospheric_pressure_ * (curve_airflow / storage_volume_)) /
-             (atmospheric_pressure_ * (full_load_airflow_ - curve_airflow)));
-        const double average_reload_pumpup_power =
-            ((1.0 - (atmospheric_pressure_ * curve_airflow * reload_runtime) /
-                        (storage_volume_ * 60.0 * 200.0)) *
-                 full_load_power_ +
-             max_power_) /
-            2.0;
-        const double reload_pumpup_energy = reload_pumpup_runtime * average_reload_pumpup_power;
-
-        const double modulation_energy =
-            unload_airflow_ != full_load_airflow_ ? modulation_runtime * average_modulation_power : 0.0;
-
-        const double cycle_runtime =
-            blowdown_runtime + off_load_runtime + reload_runtime + reload_pumpup_runtime + modulation_runtime;
-        curve_power = (blowdown_energy + off_load_energy + reload_energy + reload_pumpup_energy + modulation_energy) /
-                      cycle_runtime;
-    }
-    else {
-        curve_power = average_modulation_power;
-    }
-
-    const double power_fraction = curve_power / full_load_power_;
+    const CycleState cycle          = calculateCycleState(curve_airflow);
+    const double     power_fraction = cycle.average_cycle_power / full_load_power_;
     return {power_fraction * full_load_power_, full_load_airflow_ * airflow_fraction, power_fraction,
             airflow_fraction};
 }
@@ -392,7 +309,7 @@ CompressorPerformanceResult LoadUnloadCompressor::calculateFromMeasuredCapacity(
 
 CompressorPerformanceResult LoadUnloadCompressor::calculateFromElectrical(double voltage, double current,
                                                                           double power_factor) {
-    return calculateFromMeasuredPower(voltage * current * power_factor * 1.732 / 1000.0);
+    return calculateFromMeasuredPower(threePhasePowerKw(voltage, current, power_factor));
 }
 
 void LoadUnloadCompressor::applyPressureInletCorrection(double capacity, double full_load_bhp, double poly_exponent,

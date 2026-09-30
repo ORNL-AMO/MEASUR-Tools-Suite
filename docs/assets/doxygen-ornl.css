@@ -148,6 +148,13 @@ span[onclick]:focus-visible {
   box-shadow: 0 12px 26px rgba(0, 0, 0, 0.18);
 }
 
+/* Keep engineering diagrams legible without overflowing narrow documentation panes. */
+div.image object[type="image/svg+xml"] {
+  width: min(100%, 640px);
+  height: auto;
+  aspect-ratio: 8 / 5;
+}
+
 #projectalign {
   padding: 0 0 0 18px;
 }

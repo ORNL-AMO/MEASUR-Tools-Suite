@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" role="img" aria-labelledby="title desc">
+  <title id="title">Centrifugal modulation unload normalized performance curve</title><desc id="desc">Two line segments connect no load, unload, and maximum flow anchors.</desc>
+  <rect width="640" height="400" fill="#fff"/><g stroke="#d5dce5"><path d="M80 300H590M80 245H590M80 190H590M80 135H590M80 80H590"/><path d="M80 80V300M335 80V300M590 80V300"/></g><path d="M80 70V300H600" fill="none" stroke="#263746" stroke-width="2"/><path d="M80 265L524 100L568 80" fill="none" stroke="#1675b8" stroke-width="5"/>
+  <g fill="#1675b8"><circle cx="80" cy="265" r="6"/><circle cx="524" cy="100" r="7"/><circle cx="568" cy="80" r="6"/></g><g font-family="Arial,sans-serif" fill="#263746"><text x="300" y="355" font-size="18">Airflow fraction, fQ</text><text x="22" y="205" font-size="18" transform="rotate(-90 22 205)">Power fraction, fP</text><text x="88" y="255" font-size="14">No load</text><text x="405" y="125" font-size="14">Unload (0.870, 0.911)</text><text x="505" y="62" font-size="14">Maximum flow</text></g>
+</svg>

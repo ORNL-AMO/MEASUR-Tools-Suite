@@ -1,54 +1,60 @@
 /**
- * @defgroup vfd_compressor_assessment Variable Frequency Drive Compressor Assessment
+ * @defgroup vfd_compressor_assessment Variable-Frequency-Drive Compressor Model
  * @ingroup compressor_modeling
- * @brief Compressor model for variable frequency drive control.
- * @details The VFD model reports calculated package power and airflow from a curve defined by
- *          no-load, turndown, mid-turndown, and full-load points. Below turndown airflow it
- *          uses a linear segment from no-load to turndown. From turndown to full load it fits
- *          a second-order curve through the turndown, mid-turndown, and full-load points.
+ * @brief Piecewise VFD performance curve through no-load, turndown, midrange, and full-load anchors.
+ * @details
+ * Below turndown, package power is linearly interpolated from no-load to the turndown point. From
+ * turndown to full load, a quadratic is fitted through turndown, the supplied midrange point, and
+ * full load. A measured airflow evaluates this curve directly; a measured power evaluates its
+ * analytical inverse. Apply the result reconstruction independently to every measured interval.
  *
- * @heading{VFD Piecewise Curve}
- * @copydoc vfd_compressor_formula
- */
-
-/**
- * @defgroup vfd_compressor_formula VFD Compressor Formula
- * @ingroup vfd_compressor_assessment
- * @brief Piecewise VFD airflow-power curve.
- * @details Capacity-based inputs evaluate the power fraction directly from the airflow
- *          fraction. Power-based inputs invert the same curve, returning zero airflow
- *          and zero power when the requested power is below the no-load power.
+ * @image html ca-vfd.svg "Normalized VFD curve from the 174.4 kW, 1009 acfm test fixture."
  *
+ * @heading{Performance Curve}
  * @formula{vfd-piecewise-power;
- *   f_P =
- *   \begin{cases}
- *     1, & \text{if } f_Q > 1 \\
- *     \frac{f_{P,TD} - f_{P,NL}}{f_{Q,TD}} f_Q + f_{P,NL},
- *       & \text{if } f_Q < f_{Q,TD} \\
- *     a f_Q^2 + b f_Q + c,
- *       & \text{if } f_{Q,TD} \le f_Q \le 1
- *   \end{cases}
+ * f_P=\begin{cases}
+ * 1, & f_Q>1\\
+ * f_{P,NL}+\dfrac{f_{P,TD}-f_{P,NL}}{f_{Q,TD}}f_Q, & f_Q<f_{Q,TD}\\
+ * af_Q^2+bf_Q+c, & f_{Q,TD}\le f_Q\le1
+ * \end{cases}
  * }
- *
  * @formula{vfd-piecewise-airflow;
- *   f_Q =
- *   \begin{cases}
- *     1, & \text{if } f_P = 1 \\
- *     0, & \text{if } f_P < f_{P,NL} \\
- *     \frac{f_{Q,TD}}{f_{P,TD} - f_{P,NL}}(f_P - f_{P,NL}),
- *       & \text{if } f_{P,NL} \le f_P < f_{P,TD} \\
- *     \frac{-b + \sqrt{b^2 - 4a(c - f_P)}}{2a},
- *       & \text{if } f_P \ge f_{P,TD}
- *   \end{cases}
+ * f_Q=\begin{cases}
+ * 1, & f_P=1\\
+ * 0, & f_P<f_{P,NL}\\
+ * \dfrac{f_{Q,TD}}{f_{P,TD}-f_{P,NL}}(f_P-f_{P,NL}),
+ *   & f_{P,NL}\le f_P<f_{P,TD}\\
+ * \dfrac{-b+\sqrt{b^2-4a(c-f_P)}}{2a}, & f_P\ge f_{P,TD}
+ * \end{cases}
  * }
  *
- * @subheading{Symbols}
+ * @heading{Inputs and Origins}
+ * Full-load, turndown, and no-load package powers and the corresponding airflow anchors come from
+ * measured performance or manufacturer data. The midrange power/airflow point supplies the third
+ * point needed for the quadratic. Do not substitute motor nameplate hp for package kW.
+ *
  * @symtable
- * @symrow{f_P; Fraction of full-load power; \unitless}
- * @symrow{f_Q; Fraction of full-load airflow; \unitless}
- * @symrow{f_{P,TD}; Turndown power fraction; \unitless}
- * @symrow{f_{P,NL}; No-load power fraction; \unitless}
+ * @symrow{f_P; Package power divided by full-load package power; \unitless}
+ * @symrow{f_Q; Delivered airflow divided by full-load airflow; \unitless}
+ * @symrow{f_{P,TD}; Turndown package power fraction; \unitless}
+ * @symrow{f_{P,NL}; No-load package power fraction; \unitless}
  * @symrow{f_{Q,TD}; Turndown airflow fraction; \unitless}
- * @symrow{a,b,c; Second-order curve-fit coefficients; \unitless}
+ * @symrow{a,b,c; Quadratic coefficients fitted from turndown, midrange, and full load; \unitless}
  * @endsymtable
+ *
+ * @heading{Fully Substituted Example}
+ * The tested fixture uses @math{P_{FL}=174.4\ \mathrm{kW}}, @math{Q_{FL}=1009\ \mathrm{acfm}},
+ * turndown @math{(Q_{TD},P_{TD})=(202\ \mathrm{acfm},55.8\ \mathrm{kW})}, and
+ * midrange @math{(Q_{mid},P_{mid})=(605\ \mathrm{acfm},115\ \mathrm{kW})}, with
+ * @math{P_{NL}=11.2\ \mathrm{kW}}. At @math{f_Q=0.31}, the quadratic segment returns
+ * @math{f_P=0.4132}. The dimensional result is
+ * @math{P=0.4132(174.4)=72.07\ \mathrm{kW}} and
+ * @math{Q=0.31(1009)=312.79\ \mathrm{acfm}}.
+ *
+ * @heading{Assumptions and Limits}
+ * - A requested power below no-load power returns zero rather than extrapolating the curve.
+ * - Airflow above full load is capped at full-load power; operation beyond the supplied map is not
+ *   a validated VFD prediction.
+ * - Anchor points must be ordered consistently and describe the same pressure condition.
+ *
  */

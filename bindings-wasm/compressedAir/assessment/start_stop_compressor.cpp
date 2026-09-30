@@ -9,6 +9,7 @@ EMSCRIPTEN_BINDINGS(start_stop_compressor_assessment)
 {
     class_<StartStopCompressor>("StartStopCompressor")
         .constructor<double, double, double, double>()
+        .constructor<double, double, double, double, CompressorType>()
         .function("calculateFromPowerFraction", &StartStopCompressor::calculateFromPowerFraction)
         .function("calculateFromCapacityFraction", &StartStopCompressor::calculateFromCapacityFraction)
         .function("calculateFromMeasuredPower", &StartStopCompressor::calculateFromMeasuredPower)

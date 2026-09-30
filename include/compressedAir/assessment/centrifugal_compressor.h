@@ -87,7 +87,6 @@ class CentrifugalModulationUnloadCompressor : public CompressorModelBase {
     double       unload_power_fraction_    = 1.0;
     double       max_airflow_fraction_     = 1.0;
     double       unload_airflow_fraction_  = 1.0;
-    double       unload_base_fraction_     = 1.0;
     const double no_load_airflow_fraction_ = 0.0;
 };
 

@@ -1,48 +1,57 @@
 /**
- * @defgroup modulation_without_unload_compressor_assessment Modulation Without Unload Compressor Assessment
+ * @defgroup modulation_without_unload_compressor_assessment Modulation Without Unload
  * @ingroup compressor_modeling
- * @brief Compressor model for modulating control that does not unload.
- * @details The final output is calculated package power and airflow at the requested point.
- *          The model follows a power law between no-load and full-load power. When used as a
- *          helper inside the load/unload model, the `without unload` flag is false and the
- *          curve is anchored by the maximum modulating power floor instead.
+ * @brief Power-law model for a compressor that remains loaded while inlet capacity is modulated.
+ * @details
+ * The model converts between normalized package power and delivered airflow. Use measured or catalog
+ * full-load power and airflow, no-load package power, and the control exponent. Correct the full-load
+ * anchors for pressure and inlet conditions first when required. The same curve is also the modulation
+ * submodel used above the unload point by modulation-with-unload and variable-displacement controls.
  *
- * @heading{Power and Airflow Fractions}
- * @copydoc modulation_without_unload_formula
- */
-
-/**
- * @defgroup modulation_without_unload_formula Modulation Without Unload Formula
- * @ingroup modulation_without_unload_compressor_assessment
- * @brief Power-law relationship between airflow fraction and power.
+ * @image html ca-modulation-without-unload.svg "Normalized modulation-without-unload curve from the 85.4 kW, 473 acfm test fixture."
  *
+ * @heading{Performance Curve and Outputs}
  * @formula{mod-without-unload-power-from-airflow;
- *   P = (P_{FL} - P_{NL})f_Q^m + P_{NL}
+ *   P=(P_{FL}-P_{NL})f_Q^m+P_{NL}
  * }
  * @formula{mod-without-unload-airflow-from-power;
- *   Q = Q_{FL}\left(\frac{f_PP_{FL} - P_{NL}}{P_{FL} - P_{NL}}\right)^{1/m}
+ *   Q=Q_{FL}\left(\frac{f_PP_{FL}-P_{NL}}{P_{FL}-P_{NL}}\right)^{1/m}
  * }
+ * In the modulation submodel, replace @math{P_{NL}} with
+ * @math{P_{max,mod}=f_{P,FL}P_{max}} and replace the upper power anchor with @math{P_{max}}.
  *
- * For helper mode, the power floor is the maximum modulating power and the high
- * anchor is the maximum package power:
- * @formula{mod-without-unload-helper-power-from-airflow;
- *   P = (P_{max} - P_{max,mod})f_Q^m + P_{max,mod}
- * }
- * @formula{mod-without-unload-helper-airflow-from-power;
- *   Q = Q_{FL}\left(\frac{f_PP_{FL} - P_{max,mod}}{P_{max} - P_{max,mod}}\right)^{1/m}
- * }
+ * @heading{Inputs and Origins}
  *
- * @subheading{Symbols}
+ * | Quantity | Origin | Unit |
+ * |---|---|---|
+ * | Full-load package power and airflow | measured test or manufacturer package data | kW, acfm |
+ * | No-load package power | measured no-load condition or catalog | kW |
+ * | Exponent @math{m} | selected control correlation | dimensionless |
+ * | Maximum power and modulation floor | load/unload submodel anchors, when used there | kW, fraction |
+ *
  * @symtable
- * @symrow{P; Calculated package power; \kilo\watt}
- * @symrow{Q; Calculated airflow; \acfm}
+ * @symrow{P; Calculated package input power; \kilo\watt}
+ * @symrow{Q; Calculated delivered airflow; \acfm}
  * @symrow{P_{FL}; Full-load package power; \kilo\watt}
  * @symrow{Q_{FL}; Full-load airflow; \acfm}
  * @symrow{P_{NL}; No-load package power; \kilo\watt}
- * @symrow{P_{max}; Maximum package power in helper mode; \kilo\watt}
- * @symrow{P_{max,mod}; Maximum modulating power floor; \kilo\watt}
- * @symrow{f_P; Fraction of full-load power; \unitless}
- * @symrow{f_Q; Fraction of full-load airflow; \unitless}
- * @symrow{m; Modulation exponent; \unitless}
+ * @symrow{P_{max}; Maximum package power in the modulation submodel; \kilo\watt}
+ * @symrow{P_{max,mod}; Modulation power floor; \kilo\watt}
+ * @symrow{f_{P,FL}; Modulation floor divided by maximum package power; \unitless}
+ * @symrow{f_P; Full-load package power fraction; \unitless}
+ * @symrow{f_Q; Full-load airflow fraction; \unitless}
+ * @symrow{m; Control-curve exponent; \unitless}
  * @endsymtable
+ *
+ * @heading{Fully Substituted Example}
+ * The tested fixture uses @math{P_{FL}=85.4\ \mathrm{kW}}, @math{Q_{FL}=473\ \mathrm{acfm}},
+ * @math{P_{NL}=55.3\ \mathrm{kW}}, and @math{m=1}. At @math{f_P=0.89},
+ * @math{Q=473[(0.89(85.4)-55.3)/(85.4-55.3)]=325.38\ \mathrm{acfm}}. The final result is
+ * @math{P=0.89(85.4)=76.01\ \mathrm{kW}} and 325.38 acfm.
+ *
+ * @heading{Assumptions and Limits}
+ * - Inputs below no-load power do not represent a stable point on this loaded modulation curve.
+ * - The exponent is an empirical control-shape parameter, not a thermodynamic exponent.
+ * - Apply the curve independently to every measured profile interval.
+ *
  */

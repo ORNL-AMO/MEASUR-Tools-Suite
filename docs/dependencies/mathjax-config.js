@@ -93,6 +93,7 @@ window.MathJax = {
                 \DeclareSIUnit{\scfm}{scfm}
                 \DeclareSIUnit{\actualCubicFeetPerMinute}{acfm}
                 \DeclareSIUnit{\acfm}{acfm}
+                \DeclareSIUnit{\hundredAcfm}{100\,acfm}
                 \DeclareSIUnit{\kilostandardCubicFeet}{kscf}
                 \DeclareSIUnit{\kscf}{kscf}
                 \DeclareSIUnit{\cubicFoot}{ft^3}
@@ -112,6 +113,7 @@ window.MathJax = {
                 \DeclareSIUnit{\psi}{psi}
                 \DeclareSIUnit{\decibel}{dB}
                 \DeclareSIUnit{\hour}{h}
+                \DeclareSIUnit{\horsepower}{hp}
                 \DeclareSIUnit{\bhp}{bhp}
                 \DeclareSIUnit{\psia}{psia}
                 \DeclareSIUnit{\psig}{psig}
