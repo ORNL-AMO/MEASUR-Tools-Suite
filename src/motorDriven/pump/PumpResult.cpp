@@ -104,9 +104,16 @@ PumpResult::Output PumpResult::calculateModified() {
      */
 
     // modified.pumpEfficiency = pumpInput.pumpEfficiency;
-    OptimalPumpShaftPower optimalPumpShaftPower(fieldData.flowRate, fieldData.head, pumpInput.specificGravity,
-                                                pumpInput.pumpEfficiency);
-    double                moverShaftPower = optimalPumpShaftPower.calculate();
+    double moverShaftPower;
+    if (pumpInput.style == Pump::Style::POSITIVE_DISPLACEMENT) {
+        moverShaftPower = fieldData.flowRate * pumpInput.differentialPressurePsi /
+                          (physics::conversions::kPumpGpmPsiPerHp * pumpInput.pumpEfficiency);
+    }
+    else {
+        OptimalPumpShaftPower optimalPumpShaftPower(fieldData.flowRate, fieldData.head, pumpInput.specificGravity,
+                                                    pumpInput.pumpEfficiency);
+        moverShaftPower = optimalPumpShaftPower.calculate();
+    }
     // modified.moverShaftPower = optimalPumpShaftPower.calculate();
 
     OptimalMotorShaftPower modifiedMotorShaftPower(moverShaftPower, pumpInput.drive, pumpInput.specifiedEfficiency);

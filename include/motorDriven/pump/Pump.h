@@ -72,7 +72,8 @@ struct Input {
      * @param stageCount int, the number of pump stages
      * @param speed Speed, type of pump speed from either fixed or not fixed.
      * @param specifiedEfficiency double, specified drive efficiency, dimensionless fraction
-     * @param differentialPressurePsi double, pump differential pressure in psi for positive-displacement pumps
+     * @param differentialPressurePsi double, operating pump differential pressure in psi for positive-displacement
+     * pumps
      */
     Input(const Style style, double pumpEfficiency, const double rpm, const Motor::Drive drive, const double kviscosity,
           const double specificGravity, const int stageCount, const SpecificSpeed speed, double specifiedEfficiency,
