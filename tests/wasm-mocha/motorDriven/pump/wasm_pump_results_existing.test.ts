@@ -157,7 +157,7 @@ describe('Pump Results Existing', function () {
             assert.approximately(calculatedResults.motor_power, motorPower, 0.001, 'motor_power');
             assert.approximately(
                 calculatedResults.annual_energy,
-                motorPower * operatingHours / 1000,
+                motorPower * operatingHours,
                 0.001,
                 'annual_energy'
             );

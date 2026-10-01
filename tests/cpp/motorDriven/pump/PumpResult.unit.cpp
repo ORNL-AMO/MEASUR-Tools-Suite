@@ -78,8 +78,8 @@ TEST_CASE("PumpResults positive displacement existing", "[PumpResults]") {
     CHECK(pump.differentialPressurePsi == Approx(differential_pressure_psi));
     CHECK(ex.pumpEfficiency == Approx(hydraulicHp / ex.moverShaftPower));
     CHECK(ex.motorPower == Approx(motor_field_power));
-    CHECK(ex.annualEnergy == Approx(motor_field_power * operating_hours / 1000.0));
-    CHECK(ex.annualCost * 1000.0 == Approx(motor_field_power * operating_hours * cost_kw_hour));
+    CHECK(ex.annualEnergy == Approx(motor_field_power * operating_hours));
+    CHECK(ex.annualCost == Approx(ex.annualEnergy * cost_kw_hour));
 }
 
 TEST_CASE("PumpResults positive displacement modified", "[PumpResults]") {
@@ -112,7 +112,7 @@ TEST_CASE("PumpResults positive displacement modified", "[PumpResults]") {
     CHECK(mod.pumpEfficiency == Approx(pumpEfficiency));
     CHECK(mod.moverShaftPower == Approx(expectedMoverShaftPower));
     CHECK(mod.motorShaftPower == Approx(expectedMoverShaftPower));
-    CHECK(mod.annualEnergy == Approx(mod.motorPower * operating_hours / 1000.0));
+    CHECK(mod.annualEnergy == Approx(mod.motorPower * operating_hours));
     CHECK(mod.annualCost == Approx(mod.annualEnergy * cost_kw_hour));
 }
 

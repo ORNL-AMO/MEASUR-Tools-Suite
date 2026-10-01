@@ -72,11 +72,16 @@ PumpResult::Output PumpResult::calculateExisting() {
     // existing.pumpEfficiency = MoverEfficiency(pumpInput.specificGravity, fieldData.flowRate, fieldData.head,
     // existing.moverShaftPower).calculate();
 
-    // Annual energy, MWh/year = kWe * operating hours/1000
-    double annualEnergy = output.power * operatingHours / 1000;
+    const bool isPositiveDisplacement = pumpInput.style == Pump::Style::POSITIVE_DISPLACEMENT;
+    // Annual energy, kWh/year for positive-displacement inventory results.
+    // Legacy pump styles retain the existing MWh/year scaling used by PSAT.
+    double annualEnergy = output.power * operatingHours;
+    if (!isPositiveDisplacement) {
+        annualEnergy /= 1000;
+    }
     // existing.annualEnergy = existing.motorPower * operatingHours / 1000;
 
-    // Annual energy cost = MWh/year * 1000 * energy cost rate ($/kWh)
+    // Positive displacement annual cost is dollars/year. Legacy pump styles retain existing thousand-dollar scaling.
     double annualCost = annualEnergy * unitCost;
     // existing.annualCost = existing.annualEnergy * unitCost;
 
@@ -104,8 +109,9 @@ PumpResult::Output PumpResult::calculateModified() {
      */
 
     // modified.pumpEfficiency = pumpInput.pumpEfficiency;
-    double moverShaftPower;
-    if (pumpInput.style == Pump::Style::POSITIVE_DISPLACEMENT) {
+    const bool isPositiveDisplacement = pumpInput.style == Pump::Style::POSITIVE_DISPLACEMENT;
+    double     moverShaftPower;
+    if (isPositiveDisplacement) {
         moverShaftPower = fieldData.flowRate * pumpInput.differentialPressurePsi /
                           (physics::conversions::kPumpGpmPsiPerHp * pumpInput.pumpEfficiency);
     }
@@ -140,11 +146,15 @@ PumpResult::Output PumpResult::calculateModified() {
     // modified.motorPowerFactor = output.powerFactor;
     // modified.loadFactor = output.loadFactor;
 
-    // Annual energy, MWh/year = kWe * operating hours/1000
-    double annualEnergyCalculation = output.power * operatingHours / 1000;
+    // Annual energy, kWh/year for positive-displacement inventory results.
+    // Legacy pump styles retain the existing MWh/year scaling used by PSAT.
+    double annualEnergyCalculation = output.power * operatingHours;
+    if (!isPositiveDisplacement) {
+        annualEnergyCalculation /= 1000;
+    }
     // modified.annualEnergy = modified.motorPower * operatingHours;
 
-    // Annual energy cost = MWh/year * 1000 * energy cost rate ($/kWh)
+    // Positive displacement annual cost is dollars/year. Legacy pump styles retain existing thousand-dollar scaling.
     double annualCostCalculation = annualEnergyCalculation * unitCost;
 
     // Annual Savings potential

@@ -151,7 +151,7 @@ describe('Pump Results Modified', function () {
             );
             assert.approximately(
                 calculatedResults.annual_energy,
-                calculatedResults.motor_power * operatingHours / 1000,
+                calculatedResults.motor_power * operatingHours,
                 0.001,
                 'annual_energy'
             );
