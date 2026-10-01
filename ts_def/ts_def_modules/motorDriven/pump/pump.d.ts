@@ -166,7 +166,8 @@ export declare class PumpResultInput {
      * @param stageCount Pump stage count.
      * @param speed SpecificSpeed, pump specific speed selector
      * @param specifiedEfficiency Specified optimal efficiency, dimensionless fraction.
-     * @param differentialPressurePsi Differential pressure for positive-displacement pumps, units psi.
+     * @param differentialPressurePsi Operating differential pressure for positive-displacement pump result calculations,
+     * units psi.
      */
     constructor(
         style: PumpStyle,

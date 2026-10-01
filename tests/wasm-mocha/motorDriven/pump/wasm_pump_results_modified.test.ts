@@ -82,4 +82,91 @@ describe('Pump Results Modified', function () {
             pumpInput.delete();
         }
     });
+
+    it('should calculate positive displacement Pump results calculateModified with differential pressure', function () {
+        const pumpStyle = moduleInstance.PumpStyle.POSITIVE_DISPLACEMENT;
+        const pumpEfficiency = 80 / 100;
+        const rpm = 1780;
+        const drive = moduleInstance.Drive.DIRECT_DRIVE;
+        const kviscosity = 1.0;
+        const specificGravity = 1.0;
+        const stageCount = 1;
+        const speed = moduleInstance.SpecificSpeed.NOT_FIXED_SPEED;
+        const specifiedEfficiency = 1.0;
+        const differentialPressurePsi = 50;
+        const pumpInput = new moduleInstance.PumpResultInput(
+            pumpStyle,
+            pumpEfficiency,
+            rpm,
+            drive,
+            kviscosity,
+            specificGravity,
+            stageCount,
+            speed,
+            specifiedEfficiency,
+            differentialPressurePsi
+        );
+
+        const motor = new moduleInstance.Motor(
+            moduleInstance.LineFrequency.FREQ60,
+            200,
+            1780,
+            moduleInstance.MotorEfficiencyClass.SPECIFIED,
+            0.95,
+            460,
+            225,
+            0
+        );
+
+        const flowRate = 100;
+        const head = 999;
+        const operatingHours = 2000;
+        const unitCost = 0.05;
+        const fieldData = new moduleInstance.PumpFieldData(
+            flowRate,
+            head,
+            moduleInstance.LoadEstimationMethod.POWER,
+            80,
+            125.857,
+            480
+        );
+        const pumpResult = new moduleInstance.PumpResult(pumpInput, motor, fieldData, operatingHours, unitCost);
+        let calculatedResults: PumpResults | undefined;
+
+        try {
+            calculatedResults = pumpResult.calculateModified();
+
+            const expectedMoverShaftPower = flowRate * differentialPressurePsi / (1714.231 * pumpEfficiency);
+            assert.approximately(
+                calculatedResults.mover_shaft_power,
+                expectedMoverShaftPower,
+                0.000001,
+                'mover_shaft_power'
+            );
+            assert.approximately(
+                calculatedResults.motor_shaft_power,
+                expectedMoverShaftPower,
+                0.000001,
+                'motor_shaft_power'
+            );
+            assert.approximately(
+                calculatedResults.annual_energy,
+                calculatedResults.motor_power * operatingHours,
+                0.001,
+                'annual_energy'
+            );
+            assert.approximately(
+                calculatedResults.annual_cost,
+                calculatedResults.annual_energy * unitCost,
+                0.001,
+                'annual_cost'
+            );
+        } finally {
+            calculatedResults?.delete();
+            pumpResult.delete();
+            fieldData.delete();
+            motor.delete();
+            pumpInput.delete();
+        }
+    });
 });
