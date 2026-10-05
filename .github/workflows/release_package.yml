@@ -6,6 +6,10 @@ on:
       release_channel:
         required: true
         type: string
+      wasm_artifact_name:
+        description: Name of the tested WASM artifact uploaded by the quality workflow
+        required: true
+        type: string
     secrets:
       NPM_AUTH_TOKEN:
         required: true
@@ -30,7 +34,7 @@ jobs:
           fetch-depth: 1
 
       - name: Get Node version
-        run: echo "BUILD_NODE_VER=$(grep -o -P -m 1 '(?<=node":\s").*(?=")' package.json)" >> $GITHUB_ENV
+        run: echo "BUILD_NODE_VER=$(grep -o -P -m 1 '(?<=node":\s").*(?=")' package.json)" >> "$GITHUB_ENV"
 
       - name: Node setup
         uses: actions/setup-node@v5
@@ -40,19 +44,6 @@ jobs:
           package-manager-cache: true
           cache-dependency-path: package-lock.json
           registry-url: https://registry.npmjs.org/
-
-      - name: Setup Emscripten SDK
-        uses: emscripten-core/setup-emsdk@v15
-        with:
-          version: latest
-          actions-cache-folder: "emsdk-cache"
-
-      - name: Setup valgrind
-        if: inputs.release_channel == 'beta'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libc6-dbg valgrind
-          valgrind --version
 
       - name: Set package version
         id: pkg_version
@@ -99,26 +90,20 @@ jobs:
 
           echo "PKG_VERSION=$package_version" >> "$GITHUB_OUTPUT"
 
-      - name: Build native package
-        run: |
-          cmake -S . -B buildcpp -DCMAKE_BUILD_TYPE=Release
-          cmake --build buildcpp --config Release --target clean
-          cmake --build buildcpp --config Release -j 12
-
       - name: Install npm dependencies
         run: npm ci
 
-      - name: Build WASM package
-        env:
-          MEASUR_WASM_BUILD_JOBS: 12
-        run: npm run build:wasm
+      - name: Download verified WASM artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.wasm_artifact_name }}
+          path: bin
 
-      - name: Run tests
-        if: inputs.release_channel == 'beta'
+      - name: Verify package artifacts
         run: |
-          valgrind --tool=memcheck --gen-suppressions=all --leak-check=full --show-leak-kinds=all --errors-for-leak-kinds=definite,indirect --leak-resolution=high --track-origins=yes --vgdb=no --trace-children=yes ./buildcpp/bin/cpp_tests
-          npm run verify:types
-          npm run tests
+          test -s bin/client.js
+          test -s bin/client.wasm
+          ls -l bin/client.js bin/client.wasm
 
       - name: Publish release to registry
         env:

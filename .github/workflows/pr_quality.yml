@@ -1,14 +1,7 @@
-name: "PR: Quality"
+name: Quality
 
 on:
-  pull_request:
-    branches:
-      - develop
-    types:
-      - opened
-      - synchronize
-      - reopened
-      - ready_for_review
+  workflow_call:
 
 permissions:
   contents: read
@@ -26,8 +19,24 @@ jobs:
       - name: Build native tests
         run: cmake --build build-cpp --config Release -j 4
 
-      - name: Run native tests
-        run: ./build-cpp/bin/cpp_tests
+      - name: Install Valgrind
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libc6-dbg valgrind
+
+      - name: Run native tests with Valgrind
+        run: >-
+          valgrind
+          --tool=memcheck
+          --gen-suppressions=all
+          --leak-check=full
+          --show-leak-kinds=all
+          --errors-for-leak-kinds=definite,indirect
+          --leak-resolution=high
+          --track-origins=yes
+          --vgdb=no
+          --trace-children=yes
+          ./build-cpp/bin/cpp_tests
 
   rebuilt-wasm-tests:
     runs-on: ubuntu-24.04
@@ -50,8 +59,21 @@ jobs:
       - name: Install npm dependencies
         run: npm ci
 
-      - name: Build and verify current WASM artifacts
-        run: npm run verify:wasm
+      - name: Build and stage current WASM artifacts
+        run: npm run build:wasm
+
+      - name: Run browser tests against current WASM artifacts
+        run: npm run tests
+
+      - name: Upload verified WASM artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: verified-wasm-${{ github.sha }}
+          path: |
+            bin/client.js
+            bin/client.wasm
+          if-no-files-found: error
+          retention-days: 3
 
   declarations-and-docs:
     runs-on: ubuntu-24.04
@@ -84,8 +106,20 @@ jobs:
       - name: Generate Doxygen documentation
         run: doxygen Doxyfile
 
-      - name: Check changed-file whitespace
+      - name: Check pull-request whitespace
+        if: github.event_name == 'pull_request'
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: git diff --check "${BASE_SHA}...${HEAD_SHA}"
+
+      - name: Check pushed-commit whitespace
+        if: github.event_name == 'push'
+        env:
+          BASE_SHA: ${{ github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: git diff --check "${BASE_SHA}...${HEAD_SHA}"
+
+      - name: Check manually selected commit whitespace
+        if: github.event_name == 'workflow_dispatch'
+        run: git diff --check HEAD^...HEAD
