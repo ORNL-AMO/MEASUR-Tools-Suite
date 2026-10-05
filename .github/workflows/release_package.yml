@@ -10,6 +10,10 @@ on:
         description: Name of the tested WASM artifact uploaded by the quality workflow
         required: true
         type: string
+    outputs:
+      published_version:
+        description: Exact npm package version published by this workflow
+        value: ${{ jobs.publish.outputs.published_version }}
     secrets:
       NPM_AUTH_TOKEN:
         required: true
@@ -24,6 +28,8 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    outputs:
+      published_version: ${{ steps.pkg_version.outputs.PKG_VERSION }}
     defaults:
       run:
         shell: bash
