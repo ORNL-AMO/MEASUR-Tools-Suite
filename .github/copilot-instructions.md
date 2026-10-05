@@ -9,7 +9,13 @@ Use [../AGENTS.md](../AGENTS.md) as the source of truth for repository-wide agen
 - Follow [../contributing/documentation.md](../contributing/documentation.md) for Doxygen and `.dox` documentation.
 - For persona-driven namespace refactors and algorithm docs, follow [../.agents/README.md](../.agents/README.md).
 - Keep C++ source, WebAssembly bindings, TypeScript declarations, and tests synchronized.
-- Prefer established examples in `processHeat/`, `bindings-wasm/`, and `tests/wasm-mocha/`.
+- Use the exact canonical example matrix in `AGENTS.md`; do not infer a pattern from an entire domain.
+
+## Pull Request Review
+
+- When reviewing a pull request, use the `measur-code-review` skill in `.github/skills/measur-code-review/`.
+- Use linked Suite and Desktop issues or pull requests through available GitHub MCP context.
+- AI review is advisory and does not replace required human approval.
 
 ## Common Review Focus
 
