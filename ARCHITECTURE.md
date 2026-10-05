@@ -143,8 +143,8 @@ For declaration-only or test migration work, still inspect the matching binding 
 | Change | Minimum validation |
 | --- | --- |
 | C++ formula or data model | Build C++; run relevant `tests/cpp` or `cpp_tests`. |
-| WASM binding | Rebuild WASM; run affected `tests/wasm-mocha` tests. |
-| TypeScript declarations | `./node_modules/.bin/tsc --noEmit`; run affected WASM tests. |
+| WASM binding | `npm run verify:wasm` to rebuild, stage, typecheck, and run WASM tests. |
+| TypeScript declarations | `npm run verify:types`; run `npm run verify:wasm` when the runtime surface changed. |
 | Packaging | Build package or inspect packed contents for `client.js`, `client.wasm`, and declarations. |
 | Documentation | Check links, Doxygen syntax, and `git diff --check`. |
 

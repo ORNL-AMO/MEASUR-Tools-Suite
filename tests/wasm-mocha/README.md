@@ -105,14 +105,15 @@ nested runtime objects.
 6. Keep assertions and expected values unchanged unless the old test was
    incorrect.
 7. Delete the old `.js` test once the `.ts` replacement passes.
-8. Run:
+8. Rebuild, stage, typecheck, and test the current WASM module:
 
 ```bash
-./node_modules/.bin/tsc --noEmit
-npm run tests
+npm run verify:wasm
 ```
 
-`npm run tests` starts Karma on a local port. In restricted environments it may
+`npm run verify:wasm` requires an active Emscripten environment and copies the
+new `build-wasm/bin/client.*` files into `bin/` before starting Karma. In
+restricted environments Karma may
 need permission to bind that port.
 
 ## Agent Notes
