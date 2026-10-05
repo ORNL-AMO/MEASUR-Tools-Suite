@@ -1,0 +1,123 @@
+/**
+ * @defgroup pump_head_calculator Pump Head Calculator
+ * @ingroup pumping_system_assessments
+ * @brief Calculates operating pump head from field pressure, elevation, flow, pipe, and loss data.
+ * @details
+ * The calculator supports two suction configurations: a suction-pressure gauge and a pressurized
+ * suction tank. Inputs use U.S. customary engineering units. The caller owns input validation,
+ * user-facing unit conversion, and display rounding.
+ *
+ * @heading{Final Result}
+ * Total operating pump head is the sum of elevation, pressure, velocity, and estimated line-loss
+ * components:
+ * @formula{pump-head-total;
+ *   H_{pump}=\Delta H_z+\Delta H_p+\Delta H_v+H_{f,s}+H_{f,d}
+ * }
+ * @symtable
+ * @symrow{H_{pump}; Total operating pump head; \foot}
+ * @symrow{\Delta H_z; Discharge-minus-suction elevation head; \foot}
+ * @symrow{\Delta H_p; Discharge-minus-suction pressure head; \foot}
+ * @symrow{\Delta H_v; Discharge-minus-suction velocity head; \foot}
+ * @symrow{H_{f,s}; Estimated suction-line friction head; \foot}
+ * @symrow{H_{f,d}; Estimated discharge-line friction head; \foot}
+ * @endsymtable
+ *
+ * @heading{Differential Head Components}
+ * For suction-gauge measurements, the three differential components are:
+ * @formula{pump-head-gauge-differentials;
+ *   \Delta H_z=z_d-z_s,\qquad
+ *   \Delta H_p=\frac{P_d-P_s}{k_p SG},\qquad
+ *   \Delta H_v=H_{v,d}-H_{v,s}
+ * }
+ * @symtable
+ * @symrow{\Delta H_z; Elevation-head difference; \foot}
+ * @symrow{z_d; Discharge-gauge elevation; \foot}
+ * @symrow{z_s; Suction-gauge elevation; \foot}
+ * @symrow{\Delta H_p; Pressure-head difference; \foot}
+ * @symrow{P_d; Discharge gauge pressure; \psig}
+ * @symrow{P_s; Suction gauge pressure; \psig}
+ * @symrow{k_p; Legacy pressure-to-water-head factor, 0.432750001; \psi\per\foot}
+ * @symrow{SG; Fluid specific gravity relative to water; \unitless}
+ * @symrow{\Delta H_v; Velocity-head difference; \foot}
+ * @symrow{H_{v,d}; Discharge-pipe velocity head; \foot}
+ * @symrow{H_{v,s}; Suction-pipe velocity head; \foot}
+ * @endsymtable
+ *
+ * For a pressurized suction tank, the tank fluid surface replaces the suction-gauge elevation and
+ * the tank gas overpressure replaces suction-gauge pressure. Fluid velocity at the tank surface is
+ * assumed to be zero, so only discharge velocity head contributes to the differential:
+ * @formula{pump-head-tank-differentials;
+ *   \Delta H_z=z_d-z_t,\qquad
+ *   \Delta H_p=\frac{P_d-P_t}{k_p SG},\qquad
+ *   \Delta H_v=H_{v,d}
+ * }
+ * @symtable
+ * @symrow{\Delta H_z; Elevation-head difference; \foot}
+ * @symrow{z_d; Discharge-gauge elevation; \foot}
+ * @symrow{z_t; Suction-tank fluid-surface elevation; \foot}
+ * @symrow{\Delta H_p; Pressure-head difference; \foot}
+ * @symrow{P_d; Discharge gauge pressure; \psig}
+ * @symrow{P_t; Suction-tank gas overpressure; \psig}
+ * @symrow{k_p; Legacy pressure-to-water-head factor, 0.432750001; \psi\per\foot}
+ * @symrow{SG; Fluid specific gravity relative to water; \unitless}
+ * @symrow{\Delta H_v; Velocity-head difference; \foot}
+ * @symrow{H_{v,d}; Discharge-pipe velocity head; \foot}
+ * @endsymtable
+ *
+ * @heading{Pipe Velocity and Velocity Head}
+ * The entered flow is converted from gallons per minute to cubic feet per second before pipe
+ * velocity and velocity head are calculated:
+ * @formula{pump-head-velocity;
+ *   Q=\frac{q}{k_Q},\qquad
+ *   v=\frac{Q}{\pi(D/12)^2/4},\qquad
+ *   H_v=\frac{v^2}{2g}
+ * }
+ * @symtable
+ * @symrow{q; Entered volumetric flow rate; \gallon\per\minute}
+ * @symrow{k_Q; Legacy flow conversion factor, 448.8311693; \gallon\second\per\minute\per\cubicFoot}
+ * @symrow{Q; Volumetric flow rate used by the velocity calculation; \cubicFoot\per\second}
+ * @symrow{v; Average pipe velocity; \foot\per\second}
+ * @symrow{D; Entered pipe inside diameter; \inch}
+ * @symrow{12; Inches per foot; \inch\per\foot}
+ * @symrow{\pi; Circle ratio; \unitless}
+ * @symrow{H_v; Pipe velocity head; \foot}
+ * @symrow{g; Gravitational acceleration, 32.174; \foot\per\second\squared}
+ * @endsymtable
+ *
+ * @heading{Estimated Line Losses}
+ * The aggregate loss coefficient for each side of the pump multiplies that side's velocity head:
+ * @formula{pump-head-friction;
+ *   H_{f,s}=K_sH_{v,s},\qquad H_{f,d}=K_dH_{v,d}
+ * }
+ * @symtable
+ * @symrow{H_{f,s}; Estimated suction-line friction head; \foot}
+ * @symrow{H_{f,d}; Estimated discharge-line friction head; \foot}
+ * @symrow{K_s; Aggregate suction-line loss coefficient; \unitless}
+ * @symrow{K_d; Aggregate discharge-line loss coefficient; \unitless}
+ * @symrow{H_{v,s}; Suction-pipe velocity head; \foot}
+ * @symrow{H_{v,d}; Discharge-pipe velocity head; \foot}
+ * @endsymtable
+ *
+ * @heading{Public API and Ownership}
+ * C++ callers use @ref pump_head::calculateFromSuctionGauge or
+ * @ref pump_head::calculateFromSuctionTank. WebAssembly callers use
+ * `calculatePumpHeadFromSuctionGauge(input)` or `calculatePumpHeadFromSuctionTank(input)`.
+ * The WebAssembly inputs and result are plain value objects and require no `delete()` cleanup.
+ *
+ * @heading{Assumptions and Limits}
+ * - The flow in each pipe is steady and equal to the entered pump flow.
+ * - Pipe diameters are inside diameters in inches.
+ * - Pressures are gauge pressures in psig, elevations and returned heads are feet, and specific
+ *   gravity and loss coefficients are dimensionless.
+ * - The suction-tank fluid-surface velocity is zero relative to the pipe velocity.
+ * - The exact legacy factors 448.8311693 and 0.432750001 are retained to preserve established
+ *   results. Their original external source is not recorded in the implementation.
+ * - The calculation does not enforce physical input ranges; callers must reject invalid or
+ *   unsupported values before calling the Suite.
+ *
+ * @heading{Migration from the Constructor API}
+ * Replace `new HeadTool(...).calculate()` with `calculatePumpHeadFromSuctionGauge(input)` and
+ * replace `new HeadToolSuctionTank(...).calculate()` with
+ * `calculatePumpHeadFromSuctionTank(input)`. Remove cleanup calls for the calculator and returned
+ * result because all new inputs and results are plain objects.
+ */

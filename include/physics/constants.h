@@ -225,6 +225,24 @@ inline constexpr double kMinutesPerHour = 60.0;
 /// @brief Number of seconds in a minute.
 inline constexpr double kSecondsPerMinute = 60.0;
 
+/// @brief Number of inches in one foot @unitb{\inch\per\foot}.
+inline constexpr double kInchesPerFoot = 12.0;
+
+/**
+ * @brief Conversion factor from cubic feet per second to gallons per minute
+ *        @unitb{\gallon\second\per\minute\per\cubicFoot}.
+ * @details Retains the established Suite value used by legacy pump-head calculations so migrated
+ *          calculations reproduce their existing results exactly.
+ */
+inline constexpr double kGallonsPerMinutePerCubicFootPerSecond = 448.8311693;
+
+/**
+ * @brief Pressure exerted by one foot of water head @unitb{\psi\per\foot}.
+ * @details Retains the established Suite value used by legacy pump-head calculations at a
+ *          specific gravity of 1 so migrated calculations reproduce their existing results exactly.
+ */
+inline constexpr double kPsiPerFootOfWater = 0.432750001;
+
 /**
  * @brief Conversion factor: square inches per square foot @unitb{\inch\squared\per\squareFoot}
  * @details 1 ft² = 144 in². Used when converting pipe cross-sectional areas between

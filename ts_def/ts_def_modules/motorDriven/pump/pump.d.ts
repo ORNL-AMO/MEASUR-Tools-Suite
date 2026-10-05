@@ -5,129 +5,8 @@ import { PumpStyle, SpecificSpeed } from "../pumpFan/pumpFan";
 /**
  * Pump calculations.
  *
- * Provides pump head tools and pump-system result calculators for baseline
- * and modified operating conditions.
+ * Provides pump-system result calculators for baseline and modified operating conditions.
  */
-
-/**
- * Result object returned by head tool calculations.
- */
-export declare class HeadToolOutput {
-    /**
-     * Constructor for HeadToolOutput
-     * @param differentialElevationHead Differential elevation head, units ft.
-     * @param differentialPressureHead Differential pressure head, units ft.
-     * @param differentialVelocityHead Differential velocity head, units ft.
-     * @param estimatedSuctionFrictionHead Estimated suction friction head, units ft.
-     * @param estimatedDischargeFrictionHead Estimated discharge friction head, units ft.
-     * @param pumpHead Total pump head, units ft.
-     */
-    constructor(
-        differentialElevationHead: number,
-        differentialPressureHead: number,
-        differentialVelocityHead: number,
-        estimatedSuctionFrictionHead: number,
-        estimatedDischargeFrictionHead: number,
-        pumpHead: number
-    );
-
-    /** Differential elevation head, units ft */
-    differentialElevationHead: number;
-    /** Differential pressure head, units ft */
-    differentialPressureHead: number;
-    /** Differential velocity head, units ft */
-    differentialVelocityHead: number;
-    /** Estimated suction friction head, units ft */
-    estimatedSuctionFrictionHead: number;
-    /** Estimated discharge friction head, units ft */
-    estimatedDischargeFrictionHead: number;
-    /** Total pump head, units ft */
-    pumpHead: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
-}
-
-/**
- * Head tool model for systems with a suction tank.
- */
-export declare class HeadToolSuctionTank {
-    /**
-     * @param specificGravity double, specific gravity, dimensionless (unitless)
-     * @param flowRate double, flow rate in gpm
-     * @param suctionPipeDiameter Suction pipe diameter, units ft.
-     * @param suctionTankGasOverPressure double, suction tank gas over pressure in psig
-     * @param suctionTankFluidSurfaceElevation double, suction tank fluid surface elevation in ft
-     * @param suctionLineLossCoefficients double, suction line loss coefficients (unitless)
-     * @param dischargePipeDiameter Discharge pipe diameter, units ft.
-     * @param dischargeGaugePressure double, discharge gauge pressure in psig
-     * @param dischargeGaugeElevation Discharge gauge elevation, units ft.
-     * @param dischargeLineLossCoefficients double, discharge line loss coefficients (unitless)
-     */
-    constructor(
-        specificGravity: number,
-        flowRate: number,
-        suctionPipeDiameter: number,
-        suctionTankGasOverPressure: number,
-        suctionTankFluidSurfaceElevation: number,
-        suctionLineLossCoefficients: number,
-        dischargePipeDiameter: number,
-        dischargeGaugePressure: number,
-        dischargeGaugeElevation: number,
-        dischargeLineLossCoefficients: number
-    );
-
-    /**
-     * Calculates the operating pump head
-     * @returns HeadToolOutput
-     */
-    calculate(): HeadToolOutput;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
-}
-
-/**
- * Head tool model for systems without a suction tank.
- */
-export declare class HeadTool {
-    /**
-     * Constructor for HeadTool with no Suction Tank, all inputs specified
-     *
-     * @param specificGravity double, specific gravity, dimensionless - unitless
-     * @param flowRate double, flow rate in gpm (gallons per minute)
-     * @param suctionPipeDiameter double, diameter of suction pipe in feet
-     * @param suctionGaugePressure double, gauge pressure of suction in psig (pounds per square inch guage)
-     * @param suctionGaugeElevation double, gauge elevation of suction in feet
-     * @param suctionLineLossCoefficients double, line loss coefficients of suction - unitless
-     * @param dischargePipeDiameter double, diameter of discharge pipe in feet
-     * @param dischargeGaugePressure double, gauge pressure of discharge in psig (pounds per square inch guage)
-     * @param dischargeGaugeElevation double, gauge elevation of discharge in feet
-     * @param dischargeLineLossCoefficients double, line loss coefficients of discharge - unitless
-     *
-     * */
-    constructor(
-        specificGravity: number,
-        flowRate: number,
-        suctionPipeDiameter: number,
-        suctionGaugePressure: number,
-        suctionGaugeElevation: number,
-        suctionLineLossCoefficients: number,
-        dischargePipeDiameter: number,
-        dischargeGaugePressure: number,
-        dischargeGaugeElevation: number,
-        dischargeLineLossCoefficients: number
-    );
-
-    /**
-     * Calculates the operating pump head
-     * @returns HeadToolOutput
-     */
-    calculate(): HeadToolOutput;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
-}
 
 /**
  * Input parameters for pump result calculations.
@@ -320,9 +199,6 @@ export declare class PumpResult {
 }
 
 export type PumpModule = {
-    HeadToolOutput: typeof HeadToolOutput;
-    HeadToolSuctionTank: typeof HeadToolSuctionTank;
-    HeadTool: typeof HeadTool;
     PumpResultInput: typeof PumpResultInput;
     PumpFieldData: typeof PumpFieldData;
     PumpResult: typeof PumpResult;
