@@ -6,12 +6,8 @@
     "npm": "10.8.2"
   },
   "scripts": {
-    "build:wasm": "bash scripts/build-wasm.sh",
-    "check:docs": "node scripts/check-markdown-links.mjs",
     "test:browser": "karma start",
-    "tests": "npx karma start --browsers ChromeHeadlessNoSandbox --auto-watch false",
-    "verify:types": "tsc --noEmit",
-    "verify:wasm": "bash scripts/verify-wasm.sh"
+    "tests": "npx karma start --browsers ChromeHeadlessNoSandbox --auto-watch false"
   },
   "description": "Oak Ridge National Lab's Industrial Resources calculation library for MEASUR.",
   "author": "Gina Accawi <accawigk@ornl.gov>",

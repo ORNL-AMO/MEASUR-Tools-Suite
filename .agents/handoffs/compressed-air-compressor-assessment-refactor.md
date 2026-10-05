@@ -1,12 +1,5 @@
 # Refactor Handoff
 
-## Handoff Status
-
-- Lifecycle: archived
-- Status: implementation and documentation completed; fresh WASM validation remained blocked when archived
-- Last updated: 2026-09-23
-- GitHub links: not recorded in the original handoff
-
 ## Target Module
 
 - Domain/path: `compressedAir/assessment`

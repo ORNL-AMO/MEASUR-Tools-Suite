@@ -1,11 +1,6 @@
-# Agent Workflows And Personas
+# Agent Personas
 
 This directory defines repo-neutral personas for namespace refactors and algorithm documentation work. These personas are guidance for AI agents and automation tools; they are not tied to any single tool or runtime.
-
-Repo-scoped skills in [`skills/`](skills/) provide the task-level entry points:
-
-- `refactor-and-document-calculation` coordinates the persona sequence below.
-- `coordinate-suite-desktop-change` handles downstream contracts, linked GitHub work, and release sequencing.
 
 Use this workflow when a task asks to refactor a calculation module into a namespace pattern, split a module, or write/update algorithm documentation alongside source, WebAssembly, TypeScript, or test changes.
 
@@ -32,7 +27,7 @@ Each persona must read the current handoff, perform its phase, and update the ha
 
 ## Handoff Rules
 
-The handoff is the shared state for the workflow. It should be short, concrete, and updated after each persona phase. Create one handoff per coordinated refactor, use a lowercase hyphenated filename, and include its lifecycle state and last-updated date.
+The handoff is the shared state for the workflow. It should be short, concrete, and updated after each persona phase.
 
 Every handoff must include:
 
@@ -44,8 +39,6 @@ Every handoff must include:
 - Validation commands run and remaining validation needed.
 - Open questions or blockers.
 
-Keep investigation history and long review matrices in linked GitHub issues or a clearly labeled appendix. When the work is finished, mark the handoff `completed` or `archived`, record unresolved validation accurately, and retain the file only when it provides durable migration or formula provenance.
-
 ## Completion Standard
 
 The workflow is complete only when the verification reviewer confirms:
@@ -56,4 +49,3 @@ The workflow is complete only when the verification reviewer confirms:
 - C++ and WASM tests cover changed public behavior.
 - Algorithm documentation is top-down, formula-driven, and includes units and symbol tables.
 - Any public compatibility change has migration notes.
-- Any affected Desktop work, package version, and release sequencing are recorded or explicitly marked not applicable.

@@ -11,7 +11,6 @@ Before changing code, read the relevant project guidance:
 - [contributing/style-guide.md](contributing/style-guide.md) for C++ style and naming.
 - [contributing/documentation.md](contributing/documentation.md) for Doxygen and `.dox` documentation standards.
 - [.agents/README.md](.agents/README.md) when coordinating persona-driven namespace refactors and algorithm documentation.
-- [docs/development/suite-desktop-change-workflow.md](docs/development/suite-desktop-change-workflow.md) when a Suite change affects AMO-Tools-Desktop.
 - [ts_def/README.md](ts_def/README.md) when adding or correcting TypeScript declarations.
 - [tests/wasm-mocha/README.md](tests/wasm-mocha/README.md) when adding or migrating WebAssembly Mocha tests.
 
@@ -55,24 +54,18 @@ Maintain one file per logical module whenever refactoring or adding calculations
 - One TypeScript declaration file for each public binding surface.
 - Documentation organized under `docs/dox-content/` following nearby examples.
 
-Use these current examples instead of inferring a pattern from an entire domain:
-
-| Pattern | Canonical example |
-| --- | --- |
-| Stateless value-object calculator | `compressedAir/dryer_operating_cost` |
-| Runtime class requiring `delete()` | `compressedAir/pipe_data` |
-| Registered vector | `compressedAir/assessment/compressor_catalog` |
-| Runtime enum | `compressedAir/dryer_operating_cost` |
-| Multi-formula algorithm documentation | `docs/dox-content/calculators/compressedAir/assessment/load_unload_cycle_model.dox` |
+Use `processHeat/` as the canonical structural example when in doubt.
 
 ## Namespace or Module Refactor Phases
 
 When asked to refactor code using namespaces or to split modules, work in this order:
 
-1. **C++ API and Tests**: Update headers, source, and focused C++ tests together.
-2. **WebAssembly Surface and Tests**: Update the binding, TypeScript declaration, module export, and WASM Mocha test together. Move migrated tests from `tests/wasm/` and delete obsolete originals.
-3. **Algorithm Documentation**: Update `docs/dox-content/` and related examples when public behavior, formulas, usage, or module organization changed.
-4. **Integrated and Downstream Verification**: Rebuild and stage WASM, run the affected validation, and verify AMO-Tools-Desktop impact when applicable.
+1. **Headers and Source**: Update `.h` and `.cpp` files first.
+2. **WebAssembly Bindings**: Create or update exactly one binding file in `bindings-wasm/` for each logical module.
+3. **C++ Unit Tests**: Update `tests/cpp/`; split tests when one old test covered multiple new modules.
+4. **WebAssembly Unit Tests**: Update or add `tests/wasm-mocha/` tests. Move successfully migrated tests from `tests/wasm/` and delete the obsolete originals.
+5. **TypeScript Declarations**: Update `ts_def/` to match the exact embind runtime surface and follow [ts_def/README.md](ts_def/README.md).
+6. **Documentation**: Update `docs/dox-content/` and related docs if public behavior, formulas, usage, or module organization changed.
 
 For namespace refactors that include algorithm documentation, use the repo-neutral persona workflow in [.agents/README.md](.agents/README.md). The default sequence is:
 
@@ -84,13 +77,6 @@ For namespace refactors that include algorithm documentation, use the repo-neutr
 
 Each persona must consume and update the shared handoff template in [.agents/templates/refactor-handoff.md](.agents/templates/refactor-handoff.md). Preserve public API compatibility by default unless the user explicitly approves a breaking change.
 When a breaking change is approved, the handoff must record the old-to-new migration and downstream layers should remove the superseded API surface rather than adding wrapper code for the deleted shape.
-
-Repo-scoped skills under `.agents/skills/` package the recurring workflows:
-
-- `refactor-and-document-calculation` for cross-layer calculation refactors and algorithm documentation.
-- `coordinate-suite-desktop-change` for changes that affect the Desktop consumer, release order, or GitHub coordination.
-
-GitHub Copilot PR review uses `.github/skills/measur-code-review/`. AI review is advisory and does not replace required human approval.
 
 ## WebAssembly and TypeScript Rules
 
@@ -113,7 +99,7 @@ import createModule, { type MeasurToolsSuite } from 'measur-tools-suite';
 Choose verification based on the changed surface:
 
 - C++ source or headers: build and run relevant C++ tests.
-- WASM bindings or TypeScript declarations: run `npm run verify:wasm` so tests use a newly built and staged module.
+- WASM bindings or TypeScript declarations: run `./node_modules/.bin/tsc --noEmit` and relevant `npm run tests`.
 - Browser-facing changes: verify `bin/client.js` and `bin/client.wasm` are built and served correctly.
 - Documentation-only changes: run markdown or whitespace checks when available, and ensure links are correct.
 
@@ -123,7 +109,8 @@ Common commands:
 cmake -S . -B build-cpp
 cmake --build build-cpp
 ./build-cpp/bin/cpp_tests
-npm run build:wasm
+emcmake cmake -S . -B build-wasm -DBUILD_WASM=ON
+emmake make -C build-wasm
 ./node_modules/.bin/tsc --noEmit
 npm run tests
 git diff --check
