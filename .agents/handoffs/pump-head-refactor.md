@@ -8,7 +8,7 @@
 - Created: 2026-10-05
 - Last updated: 2026-10-05
 - Suite issue: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/200
-- Suite PR: pending
+- Suite PR: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/418
 - Desktop issue: https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8941
 - Desktop PR: pending
 
