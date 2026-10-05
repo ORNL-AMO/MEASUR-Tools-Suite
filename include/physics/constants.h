@@ -230,7 +230,7 @@ inline constexpr double kInchesPerFoot = 12.0;
 
 /**
  * @brief Conversion factor from cubic feet per second to gallons per minute
- *        @unitb{\gallon\second\per\minute\per\cubicFoot}.
+ *        @unitb{(\gallon\per\minute)\per(\cubicFoot\per\second)}.
  * @details Retains the established Suite value used by legacy pump-head calculations so migrated
  *          calculations reproduce their existing results exactly.
  */

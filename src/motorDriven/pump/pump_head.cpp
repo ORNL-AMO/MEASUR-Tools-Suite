@@ -14,7 +14,7 @@ struct CommonHeads {
 
 double velocity(const double diameter_feet, const double flow_cubic_feet_per_second) {
     return flow_cubic_feet_per_second /
-           (physics::kPi * diameter_feet / 2.0 * diameter_feet / 2.0);
+           (physics::kPi * diameter_feet * diameter_feet / 4.0);
 }
 
 double velocityHead(const double velocity_feet_per_second) {

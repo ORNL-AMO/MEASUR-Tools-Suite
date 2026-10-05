@@ -74,7 +74,7 @@
  * }
  * @symtable
  * @symrow{q; Entered volumetric flow rate; \gallon\per\minute}
- * @symrow{k_Q; Legacy flow conversion factor, 448.8311693; \gallon\second\per\minute\per\cubicFoot}
+ * @symrow{k_Q; Legacy flow conversion factor, 448.8311693 gpm per cfs; (\gallon\per\minute)\per(\cubicFoot\per\second)}
  * @symrow{Q; Volumetric flow rate used by the velocity calculation; \cubicFoot\per\second}
  * @symrow{v; Average pipe velocity; \foot\per\second}
  * @symrow{D; Entered pipe inside diameter; \inch}
