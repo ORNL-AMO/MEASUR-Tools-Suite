@@ -52,12 +52,8 @@ for (const markdownPath of collectMarkdownFiles(repositoryRoot)) {
     const contents = fs.readFileSync(markdownPath, 'utf8');
     for (const match of contents.matchAll(markdownLink)) {
         const rawTarget = match[1].trim();
-        if (/^(?:[a-z]+:|#)/i.test(rawTarget)) {
-            continue;
-        }
-
         const normalizedTarget = normalizeTarget(rawTarget);
-        if (!normalizedTarget) {
+        if (!normalizedTarget || /^(?:[a-z]+:|#)/i.test(normalizedTarget)) {
             continue;
         }
 
