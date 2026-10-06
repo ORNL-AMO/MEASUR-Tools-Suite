@@ -1,15 +1,18 @@
 /**
  * @defgroup pump_head_calculator Pump Head Calculator
  * @ingroup pumping_system_assessments
- * @brief Calculates operating pump head from field pressure, elevation, flow, pipe, and loss data.
+ * @brief Determines the head developed by an operating pump from field measurements.
  * @details
- * The calculator supports two suction configurations: a suction-pressure gauge and a pressurized
- * suction tank. Inputs use U.S. customary engineering units. The caller owns input validation,
- * user-facing unit conversion, and display rounding.
+ * Pump head is the mechanical energy that the pump adds to each unit weight of fluid, expressed as
+ * feet of the pumped fluid. For steady, incompressible flow, that energy appears as changes in
+ * elevation, pressure, and velocity and as energy dissipated between the measurement locations and
+ * the pump flanges. The calculator combines those contributions to reconstruct the operating pump
+ * head from field data. This approach follows the Pumping System Assessment Tool (PSAT) head-tool
+ * method described in @cite casada2008psat.
  *
  * @heading{Final Result}
- * Total operating pump head is the sum of elevation, pressure, velocity, and estimated line-loss
- * components:
+ * Total operating pump head is the sum of three signed differential heads and two estimated line
+ * losses:
  * @formula{pump-head-total;
  *   H_{pump}=\Delta H_z+\Delta H_p+\Delta H_v+H_{f,s}+H_{f,d}
  * }
@@ -22,70 +25,148 @@
  * @symrow{H_{f,d}; Estimated discharge-line friction head; \foot}
  * @endsymtable
  *
- * @heading{Differential Head Components}
- * For suction-gauge measurements, the three differential components are:
- * @formula{pump-head-gauge-differentials;
- *   \Delta H_z=z_d-z_s,\qquad
- *   \Delta H_p=\frac{P_d-P_s}{k_p SG},\qquad
- *   \Delta H_v=H_{v,d}-H_{v,s}
+ * The three differential terms describe the change in fluid energy from the selected suction
+ * reference point to the discharge gauge. Each may be positive, zero, or negative. The friction
+ * terms are added because they restore the energy dissipated between the reference points and the
+ * pump flanges. For nonnegative loss coefficients, both friction terms are nonnegative.
+ *
+ * @heading{Choose the Measurement Configuration}
+ * Use the configuration that matches the available suction-side measurement:
+ *
+ * | Configuration | Suction reference point | Suction pressure | Suction velocity used in @math{\Delta H_v} |
+ * |---|---|---|---|
+ * | Suction gauge | Centerline of the suction pressure gauge | Measured suction gauge pressure @math{P_s} | Velocity in the suction pipe |
+ * | Suction tank | Fluid surface in a tank, well, or reservoir | Gas overpressure above the fluid @math{P_t}; use 0 psig when open to atmosphere | Zero at the tank surface |
+ *
+ * In both configurations, the suction-pipe velocity is still calculated because it is needed for
+ * the suction-line friction estimate. The tank assumption only sets the velocity at the tank fluid
+ * surface to zero when calculating the differential velocity head.
+ *
+ * @heading{Measurements and Sign Convention}
+ * - Measure flow in U.S. gallons per minute and pipe inside diameters in inches.
+ * - Enter pressures as gauge pressure in psig. Vacuum on the suction side may therefore be entered
+ *   as a negative gauge pressure.
+ * - Reference every elevation to the same datum. The datum may be arbitrary, such as a plant floor,
+ *   because only elevation differences are used.
+ * - Use one steady flow rate for the suction and discharge pipes.
+ * - Enter fluid specific gravity relative to the reference water used by the pressure-head
+ *   conversion.
+ * - Sum the applicable dimensionless loss coefficients separately for the suction and discharge
+ *   paths between their reference points and the pump flanges.
+ *
+ * The calculation proceeds from the field measurements as follows:
+ * 1. Convert flow to cubic feet per second and pipe diameters to feet.
+ * 2. Calculate suction- and discharge-pipe velocities and velocity heads.
+ * 3. Calculate the elevation, pressure, and velocity differences for the selected configuration.
+ * 4. Estimate suction- and discharge-line friction heads from their loss coefficients.
+ * 5. Sum all five contributions using \eqref{eq:pump-head-total}.
+ *
+ * @heading{Elevation Head}
+ * Elevation head is the vertical change from the suction reference point to the discharge gauge:
+ * @formula{pump-head-elevation;
+ *   \Delta H_z=\begin{cases}
+ *     z_d-z_s & \text{suction gauge}\\
+ *     z_d-z_t & \text{suction tank}
+ *   \end{cases}
  * }
  * @symtable
- * @symrow{\Delta H_z; Elevation-head difference; \foot}
- * @symrow{z_d; Discharge-gauge elevation; \foot}
- * @symrow{z_s; Suction-gauge elevation; \foot}
- * @symrow{\Delta H_p; Pressure-head difference; \foot}
+ * @symrow{\Delta H_z; Discharge-minus-suction elevation head; \foot}
+ * @symrow{z_d; Discharge-gauge centerline elevation; \foot}
+ * @symrow{z_s; Suction-gauge centerline elevation; \foot}
+ * @symrow{z_t; Suction-tank fluid-surface elevation; \foot}
+ * @endsymtable
+ *
+ * A discharge gauge below the suction reference point produces a negative elevation-head
+ * contribution. This is physically valid and reduces the head the pump must develop.
+ *
+ * @heading{Pressure Head}
+ * Pressure head follows from the hydrostatic relation @math{H=p/\gamma}. Pressure in psi is first
+ * multiplied by 144 to express it per square foot. Fluid specific weight is represented as the
+ * reference-water specific weight multiplied by specific gravity:
+ * @formula{pump-head-pressure-basis;
+ *   \gamma=SG\,\gamma_w,\qquad
+ *   k_p=\frac{\gamma_w}{144},\qquad
+ *   \Delta H_p=\frac{144\,\Delta P}{\gamma_w SG}=\frac{\Delta P}{k_p SG}
+ * }
+ * @symtable
+ * @symrow{\gamma; Specific weight of the pumped fluid; \pound\per\cubicFoot}
+ * @symrow{\gamma_w; Reference-water specific weight represented by the calculator, 62.316000144; \pound\per\cubicFoot}
+ * @symrow{SG; Fluid specific gravity relative to the reference water; \unitless}
+ * @symrow{k_p; Reference-water pressure gradient, 0.432750001; \psi\per\foot}
+ * @symrow{144; Square inches per square foot; \squareInch\per\squareFoot}
+ * @symrow{\Delta P; Discharge-minus-suction gauge-pressure difference; \psi}
+ * @symrow{\Delta H_p; Discharge-minus-suction pressure head; \foot}
+ * @endsymtable
+ *
+ * Apply the pressure difference for the selected configuration:
+ * @formula{pump-head-pressure-configurations;
+ *   \Delta P=\begin{cases}
+ *     P_d-P_s & \text{suction gauge}\\
+ *     P_d-P_t & \text{suction tank}
+ *   \end{cases}
+ * }
+ * @symtable
+ * @symrow{\Delta P; Discharge-minus-suction gauge-pressure difference; \psi}
  * @symrow{P_d; Discharge gauge pressure; \psig}
  * @symrow{P_s; Suction gauge pressure; \psig}
- * @symrow{k_p; Legacy pressure-to-water-head factor, 0.432750001; \psi\per\foot}
- * @symrow{SG; Fluid specific gravity relative to water; \unitless}
- * @symrow{\Delta H_v; Velocity-head difference; \foot}
+ * @symrow{P_t; Suction-tank gas overpressure; \psig}
+ * @endsymtable
+ *
+ * The retained pressure gradient is equivalent to 2.310803 feet of water per psi at
+ * @math{SG=1}. DOE pump guidance commonly explains this relationship with the engineering
+ * approximation 2.31 feet per psi and a water specific weight of approximately 62.3 pounds-force
+ * per cubic foot @cite doe2000energyMatters.
+ *
+ * @heading{Pipe Velocity and Velocity Head}
+ * Convert the entered flow and diameter before applying continuity and the velocity-head relation:
+ * @formula{pump-head-flow-conversion;
+ *   Q=\frac{q}{k_Q},\qquad D_{ft}=\frac{D}{12}
+ * }
+ * @symtable
+ * @symrow{Q; Volumetric flow rate used by the velocity calculation; \cubicFoot\per\second}
+ * @symrow{q; Entered volumetric flow rate; \gallon\per\minute}
+ * @symrow{k_Q; Retained flow conversion, 448.8311693; (\gallon\per\minute)\per(\cubicFoot\per\second)}
+ * @symrow{D_{ft}; Pipe inside diameter used by the area calculation; \foot}
+ * @symrow{D; Entered pipe inside diameter; \inch}
+ * @symrow{12; Inches per foot; \inch\per\foot}
+ * @endsymtable
+ *
+ * @formula{pump-head-velocity;
+ *   A=\frac{\pi D_{ft}^{2}}{4},\qquad
+ *   v=\frac{Q}{A},\qquad
+ *   H_v=\frac{v^2}{2g}
+ * }
+ * @symtable
+ * @symrow{A; Internal pipe cross-sectional area; \squareFoot}
+ * @symrow{\pi; Circle ratio; \unitless}
+ * @symrow{D_{ft}; Pipe inside diameter; \foot}
+ * @symrow{v; Average pipe velocity; \foot\per\second}
+ * @symrow{Q; Volumetric flow rate; \cubicFoot\per\second}
+ * @symrow{H_v; Pipe velocity head; \foot}
+ * @symrow{g; Gravitational acceleration, 32.174; \foot\per\second\squared}
+ * @symrow{4; Geometric denominator for circular area expressed with diameter; \unitless}
+ * @symrow{2; Kinetic-energy denominator in the velocity-head relation; \unitless}
+ * @endsymtable
+ *
+ * The differential velocity head is then:
+ * @formula{pump-head-velocity-differential;
+ *   \Delta H_v=\begin{cases}
+ *     H_{v,d}-H_{v,s} & \text{suction gauge}\\
+ *     H_{v,d} & \text{suction tank}
+ *   \end{cases}
+ * }
+ * @symtable
+ * @symrow{\Delta H_v; Discharge-minus-suction velocity head; \foot}
  * @symrow{H_{v,d}; Discharge-pipe velocity head; \foot}
  * @symrow{H_{v,s}; Suction-pipe velocity head; \foot}
  * @endsymtable
  *
- * For a pressurized suction tank, the tank fluid surface replaces the suction-gauge elevation and
- * the tank gas overpressure replaces suction-gauge pressure. Fluid velocity at the tank surface is
- * assumed to be zero, so only discharge velocity head contributes to the differential:
- * @formula{pump-head-tank-differentials;
- *   \Delta H_z=z_d-z_t,\qquad
- *   \Delta H_p=\frac{P_d-P_t}{k_p SG},\qquad
- *   \Delta H_v=H_{v,d}
- * }
- * @symtable
- * @symrow{\Delta H_z; Elevation-head difference; \foot}
- * @symrow{z_d; Discharge-gauge elevation; \foot}
- * @symrow{z_t; Suction-tank fluid-surface elevation; \foot}
- * @symrow{\Delta H_p; Pressure-head difference; \foot}
- * @symrow{P_d; Discharge gauge pressure; \psig}
- * @symrow{P_t; Suction-tank gas overpressure; \psig}
- * @symrow{k_p; Legacy pressure-to-water-head factor, 0.432750001; \psi\per\foot}
- * @symrow{SG; Fluid specific gravity relative to water; \unitless}
- * @symrow{\Delta H_v; Velocity-head difference; \foot}
- * @symrow{H_{v,d}; Discharge-pipe velocity head; \foot}
- * @endsymtable
- *
- * @heading{Pipe Velocity and Velocity Head}
- * The entered flow is converted from gallons per minute to cubic feet per second before pipe
- * velocity and velocity head are calculated:
- * @formula{pump-head-velocity;
- *   Q=\frac{q}{k_Q},\qquad
- *   v=\frac{Q}{\pi(D/12)^2/4},\qquad
- *   H_v=\frac{v^2}{2g}
- * }
- * @symtable
- * @symrow{q; Entered volumetric flow rate; \gallon\per\minute}
- * @symrow{k_Q; Legacy flow conversion factor, 448.8311693 gpm per cfs; (\gallon\per\minute)\per(\cubicFoot\per\second)}
- * @symrow{Q; Volumetric flow rate used by the velocity calculation; \cubicFoot\per\second}
- * @symrow{v; Average pipe velocity; \foot\per\second}
- * @symrow{D; Entered pipe inside diameter; \inch}
- * @symrow{12; Inches per foot; \inch\per\foot}
- * @symrow{\pi; Circle ratio; \unitless}
- * @symrow{H_v; Pipe velocity head; \foot}
- * @symrow{g; Gravitational acceleration, 32.174; \foot\per\second\squared}
- * @endsymtable
+ * Equal suction and discharge pipe diameters give equal pipe velocities and therefore zero
+ * differential velocity head in the suction-gauge configuration.
  *
  * @heading{Estimated Line Losses}
- * The aggregate loss coefficient for each side of the pump multiplies that side's velocity head:
+ * Each aggregate loss coefficient multiplies the velocity head in the pipe used as that side's
+ * reference diameter:
  * @formula{pump-head-friction;
  *   H_{f,s}=K_sH_{v,s},\qquad H_{f,d}=K_dH_{v,d}
  * }
@@ -98,26 +179,115 @@
  * @symrow{H_{v,d}; Discharge-pipe velocity head; \foot}
  * @endsymtable
  *
- * @heading{Public API and Ownership}
- * C++ callers use @ref pump_head::calculateFromSuctionGauge or
- * @ref pump_head::calculateFromSuctionTank. WebAssembly callers use
- * `calculatePumpHeadFromSuctionGauge(input)` or `calculatePumpHeadFromSuctionTank(input)`.
- * The WebAssembly inputs and result are plain value objects and require no `delete()` cleanup.
+ * A fitting coefficient tabulated for a different diameter must be normalized to the pipe diameter
+ * used by the calculator. For the same flow, velocity varies with @math{1/D^2} and velocity head
+ * varies with @math{1/D^4}. Therefore:
+ * @formula{pump-head-loss-coefficient-scaling;
+ *   K_{ref}=K_e\left(\frac{D_{ref}}{D_e}\right)^4
+ * }
+ * @symtable
+ * @symrow{K_{ref}; Loss coefficient normalized to the calculator's reference pipe; \unitless}
+ * @symrow{K_e; Loss coefficient stated for the fitting or element; \unitless}
+ * @symrow{D_{ref}; Inside diameter of the reference pipe entered in the calculator; \inch}
+ * @symrow{D_e; Inside diameter associated with the stated element coefficient; \inch}
+ * @endsymtable
+ *
+ * For example, a 12-inch valve with @math{K_e=0.4} located in a system referenced to a 16-inch
+ * pipe contributes @math{K_{ref}=0.4(16/12)^4=1.26}. This normalization guidance and example are
+ * consistent with the PSAT head-tool documentation @cite casada2008psat.
+ *
+ * @heading{Unit Conversions and Reference Properties}
+ * The flow conversion is a unit relationship. One cubic foot contains 1728 cubic inches, one U.S.
+ * liquid gallon contains exactly 231 cubic inches, and one minute contains 60 seconds
+ * @cite chisholm1967units. Thus:
+ * @formula{pump-head-gpm-per-cfs;
+ *   k_{Q,exact}=\frac{1728}{231}(60)=448.831168831\ldots
+ * }
+ * @symtable
+ * @symrow{k_{Q,exact}; Unit-derived gallons per minute in one cubic foot per second; (\gallon\per\minute)\per(\cubicFoot\per\second)}
+ * @symrow{1728; Cubic inches per cubic foot; \cubicInch\per\cubicFoot}
+ * @symrow{231; Cubic inches per U.S. liquid gallon; \cubicInch\per\gallon}
+ * @symrow{60; Seconds per minute; \second\per\minute}
+ * @endsymtable
+ *
+ * The implementation retains 448.8311693 rather than replacing it with the longer unit-derived
+ * value so existing calculation results remain unchanged. See
+ * @ref physics::conversions::kGallonsPerMinutePerCubicFootPerSecond.
+ *
+ * The pressure factor is a reference property rather than a pure unit conversion. The retained
+ * 0.432750001 psi per foot represents the chosen reference-water pressure gradient. It implies
+ * @math{\gamma_w=144(0.432750001)=62.316000144} pounds-force per cubic foot and the reciprocal
+ * 2.310803 feet per psi. Its exact historical source and precision are not recorded, so the value is
+ * preserved as a compatibility constant rather than presented as a universal water property. See
+ * @ref physics::conversions::kPsiPerFootOfWater.
+ *
+ * @heading{Worked Suction-Gauge Example}
+ * Consider water-like fluid with @math{SG=1.0} flowing at 2000 gpm. The suction measurements are
+ * @math{D_s=17.9} inches, @math{P_s=5} psig, @math{z_s=5} feet, and @math{K_s=1}. The discharge
+ * measurements are @math{D_d=15} inches, @math{P_d=50} psig, @math{z_d=1} foot, and
+ * @math{K_d=1}.
+ *
+ * | Contribution | Calculation result (ft) | Interpretation |
+ * |---|---:|---|
+ * | @math{\Delta H_z} | -4.000000 | The discharge gauge is 4 ft below the suction gauge. |
+ * | @math{\Delta H_p} | 103.986135 | The pressure rise is the dominant contribution. |
+ * | @math{\Delta H_v} | 0.103859 | The smaller discharge pipe has the greater velocity head. |
+ * | @math{H_{f,s}} | 0.101040 | Estimated loss from the suction gauge to the pump. |
+ * | @math{H_{f,d}} | 0.204899 | Estimated loss from the pump to the discharge gauge. |
+ * | **@math{H_{pump}}** | **100.395932** | Sum of all five contributions. |
+ *
+ * The negative elevation term does not indicate an error; it offsets part of the pressure-head rise.
+ *
+ * @heading{WebAssembly Example}
+ * The package exports typed input and result objects from its root entrypoint. The `locateFile`
+ * path depends on where the consuming application deploys `client.wasm`.
+ *
+ * @code{.ts}
+ * import createModule, {
+ *   type MeasurToolsSuite,
+ *   type PumpHeadSuctionGaugeInput,
+ * } from 'measur-tools-suite';
+ *
+ * const suite: MeasurToolsSuite = await createModule({
+ *   locateFile: (filename: string) => `/path/to/wasm/${filename}`,
+ * });
+ *
+ * const input: PumpHeadSuctionGaugeInput = {
+ *   specificGravity: 1.0,
+ *   flowRate: 2000,
+ *   suctionPipeDiameter: 17.9,
+ *   suctionGaugePressure: 5,
+ *   suctionGaugeElevation: 5,
+ *   suctionLineLossCoefficients: 1,
+ *   dischargePipeDiameter: 15,
+ *   dischargeGaugePressure: 50,
+ *   dischargeGaugeElevation: 1,
+ *   dischargeLineLossCoefficients: 1,
+ * };
+ *
+ * const result = suite.calculatePumpHeadFromSuctionGauge(input);
+ * console.log(result.pumpHead); // approximately 100.396 ft
+ * @endcode
+ *
+ * For a tank-surface reference, provide a `PumpHeadSuctionTankInput` and call
+ * `calculatePumpHeadFromSuctionTank`.
  *
  * @heading{Assumptions and Limits}
- * - The flow in each pipe is steady and equal to the entered pump flow.
- * - Pipe diameters are inside diameters in inches.
- * - Pressures are gauge pressures in psig, elevations and returned heads are feet, and specific
- *   gravity and loss coefficients are dimensionless.
- * - The suction-tank fluid-surface velocity is zero relative to the pipe velocity.
- * - The exact legacy factors 448.8311693 and 0.432750001 are retained to preserve established
- *   results. Their original external source is not recorded in the implementation.
- * - The calculation does not enforce physical input ranges; callers must reject invalid or
- *   unsupported values before calling the Suite.
+ * - Flow is steady and incompressible, and the same volumetric flow passes through both pipes.
+ * - Pipe diameters are inside diameters. Specific gravity is constant over the calculation.
+ * - Pressure measurements are gauge pressures and elevations share a common datum.
+ * - The suction tank or reservoir is large enough that fluid velocity at its surface is negligible.
+ * - Loss coefficients are supplied by the user, are normalized to the entered reference-pipe
+ *   diameters, and represent only the paths between the reference points and pump flanges.
+ * - The calculation does not enforce physical input ranges. Specific gravity and pipe diameters
+ *   must be greater than zero, and users must determine whether the measurements and coefficients
+ *   are suitable for the system being assessed.
+ * - This calculation determines operating pump head; it does not calculate net positive suction
+ *   head, pump efficiency, cavitation margin, transient behavior, or a complete system curve.
  *
- * @heading{Migration from the Constructor API}
- * Replace `new HeadTool(...).calculate()` with `calculatePumpHeadFromSuctionGauge(input)` and
- * replace `new HeadToolSuctionTank(...).calculate()` with
- * `calculatePumpHeadFromSuctionTank(input)`. Remove cleanup calls for the calculator and returned
- * result because all new inputs and results are plain objects.
+ * @heading{Related Implementation}
+ * - C++ namespace: @ref pump_head
+ * - Suction-gauge calculation: @ref pump_head::calculateFromSuctionGauge
+ * - Suction-tank calculation: @ref pump_head::calculateFromSuctionTank
+ * - Shared constants: @ref physics::conversions and @ref physics::us
  */

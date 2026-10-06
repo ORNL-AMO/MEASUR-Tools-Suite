@@ -6,7 +6,7 @@
 - Status: Suite implementation and local downstream validation complete; PR/package coordination in progress
 - Owner: Codex
 - Created: 2026-10-05
-- Last updated: 2026-10-05
+- Last updated: 2026-10-06
 - Suite issue: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/200
 - Suite PR: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/418
 - Desktop issue: https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8941
@@ -75,7 +75,16 @@
 - Supporting formulas: `Q = q/448.8311693`, `v = Q/(pi D^2/4)`, `H_v = v^2/(2g)`, pressure head from pressure difference divided by `0.432750001 * SG`, and friction head `K * H_v`.
 - Constants: pi; `g = 32.174 ft/s^2`; `12 in/ft`; `448.8311693 gpm/(ft^3/s)`; and `0.432750001 psi/ft` at SG 1. All are referenced from `physics/constants.h`.
 - Units: gpm, inches, psig, ft, ft/s, ft/s^2, and dimensionless coefficients/SG.
-- Formula provenance: existing implementation and regression fixtures; no external reference is currently recorded.
+- Executable formula provenance: existing implementation and regression fixtures; the exact historical source of the
+  two retained compatibility values is not recorded.
+- Documentation provenance: the teaching-oriented algorithm narrative cites the DOE PSAT2008 user manual for the
+  measurement configurations and loss-coefficient treatment, DOE's July/August 2000 Energy Matters newsletter for
+  the conventional 2.31 ft/psi pressure-head derivation, and NBS Miscellaneous Publication 286 for U.S. customary
+  volume relationships.
+- Legacy-factor decision: preserve 448.8311693 gpm/cfs and 0.432750001 psi/ft in the Suite. The former is the
+  established rounded form of the unit-derived 448.831168831... gpm/cfs conversion. The latter implies a reference
+  water specific weight of 62.316000144 lb-force/ft^3; its exact historical source and precision remain unverified.
+  No conversion responsibility moves to Desktop, so no Desktop issue update is required for this documentation work.
 - Golden inputs and expected results: gauge fixture `100.3959322495 ft`; suction-tank fixture `22.9728655518 ft`.
 - SME decisions required: none for this behavior-preserving refactor.
 - Unclear or unverified items: physical provenance of the two legacy conversion factors is not recorded; retain exact values.
@@ -97,6 +106,13 @@
 - WebAssembly and declarations: `npm run verify:types` passed; `npm run verify:wasm` passed after activating the local Emscripten SDK, including all 251 browser tests and all three typed pump-head tests.
 - Documentation and hygiene: Doxygen completed with pre-existing configuration/undocumented-parameter warnings and a missing local `bibtex` executable; the new pump-head files emitted no warnings. `npm run check:docs` and `git diff --check` passed.
 - PR review follow-up: added a shared `1e-9 ft` absolute tolerance to native golden assertions, clarified the flow-conversion factor as gpm per cfs, and rewrote pipe area as `pi * diameter^2 / 4`. Focused native, full native, fresh WASM, Doxygen, documentation-link, and whitespace checks passed after these changes.
+- Teaching-document enhancement: reorganized the pump-head algorithm page around the physical energy balance,
+  measurement selection, sign conventions, formula derivations, loss-coefficient normalization, a golden worked
+  example, and typed WebAssembly usage. Focused native tests passed 42 assertions in two test cases;
+  `npm run verify:types`, `npm run check:docs`, and `git diff --check` passed. Doxygen generated the updated page with
+  no pump-head warnings and resolved the formulas, code block, and implementation references. Bibliography rendering
+  remains locally unverified because the existing environment does not provide `bibtex`; Doxygen emitted its known
+  missing-`bibtex` diagnostic along with unrelated pre-existing warnings.
 - Local Desktop package validation: packed this exact Suite working tree as `measur-tools-suite@1.2.6`, installed it into an isolated Desktop checkout without changing dependency pins, and passed the two focused wrapper tests, Angular application TypeScript checking, and the root application build.
 - Known environment limits: `clang-format` is not installed; C++ formatting was checked manually. Doxygen cannot produce bibliography output without `bibtex`.
 - Commands still needed: repeat Desktop validation against the exact published beta, then update both Desktop pins/lockfiles and repeat against the approved final package.

@@ -231,15 +231,21 @@ inline constexpr double kInchesPerFoot = 12.0;
 /**
  * @brief Conversion factor from cubic feet per second to gallons per minute
  *        @unitb{(\gallon\per\minute)\per(\cubicFoot\per\second)}.
- * @details Retains the established Suite value used by legacy pump-head calculations so migrated
- *          calculations reproduce their existing results exactly.
+ * @details The unit-derived value is (1728 in^3/ft^3) / (231 in^3/US gal) *
+ *          (60 s/min) = 448.831168831... gpm per cfs; see @cite chisholm1967units.
+ *          This established rounded value is retained so pump-head calculations reproduce their
+ *          existing results exactly.
  */
 inline constexpr double kGallonsPerMinutePerCubicFootPerSecond = 448.8311693;
 
 /**
- * @brief Pressure exerted by one foot of water head @unitb{\psi\per\foot}.
- * @details Retains the established Suite value used by legacy pump-head calculations at a
- *          specific gravity of 1 so migrated calculations reproduce their existing results exactly.
+ * @brief Reference-water pressure gradient used by pump-head calculations @unitb{\psi\per\foot}.
+ * @details Derived pressure head is H = delta-P / (k * SG). The retained value corresponds to a
+ *          reference-water specific weight of 144 * k = 62.316000144 lb-force/ft^3 and a reciprocal
+ *          pressure head of 2.310803 ft/psi at specific gravity 1. DOE pump guidance commonly uses
+ *          the engineering approximation 2.31 ft/psi; see @cite doe2000energyMatters. The exact
+ *          historical source and precision of this value are not recorded, so it is preserved to
+ *          reproduce established results.
  */
 inline constexpr double kPsiPerFootOfWater = 0.432750001;
 
