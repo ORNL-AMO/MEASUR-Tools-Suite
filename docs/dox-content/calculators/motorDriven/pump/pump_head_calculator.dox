@@ -125,7 +125,7 @@
  * @symtable
  * @symrow{Q; Volumetric flow rate used by the velocity calculation; \cubicFoot\per\second}
  * @symrow{q; Entered volumetric flow rate; \gallon\per\minute}
- * @symrow{k_Q; Retained flow conversion, 448.8311693; (\gallon\per\minute)\per(\cubicFoot\per\second)}
+ * @symrow{k_Q; Retained flow conversion, 448.8311693; \gallon\second\per\minute\cubicFoot}
  * @symrow{D_{ft}; Pipe inside diameter used by the area calculation; \foot}
  * @symrow{D; Entered pipe inside diameter; \inch}
  * @symrow{12; Inches per foot; \inch\per\foot}
@@ -204,9 +204,9 @@
  *   k_{Q,exact}=\frac{1728}{231}(60)=448.831168831\ldots
  * }
  * @symtable
- * @symrow{k_{Q,exact}; Unit-derived gallons per minute in one cubic foot per second; (\gallon\per\minute)\per(\cubicFoot\per\second)}
- * @symrow{1728; Cubic inches per cubic foot; \cubicInch\per\cubicFoot}
- * @symrow{231; Cubic inches per U.S. liquid gallon; \cubicInch\per\gallon}
+ * @symrow{k_{Q,exact}; Unit-derived gallons per minute in one cubic foot per second; \gallon\second\per\minute\cubicFoot}
+ * @symrow{1728; Cubic inches per cubic foot; \inch\cubed\per\cubicFoot}
+ * @symrow{231; Cubic inches per U.S. liquid gallon; \inch\cubed\per\gallon}
  * @symrow{60; Seconds per minute; \second\per\minute}
  * @endsymtable
  *

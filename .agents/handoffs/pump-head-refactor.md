@@ -113,6 +113,9 @@
   no pump-head warnings and resolved the formulas, code block, and implementation references. Bibliography rendering
   remains locally unverified because the existing environment does not provide `bibtex`; Doxygen emitted its known
   missing-`bibtex` diagnostic along with unrelated pre-existing warnings.
+- MathJax unit-rendering follow-up: replaced unsupported grouped siunitx expressions with the dimensionally equivalent
+  `gal*s/(min*ft^3)` form and composed cubic inches as `in^3`. Regenerated Doxygen and loaded the pump-head page in
+  headless Chrome; its post-MathJax DOM contained no `mjx-merror`, undefined-unit messages, or siunitx failures.
 - Local Desktop package validation: packed this exact Suite working tree as `measur-tools-suite@1.2.6`, installed it into an isolated Desktop checkout without changing dependency pins, and passed the two focused wrapper tests, Angular application TypeScript checking, and the root application build.
 - Known environment limits: `clang-format` is not installed; C++ formatting was checked manually. Doxygen cannot produce bibliography output without `bibtex`.
 - Commands still needed: repeat Desktop validation against the exact published beta, then update both Desktop pins/lockfiles and repeat against the approved final package.

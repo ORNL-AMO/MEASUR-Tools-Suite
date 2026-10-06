@@ -230,7 +230,7 @@ inline constexpr double kInchesPerFoot = 12.0;
 
 /**
  * @brief Conversion factor from cubic feet per second to gallons per minute
- *        @unitb{(\gallon\per\minute)\per(\cubicFoot\per\second)}.
+ *        @unitb{\gallon\second\per\minute\cubicFoot}.
  * @details The unit-derived value is (1728 in^3/ft^3) / (231 in^3/US gal) *
  *          (60 s/min) = 448.831168831... gpm per cfs; see @cite chisholm1967units.
  *          This established rounded value is retained so pump-head calculations reproduce their
