@@ -88,16 +88,18 @@ class PumpResult {
                            ///< existing load.
         ///< Optimal: The estimated electric power for an energy-efficient motor of the size indicated in the optimal
         ///< motor rated power entry above when operating at the optimal motor shaft power.
-        double annualEnergy; ///< Existing: This is the annual energy consumption at the measured/estimated power level
+        double annualEnergy; ///< Existing: This is the annual energy consumption, in MWh/year, at the
+                             ///< measured/estimated power level
                              ///< for the existing equipment when operated for the fraction of time indicated by the
                              ///< operating fraction.
-        ///< Optimal: The annual energy consumption for an optimized pump driven by an energy-efficient motor, based on
-        ///< the estimated motor power and on the fraction of time the pump is operated indicated by the operating
-        ///< fraction.
-        double annualCost; ///< Existing: This is the existing annual energy cost based on the product of the existing
-                           ///< annual energy consumption and the unit operating cost (cents/kwhr) input.
-        ///< Optimal: This is the annual energy cost based on the product of the optimal annual energy consumption and
-        ///< the unit operating cost (cents/kwhr) input.
+        ///< Optimal: The annual energy consumption, in MWh/year, for an optimized pump driven by an energy-efficient
+        ///< motor, based on the estimated motor power and on the fraction of time the pump is operated indicated by
+        ///< the operating fraction.
+        double annualCost; ///< Existing: This is the existing annual energy cost, in thousand dollars/year, based on
+                           ///< the product of the existing annual energy consumption and the unit operating cost
+                           ///< ($/kWh) input.
+        ///< Optimal: This is the annual energy cost, in thousand dollars/year, based on the product of the optimal
+        ///< annual energy consumption and the unit operating cost ($/kWh) input.
         double loadFactor;
         double driveEfficiency;
         double estimatedFLA; ///< Existing: The full load amps are either specified (known) or estimated. This field
