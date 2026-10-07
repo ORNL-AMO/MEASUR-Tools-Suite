@@ -105,8 +105,8 @@ export declare class PumpResults {
      * @param motor_power_factor Motor power factor, dimensionless.
      * @param motor_current Motor current, units A.
      * @param motor_power Motor power, units kW.
-     * @param annual_energy Annual energy, units kWh/year.
-     * @param annual_cost Annual cost, units $/year.
+     * @param annual_energy Annual energy, units MWh/year.
+     * @param annual_cost Annual cost, units thousand dollars/year.
      * @param load_factor Load factor, dimensionless fraction.
      * @param drive_efficiency Drive efficiency, dimensionless fraction.
      */
@@ -141,9 +141,9 @@ export declare class PumpResults {
     motor_current: number;
     /** Motor power, units kW */
     motor_power: number;
-    /** Annual energy, units kWh */
+    /** Annual energy, units MWh/year */
     annual_energy: number;
-    /** Annual cost, units $ */
+    /** Annual cost, units thousand dollars/year */
     annual_cost: number;
     /** Load factor, dimensionless fraction. */
     load_factor: number;
