@@ -8,7 +8,7 @@
  *
  */
 
-#include "motorDriven/pump/PumpResult.h"
+#include "motorDriven/pump/Pump.h"
 
 class PumpEfficiency {
   public:
@@ -50,4 +50,3 @@ class PumpEfficiency {
     double      flowRate;
     double      head;
 };
-

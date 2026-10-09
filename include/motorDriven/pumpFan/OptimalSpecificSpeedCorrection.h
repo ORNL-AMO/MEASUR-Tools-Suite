@@ -11,7 +11,7 @@
  *
  */
 
-#include "motorDriven/pump/PumpResult.h"
+#include "motorDriven/pump/Pump.h"
 
 class OptimalSpecificSpeedCorrection {
   public:
@@ -33,4 +33,3 @@ class OptimalSpecificSpeedCorrection {
     const double      specificSpeed;
     const Pump::Style style;
 };
-

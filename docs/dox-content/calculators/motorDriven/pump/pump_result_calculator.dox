@@ -1,0 +1,297 @@
+/**
+ * @defgroup pump_result_calculator Pump Result Calculator
+ * @ingroup pumping_system_assessments
+ * @brief Teaches how measured or proposed pump-system conditions become performance, energy, and cost results.
+ * @details
+ * A pumping system moves energy through a sequence of real components. Electricity enters the motor,
+ * the motor converts part of that input to shaft power, the drive transmits part of the shaft power to
+ * the pump, and the pump converts part of its shaft power to useful hydraulic power in the fluid:
+ *
+ * @formula{pump-result-energy-path;
+ *   P_e \xrightarrow{\eta_m} P_{m,s}
+ *       \xrightarrow{\eta_d} P_{p,s}
+ *       \xrightarrow{\eta_p} P_h
+ * }
+ * @symtable
+ * @symrow{P_e; Motor electrical input power; \kilo\watt}
+ * @symrow{\eta_m; Motor efficiency; \unitless}
+ * @symrow{P_{m,s}; Motor shaft output power; \horsepower}
+ * @symrow{\eta_d; Drive efficiency; \unitless}
+ * @symrow{P_{p,s}; Pump shaft input power; \horsepower}
+ * @symrow{\eta_p; Pump hydraulic efficiency; \unitless}
+ * @symrow{P_h; Hydraulic power delivered to the fluid; \horsepower}
+ * @endsymtable
+ *
+ * The existing-condition calculation follows this path from left to right. It begins with measured
+ * motor power or current, estimates motor loading, and then determines how much hydraulic power is
+ * produced. The modified-condition calculation works from right to left. It begins with the hydraulic
+ * duty and a proposed pump efficiency, determines the required pump and motor shaft powers, and then
+ * estimates the electrical input required by the motor.
+ *
+ * @heading{What the Assessment Determines}
+ * Use the existing calculation when field measurements describe the pump as it operates today. Use the
+ * modified calculation to evaluate the same hydraulic duty with a proposed pump efficiency, drive, or
+ * motor selection. Each calculation reports one operating condition. Comparing two results is the
+ * responsibility of the assessment application; this module does not calculate annual savings or an
+ * optimization rating.
+ *
+ * The final result includes pump, drive, and motor efficiencies; motor and pump shaft powers; motor
+ * current, power factor, and electric power; motor load factor; annual energy; and annual electricity
+ * cost. Efficiencies and load factor are returned as fractions: for example, 0.80 means 80 percent.
+ *
+ * @heading{Choose the Calculation Path}
+ * Three decisions determine the path through the calculation.
+ *
+ * | Decision | Choice | Meaning in the calculation |
+ * |---|---|---|
+ * | Condition | Existing | Start from measured motor power or current and calculate pump efficiency. |
+ * | Condition | Modified | Start from hydraulic duty and proposed pump efficiency and calculate motor input. |
+ * | Existing load estimate | Measured power | Match the motor model to measured three-phase electric power. |
+ * | Existing load estimate | Measured current | Match the voltage-adjusted motor model to measured current. |
+ * | Pump type | Rotodynamic | Calculate hydraulic power from flow, head, and specific gravity. |
+ * | Pump type | Positive displacement | Calculate hydraulic power from flow and differential pressure. Head and specific gravity are not used. |
+ * | Drive | Direct | Motor and pump shaft powers are equal. |
+ * | Drive | Specified | Use the entered drive-efficiency fraction. |
+ * | Drive | V-belt, notched V-belt, or synchronous belt | Estimate drive loss from empirical power-dependent curves. |
+ *
+ * @heading{Existing Condition: Start with the Motor Measurement}
+ * The motor model develops current, efficiency, power factor, and input-power values at one-percent
+ * load intervals. The search begins at one-percent load for the measured-power method and at zero load
+ * for the measured-current method. It brackets the measurement between two modeled points and linearly
+ * interpolates the load factor and motor quantities.
+ *
+ * If @math{X} is either modeled motor power or voltage-adjusted current, the interpolated load factor is:
+ * @formula{pump-result-existing-load-interpolation;
+ *   L=L_1+0.01\frac{X_{meas}-X_1}{X_2-X_1}
+ * }
+ * @symtable
+ * @symrow{L; Interpolated motor load factor; \unitless}
+ * @symrow{L_1; Lower modeled load factor; \unitless}
+ * @symrow{0.01; Separation between modeled load points; \unitless}
+ * @symrow{X_{meas}; Measured power or measured current; \kilo\watt\text{ or }\ampere}
+ * @symrow{X_1; Modeled value at the lower load point; \kilo\watt\text{ or }\ampere}
+ * @symrow{X_2; Modeled value at the upper load point; \kilo\watt\text{ or }\ampere}
+ * @endsymtable
+ *
+ * The same interpolation fraction is applied to motor efficiency and the other modeled quantities.
+ * The search is bounded by the motor model's 150-percent-load region. Values beyond that region are not
+ * a substitute for equipment validation; they indicate that the measurement and selected nameplate data
+ * should be reviewed.
+ *
+ * For the current method, modeled current is adjusted for the difference between field and nameplate
+ * voltage before interpolation:
+ * @formula{pump-result-existing-voltage-current;
+ *   I_{adj}=I\left[\left(\frac{V_f}{V_r}-1\right)(1-2L)+1\right]
+ * }
+ * @symtable
+ * @symrow{I_{adj}; Voltage-adjusted modeled current; \ampere}
+ * @symrow{I; Modeled current at the selected load point; \ampere}
+ * @symrow{V_f; Measured field voltage; \volt}
+ * @symrow{V_r; Motor nameplate voltage; \volt}
+ * @symrow{L; Motor load factor at the modeled point; \unitless}
+ * @endsymtable
+ *
+ * Once electric input power and motor efficiency are known, motor shaft power is:
+ * @formula{pump-result-existing-motor-shaft;
+ *   P_{m,s}=\frac{P_e\eta_m}{k_{hp}}
+ * }
+ * @symtable
+ * @symrow{P_{m,s}; Motor shaft output power; \horsepower}
+ * @symrow{P_e; Motor electrical input power; \kilo\watt}
+ * @symrow{\eta_m; Motor efficiency; \unitless}
+ * @symrow{k_{hp}; Rounded mechanical horsepower conversion, 0.746; \kilo\watt\per\horsepower}
+ * @endsymtable
+ *
+ * @heading{Crossing the Drive}
+ * A direct drive has @math{\eta_d=1}. For a specified drive, the entered efficiency is used directly.
+ * Existing shaft power moves from the motor toward the pump:
+ * @formula{pump-result-existing-drive;
+ *   P_{p,s}=P_{m,s}\eta_d
+ * }
+ * @symtable
+ * @symrow{P_{p,s}; Pump shaft input power; \horsepower}
+ * @symrow{P_{m,s}; Motor shaft output power; \horsepower}
+ * @symrow{\eta_d; Drive efficiency; \unitless}
+ * @endsymtable
+ *
+ * Modified shaft power moves in the opposite direction because the required pump shaft power is known:
+ * @formula{pump-result-modified-drive;
+ *   P_{m,s}=\frac{P_{p,s}}{\eta_d}
+ * }
+ * @symtable
+ * @symrow{P_{m,s}; Required motor shaft output power; \horsepower}
+ * @symrow{P_{p,s}; Required pump shaft input power; \horsepower}
+ * @symrow{\eta_d; Drive efficiency; \unitless}
+ * @endsymtable
+ *
+ * Belt-drive efficiency is power-dependent. For an existing standard V-belt, the fractional loss is:
+ * @formula{pump-result-existing-v-belt-loss;
+ *   B_o(P)=\frac{0.68759e^{-0.019791P}+3.7558e^{-0.21507P}+3.9963}{100}
+ * }
+ * @symtable
+ * @symrow{B_o; Existing V-belt output-loss fraction; \unitless}
+ * @symrow{P; Motor shaft power supplied to the drive; \horsepower}
+ * @symrow{0.68759,3.7558,3.9963; Empirical fit coefficients; \unitless}
+ * @symrow{0.019791,0.21507; Empirical exponential coefficients; \per\horsepower}
+ * @endsymtable
+ *
+ * The notched V-belt uses five-sevenths of this loss, and the synchronous belt uses two-sevenths.
+ * The modified calculation uses a corresponding input-power loss curve:
+ * @formula{pump-result-modified-v-belt-loss;
+ *   B_i(P)=\frac{0.7489574e^{-0.02067997P}+4.136368e^{-0.226025P}+4.162707}{100}
+ * }
+ * @symtable
+ * @symrow{B_i; Modified V-belt input-loss fraction relative to pump shaft power; \unitless}
+ * @symrow{P; Required pump shaft power; \horsepower}
+ * @symrow{0.7489574,4.136368,4.162707; Empirical fit coefficients; \unitless}
+ * @symrow{0.02067997,0.226025; Empirical exponential coefficients; \per\horsepower}
+ * @endsymtable
+ *
+ * In that direction, @math{P_{m,s}=P_{p,s}(1+B_i)} and @math{\eta_d=1/(1+B_i)}. The
+ * exact historical derivation of the retained belt coefficients is not recorded in the repository.
+ * They are preserved as regression-tested implementation constants rather than assigned an inferred source.
+ *
+ * @heading{Hydraulic Power: Two Pump Models}
+ * Rotodynamic pumps express hydraulic duty with flow, head, and specific gravity:
+ * @formula{pump-result-rotodynamic-hydraulic-power;
+ *   P_h=\frac{QHSG}{3961.38}
+ * }
+ * @symtable
+ * @symrow{P_h; Hydraulic power delivered to the fluid; \horsepower}
+ * @symrow{Q; Pump flow rate; \gallon\per\minute}
+ * @symrow{H; Pump head; \foot}
+ * @symrow{SG; Pumped-fluid specific gravity; \unitless}
+ * @symrow{3961.38; U.S. customary flow-head horsepower divisor; \gallon\foot\per\minute\per\horsepower}
+ * @endsymtable
+ *
+ * Positive-displacement pumps use differential pressure instead. Head and specific gravity do not enter
+ * this branch because the entered pressure rise already describes the pressure energy added to the fluid:
+ * @formula{pump-result-positive-displacement-hydraulic-power;
+ *   P_h=\frac{Q\Delta p}{1714.231}
+ * }
+ * @symtable
+ * @symrow{P_h; Hydraulic power delivered to the fluid; \horsepower}
+ * @symrow{Q; Pump flow rate; \gallon\per\minute}
+ * @symrow{\Delta p; Pump differential pressure; \psi}
+ * @symrow{1714.231; U.S. customary flow-pressure horsepower divisor; \gallon\psi\per\minute\per\horsepower}
+ * @endsymtable
+ *
+ * Existing pump efficiency is the useful hydraulic power divided by measured pump shaft power:
+ * @formula{pump-result-existing-pump-efficiency;
+ *   \eta_p=\frac{P_h}{P_{p,s}}
+ * }
+ * @symtable
+ * @symrow{\eta_p; Existing pump hydraulic efficiency; \unitless}
+ * @symrow{P_h; Hydraulic power delivered to the fluid; \horsepower}
+ * @symrow{P_{p,s}; Existing pump shaft input power; \horsepower}
+ * @endsymtable
+ *
+ * For a modified condition, the proposed efficiency is an input and the required pump shaft power is:
+ * @formula{pump-result-modified-pump-shaft;
+ *   P_{p,s}=\frac{P_h}{\eta_p}
+ * }
+ * @symtable
+ * @symrow{P_{p,s}; Required pump shaft input power; \horsepower}
+ * @symrow{P_h; Required hydraulic power; \horsepower}
+ * @symrow{\eta_p; Proposed pump hydraulic efficiency; \unitless}
+ * @endsymtable
+ *
+ * @heading{Modified Condition: Resolve Motor Electrical Input}
+ * The modified calculation converts the required motor shaft power to kilowatts and searches the motor
+ * performance model in one-percent load increments. At each point it estimates current, efficiency,
+ * power factor, and electric power. It brackets the required shaft power and uses the same linear
+ * interpolation principle introduced in the existing-condition load estimate above.
+ *
+ * Three-phase motor input power is related to voltage, current, and power factor by:
+ * @formula{pump-result-three-phase-power;
+ *   P_e=\frac{\sqrt{3}V I PF}{1000}
+ * }
+ * @symtable
+ * @symrow{P_e; Three-phase motor electrical input power; \kilo\watt}
+ * @symrow{V; Operating line voltage; \volt}
+ * @symrow{I; Motor line current; \ampere}
+ * @symrow{PF; Motor power factor; \unitless}
+ * @symrow{1000; Watts per kilowatt conversion; \watt\per\kilowatt}
+ * @endsymtable
+ *
+ * The motor curves depend on rated power, speed, line frequency, and efficiency class. A specified motor
+ * efficiency is used only when the specified class is selected. The curve coefficients are inherited
+ * from the established PSAT implementation and protected by regression tests; their complete historical
+ * derivation is not available in the repository.
+ *
+ * @heading{Annual Energy and Cost}
+ * Both paths convert operating electric power to annual energy in megawatt-hours:
+ * @formula{pump-result-annual-energy;
+ *   E_{annual}=\frac{P_e t}{1000}
+ * }
+ * @symtable
+ * @symrow{E_{annual}; Annual electrical energy use; \mega\watt\hour\per\year}
+ * @symrow{P_e; Motor electrical input power; \kilo\watt}
+ * @symrow{t; Annual operating time; \hour\per\year}
+ * @symrow{1000; Kilowatt-hours per megawatt-hour; \kilo\watt\hour\per\mega\watt\hour}
+ * @endsymtable
+ *
+ * Multiplying megawatt-hours by an electricity rate in dollars per kilowatt-hour gives a numerical
+ * result in thousands of dollars per year:
+ * @formula{pump-result-annual-cost;
+ *   C_{annual}=E_{annual}c_e
+ * }
+ * @symtable
+ * @symrow{C_{annual}; Annual electricity cost; \kilo\dollar\per\year}
+ * @symrow{E_{annual}; Annual electrical energy use; \mega\watt\hour\per\year}
+ * @symrow{c_e; Electricity rate; \dollar\per\kilo\watt\hour}
+ * @endsymtable
+ *
+ * @heading{Worked Rotodynamic Example}
+ * Consider a direct-driven pump moving 1,840 gpm at 174.85 ft of head with specific gravity 1.0.
+ * The existing motor is rated 200 hp at 1,780 RPM and 460 V. Measured input is 80 kW at 480 V,
+ * and the system operates 8,760 hours per year at $0.05/kWh.
+ *
+ * The rotodynamic hydraulic-power equation gives 81.2151 hp of hydraulic power.
+ * The measured-power motor model gives 101.1875 hp at the motor shaft. With a direct drive, pump
+ * shaft power is also 101.1875 hp. Dividing hydraulic power by pump shaft power
+ * therefore gives an existing pump efficiency of 0.802620, or 80.2620 percent. Existing annual
+ * energy is 700.8 MWh/year and annual cost is 35.04 thousand dollars/year.
+ *
+ * If the proposed pump efficiency is 0.80, the modified calculation requires 101.5189 hp at the
+ * pump and motor shafts. The motor model resolves this to 80.2552 kW, 94.3652-percent motor
+ * efficiency, 126.585 A, and a 0.762584 power factor. The modified annual result is 703.0352 MWh/year
+ * and 35.1518 thousand dollars/year. In this example, the proposed pump efficiency is slightly lower
+ * than the calculated existing efficiency, so energy use increases. A modification is not inherently
+ * an improvement; the two results must be interpreted together.
+ *
+ * @heading{Worked Positive-Displacement Example}
+ * Consider a positive-displacement pump delivering 100 gpm across 50 psi with a proposed efficiency
+ * of 0.80. The positive-displacement hydraulic-power equation gives 2.91676 hp
+ * of hydraulic power. The required pump shaft power is therefore 2.91676/0.80 = 3.64595 hp.
+ *
+ * Notice that an entered head value and specific gravity do not change this result. For this pump
+ * type, differential pressure is the selected description of hydraulic duty. The drive and motor
+ * calculations then proceed from the 3.64595-hp pump shaft requirement exactly as they do for the
+ * rotodynamic modified case.
+ *
+ * @heading{Interpreting and Comparing Results}
+ * - Efficiencies, power factor, and load factor are fractions in the calculation API, not percentage points.
+ * - Motor shaft power is upstream of the drive; pump shaft power is downstream of the drive.
+ * - Annual energy is returned in MWh/year, while the rate input remains dollars per kWh.
+ * - Annual cost is returned in thousand dollars/year because of that MWh-to-kWh scale relationship.
+ * - Voltage adjustment affects modeled current and power factor; it does not change the entered hydraulic duty.
+ * - A search reaching the 150-percent motor-load region is a reason to review motor sizing and field data.
+ * - Savings are obtained by subtracting a separately calculated modified result from an existing result.
+ *
+ * @heading{Public Calculation Interface}
+ * The C++ API is provided by @ref pump_result. WebAssembly callers pass plain objects and receive a
+ * plain result; none of these objects requires manual deletion. Both calculation inputs contain a
+ * `system` object with the shared equipment, hydraulic-duty, voltage, operating-time, and energy-rate
+ * data. `ExistingPumpResultInput` adds the measured motor data used to infer the present condition,
+ * while `ModifiedPumpResultInput` adds the proposed pump efficiency:
+ * @code{.ts}
+ * const existing = module.calculateExistingPumpResult(existingInput);
+ * const modified = module.calculateModifiedPumpResult(modifiedInput);
+ * const annualEnergySavingsMWh = existing.annualEnergy - modified.annualEnergy;
+ * const annualCostSavingsThousandDollars = existing.annualCost - modified.annualCost;
+ * @endcode
+ *
+ * The implementation composes the established motor, drive, and fluid-power calculators. Current C++
+ * and WebAssembly regression fixtures are the executable source of truth for numerical compatibility.
+ */
