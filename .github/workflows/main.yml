@@ -8,6 +8,7 @@ on:
   pull_request:
     branches:
       - "develop"
+      - "epic-*"
     types:
       - opened
       - synchronize
@@ -37,8 +38,8 @@ jobs:
   release-package-beta:
     needs: quality
     if: >
-      github.event_name == 'pull_request' && 
-      github.base_ref == 'develop' && 
+      github.event_name == 'pull_request' &&
+      (github.base_ref == 'develop' || startsWith(github.base_ref, 'epic-')) &&
       github.event.pull_request.draft == false &&
       github.event.pull_request.head.repo.fork == false
     uses: ./.github/workflows/release_package.yml
