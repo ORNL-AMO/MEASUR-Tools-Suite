@@ -10,10 +10,11 @@
 - Suite issue: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/203
 - Suite feature branch: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/tree/epic-pump-result-refactor
 - Suite CI bootstrap PR: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/420
-- Suite PumpResult PR: pending
+- Suite PumpResult PR: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/421
 - Desktop issue: https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8951
-- Desktop feature branch: `epic-pump-result-refactor` (creation pending local push because the GitHub App lacks write permission)
-- Desktop PR: pending
+- Desktop coordination issue: https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8957
+- Desktop feature branch: https://github.com/ORNL-AMO/AMO-Tools-Desktop/tree/epic-pump-result-refactor
+- Desktop PR: https://github.com/ORNL-AMO/AMO-Tools-Desktop/pull/8956
 
 ## Target Module
 
@@ -72,7 +73,7 @@
 - Process-flow package changes: dependency pin only; no direct consumer found.
 - Web/Electron WASM loading changes: none planned.
 - Downstream verification: focused wrapper tests, Angular typecheck, and root build against exact package.
-- Desktop implementation branch: `issue-8951`; rebase it onto `epic-pump-result-refactor` before review.
+- Desktop implementation branch: `issue-8951`; rebased onto `epic-pump-result-refactor` at `d1ba297a9`.
 - Desktop prerequisite: pump-head PR #8945 merged into Desktop `develop` on 2026-10-08 and is included in the feature-branch base.
 
 ## Formulas And Units
@@ -94,7 +95,7 @@
 - Desktop root dependency: update to exact beta/final package
 - Desktop process-flow dependency: keep aligned with root
 - Current Desktop `develop` pins: both manifests are aligned at `1.2.6-rc.350.1`; no speculative PumpResult package version is committed.
-- Release readiness: pending integrated Suite and Desktop validation
+- Release readiness: Suite PR #421 and Desktop PR #8956 are intentionally draft pending integrated beta validation
 - Release blockers: approval and merge of Suite CI bootstrap PR #420, followed by PumpResult beta/final package publication
 
 ## Validation
@@ -105,4 +106,4 @@
 
 ## Open Questions Or Blockers
 
-- Exact beta/final package identifiers and both PumpResult PR links remain pending.
+- Exact beta/final package identifiers remain pending. Merge Suite CI bootstrap PR #420 first, then publish and validate the PumpResult beta before either implementation PR is made ready for review.
