@@ -33,7 +33,7 @@ export * from "./ts_def_modules/motorDriven/fans/fan_affinity_laws";
 export * from "./ts_def_modules/motorDriven/motor/motor";
 export * from "./ts_def_modules/motorDriven/motor/motorEnum";
 
-export * from "./ts_def_modules/motorDriven/pump/pump";
+export * from "./ts_def_modules/motorDriven/pump/pump_result";
 export * from "./ts_def_modules/motorDriven/pump/pump_head";
 export * from "./ts_def_modules/motorDriven/pump/pump_valve_power_loss";
 
@@ -145,7 +145,7 @@ export type MeasurToolsSuite =
     import("./ts_def_modules/motorDriven/motor/motorEnum").MotorEnumModule &
     import("./ts_def_modules/motorDriven/motor/motor").MotorModule &
     // motorDriven/pump
-    import("./ts_def_modules/motorDriven/pump/pump").PumpModule &
+    import("./ts_def_modules/motorDriven/pump/pump_result").PumpResultModule &
     import("./ts_def_modules/motorDriven/pump/pump_head").PumpHeadModule &
     import("./ts_def_modules/motorDriven/pump/pump_valve_power_loss").PumpValvePowerLossModule &
     // motorDriven/pumpFan
