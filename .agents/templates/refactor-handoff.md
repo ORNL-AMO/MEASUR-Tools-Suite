@@ -69,12 +69,16 @@
 
 ## Formulas And Units
 
+- Engineering question and why the result matters:
+- Teaching sequence or decision path:
 - Final result formula:
 - Supporting formulas:
 - Constants:
 - Units:
 - Formula provenance:
 - Golden inputs and expected results:
+- Worked example and interpretation:
+- Valid ranges, boundaries, fallbacks, and inappropriate uses:
 - SME decisions required:
 - Unclear or unverified items:
 

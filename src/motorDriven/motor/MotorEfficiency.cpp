@@ -13,7 +13,7 @@
 #include <cmath>
 #include <map>
 
-#include <motorDriven/motor/Poles.h>
+#include "motorDriven/motor/poles.h"
 
 #include "util/CurveFitVal.h"
 
@@ -401,7 +401,7 @@ MotorEfficiency::determinePartialLoadCoefficients(std::size_t const pole) const 
 
 std::array<double, 5> MotorEfficiency::calculate25intervals() {
     // Find the poles and use it as an index
-    int poleCase = Poles(motorRpm, lineFrequency).calculate() / 2 - 1;
+    int poleCase = poles::calculate(motorRpm, lineFrequency) / 2 - 1;
     if (efficiencyClass == Motor::EfficiencyClass::PREMIUM && poleCase > 2) {
         poleCase = 2;
     }

@@ -17,7 +17,7 @@
 #include <fstream>
 
 #include "motorDriven/motor/MotorEfficiency.h"
-#include "motorDriven/motor/Poles.h"
+#include "motorDriven/motor/poles.h"
 
 /**
  * Estimating FLA methodology
@@ -107,7 +107,7 @@ std::array<double, 6> EstimateFLA::calculate() {
     /**
      * Calculate the number of poles based on the RPM and use it as an index
      */
-    int const pole = (Poles(motorRPM, lineFrequency).calculate() / 2) - 1;
+    int const pole = (poles::calculate(motorRPM, lineFrequency) / 2) - 1;
 
     /**
      * Calculate basic FLA value

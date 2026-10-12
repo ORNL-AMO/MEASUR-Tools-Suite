@@ -1,0 +1,149 @@
+/**
+ * @defgroup poles_calculator Motor Pole Count Calculator
+ * @ingroup equipment_and_property_calculators
+ * @brief Classifies an AC motor's pole count from measured speed and line frequency.
+ * @details
+ * The calculator returns the even pole count used to select the appropriate motor-performance
+ * coefficients elsewhere in MEASUR. It accepts a positive measured motor speed and either 50 Hz or
+ * 60 Hz line frequency. The result is normally one of 2, 4, 6, 8, 10, or 12 poles. This calculation
+ * classifies the motor for coefficient selection; it does not measure slip, predict speed, or
+ * redesign the motor.
+ *
+ * @heading{Final Result}
+ * The calculation first compares the measured speed with inclusive speed bands for the selected
+ * line frequency. Each band corresponds to an even pole count. If no band matches, the calculator
+ * applies the legacy fallback described below. This order is important: the tabulated bands are the
+ * primary classification method, while the fallback preserves established results for speeds in the
+ * gaps between bands.
+ *
+ * | Pole count | 50 Hz synchronous speed (rpm) | Accepted 50 Hz speed (rpm) | 60 Hz synchronous speed (rpm) | Accepted 60 Hz speed (rpm) |
+ * |---:|---:|---:|---:|---:|
+ * | 2  | 3000 | 2700 to 3000 | 3600 | 3240 to 3600 |
+ * | 4  | 1500 | 1350 to 1500 | 1800 | 1620 to 1800 |
+ * | 6  | 1000 | 900 to 1000  | 1200 | 1080 to 1200 |
+ * | 8  | 750  | 675 to 750   | 900  | 810 to 900 |
+ * | 10 | 600  | 540 to 600   | 720  | 648 to 720 |
+ * | 12 | 500  | 450 to 500   | 600  | 540 to 600 |
+ *
+ * Both endpoints are included. For example, a 60 Hz motor measured at either 1620 rpm or 1800 rpm
+ * is classified as a four-pole motor.
+ *
+ * @heading{How to Classify a Motor}
+ * 1. Confirm that measured motor speed is positive and choose the nominal 50 Hz or 60 Hz line
+ *    frequency.
+ * 2. Use the corresponding frequency columns in the table and compare the measured speed with each
+ *    inclusive accepted-speed band.
+ * 3. Return the pole count for the matching band. These bands are checked before any fallback because
+ *    they are the primary MEASUR classification rule.
+ * 4. If no band matches, apply the above-range rule or the legacy fallback. Treat that result as a
+ *    compatibility classification, especially for a 50 Hz input, rather than a new physical estimate.
+ * 5. Use the returned pole count only where the downstream motor model requests a pole class, such as
+ *    selecting efficiency or full-load-current coefficients.
+ *
+ * @heading{Synchronous Speed and Pole Count}
+ * The rotating magnetic field of an AC motor has synchronous speed:
+ * @formula{poles-synchronous-speed;
+ *   N_s=\frac{120f}{P}
+ * }
+ * @symtable
+ * @symrow{N_s; Synchronous speed of the rotating magnetic field; \revolutionsPerMinute}
+ * @symrow{f; Electrical line frequency; \hertz}
+ * @symrow{P; Total motor pole count; \unitless}
+ * @symrow{120; Frequency-to-speed conversion factor; \revolutionsPerMinute\per\hertz}
+ * @endsymtable
+ *
+ * This relationship gives the synchronous-speed columns in the table. A 60 Hz four-pole motor, for
+ * example, has a synchronous speed of 1800 rpm. The U.S. Department of Energy motor-system
+ * sourcebook gives the same relationship and explains that an induction motor operates below
+ * synchronous speed because of slip @cite doe2008motorSourcebook.
+ *
+ * Slip is the fractional difference between synchronous and measured rotor speed:
+ * @formula{poles-slip;
+ *   s=\frac{N_s-N}{N_s}
+ * }
+ * @symtable
+ * @symrow{s; Motor slip fraction; \unitless}
+ * @symrow{N_s; Synchronous speed of the rotating magnetic field; \revolutionsPerMinute}
+ * @symrow{N; Measured motor rotor speed; \revolutionsPerMinute}
+ * @endsymtable
+ *
+ * The calculator's primary bands extend from 90 percent through 100 percent of synchronous speed:
+ * @formula{poles-speed-band;
+ *   0.9N_s(P,f)\leq N\leq N_s(P,f)
+ * }
+ * @symtable
+ * @symrow{0.9; Retained lower-band fraction; \unitless}
+ * @symrow{N_s(P,f); Synchronous speed for pole count P and frequency f; \revolutionsPerMinute}
+ * @symrow{N; Measured motor rotor speed; \revolutionsPerMinute}
+ * @symrow{P; Candidate even pole count; \unitless}
+ * @symrow{f; Electrical line frequency; \hertz}
+ * @endsymtable
+ *
+ * The 90-percent threshold is an established MEASUR classification boundary, not a statement that
+ * normal motor slip is always 10 percent. Actual slip depends on motor design and load. The threshold
+ * is retained so the motor-efficiency and full-load-current models continue selecting the same
+ * coefficient tables.
+ *
+ * @heading{Legacy Fallback}
+ * If the measured speed is not in a table band, speeds above 3600 rpm return two poles. All other
+ * positive speeds use the historical 60 Hz expression:
+ * @formula{poles-fallback;
+ *   P_f=\min\left(12,\,2\left\lfloor\frac{\left\lfloor7200/N\right\rfloor}{2}\right\rfloor\right)
+ * }
+ * @symtable
+ * @symrow{P_f; Pole count returned by the fallback; \unitless}
+ * @symrow{N; Measured motor rotor speed; \revolutionsPerMinute}
+ * @symrow{7200; Numerator derived from 120 times 60 Hz; \revolutionsPerMinute}
+ * @symrow{2; Even-pole step size; \unitless}
+ * @symrow{12; Maximum returned pole count; \unitless}
+ * @symrow{\lfloor\ \rfloor; Floor operation; \unitless}
+ * @endsymtable
+ *
+ * The fallback uses the 60 Hz numerator even when the selected line frequency is 50 Hz. That behavior
+ * is intentionally preserved for numerical compatibility; it should not be interpreted as a general
+ * physical formula for 50 Hz motors. The repository does not record the historical source for this
+ * fallback or for the 90-percent band boundary.
+ *
+ * @heading{Worked Example: Primary Speed Band}
+ * Consider a 60 Hz motor measured at 1780 rpm. A four-pole motor is the relevant candidate from the
+ * table:
+ *
+ * 1. Its synchronous speed is @math{N_s=(120\times60)/4=1800} rpm.
+ * 2. The retained lower boundary is @math{0.9N_s=0.9\times1800=1620} rpm.
+ * 3. The measured speed satisfies @math{1620\leq1780\leq1800}, so it is inside the inclusive
+ *    four-pole band.
+ * 4. The calculator therefore returns four poles. The implied slip is
+ *    @math{s=(1800-1780)/1800=0.0111}, or approximately 1.11 percent, which explains why the measured
+ *    rotor speed is below synchronous speed.
+ *
+ * This result tells downstream MEASUR motor models to use their four-pole coefficient data; it does
+ * not change the measured speed or report slip as the calculator output.
+ *
+ * @heading{Worked Example: Legacy Fallback}
+ * Consider a 50 Hz motor measured at 800 rpm. The speed is above the eight-pole band of 675 to 750 rpm
+ * and below the six-pole band of 900 to 1000 rpm, so no primary band matches. The retained fallback
+ * gives @math{2\left\lfloor\left\lfloor7200/800\right\rfloor/2\right\rfloor=8} poles. The result is
+ * preserved for compatibility, but the use of 7200 means it should not be interpreted as a general
+ * 50 Hz motor relationship.
+ *
+ * At either supported frequency, a measured speed of 4000 rpm bypasses the fallback expression and
+ * returns two poles through the explicit above-range rule.
+ *
+ * @heading{Inputs, Limits, and Interpretation}
+ * - Motor speed is measured in revolutions per minute and must be positive. Zero or negative speeds
+ *   are outside the calculation contract.
+ * - Line frequency is selected from the existing `Motor::LineFrequency` values for 50 Hz and 60 Hz.
+ * - The result is a discrete pole count, not motor speed or slip.
+ * - The calculator is intended to classify conventional AC motor speeds for the coefficient-based
+ *   MEASUR motor models. It supports only the nominal 50 Hz and 60 Hz enum values and is not an
+ *   arbitrary-frequency variable-frequency-drive pole estimator.
+ *
+ * @heading{Public Calculation Interface}
+ * The C++ API is a namespace function:
+ * @code{.cpp}
+ * const int pole_count = poles::calculate(1780.0, Motor::LineFrequency::FREQ60);
+ * @endcode
+ *
+ * Poles has no direct WebAssembly constructor or function. Existing WebAssembly motor, pump, and fan
+ * calculations consume it internally, so the JavaScript and TypeScript runtime surface is unchanged.
+ */
