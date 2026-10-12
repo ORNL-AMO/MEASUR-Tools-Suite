@@ -28,3 +28,6 @@ Review the completed refactor and documentation as an integrated public change a
 - The handoff has final validation notes.
 - Any remaining risk is explicit and actionable.
 - The final response can accurately state what changed and which validation commands were run.
+
+This persona verifies that the implementation and evidence are complete. It does not replace the separate pre-PR
+review-only pass required by `.agents/README.md` and `.github/skills/measur-code-review/`.

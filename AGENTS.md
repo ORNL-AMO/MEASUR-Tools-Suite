@@ -73,6 +73,7 @@ When asked to refactor code using namespaces or to split modules, work in this o
 2. **WebAssembly Surface and Tests**: Update the binding, TypeScript declaration, module export, and WASM Mocha test together. Move migrated tests from `tests/wasm/` and delete obsolete originals.
 3. **Algorithm Documentation**: Update `docs/dox-content/` and related examples when public behavior, formulas, usage, or module organization changed.
 4. **Integrated and Downstream Verification**: Rebuild and stage WASM, run the affected validation, and verify AMO-Tools-Desktop impact when applicable.
+5. **Pre-PR Internal Review**: Before opening a pull request, run a review-only pass against the intended base branch using [`.github/skills/measur-code-review/`](.github/skills/measur-code-review/SKILL.md). Resolve or explicitly disposition every actionable finding, rerun affected validation, and record the reviewed base/head commits and outcome in the handoff.
 
 For namespace refactors that include algorithm documentation, use the repo-neutral persona workflow in [.agents/README.md](.agents/README.md). The default sequence is:
 
@@ -90,7 +91,7 @@ Repo-scoped skills under `.agents/skills/` package the recurring workflows:
 - `refactor-and-document-calculation` for cross-layer calculation refactors and algorithm documentation.
 - `coordinate-suite-desktop-change` for changes that affect the Desktop consumer, release order, or GitHub coordination.
 
-GitHub Copilot PR review uses `.github/skills/measur-code-review/`. AI review is advisory and does not replace required human approval.
+Both pre-PR internal review and GitHub Copilot PR review use `.github/skills/measur-code-review/`. Internal review is a readiness gate, while AI review remains advisory and does not replace required human approval.
 
 ## WebAssembly and TypeScript Rules
 

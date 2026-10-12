@@ -96,6 +96,9 @@ For each module:
 - Update PumpResult, FanResult, MotorPerformance, and database consumers only as required to compile against the new
   dependency API. Do not refactor their public APIs unless their own issue is included in this sequence.
 - Keep a module-specific handoff with the old/new runtime contract and ownership rules.
+- Before opening each child PR, run a review-only pass with `.github/skills/measur-code-review/` against the intended
+  feature-branch base. Record the reviewed base/head commits, findings and dispositions, rerun affected checks, and
+  require a `Ready` or `Ready with documented follow-up` result with no unresolved P0-P2 findings.
 - Keep the Suite PR draft until it is ready for a meaningful beta. For a public API migration, validate Desktop
   against that exact beta and keep the root and process-flow dependency pins aligned.
 - Do not create an empty Desktop PR for an internal Suite change. Record the no-change consumer analysis and focused

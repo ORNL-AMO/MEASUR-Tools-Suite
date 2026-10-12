@@ -52,6 +52,18 @@ Complete this table for each changed public WASM surface, or write `Not applicab
 
 List exact commands, results, and environmental limits:
 
+## Internal Review
+
+- [ ] A review-only pass used `.github/skills/measur-code-review/` against the intended PR base.
+- [ ] Every actionable finding was resolved or explicitly dispositioned; no P0, P1, or P2 finding remains.
+- [ ] Checks affected by review fixes were rerun.
+
+- Intended base and reviewed base commit:
+- Reviewed head commit:
+- Reviewer or review task:
+- Readiness result:
+- Remaining P3 findings, questions, or validation gaps:
+
 ## Engineering Or SME Review
 
 Record unresolved formula, units, applicability, terminology, or release decisions.

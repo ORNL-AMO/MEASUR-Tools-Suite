@@ -46,6 +46,25 @@ Every handoff must include:
 
 Keep investigation history and long review matrices in linked GitHub issues or a clearly labeled appendix. When the work is finished, mark the handoff `completed` or `archived`, record unresolved validation accurately, and retain the file only when it provides durable migration or formula provenance.
 
+## Pre-PR Internal Review Gate
+
+Complete an internal review after implementation and validation but before opening a pull request:
+
+1. Freeze the candidate long enough to identify the intended base branch and exact base/head commits. For feature work,
+   review the feature branch against the child branch rather than assuming `develop` is the base.
+2. Run a review-only pass using [the MEASUR code-review skill](../.github/skills/measur-code-review/SKILL.md).
+   Prefer a separate agent or fresh review context so the reviewer evaluates the implementation independently.
+3. Give the reviewer the handoff, linked issues, proposed PR purpose, validation evidence, and the complete
+   `base...head` diff. For coordinated Desktop changes, review each repository's candidate diff under that
+   repository's instructions.
+4. Record findings and their dispositions in the handoff. Resolve every actionable finding or document why it is not
+   applicable; no P0, P1, or P2 finding may remain unresolved when the PR opens.
+5. Rerun checks affected by review fixes, then repeat the internal review when the candidate diff changed materially.
+6. Record the final reviewed head commit and remaining questions or validation gaps. Only then open the pull request.
+
+This gate improves PR readiness but does not approve the change. Required human review and repository branch
+protection still apply after the PR opens.
+
 ## Completion Standard
 
 The workflow is complete only when the verification reviewer confirms:
