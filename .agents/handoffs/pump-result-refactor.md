@@ -147,6 +147,19 @@ dependency migration, but their public refactors remain separate.
 - Commands still needed: final generated-document visual review; repeat integrated Suite and Desktop checks after each applicable dependency migration and against the approved final package.
 - Known environment limits: Doxygen reports pre-existing repository warnings and cannot run BibTeX in this environment. Browser security policy prevented opening the generated local HTML page, so generated markup was inspected statically.
 
+## Internal Review
+
+- Intended PR base and reviewed base commit: `epic-pump-result-refactor` at `ea65920089a11d426996f065b4a554bb046c7066`.
+- Reviewed head commit: `38542a621bee5cd0ef880c80fb740ad361a17307`.
+- Reviewer or review task: review-only Codex pass using `.github/skills/measur-code-review/`.
+- Readiness result: ready.
+- Findings and dispositions: one P2 documentation inconsistency was resolved. The coordinated Suite-to-Desktop workflow
+  previously opened or readied a PR before the new internal-review gate; its canonical release sequence now requires
+  the review in both repositories before their PRs open.
+- Checks rerun after review fixes: `npm run check:docs` and `git diff --check` passed.
+- Remaining P3 findings, questions, or validation gaps: none for this documentation change. This review-evidence entry
+  is the only change after the reviewed head and does not materially alter the reviewed workflow.
+
 ## Open Questions Or Blockers
 
 - The final package identifier remains pending. The next planned Suite child issue is #216 Poles.
