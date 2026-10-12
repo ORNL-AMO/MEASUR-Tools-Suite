@@ -3,7 +3,7 @@
 ## Workflow Metadata
 
 - Lifecycle: active
-- Status: Suite revision validated and reviewed; replacement beta and Desktop repin pending
+- Status: Suite and Desktop child PRs open; final exact-beta validation and both pre-PR reviews complete
 - Owner: Codex
 - Created: 2026-10-12
 - Last updated: 2026-10-12
@@ -86,17 +86,17 @@
 ## Package And Release Coordination
 
 - Change classification: breaking API
-- Beta package version: replacement beta pending for reviewed Suite head `8b323f810fc3678f0859e4c2f99a4c86f48e2ada`; prior validation beta was `1.2.6-beta.359.1`
+- Beta package version: `1.2.6-beta.363.1` from the final class-free Suite head
 - Final package version: handled by the integrated feature sequence
 - Desktop root dependency: update to exact beta
 - Desktop process-flow dependency: keep aligned with root
-- Release readiness: Suite PR #424 is open with the revised class-free implementation; Desktop PR #8964 remains pinned to the prior beta until CI publishes the replacement beta.
+- Release readiness: Suite PR #424 is green and published `1.2.6-beta.363.1`; Desktop PR #8964 is open with both manifests and lockfiles pinned to that exact beta.
 - Release blockers: required human approval and merge sequencing for the Suite and Desktop child PRs
 
 ## Validation
 
 - Commands run: baseline `./build-cpp/bin/cpp_tests '[MotorEfficiency],[MotorEfficiency25]' --reporter compact` passed 107 assertions in 5 test cases; after removing the internal calculator class, the focused MotorEfficiency filters passed 124 assertions in 7 cases and focused EstimateFLA passed 64 assertions in 1 case; the full native suite passed 4,196 assertions in 321 cases; `npm run verify:types` passed; `npm run verify:wasm` rebuilt and staged the current class-free module and passed all 253 browser tests; `npm run check:docs` passed; Doxygen generated the Motor Efficiency page and linked it into the equipment/property calculator group; `git diff --check` passed.
-- Commands still needed: CI publication of the replacement beta, Desktop repin and exact-beta validation, and CI completion on the final Suite and Desktop heads.
+- Commands still needed: CI completion on the final Desktop PR head.
 - Known environment limits: Doxygen reports pre-existing repository warnings and cannot run BibTeX in this environment. The local Emscripten SDK must be activated explicitly before running `npm run verify:wasm`.
 
 ## Internal Review
@@ -112,11 +112,11 @@
 ### Desktop Review
 
 - Reviewed base commit: `epic-pump-result-refactor` at `32c870936a3fd07c1ad35b64f43999fbb5c866d2`
-- Reviewed head commit: `3e7c8e84c1064c3e86b84a7bf61015d5a6893311`
+- Reviewed head commit: `8dfded443561991a55fed2b7986bc55be1deb01f`
 - Reviewer or review task: Codex review-only pass using the Desktop `suite-coordination` workflow
 - Readiness result: **Ready**
 - Findings and dispositions: no actionable findings
-- Validation: focused wrapper spec passed 7 tests; application typecheck passed; root build passed; full compressed-air regression passed 49 fixtures; `git diff --check` passed.
+- Validation: against `measur-tools-suite@1.2.6-beta.363.1`, the focused wrapper spec passed 7 tests; application typecheck passed; root build passed; full compressed-air regression passed 49 fixtures; `git diff --check` passed.
 - Non-blocking environment note: the pre-existing process-flow `npm run test:typecheck` script treats `typecheck` as a Vitest filter and finds no test files. Process-flow source is unchanged and its bundle compiled in the passing root build.
 
 ## Open Questions Or Blockers

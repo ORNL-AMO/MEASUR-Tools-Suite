@@ -77,7 +77,7 @@ ordered so foundational calculators migrate before the composite calculators tha
 | ---: | --- | --- | --- |
 | 1 | #203 PumpResult | Use Desktop issue #8951 and PR #8956 for the wrapper migration. | Suite PR #421 and Desktop PR #8956 merged. |
 | 2 | #216 Poles | No Desktop PR; update and test dependent Suite consumers. | Suite PR #423 merged; all quality checks passed; beta `1.2.6-beta.358.1` published. Issue #216 remains open. |
-| 3 | #208 MotorEfficiency | Use Desktop issue #8961 and PR #8964 for the existing efficiency wrappers. | **In progress:** Suite PR #424 is green and published beta `1.2.6-beta.359.1`; Desktop PR #8964 passed local exact-beta validation and is open. |
+| 3 | #208 MotorEfficiency | Use Desktop issue #8961 and PR #8964 for the existing efficiency wrappers. | **In progress:** Suite PR #424 is green and published final reviewed beta `1.2.6-beta.363.1`; Desktop PR #8964 passed exact-beta validation and is open. |
 | 4 | #205 EstimateFLA | Create a Desktop issue and PR for `estimateFla`. | Planned |
 | 5 | #206 MotorCurrent | Create a Desktop issue and PR for `motorCurrent`. | Planned |
 | 6 | #210 MotorPower | No Desktop PR; internal dependency migration. | Planned |
@@ -137,7 +137,7 @@ dependency migration, but their public refactors remain separate.
 - Change classification: breaking API
 - PumpResult Desktop-validation beta: `1.2.6-beta.355.1`
 - Latest integrated Suite beta: `1.2.6-beta.358.1` from merged Poles PR #423
-- MotorEfficiency Desktop-validation beta: `1.2.6-beta.359.1` from Suite PR #424
+- MotorEfficiency Desktop-validation beta: `1.2.6-beta.363.1` from Suite PR #424
 - Final package version: pending
 - Desktop root dependency: update to exact beta/final package
 - Desktop process-flow dependency: keep aligned with root
@@ -166,4 +166,4 @@ dependency migration, but their public refactors remain separate.
 
 ## Open Questions Or Blockers
 
-- The final package identifier remains pending. Suite issue #216 remains open although Poles PR #423 is merged; close or retain it according to project issue policy. The next planned Suite child issue is #208 MotorEfficiency.
+- The final package identifier remains pending. Suite issue #216 remains open although Poles PR #423 is merged; close or retain it according to project issue policy. The next planned Suite child issue after the open #208 MotorEfficiency PR is #205 EstimateFLA.
