@@ -3,10 +3,10 @@
 ## Workflow Metadata
 
 - Lifecycle: active
-- Status: Suite and Desktop implementations complete; feature branches established; Suite CI bootstrap and coordinated review pending
+- Status: Suite PumpResult merged into the feature branch; Desktop PumpResult ready for review; dependency sequence active
 - Owner: Codex
 - Created: 2026-10-07
-- Last updated: 2026-10-09
+- Last updated: 2026-10-12
 - Suite issue: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/203
 - Suite feature branch: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/tree/epic-pump-result-refactor
 - Suite CI bootstrap PR: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/420
@@ -65,6 +65,46 @@
 - WASM Mocha tests: consolidate into one typed plain-object test module.
 - Algorithm docs: add a teaching-oriented `pump_result_calculator.dox`.
 
+## Feature PR Sequence
+
+The Suite and Desktop integration branches are both named `epic-pump-result-refactor`. Each child branch starts from
+the latest corresponding feature-branch head and merges through a reviewed PR into that feature branch. Modules are
+ordered so foundational calculators migrate before the composite calculators that consume them.
+
+| Order | Suite issue/module | Desktop action | Status |
+| ---: | --- | --- | --- |
+| 1 | #203 PumpResult | Use Desktop issue #8951 and PR #8956 for the wrapper migration. | Suite PR #421 merged; Desktop PR #8956 open and ready. |
+| 2 | #216 Poles | No Desktop PR; update and test dependent Suite consumers. | **Next** |
+| 3 | #208 MotorEfficiency | Create a Desktop issue and PR for the existing efficiency wrappers. | Planned |
+| 4 | #205 EstimateFLA | Create a Desktop issue and PR for `estimateFla`. | Planned |
+| 5 | #206 MotorCurrent | Create a Desktop issue and PR for `motorCurrent`. | Planned |
+| 6 | #210 MotorPower | No Desktop PR; internal dependency migration. | Planned |
+| 7 | #211 MotorPowerFactor | Create a Desktop issue and PR for `motorPowerFactor`. | Planned |
+| 8 | #212 MotorShaftPower | No direct Desktop API; migrate PumpResult and FanResult consumers. | Planned |
+| 9 | #213 OptimalMotorPower | No direct Desktop API; migrate PumpResult and FanResult consumers. | Planned |
+| 10 | #220 FluidPower | No Desktop PR; foundational pump/fan hydraulic calculation. | Planned |
+| 11 | #221 MoverEfficiency | No direct Desktop API; migrate PumpResult and FanResult consumers. | Planned |
+| 12 | #227 OptimalPumpShaftPower | No direct Desktop API; migrate PumpResult and FanResult consumers. | Planned |
+| 13 | #222 MoverShaftPower | No current Desktop caller; verify removal of the legacy runtime class. | Planned |
+| 14 | #214 OptimalMotorShaftPower | No direct Desktop API; migrate PumpResult and FanResult consumers. | Planned |
+
+For each module:
+
+- Preserve formulas, empirical coefficients, branches, units, interpolation, limits, and golden outputs.
+- Use the namespace/value-object pattern across C++, WASM, declarations, tests, and teaching documentation when the
+  module is publicly exposed.
+- Update PumpResult, FanResult, MotorPerformance, and database consumers only as required to compile against the new
+  dependency API. Do not refactor their public APIs unless their own issue is included in this sequence.
+- Keep a module-specific handoff with the old/new runtime contract and ownership rules.
+- Keep the Suite PR draft until it is ready for a meaningful beta. For a public API migration, validate Desktop
+  against that exact beta and keep the root and process-flow dependency pins aligned.
+- Do not create an empty Desktop PR for an internal Suite change. Record the no-change consumer analysis and focused
+  Desktop verification on the Suite PR and Desktop coordination issue instead.
+
+Explicitly outside this feature are `Pump.h`/#202, MotorData/#207, MotorPerformance/#209, FanResult/#198, and the
+pump-efficiency chain #223-#230. MotorPerformance and FanResult may receive private consumer updates required by a
+dependency migration, but their public refactors remain separate.
+
 ## Desktop Impact
 
 - Wrapper or helper changes: migrate `PumpsSuiteApiService` result methods to plain inputs/functions and build one shared `PumpResultSystemInput` for both paths.
@@ -90,20 +130,20 @@
 ## Package And Release Coordination
 
 - Change classification: breaking API
-- Beta package version: pending
+- Beta package version: `1.2.6-beta.355.1`
 - Final package version: pending
 - Desktop root dependency: update to exact beta/final package
 - Desktop process-flow dependency: keep aligned with root
-- Current Desktop `develop` pins: both manifests are aligned at `1.2.6-rc.350.1`; no speculative PumpResult package version is committed.
-- Release readiness: Suite PR #421 and Desktop PR #8956 are intentionally draft pending integrated beta validation
-- Release blockers: approval and merge of Suite CI bootstrap PR #420, followed by PumpResult beta/final package publication
+- Desktop PumpResult PR pins: both manifests and lockfiles are aligned at `1.2.6-beta.355.1`.
+- Release readiness: Suite PR #421 is merged into the Suite feature branch; Desktop PR #8956 is open and ready for review.
+- Release blockers: complete the dependency PR sequence, validate the integrated feature, and publish the approved final package.
 
 ## Validation
 
-- Commands run: baseline `[PumpResults]` passed 129 assertions in 11 cases; refactored `[pump_result]` passed 129 assertions in 11 cases; moved `[EstimateFLA]` passed 64 assertions; the full native suite passed 4,148 assertions in 317 cases; `npm run verify:types` passed; `npm run verify:wasm` rebuilt and staged the composed-input module and passed all 251 browser tests; `npm run check:docs` passed; Doxygen generated the Pump Result page without module-specific warnings; `git diff --check` passed. Against the exact locally packed Suite artifact, the develop-based Desktop branch passed its Angular application typecheck, all three focused PumpResult wrapper tests, and the root build.
-- Commands still needed: final generated-document visual review; repeat Desktop checks against exact beta and final packages after Suite CI bootstrap PR #420 merges.
-- Known environment limits: Doxygen reports pre-existing repository warnings and cannot run BibTeX in this environment. Browser security policy prevented opening the generated local HTML page, so generated markup was inspected statically. Because clean Desktop `develop` still references the pump-head runtime classes removed from Suite `develop`, local validation used declaration-only compatibility shims for those uncalled pump-head methods; the shims were confined to the temporary packed dependency and were not added to either branch.
+- Commands run: baseline `[PumpResults]` passed 129 assertions in 11 cases; refactored `[pump_result]` passed 129 assertions in 11 cases; moved `[EstimateFLA]` passed 64 assertions; the full native suite passed 4,148 assertions in 317 cases; `npm run verify:types` passed; `npm run verify:wasm` rebuilt and staged the composed-input module and passed all 251 browser tests; `npm run check:docs` passed; Doxygen generated the Pump Result page without module-specific warnings; `git diff --check` passed. Against `measur-tools-suite@1.2.6-beta.355.1`, Desktop passed five focused pump wrapper tests, Angular application typechecking, the root application build, and the full PR unit/regression workflow.
+- Commands still needed: final generated-document visual review; repeat integrated Suite and Desktop checks after each applicable dependency migration and against the approved final package.
+- Known environment limits: Doxygen reports pre-existing repository warnings and cannot run BibTeX in this environment. Browser security policy prevented opening the generated local HTML page, so generated markup was inspected statically.
 
 ## Open Questions Or Blockers
 
-- Exact beta/final package identifiers remain pending. Merge Suite CI bootstrap PR #420 first, then publish and validate the PumpResult beta before either implementation PR is made ready for review.
+- The final package identifier remains pending. The next planned Suite child issue is #216 Poles.
