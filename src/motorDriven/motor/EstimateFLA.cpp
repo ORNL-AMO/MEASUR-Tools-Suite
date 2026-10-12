@@ -16,7 +16,7 @@
 #include <cmath>
 #include <fstream>
 
-#include "motorDriven/motor/MotorEfficiency.h"
+#include "motorDriven/motor/motor_efficiency.h"
 #include "motorDriven/motor/poles.h"
 
 /**
@@ -170,20 +170,6 @@ std::array<double, 6> EstimateFLA::calculate() {
         estimatedFLA            = adjustForVoltage(peFLAValue * plMultiplier[4], 0);
         return {{peFLAValue * plMultiplier[0], peFLAValue * plMultiplier[1], peFLAValue * plMultiplier[2],
                  peFLAValue * plMultiplier[3], peFLAValue * plMultiplier[4], peFLAValue * plMultiplier[5]}};
-
-        //        auto motorEfficiency = MotorEfficiency(lineFrequency, motorRPM,
-        //        Motor::EfficiencyClass::ENERGY_EFFICIENT, motorRatedPower); const double effValEE =
-        //        motorEfficiency.calculateThermalResistance(1);
-        //        motorEfficiency.setEfficiencyClass(Motor::EfficiencyClass::PREMIUM);
-        //        const double effValPE = motorEfficiency.calculateThermalResistance(1);
-        //        const double val = eeFLAValue * effValPE / effValEE;
-        //	    estimatedFLA = adjustForVoltage(val * plMultiplier[4]);
-        //        return {
-        //                {
-        //                        val * plMultiplier[0], val * plMultiplier[1], val * plMultiplier[2],
-        //                        val * plMultiplier[3], val * plMultiplier[4], val * plMultiplier[5]
-        //                }
-        //        };
     }
 
     if (efficiencyClass == Motor::EfficiencyClass::ENERGY_EFFICIENT) {
@@ -207,13 +193,15 @@ std::array<double, 6> EstimateFLA::calculate() {
          * for the corresponding selection.
          */
 
-        auto const seeffVal =
-            MotorEfficiency(lineFrequency, motorRPM, Motor::EfficiencyClass::STANDARD, motorRatedPower)
-                .calculate(1, specifiedEfficiency);
+        auto const seeffVal = motor_efficiency::calculate(
+                                  {lineFrequency, motorRPM, Motor::EfficiencyClass::STANDARD, motorRatedPower, 1,
+                                   specifiedEfficiency})
+                                  .efficiency;
 
-        auto const eeeffVal =
-            MotorEfficiency(lineFrequency, motorRPM, Motor::EfficiencyClass::ENERGY_EFFICIENT, motorRatedPower)
-                .calculate(1, specifiedEfficiency);
+        auto const eeeffVal = motor_efficiency::calculate(
+                                  {lineFrequency, motorRPM, Motor::EfficiencyClass::ENERGY_EFFICIENT, motorRatedPower,
+                                   1, specifiedEfficiency})
+                                  .efficiency;
 
         if (std::fabs(seeffVal - (specifiedEfficiency)) < std::fabs(eeeffVal - (specifiedEfficiency))) {
             // SE is the nominal efficiency

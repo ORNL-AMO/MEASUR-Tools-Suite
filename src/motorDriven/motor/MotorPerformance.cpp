@@ -9,7 +9,7 @@
 #include "motorDriven/motor/MotorPerformance.h"
 
 #include "motorDriven/motor/MotorCurrent.h"
-#include "motorDriven/motor/MotorEfficiency.h"
+#include "motorDriven/motor/motor_efficiency.h"
 #include "motorDriven/motor/MotorPowerFactor.h"
 
 MotorPerformance::Output MotorPerformance::calculate() {
@@ -17,8 +17,10 @@ MotorPerformance::Output MotorPerformance::calculate() {
     double efficiency  = 0;
     double powerFactor = 0;
 
-    MotorEfficiency motorEfficiency(lineFrequency, motorRpm, efficiencyClass, motorRatedPower);
-    double          calculatedEfficiency = motorEfficiency.calculate(loadFactor, specifiedEfficiency);
+    const double calculatedEfficiency =
+        motor_efficiency::calculate(
+            {lineFrequency, motorRpm, efficiencyClass, motorRatedPower, loadFactor, specifiedEfficiency})
+            .efficiency;
     // Motor Current
     MotorCurrent motorCurrent(motorRatedPower, motorRpm, lineFrequency, efficiencyClass, specifiedEfficiency,
                               loadFactor, ratedVoltage);

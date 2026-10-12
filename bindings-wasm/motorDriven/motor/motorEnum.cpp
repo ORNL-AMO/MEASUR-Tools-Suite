@@ -1,6 +1,6 @@
 #include <emscripten/bind.h>
 
-#include "motorDriven/motor/MotorEfficiency.h"
+#include "motorDriven/motor/MotorData.h"
 #include "motorDriven/pumpFan/MoverShaftPower.h"
 using namespace emscripten;
 

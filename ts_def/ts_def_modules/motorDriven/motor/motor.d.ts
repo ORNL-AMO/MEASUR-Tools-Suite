@@ -97,45 +97,6 @@ export declare class MotorData {
 }
 
 /**
- * Motor efficiency calculator.
- */
-export declare class MotorEfficiency {
-    /**
-     * Constructor for motor efficiency.
-     *
-     * @param lineFrequency LineFrequency, classification of line frequency in Hz
-     *
-     * @param motorRpm Motor speed, units rpm.
-     *
-     * @param efficiencyClass MotorEfficiencyClass, efficiency class of motor
-     *
-     * @param motorRatedPower Rated motor power, units hp.
-     *
-     */
-    constructor(
-        lineFrequency : LineFrequency,
-        motorRpm: number,
-        efficiencyClass: MotorEfficiencyClass,
-        motorRatedPower: number
-    );
-
-    /**
-     * Calculate motor efficiency based on the input parameters.
-     *
-     * @param loadFactor Load factor, dimensionless fraction.
-     *
-     * @param specifiedEfficiency Specified motor efficiency, dimensionless fraction.
-     *
-     * @returns Calculated motor efficiency, dimensionless fraction.
-     *
-     */
-    calculate(loadFactor : number, specifiedEfficiency : number): number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
-}
-
-/**
  * Full-load current (FLA) estimator.
  */
 export declare class EstimateFLA {
@@ -373,7 +334,6 @@ export declare class MotorPerformance {
 
 export type MotorModule = {
     MotorData: typeof MotorData;
-    MotorEfficiency: typeof MotorEfficiency;
     EstimateFLA: typeof EstimateFLA;
     Motor: typeof Motor;
     MotorCurrent: typeof MotorCurrent;

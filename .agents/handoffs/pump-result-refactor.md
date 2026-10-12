@@ -3,7 +3,7 @@
 ## Workflow Metadata
 
 - Lifecycle: active
-- Status: Suite PumpResult merged into the feature branch; Desktop PumpResult ready for review; dependency sequence active
+- Status: Suite and Desktop PumpResult changes merged; Poles merged into the Suite feature branch; dependency sequence proceeding to MotorEfficiency
 - Owner: Codex
 - Created: 2026-10-07
 - Last updated: 2026-10-12
@@ -11,6 +11,8 @@
 - Suite feature branch: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/tree/epic-pump-result-refactor
 - Suite CI bootstrap PR: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/420
 - Suite PumpResult PR: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/421
+- Suite Poles issue: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/216 (open)
+- Suite Poles PR: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/423 (merged 2026-10-12)
 - Desktop issue: https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8951
 - Desktop coordination issue: https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8957
 - Desktop feature branch: https://github.com/ORNL-AMO/AMO-Tools-Desktop/tree/epic-pump-result-refactor
@@ -73,9 +75,9 @@ ordered so foundational calculators migrate before the composite calculators tha
 
 | Order | Suite issue/module | Desktop action | Status |
 | ---: | --- | --- | --- |
-| 1 | #203 PumpResult | Use Desktop issue #8951 and PR #8956 for the wrapper migration. | Suite PR #421 merged; Desktop PR #8956 open and ready. |
-| 2 | #216 Poles | No Desktop PR; update and test dependent Suite consumers. | **Next** |
-| 3 | #208 MotorEfficiency | Create a Desktop issue and PR for the existing efficiency wrappers. | Planned |
+| 1 | #203 PumpResult | Use Desktop issue #8951 and PR #8956 for the wrapper migration. | Suite PR #421 and Desktop PR #8956 merged. |
+| 2 | #216 Poles | No Desktop PR; update and test dependent Suite consumers. | Suite PR #423 merged; all quality checks passed; beta `1.2.6-beta.358.1` published. Issue #216 remains open. |
+| 3 | #208 MotorEfficiency | Create a Desktop issue and PR for the existing efficiency wrappers. | **Next** |
 | 4 | #205 EstimateFLA | Create a Desktop issue and PR for `estimateFla`. | Planned |
 | 5 | #206 MotorCurrent | Create a Desktop issue and PR for `motorCurrent`. | Planned |
 | 6 | #210 MotorPower | No Desktop PR; internal dependency migration. | Planned |
@@ -133,17 +135,18 @@ dependency migration, but their public refactors remain separate.
 ## Package And Release Coordination
 
 - Change classification: breaking API
-- Beta package version: `1.2.6-beta.355.1`
+- PumpResult Desktop-validation beta: `1.2.6-beta.355.1`
+- Latest integrated Suite beta: `1.2.6-beta.358.1` from merged Poles PR #423
 - Final package version: pending
 - Desktop root dependency: update to exact beta/final package
 - Desktop process-flow dependency: keep aligned with root
 - Desktop PumpResult PR pins: both manifests and lockfiles are aligned at `1.2.6-beta.355.1`.
-- Release readiness: Suite PR #421 is merged into the Suite feature branch; Desktop PR #8956 is open and ready for review.
+- Release readiness: Suite PR #421 and Desktop PR #8956 are merged; Poles PR #423 is merged into the Suite feature branch with its beta published. Continue with MotorEfficiency issue #208.
 - Release blockers: complete the dependency PR sequence, validate the integrated feature, and publish the approved final package.
 
 ## Validation
 
-- Commands run: baseline `[PumpResults]` passed 129 assertions in 11 cases; refactored `[pump_result]` passed 129 assertions in 11 cases; moved `[EstimateFLA]` passed 64 assertions; the full native suite passed 4,148 assertions in 317 cases; `npm run verify:types` passed; `npm run verify:wasm` rebuilt and staged the composed-input module and passed all 251 browser tests; `npm run check:docs` passed; Doxygen generated the Pump Result page without module-specific warnings; `git diff --check` passed. Against `measur-tools-suite@1.2.6-beta.355.1`, Desktop passed five focused pump wrapper tests, Angular application typechecking, the root application build, and the full PR unit/regression workflow.
+- Commands run: baseline `[PumpResults]` passed 129 assertions in 11 cases; refactored `[pump_result]` passed 129 assertions in 11 cases; moved `[EstimateFLA]` passed 64 assertions; the full native suite passed 4,148 assertions in 317 cases; `npm run verify:types` passed; `npm run verify:wasm` rebuilt and staged the composed-input module and passed all 251 browser tests; `npm run check:docs` passed; Doxygen generated the Pump Result page without module-specific warnings; `git diff --check` passed. Against `measur-tools-suite@1.2.6-beta.355.1`, Desktop passed five focused pump wrapper tests, Angular application typechecking, the root application build, and the full PR unit/regression workflow. Poles PR #423 subsequently passed native tests, rebuilt-WASM tests, and declarations/documentation checks before publishing `1.2.6-beta.358.1`.
 - Commands still needed: final generated-document visual review; repeat integrated Suite and Desktop checks after each applicable dependency migration and against the approved final package.
 - Known environment limits: Doxygen reports pre-existing repository warnings and cannot run BibTeX in this environment. Browser security policy prevented opening the generated local HTML page, so generated markup was inspected statically.
 
@@ -162,4 +165,4 @@ dependency migration, but their public refactors remain separate.
 
 ## Open Questions Or Blockers
 
-- The final package identifier remains pending. The next planned Suite child issue is #216 Poles.
+- The final package identifier remains pending. Suite issue #216 remains open although Poles PR #423 is merged; close or retain it according to project issue policy. The next planned Suite child issue is #208 MotorEfficiency.

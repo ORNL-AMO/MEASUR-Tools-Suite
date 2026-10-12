@@ -13,7 +13,7 @@
 #include <complex>
 
 #include <motorDriven/motor/MotorCurrent.h>
-#include "motorDriven/motor/MotorEfficiency.h"
+#include "motorDriven/motor/motor_efficiency.h"
 #include "motorDriven/motor/MotorPower.h"
 #include "motorDriven/motor/MotorPowerFactor.h"
 
@@ -31,8 +31,10 @@ OptimalMotorPower::Output OptimalMotorPower::calculate() {
         current = optimalMotorCurrent.calculateOptimalCurrent();
         // Adjustment to current based on measured Voltage
         current = current * ((((fieldVoltage / ratedVoltage) - 1) * (1 + (-2 * tempLoadFraction))) + 1);
-        MotorEfficiency motorEfficiency(lineFrequency, motorRPM, efficiencyClass, motorRatedPower);
-        efficiency = motorEfficiency.calculate(tempLoadFraction, specifiedEfficiency);
+        efficiency = motor_efficiency::calculate(
+                         {lineFrequency, motorRPM, efficiencyClass, motorRatedPower, tempLoadFraction,
+                          specifiedEfficiency})
+                         .efficiency;
         // Similar to motorpowerfactor in existing case instead of ratedVoltage
         MotorPowerFactor motorPowerFactor(lineFrequency, motorRPM, efficiencyClass, specifiedEfficiency,
                                           motorRatedPower, tempLoadFraction, current, efficiency, fieldVoltage);
