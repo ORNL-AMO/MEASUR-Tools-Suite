@@ -94,6 +94,16 @@
 - Commands still needed:
 - Known environment limits:
 
+## Internal Review
+
+- Intended PR base and reviewed base commit:
+- Reviewed head commit:
+- Reviewer or review task:
+- Readiness result: ready | ready with documented follow-up | not ready
+- Findings and dispositions:
+- Checks rerun after review fixes:
+- Remaining P3 findings, questions, or validation gaps:
+
 ## Open Questions Or Blockers
 
 -

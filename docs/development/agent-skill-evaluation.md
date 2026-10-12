@@ -13,6 +13,7 @@ Use these cases after changing a skill name, description, trigger boundary, or m
 | `coordinate-suite-desktop-change` | Incomplete | Prepare the Desktop migration, but no issue is linked. | Inspects available repositories and reports the missing durable coordination link. |
 | `coordinate-suite-desktop-change` | Negative | Refactor a private C++ helper with no public or behavioral effect. | Does not activate downstream coordination. |
 | `measur-code-review` | Direct | Review this pull request for correctness and Desktop impact. | Activates in review-only mode and reports actionable findings. |
+| `measur-code-review` | Pre-PR | Review this branch against its intended feature-branch base before I open a pull request. | Records the exact base/head commits, reviews the complete candidate diff, and returns a readiness result without editing files or GitHub state. |
 | `measur-code-review` | Indirect | Check whether this binding refactor is safe to merge. | Activates and traces the cross-layer runtime contract. |
 | `measur-code-review` | Incomplete | Review these changes without a linked issue. | Reviews the diff and reports missing intent/downstream context as an uncertainty, not a defect. |
 | `measur-code-review` | Negative | Implement the approved binding refactor. | Does not substitute review-only behavior for an implementation request. |

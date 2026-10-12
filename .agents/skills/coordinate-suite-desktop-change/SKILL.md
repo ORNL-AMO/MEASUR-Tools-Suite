@@ -31,9 +31,10 @@ Keep the root and process-flow Suite versions aligned unless the issue explicitl
 
 ## Sequence Delivery
 
-1. Verify the Suite change and open or ready the Suite PR.
+1. Verify the Suite change, complete its pre-PR internal review, and open or ready the Suite PR.
 2. Record the exact beta package produced for Desktop validation.
-3. Update and verify Desktop consumers against that beta.
+3. Update and verify Desktop consumers against that beta, including the Desktop repository's own pre-PR review when
+   source or committed package pins change.
 4. Record Desktop results and SME decisions in the Desktop issue.
 5. Publish the approved Suite RC or final package.
 6. Update Desktop to the approved final version and repeat affected checks.
