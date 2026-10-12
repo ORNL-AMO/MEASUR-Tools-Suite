@@ -2,12 +2,13 @@
 
 This project uses [Doxygen](https://www.doxygen.nl/) to generate documentation from annotated source code. Doxygen comments are used to describe the purpose, behavior, and usage of classes, functions, and other entities in the codebase. Follow these guidelines to ensure your code is well-documented and easy to understand. Always use `@` for Doxygen commands.
 
-.dox files are used to describe calculations with the audience of non-developers in mind. It is used to provide algorithm documentation for system engineering end users. In general we want to use a top down approach in the algorithm documentation. Starting with the final result and breaking down the equations and formulas from there.
+`.dox` files are engineering teaching documents for system engineering end users, including readers who do not work with the source code. They explain how and why a calculation answers an engineering question, not merely which formulas the implementation contains. Use a top-down approach: start with the final result and its interpretation, then teach the decision path and supporting equations, formulas, assumptions, and limits.
 
 ## Table of Contents
 
 - [Doxygen Commands](#doxygen-commands)
 - [Doxygen Aliases](#doxygen-aliases)
+- [Engineering Teaching Documents](#engineering-teaching-documents)
 - [Documenting Code](#documenting-code)
   - [Math](#math)
   - [Units](#units)
@@ -22,6 +23,23 @@ This project uses [Doxygen](https://www.doxygen.nl/) to generate documentation f
   - [Enums](#enums)
   - [Groups](#groups)
 - [Generating Doxygen Documentation](#generating-doxygen-documentation)
+
+## Engineering Teaching Documents
+
+Algorithm documentation must help an engineering user understand, apply, and check the calculation without reading the implementation. A complete `.dox` page should answer:
+
+- What engineering question does the calculation answer, and why does the result matter?
+- What is the final result, including its units and appropriate interpretation?
+- How do the inputs move through the calculation or decision process?
+- What physical relationships, empirical rules, tables, constants, or retained compatibility behaviors support the result?
+- How can the method be followed in at least one representative worked example with substituted values and units?
+- What assumptions, valid ranges, boundary behavior, fallbacks, and inappropriate uses must the reader understand?
+
+Organize the teaching narrative in that order when it fits the calculation: engineering question and context, final result, decision path, supporting formulas, worked example, and interpretation limits. Explain why each major step is needed and connect formulas to the result they support. Distinguish established engineering relationships from implementation-specific or legacy behavior, and cite authoritative sources when available.
+
+Keep developer-facing API details secondary. Include them near the end only when they help readers locate or use the public calculation surface. Do not substitute class names, control-flow narration, or source-code excerpts for the engineering explanation.
+
+**[Table of Contents](#table-of-contents)**
 
 ## Doxygen Commands
 

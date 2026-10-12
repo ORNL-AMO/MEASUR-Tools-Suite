@@ -13,8 +13,6 @@
 #include <complex>
 
 #include <motorDriven/motor/MotorCurrent.h>
-#include <motorDriven/motor/Poles.h>
-
 #include "motorDriven/motor/MotorEfficiency.h"
 #include "motorDriven/motor/MotorPower.h"
 #include "motorDriven/motor/MotorPowerFactor.h"
