@@ -8,7 +8,7 @@
 - Created: 2026-10-12
 - Last updated: 2026-10-12
 - Suite issue: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/216
-- Suite PR: pending
+- Suite PR: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/423
 - Desktop issue: not required; this is an internal Suite dependency migration
 - Desktop PR: not required
 
@@ -122,11 +122,12 @@
 ## Internal Review
 
 - Intended PR base and reviewed base commit: `epic-pump-result-refactor` at `91593869534eb0ba5657af9031fe50744650bce8`
-- Reviewed head commit: the uncommitted implementation candidate rooted at `issue-216` HEAD `91593869534eb0ba5657af9031fe50744650bce8`; the complete `git diff HEAD` plus all new files was explicitly included in the review candidate
+- Reviewed head commit: `3daec6eeee471d887e20dd92d43843de9a7550dc`
 - Reviewer or review task: Codex review-only pass using `.github/skills/measur-code-review/`
 - Readiness result: **Ready**
 - Findings and dispositions: no actionable P0-P3 findings in the original pass or the documentation-focused rerun after formalizing the engineering teaching standard
 - Checks rerun after review fixes: no code fixes were required; documentation generation, rendered-HTML inspection, link checking, and whitespace checks were rerun after the teaching-narrative and homepage updates
+- Post-review metadata: the follow-up handoff-only commit records the pull request URL and reviewed commit; it does not change the reviewed implementation or documentation.
 - Remaining P3 findings, questions, or validation gaps: no code finding remains. Before opening a PR from a future commit, record the resulting head commit and rerun review if the candidate diff changes materially.
 
 ## Open Questions Or Blockers
