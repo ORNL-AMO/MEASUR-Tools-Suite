@@ -3,14 +3,14 @@
 ## Workflow Metadata
 
 - Lifecycle: active
-- Status: Suite PR open with green CI and beta published; Desktop exact-beta migration in progress
+- Status: Suite and Desktop child PRs open; exact-beta validation and both pre-PR reviews complete
 - Owner: Codex
 - Created: 2026-10-12
 - Last updated: 2026-10-12
 - Suite issue: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/208
 - Suite PR: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/424
 - Desktop issue: https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8961
-- Desktop PR: pending
+- Desktop PR: https://github.com/ORNL-AMO/AMO-Tools-Desktop/pull/8964
 
 ## Target Module
 
@@ -89,13 +89,13 @@
 - Final package version: handled by the integrated feature sequence
 - Desktop root dependency: update to exact beta
 - Desktop process-flow dependency: keep aligned with root
-- Release readiness: Suite PR #424 passed all quality jobs and published beta `1.2.6-beta.359.1`; Desktop issue #8961 is in progress.
-- Release blockers: Desktop exact-beta migration, validation, review, and child PR
+- Release readiness: Suite PR #424 passed all quality jobs and published beta `1.2.6-beta.359.1`; Desktop PR #8964 is open with both manifests and lockfiles pinned to that beta.
+- Release blockers: required human approval and merge sequencing for the Suite and Desktop child PRs
 
 ## Validation
 
 - Commands run: baseline `./build-cpp/bin/cpp_tests '[MotorEfficiency],[MotorEfficiency25]' --reporter compact` passed 107 assertions in 5 test cases; final focused MotorEfficiency filters passed 124 assertions in 7 cases; focused EstimateFLA passed 64 assertions in 1 case; the full native suite passed 4,194 assertions in 321 cases; `npm run verify:types` passed; `npm run verify:wasm` rebuilt and staged the current module and passed all 253 browser tests; `npm run check:docs` passed; Doxygen generated the Motor Efficiency page and linked it into the equipment/property calculator group; `git diff --check` passed.
-- Commands still needed: Desktop exact-beta focused tests, application typecheck, root build, regression workflow, and Desktop review-only pass.
+- Commands still needed: CI completion on the final coordination-only Suite head and the Desktop PR head.
 - Known environment limits: Doxygen reports pre-existing repository warnings and cannot run BibTeX in this environment. The local Emscripten SDK must be activated explicitly before running `npm run verify:wasm`.
 
 ## Internal Review
@@ -106,8 +106,18 @@
 - Readiness result: **Ready**
 - Findings and dispositions: no actionable findings
 - Checks rerun after review fixes: focused MotorEfficiency filters passed 124 assertions in 7 cases after boundary assertions were strengthened; the full native and fresh WASM results above cover the reviewed implementation.
-- Remaining P3 findings, questions, or validation gaps: none for the Suite surface; downstream validation awaits the CI-assigned beta.
+- Remaining P3 findings, questions, or validation gaps: none for the Suite surface.
+
+### Desktop Review
+
+- Reviewed base commit: `epic-pump-result-refactor` at `32c870936a3fd07c1ad35b64f43999fbb5c866d2`
+- Reviewed head commit: `3e7c8e84c1064c3e86b84a7bf61015d5a6893311`
+- Reviewer or review task: Codex review-only pass using the Desktop `suite-coordination` workflow
+- Readiness result: **Ready**
+- Findings and dispositions: no actionable findings
+- Validation: focused wrapper spec passed 7 tests; application typecheck passed; root build passed; full compressed-air regression passed 49 fixtures; `git diff --check` passed.
+- Non-blocking environment note: the pre-existing process-flow `npm run test:typecheck` script treats `typecheck` as a Vitest filter and finds no test files. Process-flow source is unchanged and its bundle compiled in the passing root build.
 
 ## Open Questions Or Blockers
 
-- Desktop pull request and validation evidence will be added as delivery progresses.
+- Required human approval and merge sequencing remain external to this implementation.

@@ -3,7 +3,7 @@
 ## Workflow Metadata
 
 - Lifecycle: active
-- Status: Suite and Desktop PumpResult changes merged; Poles merged; MotorEfficiency Suite PR green and Desktop migration in progress
+- Status: Suite and Desktop PumpResult changes merged; Poles merged; MotorEfficiency Suite and Desktop child PRs open
 - Owner: Codex
 - Created: 2026-10-07
 - Last updated: 2026-10-12
@@ -77,7 +77,7 @@ ordered so foundational calculators migrate before the composite calculators tha
 | ---: | --- | --- | --- |
 | 1 | #203 PumpResult | Use Desktop issue #8951 and PR #8956 for the wrapper migration. | Suite PR #421 and Desktop PR #8956 merged. |
 | 2 | #216 Poles | No Desktop PR; update and test dependent Suite consumers. | Suite PR #423 merged; all quality checks passed; beta `1.2.6-beta.358.1` published. Issue #216 remains open. |
-| 3 | #208 MotorEfficiency | Use Desktop issue #8961 for the existing efficiency wrappers. | **In progress:** Suite PR #424 is green and published beta `1.2.6-beta.359.1`; Desktop migration is underway. |
+| 3 | #208 MotorEfficiency | Use Desktop issue #8961 and PR #8964 for the existing efficiency wrappers. | **In progress:** Suite PR #424 is green and published beta `1.2.6-beta.359.1`; Desktop PR #8964 passed local exact-beta validation and is open. |
 | 4 | #205 EstimateFLA | Create a Desktop issue and PR for `estimateFla`. | Planned |
 | 5 | #206 MotorCurrent | Create a Desktop issue and PR for `motorCurrent`. | Planned |
 | 6 | #210 MotorPower | No Desktop PR; internal dependency migration. | Planned |
@@ -142,7 +142,7 @@ dependency migration, but their public refactors remain separate.
 - Desktop root dependency: update to exact beta/final package
 - Desktop process-flow dependency: keep aligned with root
 - Desktop PumpResult PR pins: both manifests and lockfiles are aligned at `1.2.6-beta.355.1`.
-- Release readiness: Suite PR #421 and Desktop PR #8956 are merged; Poles PR #423 is merged into the Suite feature branch with its beta published. Continue with MotorEfficiency issue #208.
+- Release readiness: Suite PR #421 and Desktop PR #8956 are merged; Poles PR #423 is merged; MotorEfficiency Suite PR #424 and Desktop PR #8964 are open with exact-beta validation complete.
 - Release blockers: complete the dependency PR sequence, validate the integrated feature, and publish the approved final package.
 
 ## Validation
