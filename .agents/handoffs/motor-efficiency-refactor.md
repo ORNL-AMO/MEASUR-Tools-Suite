@@ -3,7 +3,7 @@
 ## Workflow Metadata
 
 - Lifecycle: active
-- Status: Suite and Desktop child PRs open; exact-beta validation and both pre-PR reviews complete
+- Status: Suite revision validated and reviewed; replacement beta and Desktop repin pending
 - Owner: Codex
 - Created: 2026-10-12
 - Last updated: 2026-10-12
@@ -47,6 +47,7 @@
 - Migration notes needed: replace construction, method call, and `delete()` with one plain-object function call.
 - User approval for breaking changes: explicit.
 - Removed legacy surfaces: global class, mixed-case header/source, public interval method, getters/setters, embind constructor, TypeScript class, and compatibility-only ownership tests.
+- Implementation shape: no calculator class remains; coefficient selection and interval generation are source-private free functions, and `motor_efficiency::calculate(const Input&)` is the only calculation entry point.
 - Behavior change approved: none.
 
 ## Touched Layers
@@ -85,27 +86,27 @@
 ## Package And Release Coordination
 
 - Change classification: breaking API
-- Beta package version: `1.2.6-beta.359.1`
+- Beta package version: replacement beta pending for reviewed Suite head `a492e3d171bffb1aca36d43d888594164b9d25d4`; prior validation beta was `1.2.6-beta.359.1`
 - Final package version: handled by the integrated feature sequence
 - Desktop root dependency: update to exact beta
 - Desktop process-flow dependency: keep aligned with root
-- Release readiness: Suite PR #424 passed all quality jobs and published beta `1.2.6-beta.359.1`; Desktop PR #8964 is open with both manifests and lockfiles pinned to that beta.
+- Release readiness: Suite PR #424 is open with the revised class-free implementation; Desktop PR #8964 remains pinned to the prior beta until CI publishes the replacement beta.
 - Release blockers: required human approval and merge sequencing for the Suite and Desktop child PRs
 
 ## Validation
 
-- Commands run: baseline `./build-cpp/bin/cpp_tests '[MotorEfficiency],[MotorEfficiency25]' --reporter compact` passed 107 assertions in 5 test cases; final focused MotorEfficiency filters passed 124 assertions in 7 cases; focused EstimateFLA passed 64 assertions in 1 case; the full native suite passed 4,194 assertions in 321 cases; `npm run verify:types` passed; `npm run verify:wasm` rebuilt and staged the current module and passed all 253 browser tests; `npm run check:docs` passed; Doxygen generated the Motor Efficiency page and linked it into the equipment/property calculator group; `git diff --check` passed.
-- Commands still needed: CI completion on the final coordination-only Suite head and the Desktop PR head.
+- Commands run: baseline `./build-cpp/bin/cpp_tests '[MotorEfficiency],[MotorEfficiency25]' --reporter compact` passed 107 assertions in 5 test cases; after removing the internal calculator class, the focused MotorEfficiency filters passed 124 assertions in 7 cases and focused EstimateFLA passed 64 assertions in 1 case; the full native suite passed 4,196 assertions in 321 cases; `npm run verify:types` passed; `npm run verify:wasm` rebuilt and staged the current class-free module and passed all 253 browser tests; `npm run check:docs` passed; Doxygen generated the Motor Efficiency page and linked it into the equipment/property calculator group; `git diff --check` passed.
+- Commands still needed: CI publication of the replacement beta, Desktop repin and exact-beta validation, and CI completion on the final Suite and Desktop heads.
 - Known environment limits: Doxygen reports pre-existing repository warnings and cannot run BibTeX in this environment. The local Emscripten SDK must be activated explicitly before running `npm run verify:wasm`.
 
 ## Internal Review
 
 - Intended PR base and reviewed base commit: `epic-pump-result-refactor` at `90b00dc68894c7e39d5afb4ced8cf3193e59bfc3`.
-- Reviewed head commit: `7ca2700132713b94d314bd3806deea043bbdd7fc`
+- Reviewed head commit: `a492e3d171bffb1aca36d43d888594164b9d25d4`
 - Reviewer or review task: Codex review-only pass using `.github/skills/measur-code-review/`
 - Readiness result: **Ready**
 - Findings and dispositions: no actionable findings
-- Checks rerun after review fixes: focused MotorEfficiency filters passed 124 assertions in 7 cases after boundary assertions were strengthened; the full native and fresh WASM results above cover the reviewed implementation.
+- Checks rerun after review fixes: focused MotorEfficiency filters passed 124 assertions in 7 cases; focused EstimateFLA passed 64 assertions; the full native suite and freshly rebuilt WASM package passed. The review confirmed that no production `Calculator` or `MotorEfficiency` class remains.
 - Remaining P3 findings, questions, or validation gaps: none for the Suite surface.
 
 ### Desktop Review
