@@ -3,7 +3,7 @@
 ## Workflow Metadata
 
 - Lifecycle: active
-- Status: Suite and Desktop PumpResult changes merged; Poles merged into the Suite feature branch; dependency sequence proceeding to MotorEfficiency
+- Status: Suite and Desktop PumpResult changes merged; Poles merged; MotorEfficiency Suite PR green and Desktop migration in progress
 - Owner: Codex
 - Created: 2026-10-07
 - Last updated: 2026-10-12
@@ -77,7 +77,7 @@ ordered so foundational calculators migrate before the composite calculators tha
 | ---: | --- | --- | --- |
 | 1 | #203 PumpResult | Use Desktop issue #8951 and PR #8956 for the wrapper migration. | Suite PR #421 and Desktop PR #8956 merged. |
 | 2 | #216 Poles | No Desktop PR; update and test dependent Suite consumers. | Suite PR #423 merged; all quality checks passed; beta `1.2.6-beta.358.1` published. Issue #216 remains open. |
-| 3 | #208 MotorEfficiency | Create a Desktop issue and PR for the existing efficiency wrappers. | **Next** |
+| 3 | #208 MotorEfficiency | Use Desktop issue #8961 for the existing efficiency wrappers. | **In progress:** Suite PR #424 is green and published beta `1.2.6-beta.359.1`; Desktop migration is underway. |
 | 4 | #205 EstimateFLA | Create a Desktop issue and PR for `estimateFla`. | Planned |
 | 5 | #206 MotorCurrent | Create a Desktop issue and PR for `motorCurrent`. | Planned |
 | 6 | #210 MotorPower | No Desktop PR; internal dependency migration. | Planned |
@@ -137,6 +137,7 @@ dependency migration, but their public refactors remain separate.
 - Change classification: breaking API
 - PumpResult Desktop-validation beta: `1.2.6-beta.355.1`
 - Latest integrated Suite beta: `1.2.6-beta.358.1` from merged Poles PR #423
+- MotorEfficiency Desktop-validation beta: `1.2.6-beta.359.1` from Suite PR #424
 - Final package version: pending
 - Desktop root dependency: update to exact beta/final package
 - Desktop process-flow dependency: keep aligned with root

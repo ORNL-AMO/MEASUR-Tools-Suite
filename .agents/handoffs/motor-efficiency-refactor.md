@@ -3,12 +3,12 @@
 ## Workflow Metadata
 
 - Lifecycle: active
-- Status: Suite implementation, verification, and pre-PR review complete; Suite PR next
+- Status: Suite PR open with green CI and beta published; Desktop exact-beta migration in progress
 - Owner: Codex
 - Created: 2026-10-12
 - Last updated: 2026-10-12
 - Suite issue: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/208
-- Suite PR: pending
+- Suite PR: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/424
 - Desktop issue: https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8961
 - Desktop PR: pending
 
@@ -85,17 +85,17 @@
 ## Package And Release Coordination
 
 - Change classification: breaking API
-- Beta package version: pending Suite PR automation
+- Beta package version: `1.2.6-beta.359.1`
 - Final package version: handled by the integrated feature sequence
 - Desktop root dependency: update to exact beta
 - Desktop process-flow dependency: keep aligned with root
-- Release readiness: Suite implementation and validation complete; Desktop issue created
-- Release blockers: Suite review/PR/beta publication and Desktop migration/validation/review
+- Release readiness: Suite PR #424 passed all quality jobs and published beta `1.2.6-beta.359.1`; Desktop issue #8961 is in progress.
+- Release blockers: Desktop exact-beta migration, validation, review, and child PR
 
 ## Validation
 
 - Commands run: baseline `./build-cpp/bin/cpp_tests '[MotorEfficiency],[MotorEfficiency25]' --reporter compact` passed 107 assertions in 5 test cases; final focused MotorEfficiency filters passed 124 assertions in 7 cases; focused EstimateFLA passed 64 assertions in 1 case; the full native suite passed 4,194 assertions in 321 cases; `npm run verify:types` passed; `npm run verify:wasm` rebuilt and staged the current module and passed all 253 browser tests; `npm run check:docs` passed; Doxygen generated the Motor Efficiency page and linked it into the equipment/property calculator group; `git diff --check` passed.
-- Commands still needed: Desktop exact-beta focused tests, application typecheck, root build, regression workflow, and both repositories' review-only passes.
+- Commands still needed: Desktop exact-beta focused tests, application typecheck, root build, regression workflow, and Desktop review-only pass.
 - Known environment limits: Doxygen reports pre-existing repository warnings and cannot run BibTeX in this environment. The local Emscripten SDK must be activated explicitly before running `npm run verify:wasm`.
 
 ## Internal Review
@@ -110,4 +110,4 @@
 
 ## Open Questions Or Blockers
 
-- Beta version and pull request links will be added as delivery progresses.
+- Desktop pull request and validation evidence will be added as delivery progresses.
