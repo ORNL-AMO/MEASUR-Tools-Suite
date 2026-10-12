@@ -14,114 +14,6 @@ namespace {
 
 using PartialLoadCoefficients = std::array<std::array<double, 4>, 5>;
 
-PartialLoadCoefficients determine_partial_load_coefficients(Motor::EfficiencyClass efficiency_class,
-                                                            double motor_rated_power, std::size_t pole);
-std::array<double, 5> calculate_25_percent_intervals(Motor::LineFrequency line_frequency, double motor_rpm,
-                                                     Motor::EfficiencyClass efficiency_class,
-                                                     double motor_rated_power);
-
-} // namespace
-
-Result calculate(const Input& input) {
-    if (input.efficiency_class == Motor::EfficiencyClass::SPECIFIED && input.specified_efficiency < 0) {
-        throw std::runtime_error("An efficiency must be specified if EfficiencyClass::SPECIFIED is used");
-    }
-
-    std::array<double, 5> motor_efficiency = {};
-    if (input.efficiency_class == Motor::EfficiencyClass::ENERGY_EFFICIENT ||
-        input.efficiency_class == Motor::EfficiencyClass::STANDARD ||
-        input.efficiency_class == Motor::EfficiencyClass::PREMIUM) {
-        motor_efficiency = calculate_25_percent_intervals(input.line_frequency, input.motor_rpm,
-                                                          input.efficiency_class, input.motor_rated_power);
-    }
-    else if (input.efficiency_class == Motor::EfficiencyClass::SPECIFIED) {
-        // For specified efficiency, you have to first choose the nominal efficiency.
-        motor_efficiency = calculate_25_percent_intervals(input.line_frequency, input.motor_rpm,
-                                                          Motor::EfficiencyClass::ENERGY_EFFICIENT,
-                                                          input.motor_rated_power);
-        const auto standard_motor_efficiencies = calculate_25_percent_intervals(
-            input.line_frequency, input.motor_rpm, Motor::EfficiencyClass::STANDARD, input.motor_rated_power);
-
-        if (std::fabs(motor_efficiency[3] - input.specified_efficiency) >
-            std::fabs(standard_motor_efficiencies[3] - input.specified_efficiency)) {
-            // SE chosen
-            const double scale = input.specified_efficiency / standard_motor_efficiencies[3];
-            motor_efficiency   = {{standard_motor_efficiencies[0] * scale, standard_motor_efficiencies[1] * scale,
-                                   standard_motor_efficiencies[2] * scale, standard_motor_efficiencies[4] * scale,
-                                   standard_motor_efficiencies[4] * scale}};
-        }
-        else { // EE chosen
-            const double scale = input.specified_efficiency / motor_efficiency[3];
-
-            for (std::size_t i = 0; i < 5; ++i) {
-                motor_efficiency[i] = motor_efficiency[i] * scale;
-            }
-        }
-    }
-
-    /**
-     * Calculating the 1% interval values based on the load factor
-     * 0 - 25
-     * 1. Using the 0% and 25% kW loss values, develop a linear table of loss by 1% load
-     * Equation: kWloss (X) = kWloss (0) + X * (kWloss(25) - kWloss(0))/25      where X = 0,1,2,3…..25
-     * 2. Assemble an array of shaft power from 0 to 25
-     * Equation: kW shaft (X) = rated hp *0.746 * (X / 100)
-     * Assemble an array of kWe (input electric power
-     * Equation: kWe(X) = kWloss(x) + kWshaft(X)
-     * Calculate efficiency
-     * Equation: Eff(X) = kW shaft (X) / kWe (X)
-     */
-
-    /**
-     * Setting up kWloss0 and kWloss25
-     * Make sure motorEfficiency is in decimal rather %.
-     * E.g.: 0.92 is correct, 92 is wrong.
-     */
-    const double power_loss_25 =
-        ((1 / motor_efficiency[0]) - 1) * input.motor_rated_power * 0.746 * 0.25;
-    const double power_loss_zero = 0.8 * power_loss_25;
-    double efficiency            = 0.0;
-    double load_factor           = input.load_factor;
-
-    if (load_factor < 0.251) {
-        const double power_loss  = power_loss_zero + load_factor * 100 * (power_loss_25 - power_loss_zero) / 25;
-        const double shaft_power = input.motor_rated_power * 0.746 * load_factor;
-        const double input_power = power_loss + shaft_power;
-        efficiency              = shaft_power / input_power;
-    }
-    else if (load_factor < 1.251) {
-        /**
-         * 26 - 125 load factor (0.25 - 1.25 non-inclusive)
-         * Fitting tabular, 25% interval, motor efficiency data to assemble an overall curve with 1% interval data from
-         * 26 to 150% 25% load interval efficiency values come from "Adjusting 25 percent arrays for specified
-         * efficiency" Pick the 25,50,75,100,and 125% motor efficiency values and do a 4th order polynomial fit. Use the
-         * fit coefficients to populate, in 1% load intervals, from 26 to 125% load
-         */
-        CurveFitVal cfv(
-            {.25, .50, .75, 1.00, 1.25},
-            {motor_efficiency[0], motor_efficiency[1], motor_efficiency[2], motor_efficiency[3], motor_efficiency[4]},
-            4, load_factor);
-        efficiency = cfv.calculate();
-    }
-    else {
-        /**
-         * 126 - 150 load factor (1.25 (non-inclusive) - 1.50 (inclusive))
-         * Pick the 75, 100, and 125% motor efficiency values and do a 2nd order polynomial fit
-         * Use the fit coefficients to populate, in 1% load intervals, the current range from 126 to 150% load
-         */
-        if (load_factor > 1.5) {
-            load_factor = 1.5;
-        }
-        CurveFitVal cfv({.75, 1.00, 1.25},
-                        {motor_efficiency[2], motor_efficiency[3], motor_efficiency[4]}, 2, load_factor);
-        efficiency = cfv.calculate();
-    }
-
-    return {efficiency, power_loss_zero};
-}
-
-namespace {
-
 PartialLoadCoefficients determine_partial_load_coefficients(const Motor::EfficiencyClass efficiency_class,
                                                             const double motor_rated_power,
                                                             const std::size_t pole) {
@@ -437,5 +329,103 @@ std::array<double, 5> calculate_25_percent_intervals(const Motor::LineFrequency 
 }
 
 } // namespace
+
+Result calculate(const Input& input) {
+    if (input.efficiency_class == Motor::EfficiencyClass::SPECIFIED && input.specified_efficiency < 0) {
+        throw std::runtime_error("An efficiency must be specified if EfficiencyClass::SPECIFIED is used");
+    }
+
+    std::array<double, 5> motor_efficiency = {};
+    if (input.efficiency_class == Motor::EfficiencyClass::ENERGY_EFFICIENT ||
+        input.efficiency_class == Motor::EfficiencyClass::STANDARD ||
+        input.efficiency_class == Motor::EfficiencyClass::PREMIUM) {
+        motor_efficiency = calculate_25_percent_intervals(input.line_frequency, input.motor_rpm,
+                                                          input.efficiency_class, input.motor_rated_power);
+    }
+    else if (input.efficiency_class == Motor::EfficiencyClass::SPECIFIED) {
+        // For specified efficiency, you have to first choose the nominal efficiency.
+        motor_efficiency = calculate_25_percent_intervals(input.line_frequency, input.motor_rpm,
+                                                          Motor::EfficiencyClass::ENERGY_EFFICIENT,
+                                                          input.motor_rated_power);
+        const auto standard_motor_efficiencies = calculate_25_percent_intervals(
+            input.line_frequency, input.motor_rpm, Motor::EfficiencyClass::STANDARD, input.motor_rated_power);
+
+        if (std::fabs(motor_efficiency[3] - input.specified_efficiency) >
+            std::fabs(standard_motor_efficiencies[3] - input.specified_efficiency)) {
+            // SE chosen
+            const double scale = input.specified_efficiency / standard_motor_efficiencies[3];
+            motor_efficiency   = {{standard_motor_efficiencies[0] * scale, standard_motor_efficiencies[1] * scale,
+                                   standard_motor_efficiencies[2] * scale, standard_motor_efficiencies[4] * scale,
+                                   standard_motor_efficiencies[4] * scale}};
+        }
+        else { // EE chosen
+            const double scale = input.specified_efficiency / motor_efficiency[3];
+
+            for (std::size_t i = 0; i < 5; ++i) {
+                motor_efficiency[i] = motor_efficiency[i] * scale;
+            }
+        }
+    }
+
+    /**
+     * Calculating the 1% interval values based on the load factor
+     * 0 - 25
+     * 1. Using the 0% and 25% kW loss values, develop a linear table of loss by 1% load
+     * Equation: kWloss (X) = kWloss (0) + X * (kWloss(25) - kWloss(0))/25      where X = 0,1,2,3…..25
+     * 2. Assemble an array of shaft power from 0 to 25
+     * Equation: kW shaft (X) = rated hp *0.746 * (X / 100)
+     * Assemble an array of kWe (input electric power
+     * Equation: kWe(X) = kWloss(x) + kWshaft(X)
+     * Calculate efficiency
+     * Equation: Eff(X) = kW shaft (X) / kWe (X)
+     */
+
+    /**
+     * Setting up kWloss0 and kWloss25
+     * Make sure motorEfficiency is in decimal rather %.
+     * E.g.: 0.92 is correct, 92 is wrong.
+     */
+    const double power_loss_25 =
+        ((1 / motor_efficiency[0]) - 1) * input.motor_rated_power * 0.746 * 0.25;
+    const double power_loss_zero = 0.8 * power_loss_25;
+    double efficiency            = 0.0;
+    double load_factor           = input.load_factor;
+
+    if (load_factor < 0.251) {
+        const double power_loss  = power_loss_zero + load_factor * 100 * (power_loss_25 - power_loss_zero) / 25;
+        const double shaft_power = input.motor_rated_power * 0.746 * load_factor;
+        const double input_power = power_loss + shaft_power;
+        efficiency              = shaft_power / input_power;
+    }
+    else if (load_factor < 1.251) {
+        /**
+         * 26 - 125 load factor (0.25 - 1.25 non-inclusive)
+         * Fitting tabular, 25% interval, motor efficiency data to assemble an overall curve with 1% interval data from
+         * 26 to 150% 25% load interval efficiency values come from "Adjusting 25 percent arrays for specified
+         * efficiency" Pick the 25,50,75,100,and 125% motor efficiency values and do a 4th order polynomial fit. Use the
+         * fit coefficients to populate, in 1% load intervals, from 26 to 125% load
+         */
+        CurveFitVal cfv(
+            {.25, .50, .75, 1.00, 1.25},
+            {motor_efficiency[0], motor_efficiency[1], motor_efficiency[2], motor_efficiency[3], motor_efficiency[4]},
+            4, load_factor);
+        efficiency = cfv.calculate();
+    }
+    else {
+        /**
+         * 126 - 150 load factor (1.25 (non-inclusive) - 1.50 (inclusive))
+         * Pick the 75, 100, and 125% motor efficiency values and do a 2nd order polynomial fit
+         * Use the fit coefficients to populate, in 1% load intervals, the current range from 126 to 150% load
+         */
+        if (load_factor > 1.5) {
+            load_factor = 1.5;
+        }
+        CurveFitVal cfv({.75, 1.00, 1.25},
+                        {motor_efficiency[2], motor_efficiency[3], motor_efficiency[4]}, 2, load_factor);
+        efficiency = cfv.calculate();
+    }
+
+    return {efficiency, power_loss_zero};
+}
 
 } // namespace motor_efficiency
