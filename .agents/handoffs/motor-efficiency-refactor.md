@@ -47,7 +47,7 @@
 - Migration notes needed: replace construction, method call, and `delete()` with one plain-object function call.
 - User approval for breaking changes: explicit.
 - Removed legacy surfaces: global class, mixed-case header/source, public interval method, getters/setters, embind constructor, TypeScript class, and compatibility-only ownership tests.
-- Implementation shape: no calculator class remains; coefficient selection and interval generation are source-private free functions, and `motor_efficiency::calculate(const Input&)` is the only calculation entry point.
+- Implementation shape: no calculator class remains; one anonymous namespace contains the source-private coefficient and interval free functions, followed by `motor_efficiency::calculate(const Input&)` as the only calculation entry point.
 - Behavior change approved: none.
 
 ## Touched Layers
@@ -86,7 +86,7 @@
 ## Package And Release Coordination
 
 - Change classification: breaking API
-- Beta package version: replacement beta pending for reviewed Suite head `a492e3d171bffb1aca36d43d888594164b9d25d4`; prior validation beta was `1.2.6-beta.359.1`
+- Beta package version: replacement beta pending for reviewed Suite head `8b323f810fc3678f0859e4c2f99a4c86f48e2ada`; prior validation beta was `1.2.6-beta.359.1`
 - Final package version: handled by the integrated feature sequence
 - Desktop root dependency: update to exact beta
 - Desktop process-flow dependency: keep aligned with root
@@ -102,11 +102,11 @@
 ## Internal Review
 
 - Intended PR base and reviewed base commit: `epic-pump-result-refactor` at `90b00dc68894c7e39d5afb4ced8cf3193e59bfc3`.
-- Reviewed head commit: `a492e3d171bffb1aca36d43d888594164b9d25d4`
+- Reviewed head commit: `8b323f810fc3678f0859e4c2f99a4c86f48e2ada`
 - Reviewer or review task: Codex review-only pass using `.github/skills/measur-code-review/`
 - Readiness result: **Ready**
 - Findings and dispositions: no actionable findings
-- Checks rerun after review fixes: focused MotorEfficiency filters passed 124 assertions in 7 cases; focused EstimateFLA passed 64 assertions; the full native suite and freshly rebuilt WASM package passed. The review confirmed that no production `Calculator` or `MotorEfficiency` class remains.
+- Checks rerun after review fixes: focused MotorEfficiency filters passed 124 assertions in 7 cases; focused EstimateFLA passed 64 assertions; the full native suite and freshly rebuilt WASM package passed. The review confirmed that no production `Calculator` or `MotorEfficiency` class remains and the source uses one private anonymous namespace.
 - Remaining P3 findings, questions, or validation gaps: none for the Suite surface.
 
 ### Desktop Review
