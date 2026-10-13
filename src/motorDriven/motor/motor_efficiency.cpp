@@ -7,6 +7,8 @@
 
 #include "motorDriven/motor/poles.h"
 
+#include "physics/constants.h"
+
 #include "util/CurveFitVal.h"
 
 namespace motor_efficiency {
@@ -386,14 +388,14 @@ Result calculate(const Input& input) {
      * E.g.: 0.92 is correct, 92 is wrong.
      */
     const double power_loss_25 =
-        ((1 / motor_efficiency[0]) - 1) * input.motor_rated_power * 0.746 * 0.25;
+        ((1 / motor_efficiency[0]) - 1) * input.motor_rated_power * physics::conversions::kBhpToKw * 0.25;
     const double power_loss_zero = 0.8 * power_loss_25;
     double efficiency            = 0.0;
     double load_factor           = input.load_factor;
 
     if (load_factor < 0.251) {
         const double power_loss  = power_loss_zero + load_factor * 100 * (power_loss_25 - power_loss_zero) / 25;
-        const double shaft_power = input.motor_rated_power * 0.746 * load_factor;
+        const double shaft_power = input.motor_rated_power * physics::conversions::kBhpToKw * load_factor;
         const double input_power = power_loss + shaft_power;
         efficiency              = shaft_power / input_power;
     }
