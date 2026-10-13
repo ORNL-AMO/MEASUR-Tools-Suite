@@ -66,12 +66,16 @@
 ## Internal Review
 
 - Intended PR base: `epic-pump-result-refactor` at `e6d6df776a9aa3546ab97f58bb0ee2e6ba6e13a5`.
-- Reviewed candidate: implementation commit recorded below after the final pre-PR review.
+- Reviewed head commit: `971015d1b2ae2541ae00a764cf21140f19b93496`.
+- Review scope: complete `base...head` implementation diff; subsequent handoff-only commits record review evidence
+  and the PR URL without changing the reviewed calculation or API.
 - Reviewer: review-only pass following `.github/skills/measur-code-review/`.
 - Readiness result: ready.
 - Findings and dispositions: corrected the engineering documentation's basic-curve coefficient units to A/hp
   and clarified that the old WASM API exposed only FLA. C++ API, MotorCurrent migration, embind ownership,
   TypeScript declarations, typed WASM surface, algorithm documentation, and deferred Desktop impact are consistent.
+- Checks rerun after documentation corrections: `npm run check:docs`, `doxygen Doxyfile`, and `git diff --check`;
+  no EstimateFLA-specific Doxygen warnings or unresolved P0-P2 findings remain.
 - Remaining P3 findings, questions, or validation gaps: no local `clang-format` executable is installed; formatting was
   checked manually against the nearby motor-efficiency pattern.
 
