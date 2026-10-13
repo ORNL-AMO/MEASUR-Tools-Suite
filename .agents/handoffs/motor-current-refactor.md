@@ -3,13 +3,13 @@
 ## Workflow Metadata
 
 - Lifecycle: completed
-- Status: Suite implementation, validation, and pre-PR review complete; child PR delivery in progress
+- Status: Suite implementation, validation, and pre-PR review complete; PR #426 open for CI/human review
 - Owner: Codex
 - Created / last updated: 2026-10-13
 - Suite issue: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/206
 - Suite branch / intended PR base: `issue-206` / `epic-pump-result-refactor`
 - Base commit: `363c011d6014f817e937a0b451cf645f5a52f541` (EstimateFLA PR #425 merged)
-- Suite PR: not opened
+- Suite PR: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/426
 - Desktop coordination: https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8957
 - Held Desktop PR: https://github.com/ORNL-AMO/AMO-Tools-Desktop/pull/8964
 
