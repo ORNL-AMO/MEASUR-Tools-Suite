@@ -6,7 +6,7 @@
 - Status: Suite implementation and local downstream validation complete; PR/package coordination in progress
 - Owner: Codex
 - Created: 2026-10-05
-- Last updated: 2026-10-06
+- Last updated: 2026-10-13
 - Suite issue: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/200
 - Suite PR: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/418
 - Desktop issue: https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8941
@@ -123,3 +123,39 @@
 ## Open Questions Or Blockers
 
 - No implementation decisions remain. Package beta/final identifiers will be recorded when produced by the release workflow.
+
+## Issue 200 Engineering Review 2026-10-13
+
+Implemented the eight suggestions from the engineer's pump-head Doxygen review in Suite only.
+This documentation update preserves the current public API, executable formulas, and all stored constants.
+
+| Review item | Disposition | Implementation |
+| --- | --- | --- |
+| 1. Unit exponents | Accepted | Compose units from base foot/inch units with explicit squared or cubed powers; no shared renderer changes. |
+| 2. Worked-example total | Accepted | Use HTML bold markup in all three total-row cells and bold mathematical notation for the pump-head symbol. |
+| 3. Water density and specific weight | Adapted | Explain approximate mass density near 68 degrees Fahrenheit in lbm/ft^3 and cite NBS Circular 19, Table 34; retain gamma as specific weight in lbf/ft^3 and explain numerical equality under standard gravity. |
+| 4. Negative elevation head | Accepted | Describe the lower discharge-gauge measurement correction and its offset of the pressure-head contribution. |
+| 5. Gauge elevation reference | Adapted | Use the gauge center and a common datum; require the elevation to match the supplied pressure reading, including any corrected reference. PSAT is cited for the common datum, not for the added center-of-gauge clarification. |
+| 6. Reference-water pressure factor | Adapted | Cite the Hydraulic Institute explanation of head and pressure and NBS water tables; distinguish the 2.31 ft/psi approximation from the exact stored factor and avoid unsupported historical attribution. Qualify centrifugal-pump density independence by flow, speed, impeller geometry, comparable viscosity, and absence of cavitation. |
+| 7. Pipe size at measurement | Accepted | State that each gauge's entered inside diameter applies at the pressure-measurement location; preserve the tank fluid-surface reference and suction-loss reference diameter. |
+| 8. Terminology | Accepted | Use pump head consistently in the algorithm narrative, C++ API comments, and TypeScript declaration comments; retain all identifiers. |
+
+### Supporting Sources
+
+- [PSAT2008 user manual](https://www.energy.gov/sites/default/files/2014/04/f15/psat_user_manual.pdf): common elevation datum, measurement pipe sizes, and normalized loss coefficients.
+- [NBS Circular 19, Sixth Edition, Table 34](https://nvlpubs.nist.gov/nistpubs/Legacy/circ/nbscircular19e6.pdf): approximate water properties near 68 degrees Fahrenheit.
+- [Hydraulic Institute System Curves](https://datatool.pumps.org/pump-fundamentals/sys-curves): head as energy per unit weight and pressure/specific-gravity relationship.
+
+### Validation
+
+- Configured and built the native cpp_tests target; focused [pump_head] tests passed 42 assertions in two cases, including all five worked-example components and the 100.3959322495 ft total.
+- npm run verify:wasm rebuilt and staged the module, passed TypeScript checking, and passed all 251 browser tests. The initial sandbox attempt could not write an Emscripten cache lock; the authorized rerun passed.
+- Doxygen regenerated successfully with a temporary TeX Live BibTeX executable downloaded into /private/tmp. Existing unrelated configuration and undocumented-parameter warnings remain; no warnings were emitted for the changed pump-head files or new citations.
+- Headless Chrome inspection found no JavaScript errors, MathJax errors, nested unit powers, or unresolved citation keys. Inspected the pressure, velocity, reference-property, and worked-example sections visually; verified all three total-row cells are bold and bibliography URLs are clickable.
+- Compared stripped C++ and TypeScript comments against HEAD: all non-comment content is unchanged. All ten labeled algorithm equations are unchanged.
+- npm run check:docs and git diff --check passed.
+
+### Desktop Follow-up
+
+Align the Pump Head Tool help with the Suite gauge-center/common-datum definition, corrected pressure-reference qualification, and pipe-size-at-measurement assumption. Track this separately under Suite issue 200 and the existing [Desktop coordination issue 8941](https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8941).
+No Desktop changes or GitHub messages were made for this review update; no new API migration is needed.
