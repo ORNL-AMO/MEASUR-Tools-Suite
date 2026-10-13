@@ -3,17 +3,20 @@
 /**
  * @ingroup pump_head_calculator
  * @file pump_head.h
- * @brief Declares calculations of the total dynamic head developed by an operating pump.
- * @details The calculation resolves total pump head into elevation, pressure, velocity, and
+ * @brief Declares calculations of the pump head developed from measured operating conditions.
+ * @details The calculation resolves pump head into elevation, pressure, velocity, and
  *          estimated suction- and discharge-line friction components. Suction conditions may be
- *          defined by either a pressure gauge or a pressurized tank.
+ *          defined by either a pressure gauge or a pressurized tank. Gauge elevations are measured
+ *          at the centers of the gauges from a common datum and must correspond to the supplied
+ *          pressure readings. If a reading is corrected to another reference elevation, use that
+ *          elevation instead.
  * @see @ref pump_head_calculator for formula derivations, units, and assumptions.
  */
 
 /**
  * @ingroup pump_head_calculator
  * @namespace pump_head
- * @brief Calculates total dynamic pump head from measured system operating conditions.
+ * @brief Calculates pump head from measured system operating conditions.
  */
 namespace pump_head {
 
@@ -21,13 +24,13 @@ namespace pump_head {
 struct SuctionGaugeInput {
     double specific_gravity;                 ///< Fluid specific gravity @unitb{\unitless}.
     double flow_rate;                        ///< Volumetric flow rate @unitb{\gallon\per\minute}.
-    double suction_pipe_diameter;            ///< Suction-pipe inside diameter @unitb{\inch}.
+    double suction_pipe_diameter;            ///< Pipe inside diameter at the suction pressure-measurement location @unitb{\inch}.
     double suction_gauge_pressure;           ///< Suction gauge pressure @unitb{psig}.
-    double suction_gauge_elevation;          ///< Suction-gauge elevation @unitb{\foot}.
+    double suction_gauge_elevation;          ///< Elevation of the center of the suction gauge from the common datum, or the corrected pressure reference @unitb{\foot}.
     double suction_line_loss_coefficients;   ///< Aggregate suction-line loss coefficient @unitb{\unitless}.
-    double discharge_pipe_diameter;          ///< Discharge-pipe inside diameter @unitb{\inch}.
+    double discharge_pipe_diameter;          ///< Pipe inside diameter at the discharge pressure-measurement location @unitb{\inch}.
     double discharge_gauge_pressure;         ///< Discharge gauge pressure @unitb{psig}.
-    double discharge_gauge_elevation;        ///< Discharge-gauge elevation @unitb{\foot}.
+    double discharge_gauge_elevation;        ///< Elevation of the center of the discharge gauge from the common datum, or the corrected pressure reference @unitb{\foot}.
     double discharge_line_loss_coefficients; ///< Aggregate discharge-line loss coefficient @unitb{\unitless}.
 };
 
@@ -35,37 +38,37 @@ struct SuctionGaugeInput {
 struct SuctionTankInput {
     double specific_gravity;                     ///< Fluid specific gravity @unitb{\unitless}.
     double flow_rate;                            ///< Volumetric flow rate @unitb{\gallon\per\minute}.
-    double suction_pipe_diameter;                ///< Suction-pipe inside diameter @unitb{\inch}.
+    double suction_pipe_diameter;                ///< Suction-pipe inside diameter used as the reference for suction-line losses @unitb{\inch}.
     double suction_tank_gas_over_pressure;       ///< Suction-tank gas overpressure @unitb{psig}.
-    double suction_tank_fluid_surface_elevation; ///< Suction-tank fluid-surface elevation @unitb{\foot}.
+    double suction_tank_fluid_surface_elevation; ///< Suction-tank fluid-surface elevation from the common datum @unitb{\foot}.
     double suction_line_loss_coefficients;       ///< Aggregate suction-line loss coefficient @unitb{\unitless}.
-    double discharge_pipe_diameter;              ///< Discharge-pipe inside diameter @unitb{\inch}.
+    double discharge_pipe_diameter;              ///< Pipe inside diameter at the discharge pressure-measurement location @unitb{\inch}.
     double discharge_gauge_pressure;             ///< Discharge gauge pressure @unitb{psig}.
-    double discharge_gauge_elevation;            ///< Discharge-gauge elevation @unitb{\foot}.
+    double discharge_gauge_elevation;            ///< Elevation of the center of the discharge gauge from the common datum, or the corrected pressure reference @unitb{\foot}.
     double discharge_line_loss_coefficients;     ///< Aggregate discharge-line loss coefficient @unitb{\unitless}.
 };
 
-/** @brief Component heads and total operating pump head. */
+/** @brief Component heads and pump head. */
 struct Result {
     double differential_elevation_head;       ///< Discharge-minus-suction elevation head @unitb{\foot}.
     double differential_pressure_head;        ///< Discharge-minus-suction pressure head @unitb{\foot}.
     double differential_velocity_head;        ///< Discharge-minus-suction velocity head @unitb{\foot}.
     double estimated_suction_friction_head;   ///< Estimated suction-line friction head @unitb{\foot}.
     double estimated_discharge_friction_head; ///< Estimated discharge-line friction head @unitb{\foot}.
-    double pump_head;                          ///< Total operating pump head @unitb{\foot}.
+    double pump_head;                         ///< Pump head @unitb{\foot}.
 };
 
 /**
  * @brief Calculates pump head from suction- and discharge-gauge measurements.
  * @param[in] input Fluid, flow, pipe, pressure, elevation, and line-loss data for the operating system.
- * @return Component heads and total operating pump head, all @unitb{\foot}.
+ * @return Component heads and pump head, all @unitb{\foot}.
  */
 Result calculateFromSuctionGauge(const SuctionGaugeInput& input);
 
 /**
  * @brief Calculates pump head for a system supplied from a pressurized suction tank.
  * @param[in] input Fluid, flow, pipe, tank, discharge, elevation, and line-loss data for the operating system.
- * @return Component heads and total operating pump head, all @unitb{\foot}.
+ * @return Component heads and pump head, all @unitb{\foot}.
  */
 Result calculateFromSuctionTank(const SuctionTankInput& input);
 
