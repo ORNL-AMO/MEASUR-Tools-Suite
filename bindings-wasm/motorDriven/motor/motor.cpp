@@ -1,7 +1,6 @@
 #include <emscripten/bind.h>
 #include <motorDriven/motor/MotorData.h>
 
-#include "motorDriven/motor/EstimateFLA.h"
 #include "motorDriven/motor/MotorCurrent.h"
 #include "motorDriven/motor/MotorPerformance.h"
 #include "motorDriven/motor/MotorPowerFactor.h"
@@ -35,12 +34,6 @@ EMSCRIPTEN_BINDINGS(motorData_class) {
         .function("setCatalog", &MotorData::setCatalog);
 
     register_vector<MotorData>("MotorDataV");
-}
-
-EMSCRIPTEN_BINDINGS(est_fla_class) {
-    class_<EstimateFLA>("EstimateFLA")
-        .constructor<double, double, Motor::LineFrequency, Motor::EfficiencyClass, double, double>()
-        .function("getEstimatedFLA", &EstimateFLA::getEstimatedFLA);
 }
 
 EMSCRIPTEN_BINDINGS(motor_class) {

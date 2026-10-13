@@ -97,47 +97,6 @@ export declare class MotorData {
 }
 
 /**
- * Full-load current (FLA) estimator.
- */
-export declare class EstimateFLA {
-    /**
-     * Constructor for estimating full load amps (FLA) of a motor.
-     *
-     * @param motorRatedPower Rated motor power, units hp.
-     *
-     * @param motorRPM Motor speed, units rpm.
-     *
-     * @param lineFrequency LineFrequency, line frequency classification of the motor in Hz
-     *
-     * @param efficiencyClass MotorEfficiencyClass, efficiency class of the motor
-     *
-     * @param specifiedEfficiency Specified motor efficiency, dimensionless fraction.
-     *
-     * @param ratedVoltage Rated motor voltage, units V.
-     *
-     */
-    constructor(
-        motorRatedPower: number,
-        motorRPM: number,
-        lineFrequency: LineFrequency,
-        efficiencyClass: MotorEfficiencyClass,
-        specifiedEfficiency: number,
-        ratedVoltage: number
-        );
-
-    /**
-     * Method to calculate the estimated full load amps (FLA) of the motor.
-     *
-     * @returns Estimated full-load current, units A.
-     *
-     */
-    getEstimatedFLA(): number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
-}
-
-/**
  * Motor model.
  */
 export declare class Motor {
@@ -334,7 +293,6 @@ export declare class MotorPerformance {
 
 export type MotorModule = {
     MotorData: typeof MotorData;
-    EstimateFLA: typeof EstimateFLA;
     Motor: typeof Motor;
     MotorCurrent: typeof MotorCurrent;
     MotorPowerFactor: typeof MotorPowerFactor;

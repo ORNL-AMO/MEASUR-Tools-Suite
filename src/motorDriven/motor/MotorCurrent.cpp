@@ -12,7 +12,7 @@
 
 #include <array>
 
-#include "motorDriven/motor/EstimateFLA.h"
+#include "motorDriven/motor/estimate_fla.h"
 #include "util/CurveFitVal.h"
 
 /**
@@ -29,10 +29,10 @@
  * @return motor current
  */
 double MotorCurrent::calculateCurrent(const double fullLoadAmps) {
-    EstimateFLA           estimateFLA(motorRatedPower, motorRPM, lineFrequency, efficiencyClass, specifiedEfficiency,
-                                      ratedVoltage);
-    std::array<double, 6> plValues = estimateFLA.calculate();
-    estimatedFLA                   = estimateFLA.getEstimatedFLA();
+    const estimate_fla::Result estimate = estimate_fla::calculate(
+        {motorRatedPower, motorRPM, lineFrequency, efficiencyClass, specifiedEfficiency, ratedVoltage});
+    std::array<double, 6> plValues = estimate.partial_load_currents;
+    estimatedFLA                   = estimate.estimated_fla;
 
     // Adjustment based on the rated voltage and Adjustment based on the specified FLA
     for (auto& val : plValues) {
@@ -59,9 +59,9 @@ double MotorCurrent::calculateCurrent(const double fullLoadAmps) {
 }
 
 double MotorCurrent::calculateOptimalCurrent() {
-    EstimateFLA estimateFLA(motorRatedPower, motorRPM, lineFrequency, efficiencyClass, specifiedEfficiency,
-                            ratedVoltage);
-    const std::array<double, 6> plValues = estimateFLA.calculate();
+    const estimate_fla::Result estimate = estimate_fla::calculate(
+        {motorRatedPower, motorRPM, lineFrequency, efficiencyClass, specifiedEfficiency, ratedVoltage});
+    const std::array<double, 6> plValues = estimate.partial_load_currents;
 
     //     Adjustment based on the measured Voltage/ Field Voltage
     //    double temp_fullLoadAmps = plValues[4];
