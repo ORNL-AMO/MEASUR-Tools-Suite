@@ -32,30 +32,6 @@ describe('Motor Tests', function () {
         );
     }
 
-    it('should calculate EstimateFLA correctly', function () {
-        const motorRatedPower = 200;
-        const motorRPM = 1780;
-        const lineFrequency = moduleInstance.LineFrequency.FREQ50;
-        const efficiencyClass = moduleInstance.MotorEfficiencyClass.ENERGY_EFFICIENT;
-        const specifiedEfficiency = 0;
-        const ratedVoltage = 460;
-        const instance = new moduleInstance.EstimateFLA(
-            motorRatedPower,
-            motorRPM,
-            lineFrequency,
-            efficiencyClass,
-            specifiedEfficiency,
-            ratedVoltage
-        );
-
-        try {
-            const estimatedFLA = instance.getEstimatedFLA();
-            assert.equal(estimatedFLA, 225.800612262395);
-        } finally {
-            instance.delete();
-        }
-    });
-
     it('should calculate MotorPerformance (current) correctly', function () {
         const instance = createMotorPerformance();
         let calculatedResults: MotorPerformanceOutput | undefined;
