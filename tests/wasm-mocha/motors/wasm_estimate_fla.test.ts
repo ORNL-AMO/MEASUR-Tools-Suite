@@ -69,4 +69,24 @@ describe('EstimateFLA WASM API', function () {
     it('removes the legacy EstimateFLA runtime constructor', function () {
         assert.notProperty(moduleInstance, 'EstimateFLA');
     });
+
+    it('preserves the premium full-load result and all six legacy anchors', function () {
+        const output = moduleInstance.calculateEstimateFLA(makeInput({
+            motorRatedPower: 200,
+            motorRpm: 1780,
+            efficiencyClass: moduleInstance.MotorEfficiencyClass.PREMIUM,
+            ratedVoltage: 230
+        }));
+        const expectedAnchors = [
+            61.767914923517779, 80.892507178588289, 124.30911651250761,
+            171.6912306970269, 224.0381281777037, 280.2716983503073
+        ];
+        assert.closeTo(output.estimatedFLA, 448.07625635540739, 1e-9);
+        assert.isArray(output.partialLoadCurrents);
+        assert.lengthOf(output.partialLoadCurrents, 6);
+        expectedAnchors.forEach((current, interval) => {
+            assert.closeTo(output.partialLoadCurrents[interval], current, 1e-9);
+        });
+        assert.notProperty(output.partialLoadCurrents, 'delete');
+    });
 });

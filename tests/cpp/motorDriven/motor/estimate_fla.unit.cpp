@@ -72,3 +72,29 @@ TEST_CASE("Estimate full-load motor current", "[estimate_fla][EstimateFLA]") {
     CHECK(calculate(200, 1780, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, .95, 460).estimated_fla ==
           Approx(227.288340026));
 }
+
+TEST_CASE("Estimate premium full-load current and ordered anchors", "[estimate_fla]") {
+    // Captured from the legacy EstimateFLA implementation at the PR base e6d6df7.
+    // Exercise each supported premium pole column at 200 hp and 230 V.
+    const std::array<double, 3> motor_rpms = {{3600, 1780, 1200}};
+    const std::array<double, 3> expected_fla = {{435.49337497165698, 448.07625635540739, 467.38842500147217}};
+    const std::array<std::array<double, 6>, 3> expected_anchors = {{
+        {{52.804540263371869, 74.443008140618474, 118.07993301142717, 165.95389507103832,
+          217.74668748582849, 272.8365994197431}},
+        {{61.767914923517779, 80.892507178588289, 124.30911651250761, 171.6912306970269,
+          224.0381281777037, 280.2716983503073}},
+        {{77.606732740709717, 94.116538455169888, 132.97868398283219, 179.88325053357315,
+          233.69421250073609, 293.05254247592308}},
+    }};
+
+    for (std::size_t pole_index = 0; pole_index < motor_rpms.size(); ++pole_index) {
+        INFO("premium pole count: " << 2 * (pole_index + 1));
+        const auto result = calculate(200, motor_rpms[pole_index], Motor::LineFrequency::FREQ60,
+                                      Motor::EfficiencyClass::PREMIUM, 0, 230);
+        CHECK(result.estimated_fla == Approx(expected_fla[pole_index]).margin(1e-9));
+        for (std::size_t interval = 0; interval < result.partial_load_currents.size(); ++interval) {
+            INFO("interval index: " << interval);
+            CHECK(result.partial_load_currents[interval] == Approx(expected_anchors[pole_index][interval]).margin(1e-9));
+        }
+    }
+}

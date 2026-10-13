@@ -8,9 +8,9 @@ export interface EstimateFLAInput {
     motorRpm: number;
     /** Nominal electrical line-frequency selection. */
     lineFrequency: LineFrequency;
-    /** Motor efficiency classification. */
+    /** Motor efficiency classification. PREMIUM supports only 2-, 4-, or 6-pole speed/frequency selections. */
     efficiencyClass: MotorEfficiencyClass;
-    /** Specified motor efficiency, dimensionless fraction. Used only for the specified class. */
+    /** Specified motor efficiency, dimensionless fraction. Must be greater than zero for SPECIFIED; ignored otherwise. */
     specifiedEfficiency: number;
     /** Motor nameplate voltage, units V. */
     ratedVoltage: number;
@@ -42,6 +42,8 @@ export interface EstimateFLAOutput {
 
 /**
  * Estimates a motor's full-load current and retained partial-load current anchors.
+ * PREMIUM supports only 2, 4, or 6 poles; SPECIFIED requires positive specifiedEfficiency.
+ * Equal baseline-efficiency distances select ENERGY_EFFICIENT. Input preconditions are not validated.
  *
  * @param input Motor nameplate and efficiency-class inputs.
  * @returns Estimated full-load current and six current anchors.

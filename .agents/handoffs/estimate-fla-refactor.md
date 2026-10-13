@@ -82,3 +82,23 @@
 ## Open Questions Or Blockers
 
 - No implementation blocker. The only downstream gate is the intentionally deferred final Suite-to-Desktop integration.
+
+## PR Review Follow-Up (2026-10-13)
+
+- Review: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/425#pullrequestreview-5506501562
+- Premium boundary: public C++, TypeScript, and calculator documentation now require 2-, 4-, or 6-pole premium
+  selections. The pre-existing three-column table is unchanged; unsupported higher-pole inputs are not validated
+  or clamped, preserving the approved behavior contract.
+- Premium coverage: added a native golden for every supported premium pole column, checking estimated FLA and all
+  six anchors (21 assertions), plus a typed WASM golden. Values were captured by compiling the legacy EstimateFLA
+  header/source from base `e6d6df7`, with 200 hp, 230 V, 60 Hz, and speeds 3600/1780/1200 rpm.
+- Specified efficiency: documented the > 0 precondition in all public surfaces; the retained calculation still does
+  not validate it. Exact equal-distance baseline comparisons choose ENERGY_EFFICIENT, now documented explicitly.
+- Package records: central handoff distinguishes last documented MotorEfficiency reviewed beta `.363.1`, latest
+  published integrated beta `.365.1`, and Desktop #8964's existing `.365.1` pins; no new Desktop work was performed.
+- Verification: focused native `[estimate_fla]` passed 85 assertions in 2 cases; full native suite passed 4,217
+  assertions in 322 cases; `npm run verify:types`, freshly rebuilt/staged `npm run verify:wasm` (256 browser tests),
+  `npm run check:docs`, and `git diff --check` passed. Doxygen generated the updated API/calculator pages without
+  module-specific warnings; the pre-existing missing-BibTeX and unrelated warnings remain.
+- Follow-up review: compared all five review findings with the revised public comments, fixtures, and verified
+  remote package records; no unresolved finding remains from this review. No calculation or binding code changed.

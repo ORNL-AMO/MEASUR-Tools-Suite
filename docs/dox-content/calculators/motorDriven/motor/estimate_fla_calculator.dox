@@ -54,6 +54,8 @@
  * @formula{estimate-fla-specified-baseline;
  *   b=\underset{x\in\{s,e\}}{\operatorname{argmin}}\,|\eta_x-\eta_{spec}|
  * }
+ * If both absolute differences are exactly equal, the retained strict comparison selects the
+ * energy-efficient baseline. The premium curve is not a candidate for specified-efficiency selection.
  * The six partial-load anchors then use that selected current curve. The specified-efficiency ratio
  * is intentionally not applied to those anchors; it is applied only to the public full-load result.
  *
@@ -90,6 +92,13 @@
  * @heading{Inputs, Limits, and Appropriate Use}
  * - Rated power is hp, speed is rpm, voltage is V, and currents are A. Specified efficiency is a
  *   dimensionless fraction, not a percentage point value.
+ * - For the specified class, specified efficiency must be greater than zero because the full-load
+ *   correction divides by it. Other classes ignore this input. This precondition is not validated;
+ *   zero can produce a non-finite estimated full-load current.
+ * - Premium current coefficients support only 2-, 4-, and 6-pole motors (pole indices 0 through 2).
+ *   A speed/frequency pair classified as 8, 10, or 12 poles is unsupported for PREMIUM and would
+ *   index beyond its three-column table. Those nominal pole bands must not be passed to this class;
+ *   no clamping, fallback, or validation has been added by this behavior-preserving refactor.
  * - The interval array has exactly six values, always ordered 0 through 125 percent as documented.
  * - The coefficient tables, pole selection behavior, and class selection are retained for numerical
  *   compatibility. Their original regression or experimental source is not recorded in this

@@ -78,7 +78,7 @@ ordered so foundational calculators migrate before the composite calculators tha
 | ---: | --- | --- | --- |
 | 1 | #203 PumpResult | Completed in Desktop PR #8956. | Suite PR #421 and Desktop PR #8956 merged. |
 | 2 | #216 Poles | No new Desktop work; final integration will consume the final Suite package once. | Suite PR #423 merged; issue closed; beta `1.2.6-beta.358.1` published. |
-| 3 | #208 MotorEfficiency | Desktop PR #8964 is open and intentionally held without further changes or merge until the full Suite sequence is approved. | Suite PR #424 merged on 2026-10-13; issue #208 closed; final reviewed beta `1.2.6-beta.363.1`. |
+| 3 | #208 MotorEfficiency | Desktop PR #8964 is open and intentionally held without further changes or merge until the full Suite sequence is approved; its existing package pins are `1.2.6-beta.365.1`. | Suite PR #424 merged on 2026-10-13; issue #208 closed; latest published integrated beta `1.2.6-beta.365.1`; last beta with recorded review/validation evidence `1.2.6-beta.363.1`. |
 | 4 | #205 EstimateFLA | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite PR [#425](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/425) open for review; Desktop migration deferred to final integration. |
 | 5 | #206 MotorCurrent | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |
 | 6 | #210 MotorPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |
@@ -136,7 +136,14 @@ dependency migration, but their public refactors remain separate.
 
 - Change classification: breaking API
 - PumpResult Desktop-validation beta: `1.2.6-beta.355.1`
-- Latest integrated Suite beta: `1.2.6-beta.363.1` from merged MotorEfficiency PR #424 (final reviewed beta)
+- Latest published integrated Suite beta: `1.2.6-beta.365.1` from merged MotorEfficiency PR #424, confirmed by its
+  [publication workflow](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/actions/runs/38400544559).
+- Last MotorEfficiency beta with recorded review/validation evidence: `1.2.6-beta.363.1`. The `.365.1` package was
+  published after that reviewed head; this record does not extend `.363.1` review/validation coverage to `.365.1`.
+- Existing Desktop PR #8964 package pins: root and process-flow manifests both pin `1.2.6-beta.365.1` at Desktop head
+  `2b48fc84ecc6834d83a3bf56318f266c28368caa`; its description still records `.363.1` as the tested beta. These are
+  distinct package-publication, dependency-state, and validation facts; no Desktop update was made in this task.
+- EstimateFLA PR #425 has published child betas `.366.1` and `.367.1`; it is not yet merged into the integrated branch.
 - MotorEfficiency Suite status: PR #424 merged on 2026-10-13; issue #208 closed.
 - Final package version: pending
 - Desktop root dependency: do not update until final integration; then update once to the approved final/RC package.

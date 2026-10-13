@@ -22,8 +22,8 @@ struct Input {
     double motor_rated_power;                 ///< Motor nameplate power @unitb{\horsepower}.
     double motor_rpm;                         ///< Motor nameplate speed @unitb{\revolution\per\minute}.
     Motor::LineFrequency line_frequency;      ///< Nominal electrical line-frequency selection.
-    Motor::EfficiencyClass efficiency_class;  ///< Motor efficiency-class selection.
-    double specified_efficiency;              ///< Specified efficiency @unitb{\unitless}.
+    Motor::EfficiencyClass efficiency_class;  ///< Motor efficiency-class selection; PREMIUM supports 2, 4, or 6 poles.
+    double specified_efficiency;              ///< Efficiency @unitb{\unitless}; must be > 0 for SPECIFIED, otherwise ignored.
     double rated_voltage;                     ///< Motor nameplate voltage @unitb{\volt}.
 };
 
@@ -39,6 +39,9 @@ struct Result {
 
 /**
  * @brief Estimates full-load motor current and six partial-load current anchors.
+ * @details PREMIUM requires a speed/frequency pair classified as 2, 4, or 6 poles.
+ * SPECIFIED requires positive specified_efficiency; equal baseline distances select ENERGY_EFFICIENT.
+ * These preconditions are not validated by the retained empirical calculation.
  * @param[in] input Motor nameplate and efficiency-class inputs.
  * @return Estimated full-load current and retained partial-load current anchors.
  */
