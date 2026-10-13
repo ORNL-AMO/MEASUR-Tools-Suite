@@ -3,7 +3,7 @@
 ## Workflow Metadata
 
 - Lifecycle: active
-- Status: Suite PumpResult, Poles, MotorEfficiency, and EstimateFLA changes merged; MotorCurrent implemented with review in progress; all remaining Desktop migration is deferred to final integration
+- Status: Suite PumpResult, Poles, MotorEfficiency, and EstimateFLA changes merged; MotorCurrent implementation/review complete and child PR delivery in progress; all remaining Desktop migration is deferred to final integration
 - Owner: Codex
 - Created: 2026-10-07
 - Last updated: 2026-10-13
@@ -80,7 +80,7 @@ ordered so foundational calculators migrate before the composite calculators tha
 | 2 | #216 Poles | No new Desktop work; final integration will consume the final Suite package once. | Suite PR #423 merged; issue closed; beta `1.2.6-beta.358.1` published. |
 | 3 | #208 MotorEfficiency | Desktop PR #8964 is open and intentionally held without further changes or merge until the full Suite sequence is approved; its existing package pins are `1.2.6-beta.365.1`. | Suite PR #424 merged on 2026-10-13; issue #208 closed; latest published integrated beta `1.2.6-beta.365.1`; last beta with recorded review/validation evidence `1.2.6-beta.363.1`. |
 | 4 | #205 EstimateFLA | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite PR [#425](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/425) merged on 2026-10-13 at `363c011`; Desktop migration deferred to final integration. |
-| 5 | #206 MotorCurrent | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite-only implementation and validation complete; internal review in progress. See [MotorCurrent handoff](motor-current-refactor.md). |
+| 5 | #206 MotorCurrent | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite-only implementation, validation, and independent internal review complete (Ready); child PR delivery in progress. See [MotorCurrent handoff](motor-current-refactor.md). |
 | 6 | #210 MotorPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |
 | 7 | #211 MotorPowerFactor | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |
 | 8 | #212 MotorShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |
@@ -153,7 +153,7 @@ dependency migration, but their public refactors remain separate.
 - Desktop held PR: #8964 remains open, unmodified, and unmerged until the final Suite package is available.
 - Release readiness: Suite PR #421 and Desktop PR #8956 are merged; Poles PR #423, MotorEfficiency PR #424,
   and EstimateFLA PR #425 are merged. MotorCurrent implementation has passed native/type/WASM validation;
-  internal review and child PR delivery are in progress.
+  independent internal review is Ready and child PR delivery is in progress.
 - Release blockers: complete and review all remaining Suite modules, pass the integrated Suite review, publish the approved final/RC package, then perform the one Desktop integration/review cycle.
 
 ## Validation
@@ -162,8 +162,8 @@ dependency migration, but their public refactors remain separate.
 - Commands still needed: final generated-document visual review; Suite checks for each remaining module; one integrated Suite review; then one consolidated Desktop review and verification against the approved final package.
 - MotorCurrent validation: native build and 4,314 assertions in 324 cases passed; focused motor/pump/fan checks
   passed 253 assertions; typechecking and freshly rebuilt/staged WASM verification passed all 260 browser tests.
-  Documentation links, whitespace checks, package dry run, and generated-page inspection passed; internal review
-  and child PR delivery are in progress.
+  Documentation links, whitespace checks, package dry run, and generated-page inspection passed; independent
+  internal review is Ready with no actionable findings. Reviewed implementation head: `da8f42a`.
 - Known environment limits: Doxygen reports pre-existing repository warnings and cannot run BibTeX in this environment. Browser security policy prevented opening the generated local HTML page, so generated markup was inspected statically.
 
 ## Internal Review
