@@ -12,7 +12,7 @@
 
 #include <cmath>
 
-#include "motorDriven/motor/MotorEfficiency.h"
+#include "motorDriven/motor/motor_efficiency.h"
 
 double MotorPowerFactor::calculate() {
     if (std::abs(loadFactor) < 0.001) {
@@ -24,9 +24,9 @@ double MotorPowerFactor::calculate() {
          *  motorkVA (0) = 460 * sqrt(3) * motorCurrent_ (0)/1000;
          *  MotorPowerFactor (0) = motorKwInput (0) / motorkVA (0);
          */
-        MotorEfficiency motorEfficiency(lineFrequency, motorRpm, efficiencyClass, motorRatedPower);
-        motorEfficiency.calculate(0.25, specifiedEfficiency);
-        motorKwInput = motorEfficiency.getKWloss0();
+        motorKwInput = motor_efficiency::calculate(
+                           {lineFrequency, motorRpm, efficiencyClass, motorRatedPower, 0.25, specifiedEfficiency})
+                           .zero_load_power_loss;
         motorkVA     = 460 * sqrt(3) * motorCurrent / 1000;
         return motorKwInput / motorkVA;
     }

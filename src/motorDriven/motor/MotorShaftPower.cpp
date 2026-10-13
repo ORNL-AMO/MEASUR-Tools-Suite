@@ -3,7 +3,7 @@
 #include <cmath>
 
 #include "motorDriven/motor/MotorCurrent.h"
-#include "motorDriven/motor/MotorEfficiency.h"
+#include "motorDriven/motor/motor_efficiency.h"
 #include "motorDriven/motor/MotorPower.h"
 #include "motorDriven/motor/MotorPowerFactor.h"
 
@@ -17,8 +17,10 @@ MotorShaftPower::Output MotorShaftPower::calculate() {
             MotorCurrent motorCurrent(motorRatedPower, motorRPM, lineFrequency, efficiencyClass, specifiedEfficiency,
                                       tempLoadFraction, ratedVoltage);
             current = motorCurrent.calculateCurrent(fullLoadAmps);
-            MotorEfficiency motorEfficiency(lineFrequency, motorRPM, efficiencyClass, motorRatedPower);
-            efficiency = motorEfficiency.calculate(tempLoadFraction, specifiedEfficiency);
+            efficiency = motor_efficiency::calculate(
+                             {lineFrequency, motorRPM, efficiencyClass, motorRatedPower, tempLoadFraction,
+                              specifiedEfficiency})
+                             .efficiency;
             MotorPowerFactor motorPowerFactor(lineFrequency, motorRPM, efficiencyClass, specifiedEfficiency,
                                               motorRatedPower, tempLoadFraction, current, efficiency, ratedVoltage);
             powerFactor = motorPowerFactor.calculate();
@@ -71,8 +73,10 @@ MotorShaftPower::Output MotorShaftPower::calculate() {
                                       tempLoadFraction, ratedVoltage);
             current = motorCurrent.calculateCurrent(fullLoadAmps);
             if (current > fieldCurrent || tempLoadFraction > 1.5) {
-                MotorEfficiency motorEfficiency(lineFrequency, motorRPM, efficiencyClass, motorRatedPower);
-                efficiency = motorEfficiency.calculate(tempLoadFraction, specifiedEfficiency);
+                efficiency = motor_efficiency::calculate(
+                                 {lineFrequency, motorRPM, efficiencyClass, motorRatedPower, tempLoadFraction,
+                                  specifiedEfficiency})
+                                 .efficiency;
                 MotorPowerFactor motorPowerFactor(lineFrequency, motorRPM, efficiencyClass, specifiedEfficiency,
                                                   motorRatedPower, tempLoadFraction, current, efficiency, ratedVoltage);
                 powerFactor = motorPowerFactor.calculate();
@@ -92,8 +96,10 @@ MotorShaftPower::Output MotorShaftPower::calculate() {
         MotorCurrent motorCurrent1(motorRatedPower, motorRPM, lineFrequency, efficiencyClass, specifiedEfficiency,
                                    tempLoadFraction, ratedVoltage);
         current = motorCurrent1.calculateCurrent(fullLoadAmps);
-        MotorEfficiency motorEfficiency(lineFrequency, motorRPM, efficiencyClass, motorRatedPower);
-        efficiency  = motorEfficiency.calculate(tempLoadFraction, specifiedEfficiency);
+        efficiency  = motor_efficiency::calculate(
+                          {lineFrequency, motorRPM, efficiencyClass, motorRatedPower, tempLoadFraction,
+                           specifiedEfficiency})
+                          .efficiency;
         powerFactor = MotorPowerFactor(lineFrequency, motorRPM, efficiencyClass, specifiedEfficiency, motorRatedPower,
                                        tempLoadFraction, current, efficiency, ratedVoltage)
                           .calculate();

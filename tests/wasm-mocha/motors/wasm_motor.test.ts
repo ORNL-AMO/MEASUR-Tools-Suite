@@ -32,23 +32,6 @@ describe('Motor Tests', function () {
         );
     }
 
-    it('should calculate MotorEfficiency correctly', function () {
-        const lineFrequency = moduleInstance.LineFrequency.FREQ60;
-        const motorRatedSpeed = 1200;
-        const efficiencyClass = moduleInstance.MotorEfficiencyClass.ENERGY_EFFICIENT;
-        const efficiency = 0;
-        const motorRatedPower = 200;
-        const loadFactor = 1;
-        const instance = new moduleInstance.MotorEfficiency(lineFrequency, motorRatedSpeed, efficiencyClass, motorRatedPower);
-
-        try {
-            const motorEfficiency = instance.calculate(loadFactor, efficiency) * 100;
-            assert.equal(motorEfficiency, 95.33208465291122);
-        } finally {
-            instance.delete();
-        }
-    });
-
     it('should calculate EstimateFLA correctly', function () {
         const motorRatedPower = 200;
         const motorRPM = 1780;

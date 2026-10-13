@@ -3,7 +3,7 @@
 #include <tuple>
 
 #include "default_data.h"
-#include "motorDriven/motor/MotorEfficiency.h"
+#include "motorDriven/motor/motor_efficiency.h"
 
 std::vector<std::tuple<double, int, double, Motor::EfficiencyClass, std::string, Motor::LineFrequency, int>>
 getStandardEffCombinations(const std::vector<double>& hpValues, const std::vector<int>& synchronousSpeedValues,
@@ -22,8 +22,10 @@ getStandardEffCombinations(const std::vector<double>& hpValues, const std::vecto
                         for (auto const& voltageLimit : voltageLimitValues) {
                             // Calculate
                             double nominalEfficiency =
-                                MotorEfficiency(lineFrequency, synchronousSpeed, Motor::EfficiencyClass::STANDARD, hp)
-                                    .calculate(1) *
+                                motor_efficiency::calculate(
+                                    {lineFrequency, static_cast<double>(synchronousSpeed),
+                                     Motor::EfficiencyClass::STANDARD, hp, 1})
+                                    .efficiency *
                                 100;
                             std::tuple<double, int, double, Motor::EfficiencyClass, std::string, Motor::LineFrequency,
                                        int>
