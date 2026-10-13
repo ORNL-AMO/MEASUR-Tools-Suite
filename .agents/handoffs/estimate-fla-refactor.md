@@ -3,12 +3,12 @@
 ## Workflow Metadata
 
 - Lifecycle: active
-- Status: Suite implementation complete and ready for PR review; Desktop migration deferred to final integration
+- Status: Suite PR #425 open for review; Desktop migration deferred to final integration
 - Owner: Codex
 - Created: 2026-10-13
 - Last updated: 2026-10-13
 - Suite issue: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/205
-- Suite PR: not opened
+- Suite PR: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/425
 - Desktop issue: deferred to final integration
 - Desktop PR: https://github.com/ORNL-AMO/AMO-Tools-Desktop/pull/8964 (open and intentionally held)
 
