@@ -7,7 +7,7 @@
  * unavailable. It classifies the motor by pole count, evaluates retained empirical current curves
  * from rated horsepower, then selects the requested efficiency class. The output includes both a
  * voltage- and, where applicable, specified-efficiency-adjusted full-load estimate and the legacy
- * partial-load current anchors used by @ref MotorCurrent.
+ * partial-load current anchors used by @ref motor_current_calculator.
  *
  * @heading{Decision Path}
  * 1. Use @ref poles_calculator with rated speed and nominal 50 Hz or 60 Hz frequency to select a

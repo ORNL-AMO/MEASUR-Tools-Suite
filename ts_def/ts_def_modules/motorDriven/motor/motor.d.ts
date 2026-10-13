@@ -135,50 +135,6 @@ export declare class Motor {
 }
 
 /**
- * Motor current calculator.
- */
-export declare class MotorCurrent {
-    /**
-     * Constructor for calculating the motor current based on various parameters.
-     *
-     * @param motorRatedPower Rated motor power, units hp.
-     *
-     * @param motorRPM Motor speed, units rpm.
-     *
-     * @param lineFrequency Motor::LineFrequency, classification of line Frequency of motor in Hz
-     *
-     * @param efficiencyClass Motor::EfficiencyClass, Efficiency class of motor.
-     * @param specifiedEfficiency Specified motor efficiency, dimensionless fraction.
-     *
-     * @param loadFactor Load factor, dimensionless fraction.
-     *
-     * @param ratedVoltage Rated motor voltage, units V.
-     *
-     */
-    constructor(
-        motorRatedPower: number,
-        motorRPM: number,
-        lineFrequency: LineFrequency,
-        efficiencyClass: MotorEfficiencyClass,
-        specifiedEfficiency: number,
-        loadFactor: number,
-        ratedVoltage: number );
-
-    /**
-     * calculates the motor current at a given load factor.
-     *
-     * @param fullLoadAmps Full-load current, units A.
-     *
-     * @returns Motor current, units A.
-     *
-     */
-    calculateCurrent(fullLoadAmps: number): number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
-}
-
-/**
  * Motor power factor calculator.
  */
 export declare class MotorPowerFactor {
@@ -294,7 +250,6 @@ export declare class MotorPerformance {
 export type MotorModule = {
     MotorData: typeof MotorData;
     Motor: typeof Motor;
-    MotorCurrent: typeof MotorCurrent;
     MotorPowerFactor: typeof MotorPowerFactor;
     MotorPerformanceOutput: typeof MotorPerformanceOutput;
     MotorPerformance: typeof MotorPerformance;

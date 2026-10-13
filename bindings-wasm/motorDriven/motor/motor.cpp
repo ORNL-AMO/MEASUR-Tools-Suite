@@ -1,7 +1,6 @@
 #include <emscripten/bind.h>
 #include <motorDriven/motor/MotorData.h>
 
-#include "motorDriven/motor/MotorCurrent.h"
 #include "motorDriven/motor/MotorPerformance.h"
 #include "motorDriven/motor/MotorPowerFactor.h"
 using namespace emscripten;
@@ -39,12 +38,6 @@ EMSCRIPTEN_BINDINGS(motorData_class) {
 EMSCRIPTEN_BINDINGS(motor_class) {
     class_<Motor>("Motor")
         .constructor<Motor::LineFrequency, double, double, Motor::EfficiencyClass, double, double, double, double>();
-}
-
-EMSCRIPTEN_BINDINGS(motor_current) {
-    class_<MotorCurrent>("MotorCurrent")
-        .constructor<double, double, Motor::LineFrequency, Motor::EfficiencyClass, double, double, double>()
-        .function("calculateCurrent", &MotorCurrent::calculateCurrent);
 }
 
 EMSCRIPTEN_BINDINGS(motor_power_factor) {
