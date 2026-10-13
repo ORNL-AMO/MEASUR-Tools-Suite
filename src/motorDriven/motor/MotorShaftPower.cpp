@@ -2,10 +2,10 @@
 
 #include <cmath>
 
-#include "motorDriven/motor/MotorCurrent.h"
-#include "motorDriven/motor/motor_efficiency.h"
 #include "motorDriven/motor/MotorPower.h"
 #include "motorDriven/motor/MotorPowerFactor.h"
+#include "motorDriven/motor/motor_current.h"
+#include "motorDriven/motor/motor_efficiency.h"
 
 MotorShaftPower::Output MotorShaftPower::calculate() {
     double powerFactor, efficiency, current, power, estimatedFLA;
@@ -14,9 +14,11 @@ MotorShaftPower::Output MotorShaftPower::calculate() {
         double tempLoadFraction = 0.01;
         double powerE1 = 0, powerE2 = 0, lf1 = 0, lf2 = 0, eff1 = 0, eff2 = 0, pf1 = 0, pf2 = 0;
         while (true) {
-            MotorCurrent motorCurrent(motorRatedPower, motorRPM, lineFrequency, efficiencyClass, specifiedEfficiency,
-                                      tempLoadFraction, ratedVoltage);
-            current = motorCurrent.calculateCurrent(fullLoadAmps);
+            const auto motor_current_result = motor_current::calculate(
+                {motorRatedPower, motorRPM, lineFrequency, efficiencyClass, specifiedEfficiency,
+                 tempLoadFraction, ratedVoltage},
+                fullLoadAmps);
+            current = motor_current_result.current;
             efficiency = motor_efficiency::calculate(
                              {lineFrequency, motorRPM, efficiencyClass, motorRatedPower, tempLoadFraction,
                               specifiedEfficiency})
@@ -31,7 +33,7 @@ MotorShaftPower::Output MotorShaftPower::calculate() {
                 lf2          = tempLoadFraction;
                 eff2         = efficiency;
                 pf2          = powerFactor;
-                estimatedFLA = motorCurrent.getEstimatedFLA();
+                estimatedFLA = motor_current_result.estimated_fla;
                 break;
             }
             else {
@@ -69,9 +71,11 @@ MotorShaftPower::Output MotorShaftPower::calculate() {
         double tempLoadFraction = 0.00;
         double powerE1, powerE2, lf1, lf2, eff1, eff2, current1, current2;
         while (true) {
-            MotorCurrent motorCurrent(motorRatedPower, motorRPM, lineFrequency, efficiencyClass, specifiedEfficiency,
-                                      tempLoadFraction, ratedVoltage);
-            current = motorCurrent.calculateCurrent(fullLoadAmps);
+            const auto motor_current_result = motor_current::calculate(
+                {motorRatedPower, motorRPM, lineFrequency, efficiencyClass, specifiedEfficiency,
+                 tempLoadFraction, ratedVoltage},
+                fullLoadAmps);
+            current = motor_current_result.current;
             if (current > fieldCurrent || tempLoadFraction > 1.5) {
                 efficiency = motor_efficiency::calculate(
                                  {lineFrequency, motorRPM, efficiencyClass, motorRatedPower, tempLoadFraction,
@@ -86,16 +90,18 @@ MotorShaftPower::Output MotorShaftPower::calculate() {
                 powerE2      = power;
                 lf2          = tempLoadFraction;
                 eff2         = efficiency;
-                estimatedFLA = motorCurrent.getEstimatedFLA();
+                estimatedFLA = motor_current_result.estimated_fla;
                 break;
             }
             tempLoadFraction += 0.01;
         }
         /// Dropping load fraction by 0.01
         tempLoadFraction -= 0.01;
-        MotorCurrent motorCurrent1(motorRatedPower, motorRPM, lineFrequency, efficiencyClass, specifiedEfficiency,
-                                   tempLoadFraction, ratedVoltage);
-        current = motorCurrent1.calculateCurrent(fullLoadAmps);
+        current = motor_current::calculate(
+                      {motorRatedPower, motorRPM, lineFrequency, efficiencyClass, specifiedEfficiency,
+                       tempLoadFraction, ratedVoltage},
+                      fullLoadAmps)
+                      .current;
         efficiency  = motor_efficiency::calculate(
                           {lineFrequency, motorRPM, efficiencyClass, motorRatedPower, tempLoadFraction,
                            specifiedEfficiency})
