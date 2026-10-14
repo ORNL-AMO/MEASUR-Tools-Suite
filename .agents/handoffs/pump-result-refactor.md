@@ -3,10 +3,10 @@
 ## Workflow Metadata
 
 - Lifecycle: active
-- Status: Suite PumpResult, Poles, MotorEfficiency, and EstimateFLA changes merged; MotorCurrent PR #426 open for CI/human review; all remaining Desktop migration is deferred to final integration
+- Status: Suite PumpResult, Poles, MotorEfficiency, EstimateFLA, and MotorCurrent merged; epic synced with develop; MotorPower active; all remaining Desktop migration is deferred to final integration
 - Owner: Codex
 - Created: 2026-10-07
-- Last updated: 2026-10-13
+- Last updated: 2026-10-14
 - Suite issue: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/203
 - Suite feature branch: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/tree/epic-pump-result-refactor
 - Suite CI bootstrap PR: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/420
@@ -80,8 +80,8 @@ ordered so foundational calculators migrate before the composite calculators tha
 | 2 | #216 Poles | No new Desktop work; final integration will consume the final Suite package once. | Suite PR #423 merged; issue closed; beta `1.2.6-beta.358.1` published. |
 | 3 | #208 MotorEfficiency | Desktop PR #8964 is open and intentionally held without further changes or merge until the full Suite sequence is approved; its existing package pins are `1.2.6-beta.365.1`. | Suite PR #424 merged on 2026-10-13; issue #208 closed; latest published integrated beta `1.2.6-beta.365.1`; last beta with recorded review/validation evidence `1.2.6-beta.363.1`. |
 | 4 | #205 EstimateFLA | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite PR [#425](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/425) merged on 2026-10-13 at `363c011`; Desktop migration deferred to final integration. |
-| 5 | #206 MotorCurrent | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite PR [#426](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/426) open for CI/human review; implementation, validation, and independent internal review complete (Ready). See [MotorCurrent handoff](motor-current-refactor.md). |
-| 6 | #210 MotorPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |
+| 5 | #206 MotorCurrent | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite PR [#426](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/426) merged on 2026-10-13 at `9b3b8da`. See [MotorCurrent handoff](motor-current-refactor.md). |
+| 6 | #210 MotorPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Active Suite-only namespace refactor and additive scalar WASM function. See [MotorPower handoff](motor-power-refactor.md). |
 | 7 | #211 MotorPowerFactor | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |
 | 8 | #212 MotorShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |
 | 9 | #213 OptimalMotorPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |

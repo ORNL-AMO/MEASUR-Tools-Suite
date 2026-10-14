@@ -1,0 +1,113 @@
+/**
+ * @defgroup motor_power_calculator Motor Electrical Input Power Calculator
+ * @ingroup equipment_and_property_calculators
+ * @brief Calculates three-phase motor real electrical input power from voltage, current, and power factor.
+ * @details
+ * How much real electrical power does a motor consume at its operating point? This calculator answers
+ * that question using line voltage, line current, and power factor. The result supports motor and
+ * pump/fan assessments that need electrical input power. It is an instantaneous power in kW;
+ * determining energy use or operating cost also requires a load schedule and electricity rate.
+ *
+ * @heading{Final Result}
+ * For balanced sinusoidal three-phase conditions, real electrical input power is:
+ * @formula{motor-power-real-input;
+ *   P_{in}=\frac{V_{LL} I_L \sqrt{3}\,PF}{1000}
+ * }
+ * @symtable
+ * @symrow{P_{in}; Motor real electrical input power; \kilo\watt}
+ * @symrow{V_{LL}; RMS line-to-line motor voltage; \volt}
+ * @symrow{I_L; RMS motor line current; \ampere}
+ * @symrow{PF; Real-to-apparent power ratio expressed as a fraction; \unitless}
+ * @symrow{\sqrt{3}; Three-phase line-quantity factor; \unitless}
+ * @symrow{1000; Watts in one kilowatt; \watt\per\kilo\watt}
+ * @endsymtable
+ *
+ * Electrical input power includes the power converted to useful shaft output and the motor's losses.
+ * The returned number is therefore not shaft horsepower. Motor efficiency is not an input to this
+ * calculation, and no efficiency adjustment or horsepower conversion is applied.
+ *
+ * @heading{Selecting the Inputs}
+ * 1. Confirm that a balanced three-phase model is suitable for the motor's electrical supply.
+ * 2. Select RMS line-to-line voltage in V and RMS line current in A for the same operating point.
+ *    The API calls the voltage argument ratedVoltage, but uses the supplied value directly. A measured
+ *    operating voltage may differ from the nameplate rating; the function does not correct either value.
+ * 3. Supply power factor as a fraction: enter 0.85 for 85 percent. Use a power factor representative
+ *    of the operating load; a nameplate full-load value may be unsuitable at a different load.
+ * 4. Calculate real input power and interpret it as electrical consumption at that operating point.
+ *
+ * [DOE's motor sourcebook](https://www1.eere.energy.gov/manufacturing/tech_assistance/pdfs/motor.pdf#page=46)
+ * describes the same three-phase voltage/current/power-factor method in its
+ * direct-measurement example on printed page 42 @cite doe2008motorSourcebook. Its factor 1.732 is a
+ * rounded form of the square root of three. MEASUR retains the exact square-root evaluation used by
+ * the original calculator; the citation supports the relationship, not a change to its precision.
+ *
+ * @heading{Why Voltage and Current Need Power Factor}
+ * Multiplying RMS voltage and current describes apparent power. For balanced three-phase line
+ * quantities, the three phase contributions and their line-to-phase relationship produce the
+ * square-root-of-three factor:
+ * @formula{motor-power-apparent-input;
+ *   S=\frac{\sqrt{3} V_{LL} I_L}{1000}
+ * }
+ * @symtable
+ * @symrow{S; Three-phase apparent power; \kilo\volt\ampere}
+ * @symrow{V_{LL}; RMS line-to-line voltage; \volt}
+ * @symrow{I_L; RMS line current; \ampere}
+ * @symrow{\sqrt{3}; Three-phase line-quantity factor; \unitless}
+ * @symrow{1000; Volt-amperes in one kilovolt-ampere; \volt\ampere\per\kilo\volt\ampere}
+ * @endsymtable
+ *
+ * Power factor expresses the fraction of apparent power that contributes to real power. For
+ * sinusoidal waveforms it is the cosine of the voltage/current phase angle. Multiplying apparent
+ * power by that fraction gives the real electrical input in the final-result equation. At unity
+ * power factor the numerical values of real power in kW and apparent power in kVA coincide.
+ *
+ * @heading{Worked Example}
+ * A motor operates at 460 V line-to-line and 100 A line current with power factor 0.85.
+ * First, the voltage/current/three-phase contribution gives approximately
+ * @math{\sqrt{3}(460)(100)/1000=79.6743371482} kVA of apparent power.
+ * Applying the power factor gives:
+ * @formula{motor-power-worked-result;
+ *   P_{example}=\frac{(460\,\mathrm{V})(100\,\mathrm{A})\sqrt{3}(0.85)}
+ *     {1000\,\mathrm{W/kW}}=67.7231865759\,\mathrm{kW}
+ * }
+ * @symtable
+ * @symrow{P_{example}; Real electrical input power for the example; \kilo\watt}
+ * @symrow{460; RMS line-to-line voltage; \volt}
+ * @symrow{100; RMS line current; \ampere}
+ * @symrow{0.85; Power factor supplied as a fraction; \unitless}
+ * @symrow{\sqrt{3}; Three-phase line-quantity factor; \unitless}
+ * @symrow{1000; Watts in one kilowatt; \watt\per\kilo\watt}
+ * @endsymtable
+ *
+ * The motor consumes approximately 67.7232 kW at this point. Its useful shaft output requires a
+ * separate efficiency calculation. Entering 85 instead of 0.85 would produce a result 100 times too
+ * large because the calculator accepts a fraction and performs no percentage conversion.
+ *
+ * @heading{Assumptions and Limits}
+ * - The documented relationship assumes balanced three-phase operation with sinusoidal voltage
+ *   and current. One voltage/current pair does not characterize phase imbalance or waveform distortion.
+ *   Use appropriate three-phase power measurements when those effects matter, including VFD waveforms.
+ * - Voltage, current, and power factor must represent the same operating condition. Rated/nameplate
+ *   quantities alone do not establish actual electrical consumption across a varying load schedule.
+ * - For an ordinary consuming-motor interpretation, voltage/current are nonnegative and PF is 0 to 1.
+ *   Inputs are caller-owned and unvalidated; no clamp, default, absolute value, or fallback is applied.
+ * - Finite zero voltage, zero current, or zero PF produces zero. Negative and out-of-range finite
+ *   values retain the formula's signed arithmetic; such results do not validate a physical motor state.
+ * - The result is real electrical input power in kW. The calculator does not determine shaft power,
+ *   efficiency, current from load, energy use, or annual cost.
+ *
+ * @heading{Calculation API}
+ * C++ callers include motorDriven/motor/motor_power.h and use:
+ * @code{.cpp}
+ * const double power_kw = motor_power::calculate(460, 100, 0.85);
+ * @endcode
+ * TypeScript callers use the initialized package module:
+ * @code{.ts}
+ * import createModule from 'measur-tools-suite';
+ * const module = await createModule();
+ * const powerKw: number = module.calculateMotorPower(460, 100, 0.85);
+ * @endcode
+ * Both APIs return a scalar and require no cleanup. The C++ namespace function replaces the legacy
+ * MotorPower constructor and calculate() method without a compatibility wrapper. The direct WASM
+ * function is additive; there was no previous MotorPower runtime constructor.
+ */

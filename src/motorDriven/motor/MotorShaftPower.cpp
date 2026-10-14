@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-#include "motorDriven/motor/MotorPower.h"
+#include "motorDriven/motor/motor_power.h"
 #include "motorDriven/motor/MotorPowerFactor.h"
 #include "motorDriven/motor/motor_current.h"
 #include "motorDriven/motor/motor_efficiency.h"
@@ -26,8 +26,7 @@ MotorShaftPower::Output MotorShaftPower::calculate() {
             MotorPowerFactor motorPowerFactor(lineFrequency, motorRPM, efficiencyClass, specifiedEfficiency,
                                               motorRatedPower, tempLoadFraction, current, efficiency, ratedVoltage);
             powerFactor = motorPowerFactor.calculate();
-            MotorPower motorPower(ratedVoltage, current, powerFactor);
-            power = motorPower.calculate();
+            power = motor_power::calculate(ratedVoltage, current, powerFactor);
             if (power > fieldPower || tempLoadFraction > 1.5) {
                 powerE2      = power;
                 lf2          = tempLoadFraction;
@@ -84,8 +83,7 @@ MotorShaftPower::Output MotorShaftPower::calculate() {
                 MotorPowerFactor motorPowerFactor(lineFrequency, motorRPM, efficiencyClass, specifiedEfficiency,
                                                   motorRatedPower, tempLoadFraction, current, efficiency, ratedVoltage);
                 powerFactor = motorPowerFactor.calculate();
-                MotorPower motorPower(ratedVoltage, current, powerFactor);
-                power        = motorPower.calculate();
+                power        = motor_power::calculate(ratedVoltage, current, powerFactor);
                 current2     = current;
                 powerE2      = power;
                 lf2          = tempLoadFraction;
@@ -109,8 +107,7 @@ MotorShaftPower::Output MotorShaftPower::calculate() {
         powerFactor = MotorPowerFactor(lineFrequency, motorRPM, efficiencyClass, specifiedEfficiency, motorRatedPower,
                                        tempLoadFraction, current, efficiency, ratedVoltage)
                           .calculate();
-        MotorPower motorPower(ratedVoltage, current, powerFactor);
-        power    = motorPower.calculate();
+        power    = motor_power::calculate(ratedVoltage, current, powerFactor);
         current1 = current;
         powerE1  = power;
         lf1      = tempLoadFraction;

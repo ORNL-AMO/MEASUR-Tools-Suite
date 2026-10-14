@@ -12,7 +12,7 @@
 
 #include <complex>
 
-#include "motorDriven/motor/MotorPower.h"
+#include "motorDriven/motor/motor_power.h"
 #include "motorDriven/motor/MotorPowerFactor.h"
 #include "motorDriven/motor/motor_current.h"
 #include "motorDriven/motor/motor_efficiency.h"
@@ -40,7 +40,7 @@ OptimalMotorPower::Output OptimalMotorPower::calculate() {
                                           motorRatedPower, tempLoadFraction, current, efficiency, fieldVoltage);
         powerFactor = motorPowerFactor.calculate();
 
-        power   = MotorPower(fieldVoltage, current, powerFactor).calculate();
+        power   = motor_power::calculate(fieldVoltage, current, powerFactor);
         tempMsp = power * efficiency;
         // Converting to KW for matching purpose.
         mspkW = optimalMotorShaftPower * 0.746;
