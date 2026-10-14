@@ -3,8 +3,7 @@
 ## Workflow Metadata
 
 - Lifecycle: active
-- Status: All five persona phases complete; initial independent review's P2 documentation mismatch corrected;
-  targeted review of the correction next.
+- Status: All five persona phases and independent pre-PR review complete; Ready; PR delivery and CI next.
 - Owner: Codex
 - Created / last updated: 2026-10-14
 - Suite issue: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/211
@@ -95,7 +94,7 @@
   localhost server confirmed MathJax equations, symbol tables and both worked examples; no browser errors.
 - Browser tests cover 31 captured native goldens, typed scalar surface and legacy-constructor removal,
   immutable input/state independence, branch-specific ignored inputs and deterministic MotorPerformance zero load.
-- Remaining: independent pre-PR review and PR CI/publication evidence.
+- Remaining: PR CI/publication evidence.
 - Known limits: sandbox attempts blocked Emscripten and npm caches and local port binding; approved reruns passed.
   Doxygen's existing BibTeX failure persists elsewhere in the repository. This page uses verified direct source
   links instead of adding an unresolved numbered bibliography reference.
@@ -108,7 +107,11 @@
 - Finding/disposition: header, TS and engineering prose incorrectly restricted near-zero PREMIUM to 2/4/6 poles.
   Corrected all three to describe motor_efficiency's retained mapping of higher classified counts to the six-pole
   curve. Calculation unchanged. Reviewer independently confirmed existing pole tests pass (9 assertions).
-- Final reviewed head / readiness: pending targeted review.
+- Final reviewed head: `873efc0b988b0aee5ad7720b588e671864288c6e`; readiness: Ready.
+- Targeted read-only re-review confirmed the P2 is resolved and no actionable findings remain.
+- Checks rerun after correction: `npm run verify:types`, `npm run check:docs`, `git diff --check`,
+  Doxygen generation and browser inspection of the corrected model limits. No runtime changes followed native/WASM tests.
+- Subsequent review/delivery evidence-only commits do not change the implementation reviewed at this head.
 - Use `.github/skills/measur-code-review/`; no unresolved P0-P2 finding before PR opening.
 
 ## Open Questions Or Blockers
