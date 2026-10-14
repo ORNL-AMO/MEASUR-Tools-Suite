@@ -9,7 +9,7 @@
 - Suite issue: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/210
 - Suite branch / intended PR base: `codex/motor-power-refactor` / `epic-pump-result-refactor`
 - Synced base commit: `4c573f3cd523f3c897aa6f9c87e565d5a271b61e`
-- Suite PR: pending
+- Suite PR: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/428
 - Desktop coordination: https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8957
 - Held Desktop PR: https://github.com/ORNL-AMO/AMO-Tools-Desktop/pull/8964
 
