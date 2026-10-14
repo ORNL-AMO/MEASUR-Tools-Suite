@@ -171,7 +171,8 @@
  * - For ordinary loaded operation, rated power, current, voltage and efficiency should be positive;
  *   efficiency is a fraction normally at most one. The function neither checks these conditions nor caps load.
  * - Near-zero modeling inherits the motor-efficiency calculator's requirements and data limits. PREMIUM
- *   supports 2-, 4-, or 6-pole motors. SPECIFIED needs positive efficiency for a meaningful estimate;
+ *   uses 2-, 4-, and 6-pole curves; higher classified pole counts use the six-pole curve rather than a
+ *   dedicated higher-pole model. SPECIFIED needs positive efficiency for a meaningful estimate;
  *   negative specified efficiency propagates the model's error. Other classes ignore specified efficiency.
  * - Zero current, loaded zero voltage or loaded zero efficiency can produce infinity or NaN. Negative
  *   inputs retain signed arithmetic; a PF above one is not clamped. There is no fallback or sentinel result.

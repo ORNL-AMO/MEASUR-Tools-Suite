@@ -3,7 +3,8 @@
 ## Workflow Metadata
 
 - Lifecycle: active
-- Status: All five persona phases complete; independent pre-PR review next.
+- Status: All five persona phases complete; initial independent review's P2 documentation mismatch corrected;
+  targeted review of the correction next.
 - Owner: Codex
 - Created / last updated: 2026-10-14
 - Suite issue: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/211
@@ -102,7 +103,12 @@
 ## Internal Review
 
 - Intended base: `epic-pump-result-refactor` at `271487373e5ee985ba61fdd2186c9d3a6bcd07c3`.
-- Reviewed head / reviewer / readiness / findings and dispositions: pending.
+- Initial reviewed head: `a332e902f5c2b79ca85ba80ca4785b247478d479`.
+- Reviewer: `motor_power_factor_review`; initial result Not ready for one P2 documentation finding.
+- Finding/disposition: header, TS and engineering prose incorrectly restricted near-zero PREMIUM to 2/4/6 poles.
+  Corrected all three to describe motor_efficiency's retained mapping of higher classified counts to the six-pole
+  curve. Calculation unchanged. Reviewer independently confirmed existing pole tests pass (9 assertions).
+- Final reviewed head / readiness: pending targeted review.
 - Use `.github/skills/measur-code-review/`; no unresolved P0-P2 finding before PR opening.
 
 ## Open Questions Or Blockers

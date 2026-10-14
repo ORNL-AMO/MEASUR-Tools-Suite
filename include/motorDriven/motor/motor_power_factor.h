@@ -33,8 +33,9 @@ struct Input {
  * @details For abs(load_factor) < 0.001, uses modeled zero-load loss and a retained fixed
  * 460 V apparent-power denominator. Otherwise uses supplied load, efficiency and voltage.
  * Inputs are unvalidated; signed, unclamped and nonfinite arithmetic results are retained.
- * The near-zero efficiency model requires valid motor characteristics, including 2/4/6 poles
- * for PREMIUM and positive specified efficiency for a physically meaningful SPECIFIED result.
+ * The near-zero efficiency model requires valid motor characteristics. PREMIUM uses 2/4/6-pole
+ * curves, mapping higher classified pole counts to the six-pole curve. SPECIFIED needs positive
+ * specified efficiency for a physically meaningful result.
  * @param[in] input Complete motor and operating data; not modified.
  * @return Motor power factor as a dimensionless fraction, not percentage points.
  * @throws std::runtime_error In the near-zero branch when SPECIFIED has negative specified efficiency,

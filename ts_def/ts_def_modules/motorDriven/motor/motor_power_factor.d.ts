@@ -7,7 +7,7 @@ export interface MotorPowerFactorInput {
     lineFrequency: LineFrequency;
     /** Motor speed, units rpm; used only near zero load. */
     motorRpm: number;
-    /** Motor efficiency model; near-zero PREMIUM requires a 2-, 4-, or 6-pole motor. */
+    /** Motor efficiency model; near-zero PREMIUM maps classified pole counts above six to its six-pole curve. */
     efficiencyClass: MotorEfficiencyClass;
     /** Specified efficiency, dimensionless fraction; near-zero SPECIFIED uses it, other classes ignore it. */
     specifiedEfficiency: number;
