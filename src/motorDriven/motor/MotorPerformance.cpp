@@ -8,7 +8,7 @@
 
 #include "motorDriven/motor/MotorPerformance.h"
 
-#include "motorDriven/motor/MotorPowerFactor.h"
+#include "motorDriven/motor/motor_power_factor.h"
 #include "motorDriven/motor/motor_current.h"
 #include "motorDriven/motor/motor_efficiency.h"
 
@@ -28,9 +28,9 @@ MotorPerformance::Output MotorPerformance::calculate() {
             fullLoadAmps)
             .current;
     // Motor Power Factor
-    MotorPowerFactor motorPowerFactor(motorRatedPower, loadFactor, calculatedCurrent, calculatedEfficiency,
-                                      ratedVoltage);
-    powerFactor = motorPowerFactor.calculate() * 100;
+    powerFactor = motor_power_factor::calculate(
+        {lineFrequency, motorRpm, efficiencyClass, specifiedEfficiency, motorRatedPower, loadFactor,
+         calculatedCurrent, calculatedEfficiency, ratedVoltage}) * 100;
     efficiency  = calculatedEfficiency * 100;
     current     = calculatedCurrent / fullLoadAmps * 100;
     return {current, efficiency, powerFactor};

@@ -2,7 +2,6 @@
 #include <motorDriven/motor/MotorData.h>
 
 #include "motorDriven/motor/MotorPerformance.h"
-#include "motorDriven/motor/MotorPowerFactor.h"
 using namespace emscripten;
 
 EMSCRIPTEN_BINDINGS(motorData_class) {
@@ -38,12 +37,6 @@ EMSCRIPTEN_BINDINGS(motorData_class) {
 EMSCRIPTEN_BINDINGS(motor_class) {
     class_<Motor>("Motor")
         .constructor<Motor::LineFrequency, double, double, Motor::EfficiencyClass, double, double, double, double>();
-}
-
-EMSCRIPTEN_BINDINGS(motor_power_factor) {
-    class_<MotorPowerFactor>("MotorPowerFactor")
-        .constructor<double, double, double, double, double>()
-        .function("calculate", &MotorPowerFactor::calculate);
 }
 
 EMSCRIPTEN_BINDINGS(motor_performance) {

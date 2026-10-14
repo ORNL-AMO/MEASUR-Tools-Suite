@@ -3,7 +3,7 @@
 ## Workflow Metadata
 
 - Lifecycle: active
-- Status: Suite PumpResult, Poles, MotorEfficiency, EstimateFLA, and MotorCurrent merged; epic synced with develop; MotorPower active; all remaining Desktop migration is deferred to final integration
+- Status: Suite through MotorPower merged; MotorPowerFactor implementation and local validation complete; all remaining Desktop migration is deferred to final integration
 - Owner: Codex
 - Created: 2026-10-07
 - Last updated: 2026-10-14
@@ -81,8 +81,8 @@ ordered so foundational calculators migrate before the composite calculators tha
 | 3 | #208 MotorEfficiency | Desktop PR #8964 is open and intentionally held without further changes or merge until the full Suite sequence is approved; its existing package pins are `1.2.6-beta.365.1`. | Suite PR #424 merged on 2026-10-13; issue #208 closed; latest published integrated beta `1.2.6-beta.365.1`; last beta with recorded review/validation evidence `1.2.6-beta.363.1`. |
 | 4 | #205 EstimateFLA | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite PR [#425](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/425) merged on 2026-10-13 at `363c011`; Desktop migration deferred to final integration. |
 | 5 | #206 MotorCurrent | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite PR [#426](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/426) merged on 2026-10-13 at `9b3b8da`. See [MotorCurrent handoff](motor-current-refactor.md). |
-| 6 | #210 MotorPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite [PR #428](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/428) open for human review; local validation, independent internal review, and CI passed at `b61a2af`; recorded beta `1.2.6-beta.374.1`. See [MotorPower handoff](motor-power-refactor.md). |
-| 7 | #211 MotorPowerFactor | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |
+| 6 | #210 MotorPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite [PR #428](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/428) merged on 2026-10-14 at `2714873`; recorded validated child beta `1.2.6-beta.374.1`. See [MotorPower handoff](motor-power-refactor.md). |
+| 7 | #211 MotorPowerFactor | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite implementation, native/fresh-WASM validation and rendered documentation inspection complete; independent pre-PR review next. See [MotorPowerFactor handoff](motor-power-factor-refactor.md). |
 | 8 | #212 MotorShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |
 | 9 | #213 OptimalMotorPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |
 | 10 | #220 FluidPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |
@@ -154,8 +154,8 @@ dependency migration, but their public refactors remain separate.
 - Desktop held PR: #8964 remains open, unmodified, and unmerged until the final Suite package is available.
 - Release readiness: Suite PR #421 and Desktop PR #8956 are merged; Poles PR #423, MotorEfficiency PR #424,
   EstimateFLA PR #425, and MotorCurrent PR #426 are merged. The epic was synced with develop at `4c573f3`.
-  MotorPower has passed native/type/fresh-WASM verification and independent pre-PR review with documented
-  local visual/bibliography follow-up; child PR #428 passed CI at `b61a2af` and is open for human review.
+  MotorPower PR #428 merged on 2026-10-14 at `2714873`. MotorPowerFactor has passed native/type/fresh-WASM
+  verification and rendered documentation inspection; independent pre-PR review and child PR CI remain pending.
 - Release blockers: complete and review all remaining Suite modules, pass the integrated Suite review, publish the approved final/RC package, then perform the one Desktop integration/review cycle.
 
 ## Validation
@@ -167,6 +167,10 @@ dependency migration, but their public refactors remain separate.
   Documentation links, whitespace checks, package dry run, and generated-page inspection passed; independent
   internal review is Ready with no actionable findings. Reviewed implementation head: `da8f42a`.
 - Known environment limits: Doxygen reports pre-existing repository warnings and cannot run BibTeX in this environment. Browser security policy prevented opening the generated local HTML page, so generated markup was inspected statically.
+- MotorPowerFactor validation: focused power-factor/pump/fan checks passed 207 assertions in 17 cases; full
+  native tests passed 4,381 assertions in 329 cases; declarations and fresh-WASM verification passed all 267
+  browser tests. Docs/whitespace/package checks and generated MathJax page inspection over localhost passed.
+  The existing BibTeX limitation remains; the new page uses verified direct source links.
 
 ## Internal Review
 
