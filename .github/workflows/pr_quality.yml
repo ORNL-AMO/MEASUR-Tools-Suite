@@ -100,6 +100,9 @@ jobs:
       - name: Check TypeScript declarations
         run: npm run verify:types
 
+      - name: Check beta version allocation and publication failures
+        run: node --test scripts/publish-beta-package.test.mjs
+
       - name: Check local Markdown links
         run: npm run check:docs
 

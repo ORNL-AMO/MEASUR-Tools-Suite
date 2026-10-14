@@ -46,6 +46,10 @@ Every handoff must include:
 
 Keep investigation history and long review matrices in linked GitHub issues or a clearly labeled appendix. When the work is finished, mark the handoff `completed` or `archived`, record unresolved validation accurately, and retain the file only when it provides durable migration or formula provenance.
 
+Record post-push CI and exact package-publication evidence in the linked PR description or CI comments.
+Link that evidence location from the handoff before pushing. Do not push follow-up commits whose only purpose
+is to record a beta version or its CI result: each push can publish another beta and restart the evidence cycle.
+
 ## Pre-PR Internal Review Gate
 
 Complete an internal review after implementation and validation but before opening a pull request:

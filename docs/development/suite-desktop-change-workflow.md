@@ -73,6 +73,12 @@ This internal gate improves PR readiness but does not replace human approval or 
 2. Complete the Suite pre-PR internal review and record its evidence in the handoff.
 3. Open or ready the Suite PR. The current GitHub workflow publishes a beta package for ready, same-repository PRs targeting `develop`.
 4. Record the exact beta version in the Desktop issue and update both Desktop dependency pins when the process-flow package consumes the Suite.
+
+   Beta versions use the PR number and that PR's next published revision, for example
+   `1.2.6-beta.430.1` followed by `1.2.6-beta.430.2`. CI publishes the exact version as a PR comment.
+   Pin that exact version for validation; the `beta` tag identifies the most recent publication across PRs.
+   Keep post-push CI and publication evidence in the PR description or comments; a handoff can link there.
+   Do not push version-recording-only commits, which trigger another publication.
 5. Update Desktop wrappers and other consumers, run the relevant typecheck, application tests, regression tests, and web/Electron checks, then complete the Desktop pre-PR internal review before opening its PR.
 6. Record Desktop validation results and remaining SME or release decisions in the Desktop issue.
 7. Merge and publish the appropriate Suite RC or final package.
