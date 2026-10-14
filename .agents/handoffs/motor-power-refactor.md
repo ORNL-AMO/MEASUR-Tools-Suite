@@ -3,7 +3,7 @@
 ## Workflow Metadata
 
 - Lifecycle: completed
-- Status: all five persona phases, local verification, and independent pre-PR review complete; PR CI/human review pending
+- Status: all five persona phases, local verification, independent review, and PR CI/beta publication complete; human review pending
 - Owner: Codex
 - Created / last updated: 2026-10-14
 - Suite issue: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/210
@@ -69,7 +69,12 @@
 ## Package And Release Coordination
 
 - Classification: breaking C++ source API; additive WASM/TypeScript API; behavior preserved.
-- Beta: pending ready child PR CI; final package: integrated epic release. No local version bump.
+- Recorded beta: `1.2.6-beta.374.1`, published for head `b61a2af8281c45873ca58c3769efc0bafc31cf5d`.
+  Evidence: [CI publication comment](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/428#issuecomment-6172509451)
+  and [successful workflow](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/actions/runs/38593115132).
+  Earlier PR head `95af509` published `.373.1`; subsequent handoff-only commits may produce newer betas.
+  This record identifies the exact published package with recorded CI evidence, not a Desktop-tested package.
+- Final package: integrated epic release. No local version bump.
 - Keep runtime/package paths unchanged; verify freshly built/staged JS/WASM and packaged declarations.
 - No individual MotorPower Desktop package-pin update or beta validation; final integration uses aligned pins.
 
@@ -98,7 +103,9 @@
 - Browser security review blocked the generated local `file:` URL. No workaround was attempted;
   visual/MathJax inspection is unavailable. Generated HTML sections, example, API, and local links are
   checked directly. Report this remaining visual-validation gap accurately.
-- Remaining: child PR CI/human review; visual/MathJax and bibliography-numbering follow-up documented above;
+- PR CI at `b61a2af`: native, declaration/docs, rebuilt-WASM, beta publication, and publication-comment jobs
+  all succeeded. No implementation changes followed that head; this metadata-only update records the outcome.
+- Remaining: human review and any CI rerun of delivery metadata; visual/MathJax and bibliography-numbering follow-up;
   final integrated Suite-to-Desktop verification after the remaining calculators merge.
 
 ## Internal Review
