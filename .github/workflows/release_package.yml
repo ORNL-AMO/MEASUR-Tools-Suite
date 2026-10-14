@@ -6,6 +6,11 @@ on:
       release_channel:
         required: true
         type: string
+      pull_request_number:
+        description: PR number used for beta versioning; required for the beta channel
+        required: false
+        type: number
+        default: 0
       wasm_artifact_name:
         description: Name of the tested WASM artifact uploaded by the quality workflow
         required: true
@@ -29,7 +34,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     outputs:
-      published_version: ${{ steps.pkg_version.outputs.PKG_VERSION }}
+      published_version: ${{ steps.publish_package.outputs.PKG_VERSION }}
     defaults:
       run:
         shell: bash
@@ -51,22 +56,12 @@ jobs:
           cache-dependency-path: package-lock.json
           registry-url: https://registry.npmjs.org/
 
-      - name: Set package version
-        id: pkg_version
-        env:
-          RELEASE_CHANNEL: ${{ inputs.release_channel }}
+      - name: Set release-candidate version
+        if: inputs.release_channel == 'rc'
         run: |
           package_version="$(node -p "require('./package.json').version")"
-
-          if [[ "$RELEASE_CHANNEL" == "beta" || "$RELEASE_CHANNEL" == "rc" ]]; then
-            # Run number and attempt are immutable for this workflow execution. They
-            # avoid collisions when npm's version index has not yet reflected a prior
-            # publish, and give reruns a distinct prerelease version.
-            package_version="${package_version}-${RELEASE_CHANNEL}.${GITHUB_RUN_NUMBER}.${GITHUB_RUN_ATTEMPT}"
-            npm --no-git-tag-version version "$package_version"
-          fi
-
-          echo "PKG_VERSION=$package_version" >> "$GITHUB_OUTPUT"
+          # Retain run-based uniqueness for release candidates and their reruns.
+          npm --no-git-tag-version version "${package_version}-rc.${GITHUB_RUN_NUMBER}.${GITHUB_RUN_ATTEMPT}"
 
       - name: Install npm dependencies
         run: npm ci
@@ -84,15 +79,24 @@ jobs:
           ls -l bin/client.js bin/client.wasm
 
       - name: Publish release to registry
+        id: publish_package
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
-        run: npm publish --tag "${{ inputs.release_channel }}"
+          RELEASE_CHANNEL: ${{ inputs.release_channel }}
+          PR_NUMBER: ${{ inputs.pull_request_number }}
+        run: |
+          if [[ "$RELEASE_CHANNEL" == "beta" ]]; then
+            node scripts/publish-beta-package.mjs
+          else
+            npm publish --tag "$RELEASE_CHANNEL"
+            echo "PKG_VERSION=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Publish GitHub release
         if: inputs.release_channel == 'latest'
         uses: softprops/action-gh-release@v3
         env:
-          VERSION: ${{ steps.pkg_version.outputs.PKG_VERSION }}
+          VERSION: ${{ steps.publish_package.outputs.PKG_VERSION }}
         with:
           name: MEASUR-Tools-Suite v${{ env.VERSION }}
           tag_name: v${{ env.VERSION }}
