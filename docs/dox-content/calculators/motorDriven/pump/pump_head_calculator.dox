@@ -6,18 +6,18 @@
  * Pump head is the mechanical energy that the pump adds to each unit weight of fluid, expressed as
  * feet of the pumped fluid. For steady, incompressible flow, that energy appears as changes in
  * elevation, pressure, and velocity and as energy dissipated between the measurement locations and
- * the pump flanges. The calculator combines those contributions to reconstruct the operating pump
+ * the pump flanges. The calculator combines those contributions to reconstruct the pump
  * head from field data. This approach follows the Pumping System Assessment Tool (PSAT) head-tool
  * method described in @cite casada2008psat.
  *
  * @heading{Final Result}
- * Total operating pump head is the sum of three signed differential heads and two estimated line
+ * Pump head is the sum of three signed differential heads and two estimated line
  * losses:
  * @formula{pump-head-total;
  *   H_{pump}=\Delta H_z+\Delta H_p+\Delta H_v+H_{f,s}+H_{f,d}
  * }
  * @symtable
- * @symrow{H_{pump}; Total operating pump head; \foot}
+ * @symrow{H_{pump}; Pump head; \foot}
  * @symrow{\Delta H_z; Discharge-minus-suction elevation head; \foot}
  * @symrow{\Delta H_p; Discharge-minus-suction pressure head; \foot}
  * @symrow{\Delta H_v; Discharge-minus-suction velocity head; \foot}
@@ -35,7 +35,7 @@
  *
  * | Configuration | Suction reference point | Suction pressure | Suction velocity used in @math{\Delta H_v} |
  * |---|---|---|---|
- * | Suction gauge | Centerline of the suction pressure gauge | Measured suction gauge pressure @math{P_s} | Velocity in the suction pipe |
+ * | Suction gauge | Center of the suction pressure gauge | Measured suction gauge pressure @math{P_s} | Velocity in the suction pipe |
  * | Suction tank | Fluid surface in a tank, well, or reservoir | Gas overpressure above the fluid @math{P_t}; use 0 psig when open to atmosphere | Zero at the tank surface |
  *
  * In both configurations, the suction-pipe velocity is still calculated because it is needed for
@@ -43,11 +43,15 @@
  * surface to zero when calculating the differential velocity head.
  *
  * @heading{Measurements and Sign Convention}
- * - Measure flow in U.S. gallons per minute and pipe inside diameters in inches.
+ * - Measure flow in U.S. gallons per minute and pipe inside diameters in inches. For each gauge,
+ *   use the pipe inside diameter at its pressure-measurement location @cite casada2008psat.
  * - Enter pressures as gauge pressure in psig. Vacuum on the suction side may therefore be entered
  *   as a negative gauge pressure.
  * - Reference every elevation to the same datum. The datum may be arbitrary, such as a plant floor,
- *   because only elevation differences are used.
+ *   because only elevation differences are used @cite casada2008psat.
+ * - Measure gauge elevation at the center of the gauge, not the center of the pipe. The elevation
+ *   must correspond to the supplied pressure reading. If a reading has been corrected to another
+ *   reference elevation, use that elevation instead.
  * - Use one steady flow rate for the suction and discharge pipes.
  * - Enter fluid specific gravity relative to the reference water used by the pressure-head
  *   conversion.
@@ -71,13 +75,14 @@
  * }
  * @symtable
  * @symrow{\Delta H_z; Discharge-minus-suction elevation head; \foot}
- * @symrow{z_d; Discharge-gauge centerline elevation; \foot}
- * @symrow{z_s; Suction-gauge centerline elevation; \foot}
+ * @symrow{z_d; Elevation of the center of the discharge gauge from the common datum; \foot}
+ * @symrow{z_s; Elevation of the center of the suction gauge from the common datum; \foot}
  * @symrow{z_t; Suction-tank fluid-surface elevation; \foot}
  * @endsymtable
  *
  * A discharge gauge below the suction reference point produces a negative elevation-head
- * contribution. This is physically valid and reduces the head the pump must develop.
+ * contribution. This is physically valid; it adjusts for the lower discharge gauge and partially
+ * offsets the pressure-head contribution.
  *
  * @heading{Pressure Head}
  * Pressure head follows from the hydrostatic relation @math{H=p/\gamma}. Pressure in psi is first
@@ -89,11 +94,11 @@
  *   \Delta H_p=\frac{144\,\Delta P}{\gamma_w SG}=\frac{\Delta P}{k_p SG}
  * }
  * @symtable
- * @symrow{\gamma; Specific weight of the pumped fluid; \pound\per\cubicFoot}
- * @symrow{\gamma_w; Reference-water specific weight represented by the calculator, 62.316000144; \pound\per\cubicFoot}
+ * @symrow{\gamma; Specific weight of the pumped fluid; \lbf\per\foot\cubed}
+ * @symrow{\gamma_w; Reference-water specific weight represented by the calculator, 62.316000144; \lbf\per\foot\cubed}
  * @symrow{SG; Fluid specific gravity relative to the reference water; \unitless}
  * @symrow{k_p; Reference-water pressure gradient, 0.432750001; \psi\per\foot}
- * @symrow{144; Square inches per square foot; \squareInch\per\squareFoot}
+ * @symrow{144; Square inches per square foot; \inch\squared\per\foot\squared}
  * @symrow{\Delta P; Discharge-minus-suction gauge-pressure difference; \psi}
  * @symrow{\Delta H_p; Discharge-minus-suction pressure head; \foot}
  * @endsymtable
@@ -112,10 +117,17 @@
  * @symrow{P_t; Suction-tank gas overpressure; \psig}
  * @endsymtable
  *
- * The retained pressure gradient is equivalent to 2.310803 feet of water per psi at
- * @math{SG=1}. DOE pump guidance commonly explains this relationship with the engineering
- * approximation 2.31 feet per psi and a water specific weight of approximately 62.3 pounds-force
- * per cubic foot @cite doe2000energyMatters.
+ * Specific gravity compares the fluid's mass density with that of the reference water. Water near
+ * 68 degrees Fahrenheit (20 degrees Celsius) has a mass density of approximately 62.3
+ * @unitb{\lbm\per\foot\cubed}; Table 34 of the Bureau of Standards reference tables gives
+ * approximately 62.316 pounds per cubic foot at 20 degrees Celsius @cite nbs1924densityTables.
+ * Under standard gravity, mass density in lbm per cubic foot and specific weight in lbf per cubic
+ * foot have the same numerical value, but they describe different quantities: mass per volume and
+ * weight per volume, respectively. The pressure-head equation uses specific weight.
+ *
+ * The retained pressure gradient is consistent with these approximate reference-water properties
+ * and gives 2.310803 feet of water per psi at @math{SG=1}. The familiar 2.31 feet per psi is an
+ * engineering approximation @cite doe2000energyMatters @cite hydraulicInstituteSystemCurves.
  *
  * @heading{Pipe Velocity and Velocity Head}
  * Convert the entered flow and diameter before applying continuity and the velocity-head relation:
@@ -123,9 +135,9 @@
  *   Q=\frac{q}{k_Q},\qquad D_{ft}=\frac{D}{12}
  * }
  * @symtable
- * @symrow{Q; Volumetric flow rate used by the velocity calculation; \cubicFoot\per\second}
+ * @symrow{Q; Volumetric flow rate used by the velocity calculation; \foot\cubed\per\second}
  * @symrow{q; Entered volumetric flow rate; \gallon\per\minute}
- * @symrow{k_Q; Retained flow conversion, 448.8311693; \gallon\second\per\minute\cubicFoot}
+ * @symrow{k_Q; Retained flow conversion, 448.8311693; \gallon\second\per\minute\foot\cubed}
  * @symrow{D_{ft}; Pipe inside diameter used by the area calculation; \foot}
  * @symrow{D; Entered pipe inside diameter; \inch}
  * @symrow{12; Inches per foot; \inch\per\foot}
@@ -137,11 +149,11 @@
  *   H_v=\frac{v^2}{2g}
  * }
  * @symtable
- * @symrow{A; Internal pipe cross-sectional area; \squareFoot}
+ * @symrow{A; Internal pipe cross-sectional area; \foot\squared}
  * @symrow{\pi; Circle ratio; \unitless}
  * @symrow{D_{ft}; Pipe inside diameter; \foot}
  * @symrow{v; Average pipe velocity; \foot\per\second}
- * @symrow{Q; Volumetric flow rate; \cubicFoot\per\second}
+ * @symrow{Q; Volumetric flow rate; \foot\cubed\per\second}
  * @symrow{H_v; Pipe velocity head; \foot}
  * @symrow{g; Gravitational acceleration, 32.174; \foot\per\second\squared}
  * @symrow{4; Geometric denominator for circular area expressed with diameter; \unitless}
@@ -204,8 +216,8 @@
  *   k_{Q,exact}=\frac{1728}{231}(60)=448.831168831\ldots
  * }
  * @symtable
- * @symrow{k_{Q,exact}; Unit-derived gallons per minute in one cubic foot per second; \gallon\second\per\minute\cubicFoot}
- * @symrow{1728; Cubic inches per cubic foot; \inch\cubed\per\cubicFoot}
+ * @symrow{k_{Q,exact}; Unit-derived gallons per minute in one cubic foot per second; \gallon\second\per\minute\foot\cubed}
+ * @symrow{1728; Cubic inches per cubic foot; \inch\cubed\per\foot\cubed}
  * @symrow{231; Cubic inches per U.S. liquid gallon; \inch\cubed\per\gallon}
  * @symrow{60; Seconds per minute; \second\per\minute}
  * @endsymtable
@@ -214,11 +226,19 @@
  * value so existing calculation results remain unchanged. See
  * @ref physics::conversions::kGallonsPerMinutePerCubicFootPerSecond.
  *
+ * Head is expressed in feet because it is energy per unit weight of fluid: foot-pounds of energy
+ * per pound-force reduce to feet. This also relates pressure to the height of a liquid column
+ * @cite hydraulicInstituteSystemCurves. For a centrifugal pump at the same flow rate, speed, and
+ * impeller geometry, with comparable viscosity and no cavitation, head is approximately independent
+ * of fluid density, while the pressure rise for that head changes with specific gravity.
+ *
  * The pressure factor is a reference property rather than a pure unit conversion. The retained
- * 0.432750001 psi per foot represents the chosen reference-water pressure gradient. It implies
- * @math{\gamma_w=144(0.432750001)=62.316000144} pounds-force per cubic foot and the reciprocal
- * 2.310803 feet per psi. Its exact historical source and precision are not recorded, so the value is
- * preserved as a compatibility constant rather than presented as a universal water property. See
+ * 0.432750001 psi per foot implies
+ * @math{\gamma_w=144(0.432750001)=62.316000144} @unitb{\lbf\per\foot\cubed}, consistent with
+ * approximate water properties near 68 degrees Fahrenheit @cite nbs1924densityTables.
+ * Its reciprocal is 2.310803 feet per psi, commonly approximated as 2.31. The calculator retains the
+ * exact stored factor so existing results remain unchanged; the numerical relationship does not
+ * establish the historical origin of its final digits. See
  * @ref physics::conversions::kPsiPerFootOfWater.
  *
  * @heading{Worked Suction-Gauge Example}
@@ -234,7 +254,7 @@
  * | @math{\Delta H_v} | 0.103859 | The smaller discharge pipe has the greater velocity head. |
  * | @math{H_{f,s}} | 0.101040 | Estimated loss from the suction gauge to the pump. |
  * | @math{H_{f,d}} | 0.204899 | Estimated loss from the pump to the discharge gauge. |
- * | **@math{H_{pump}}** | **100.395932** | Sum of all five contributions. |
+ * | <b>@math{\boldsymbol{H_{pump}}}</b> | <b>100.395932</b> | <b>Sum of all five contributions.</b> |
  *
  * The negative elevation term does not indicate an error; it offsets part of the pressure-head rise.
  *
@@ -275,14 +295,19 @@
  * @heading{Assumptions and Limits}
  * - Flow is steady and incompressible, and the same volumetric flow passes through both pipes.
  * - Pipe diameters are inside diameters. Specific gravity is constant over the calculation.
- * - Pressure measurements are gauge pressures and elevations share a common datum.
+ * - Each gauge measures pressure on pipe of the entered inside diameter @cite casada2008psat.
+ *   In the tank configuration, the suction diameter is the reference for suction-line losses, while
+ *   the suction elevation and pressure refer to the tank fluid surface.
+ * - Pressure measurements are gauge pressures and elevations share a common datum. Gauge
+ *   elevations refer to the centers of the gauges unless the supplied readings have been corrected
+ *   to another reference elevation; then use the corresponding corrected reference elevations.
  * - The suction tank or reservoir is large enough that fluid velocity at its surface is negligible.
  * - Loss coefficients are supplied by the user, are normalized to the entered reference-pipe
  *   diameters, and represent only the paths between the reference points and pump flanges.
  * - The calculation does not enforce physical input ranges. Specific gravity and pipe diameters
  *   must be greater than zero, and users must determine whether the measurements and coefficients
  *   are suitable for the system being assessed.
- * - This calculation determines operating pump head; it does not calculate net positive suction
+ * - This calculation determines pump head; it does not calculate net positive suction
  *   head, pump efficiency, cavitation margin, transient behavior, or a complete system curve.
  *
  * @heading{Related Implementation}
