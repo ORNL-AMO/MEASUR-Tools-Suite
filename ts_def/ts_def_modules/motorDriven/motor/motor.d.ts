@@ -135,42 +135,6 @@ export declare class Motor {
 }
 
 /**
- * Motor power factor calculator.
- */
-export declare class MotorPowerFactor {
-    /**
-     * Constructor
-     * @param motorRatedPower Rated motor power, units hp.
-     *
-     * @param loadFactor Load factor, dimensionless fraction.
-     *
-     * @param motorCurrent Motor current, units A.
-     *
-     * @param motorEfficiency Motor efficiency, dimensionless fraction.
-     *
-     * @param ratedVoltage Rated motor voltage, units V.
-     *
-     */
-    constructor(
-        motorRatedPower: number,
-        loadFactor: number,
-        motorCurrent: number,
-        motorEfficiency: number,
-        ratedVoltage: number );
-
-    /**
-     * Calculates the motor power factor.
-     *
-     * @returns Motor power factor, dimensionless.
-     *
-     */
-    calculate(): number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
-}
-
-/**
  * Result object returned by {@link MotorPerformance.calculate}.
  *
  * @property current Motor current, units A.
@@ -250,7 +214,6 @@ export declare class MotorPerformance {
 export type MotorModule = {
     MotorData: typeof MotorData;
     Motor: typeof Motor;
-    MotorPowerFactor: typeof MotorPowerFactor;
     MotorPerformanceOutput: typeof MotorPerformanceOutput;
     MotorPerformance: typeof MotorPerformance;
 };
