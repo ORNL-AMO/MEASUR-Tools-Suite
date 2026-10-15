@@ -12,7 +12,7 @@
 
 #include "motorDriven/fans/FanResult.h"
 
-#include "motorDriven/motor/MotorShaftPower.h"
+#include "motorDriven/motor/motor_shaft_power.h"
 #include "motorDriven/motor/OptimalMotorPower.h"
 #include "motorDriven/motor/OptimalMotorShaftPower.h"
 #include "motorDriven/pumpFan/FanEnergyIndex.h"
@@ -21,14 +21,13 @@
 #include "motorDriven/pumpFan/OptimalPumpShaftPower.h"
 
 FanResult::Output FanResult::calculateExisting(Fan::FieldDataBaseline const fanFieldData) {
-    MotorShaftPower               motorShaftPower(motor.motorRatedPower, fanFieldData.measuredPower, motor.motorRpm,
-                                                  motor.lineFrequency, motor.efficiencyClass, motor.specifiedEfficiency,
-                                                  motor.motorRatedVoltage, motor.fullLoadAmps, fanFieldData.measuredVoltage,
-                                                  fanFieldData.loadEstimationMethod, fanFieldData.measuredAmps);
-    MotorShaftPower::Output const output = motorShaftPower.calculate();
+    const auto output = motor_shaft_power::calculate({
+        motor.motorRatedPower, fanFieldData.measuredPower, motor.motorRpm, motor.lineFrequency,
+        motor.efficiencyClass, motor.specifiedEfficiency, motor.motorRatedVoltage, motor.fullLoadAmps,
+        fanFieldData.measuredVoltage, fanFieldData.loadEstimationMethod, fanFieldData.measuredAmps});
 
     MoverShaftPower::Output const moverShaftPower =
-        MoverShaftPower(output.shaftPower, fanInput.drive, fanInput.specifiedEfficiency).calculate();
+        MoverShaftPower(output.shaft_power, fanInput.drive, fanInput.specifiedEfficiency).calculate();
     double const fanShaftPower   = moverShaftPower.moverShaftPower;
     double const driveEfficiency = moverShaftPower.driveEfficiency;
     double const fanEfficiency =
@@ -44,16 +43,16 @@ FanResult::Output FanResult::calculateExisting(Fan::FieldDataBaseline const fanF
                                                  fanFieldData.outletPressure, fanInput.airDensity, output.power)
                                       .calculateEnergyIndex();
 
-    return {motorShaftPower.calculate(),
+    return {output,
             fanEfficiency,
             motor.motorRatedPower,
             fanShaftPower,
             annualEnergy,
             annualCost,
             fanEnergyIndex,
-            output.loadFactor,
+            output.load_factor,
             driveEfficiency,
-            output.estimatedFLA};
+            output.estimated_fla};
 }
 
 FanResult::Output FanResult::calculateModified(Fan::FieldDataModified const fanFieldData, double fanEfficiency) {

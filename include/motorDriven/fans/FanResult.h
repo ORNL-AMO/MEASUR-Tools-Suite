@@ -13,7 +13,7 @@
  *
  */
 
-#include "motorDriven/motor/MotorShaftPower.h"
+#include "motorDriven/motor/motor_shaft_power.h"
 
 namespace Fan {
 struct Input {
@@ -86,11 +86,11 @@ class FanResult {
               fanEnergyIndex(fanEnergyIndex), loadFactor(loadFactor), driveEfficiency(driveEfficiency),
               estimatedFLA(estimatedFLA) {}
 
-        Output(const MotorShaftPower::Output& output, const double fanEfficiency, const double motorRatedPower,
+        Output(const motor_shaft_power::Result& output, const double fanEfficiency, const double motorRatedPower,
                const double fanShaftPower, const double annualEnergy, const double annualCost, const double fanEnergyIndex,
                const double loadFactor, const double driveEfficiency, const double estimatedFLA = 0)
-            : fanEfficiency(fanEfficiency), motorRatedPower(motorRatedPower), motorShaftPower(output.shaftPower),
-              fanShaftPower(fanShaftPower), motorEfficiency(output.efficiency), motorPowerFactor(output.powerFactor),
+            : fanEfficiency(fanEfficiency), motorRatedPower(motorRatedPower), motorShaftPower(output.shaft_power),
+              fanShaftPower(fanShaftPower), motorEfficiency(output.efficiency), motorPowerFactor(output.power_factor),
               motorCurrent(output.current), motorPower(output.power), annualEnergy(annualEnergy),
               annualCost(annualCost), fanEnergyIndex(fanEnergyIndex), loadFactor(loadFactor),
               driveEfficiency(driveEfficiency), estimatedFLA(estimatedFLA) {}

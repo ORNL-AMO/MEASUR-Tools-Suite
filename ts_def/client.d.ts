@@ -35,6 +35,7 @@ export * from "./ts_def_modules/motorDriven/motor/estimate_fla";
 export * from "./ts_def_modules/motorDriven/motor/motor_current";
 export * from "./ts_def_modules/motorDriven/motor/motor_power";
 export * from "./ts_def_modules/motorDriven/motor/motor_power_factor";
+export * from "./ts_def_modules/motorDriven/motor/motor_shaft_power";
 export * from "./ts_def_modules/motorDriven/motor/motor_efficiency";
 export * from "./ts_def_modules/motorDriven/motor/motorEnum";
 
@@ -153,6 +154,7 @@ export type MeasurToolsSuite =
     import("./ts_def_modules/motorDriven/motor/motor_current").MotorCurrentModule &
     import("./ts_def_modules/motorDriven/motor/motor_power").MotorPowerModule &
     import("./ts_def_modules/motorDriven/motor/motor_power_factor").MotorPowerFactorModule &
+    import("./ts_def_modules/motorDriven/motor/motor_shaft_power").MotorShaftPowerModule &
     import("./ts_def_modules/motorDriven/motor/motor_efficiency").MotorEfficiencyModule &
     // motorDriven/pump
     import("./ts_def_modules/motorDriven/pump/pump_result").PumpResultModule &
