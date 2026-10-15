@@ -2,8 +2,8 @@
 
 ## Workflow Metadata
 
-- Lifecycle: completed
-- Status: All five persona phases and independent review complete; Ready at 17a30db; local delivery complete, PR/CI/publication pending.
+- Lifecycle: active
+- Status: Readability follow-up implemented and verified; independent re-review pending; PR/CI/publication pending.
 - Owner: Codex
 - Created / last updated: 2026-10-15
 - Suite issue: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/212
@@ -46,7 +46,7 @@
 ## Formulas, Units And Documentation
 
 - Engineering question: how much mechanical shaft power does a measured motor electrical operating point deliver?
-- Final shaft power: electrical input kW times modeled efficiency fraction, divided by 0.746 kW/hp.
+- Final shaft power: electrical input kW times modeled efficiency fraction, divided by `physics::conversions::kBhpToKw` (0.746 kW/hp).
 - POWER starts at load 0.01; CURRENT starts at 0.00. Retain repeated 0.01 additions, strict measurement comparisons
   and `load > 1.5`, both interpolation paths and voltage corrections, supplied-FLA normalization and estimated FLA.
 - POWER ignores measured current; CURRENT ignores measured power. No validation, defaults, new clamping,
@@ -103,3 +103,21 @@
 ## Open Questions Or Blockers
 
 - No unresolved API or calculation-policy decisions.
+
+## Readability Follow-Up (2026-10-15)
+
+- User requested separate POWER/CURRENT functions, the shared horsepower conversion constant, and improved maintainability.
+- Public `calculate()` now only dispatches to private `calculateFromPower()` / `calculateFromCurrent()`.
+  A private `OperatingPoint` groups named lower/upper load data; helpers share current/model evaluation,
+  interpolation and voltage adjustments without exposing a new API.
+- Named 1% increment, reciprocal interpolation scale and search limit replace unexplained literals.
+  Both shaft-power conversions use `physics::conversions::kBhpToKw`, whose value remains exactly 0.746.
+- Preserved dependency evaluation order, accumulated load additions/subtraction, zero POWER anchor,
+  strict comparisons, post-search CURRENT voltage correction, extrapolation and nonfinite behavior.
+- Focused native tests passed 446 assertions / 16 cases; full native suite passed 4,675 assertions / 332 cases.
+  Fresh `npm run verify:wasm` rebuilt/staged both assets and passed all 270 browser tests, including typechecking.
+- A temporary differential harness compiled the preceding committed implementation in a separate namespace
+  and compared 1,152 operating points with the revised source: every non-NaN output matched bit-for-bit,
+  including signed zero/infinity; NaN classifications matched. No harness files were added to the repository.
+- No interface, binding, declaration or engineering-formula changes; existing goldens remain unchanged.
+- Independent re-review: pending against the epic base; the earlier Ready result above covers only its recorded head.
