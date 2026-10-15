@@ -1,6 +1,6 @@
 #include "motorDriven/pump/pump_result.h"
 
-#include "motorDriven/motor/MotorShaftPower.h"
+#include "motorDriven/motor/motor_shaft_power.h"
 #include "motorDriven/motor/OptimalMotorPower.h"
 #include "motorDriven/motor/OptimalMotorShaftPower.h"
 #include "motorDriven/pumpFan/MoverEfficiency.h"
@@ -13,13 +13,12 @@ namespace pump_result {
 Result calculateExisting(const ExistingInput& input) {
     const auto& system = input.system;
     const auto motorOutput =
-        MotorShaftPower(system.motor_rated_power, input.measured_motor_power, system.motor_rated_speed,
+        motor_shaft_power::calculate({system.motor_rated_power, input.measured_motor_power, system.motor_rated_speed,
                         system.line_frequency, system.motor_efficiency_class, system.specified_motor_efficiency,
                         system.motor_rated_voltage, input.motor_full_load_amps, system.operating_voltage,
-                        input.load_estimation_method, input.measured_motor_current)
-            .calculate();
+                        input.load_estimation_method, input.measured_motor_current});
 
-    const auto moverOutput = MoverShaftPower(motorOutput.shaftPower, system.drive,
+    const auto moverOutput = MoverShaftPower(motorOutput.shaft_power, system.drive,
                                               system.specified_drive_efficiency)
                                  .calculate();
 
@@ -40,17 +39,17 @@ Result calculateExisting(const ExistingInput& input) {
     return {
         pumpEfficiency,
         system.motor_rated_power,
-        motorOutput.shaftPower,
+        motorOutput.shaft_power,
         moverOutput.moverShaftPower,
         motorOutput.efficiency,
-        motorOutput.powerFactor,
+        motorOutput.power_factor,
         motorOutput.current,
         motorOutput.power,
         annualEnergy,
         annualCost,
-        motorOutput.loadFactor,
+        motorOutput.load_factor,
         moverOutput.driveEfficiency,
-        motorOutput.estimatedFLA,
+        motorOutput.estimated_fla,
     };
 }
 
