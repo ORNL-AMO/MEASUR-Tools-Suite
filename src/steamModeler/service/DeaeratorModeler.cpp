@@ -1,4 +1,5 @@
 #include "steamModeler/service/DeaeratorModeler.h"
+#include "steamModeler/Header.h"
 #include "steamModeler/util/SteamModelerLogger.h"
 
 Deaerator DeaeratorModeler::model(
@@ -6,7 +7,8 @@ Deaerator DeaeratorModeler::model(
     const HighPressureHeaderCalculationsDomain&                    highPressureHeaderCalculationsDomain,
     const std::shared_ptr<MediumPressureHeaderCalculationsDomain>& mediumPressureHeaderCalculationsDomain,
     const std::shared_ptr<LowPressureHeaderCalculationsDomain>&    lowPressureHeaderCalculationsDomain,
-    const MakeupWaterAndCondensateHeaderCalculationsDomain& makeupWaterAndCondensateHeaderCalculationsDomain) const {
+    const MakeupWaterAndCondensateHeaderCalculationsDomain&        makeupWaterAndCondensateHeaderCalculationsDomain,
+    const std::shared_ptr<FlashTank>&                              blowdownFlashTank) const {
     const std::string methodName = std::string("DeaeratorModeler::") + std::string(__func__) + ": ";
 
     SM_LOG(methodName << "calculating deaerator");
@@ -15,7 +17,8 @@ Deaerator DeaeratorModeler::model(
         headerCountInput, boiler, mediumPressureHeaderCalculationsDomain, lowPressureHeaderCalculationsDomain);
     const Deaerator& deaerator = makeDeaerator(headerCountInput, boilerInput, highPressureHeaderCalculationsDomain,
                                                lowPressureHeaderCalculationsDomain,
-                                               makeupWaterAndCondensateHeaderCalculationsDomain, feedwaterMassFlow);
+                                               makeupWaterAndCondensateHeaderCalculationsDomain, feedwaterMassFlow,
+                                               blowdownFlashTank);
 
     return deaerator;
 }
@@ -75,7 +78,8 @@ Deaerator DeaeratorModeler::makeDeaerator(
     const HighPressureHeaderCalculationsDomain&                 highPressureHeaderCalculationsDomain,
     const std::shared_ptr<LowPressureHeaderCalculationsDomain>& lowPressureHeaderCalculationsDomain,
     const MakeupWaterAndCondensateHeaderCalculationsDomain&     makeupWaterAndCondensateHeaderCalculationsDomain,
-    const double                                                feedwaterMassFlow) const {
+    const double                                                feedwaterMassFlow, 
+    const std::shared_ptr<FlashTank>& blowdownFlashTank) const {
     const std::string methodName = std::string("DeaeratorModeler::") + std::string(__func__) + ": ";
 
     // 6B. Calculate Deaerator
@@ -83,9 +87,25 @@ Deaerator DeaeratorModeler::makeDeaerator(
 
     const SteamSystemModelerTool::FluidProperties& makeupWaterAndCondensateHeaderOutput =
         makeupWaterAndCondensateHeaderCalculationsDomain.makeupWaterAndCondensateHeaderOutput;
-    const SteamSystemModelerTool::FluidProperties& inletHeaderOutput =
+
+
+
+    const SteamSystemModelerTool::FluidProperties& inletFromHeader =
         headerCountInput == 1 ? highPressureHeaderCalculationsDomain.highPressureHeaderOutput
                               : lowPressureHeaderCalculationsDomain->lowPressureHeaderOutput;
+
+    // ISSUE 312: combine inlet header output with blowdown flash tank output when
+    // blowdown is flashed and sent to the deaerator
+    SteamSystemModelerTool::FluidProperties inletHeaderOutput = inletFromHeader;
+
+    if (headerCountInput > 1 && blowdownFlashTank != nullptr
+        && boilerInput.isBlowdownFlashed() && boilerInput.isSendBlowdownToDeaerator()) {
+        const Inlet  headerInlet       = inletFactory.makeWithEnthalpy(inletFromHeader);
+        const Inlet  blowdownInlet     = inletFactory.makeFromOutletGas(blowdownFlashTank);
+        const double deaeratorPressure = boilerInput.getDeaeratorPressure();
+        const Header combinedHeader    = Header(deaeratorPressure, {headerInlet, blowdownInlet});
+        inletHeaderOutput              = fluidPropertiesFactory.make(combinedHeader);
+    }
 
     return deaeratorFactory.make(boilerInput, feedwaterMassFlow, makeupWaterAndCondensateHeaderOutput,
                                  inletHeaderOutput);

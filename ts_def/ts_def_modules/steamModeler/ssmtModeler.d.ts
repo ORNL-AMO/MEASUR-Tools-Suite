@@ -60,6 +60,7 @@ export declare class BoilerInput {
      * @param deaeratorVentRate Deaerator vent rate, units %.
      * @param deaeratorPressure double, deaerator pressure, units MPa
      * @param approachTemperature double, approach temperature, units K
+     * @param sendBlowdownToDeaerator Whether boiler blowdown is routed to the deaerator; defaults to false when omitted.
      */
     constructor(
         fuelType: number,
@@ -71,7 +72,8 @@ export declare class BoilerInput {
         steamTemperature: number,
         deaeratorVentRate: number,
         deaeratorPressure: number,
-        approachTemperature: number
+        approachTemperature: number,
+        sendBlowdownToDeaerator?: boolean
     );
 
     /** Frees the underlying resource; must be called when finished with the instance */
