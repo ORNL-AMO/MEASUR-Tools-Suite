@@ -3,13 +3,13 @@
 ## Workflow Metadata
 
 - Lifecycle: completed
-- Status: Implemented, verified and independently reviewed; Ready at 5cb2284; PR/CI/publication pending.
+- Status: Implemented, verified and independently reviewed; Ready at 5cb2284; PR delivery requested.
 - Owner: Codex
 - Created / last updated: 2026-10-15
 - Suite issue: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/213
 - Branch / intended PR base: `issue-213` / `epic-pump-result-refactor`
 - Base commit: `80c647502f2ad18f960f9208570d5c890ba58afd` (MotorShaftPower PR #432 merged).
-- Suite PR: not opened; CI/publication evidence belongs in the eventual PR description/comments.
+- Suite PR: [branch PR and CI/publication evidence](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pulls?q=is%3Apr+head%3Aissue-213) will be maintained in the PR description and CI comments.
 - Desktop coordination: https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8957
 - Held Desktop PR: https://github.com/ORNL-AMO/AMO-Tools-Desktop/pull/8964
 
@@ -107,4 +107,6 @@
 ## Open Questions Or Blockers
 
 - No unresolved implementation or review blockers. Desktop verification is intentionally deferred to final integration.
-- PR delivery and any CI/publication evidence remain pending; no beta or final package publication is claimed.
+- User requested PR delivery on 2026-10-15. Push the reviewed branch and open against the epic; record
+  post-push CI and any exact published beta in the linked PR, without publication-evidence-only follow-up pushes.
+  No beta or final package publication is claimed by local validation.
