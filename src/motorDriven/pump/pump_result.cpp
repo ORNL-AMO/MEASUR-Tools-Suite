@@ -1,7 +1,7 @@
 #include "motorDriven/pump/pump_result.h"
 
 #include "motorDriven/motor/motor_shaft_power.h"
-#include "motorDriven/motor/OptimalMotorPower.h"
+#include "motorDriven/motor/optimal_motor_power.h"
 #include "motorDriven/motor/OptimalMotorShaftPower.h"
 #include "motorDriven/pumpFan/MoverEfficiency.h"
 #include "motorDriven/pumpFan/MoverShaftPower.h"
@@ -67,11 +67,10 @@ Result calculateModified(const ModifiedInput& input) {
 
     const auto motorShaftOutput =
         OptimalMotorShaftPower(moverShaftPower, system.drive, system.specified_drive_efficiency).calculate();
-    const auto motorOutput =
-        OptimalMotorPower(system.motor_rated_power, system.motor_rated_speed, system.line_frequency,
-                          system.motor_efficiency_class, system.specified_motor_efficiency,
-                          system.motor_rated_voltage, system.operating_voltage, motorShaftOutput.motorShaftPower)
-            .calculate();
+    const auto motorOutput = optimal_motor_power::calculate({
+        system.motor_rated_power, system.motor_rated_speed, system.line_frequency,
+        system.motor_efficiency_class, system.specified_motor_efficiency,
+        system.motor_rated_voltage, system.operating_voltage, motorShaftOutput.motorShaftPower});
 
     const auto annualEnergy = motorOutput.power * system.operating_hours / 1000.0;
     const auto annualCost = annualEnergy * system.unit_cost;
@@ -82,12 +81,12 @@ Result calculateModified(const ModifiedInput& input) {
         motorShaftOutput.motorShaftPower,
         moverShaftPower,
         motorOutput.efficiency,
-        motorOutput.powerFactor,
+        motorOutput.power_factor,
         motorOutput.current,
         motorOutput.power,
         annualEnergy,
         annualCost,
-        motorOutput.loadFactor,
+        motorOutput.load_factor,
         motorShaftOutput.driveEfficiency,
         0.0,
     };
