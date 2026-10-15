@@ -3,7 +3,7 @@
 ## Workflow Metadata
 
 - Lifecycle: active
-- Status: Suite through OptimalMotorPower merged; FluidPower is the active child; all remaining Desktop migration is deferred to final integration
+- Status: Suite through OptimalMotorPower merged; FluidPower implemented, verified and independently reviewed Ready at 9d5e46c; all remaining Desktop migration is deferred to final integration
 - Owner: Codex
 - Created: 2026-10-07
 - Last updated: 2026-10-15
@@ -85,7 +85,7 @@ ordered so foundational calculators migrate before the composite calculators tha
 | 7 | #211 MotorPowerFactor | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite PR [#430](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/430) merged at `9da4f19`; reviewed implementation head `873efc0`. See [MotorPowerFactor handoff](motor-power-factor-refactor.md). |
 | 8 | #212 MotorShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite [PR #432](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/432) merged on 2026-10-15 at `80c6475`. See [MotorShaftPower handoff](motor-shaft-power-refactor.md). |
 | 9 | #213 OptimalMotorPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite [PR #433](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/433) merged at `1998e82`; reviewed implementation head `5cb2284`. See [OptimalMotorPower handoff](optimal-motor-power-refactor.md). |
-| 10 | #220 FluidPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Active Suite-only child on `issue-220`; implementation complete and integrated verification/review in progress. See [FluidPower handoff](fluid-power-refactor.md). |
+| 10 | #220 FluidPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Implemented, verified and independently reviewed Ready at `9d5e46c` on `issue-220`; child PR delivery pending. See [FluidPower handoff](fluid-power-refactor.md). |
 | 11 | #221 MoverEfficiency | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |
 | 12 | #227 OptimalPumpShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |
 | 13 | #222 MoverShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |
@@ -157,7 +157,8 @@ dependency migration, but their public refactors remain separate.
   MotorPower PR #428 merged on 2026-10-14 at `2714873`. MotorPowerFactor PR #430 merged at `9da4f19`.
   MotorShaftPower PR #432 merged on 2026-10-15 at `80c6475` after verification and independent review.
   OptimalMotorPower PR #433 merged at `1998e82`; independent pre-PR review is Ready at `5cb2284`.
-  FluidPower is the active Suite-only child; implementation and verification evidence are in its module handoff.
+  FluidPower implementation, verification and independent review are complete, Ready at `9d5e46c`;
+  child PR delivery remains pending. Evidence is in its module handoff.
 - Release blockers: complete and review all remaining Suite modules, pass the integrated Suite review, publish the approved final/RC package, then perform the one Desktop integration/review cycle.
 
 ## Validation
@@ -218,3 +219,20 @@ dependency migration, but their public refactors remain separate.
   Existing full-documentation BibTeX limitation persists. Independent full-diff review of `80c6475...5cb2284`
   is Ready with no actionable findings; reviewer independently reran 356 native assertions and declaration/whitespace checks.
 - Desktop source, tests, package pins and held PR #8964 remain deferred to final integration.
+
+## FluidPower Implementation
+
+- Replaced the header-only class with `fluid_power::calculatePump(PumpInput)` and
+  `fluid_power::calculateFan(FanInput)`, returning numeric kW. Added standalone plain-input
+  `calculatePumpFluidPower` and `calculateFanFluidPower` WASM/TypeScript APIs. Approved breaking C++ removal
+  and additive runtime API; no numerical behavior changes. MoverEfficiency and OptimalPumpShaftPower receive
+  private consumer updates only.
+- Retained all six original goldens and captured 23 finite duty/boundary outputs. A 373,490-case differential
+  comparison matched all non-NaN results bit-for-bit, including signed zero/infinity, and retained NaN classifications.
+- Focused native checks passed 259 assertions in 19 cases; full native suite passed 5,061 assertions in 337 cases.
+  Fresh rebuilt/staged WASM passed all 276 browser tests. Types, docs/whitespace/package checks and rendered-page
+  inspection passed; all 65 MathJax containers rendered without errors. Existing full-documentation BibTeX limitation persists.
+- Independent full-diff review of `1998e82...9d5e46c` is Ready with no actionable findings; reviewer independently
+  reran focused native, differential, type, documentation-link and whitespace checks. See the module handoff.
+- Desktop source, tests, dependency pins and held PR remain deferred to final integration. No package publication
+  or PR delivery was performed in this implementation.
