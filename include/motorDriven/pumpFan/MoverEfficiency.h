@@ -10,8 +10,6 @@
  *
  */
 
-#include "FluidPower.h"
-
 class MoverEfficiency {
 
   public:
