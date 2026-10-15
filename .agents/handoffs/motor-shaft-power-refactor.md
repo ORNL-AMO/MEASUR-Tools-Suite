@@ -9,7 +9,7 @@
 - Suite issue: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/212
 - Branch / intended PR base: `issue-212` / `epic-pump-result-refactor`
 - Base commit: `ba430c6f2518777f6839ec298282c1d83d16ad7e`
-- Suite PR: pending; post-push CI/publication evidence belongs in the eventual PR description/comments.
+- Suite PR: delivery requested; [branch PR and CI/publication evidence](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pulls?q=is%3Apr+head%3Aissue-212) will be maintained in the PR description and CI comments.
 - Desktop coordination: https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8957
 - Held Desktop PR: https://github.com/ORNL-AMO/AMO-Tools-Desktop/pull/8964
 
@@ -98,7 +98,8 @@
 - Reviewer independently reran the focused calculator tests (294 assertions in 3 cases), declaration
   verification and diff whitespace checks; all passed. No review fixes were required.
 - Subsequent handoff-only evidence changes do not alter the reviewed implementation.
-- Local implementation only: no PR opened, push or package publication. CI/publication evidence is pending delivery.
+- User requested PR delivery on 2026-10-15. Push the reviewed branch and open against the epic; record
+  post-push CI and any exact published beta in the linked PR, without publication-evidence-only follow-up pushes.
 
 ## Open Questions Or Blockers
 
