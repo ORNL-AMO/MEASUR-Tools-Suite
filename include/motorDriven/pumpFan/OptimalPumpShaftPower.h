@@ -11,8 +11,6 @@
  * @bug No known bugs.
  *
  */
-#include "FluidPower.h"
-
 class OptimalPumpShaftPower {
   public:
     /**

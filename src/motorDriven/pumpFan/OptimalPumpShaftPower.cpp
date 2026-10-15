@@ -10,12 +10,14 @@
 
 #include "motorDriven/pumpFan/OptimalPumpShaftPower.h"
 
+#include "motorDriven/pumpFan/fluid_power.h"
+
 double OptimalPumpShaftPower::calculate() {
     if (isPump) {
-        const double fluidPower = FluidPower(specificGravity, flowRate, head).calculate();
+        const double fluidPower = fluid_power::calculatePump({specificGravity, flowRate, head});
         return (fluidPower / efficiency) / 0.746;
     }
     const double fluidPower =
-        FluidPower(flowRate, inletPressure, outletPressure, compressibilityFactor, velocityPressure).calculate();
+        fluid_power::calculateFan({flowRate, inletPressure, outletPressure, compressibilityFactor, velocityPressure});
     return (fluidPower / efficiency) / 0.746;
 }
