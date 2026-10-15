@@ -9,7 +9,8 @@
 - Suite issue: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/220
 - Branch / intended PR base: `issue-220` / `epic-pump-result-refactor`
 - Base commit: `1998e82434604ccf066cb4257e3db2dbc53f25e8` (OptimalMotorPower PR #433 merged).
-- Suite PR: pending; no publication requested.
+- Suite PR: [branch PR and CI/publication evidence](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pulls?q=is%3Apr+head%3Aissue-220)
+  will be maintained in the PR description and workflow comments.
 - Desktop coordination: https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8957
 - Held Desktop PR: https://github.com/ORNL-AMO/AMO-Tools-Desktop/pull/8964
 
@@ -112,5 +113,6 @@
 ## Open Questions Or Blockers
 
 - No unresolved implementation or review blockers. Desktop verification remains deferred to final epic integration.
-- No push, PR opening or package publication was performed. When PR delivery is requested, target the epic branch
-  and record post-push CI/publication evidence in the PR without publication-evidence-only follow-up pushes.
+- User requested PR delivery on 2026-10-15. Push the reviewed branch and open against the epic; keep post-push
+  CI and any exact published beta in the linked PR without publication-evidence-only follow-up pushes.
+  No manual package publication is requested or claimed by local verification.
