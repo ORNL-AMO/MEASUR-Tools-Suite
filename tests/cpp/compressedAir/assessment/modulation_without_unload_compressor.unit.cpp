@@ -27,7 +27,7 @@ TEST_CASE("Modulation without unload compressor assessment preserves legacy expe
     CHECK(resMWOuL.airflowAcfm == Approx(786));
     CHECK(resMWOuL.powerFraction == Approx(1));
     CHECK(resMWOuL.airflowFraction == Approx(1.66173));
-    resMWOuL = cMWOuL.calculateFromElectrical(440, 2.467, 50);
+    resMWOuL = cMWOuL.calculateFromElectrical(440, 246.7, 0.5);
     CHECK(resMWOuL.powerKw == Approx(94.0026));
     CHECK(resMWOuL.powerFraction == Approx(1.10073));
 
@@ -61,33 +61,33 @@ TEST_CASE("Modulation without unload compressor assessment preserves legacy expe
     CHECK(resMWOuL.airflowAcfm == Approx(786));
     CHECK(resMWOuL.powerFraction == Approx(1));
     CHECK(resMWOuL.airflowFraction == Approx(1.67426));
-    resMWOuL = cMWOuL.calculateFromElectrical(440, 2.467, 50);
+    resMWOuL = cMWOuL.calculateFromElectrical(440, 246.7, 0.5);
     CHECK(resMWOuL.powerKw == Approx(94.00257));
     CHECK(resMWOuL.powerFraction == Approx(1.04362));
 }
 
-TEST_CASE("Modulation helper mode inverts requested power over the modulation curve",
+TEST_CASE("Modulation submodel inverts requested power above the unload point",
           "[compressed-air][assessment]") {
-    auto helper = ModulationWithoutUnloadCompressor(166.5, 1048, 107.5, 1.0, false, CompressorType::Screw, 0.7,
-                                                   175.5);
+    auto modulation_submodel = ModulationWithoutUnloadCompressor(166.5, 1048, 107.5, 1.0, false,
+                                                                  CompressorType::Screw, 0.7, 175.5);
 
-    auto low = helper.calculateFromPowerFraction(0.94);
+    auto low = modulation_submodel.calculateFromPowerFraction(0.94);
     CHECK(low.powerKw == Approx(156.51));
     CHECK(low.airflowAcfm == Approx(670.0034));
     CHECK(low.powerFraction == Approx(0.94));
     CHECK(low.airflowFraction == Approx(0.6393162));
-    auto low_round_trip = helper.calculateFromCapacityFraction(low.airflowFraction);
+    auto low_round_trip = modulation_submodel.calculateFromCapacityFraction(low.airflowFraction);
     CHECK(low_round_trip.powerKw == Approx(low.powerKw));
     CHECK(low_round_trip.airflowAcfm == Approx(low.airflowAcfm));
     CHECK(low_round_trip.powerFraction == Approx(low.powerFraction));
     CHECK(low_round_trip.airflowFraction == Approx(low.airflowFraction));
 
-    auto high = helper.calculateFromPowerFraction(0.98);
+    auto high = modulation_submodel.calculateFromPowerFraction(0.98);
     CHECK(high.powerKw == Approx(163.17));
     CHECK(high.airflowAcfm == Approx(802.5709));
     CHECK(high.powerFraction == Approx(0.98));
     CHECK(high.airflowFraction == Approx(0.765812));
-    auto high_round_trip = helper.calculateFromCapacityFraction(high.airflowFraction);
+    auto high_round_trip = modulation_submodel.calculateFromCapacityFraction(high.airflowFraction);
     CHECK(high_round_trip.powerKw == Approx(high.powerKw));
     CHECK(high_round_trip.airflowAcfm == Approx(high.airflowAcfm));
     CHECK(high_round_trip.powerFraction == Approx(high.powerFraction));

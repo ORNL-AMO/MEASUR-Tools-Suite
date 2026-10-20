@@ -1,4 +1,4 @@
-import { CompressorPerformanceResult } from "./compressor";
+import { CompressorPerformanceResult, CompressorType } from "./compressor";
 
 /** Compressor model for start/stop control. */
 export declare class StartStopCompressor {
@@ -13,6 +13,21 @@ export declare class StartStopCompressor {
         fullLoadAirflowAcfm: number,
         maxPowerFraction: number,
         fullLoadPowerFraction: number
+    );
+    /**
+     * Creates a start/stop model with an explicit compressor type for pressure correction.
+     * @param fullLoadPowerKw Full-load package power, units kW.
+     * @param fullLoadAirflowAcfm Full-load airflow, units acfm.
+     * @param maxPowerFraction Maximum power fraction, dimensionless.
+     * @param fullLoadPowerFraction Full-load power fraction, dimensionless.
+     * @param compressorType Compressor construction used by pressure and inlet correction.
+     */
+    constructor(
+        fullLoadPowerKw: number,
+        fullLoadAirflowAcfm: number,
+        maxPowerFraction: number,
+        fullLoadPowerFraction: number,
+        compressorType: CompressorType
     );
 
     /** Adjusted full-load power, units kW. */
@@ -35,7 +50,7 @@ export declare class StartStopCompressor {
     /**
      * @param voltage Electrical voltage, units V.
      * @param current Electrical current, units A.
-     * @param powerFactor Power factor, dimensionless.
+     * @param powerFactor Power factor, dimensionless value from 0 to 1.
      */
     calculateFromElectrical(voltage: number, current: number, powerFactor: number): CompressorPerformanceResult;
     /**

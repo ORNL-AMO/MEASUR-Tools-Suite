@@ -225,6 +225,34 @@ inline constexpr double kMinutesPerHour = 60.0;
 /// @brief Number of seconds in a minute.
 inline constexpr double kSecondsPerMinute = 60.0;
 
+/// @brief Number of inches in one foot @unitb{\inch\per\foot}.
+inline constexpr double kInchesPerFoot = 12.0;
+
+/**
+ * @brief Conversion factor from cubic feet per second to gallons per minute
+ *        @unitb{\gallon\second\per\minute\foot\cubed}.
+ * @details The unit-derived value is (1728 in^3/ft^3) / (231 in^3/US gal) *
+ *          (60 s/min) = 448.831168831... gpm per cfs; see @cite chisholm1967units.
+ *          This established rounded value is retained so pump-head calculations reproduce their
+ *          existing results exactly.
+ */
+inline constexpr double kGallonsPerMinutePerCubicFootPerSecond = 448.8311693;
+
+/**
+ * @brief Reference-water pressure gradient used by pump-head calculations @unitb{\psi\per\foot}.
+ * @details Derived pressure head is H = delta-P / (k * SG). The retained value corresponds to a
+ *          reference-water specific weight of 144 * k = 62.316000144 lbf/ft^3, consistent with
+ *          approximate water properties near 68 degrees Fahrenheit (20 degrees Celsius);
+ *          see Table 34 in @cite nbs1924densityTables. Under standard gravity, specific weight
+ *          in lbf/ft^3 has the same numerical value as mass density in lbm/ft^3.
+ *          The reciprocal is 2.310803 ft/psi at specific gravity 1; 2.31 ft/psi is an engineering
+ *          approximation, as explained in @cite doe2000energyMatters and
+ *          @cite hydraulicInstituteSystemCurves. The exact stored factor is preserved to reproduce
+ *          established results; this physical relationship does not establish the historical origin
+ *          of its final digits.
+ */
+inline constexpr double kPsiPerFootOfWater = 0.432750001;
+
 /**
  * @brief Conversion factor: square inches per square foot @unitb{\inch\squared\per\squareFoot}
  * @details 1 ft² = 144 in². Used when converting pipe cross-sectional areas between

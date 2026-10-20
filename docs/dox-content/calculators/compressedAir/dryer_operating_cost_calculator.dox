@@ -1,0 +1,73 @@
+/**
+ * @defgroup dryer_operating_cost_calculator Dryer Operating Cost Calculator
+ * @ingroup compressed_air_calculators
+ * @brief Calculates moisture removal and annual operating cost for compressed-air dryers.
+ * @details The calculator supports Heatless, Externally Heated, Blower Purge with
+ * and without Sweep, Heat of Compression HC and SP, and Refrigerated dryers.
+ * Input validation, type defaults, and user-facing unit conversion belong to the
+ * caller. The Suite receives U.S. customary engineering inputs and returns water
+ * removal in lb/hr and annual cost in dollars/year.
+ *
+ * @heading{Public API}
+ * The C++ implementation follows the stateless compressed-air calculator pattern:
+ * callers populate @ref dryer_operating_cost::Input, including the dryer type, and
+ * pass it to @ref dryer_operating_cost::calculate. The WebAssembly binding exposes
+ * the equivalent `calculateDryerOperatingCost(input)` function. Both the JavaScript
+ * input and result are plain value objects and require no `delete()` cleanup.
+ *
+ * @heading{Water load}
+ * Saturation pressure is calculated by @ref SaturatedPressure at the inlet
+ * temperature. Refrigerated dryers subtract saturation pressure at 40 degrees F.
+ *
+ * @formula{dryer-water-load;
+ *   W = \frac{Q \cdot 60 \cdot 18.016 \cdot (P_{sat,in} - P_{sat,out})}
+ *            {(P_g + 14.7) \cdot 379}
+ * }
+ *
+ * @symtable
+ * @symrow{W; Water removed; lb/hr}
+ * @symrow{Q; Inlet airflow; SCFM}
+ * @symrow{P_{sat,in}; Saturation pressure at inlet temperature; psia}
+ * @symrow{P_{sat,out}; Zero for desiccant dryers or saturation pressure at 40 degrees F for refrigerated dryers; psia}
+ * @symrow{P_g; Inlet gauge pressure; psig}
+ * @endsymtable
+ *
+ * @heading{Desiccant and dryer sizing}
+ * Heatless dryers preserve the source calculator's distinct sizing relation:
+ * @formula{dryer-heatless-size;
+ *   V = Q \cdot \frac{114.7}{P_g + 14.7}
+ * }
+ * Other desiccant dryers use:
+ * @formula{dryer-desiccant-size;
+ *   m_d = \frac{W \cdot t_c}{f_{DDC}}, \qquad V = \frac{m_d}{0.5784}
+ * }
+ * where @math{t_c} is regeneration half-cycle length in hours and
+ * @math{f_{DDC}} is the design desiccant capacity percentage divided by 100.
+ * SP dryers use the caller-supplied v2 values of two hours and four percent.
+ *
+ * @heading{Purge, heater, and motor}
+ * Purge airflow is either @math{V \cdot f_p} or a direct SCFM input. Direct flow
+ * is converted to an effective capacity percentage for the output. Automatic
+ * heater and motor formulas follow the Dryer Calculator V2 formula reference;
+ * positive heater kW or motor HP inputs override automatic sizing where the
+ * selected dryer type permits manual sizing. HC heater power is always calculated
+ * from inlet flow.
+ *
+ * @heading{Annual cost}
+ * @formula{dryer-total-cost;
+ *   C_{total} = C_{heater} + C_{motor} + C_{purge} + C_{controls} + C_{cooling}
+ * }
+ * Heater energy is scaled by heating hours per day and annual operating hours
+ * divided by 24. Motors run for all annual operating hours. Purge cost uses the
+ * greater of the entered compressed-air rate and its electricity-equivalent rate,
+ * multiplied by the dryer-type duty factor. Desiccant dryers include a 100 W
+ * controls load; only refrigerated dryers include cooling-water cost.
+ *
+ * @heading{Migration from v1}
+ * Replace construction of `DryerOperatingCost` and its instance `calculate` call
+ * with one `calculateDryerOperatingCost` call. Move `dryerType` into the input
+ * object and remove cleanup calls for the calculator and returned result. The v2
+ * input also replaces the three schedule fields with annual operating hours and
+ * adds regeneration-cycle, purge-mode, direct-purge-flow, and motor-power fields.
+ *
+ */

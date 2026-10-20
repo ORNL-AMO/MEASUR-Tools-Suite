@@ -46,7 +46,8 @@ describe('DB Default Data Test', function () {
                 item.model + ', ' + item.horsepower + ', ' + item.ratedCapacityAcfm + ', ' +
                 item.ratedPressurePsig + ', ' + item.maxFullFlowPressurePsig + ', ' + item.controlTypeId + ', ' +
                 item.unloadPointPercent + ', ' + item.minUnloadSumpPressurePsig + ', ' + item.blowdownTimeSec + ', ' +
-                item.unloadSteps + ', ' + item.modulatingPressureRangePsig + ', ' + item.fullLoadBhpPowerKw + ', ' +
+                item.unloadSteps + ', ' + item.modulatingPressureRangePsig + ', ' +
+                item.fullLoadBrakeHorsepower + ', ' + item.fullLoadBhpPowerKw + ', ' +
                 item.totalPackageInputPowerKw + ', ' + item.specificPackagePower + ', ' +
                 item.noLoadPowerFullyModulating + ', ' + item.noLoadPowerUnload + ', ' +
                 item.maxSurgePressurePsig + ', ' + item.maxSurgePressureFlowAcfm + ', ' +
@@ -65,6 +66,20 @@ describe('DB Default Data Test', function () {
             logMessage('Default Data (start - end):');
             compressorDataLog(listItems.get(0));
             compressorDataLog(listItems.get(count - 1));
+            const firstCompressor = listItems.get(0);
+            assert.equal(firstCompressor.fullLoadBrakeHorsepower, firstCompressor.fullLoadBhpPowerKw);
+            assert.approximately(
+                firstCompressor.fullLoadBrakeHorsepower * 0.746 /
+                    (firstCompressor.fullLoadEfficiencyPercent / 100),
+                firstCompressor.totalPackageInputPowerKw,
+                0.1
+            );
+            assert.approximately(
+                firstCompressor.totalPackageInputPowerKw * 100 / firstCompressor.ratedCapacityAcfm,
+                firstCompressor.specificPackagePower,
+                0.5
+            );
+            assert.equal(firstCompressor.maxSurgePressurePsig, -9999);
 
             listItems = defaultData.getCompressorType1_GT100kWData();
             count = listItems.size();

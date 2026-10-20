@@ -27,7 +27,7 @@ TEST_CASE("Start/stop compressor assessment preserves legacy expected values", "
     CHECK(resSS.airflowAcfm == Approx(112));
     CHECK(resSS.powerFraction == Approx(0.205));
     CHECK(resSS.airflowFraction == Approx(0.2));
-    resSS = cSS.calculateFromElectrical(440, 2.467, 50);
+    resSS = cSS.calculateFromElectrical(440, 246.7, 0.5);
     CHECK(resSS.powerKw == Approx(94.0026));
     CHECK(resSS.airflowAcfm == Approx(573.827));
     CHECK(resSS.powerFraction == Approx(1.0503));
@@ -57,9 +57,22 @@ TEST_CASE("Start/stop compressor assessment preserves legacy expected values", "
     CHECK(resSS.airflowAcfm == Approx(112));
     CHECK(resSS.powerFraction == Approx(0.2445355524));
     CHECK(resSS.airflowFraction == Approx(0.238572));
-    resSS = cSS.calculateFromElectrical(440, 2.467, 50);
+    resSS = cSS.calculateFromElectrical(440, 246.7, 0.5);
     CHECK(resSS.powerKw == Approx(94.0026));
     CHECK(resSS.airflowAcfm == Approx(477.9893));
     CHECK(resSS.powerFraction == Approx(1.04362));
     CHECK(resSS.airflowFraction == Approx(1.01816));
+}
+
+TEST_CASE("Start/stop pressure correction supports screw and reciprocating compressors",
+          "[compressed-air][assessment]") {
+    auto screw = StartStopCompressor(89.5, 560, 1.05, 1.0);
+    auto reciprocating = StartStopCompressor(89.5, 560, 1.05, 1.0, CompressorType::Reciprocating);
+
+    screw.applyPressureInletCorrection(473, 105, 1.4, 100, 14.5, 0.917, 110, 110, 14.7, true, 14.7);
+    reciprocating.applyPressureInletCorrection(473, 105, 1.4, 100, 14.5, 0.917, 110, 110, 14.7, true, 14.7);
+
+    CHECK(screw.adjustedFullLoadPowerKw() == Approx(90.0736));
+    CHECK(reciprocating.adjustedFullLoadPowerKw() == Approx(89.3967));
+    CHECK(reciprocating.adjustedFullLoadAirflowAcfm() == Approx(469.4614));
 }

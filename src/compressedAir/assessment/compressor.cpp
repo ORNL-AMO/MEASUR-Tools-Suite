@@ -2,9 +2,16 @@
 
 #include <cmath>
 
+#include "physics/constants.h"
+
 namespace compressed_air::assessment {
 
 double CompressorModelBase::roundDouble(double value) { return std::round(value * 10000.0) / 10000.0; }
+
+double CompressorModelBase::threePhasePowerKw(double voltage, double current, double power_factor) {
+    constexpr double kLegacySquareRootOfThree = 1.732;
+    return voltage * current * power_factor * kLegacySquareRootOfThree / 1000.0;
+}
 
 void CompressorModelBase::applyPressureInletCorrection(CompressorType compressor_type, double capacity,
                                                        double full_load_bhp, double poly_exponent,
@@ -50,7 +57,8 @@ void CompressorModelBase::applyPressureInletCorrection(double& capacity_adjusted
     }
 
     power_adjusted =
-        pressure_power * (atmospheric_pressure / inlet_pressure) * full_load_bhp * 0.746 / efficiency *
+        pressure_power * (atmospheric_pressure / inlet_pressure) * full_load_bhp *
+        physics::conversions::kBhpToKw / efficiency *
         pressureRatioCorrection(poly_exponent, (rated_discharge_pressure + rated_inlet_pressure) / rated_inlet_pressure,
                                 discharge_pressure,
                                 compressor_type == CompressorType::Screw ? rated_inlet_pressure : atmospheric_pressure);

@@ -75,7 +75,7 @@ CompressorPerformanceResult ModulationWithoutUnloadCompressor::calculateFromMeas
 
 CompressorPerformanceResult ModulationWithoutUnloadCompressor::calculateFromElectrical(double voltage, double current,
                                                                                       double power_factor) {
-    return calculateFromMeasuredPower(voltage * current * power_factor * 1.732 / 1000.0);
+    return calculateFromMeasuredPower(threePhasePowerKw(voltage, current, power_factor));
 }
 
 void ModulationWithoutUnloadCompressor::applyPressureInletCorrection(

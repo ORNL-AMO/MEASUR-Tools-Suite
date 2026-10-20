@@ -6,6 +6,14 @@ on:
       release_channel:
         required: true
         type: string
+      wasm_artifact_name:
+        description: Name of the tested WASM artifact uploaded by the quality workflow
+        required: true
+        type: string
+    outputs:
+      published_version:
+        description: Exact npm package version published by this workflow
+        value: ${{ jobs.publish.outputs.published_version }}
     secrets:
       NPM_AUTH_TOKEN:
         required: true
@@ -20,6 +28,8 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    outputs:
+      published_version: ${{ steps.pkg_version.outputs.PKG_VERSION }}
     defaults:
       run:
         shell: bash
@@ -30,7 +40,7 @@ jobs:
           fetch-depth: 1
 
       - name: Get Node version
-        run: echo "BUILD_NODE_VER=$(grep -o -P -m 1 '(?<=node":\s").*(?=")' package.json)" >> $GITHUB_ENV
+        run: echo "BUILD_NODE_VER=$(grep -o -P -m 1 '(?<=node":\s").*(?=")' package.json)" >> "$GITHUB_ENV"
 
       - name: Node setup
         uses: actions/setup-node@v5
@@ -41,88 +51,37 @@ jobs:
           cache-dependency-path: package-lock.json
           registry-url: https://registry.npmjs.org/
 
-      - name: Setup Emscripten SDK
-        uses: emscripten-core/setup-emsdk@v15
-        with:
-          version: latest
-          actions-cache-folder: "emsdk-cache"
-
-      - name: Setup valgrind
-        if: inputs.release_channel == 'beta'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libc6-dbg valgrind
-          valgrind --version
-
       - name: Set package version
         id: pkg_version
         env:
           RELEASE_CHANNEL: ${{ inputs.release_channel }}
         run: |
-          package_name="$(node -p "require('./package.json').name")"
           package_version="$(node -p "require('./package.json').version")"
 
           if [[ "$RELEASE_CHANNEL" == "beta" || "$RELEASE_CHANNEL" == "rc" ]]; then
-            prefix="${package_version}-${RELEASE_CHANNEL}."
-
-            # Fetch every published version and find the highest increment that matches
-            # this exact base version + channel (e.g. "1.2.1-beta."). Using all versions
-            # avoids the stale-dist-tag problem where @beta still points to an older
-            # base version from a different branch.
-            all_versions="$(npm view "$package_name" versions --json 2>/dev/null || echo '[]')"
-            highest=$(PREFIX="$prefix" node -e "
-              const prefix = process.env.PREFIX;
-              let data = '';
-              process.stdin.on('data', d => data += d);
-              process.stdin.on('end', () => {
-                try {
-                  const raw = JSON.parse(data);
-                  const arr = Array.isArray(raw) ? raw : (raw ? [raw] : []);
-                  const nums = arr
-                    .filter(v => v.startsWith(prefix))
-                    .map(v => parseInt(v.slice(prefix.length), 10))
-                    .filter(n => Number.isFinite(n));
-                  process.stdout.write(String(nums.length > 0 ? Math.max(...nums) : -1));
-                } catch(e) { process.stdout.write('-1'); }
-              });
-            " <<< "$all_versions")
-
-            if [[ "$highest" =~ ^[0-9]+$ ]]; then
-              next_increment=$((highest + 1))
-            else
-              next_increment=0
-            fi
-
-            package_version="${prefix}${next_increment}"
+            # Run number and attempt are immutable for this workflow execution. They
+            # avoid collisions when npm's version index has not yet reflected a prior
+            # publish, and give reruns a distinct prerelease version.
+            package_version="${package_version}-${RELEASE_CHANNEL}.${GITHUB_RUN_NUMBER}.${GITHUB_RUN_ATTEMPT}"
             npm --no-git-tag-version version "$package_version"
           fi
 
           echo "PKG_VERSION=$package_version" >> "$GITHUB_OUTPUT"
 
-      - name: Build native package
-        run: |
-          cmake -S . -B buildcpp -DCMAKE_BUILD_TYPE=Release
-          cmake --build buildcpp --config Release --target clean
-          cmake --build buildcpp --config Release -j 12
-
       - name: Install npm dependencies
         run: npm ci
 
-      - name: Build WASM package
-        run: |
-          emcmake cmake -S . -B build-wasm -DBUILD_WASM=ON
-          emmake make -C build-wasm -j 12
-          mkdir -p bin
-          cp build-wasm/bin/client.js bin/client.js
-          cp build-wasm/bin/client.wasm bin/client.wasm
-          rm -f bin/measur_tools_suite.js
-          rm -f bin/measur_tools_suite.wasm
+      - name: Download verified WASM artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.wasm_artifact_name }}
+          path: bin
 
-      - name: Run tests
-        if: inputs.release_channel == 'beta'
+      - name: Verify package artifacts
         run: |
-          valgrind --tool=memcheck --gen-suppressions=all --leak-check=full --show-leak-kinds=all --errors-for-leak-kinds=definite,indirect --leak-resolution=high --track-origins=yes --vgdb=no --trace-children=yes ./buildcpp/bin/cpp_tests
-          npm run tests
+          test -s bin/client.js
+          test -s bin/client.wasm
+          ls -l bin/client.js bin/client.wasm
 
       - name: Publish release to registry
         env:

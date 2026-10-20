@@ -49,7 +49,7 @@ export declare class ModulationWithoutUnloadCompressor {
     /**
      * @param voltage Electrical voltage, units V.
      * @param current Electrical current, units A.
-     * @param powerFactor Power factor, dimensionless.
+     * @param powerFactor Power factor, dimensionless value from 0 to 1.
      */
     calculateFromElectrical(voltage: number, current: number, powerFactor: number): CompressorPerformanceResult;
     /**
