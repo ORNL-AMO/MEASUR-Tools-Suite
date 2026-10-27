@@ -78,7 +78,7 @@ Deaerator DeaeratorModeler::makeDeaerator(
     const HighPressureHeaderCalculationsDomain&                 highPressureHeaderCalculationsDomain,
     const std::shared_ptr<LowPressureHeaderCalculationsDomain>& lowPressureHeaderCalculationsDomain,
     const MakeupWaterAndCondensateHeaderCalculationsDomain&     makeupWaterAndCondensateHeaderCalculationsDomain,
-    const double                                                feedwaterMassFlow, 
+    const double                                                feedwaterMassFlow,
     const std::shared_ptr<FlashTank>& blowdownFlashTank) const {
     const std::string methodName = std::string("DeaeratorModeler::") + std::string(__func__) + ": ";
 
