@@ -1,0 +1,166 @@
+/**
+ * @defgroup mover_efficiency_calculator Mover Efficiency Calculator
+ * @ingroup equipment_and_property_calculators
+ * @brief Calculates the fraction of pump or fan shaft input delivered to the fluid at a supplied duty.
+ * @details
+ * How much of the power supplied to a pump or fan shaft reaches the fluid? Comparing useful fluid
+ * output with shaft input helps evaluate an operating point and distinguish mover losses from motor
+ * and drive losses. This calculator evaluates that ratio from a supplied flow, head or pressure duty,
+ * and shaft power. It does not estimate shaft power from electrical measurements.
+ *
+ * @heading{Final Result and Interpretation}
+ * Both paths return a dimensionless efficiency fraction. Fluid power is first converted from kW
+ * to hp so that numerator and denominator share the same units:
+ * @formula{mover-efficiency-ratio; \eta_m=\frac{P_f/c_{hp}}{P_s}}
+ * @symtable
+ * @symrow{\eta_m; Mover efficiency as a fraction; \unitless}
+ * @symrow{P_f; Power delivered to the fluid at the supplied duty; \kilo\watt}
+ * @symrow{c_{hp}; Retained horsepower conversion, 0.746; \kilo\watt\per\horsepower}
+ * @symrow{P_s; Power supplied at the mover shaft; \horsepower}
+ * @endsymtable
+ *
+ * A result of 0.75 means that 75% of the shaft input reaches the fluid under the supplied duty and
+ * pressure convention. Multiply the fraction by 100 only when displaying a percentage. A result
+ * greater than one or less than zero is returned unchanged; it calls for checking units, measurements,
+ * signs and measurement conventions before interpreting equipment performance. For ordinary consuming
+ * equipment with consistent positive inputs, useful output should not exceed shaft input.
+ *
+ * Shaft input is measured at the pump or fan shaft, after any intervening drive. Do not substitute
+ * motor electrical kW or motor shaft hp upstream of a lossy drive. This ratio excludes upstream motor
+ * and drive losses and therefore does not represent overall electrical-to-fluid efficiency.
+ *
+ * @heading{Select the Duty and Establish Consistent Inputs}
+ * Use the pump path for liquid flow in US gpm, pump head in feet of the pumped fluid, dimensionless
+ * specific gravity, and pump shaft input in hp. Head is the supplied energy-per-weight rise across
+ * the pump; do not substitute pressure in psi. This path uses flow and head, not the separate
+ * positive-displacement pressure-based calculation used by pump assessments.
+ *
+ * Use the fan path for gas flow in cfm, inlet and outlet gauge pressures in inches of water column,
+ * a supplied dimensionless compressibility correction, velocity pressure in inches of water column,
+ * and fan shaft input in hp. Pressures must use a common reference and compatible measurement planes.
+ * All fields are required, including velocity pressure; explicitly supply zero when no velocity-pressure
+ * term is to be subtracted. The correction is supplied by the caller and is not a ratio of specific heats.
+ *
+ * Use duty and shaft measurements for the same operating point. The calculator does not reconcile
+ * different measurement times, correct instrumentation, convert user-selected units, or identify a
+ * suitable pressure convention.
+ *
+ * @heading{Why Flow and Duty Determine the Useful Output}
+ * Liquid flow carries weight through a head rise. The pump path obtains fluid power from the
+ * @ref fluid_power_calculator "Fluid Power Calculator":
+ * @formula{mover-efficiency-pump-fluid-power; P_{f,p}=\frac{c_{hp}Q_pH\,SG}{C_p}}
+ * @symtable
+ * @symrow{P_{f,p}; Power delivered to the liquid; \kilo\watt}
+ * @symrow{c_{hp}; Retained horsepower conversion, 0.746; \kilo\watt\per\horsepower}
+ * @symrow{Q_p; Liquid volumetric flow in US gallons per minute; \gallon\per\minute}
+ * @symrow{H; Pump head in feet of the pumped fluid; \foot}
+ * @symrow{SG; Fluid specific gravity; \unitless}
+ * @symrow{C_p; Retained flow-head horsepower divisor, 3961.38; \gallon\foot\per\minute\per\horsepower}
+ * @endsymtable
+ *
+ * Gas flow through a pressure rise transfers pressure-volume work. The fan path obtains fluid power
+ * using the supplied compressibility correction and the retained pressure convention:
+ * @formula{mover-efficiency-fan-fluid-power; P_{f,f}=\frac{c_{hp}Q_f(p_o-p_i-p_v)K}{C_f}}
+ * @symtable
+ * @symrow{P_{f,f}; Power delivered to the gas; \kilo\watt}
+ * @symrow{c_{hp}; Retained horsepower conversion, 0.746; \kilo\watt\per\horsepower}
+ * @symrow{Q_f; Gas volumetric flow; \cubicFoot\per\minute}
+ * @symrow{p_o,p_i; Outlet and inlet gauge pressures with a common reference; \inchWaterColumn}
+ * @symrow{p_v; Supplied velocity pressure subtracted from the rise; \inchWaterColumn}
+ * @symrow{K; Supplied fan compressibility correction; \unitless}
+ * @symrow{C_f; Retained flow-pressure horsepower divisor, 6362; \cubicFoot\inchWaterColumn\per\minute\per\horsepower}
+ * @endsymtable
+ *
+ * The effective fan rise is outlet minus inlet minus velocity pressure. This is the retained Suite
+ * convention. The method does not determine whether supplied pressures are static or total, reconstruct
+ * velocity pressure, or assign a standardized static/total efficiency classification. Establish a
+ * compatible measurement convention upstream, and avoid subtracting velocity pressure again from an
+ * already adjusted rise. Negative inlet gauge pressure can contribute to a positive effective rise.
+ *
+ * Dividing fluid power by shaft input expresses the useful output per unit input. At a fixed duty,
+ * increasing shaft input reduces the calculated ratio. A real equipment change may also change the
+ * operating point; this calculation does not predict that coupled response.
+ *
+ * @heading{Worked Pump Example}
+ * For specific gravity 1.5, flow 1000 US gpm, head 125 ft, and shaft input 125 hp, the fluid-power
+ * calculation gives approximately 35.3096648138 kW, or 47.3319903670 hp. Applying the ratio:
+ * @formula{mover-efficiency-pump-example;
+ *   \eta_{m,p}=\frac{\left(0.746\times1000\times125\times1.5/3961.38\right)/0.746}{125}
+ *             =0.3786559229
+ * }
+ * @symtable
+ * @symrow{\eta_{m,p}; Calculated pump efficiency fraction; \unitless}
+ * @symrow{0.746; Retained horsepower conversion; \kilo\watt\per\horsepower}
+ * @symrow{1000; Supplied liquid flow; \gallon\per\minute}
+ * @symrow{125\text{ in numerator}; Supplied pump head; \foot}
+ * @symrow{1.5; Supplied specific gravity; \unitless}
+ * @symrow{3961.38; Retained pump divisor; \gallon\foot\per\minute\per\horsepower}
+ * @symrow{125\text{ in denominator}; Supplied pump shaft input; \horsepower}
+ * @endsymtable
+ *
+ * About 37.87% of the supplied pump shaft input reaches the liquid at this operating point. Motor
+ * electrical input would also need to account for motor and drive efficiency; it cannot be recovered
+ * from this mover efficiency alone.
+ *
+ * @heading{Worked Fan Example}
+ * For flow 2000 cfm, shaft input 5 hp, inlet gauge pressure 20 inches water column, outlet gauge
+ * pressure 25 inches water column, compressibility correction 1.4, and velocity pressure 1 inch water
+ * column, the effective rise is 4 inches water column. Fluid power is approximately 1.3132977051 kW,
+ * or 1.7604526878 hp:
+ * @formula{mover-efficiency-fan-example;
+ *   \eta_{m,f}=\frac{\left(0.746\times2000\times(25-20-1)\times1.4/6362\right)/0.746}{5}
+ *             =0.3520905376
+ * }
+ * @symtable
+ * @symrow{\eta_{m,f}; Calculated fan efficiency fraction; \unitless}
+ * @symrow{0.746; Retained horsepower conversion; \kilo\watt\per\horsepower}
+ * @symrow{2000; Supplied gas flow; \cubicFoot\per\minute}
+ * @symrow{25,20; Supplied outlet and inlet gauge pressures; \inchWaterColumn}
+ * @symrow{1; Supplied velocity pressure; \inchWaterColumn}
+ * @symrow{1.4; Supplied compressibility correction; \unitless}
+ * @symrow{6362; Retained fan divisor; \cubicFoot\inchWaterColumn\per\minute\per\horsepower}
+ * @symrow{5; Supplied fan shaft input; \horsepower}
+ * @endsymtable
+ *
+ * The result represents about 35.21% of the shaft input delivered to the gas under this pressure
+ * convention. With the other inputs unchanged, omitting the 1-inch velocity-pressure term would
+ * give about 44.01%. Pressure measurement conventions therefore directly affect the interpreted ratio.
+ *
+ * @heading{Assumptions, Boundaries and Inappropriate Uses}
+ * Normal consuming-equipment duties use positive shaft power, positive flow and specific gravity,
+ * positive pump head or effective fan rise, and an appropriate supplied fan correction. These are
+ * interpretation guidelines, not enforced ranges. The calculator evaluates supplied values directly
+ * and does not clamp results to zero through one or multiply them by 100.
+ *
+ * With finite arithmetic and no intermediate overflow, zero fluid power divided by nonzero shaft
+ * power produces zero efficiency. Nonzero fluid power divided by zero shaft power produces signed
+ * infinity; zero divided by zero produces NaN. Negative shaft input or fluid output affects the
+ * result's sign. Signed zero, infinity, NaN, underflow and overflow follow floating-point arithmetic,
+ * including the intermediate kW-to-hp conversion. Infinite flow multiplied by zero head or zero
+ * effective fan rise produces NaN, as does infinite fluid power divided by infinite shaft input.
+ * These arithmetic results are not automatically interpreted as valid performance or recoverable power.
+ *
+ * This method does not select equipment, predict pump/fan curves, assess cavitation or transients,
+ * estimate annual energy or cost, derive compressibility corrections, or model a general compressor.
+ * It does not provide a best-efficiency-point prediction or an independent efficiency guarantee.
+ *
+ * @heading{Constants and Provenance}
+ * The ratio, its evaluation order and scalar output are retained from the legacy MoverEfficiency
+ * implementation at Suite commit 7b5b760. Despite a legacy header comment saying percent, the tested
+ * return value is a fraction. FluidPower supplies the unchanged 3961.38 and 6362 divisors, 0.746
+ * conversion and velocity-pressure subtraction. Their exact historical divisor provenance is unverified;
+ * the physical explanation above does not establish the final digits of those constants.
+ * The pump worked example is an original native golden. The fan example was captured from the
+ * unchanged legacy implementation before removal; both are exercised by native and typed WASM tests.
+ *
+ * @heading{Public API and Migration}
+ * C++ callers include motorDriven/pumpFan/mover_efficiency.h and replace the four-argument pump
+ * constructor/calculate sequence with mover_efficiency::calculatePump(mover_efficiency::PumpInput),
+ * or the six-argument fan sequence with mover_efficiency::calculateFan(mover_efficiency::FanInput).
+ * Field order retains the former argument order; the fan shaft input remains second. The legacy
+ * class, getters, setters and header are removed without a compatibility wrapper.
+ * WASM/TypeScript callers use calculatePumpMoverEfficiency(PumpMoverEfficiencyInput) or
+ * calculateFanMoverEfficiency(FanMoverEfficiencyInput). Inputs are required plain objects with
+ * camelCase fields, including moverShaftPower in both paths; results are numeric fractions.
+ * Neither the inputs nor results require delete().
+ */

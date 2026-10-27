@@ -16,7 +16,7 @@
 #include "motorDriven/motor/optimal_motor_power.h"
 #include "motorDriven/motor/OptimalMotorShaftPower.h"
 #include "motorDriven/pumpFan/FanEnergyIndex.h"
-#include "motorDriven/pumpFan/MoverEfficiency.h"
+#include "motorDriven/pumpFan/mover_efficiency.h"
 #include "motorDriven/pumpFan/MoverShaftPower.h"
 #include "motorDriven/pumpFan/OptimalPumpShaftPower.h"
 
@@ -31,9 +31,8 @@ FanResult::Output FanResult::calculateExisting(Fan::FieldDataBaseline const fanF
     double const fanShaftPower   = moverShaftPower.moverShaftPower;
     double const driveEfficiency = moverShaftPower.driveEfficiency;
     double const fanEfficiency =
-        MoverEfficiency(fanFieldData.flowRate, fanShaftPower, fanFieldData.inletPressure, fanFieldData.outletPressure,
-                        fanFieldData.compressibilityFactor, fanFieldData.velocityPressure)
-            .calculate();
+        mover_efficiency::calculateFan({fanFieldData.flowRate, fanShaftPower, fanFieldData.inletPressure,
+            fanFieldData.outletPressure, fanFieldData.compressibilityFactor, fanFieldData.velocityPressure});
     double const annualEnergy =
         output.power * operatingHours / 1000; // Annual energy, MWh/year = kWe * operating hours/1000
     double const annualCost =
