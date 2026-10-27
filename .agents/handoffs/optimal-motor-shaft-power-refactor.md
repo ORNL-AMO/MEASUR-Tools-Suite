@@ -9,8 +9,9 @@
 - Base: `93427c377fd6e181cdb77b44ce6c16f199676b18`, including merged MoverShaftPower PR #443.
 - Desktop coordination: https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8957
 - Delivery: user requested commit, push and PR creation on 2026-10-27; target the epic branch.
-- Suite PR: pending creation from `issue-214`; exact URL will be recorded before final delivery push.
-- CI/publication evidence: maintain it in the child PR description and CI comments; do not push
+- Suite PR: [#444](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/444), targeting the epic branch.
+  Its description and CI comments are the durable delivery/publication evidence location.
+- CI/publication evidence: maintain it in PR #444's description and CI comments; do not push
   follow-up commits solely to record package versions or CI results. Package version: pending CI.
 
 ## Target And Persona Sequence
@@ -134,3 +135,11 @@
 - Snapshot: `/private/tmp/worked-example-precision-ylrese34/review-snapshot`. Original pre-sweep
   pages, arithmetic evidence and Doxygen log are retained in that temporary archive. Final handoff
   and roadmap updates record review evidence only; no documentation change after reviewed head.
+
+## PR Delivery — 2026-10-27
+
+- Implementation and documentation committed as `3344824e468495e7b4e1d126a399ccfd6d98b13f` on
+  `issue-214`, pushed, and opened as Suite PR #444 against `epic-pump-result-refactor`.
+- Actual implementation/docs match the reviewed `2fd0fe2` snapshot; delivery metadata only follows
+  that snapshot. The final coordination commit records the PR URL before ready-for-review transition.
+- Record post-push CI and exact package-publication evidence in PR #444, without evidence-only pushes.

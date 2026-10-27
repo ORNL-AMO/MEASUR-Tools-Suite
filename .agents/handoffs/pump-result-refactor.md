@@ -89,7 +89,7 @@ ordered so foundational calculators migrate before the composite calculators tha
 | 11 | #221 MoverEfficiency | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite PR #441 merged at `8d34462`; implementation independently reviewed Ready at `27510c8`. See the [MoverEfficiency handoff](mover-efficiency-refactor.md). |
 | 12 | #227 OptimalPumpShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite PR #442 merged at `2a20eed`; review and delivery evidence linked from the [OptimalPumpShaftPower handoff](optimal-pump-shaft-power-refactor.md). |
 | 13 | #222 MoverShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite PR [#443](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/443) merged at `93427c3`. See the [MoverShaftPower handoff](mover-shaft-power-refactor.md). |
-| 14 | #214 OptimalMotorShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Implemented, verified and independently reviewed Ready on `issue-214`. See the [OptimalMotorShaftPower handoff](optimal-motor-shaft-power-refactor.md). |
+| 14 | #214 OptimalMotorShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite [PR #444](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/444); implemented, verified and independently reviewed Ready. See the [OptimalMotorShaftPower handoff](optimal-motor-shaft-power-refactor.md). |
 
 For each module:
 
@@ -198,7 +198,8 @@ dependency migration, but their public refactors remain separate.
 - User-requested worked-example precision sweep subsequently updated 14 calculation pages and the
   documentation guide. All 82 general formula blocks and 794 source/binding/declaration/test files
   remain unchanged; independent documentation review is Ready. Details are in the module handoff.
-- User requested commit, push and child PR creation on 2026-10-27. No Desktop changes,
+- Suite child [PR #444](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/444) delivers this work
+  from `issue-214` into the epic; CI/publication evidence stays in that PR. No Desktop changes,
   package-pin updates, manual publication or automatic merge are part of this delivery.
   Existing Doxygen BibTeX failure remains; module-specific page has no warnings. Final epic integration
   review, release and consolidated Desktop verification remain separate work.
