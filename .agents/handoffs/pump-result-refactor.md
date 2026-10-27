@@ -3,7 +3,7 @@
 ## Workflow Metadata
 
 - Lifecycle: active
-- Status: Suite through FluidPower merged; MoverEfficiency implemented, verified and independently reviewed Ready at 27510c8; all remaining Desktop migration is deferred to final integration
+- Status: Suite through MoverEfficiency merged; OptimalPumpShaftPower implemented, verified and independently reviewed Ready; all remaining Desktop migration is deferred to final integration
 - Owner: Codex
 - Created: 2026-10-07
 - Last updated: 2026-10-27
@@ -17,7 +17,7 @@
 - Desktop coordination issue: https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8957
 - Desktop feature branch: https://github.com/ORNL-AMO/AMO-Tools-Desktop/tree/epic-pump-result-refactor
 - Desktop PumpResult PR: https://github.com/ORNL-AMO/AMO-Tools-Desktop/pull/8956 (merged)
-- Desktop held integration PR: https://github.com/ORNL-AMO/AMO-Tools-Desktop/pull/8964 (open; intentionally held)
+- Prior Desktop MotorEfficiency PR: https://github.com/ORNL-AMO/AMO-Tools-Desktop/pull/8964 (merged at `9b7ff3d7416ff8172ad3ab24fc01ab2ef29acbc9`, verified read-only on 2026-10-27)
 
 ## Target Module
 
@@ -78,7 +78,7 @@ ordered so foundational calculators migrate before the composite calculators tha
 | ---: | --- | --- | --- |
 | 1 | #203 PumpResult | Completed in Desktop PR #8956. | Suite PR #421 and Desktop PR #8956 merged. |
 | 2 | #216 Poles | No new Desktop work; final integration will consume the final Suite package once. | Suite PR #423 merged; issue closed; beta `1.2.6-beta.358.1` published. |
-| 3 | #208 MotorEfficiency | Desktop PR #8964 is open and intentionally held without further changes or merge until the full Suite sequence is approved; its existing package pins are `1.2.6-beta.365.1`. | Suite PR #424 merged on 2026-10-13; issue #208 closed; latest published integrated beta `1.2.6-beta.365.1`; last beta with recorded review/validation evidence `1.2.6-beta.363.1`. |
+| 3 | #208 MotorEfficiency | Desktop PR #8964 is merged; its package records pin `1.2.6-beta.365.1`. Remaining Desktop work is deferred to final integration. | Suite PR #424 merged on 2026-10-13; issue #208 closed; latest published integrated beta `1.2.6-beta.365.1`; last beta with recorded review/validation evidence `1.2.6-beta.363.1`. |
 | 4 | #205 EstimateFLA | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite PR [#425](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/425) merged on 2026-10-13 at `363c011`; Desktop migration deferred to final integration. |
 | 5 | #206 MotorCurrent | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite PR [#426](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/426) merged on 2026-10-13 at `9b3b8da`. See [MotorCurrent handoff](motor-current-refactor.md). |
 | 6 | #210 MotorPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite [PR #428](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/428) merged on 2026-10-14 at `2714873`; recorded validated child beta `1.2.6-beta.374.1`. See [MotorPower handoff](motor-power-refactor.md). |
@@ -86,8 +86,8 @@ ordered so foundational calculators migrate before the composite calculators tha
 | 8 | #212 MotorShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite [PR #432](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/432) merged on 2026-10-15 at `80c6475`. See [MotorShaftPower handoff](motor-shaft-power-refactor.md). |
 | 9 | #213 OptimalMotorPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite [PR #433](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/433) merged at `1998e82`; reviewed implementation head `5cb2284`. See [OptimalMotorPower handoff](optimal-motor-power-refactor.md). |
 | 10 | #220 FluidPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite [PR #434](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/434) merged on 2026-10-15 at `7b5b760`; reviewed implementation head `9d5e46c`. See [FluidPower handoff](fluid-power-refactor.md). |
-| 11 | #221 MoverEfficiency | Defer all Desktop wrapper and package-pin work to the final integration pass. | Implemented, verified and independently reviewed Ready at `27510c8` on `issue-221`; child PR/CI evidence linked from the [MoverEfficiency handoff](mover-efficiency-refactor.md). |
-| 12 | #227 OptimalPumpShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |
+| 11 | #221 MoverEfficiency | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite PR #441 merged at `8d34462`; implementation independently reviewed Ready at `27510c8`. See the [MoverEfficiency handoff](mover-efficiency-refactor.md). |
+| 12 | #227 OptimalPumpShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Implemented, verified and independently reviewed Ready on `issue-227`; review and delivery evidence linked from the [OptimalPumpShaftPower handoff](optimal-pump-shaft-power-refactor.md). |
 | 13 | #222 MoverShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |
 | 14 | #214 OptimalMotorShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |
 
@@ -104,8 +104,8 @@ For each module:
   require a `Ready` or `Ready with documented follow-up` result with no unresolved P0-P2 findings.
 - Complete Suite implementation, cross-layer tests, documentation, package artifacts, and pre-PR review for every
   remaining module before changing Desktop again.
-- After the integrated Suite review passes, publish the approved final or release-candidate package. Rebase and
-  consolidate Desktop PR #8964 against the final integration branch, update both Desktop package pins once, migrate
+- After the integrated Suite review passes, publish the approved final or release-candidate package. Consolidate
+  remaining Desktop changes against the final integration branch, update both Desktop package pins once, migrate
   every affected wrapper, and perform Desktop review and verification once.
 
 Explicitly outside this feature are `Pump.h`/#202, MotorData/#207, MotorPerformance/#209, FanResult/#198, and the
@@ -114,8 +114,9 @@ dependency migration, but their public refactors remain separate.
 
 ## Desktop Impact
 
-- Current state: Desktop PR #8964 remains open as retained validation history and is intentionally held with no new
-  updates or merge until the complete Suite sequence reaches approved final integration.
+- Current state: Desktop MotorEfficiency PR #8964 is already merged at `9b7ff3d7416ff8172ad3ab24fc01ab2ef29acbc9`.
+  GitHub status was verified read-only on 2026-10-27; earlier held-PR instructions were stale. Remaining Desktop
+  implementation, package updates and verification stay deferred until approved final Suite integration.
 - Final integration: consolidate all affected wrappers, root and process-flow package pins, and Desktop verification
   into one rebase/review cycle against the approved final or RC Suite package.
 - Until then: no Desktop implementation, wrapper tests, Angular typecheck/build, regression run, or package-pin update
@@ -151,7 +152,7 @@ dependency migration, but their public refactors remain separate.
 - Final package version: pending
 - Desktop root dependency: do not update until final integration; then update once to the approved final/RC package.
 - Desktop process-flow dependency: do not update until final integration; then align it with the root once.
-- Desktop held PR: #8964 remains open, unmodified, and unmerged until the final Suite package is available.
+- Prior Desktop PR: #8964 is merged. No Desktop PR changes are part of the remaining Suite child deliveries.
 - Release readiness: Suite PR #421 and Desktop PR #8956 are merged; Poles PR #423, MotorEfficiency PR #424,
   EstimateFLA PR #425, and MotorCurrent PR #426 are merged. The epic was synced with develop at `4c573f3`.
   MotorPower PR #428 merged on 2026-10-14 at `2714873`. MotorPowerFactor PR #430 merged at `9da4f19`.
@@ -198,7 +199,7 @@ dependency migration, but their public refactors remain separate.
 
 ## Open Questions Or Blockers
 
-- The final package identifier remains pending. Desktop PR #8964 is intentionally held until all Suite modules are merged and the integrated Suite review approves a final/RC package.
+- The final package identifier remains pending. Remaining Desktop work is deferred until all Suite modules are merged and the integrated Suite review approves a final/RC package; prior Desktop PR #8964 is already merged.
 
 ## MotorShaftPower Readability Follow-Up
 
@@ -220,7 +221,7 @@ dependency migration, but their public refactors remain separate.
   Declarations, docs/whitespace/package checks and rendered MathJax page/example inspection passed.
   Existing full-documentation BibTeX limitation persists. Independent full-diff review of `80c6475...5cb2284`
   is Ready with no actionable findings; reviewer independently reran 356 native assertions and declaration/whitespace checks.
-- Desktop source, tests, package pins and held PR #8964 remain deferred to final integration.
+- Remaining Desktop source, tests and package-pin work stay deferred to final integration.
 
 ## FluidPower Implementation
 
@@ -236,7 +237,7 @@ dependency migration, but their public refactors remain separate.
   inspection passed; all 65 MathJax containers rendered without errors. Existing full-documentation BibTeX limitation persists.
 - Independent full-diff review of `1998e82...9d5e46c` is Ready with no actionable findings; reviewer independently
   reran focused native, differential, type, documentation-link and whitespace checks. See the module handoff.
-- Desktop source, tests, dependency pins and held PR remain deferred to final integration. No package publication
+- Remaining Desktop source, tests and dependency-pin work stay deferred to final integration. No package publication
   or PR delivery was performed in this implementation.
 - Subsequent delivery: Suite [PR #434](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/434) merged into
   the epic on 2026-10-15 at `7b5b760`; the PR holds CI/publication evidence.
@@ -256,4 +257,22 @@ dependency migration, but their public refactors remain separate.
 - Independent full-diff review of `7b5b760...27510c8` is Ready with no actionable findings; reviewer
   independently reran focused native, differential, type, documentation-link and whitespace checks.
   See the module handoff for exact validation and review evidence.
-- Desktop source, tests, dependency pins and held PR remain deferred to final integration.
+- Remaining Desktop source, tests and dependency-pin work stay deferred to final integration.
+
+## OptimalPumpShaftPower Implementation
+
+- Replaced the legacy class with `optimal_pump_shaft_power::calculatePump(PumpInput)` and
+  `calculateFan(FanInput)`, returning numeric hp. Added standalone plain-input
+  `calculateOptimalPumpShaftPower` and `calculateOptimalFanShaftPower` WASM/TypeScript APIs.
+  Breaking C++ removal and additive runtime APIs explicitly approved; no numerical behavior changes.
+- PumpResult and FanResult receive only private consumer updates. Captured 30 direct legacy duties;
+  native and typed WASM tests cover them plus arithmetic boundaries. All 11,520,946 legacy differential
+  comparisons passed, with non-NaN outputs bit-for-bit and matching NaN classifications.
+- Focused native checks passed 345 assertions in 22 cases; full native tests passed 5,174 assertions
+  in 341 cases. Fresh rebuilt/staged WASM passed all 282 browser tests. Types, docs/whitespace/package
+  checks and rendered pump/fan examples passed; all 69 MathJax containers rendered without math errors.
+  Existing full-documentation BibTeX limitation and MathJax configuration warnings persist.
+- Independent full-diff review against `8d34462`, finalized at isolated snapshot `1046b25`, is Ready.
+  A P3 stale Desktop PR status was corrected and re-reviewed; no unresolved actionable findings remain.
+  See its module handoff for exact snapshot details and the branch PR/CI evidence link.
+- New Desktop source, tests, dependency pins and final package selection remain deferred to final integration.

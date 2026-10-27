@@ -47,6 +47,7 @@ export * from "./ts_def_modules/motorDriven/pump/pump_valve_power_loss";
 export * from "./ts_def_modules/motorDriven/pumpFan/pumpFan";
 export * from "./ts_def_modules/motorDriven/pumpFan/fluid_power";
 export * from "./ts_def_modules/motorDriven/pumpFan/mover_efficiency";
+export * from "./ts_def_modules/motorDriven/pumpFan/optimal_pump_shaft_power";
 
 export * from "./ts_def_modules/other/chp";
 export * from "./ts_def_modules/other/lighting_data";
@@ -168,6 +169,7 @@ export type MeasurToolsSuite =
     import("./ts_def_modules/motorDriven/pumpFan/pumpFan").PumpFanModule &
     import("./ts_def_modules/motorDriven/pumpFan/fluid_power").FluidPowerModule &
     import("./ts_def_modules/motorDriven/pumpFan/mover_efficiency").MoverEfficiencyModule &
+    import("./ts_def_modules/motorDriven/pumpFan/optimal_pump_shaft_power").OptimalPumpShaftPowerModule &
     // other
     import("./ts_def_modules/other/chp").ChpModule &
     import("./ts_def_modules/other/lighting_data").LightingDataModule &
