@@ -87,8 +87,8 @@ Mutually influential behavior:
 | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | Standard C++ (library + CLI) | `cmake -S . -B build-cpp && cmake --build build-cpp` (Windows: add `--config Release` or desired configuration)                               |
 | C++ Tests                    | (after standard build) run `./build-cpp/bin/cpp_tests` (Linux/macOS) or `./build-cpp/Debug/cpp_tests.exe` (Windows; use `Release/` as needed) |
-| WASM Module                  | `emcmake cmake -S . -B build-wasm -DBUILD_WASM=ON` then `emmake make -C build-wasm`                                                           |
-| WASM Tests (browser)         | `npm install && npm run test:browser`                                                                                                         |
+| WASM Module                  | `npm run build:wasm` builds and stages `client.js` and `client.wasm` into `bin/`                                                             |
+| WASM Tests (browser)         | `npm run verify:wasm` rebuilds, stages, typechecks, and runs headless browser tests                                                          |
 | Documentation                | `doxygen Doxyfile`                                                                                                                            |
 | Package                      | `cmake -S . -B build-pkg -DBUILD_PACKAGE=ON -DBUILD_TESTING=OFF && cmake --build build-pkg --target package`                                  |
 
@@ -170,14 +170,17 @@ emcc --version  # should show Emscripten version
 
 #### Build WebAssembly Module
 
-With emsdk activated, configure and build:
+With emsdk activated, use the repository script to configure, build, and stage
+the artifacts consumed by tests and npm packaging:
 ```bash
-emcmake cmake -S . -B build-wasm -DBUILD_WASM=ON
-emmake make -C build-wasm
+npm run build:wasm
 ```
-The build emits `build-wasm/bin/client.js` and
-`build-wasm/bin/client.wasm`. Release automation stages those two files in
-`bin/`, which is the canonical location used by tests and npm packaging.
+The underlying build emits `build-wasm/bin/client.js` and
+`build-wasm/bin/client.wasm`; the script copies both into `bin/`, which is the
+canonical location used by Karma and npm packaging. Set
+`MEASUR_WASM_BUILD_DIR` only when a different dedicated WASM build directory is
+needed. Set `MEASUR_WASM_BUILD_JOBS` to override the default parallelism of four
+build jobs.
 
 ### 6.5 WebAssembly Usage Example
 
@@ -218,12 +221,15 @@ console.log('DryerOperatingCost => Water removed:', res.waterRemoved);
 
 ### 6.6 WebAssembly Tests (Browser)
 
-Run from repository root (uses mocha):
+Run from the repository root with an active Emscripten environment:
 ```bash
-npm install
-npm run test:browser
+npm run verify:wasm
 ```
-Mocha tests reside in `tests/wasm-mocha/`. Re-running tests after editing JS/WASM test files does not require a rebuild unless C++ sources changed. Rerun `npm install` only when dependencies change or the lockfile updates.
+This command rebuilds and stages the current module, runs `tsc --noEmit`, and
+starts the headless Karma suite. Use `npm run tests` only when intentionally
+retesting an already-staged artifact. Mocha tests reside in
+`tests/wasm-mocha/`. Rerun `npm install` only when dependencies change or the
+lockfile updates.
 
 ### 6.7 Documentation Generation
 
@@ -426,11 +432,11 @@ cmake -S . -B build-cpp && cmake --build build-cpp
 # Run C++ tests
 ./build-cpp/bin/cpp_tests
 
-# WASM build
-emcmake cmake -S . -B build-wasm -DBUILD_WASM=ON && emmake make -C build-wasm
+# WASM build and staging
+npm run build:wasm
 
-# WASM browser tests
-npm install && npm run test:browser  # install needed only on first run
+# Fresh WASM build, declarations, and browser tests
+npm run verify:wasm
 
 # Docs
 doxygen Doxyfile

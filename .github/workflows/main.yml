@@ -25,11 +25,17 @@ jobs:
     secrets:
       PROJECT_TOKEN: ${{ secrets.PROJECT_TOKEN }}
 
+  quality:
+    if: github.event_name == 'pull_request' || github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    uses: ./.github/workflows/pr_quality.yml
+
   release-docs:
+    needs: quality
     if: github.event_name == 'push' && (github.ref_name == 'develop' || github.ref_name == 'master')
     uses: ./.github/workflows/release_docs.yml
 
   release-package-beta:
+    needs: quality
     if: >
       github.event_name == 'pull_request' && 
       github.base_ref == 'develop' && 
@@ -38,21 +44,49 @@ jobs:
     uses: ./.github/workflows/release_package.yml
     with:
       release_channel: beta
+      wasm_artifact_name: verified-wasm-${{ github.sha }}
     secrets:
       NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
+  comment-beta-package:
+    needs: release-package-beta
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Comment published beta version on pull request
+        env:
+          BODY: |
+            Beta package published: [`measur-tools-suite@${{ needs.release-package-beta.outputs.published_version }}`](https://www.npmjs.com/package/measur-tools-suite/v/${{ needs.release-package-beta.outputs.published_version }})
+
+            ```bash
+            npm install measur-tools-suite@${{ needs.release-package-beta.outputs.published_version }}
+            ```
+
+            [View workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: gh pr comment "$PR_NUMBER" --repo "$GH_REPO" --body "$BODY"
+
   release-package-rc:
+    needs: quality
     if: github.event_name == 'push' && github.ref_name == 'develop'
     uses: ./.github/workflows/release_package.yml
     with:
       release_channel: rc
+      wasm_artifact_name: verified-wasm-${{ github.sha }}
     secrets:
       NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
   release-package-latest:
+    needs: quality
     if: github.event_name == 'push' && github.ref_name == 'master'
     uses: ./.github/workflows/release_package.yml
     with:
       release_channel: latest
+      wasm_artifact_name: verified-wasm-${{ github.sha }}
     secrets:
       NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}

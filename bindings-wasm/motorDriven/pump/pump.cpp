@@ -2,34 +2,9 @@
 
 #include "motorDriven/motor/MotorData.h"
 #include "motorDriven/motor/MotorShaftPower.h"
-#include "motorDriven/pump/HeadTool.h"
 #include "motorDriven/pump/PumpResult.h"
 
 using namespace emscripten;
-
-// headToolSuctionTank
-EMSCRIPTEN_BINDINGS(head_tool_suction_tank_class) {
-    class_<HeadToolSuctionTank>("HeadToolSuctionTank")
-        .constructor<double, double, double, double, double, double, double, double, double, double>()
-        .function("calculate", &HeadToolSuctionTank::calculate);
-}
-// headTool
-EMSCRIPTEN_BINDINGS(head_tool_class) {
-    class_<HeadTool>("HeadTool")
-        .constructor<double, double, double, double, double, double, double, double, double, double>()
-        .function("calculate", &HeadTool::calculate);
-}
-// headToolOutput
-EMSCRIPTEN_BINDINGS(head_tool_output) {
-    class_<HeadToolBase::Output>("HeadToolOutput")
-        .constructor<double, double, double, double, double, double>()
-        .property("differentialElevationHead", &HeadToolBase::Output::elevationHead)
-        .property("differentialPressureHead", &HeadToolBase::Output::pressureHead)
-        .property("differentialVelocityHead", &HeadToolBase::Output::velocityHeadDifferential)
-        .property("estimatedSuctionFrictionHead", &HeadToolBase::Output::suctionHead)
-        .property("estimatedDischargeFrictionHead", &HeadToolBase::Output::dischargeHead)
-        .property("pumpHead", &HeadToolBase::Output::pumpHead);
-}
 
 // resultsExisting & resultsModified
 EMSCRIPTEN_BINDINGS(pump_results) {

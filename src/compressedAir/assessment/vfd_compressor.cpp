@@ -86,7 +86,7 @@ CompressorPerformanceResult VariableFrequencyDriveCompressor::calculateFromMeasu
 
 CompressorPerformanceResult VariableFrequencyDriveCompressor::calculateFromElectrical(double voltage, double current,
                                                                                      double power_factor) {
-    return calculateFromMeasuredPower(voltage * current * power_factor * 1.732 / 1000.0);
+    return calculateFromMeasuredPower(threePhasePowerKw(voltage, current, power_factor));
 }
 
 } // namespace compressed_air::assessment

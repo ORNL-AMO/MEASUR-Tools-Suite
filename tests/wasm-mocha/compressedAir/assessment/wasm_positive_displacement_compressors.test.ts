@@ -48,6 +48,25 @@ describe('Compressed Air Assessment - Positive Displacement Compressors', functi
         }
     });
 
+    it('uses compressor type when correcting start/stop performance', function () {
+        const screw = new moduleInstance.StartStopCompressor(89.5, 560, 1.05, 1);
+        const reciprocating = new moduleInstance.StartStopCompressor(
+            89.5, 560, 1.05, 1, moduleInstance.CompressorType.Reciprocating
+        );
+
+        try {
+            screw.applyPressureInletCorrection(473, 105, 1.4, 100, 14.5, 0.917, 110, 110, 14.7, true, 14.7);
+            reciprocating.applyPressureInletCorrection(
+                473, 105, 1.4, 100, 14.5, 0.917, 110, 110, 14.7, true, 14.7
+            );
+            assert.approximately(screw.adjustedFullLoadPowerKw, 90.0736, 0.001);
+            assert.approximately(reciprocating.adjustedFullLoadPowerKw, 89.3967, 0.001);
+        } finally {
+            screw.delete();
+            reciprocating.delete();
+        }
+    });
+
     it('calculates load/unload compressor performance', function () {
         const compressor = new moduleInstance.LoadUnloadCompressor(
             166.5, 1048, 1048 / 7.481, 175.5, 100, 110, 5, 10.1, 14.7,
@@ -63,6 +82,21 @@ describe('Compressed Air Assessment - Positive Displacement Compressors', functi
             assert.approximately(result.powerFraction, 0.94, 0.0001);
         } finally {
             compressor.delete();
+        }
+    });
+
+    it('uses the short load/unload constructor unloaded load factor', function () {
+        const highNoLoad = new moduleInstance.LoadUnloadCompressor(100, 500, 100, 105, 100, 110, 5, 0.6);
+        const lowNoLoad = new moduleInstance.LoadUnloadCompressor(100, 500, 100, 105, 100, 110, 5, 0.2);
+
+        try {
+            assert.equal(highNoLoad.calculateFromPowerFraction(0.59).powerKw, 0);
+            assert.approximately(lowNoLoad.calculateFromPowerFraction(0.59).powerKw, 59, 0.001);
+            const electrical = lowNoLoad.calculateFromElectrical(440, 154.74, 0.5);
+            assert.approximately(electrical.powerKw, 58.98, 0.02);
+        } finally {
+            highNoLoad.delete();
+            lowNoLoad.delete();
         }
     });
 
