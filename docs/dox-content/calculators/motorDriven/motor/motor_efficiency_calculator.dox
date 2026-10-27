@@ -57,8 +57,8 @@
  * @endsymtable
  *
  * The repository does not record the original source or regression process for the coefficient
- * tables, the 125 hp family boundary, or the 0.99 factor. They are retained as MEASUR compatibility
- * data rather than presented as universal motor relationships. The U.S. Department of Energy motor
+ * tables, the 125 hp family boundary, or the 0.99 factor. They are MEASUR model assumptions
+ * rather than universal motor relationships. The U.S. Department of Energy motor
  * sourcebook provides general motor-efficiency and load context @cite doe2008motorSourcebook.
  *
  * @heading{Specified-Efficiency Curve}
@@ -76,9 +76,9 @@
  * @symrow{\eta_{j,spec}; Scaled specified-class efficiency at load point j; \unitless}
  * @endsymtable
  *
- * The standard-baseline path historically uses its scaled 125-percent value at both the 100- and
- * 125-percent positions. That indexing behavior is intentionally retained for numerical
- * compatibility and is not a general engineering rule.
+ * The standard-baseline path uses its scaled 125-percent value at both the 100- and
+ * 125-percent positions. That indexing behavior is specific to this model and is not a general
+ * engineering rule.
  *
  * @heading{Zero Through 25 Percent Load}
  * At low load, the model converts the 25-percent efficiency into electrical loss:
@@ -164,7 +164,7 @@
  *   percentage points.
  * - The specified class requires a nonnegative specified efficiency. Other classes ignore that field.
  * - Zero load returns zero efficiency while retaining a nonzero loss estimate. Negative loads and
- *   nonpositive rated power are not rejected by the legacy model and are outside the intended use.
+ *   nonpositive rated power are not rejected by the model and are outside the intended use.
  * - The exact branch thresholds are retained: below 0.251, below 1.251, and otherwise the overload
  *   fit capped at 1.5.
  * - Use the model for coefficient-based MEASUR estimates when measured efficiency is unavailable.

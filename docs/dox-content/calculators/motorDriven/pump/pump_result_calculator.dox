@@ -294,6 +294,5 @@
  * const annualCostSavingsThousandDollars = existing.annualCost - modified.annualCost;
  * @endcode
  *
- * The implementation composes the established motor, drive, and fluid-power calculators. Current C++
- * and WebAssembly regression fixtures are the executable source of truth for numerical compatibility.
+ * The calculation combines the motor, drive and fluid-power models described above.
  */

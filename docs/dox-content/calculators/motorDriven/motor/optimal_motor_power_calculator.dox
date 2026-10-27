@@ -145,7 +145,7 @@
  * fraction for SPECIFIED. PREMIUM current modeling supports 2-, 4-, and 6-pole motors. See
  * @ref motor_current_calculator and @ref estimate_fla_calculator for empirical model restrictions.
  *
- * There is no new numerical validation, fallback or output clamping. The search limit is not a
+ * There is no numerical validation, fallback or output clamping. The search limit is not a
  * continuous-duty rating, and the final load may extrapolate beyond 1.5. The current model itself
  * caps its evaluation above 1.5; the composite search and other dependencies retain their own behavior.
  * Zero target retains modeled no-load electrical demand. Negative targets can terminate at the first
@@ -154,14 +154,11 @@
  * Do not interpret extrapolated or nonfinite results as feasible equipment operation or use this
  * model in place of measured performance or manufacturer limits for equipment selection.
  *
- * Formula provenance is the unchanged legacy implementation at commit 80c6475 and captured native
- * regression outputs. The historical sources of empirical curves and voltage adjustments are
- * unverified; their preservation is not an independent engineering validation.
+ * The historical sources of the empirical curves and voltage adjustments are unverified.
+ * The model does not establish independent engineering validation of those assumptions.
  *
- * @heading{API Migration}
- * Replace the global constructor followed by calculate() with optimal_motor_power::calculate(Input).
- * The required shaft hp is now an explicit input on every call; constructor accessors are removed.
- * C++ result members powerFactor/loadFactor become power_factor/load_factor. WebAssembly consumers
- * use calculateOptimalMotorPower with OptimalMotorPowerInput and OptimalMotorPowerResult plain objects;
- * no allocation or delete() is required. This standalone WebAssembly surface is newly added.
+ * @heading{Calculation Interface}
+ * C++ callers use optimal_motor_power::calculate(Input), supplying required shaft power in hp.
+ * WebAssembly callers use calculateOptimalMotorPower with OptimalMotorPowerInput and
+ * OptimalMotorPowerResult plain objects; neither requires delete().
  */

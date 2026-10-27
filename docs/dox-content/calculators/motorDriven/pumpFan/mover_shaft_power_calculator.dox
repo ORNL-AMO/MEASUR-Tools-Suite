@@ -78,8 +78,10 @@
  *
  * These factors scale the loss; they are not fixed drive efficiencies. The exponential terms
  * vary with motor shaft power, so choosing a belt type does not assign a constant 93%, 95% or
- * 98% efficiency. The implementation retains its original arithmetic order: scaled belts
- * multiply the curve by the factor before dividing by 100, then multiply by motor shaft power;
+ * 98% efficiency. Those nominal efficiencies correspond to reference loss fractions of 0.07,
+ * 0.05 and 0.02, which define the relative belt-loss multipliers. The calculation's arithmetic
+ * order matters: scaled belts multiply the curve by the factor before dividing by 100, then
+ * multiply by motor shaft power;
  * the ordinary V-belt path divides its curve by 100 before multiplying by power. Efficiency
  * uses one minus loss divided by power, and delivered power uses subtraction. Algebraic
  * simplification can change floating-point boundary results.
@@ -117,33 +119,22 @@
  * because its loss-to-power ratio is zero divided by zero. Direct drive instead returns
  * efficiency 1, and SPECIFIED returns its supplied fraction. Signed zero, nonfinite values,
  * underflow and overflow are retained. Negative-power exponential growth can overflow, and
- * infinite-power belt calculations can produce nonfinite efficiencies. These are compatibility
- * behaviors, not physical extensions of the loss model.
+ * infinite-power belt calculations can produce nonfinite efficiencies. These arithmetic outcomes
+ * do not establish physical extensions of the loss model.
  *
  * This is a forward calculation from known motor shaft output to delivered mover shaft input.
  * OptimalMotorShaftPower works in the reverse direction using a different retained empirical
  * curve; it is not an exact algebraic inverse. Do not replace either algorithm with an assumed
  * round-trip identity. This calculator also does not select equipment or optimize motor size.
  *
- * @heading{Provenance and Public API Migration}
- * Coefficients, branch behavior and evaluation order come from the legacy MoverShaftPower
- * implementation at commit 2a20eed, checked against direct native captures. Historical source
- * comments attribute the ordinary V-belt calculation to AMCA 203-90 Appendix L and relative
- * belt factors to a Belt Drive Tip Sheet. The precise coefficient derivation and applicability
+ * @heading{Provenance}
+ * Historical source comments attribute the ordinary V-belt calculation to AMCA 203-90 Appendix L
+ * and relative belt factors to a Belt Drive Tip Sheet. The precise coefficient derivation and applicability
  * range have not been independently verified; those comments are attribution, not a new claim
  * that the fit reproduces a particular standard.
  *
- * The implementation names the curve amplitudes and signed exponent coefficients for their slow
- * and fast decay terms, and the constant term for its high-positive-power loss limit. The legacy
- * comments' nominal efficiencies of 93%, 95% and 98% correspond to reference loss fractions of
- * 0.07, 0.05 and 0.02. Those named fractions define the relative belt-loss multipliers; they do
- * not replace the power-dependent efficiency calculation. Literal fractions and the original
- * evaluation order are retained to preserve numerical behavior.
- *
- * C++ callers use mover_shaft_power::calculate(Input) returning Result. Replace the old
- * constructor/calculate and getter/setter calls with a complete input per call, and use the
- * snake_case result fields mover_shaft_power and drive_efficiency. WASM/TypeScript callers use
+ * @heading{Calculation Interface}
+ * C++ callers use mover_shaft_power::calculate(Input) returning Result. WASM/TypeScript callers use
  * calculateMoverShaftPower(MoverShaftPowerInput), returning MoverShaftPowerResult with
- * moverShaftPower and driveEfficiency. Both are plain objects requiring no delete(). The old
- * MoverShaftPower and MoverShaftPowerOutput constructors are removed; the Drive enum is retained.
+ * moverShaftPower and driveEfficiency. Inputs and results are plain objects requiring no delete().
  */

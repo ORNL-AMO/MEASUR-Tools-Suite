@@ -299,3 +299,13 @@ dependency migration, but their public refactors remain separate.
 - Refreshed focused native checks (453 assertions/17 cases), all 1,607,396 exact legacy comparisons,
   and fresh WASM verification (284 browser tests) passed. Follow-up snapshot `f797513` independently
   reviewed Ready; full evidence is in the module handoff.
+
+## Calculation Documentation Cleanup
+
+- Removed API migration/refactor history from all 13 completed epic calculator `.dox` pages;
+  migration contracts remain in module handoffs and PRs. Current usage and engineering explanations,
+  provenance, model caveats, 81 formulas, 80 symbol/unit tables and 37 inline math expressions remain.
+- Added the calculation-versus-migration documentation rule to `contributing/documentation.md`.
+  Links, whitespace and generated-page checks pass; existing full-documentation BibTeX error persists.
+- Independent documentation review is Ready at frozen snapshot `3295592`, with no actionable findings.
+  Delivered as a documentation follow-up in Suite PR [#443](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/443).

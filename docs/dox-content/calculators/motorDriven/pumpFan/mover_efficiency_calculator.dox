@@ -145,20 +145,15 @@
  * It does not provide a best-efficiency-point prediction or an independent efficiency guarantee.
  *
  * @heading{Constants and Provenance}
- * The ratio, its evaluation order and scalar output are retained from the legacy MoverEfficiency
- * implementation at Suite commit 7b5b760. Despite a legacy header comment saying percent, the tested
- * return value is a fraction. FluidPower supplies the unchanged 3961.38 and 6362 divisors, 0.746
- * conversion and velocity-pressure subtraction. Their exact historical divisor provenance is unverified;
+ * The result is an efficiency fraction. The @ref fluid_power_calculator "Fluid Power Calculator"
+ * supplies the 3961.38 and 6362 divisors, 0.746 conversion and velocity-pressure subtraction.
+ * Their exact historical divisor provenance is unverified;
  * the physical explanation above does not establish the final digits of those constants.
- * The pump worked example is an original native golden. The fan example was captured from the
- * unchanged legacy implementation before removal; both are exercised by native and typed WASM tests.
  *
- * @heading{Public API and Migration}
- * C++ callers include motorDriven/pumpFan/mover_efficiency.h and replace the four-argument pump
- * constructor/calculate sequence with mover_efficiency::calculatePump(mover_efficiency::PumpInput),
- * or the six-argument fan sequence with mover_efficiency::calculateFan(mover_efficiency::FanInput).
- * Field order retains the former argument order; the fan shaft input remains second. The legacy
- * class, getters, setters and header are removed without a compatibility wrapper.
+ * @heading{Calculation Interface}
+ * C++ callers include motorDriven/pumpFan/mover_efficiency.h and use
+ * mover_efficiency::calculatePump(mover_efficiency::PumpInput) or
+ * mover_efficiency::calculateFan(mover_efficiency::FanInput).
  * WASM/TypeScript callers use calculatePumpMoverEfficiency(PumpMoverEfficiencyInput) or
  * calculateFanMoverEfficiency(FanMoverEfficiencyInput). Inputs are required plain objects with
  * camelCase fields, including moverShaftPower in both paths; results are numeric fractions.

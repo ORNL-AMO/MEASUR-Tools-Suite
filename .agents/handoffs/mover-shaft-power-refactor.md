@@ -8,7 +8,7 @@
 - Suite issue: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/222
 - Branch / intended PR base: `issue-222` / `epic-pump-result-refactor`.
 - Base commit: `2a20eed283fd4195c0b3af70ced8a2175c38bab7` (OptimalPumpShaftPower PR #442 merged).
-- Suite PR: [branch PR and CI/publication evidence](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pulls?q=is%3Apr+head%3Aissue-222) will be recorded in the PR description and CI comments.
+- Suite PR: [#443 and CI/publication evidence](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/443); delivery and validation evidence are maintained in its description and CI comments.
 - Delivery: user requested commit, push and PR creation on 2026-10-27; target the epic branch.
   Keep post-push CI/package evidence in the PR; avoid publication-evidence-only follow-up pushes.
 - Desktop coordination: https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8957
@@ -134,3 +134,23 @@
 - Independent review of follow-up implementation snapshot `f797513ed5b7e6ffb9ebbd473f602c56dcb77efb`
   against the preceding reviewed snapshot `eddc68e7587bdd934e4d0efb430d3c0ffa0a6b24` confirmed Ready
   with no actionable findings. The complete candidate still targets epic base `2a20eed`.
+
+## Engineering Documentation Sweep — 2026-10-27
+
+- User requested removal of migration content from calculation `.dox` pages across the PumpResult epic.
+  Swept all 13 completed pages: PumpResult, Poles, MotorEfficiency, EstimateFLA, MotorCurrent, MotorPower,
+  MotorPowerFactor, MotorShaftPower, OptimalMotorPower, FluidPower, MoverEfficiency,
+  OptimalPumpShaftPower and MoverShaftPower. PumpHead is outside this epic and was left unchanged.
+- Removed old-to-new constructor/accessor/cleanup instructions, removed/additive API status, refactor
+  narration and commit/test-capture history. Current interfaces/examples remain, along with engineering
+  interpretation, provenance qualifications, boundary behavior and model-specific caveats. Migration
+  contracts remain in development handoffs and PR records. Added this distinction to the documentation guide.
+- All 81 formula blocks, 80 symbol/unit tables and 37 inline math expressions are byte-identical to
+  PR head `32940f58b19ec4271149bb62e9211e0c2f8018e4`. Documentation links and whitespace checks pass.
+  Doxygen emitted all 13 pages without migration headings or edited-page diagnostics. The existing
+  repository-wide BibTeX error and unrelated warnings remain. No runtime code/API change or native/WASM
+  rerun is involved in this prose-only follow-up; prior runtime validation remains applicable.
+- Independent reviewer `mover_shaft_power_review` reviewed delta `32940f5...3295592c9b7c0c6b85508faf0bdc5c8497303b2b`
+  in `/private/tmp/pump-docs-sweep-wwugj3ec/review-snapshot`: Ready, no actionable findings. Reviewer
+  independently confirmed identical math/tables, links and whitespace and inspected Doxygen evidence.
+- This update continues PR #443; no new PR or Desktop/package changes are required.

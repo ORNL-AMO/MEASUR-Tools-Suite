@@ -60,7 +60,7 @@
  * @endsymtable
  *
  * The common voltage factor cancels algebraically in the normalization. Nevertheless, both scaling
- * passes and their order are retained for numerical compatibility. Changing rated voltage with the
+ * passes are evaluated in the documented order. Changing rated voltage with the
  * same supplied FLA therefore leaves selected-load current essentially unchanged, while the
  * independently estimated FLA changes with rated voltage. Do not substitute estimated FLA for
  * @math{B_4}: that would change the retained behavior for specified-efficiency motors.
@@ -80,10 +80,9 @@
  * @symrow{j; Anchor index 0 through 5; \unitless}
  * @endsymtable
  *
- * The coefficients fit the selected anchors using the retained polynomial solver. Each branch has
+ * The coefficients fit the selected anchors using a polynomial solver. Each branch has
  * degree plus one distinct load points, defining its interpolating polynomial within numerical
- * precision. The implementation solves the polynomial normal equations using Gaussian elimination;
- * this refactor retains that solver rather than changing the interpolation method.
+ * precision. The implementation solves the polynomial normal equations using Gaussian elimination.
  *
  * | Requested fractional load | Degree | Anchor loads used | Evaluation load |
  * | --- | --- | --- | --- |
@@ -138,17 +137,17 @@
  *   divides by it; zero may produce non-finite estimated FLA. An exact baseline-distance tie selects
  *   the energy-efficient baseline, as described in @ref estimate_fla_calculator.
  * - PREMIUM supports only speed/frequency pairs classified as 2, 4, or 6 poles. Higher-pole premium
- *   selections are outside the coefficient-table bounds. No validation or fallback has been added.
- * - These preconditions are caller-owned and are not checked by the retained model. No new load
- *   validation, clipping below zero, or current correction is introduced.
+ *   selections are outside the coefficient-table bounds. No validation or fallback is applied.
+ * - These preconditions are caller-owned and are not checked by the model. The calculation does not
+ *   validate load or clip it below zero.
  * - The method is an empirical estimate for MEASUR assessments. It does not calculate transients,
  *   starting current, voltage imbalance, or motor thermal/protection limits. The 150% cap is a model
  *   evaluation limit, not a statement that operation at that load is permissible.
- * - The anchors, polynomial regions, and constants are retained from the legacy calculation and
- *   regression fixtures. Their original experimental or regression provenance is not recorded.
+ * - The original experimental or regression provenance of the anchors, polynomial regions and
+ *   constants is not recorded.
  *
- * @heading{Public Interfaces And Migration}
- * C++ callers replace the MotorCurrent constructor and methods with stateless functions:
+ * @heading{Calculation Interfaces}
+ * C++ callers use:
  * @code{.cpp}
  * const motor_current::Input input = {
  *     100, 1500, Motor::LineFrequency::FREQ60,
@@ -156,11 +155,11 @@
  * };
  * const auto result = motor_current::calculate(input, 113.8);
  * const double current = result.current;
- * const double estimated_fla = result.estimated_fla; // Replaces the post-calculation getter.
+ * const double estimated_fla = result.estimated_fla;
  * const double optimal_current = motor_current::calculateOptimal(input);
  * @endcode
  *
- * WebAssembly callers replace the runtime constructor, method, and cleanup with plain values:
+ * WebAssembly callers use plain input and result values:
  * @code{.ts}
  * import createModule, { type MotorCurrentInput } from 'measur-tools-suite';
  * const module = await createModule();
@@ -178,6 +177,6 @@
  * @endcode
  *
  * Neither input nor output requires `delete()`. Both functions leave the input unchanged. The
- * optimal function returns a number. Existing consuming calculators retain responsibility for
- * their field-voltage corrections and their own runtime-object cleanup.
+ * optimal function returns a number. Consuming calculators apply their field-voltage corrections
+ * separately.
  */

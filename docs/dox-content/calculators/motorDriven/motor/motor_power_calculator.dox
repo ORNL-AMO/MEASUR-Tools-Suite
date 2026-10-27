@@ -107,7 +107,5 @@
  * const module = await createModule();
  * const powerKw: number = module.calculateMotorPower(460, 100, 0.85);
  * @endcode
- * Both APIs return a scalar and require no cleanup. The C++ namespace function replaces the legacy
- * MotorPower constructor and calculate() method without a compatibility wrapper. The direct WASM
- * function is additive; there was no previous MotorPower runtime constructor.
+ * Both APIs return a scalar and require no cleanup.
  */

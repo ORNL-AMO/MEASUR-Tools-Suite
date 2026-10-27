@@ -125,7 +125,7 @@
  *
  * Supplied operating efficiency and voltage are ignored here. Changing ratedVoltage from 460 to 230
  * does not change this branch's result for the same motor characteristics and current. The fixed 460 V,
- * 0.8 loss ratio and 0.001 switch are preserved legacy assumptions with unverified original provenance.
+ * 0.8 loss ratio and 0.001 switch are model assumptions with unverified original provenance.
  * The result is a model estimate at that reference, not a general measurement-based PF at any voltage.
  *
  * @heading{Worked Examples}
@@ -162,7 +162,6 @@
  * @symrow{1000; Volt-amperes per kilovolt-ampere; \volt\ampere\per\kilo\volt\ampere}
  * @endsymtable
  *
- * Both examples are regression fixtures captured from the fully initialized legacy calculator.
  * Small nonzero loads below the threshold still use zero-load loss; no shaft-power term is added there.
  *
  * @heading{Assumptions, Boundaries and Inappropriate Uses}
@@ -179,7 +178,7 @@
  * - This estimates a ratio, not capacitor sizing, plant utility penalties, energy use, or motor efficiency.
  *   A reference-voltage near-zero result is not sufficient for evaluating actual PF at a different voltage.
  *
- * @heading{Calculation API and Migration}
+ * @heading{Calculation Interface}
  * C++ callers include motorDriven/motor/motor_power_factor.h:
  * @code{.cpp}
  * const motor_power_factor::Input input = {Motor::LineFrequency::FREQ60, 1780,
@@ -197,9 +196,6 @@
  * };
  * const powerFactor: number = module.calculateMotorPowerFactor(input);
  * @endcode
- * Replace legacy MotorPowerFactor constructors and calculate() calls with this function. Supply all nine
- * fields even when the loaded branch ignores model data. Remove delete() calls; no runtime object is allocated.
- * The old class, accessors, header and runtime constructor are removed without compatibility wrappers.
- * MotorPerformance now supplies complete nameplate data for its formerly uninitialized near-zero path;
- * its existing loaded results and percentage output convention are preserved.
+ * Supply all nine fields even when the loaded branch ignores model data. The input is a plain
+ * object and the result is a number; neither requires cleanup.
  */
