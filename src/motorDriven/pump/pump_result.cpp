@@ -3,7 +3,7 @@
 #include "motorDriven/motor/motor_shaft_power.h"
 #include "motorDriven/motor/optimal_motor_power.h"
 #include "motorDriven/motor/OptimalMotorShaftPower.h"
-#include "motorDriven/pumpFan/MoverEfficiency.h"
+#include "motorDriven/pumpFan/mover_efficiency.h"
 #include "motorDriven/pumpFan/MoverShaftPower.h"
 #include "motorDriven/pumpFan/OptimalPumpShaftPower.h"
 #include "physics/constants.h"
@@ -28,9 +28,8 @@ Result calculateExisting(const ExistingInput& input) {
                                     physics::conversions::kPumpGpmPsiPerHp;
         pumpEfficiency = hydraulicPower / moverOutput.moverShaftPower;
     } else {
-        pumpEfficiency = MoverEfficiency(system.specific_gravity, system.flow_rate, system.head,
-                                         moverOutput.moverShaftPower)
-                             .calculate();
+        pumpEfficiency = mover_efficiency::calculatePump({system.specific_gravity, system.flow_rate,
+            system.head, moverOutput.moverShaftPower});
     }
 
     const auto annualEnergy = motorOutput.power * system.operating_hours / 1000.0;

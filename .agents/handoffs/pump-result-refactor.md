@@ -3,10 +3,10 @@
 ## Workflow Metadata
 
 - Lifecycle: active
-- Status: Suite through OptimalMotorPower merged; FluidPower implemented, verified and independently reviewed Ready at 9d5e46c; all remaining Desktop migration is deferred to final integration
+- Status: Suite through FluidPower merged; MoverEfficiency implemented with integrated verification and independent review in progress; all remaining Desktop migration is deferred to final integration
 - Owner: Codex
 - Created: 2026-10-07
-- Last updated: 2026-10-15
+- Last updated: 2026-10-27
 - Suite issue: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/203
 - Suite feature branch: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/tree/epic-pump-result-refactor
 - Suite CI bootstrap PR: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/420
@@ -85,8 +85,8 @@ ordered so foundational calculators migrate before the composite calculators tha
 | 7 | #211 MotorPowerFactor | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite PR [#430](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/430) merged at `9da4f19`; reviewed implementation head `873efc0`. See [MotorPowerFactor handoff](motor-power-factor-refactor.md). |
 | 8 | #212 MotorShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite [PR #432](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/432) merged on 2026-10-15 at `80c6475`. See [MotorShaftPower handoff](motor-shaft-power-refactor.md). |
 | 9 | #213 OptimalMotorPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite [PR #433](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/433) merged at `1998e82`; reviewed implementation head `5cb2284`. See [OptimalMotorPower handoff](optimal-motor-power-refactor.md). |
-| 10 | #220 FluidPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Implemented, verified and independently reviewed Ready at `9d5e46c` on `issue-220`; child PR delivery pending. See [FluidPower handoff](fluid-power-refactor.md). |
-| 11 | #221 MoverEfficiency | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |
+| 10 | #220 FluidPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite [PR #434](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/434) merged on 2026-10-15 at `7b5b760`; reviewed implementation head `9d5e46c`. See [FluidPower handoff](fluid-power-refactor.md). |
+| 11 | #221 MoverEfficiency | Defer all Desktop wrapper and package-pin work to the final integration pass. | Implemented on `issue-221`; integrated verification and independent review in progress. See [MoverEfficiency handoff](mover-efficiency-refactor.md). |
 | 12 | #227 OptimalPumpShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |
 | 13 | #222 MoverShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |
 | 14 | #214 OptimalMotorShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |
@@ -157,8 +157,9 @@ dependency migration, but their public refactors remain separate.
   MotorPower PR #428 merged on 2026-10-14 at `2714873`. MotorPowerFactor PR #430 merged at `9da4f19`.
   MotorShaftPower PR #432 merged on 2026-10-15 at `80c6475` after verification and independent review.
   OptimalMotorPower PR #433 merged at `1998e82`; independent pre-PR review is Ready at `5cb2284`.
-  FluidPower implementation, verification and independent review are complete, Ready at `9d5e46c`;
-  child PR delivery remains pending. Evidence is in its module handoff.
+  FluidPower PR #434 merged on 2026-10-15 at `7b5b760`; independent review was Ready at `9d5e46c`.
+  MoverEfficiency implementation is complete; integrated verification and independent review remain in progress.
+  Evidence is in the module handoffs.
 - Release blockers: complete and review all remaining Suite modules, pass the integrated Suite review, publish the approved final/RC package, then perform the one Desktop integration/review cycle.
 
 ## Validation
@@ -236,3 +237,17 @@ dependency migration, but their public refactors remain separate.
   reran focused native, differential, type, documentation-link and whitespace checks. See the module handoff.
 - Desktop source, tests, dependency pins and held PR remain deferred to final integration. No package publication
   or PR delivery was performed in this implementation.
+- Subsequent delivery: Suite [PR #434](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/434) merged into
+  the epic on 2026-10-15 at `7b5b760`; the PR holds CI/publication evidence.
+
+## MoverEfficiency Implementation
+
+- Replaced the legacy class with `mover_efficiency::calculatePump(PumpInput)` and
+  `mover_efficiency::calculateFan(FanInput)`, returning numeric efficiency fractions. Added standalone
+  plain-input `calculatePumpMoverEfficiency` and `calculateFanMoverEfficiency` WASM/TypeScript APIs.
+  Breaking C++ removal and additive runtime API explicitly approved; no numerical behavior changes.
+- PumpResult and FanResult receive only private consumer updates. Original pump goldens, captured direct
+  fan duties and arithmetic boundaries are covered; 2,598,977 legacy differential comparisons passed.
+- Native and fresh-WASM verification passed; final documentation/package checks and independent review
+  remain in progress. See the module handoff for exact validation and review evidence.
+- Desktop source, tests, dependency pins and held PR remain deferred to final integration.
