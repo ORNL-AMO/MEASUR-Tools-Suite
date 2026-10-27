@@ -127,17 +127,14 @@
  * available here to validate equipment performance or determine electricity consumption.
  *
  * @heading{Constants and Provenance}
- * The formulas, exact divisors 3961.38 and 6362, 0.746 conversion, velocity-pressure subtraction and
- * evaluation order are retained from the legacy FluidPower header at Suite commit 1998e82. The exact
- * historical derivation of the two divisors is unverified; the physical explanation above does not
+ * The MEASUR model uses divisors 3961.38 and 6362, conversion 0.746 and the velocity-pressure
+ * subtraction described above. The exact historical derivation of the two divisors is unverified;
+ * the physical explanation above does not
  * establish the provenance of their final digits. Rounded alternatives must not silently replace them.
- * The worked examples are existing native regression fixtures, also exercised by typed WASM tests.
  *
- * @heading{Public API and Migration}
+ * @heading{Calculation Interface}
  * C++ callers use fluid_power::calculatePump() with fluid_power::PumpInput, or
  * fluid_power::calculateFan() with fluid_power::FanInput, from motorDriven/pumpFan/fluid_power.h.
- * These replace the three-argument and five-argument FluidPower constructor/calculate sequences,
- * respectively; the old class and header are removed without a compatibility wrapper.
  * WASM/TypeScript callers use calculatePumpFluidPower(PumpFluidPowerInput) or
  * calculateFanFluidPower(FanFluidPowerInput). Inputs are plain objects with camelCase fields;
  * results are numeric kW. Neither inputs nor results require delete().

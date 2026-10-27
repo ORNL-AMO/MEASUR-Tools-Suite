@@ -141,20 +141,18 @@
  * selection guarantee, or proof of an achievable efficiency. Use a separate model for motor and
  * drive losses, margins, operating constraints and equipment selection.
  *
- * @heading{Provenance and API Migration}
- * The formulas, conversion order and hp output are retained from the legacy OptimalPumpShaftPower
- * class at Suite commit 8d34462. Direct pump/fan legacy captures and assessment regression tests
- * provide numerical provenance. The 3961.38 and 6362 divisors are retained through FluidPower;
- * their exact historical source is unverified. This refactor does not claim a new empirical model.
- * The old header's percent comment was incorrect: callers and arithmetic use efficiency fractions.
+ * @heading{Constants and Provenance}
+ * The @ref fluid_power_calculator "Fluid Power Calculator" supplies the 3961.38 and 6362 divisors
+ * and the 0.746 kW/hp conversion. The exact historical source of the divisors is unverified;
+ * the physical relationships above do not establish their final digits.
  *
- * C++ callers replace the old constructor and calculate() call with
+ * @heading{Calculation Interface}
+ * C++ callers use
  * optimal_pump_shaft_power::calculatePump(PumpInput) or calculateFan(FanInput), using
- * motorDriven/pumpFan/optimal_pump_shaft_power.h. Required aggregate members retain the old
- * constructor order. The class, legacy header, getters and setters are removed without wrappers.
+ * motorDriven/pumpFan/optimal_pump_shaft_power.h.
  *
  * WASM/TypeScript callers use calculateOptimalPumpShaftPower(OptimalPumpShaftPowerInput) or
  * calculateOptimalFanShaftPower(OptimalFanShaftPowerInput). Inputs are complete plain objects with
  * camelCase fields, including pumpEfficiency or fanEfficiency as a fraction. Results are numeric hp;
- * inputs and results require no delete(). Interfaces are type-only, not runtime constructors.
+ * inputs and results require no delete().
  */

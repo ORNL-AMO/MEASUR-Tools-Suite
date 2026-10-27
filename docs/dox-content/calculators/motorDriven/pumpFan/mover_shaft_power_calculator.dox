@@ -1,0 +1,140 @@
+/**
+ * @defgroup mover_shaft_power_calculator Mover Shaft Power Calculator
+ * @ingroup equipment_and_property_calculators
+ * @brief Calculates the motor shaft output delivered through a drive to a pump or fan.
+ * @details
+ * How much of the motor's mechanical output reaches the pump or fan after drive losses?
+ * A drive transmits power between these shafts; belt losses reduce the power available to the
+ * mover. This calculation supplies that delivered shaft power and the drive efficiency needed
+ * to interpret an existing pump or fan operating point.
+ *
+ * @heading{Final Results and Interpretation}
+ * The results are mover shaft input in hp and drive efficiency as a fraction. For belt drives,
+ * the calculation first estimates the mechanical power lost in transmission:
+ * @formula{mover-shaft-power-results; P_s=P_m-L,\qquad \eta_d=1-\frac{L}{P_m}}
+ * @symtable
+ * @symrow{P_s; Mechanical input delivered to the pump or fan shaft; \horsepower}
+ * @symrow{P_m; Motor mechanical shaft output entering the drive; \horsepower}
+ * @symrow{L; Estimated mechanical power lost in the drive; \horsepower}
+ * @symrow{\eta_d; Drive efficiency as a fraction; \unitless}
+ * @endsymtable
+ *
+ * At positive power with ordinary drive losses, delivered power is below motor shaft output.
+ * An efficiency of 0.95 means 95% of that shaft output reaches the mover. Neither result is motor
+ * electrical demand or pump/fan fluid power. Motor efficiency belongs upstream; the
+ * @ref mover_efficiency_calculator "Mover Efficiency Calculator" accounts for shaft-to-fluid
+ * conversion downstream. Do not apply these drive losses a second time to power already measured
+ * at the pump or fan shaft.
+ *
+ * @heading{Choose the Drive Path}
+ * Supply motor shaft power in hp, an existing Drive selection, and specified efficiency as a
+ * fraction. All fields are required, even when specified efficiency is inactive.
+ *
+ * Direct drive models no transmission loss and returns the supplied shaft power unchanged:
+ * @formula{mover-shaft-power-direct; P_s=P_m,\qquad \eta_d=1}
+ * @symtable
+ * @symrow{P_s; Delivered pump or fan shaft power; \horsepower}
+ * @symrow{P_m; Supplied motor shaft power; \horsepower}
+ * @symrow{\eta_d; Direct-drive efficiency; \unitless}
+ * @endsymtable
+ *
+ * SPECIFIED uses the supplied fraction directly, without estimating a belt loss:
+ * @formula{mover-shaft-power-specified; P_s=P_m\eta_{specified},\qquad \eta_d=\eta_{specified}}
+ * @symtable
+ * @symrow{P_s; Delivered pump or fan shaft power; \horsepower}
+ * @symrow{P_m; Supplied motor shaft power; \horsepower}
+ * @symrow{\eta_{specified}; Supplied drive efficiency fraction; \unitless}
+ * @symrow{\eta_d; Returned drive efficiency; \unitless}
+ * @endsymtable
+ *
+ * Ordinary V-belt, notched V-belt and synchronous-belt selections use the power-dependent loss
+ * model below. The supplied efficiency field is ignored for these selections and for direct
+ * drive. Unknown C++ drive values retain the ordinary V-belt fallback; this does not introduce
+ * additional supported values into the public WASM Drive enum.
+ *
+ * @heading{Estimate Belt Transmission Loss}
+ * The retained empirical curve gives the ordinary V-belt loss in percentage points:
+ * @formula{mover-shaft-power-belt-curve;
+ * C(P_m)=a\exp(-bP_m)+c\exp(-dP_m)+e
+ * }
+ * @symtable
+ * @symrow{C; Numerical belt-loss curve value in percentage points; \percent}
+ * @symrow{P_m; Motor shaft power used to evaluate the curve; \horsepower}
+ * @symrow{a,c,e; Retained coefficients 0.68759, 3.7558 and 3.9963; \percent}
+ * @symrow{b,d; Retained exponential coefficients 0.019791 and 0.21507; \per\horsepower}
+ * @endsymtable
+ *
+ * Scaling the curve distinguishes the belt types. Ordinary V-belt uses factor 1, notched V-belt
+ * uses 0.05/0.07, and synchronous belt uses 0.02/0.07. Divide the percentage-point value by 100
+ * before applying it to motor shaft power:
+ * @formula{mover-shaft-power-belt-loss; L=P_m\left(\frac{C(P_m)f}{100}\right)}
+ * @symtable
+ * @symrow{L; Estimated mechanical transmission loss; \horsepower}
+ * @symrow{P_m; Motor mechanical shaft output; \horsepower}
+ * @symrow{C; Numerical belt-loss curve value in percentage points; \percent}
+ * @symrow{f; Relative belt-loss factor: 1, 0.05/0.07 or 0.02/0.07; \unitless}
+ * @symrow{100; Numerical percentage-point-to-fraction divisor; \unitless}
+ * @endsymtable
+ *
+ * These factors scale the loss; they are not fixed drive efficiencies. The exponential terms
+ * vary with motor shaft power, so choosing a belt type does not assign a constant 93%, 95% or
+ * 98% efficiency. Those nominal efficiencies correspond to reference loss fractions of 0.07,
+ * 0.05 and 0.02, which define the relative belt-loss multipliers. The calculation's arithmetic
+ * order matters: scaled belts multiply the curve by the factor before dividing by 100, then
+ * multiply by motor shaft power;
+ * the ordinary V-belt path divides its curve by 100 before multiplying by power. Efficiency
+ * uses one minus loss divided by power, and delivered power uses subtraction. Algebraic
+ * simplification can change floating-point boundary results.
+ *
+ * @heading{Worked Notched V-Belt Example}
+ * A motor delivers 50 hp through a notched V-belt. The unscaled curve is approximately
+ * 4.251987677690972 percentage points. The factor 0.05/0.07 reduces the predicted loss to
+ * approximately 1.518567027746776 hp:
+ * @formula{mover-shaft-power-example;
+ * L\approx50\left(\frac{4.251987677690972(0.05/0.07)}{100}\right)
+ *   =1.518567027746776\ \mathrm{hp},\quad
+ * P_s\approx48.481432972253224\ \mathrm{hp},\quad
+ * \eta_d\approx0.96962865944506449
+ * }
+ * @symtable
+ * @symrow{L; Estimated loss through the notched V-belt; \horsepower}
+ * @symrow{P_s; Mechanical input reaching the mover; \horsepower}
+ * @symrow{\eta_d; Returned drive efficiency, about 96.96 percent; \unitless}
+ * @endsymtable
+ *
+ * Thus about 48.48 hp reaches the pump or fan; this is the shaft input used when determining
+ * mover efficiency. For comparison, direct drive at 50 hp returns 50 hp and efficiency 1.
+ * SPECIFIED at 50 hp with fraction 0.95 returns 47.5 hp and efficiency 0.95. Those three
+ * paths describe different assumptions about transmission loss at the same motor output.
+ *
+ * @heading{Physical Limits and Retained Arithmetic}
+ * Callers supply physically appropriate power and efficiency and convert user-facing units.
+ * For an ordinary consuming drive, positive shaft power and an efficiency fraction between zero
+ * and one are the relevant interpretation. No validated empirical power range is established by
+ * the repository. The calculator does not validate, clamp or substitute defaults for any input.
+ * Above-one or negative specified efficiencies and negative powers retain their raw arithmetic
+ * results; these should not be interpreted as validated equipment predictions.
+ *
+ * At zero motor shaft power, belt loss and delivered power are zero, while efficiency is NaN
+ * because its loss-to-power ratio is zero divided by zero. Direct drive instead returns
+ * efficiency 1, and SPECIFIED returns its supplied fraction. Signed zero, nonfinite values,
+ * underflow and overflow are retained. Negative-power exponential growth can overflow, and
+ * infinite-power belt calculations can produce nonfinite efficiencies. These arithmetic outcomes
+ * do not establish physical extensions of the loss model.
+ *
+ * This is a forward calculation from known motor shaft output to delivered mover shaft input.
+ * OptimalMotorShaftPower works in the reverse direction using a different retained empirical
+ * curve; it is not an exact algebraic inverse. Do not replace either algorithm with an assumed
+ * round-trip identity. This calculator also does not select equipment or optimize motor size.
+ *
+ * @heading{Provenance}
+ * Historical source comments attribute the ordinary V-belt calculation to AMCA 203-90 Appendix L
+ * and relative belt factors to a Belt Drive Tip Sheet. The precise coefficient derivation and applicability
+ * range have not been independently verified; those comments are attribution, not a new claim
+ * that the fit reproduces a particular standard.
+ *
+ * @heading{Calculation Interface}
+ * C++ callers use mover_shaft_power::calculate(Input) returning Result. WASM/TypeScript callers use
+ * calculateMoverShaftPower(MoverShaftPowerInput), returning MoverShaftPowerResult with
+ * moverShaftPower and driveEfficiency. Inputs and results are plain objects requiring no delete().
+ */

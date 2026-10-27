@@ -3,7 +3,7 @@
 ## Workflow Metadata
 
 - Lifecycle: active
-- Status: Suite through MoverEfficiency merged; OptimalPumpShaftPower implemented, verified and independently reviewed Ready; all remaining Desktop migration is deferred to final integration
+- Status: Suite through OptimalPumpShaftPower merged; MoverShaftPower implemented, verified and independently reviewed Ready; remaining Desktop migration is deferred to final integration
 - Owner: Codex
 - Created: 2026-10-07
 - Last updated: 2026-10-27
@@ -87,8 +87,8 @@ ordered so foundational calculators migrate before the composite calculators tha
 | 9 | #213 OptimalMotorPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite [PR #433](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/433) merged at `1998e82`; reviewed implementation head `5cb2284`. See [OptimalMotorPower handoff](optimal-motor-power-refactor.md). |
 | 10 | #220 FluidPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite [PR #434](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/434) merged on 2026-10-15 at `7b5b760`; reviewed implementation head `9d5e46c`. See [FluidPower handoff](fluid-power-refactor.md). |
 | 11 | #221 MoverEfficiency | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite PR #441 merged at `8d34462`; implementation independently reviewed Ready at `27510c8`. See the [MoverEfficiency handoff](mover-efficiency-refactor.md). |
-| 12 | #227 OptimalPumpShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Implemented, verified and independently reviewed Ready on `issue-227`; review and delivery evidence linked from the [OptimalPumpShaftPower handoff](optimal-pump-shaft-power-refactor.md). |
-| 13 | #222 MoverShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |
+| 12 | #227 OptimalPumpShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite PR #442 merged at `2a20eed`; review and delivery evidence linked from the [OptimalPumpShaftPower handoff](optimal-pump-shaft-power-refactor.md). |
+| 13 | #222 MoverShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Implemented, verified and independently reviewed Ready on `issue-222`. See the [MoverShaftPower handoff](mover-shaft-power-refactor.md). |
 | 14 | #214 OptimalMotorShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |
 
 For each module:
@@ -276,3 +276,36 @@ dependency migration, but their public refactors remain separate.
   A P3 stale Desktop PR status was corrected and re-reviewed; no unresolved actionable findings remain.
   See its module handoff for exact snapshot details and the branch PR/CI evidence link.
 - New Desktop source, tests, dependency pins and final package selection remain deferred to final integration.
+
+## MoverShaftPower Implementation
+
+- Replaced legacy calculator/output classes with `mover_shaft_power::calculate(Input) -> Result`
+  and `calculateMoverShaftPower(MoverShaftPowerInput) -> MoverShaftPowerResult`, using plain objects.
+  Breaking C++/WASM/TypeScript removal explicitly approved on 2026-10-27; no numerical change.
+- PumpResult/FanResult receive private consumer migrations only; Drive enum values are unchanged.
+- Preserved both output fields across 101 captured duties/boundaries and 1,607,396 exact legacy
+  differential comparisons. Focused native checks passed 453 assertions/17 cases; full native passed
+  5,448 assertions/344 cases. Fresh rebuilt/staged WASM passed all 284 browser tests.
+- Types, links, whitespace and package checks passed. Added a rendered teaching page with formulas,
+  symbol/unit tables and worked examples. Existing full-documentation BibTeX limitation persists.
+- Independent complete-diff review against `2a20eed` at frozen snapshot `5f82081` is Ready, with no
+  actionable findings. Exact commits and validation evidence are recorded in the module handoff.
+  No Desktop changes, package-pin changes, publication or manual version bump included.
+
+### MoverShaftPower Named Constants Follow-Up
+
+- Named empirical curve terms, reference belt-loss fractions and conversion factor; documented
+  historical attribution without claiming verified coefficient derivation. No API or numerical change.
+- Refreshed focused native checks (453 assertions/17 cases), all 1,607,396 exact legacy comparisons,
+  and fresh WASM verification (284 browser tests) passed. Follow-up snapshot `f797513` independently
+  reviewed Ready; full evidence is in the module handoff.
+
+## Calculation Documentation Cleanup
+
+- Removed API migration/refactor history from all 13 completed epic calculator `.dox` pages;
+  migration contracts remain in module handoffs and PRs. Current usage and engineering explanations,
+  provenance, model caveats, 81 formulas, 80 symbol/unit tables and 37 inline math expressions remain.
+- Added the calculation-versus-migration documentation rule to `contributing/documentation.md`.
+  Links, whitespace and generated-page checks pass; existing full-documentation BibTeX error persists.
+- Independent documentation review is Ready at frozen snapshot `3295592`, with no actionable findings.
+  Delivered as a documentation follow-up in Suite PR [#443](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/443).

@@ -39,6 +39,8 @@ Organize the teaching narrative in that order when it fits the calculation: engi
 
 Keep developer-facing API details secondary. Include them near the end only when they help readers locate or use the public calculation surface. Do not substitute class names, control-flow narration, or source-code excerpts for the engineering explanation.
 
+Keep API migration instructions, removed-surface descriptions, and refactor history in development handoffs or pull requests, outside calculation `.dox` pages. Current usage examples and engineering provenance belong in calculation documentation when they help readers apply or assess the method.
+
 **[Table of Contents](#table-of-contents)**
 
 ## Doxygen Commands

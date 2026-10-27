@@ -103,6 +103,8 @@
  * @endsymtable
  *
  * @heading{Crossing the Drive}
+ * The @ref mover_shaft_power_calculator "Mover Shaft Power Calculator" explains the forward
+ * drive-loss model, belt selection, worked examples and arithmetic limits in detail.
  * A direct drive has @math{\eta_d=1}. For a specified drive, the entered efficiency is used directly.
  * Existing shaft power moves from the motor toward the pump:
  * @formula{pump-result-existing-drive;
@@ -292,6 +294,5 @@
  * const annualCostSavingsThousandDollars = existing.annualCost - modified.annualCost;
  * @endcode
  *
- * The implementation composes the established motor, drive, and fluid-power calculators. Current C++
- * and WebAssembly regression fixtures are the executable source of truth for numerical compatibility.
+ * The calculation combines the motor, drive and fluid-power models described above.
  */

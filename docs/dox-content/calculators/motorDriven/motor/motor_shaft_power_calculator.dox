@@ -181,7 +181,7 @@
  * - For meaningful assessment, use positive rated hp, nameplate/operating voltage and supplied FLA,
  *   consistent operating measurements, supported motor speed/frequency selections, and a positive
  *   specified-efficiency fraction for SPECIFIED. The current model's PREMIUM data supports 2/4/6 poles.
- * - No new validation or clamping is applied. Negative SPECIFIED efficiency propagates the dependency's
+ * - No validation or clamping is applied. Negative SPECIFIED efficiency propagates the dependency's
  *   error. Zero supplied FLA is used literally and can produce NaN/infinity; it does not request estimated FLA.
  * - POWER at zero measured kW returns zero shaft power but can return NaN current. CURRENT below modeled
  *   no-load current can evaluate negative load and produce large extrapolated or nonphysical results.
@@ -191,13 +191,12 @@
  *   protection, certification, transient performance, or plant-wide power-factor assessment.
  * - The electrical power/efficiency relationships are physical definitions under the stated assumptions.
  *   Search increments, voltage corrections, endpoint interpolation and empirical dependency curves are
- *   retained model choices. Their original calibration/provenance is unverified; the unchanged source
- *   and native regression captures establish implementation continuity, not independent model validation.
+ *   model choices. Their original calibration and provenance are unverified; these estimates do not
+ *   establish independent model validation.
  *
- * @heading{API Usage and Migration}
+ * @heading{Calculation Interface}
  * C++ uses motor_shaft_power::calculate() with motor_shaft_power::Input and motor_shaft_power::Result.
- * Replace legacy MotorShaftPower constructors and calculate() calls with this function and update snake_case
- * member access. The standalone WASM function is new; input and result are plain objects without delete().
+ * WebAssembly callers pass a plain input object and receive a plain result; neither requires delete().
  * @code{.ts}
  * import createModule, { type MotorShaftPowerInput } from 'measur-tools-suite';
  * const module = await createModule();

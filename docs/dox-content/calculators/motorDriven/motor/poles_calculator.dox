@@ -12,9 +12,8 @@
  * @heading{Final Result}
  * The calculation first compares the measured speed with inclusive speed bands for the selected
  * line frequency. Each band corresponds to an even pole count. If no band matches, the calculator
- * applies the legacy fallback described below. This order is important: the tabulated bands are the
- * primary classification method, while the fallback preserves established results for speeds in the
- * gaps between bands.
+ * applies the fallback described below. The tabulated bands are the primary classification method;
+ * the fallback classifies speeds in the gaps between bands.
  *
  * | Pole count | 50 Hz synchronous speed (rpm) | Accepted 50 Hz speed (rpm) | 60 Hz synchronous speed (rpm) | Accepted 60 Hz speed (rpm) |
  * |---:|---:|---:|---:|---:|
@@ -35,8 +34,8 @@
  *    inclusive accepted-speed band.
  * 3. Return the pole count for the matching band. These bands are checked before any fallback because
  *    they are the primary MEASUR classification rule.
- * 4. If no band matches, apply the above-range rule or the legacy fallback. Treat that result as a
- *    compatibility classification, especially for a 50 Hz input, rather than a new physical estimate.
+ * 4. If no band matches, apply the above-range rule or fallback. Treat that result as a
+ *    MEASUR-specific classification, especially for a 50 Hz input, rather than a physical estimate.
  * 5. Use the returned pole count only where the downstream motor model requests a pole class, such as
  *    selecting efficiency or full-load-current coefficients.
  *
@@ -81,10 +80,9 @@
  *
  * The 90-percent threshold is an established MEASUR classification boundary, not a statement that
  * normal motor slip is always 10 percent. Actual slip depends on motor design and load. The threshold
- * is retained so the motor-efficiency and full-load-current models continue selecting the same
- * coefficient tables.
+ * determines which coefficient tables the motor-efficiency and full-load-current models select.
  *
- * @heading{Legacy Fallback}
+ * @heading{Fallback Classification}
  * If the measured speed is not in a table band, speeds above 3600 rpm return two poles. All other
  * positive speeds use the historical 60 Hz expression:
  * @formula{poles-fallback;
@@ -99,10 +97,9 @@
  * @symrow{\lfloor\ \rfloor; Floor operation; \unitless}
  * @endsymtable
  *
- * The fallback uses the 60 Hz numerator even when the selected line frequency is 50 Hz. That behavior
- * is intentionally preserved for numerical compatibility; it should not be interpreted as a general
- * physical formula for 50 Hz motors. The repository does not record the historical source for this
- * fallback or for the 90-percent band boundary.
+ * The fallback uses the 60 Hz numerator even when the selected line frequency is 50 Hz. It should
+ * not be interpreted as a general physical formula for 50 Hz motors. The repository does not
+ * record the historical source for this fallback or for the 90-percent band boundary.
  *
  * @heading{Worked Example: Primary Speed Band}
  * Consider a 60 Hz motor measured at 1780 rpm. A four-pole motor is the relevant candidate from the
@@ -119,12 +116,11 @@
  * This result tells downstream MEASUR motor models to use their four-pole coefficient data; it does
  * not change the measured speed or report slip as the calculator output.
  *
- * @heading{Worked Example: Legacy Fallback}
+ * @heading{Worked Example: Fallback Classification}
  * Consider a 50 Hz motor measured at 800 rpm. The speed is above the eight-pole band of 675 to 750 rpm
  * and below the six-pole band of 900 to 1000 rpm, so no primary band matches. The retained fallback
- * gives @math{2\left\lfloor\left\lfloor7200/800\right\rfloor/2\right\rfloor=8} poles. The result is
- * preserved for compatibility, but the use of 7200 means it should not be interpreted as a general
- * 50 Hz motor relationship.
+ * gives @math{2\left\lfloor\left\lfloor7200/800\right\rfloor/2\right\rfloor=8} poles. The use of
+ * 7200 means this result should not be interpreted as a general 50 Hz motor relationship.
  *
  * At either supported frequency, a measured speed of 4000 rpm bypasses the fallback expression and
  * returns two poles through the explicit above-range rule.
@@ -144,6 +140,6 @@
  * const int pole_count = poles::calculate(1780.0, Motor::LineFrequency::FREQ60);
  * @endcode
  *
- * Poles has no direct WebAssembly constructor or function. Existing WebAssembly motor, pump, and fan
- * calculations consume it internally, so the JavaScript and TypeScript runtime surface is unchanged.
+ * Poles has no direct WebAssembly function. WebAssembly motor, pump and fan calculations use it
+ * internally.
  */
