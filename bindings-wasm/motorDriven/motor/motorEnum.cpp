@@ -1,7 +1,6 @@
 #include <emscripten/bind.h>
 
 #include "motorDriven/motor/MotorData.h"
-#include "motorDriven/pumpFan/MoverShaftPower.h"
 using namespace emscripten;
 
 EMSCRIPTEN_BINDINGS(motor_enums) {

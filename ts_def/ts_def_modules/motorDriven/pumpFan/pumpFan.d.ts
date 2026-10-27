@@ -1,10 +1,7 @@
-import { Drive } from "../motor/motorEnum";
-
 /**
  * Pump/Fan helper calculations.
  *
- * Provides calculators for mover shaft power, specific speed correction,
- * and pump efficiency metrics.
+ * Provides specific speed correction and pump efficiency calculators.
  */
 
 /**
@@ -32,50 +29,6 @@ export enum PumpStyle {
 export enum SpecificSpeed {
     FIXED_SPEED = 0,
     NOT_FIXED_SPEED = 1
-}
-
-/**
- * Result object returned by {@link MoverShaftPower.calculate}.
- *
- * @property moverShaftPower double, mover shaft power in hp
- * @property driveEfficiency Drive efficiency, dimensionless fraction.
- */
-export declare class MoverShaftPowerOutput {
-    /**
-     * Constructor for MoverShaftPowerOutput
-     * @param moverShaftPower Mover shaft power, units hp.
-     * @param driveEfficiency Drive efficiency, dimensionless fraction.
-     */
-    constructor(moverShaftPower: number, driveEfficiency: number);
-
-    /** Mover shaft power, units hp */
-    moverShaftPower: number;
-    /** Drive efficiency, dimensionless fraction. */
-    driveEfficiency: number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
-}
-
-/**
- * Calculates pump mover shaft power from motor shaft power and drive type.
- */
-export declare class MoverShaftPower {
-    /**
-     * @param motorShaftPower Motor shaft power, units hp.
-     * @param drive Drive enum, drive type
-     * @param specifiedEfficiency User-specified drive efficiency, dimensionless fraction.
-     */
-    constructor(motorShaftPower: number, drive: Drive, specifiedEfficiency: number);
-
-    /**
-     * Calculates the pump shaft power
-     * @returns {@link MoverShaftPowerOutput} object containing the pump shaft power and drive efficiency
-     */
-    calculate(): MoverShaftPowerOutput;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
 }
 
 /**
@@ -157,8 +110,6 @@ export declare class PumpEfficiency {
 export type PumpFanModule = {
     PumpStyle: typeof PumpStyle;
     SpecificSpeed: typeof SpecificSpeed;
-    MoverShaftPower: typeof MoverShaftPower;
-    MoverShaftPowerOutput: typeof MoverShaftPowerOutput;
     OptimalSpecificSpeedCorrection: typeof OptimalSpecificSpeedCorrection;
     PumpEfficiency: typeof PumpEfficiency;
     PumpEfficiencyResults: typeof PumpEfficiencyResults;

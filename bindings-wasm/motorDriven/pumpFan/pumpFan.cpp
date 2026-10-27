@@ -1,6 +1,5 @@
 #include <emscripten/bind.h>
 
-#include "motorDriven/pumpFan/MoverShaftPower.h"
 #include "motorDriven/pumpFan/OptimalSpecificSpeedCorrection.h"
 #include "motorDriven/pumpFan/PumpEfficiency.h"
 
@@ -25,18 +24,6 @@ EMSCRIPTEN_BINDINGS(pump_enums) {
     enum_<Pump::SpecificSpeed>("SpecificSpeed")
         .value("FIXED_SPEED", Pump::SpecificSpeed::FIXED_SPEED)
         .value("NOT_FIXED_SPEED", Pump::SpecificSpeed::NOT_FIXED_SPEED);
-}
-
-// pump shaft power
-EMSCRIPTEN_BINDINGS(pump_shaft_class) {
-    class_<MoverShaftPower>("MoverShaftPower")
-        .constructor<double, Motor::Drive, double>()
-        .function("calculate", &MoverShaftPower::calculate);
-
-    class_<MoverShaftPower::Output>("MoverShaftPowerOutput")
-        .constructor<double, double>()
-        .property("moverShaftPower", &MoverShaftPower::Output::moverShaftPower)
-        .property("driveEfficiency", &MoverShaftPower::Output::driveEfficiency);
 }
 
 // achievableEfficiency

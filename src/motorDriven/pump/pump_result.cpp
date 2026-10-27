@@ -4,7 +4,7 @@
 #include "motorDriven/motor/optimal_motor_power.h"
 #include "motorDriven/motor/OptimalMotorShaftPower.h"
 #include "motorDriven/pumpFan/mover_efficiency.h"
-#include "motorDriven/pumpFan/MoverShaftPower.h"
+#include "motorDriven/pumpFan/mover_shaft_power.h"
 #include "motorDriven/pumpFan/optimal_pump_shaft_power.h"
 #include "physics/constants.h"
 
@@ -18,18 +18,17 @@ Result calculateExisting(const ExistingInput& input) {
                         system.motor_rated_voltage, input.motor_full_load_amps, system.operating_voltage,
                         input.load_estimation_method, input.measured_motor_current});
 
-    const auto moverOutput = MoverShaftPower(motorOutput.shaft_power, system.drive,
-                                              system.specified_drive_efficiency)
-                                 .calculate();
+    const auto moverOutput = mover_shaft_power::calculate({motorOutput.shaft_power, system.drive,
+        system.specified_drive_efficiency});
 
     double pumpEfficiency;
     if (system.pump_style == Pump::Style::POSITIVE_DISPLACEMENT) {
         const auto hydraulicPower = system.flow_rate * system.differential_pressure /
                                     physics::conversions::kPumpGpmPsiPerHp;
-        pumpEfficiency = hydraulicPower / moverOutput.moverShaftPower;
+        pumpEfficiency = hydraulicPower / moverOutput.mover_shaft_power;
     } else {
         pumpEfficiency = mover_efficiency::calculatePump({system.specific_gravity, system.flow_rate,
-            system.head, moverOutput.moverShaftPower});
+            system.head, moverOutput.mover_shaft_power});
     }
 
     const auto annualEnergy = motorOutput.power * system.operating_hours / 1000.0;
@@ -39,7 +38,7 @@ Result calculateExisting(const ExistingInput& input) {
         pumpEfficiency,
         system.motor_rated_power,
         motorOutput.shaft_power,
-        moverOutput.moverShaftPower,
+        moverOutput.mover_shaft_power,
         motorOutput.efficiency,
         motorOutput.power_factor,
         motorOutput.current,
@@ -47,7 +46,7 @@ Result calculateExisting(const ExistingInput& input) {
         annualEnergy,
         annualCost,
         motorOutput.load_factor,
-        moverOutput.driveEfficiency,
+        moverOutput.drive_efficiency,
         motorOutput.estimated_fla,
     };
 }
