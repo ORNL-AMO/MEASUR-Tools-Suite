@@ -5,7 +5,7 @@
 #include "motorDriven/motor/OptimalMotorShaftPower.h"
 #include "motorDriven/pumpFan/mover_efficiency.h"
 #include "motorDriven/pumpFan/MoverShaftPower.h"
-#include "motorDriven/pumpFan/OptimalPumpShaftPower.h"
+#include "motorDriven/pumpFan/optimal_pump_shaft_power.h"
 #include "physics/constants.h"
 
 namespace pump_result {
@@ -59,9 +59,8 @@ Result calculateModified(const ModifiedInput& input) {
         moverShaftPower = system.flow_rate * system.differential_pressure /
                           (physics::conversions::kPumpGpmPsiPerHp * input.pump_efficiency);
     } else {
-        moverShaftPower = OptimalPumpShaftPower(system.flow_rate, system.head, system.specific_gravity,
-                                                input.pump_efficiency)
-                              .calculate();
+        moverShaftPower = optimal_pump_shaft_power::calculatePump({system.flow_rate, system.head,
+            system.specific_gravity, input.pump_efficiency});
     }
 
     const auto motorShaftOutput =

@@ -18,7 +18,7 @@
 #include "motorDriven/pumpFan/FanEnergyIndex.h"
 #include "motorDriven/pumpFan/mover_efficiency.h"
 #include "motorDriven/pumpFan/MoverShaftPower.h"
-#include "motorDriven/pumpFan/OptimalPumpShaftPower.h"
+#include "motorDriven/pumpFan/optimal_pump_shaft_power.h"
 
 FanResult::Output FanResult::calculateExisting(Fan::FieldDataBaseline const fanFieldData) {
     const auto output = motor_shaft_power::calculate({
@@ -56,9 +56,9 @@ FanResult::Output FanResult::calculateExisting(Fan::FieldDataBaseline const fanF
 
 FanResult::Output FanResult::calculateModified(Fan::FieldDataModified const fanFieldData, double fanEfficiency) {
     double const fanShaftPower =
-        OptimalPumpShaftPower(fanFieldData.flowRate, fanFieldData.inletPressure, fanFieldData.outletPressure,
-                              fanFieldData.compressibilityFactor, fanEfficiency, fanFieldData.velocityPressure)
-            .calculate();
+        optimal_pump_shaft_power::calculateFan({fanFieldData.flowRate, fanFieldData.inletPressure,
+            fanFieldData.outletPressure, fanFieldData.compressibilityFactor, fanEfficiency,
+            fanFieldData.velocityPressure});
 
     OptimalMotorShaftPower::Output const optimalMotorShaftPower =
         OptimalMotorShaftPower(fanShaftPower, fanInput.drive, fanInput.specifiedEfficiency).calculate();
