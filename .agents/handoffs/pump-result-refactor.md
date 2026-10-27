@@ -3,7 +3,7 @@
 ## Workflow Metadata
 
 - Lifecycle: active
-- Status: Suite through FluidPower merged; MoverEfficiency implemented with integrated verification and independent review in progress; all remaining Desktop migration is deferred to final integration
+- Status: Suite through FluidPower merged; MoverEfficiency implemented, verified and independently reviewed Ready at 27510c8; all remaining Desktop migration is deferred to final integration
 - Owner: Codex
 - Created: 2026-10-07
 - Last updated: 2026-10-27
@@ -86,7 +86,7 @@ ordered so foundational calculators migrate before the composite calculators tha
 | 8 | #212 MotorShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite [PR #432](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/432) merged on 2026-10-15 at `80c6475`. See [MotorShaftPower handoff](motor-shaft-power-refactor.md). |
 | 9 | #213 OptimalMotorPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite [PR #433](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/433) merged at `1998e82`; reviewed implementation head `5cb2284`. See [OptimalMotorPower handoff](optimal-motor-power-refactor.md). |
 | 10 | #220 FluidPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite [PR #434](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/434) merged on 2026-10-15 at `7b5b760`; reviewed implementation head `9d5e46c`. See [FluidPower handoff](fluid-power-refactor.md). |
-| 11 | #221 MoverEfficiency | Defer all Desktop wrapper and package-pin work to the final integration pass. | Implemented on `issue-221`; integrated verification and independent review in progress. See [MoverEfficiency handoff](mover-efficiency-refactor.md). |
+| 11 | #221 MoverEfficiency | Defer all Desktop wrapper and package-pin work to the final integration pass. | Implemented, verified and independently reviewed Ready at `27510c8` on `issue-221`; child PR delivery pending. See [MoverEfficiency handoff](mover-efficiency-refactor.md). |
 | 12 | #227 OptimalPumpShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |
 | 13 | #222 MoverShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |
 | 14 | #214 OptimalMotorShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |
@@ -158,7 +158,8 @@ dependency migration, but their public refactors remain separate.
   MotorShaftPower PR #432 merged on 2026-10-15 at `80c6475` after verification and independent review.
   OptimalMotorPower PR #433 merged at `1998e82`; independent pre-PR review is Ready at `5cb2284`.
   FluidPower PR #434 merged on 2026-10-15 at `7b5b760`; independent review was Ready at `9d5e46c`.
-  MoverEfficiency implementation is complete; integrated verification and independent review remain in progress.
+  MoverEfficiency implementation, verification and independent review are complete, Ready at `27510c8`;
+  child PR delivery remains pending.
   Evidence is in the module handoffs.
 - Release blockers: complete and review all remaining Suite modules, pass the integrated Suite review, publish the approved final/RC package, then perform the one Desktop integration/review cycle.
 
@@ -248,6 +249,11 @@ dependency migration, but their public refactors remain separate.
   Breaking C++ removal and additive runtime API explicitly approved; no numerical behavior changes.
 - PumpResult and FanResult receive only private consumer updates. Original pump goldens, captured direct
   fan duties and arithmetic boundaries are covered; 2,598,977 legacy differential comparisons passed.
-- Native and fresh-WASM verification passed; final documentation/package checks and independent review
-  remain in progress. See the module handoff for exact validation and review evidence.
+- Final focused native checks passed 259 assertions in 19 cases; full native tests passed 5,088 assertions
+  in 338 cases. Fresh rebuilt/staged WASM passed all 279 browser tests. Types, docs/whitespace/package checks
+  and rendered-page/example inspection passed; all 69 MathJax containers rendered without errors.
+  Existing full-documentation BibTeX limitation persists.
+- Independent full-diff review of `7b5b760...27510c8` is Ready with no actionable findings; reviewer
+  independently reran focused native, differential, type, documentation-link and whitespace checks.
+  See the module handoff for exact validation and review evidence.
 - Desktop source, tests, dependency pins and held PR remain deferred to final integration.
