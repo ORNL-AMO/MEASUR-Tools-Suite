@@ -86,7 +86,7 @@ ordered so foundational calculators migrate before the composite calculators tha
 | 8 | #212 MotorShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite [PR #432](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/432) merged on 2026-10-15 at `80c6475`. See [MotorShaftPower handoff](motor-shaft-power-refactor.md). |
 | 9 | #213 OptimalMotorPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite [PR #433](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/433) merged at `1998e82`; reviewed implementation head `5cb2284`. See [OptimalMotorPower handoff](optimal-motor-power-refactor.md). |
 | 10 | #220 FluidPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite [PR #434](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/434) merged on 2026-10-15 at `7b5b760`; reviewed implementation head `9d5e46c`. See [FluidPower handoff](fluid-power-refactor.md). |
-| 11 | #221 MoverEfficiency | Defer all Desktop wrapper and package-pin work to the final integration pass. | Implemented, verified and independently reviewed Ready at `27510c8` on `issue-221`; child PR delivery pending. See [MoverEfficiency handoff](mover-efficiency-refactor.md). |
+| 11 | #221 MoverEfficiency | Defer all Desktop wrapper and package-pin work to the final integration pass. | Implemented, verified and independently reviewed Ready at `27510c8` on `issue-221`; child PR/CI evidence linked from the [MoverEfficiency handoff](mover-efficiency-refactor.md). |
 | 12 | #227 OptimalPumpShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |
 | 13 | #222 MoverShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |
 | 14 | #214 OptimalMotorShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |
@@ -159,7 +159,7 @@ dependency migration, but their public refactors remain separate.
   OptimalMotorPower PR #433 merged at `1998e82`; independent pre-PR review is Ready at `5cb2284`.
   FluidPower PR #434 merged on 2026-10-15 at `7b5b760`; independent review was Ready at `9d5e46c`.
   MoverEfficiency implementation, verification and independent review are complete, Ready at `27510c8`;
-  child PR delivery remains pending.
+  child PR/CI evidence is linked from its module handoff.
   Evidence is in the module handoffs.
 - Release blockers: complete and review all remaining Suite modules, pass the integrated Suite review, publish the approved final/RC package, then perform the one Desktop integration/review cycle.
 

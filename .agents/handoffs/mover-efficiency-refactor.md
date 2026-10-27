@@ -9,7 +9,8 @@
 - Suite issue: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/221
 - Branch / intended PR base: `issue-221` / `epic-pump-result-refactor`.
 - Base commit: `7b5b760d6183891d892a55eb132f57b472430a4f` (FluidPower PR #434 merged).
-- Suite PR: none opened; future CI/publication evidence belongs in the child PR and workflow comments.
+- Suite PR: [branch PR and CI/publication evidence](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pulls?q=is%3Apr+head%3Aissue-221)
+  will be maintained in the PR description and workflow comments.
 - Desktop coordination: https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8957
 - Held Desktop PR: https://github.com/ORNL-AMO/AMO-Tools-Desktop/pull/8964
 
@@ -115,3 +116,5 @@
 ## Open Questions Or Blockers
 
 - None for implementation. Desktop integration and final package selection remain epic-level work.
+- User requested push and PR creation on 2026-10-27; target the epic branch. Keep subsequent CI/package
+  evidence in the linked PR without publication-evidence-only follow-up pushes.
