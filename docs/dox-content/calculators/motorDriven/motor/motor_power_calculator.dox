@@ -64,11 +64,11 @@
  * @heading{Worked Example}
  * A motor operates at 460 V line-to-line and 100 A line current with power factor 0.85.
  * First, the voltage/current/three-phase contribution gives approximately
- * @math{\sqrt{3}(460)(100)/1000=79.6743371482} kVA of apparent power.
+ * @math{\sqrt{3}(460)(100)/1000\approx79.67} kVA of apparent power.
  * Applying the power factor gives:
  * @formula{motor-power-worked-result;
  *   P_{example}=\frac{(460\,\mathrm{V})(100\,\mathrm{A})\sqrt{3}(0.85)}
- *     {1000\,\mathrm{W/kW}}=67.7231865759\,\mathrm{kW}
+ *     {1000\,\mathrm{W/kW}}\approx67.72\,\mathrm{kW}
  * }
  * @symtable
  * @symrow{P_{example}; Real electrical input power for the example; \kilo\watt}

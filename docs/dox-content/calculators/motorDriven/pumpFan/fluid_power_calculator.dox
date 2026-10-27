@@ -32,7 +32,7 @@
  * @symrow{C_f; Retained flow-pressure horsepower divisor, 6362; \cubicFoot\inchWaterColumn\per\minute\per\horsepower}
  * @endsymtable
  *
- * A 1000 US gpm pump duty at 280 ft and specific gravity 1.02 represents approximately 53.784 kW
+ * A 1000 US gpm pump duty at 280 ft and specific gravity 1.02 represents approximately 53.78 kW
  * delivered to the liquid. The corresponding motor electrical demand also includes pump, drive and
  * motor losses. Fluid power alone does not determine those losses or select equipment size.
  *
@@ -72,7 +72,7 @@
  * For specific gravity 1.02, flow 1000 US gpm and head 280 ft:
  * @formula{fluid-power-pump-example;
  *   P_{f,p}=\frac{0.746\times1000\times280\times1.02}{3961.38}
- *          =53.7836814443\ \mathrm{kW}
+ *          \approx53.78\ \mathrm{kW}
  * }
  * @symtable
  * @symrow{P_{f,p}; Calculated liquid fluid power; \kilo\watt}
@@ -83,7 +83,7 @@
  * @symrow{3961.38; Retained pump divisor; \gallon\foot\per\minute\per\horsepower}
  * @endsymtable
  *
- * The duty represents about 72.096 hydraulic hp, or 53.784 kW. This is the useful fluid output against
+ * The duty represents about 72.10 hydraulic hp, or 53.78 kW. This is the useful fluid output against
  * which pump shaft input can be compared; it does not include the pump's internal losses.
  *
  * @heading{Worked Fan Example}
@@ -92,7 +92,7 @@
  * the effective rise is 17.46 inches water column:
  * @formula{fluid-power-fan-example;
  *   P_{f,f}=\frac{0.746\times129691\times(1.1-(-16.36)-0)\times0.988}{6362}
- *          =262.3349690747\ \mathrm{kW}
+ *          \approx262.33\ \mathrm{kW}
  * }
  * @symtable
  * @symrow{P_{f,f}; Calculated gas fluid power; \kilo\watt}

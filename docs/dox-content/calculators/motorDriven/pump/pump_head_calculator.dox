@@ -247,14 +247,14 @@
  * measurements are @math{D_d=15} inches, @math{P_d=50} psig, @math{z_d=1} foot, and
  * @math{K_d=1}.
  *
- * | Contribution | Calculation result (ft) | Interpretation |
+ * | Contribution | Approximate result (ft) | Interpretation |
  * |---|---:|---|
- * | @math{\Delta H_z} | -4.000000 | The discharge gauge is 4 ft below the suction gauge. |
- * | @math{\Delta H_p} | 103.986135 | The pressure rise is the dominant contribution. |
- * | @math{\Delta H_v} | 0.103859 | The smaller discharge pipe has the greater velocity head. |
- * | @math{H_{f,s}} | 0.101040 | Estimated loss from the suction gauge to the pump. |
- * | @math{H_{f,d}} | 0.204899 | Estimated loss from the pump to the discharge gauge. |
- * | <b>@math{\boldsymbol{H_{pump}}}</b> | <b>100.395932</b> | <b>Sum of all five contributions.</b> |
+ * | @math{\Delta H_z} | -4 | The discharge gauge is 4 ft below the suction gauge. |
+ * | @math{\Delta H_p} | 103.986 | The pressure rise is the dominant contribution. |
+ * | @math{\Delta H_v} | 0.104 | The smaller discharge pipe has the greater velocity head. |
+ * | @math{H_{f,s}} | 0.101 | Estimated loss from the suction gauge to the pump. |
+ * | @math{H_{f,d}} | 0.205 | Estimated loss from the pump to the discharge gauge. |
+ * | <b>@math{\boldsymbol{H_{pump}}}</b> | <b>100.396</b> | <b>Sum of all five contributions.</b> |
  *
  * The negative elevation term does not indicate an error; it offsets part of the pressure-head rise.
  *

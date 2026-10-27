@@ -37,6 +37,8 @@ Algorithm documentation must help an engineering user understand, apply, and che
 
 Organize the teaching narrative in that order when it fits the calculation: engineering question and context, final result, decision path, supporting formulas, worked example, and interpretation limits. Explain why each major step is needed and connect formulas to the result they support. Distinguish established engineering relationships from implementation-specific or legacy behavior, and cite authoritative sources when available.
 
+Use readable precision in worked examples. Usually two or three decimal places for power, current, head and other dimensional results, and about four decimal places for efficiency or load fractions, are enough. Retain extra digits only when they help reproduce an intermediate calculation, distinguish nearby interpolation endpoints, or explain a numerical boundary. Keep input values, algorithm coefficients and conversion constants at their specified precision. Calculate with unrounded intermediates, round for display, and use approximation signs or wording for rounded results; displayed intermediate values need not reproduce the last digit of an independently rounded total.
+
 Keep developer-facing API details secondary. Include them near the end only when they help readers locate or use the public calculation surface. Do not substitute class names, control-flow narration, or source-code excerpts for the engineering explanation.
 
 Keep API migration instructions, removed-surface descriptions, and refactor history in development handoffs or pull requests, outside calculation `.dox` pages. Current usage examples and engineering provenance belong in calculation documentation when they help readers apply or assess the method.

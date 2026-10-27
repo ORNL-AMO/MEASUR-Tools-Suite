@@ -153,26 +153,26 @@
  * @heading{Worked Examples}
  * Both examples use a 100 hp, 1780 rpm, 60 Hz ENERGY_EFFICIENT motor, 460 V nameplate voltage and
  * supplied FLA of 120 A. Specified efficiency is 0.93 but is ignored for this class. The independent
- * estimated FLA is 113.8342622305 A. Rounded intermediate values below explain the calculation;
- * regression tests retain full-precision results.
+ * estimated FLA is about 113.83 A. Results below are rounded for display; extra digits in
+ * interpolation endpoints keep the small differences between them visible.
  *
  * **POWER, measured 60 kW at 460 V.** The search selects load endpoints 0.76 and 0.77, with electrical
- * powers 59.6136044028 and 60.3969891626 kW and efficiencies 0.9510580776 and 0.9510738995.
- * The interpolation position is (60 - 59.6136044028)/(60.3969891626 - 59.6136044028), approximately
- * 0.4932385936. Load becomes 0.7649323859 and efficiency becomes 0.9510658815. Voltage ratio is one,
- * so endpoint power factors 0.8022378695 and 0.8036078937 need no correction. The interpolated power
- * factor is 0.8029136183 and current is 60/(460 times sqrt(3) times 0.8029136183/1000), or
- * 93.7916048948 A. Shaft output is 60 times 0.9510658815/0.746 = 76.4932344407 hp.
+ * powers 59.6136 and 60.3970 kW and efficiencies 0.951058 and 0.951074.
+ * The interpolation position is (60 - 59.6136)/(60.3970 - 59.6136), approximately
+ * 0.4932. Load becomes 0.7649 and efficiency becomes 0.951066. Voltage ratio is one,
+ * so endpoint power factors 0.802238 and 0.803608 need no correction. The interpolated power
+ * factor is 0.802914 and current is 60/(460 times sqrt(3) times 0.802914/1000), or
+ * 93.79 A. Shaft output is 60 times 0.951066/0.746, approximately 76.49 hp.
  * This is approximately 76.49 percent rated shaft load; electrical input remains the measured 60 kW.
  *
  * **CURRENT, measured 90 A at 440 V.** The initial current search selects loads 0.72 and 0.73 with
- * unadjusted currents 89.0531388987 and 90.0995735061 A. Ratio 440/460 changes these to
- * 90.7567641646 and 91.9015649762 A. The measured 90 A is below both corrected endpoints, giving
- * interpolation position approximately -0.6610443990 and load 0.7133895560. The endpoint efficiencies
- * are 0.9509078133 and 0.9509592089; endpoint electrical powers are 56.4849707317 and 57.2663890184 kW.
- * Extrapolation yields efficiency 0.9508738384 and input 55.9684185499 kW. Power factor becomes
- * 55.9684185499/(90 times 440 times sqrt(3)/1000) = 0.8159944827. Shaft output is
- * 55.9684185499 times 0.9508738384/0.746 = 71.3390147140 hp. The returned current remains 90 A.
+ * unadjusted currents 89.0531 and 90.0996 A. Ratio 440/460 changes these to
+ * 90.7568 and 91.9016 A. The measured 90 A is below both corrected endpoints, giving
+ * interpolation position approximately -0.6610 and load 0.7134. The endpoint efficiencies
+ * are 0.950908 and 0.950959; endpoint electrical powers are 56.4850 and 57.2664 kW.
+ * Extrapolation yields efficiency 0.950874 and input 55.97 kW. Power factor becomes
+ * 55.97/(90 times 440 times sqrt(3)/1000), approximately 0.8160. Shaft output is
+ * 55.97 times 0.950874/0.746, approximately 71.34 hp. The returned current remains 90 A.
  * This illustrates why post-search voltage correction can move the result outside the selected load pair.
  *
  * @heading{Assumptions, Boundaries and Provenance}
@@ -208,6 +208,6 @@
  *     loadEstimationMethod: module.LoadEstimationMethod.POWER, fieldCurrent: 90
  * };
  * const result = module.calculateMotorShaftPower(input);
- * // result.shaftPower is approximately 76.4932344407 hp.
+ * // result.shaftPower is approximately 76.49 hp.
  * @endcode
  */

@@ -130,12 +130,12 @@
  *
  * @heading{Worked Examples}
  * A 100 hp motor at load fraction 0.75 has shaft output 55.95 kW. With efficiency 0.90 its inferred real
- * input is 62.1666666667 kW. At 460 V and 100 A, apparent power is 79.6743371482 kVA. Therefore:
+ * input is 62.17 kW. At 460 V and 100 A, apparent power is 79.67 kVA. Therefore:
  * @formula{motor-pf-loaded-example;
- *   PF_{example}=\frac{(0.75)(100)(0.746)}{(100)(0.90)(460)\sqrt{3}/1000}=0.780259602927
+ *   PF_{example}=\frac{(0.75)(100)(0.746)}{(100)(0.90)(460)\sqrt{3}/1000}\approx0.7803
  * }
  * @symtable
- * @symrow{PF_{example}; Loaded example result, approximately 78.026 percent; \unitless}
+ * @symrow{PF_{example}; Loaded example result, approximately 78.03 percent; \unitless}
  * @symrow{0.75; Shaft load fraction; \unitless}
  * @symrow{100\text{ (numerator)}; Rated shaft power; \horsepower}
  * @symrow{0.746; Horsepower conversion; \kilo\watt\per\horsepower}
@@ -148,14 +148,14 @@
  *
  * For the near-zero example, use 60 Hz, 1780 rpm, ENERGY_EFFICIENT, specified efficiency 0 (ignored
  * for that class), rated power 100 hp, zero load and 30 A. The inherited efficiency model yields
- * quarter-load efficiency 0.921519665276. Quarter-load loss is approximately 1.58830928710 kW and
- * zero-load loss is 1.27064742968 kW. Apparent power at the fixed reference is 23.9023011445 kVA:
+ * quarter-load efficiency approximately 0.92152. Quarter-load loss is approximately 1.588 kW and
+ * zero-load loss is 1.271 kW. Apparent power at the fixed reference is 23.90 kVA:
  * @formula{motor-pf-zero-example;
- *   PF_{0,example}=\frac{1.27064742968}{(460)\sqrt{3}(30)/1000}=0.053160046056
+ *   PF_{0,example}=\frac{1.271}{(460)\sqrt{3}(30)/1000}\approx0.0532
  * }
  * @symtable
- * @symrow{PF_{0,example}; Near-zero example result, approximately 5.316 percent; \unitless}
- * @symrow{1.27064742968; Modeled zero-load electrical loss; \kilo\watt}
+ * @symrow{PF_{0,example}; Near-zero example result, approximately 5.32 percent; \unitless}
+ * @symrow{1.271; Modeled zero-load electrical loss; \kilo\watt}
  * @symrow{460; Fixed reference voltage; \volt}
  * @symrow{\sqrt{3}; Three-phase factor; \unitless}
  * @symrow{30; Supplied line current; \ampere}
