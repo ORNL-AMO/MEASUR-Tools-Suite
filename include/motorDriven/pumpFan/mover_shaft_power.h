@@ -38,7 +38,7 @@ struct Result {
  * efficiency fraction; other drives use the retained empirical belt-loss curves. No validation,
  * defaults or clamping are applied. Signed and nonfinite arithmetic is retained, including NaN
  * belt-drive efficiency at zero motor shaft power. This is a forward drive-loss calculation,
- * not the reverse-direction OptimalMotorShaftPower calculation.
+ * distinct from the reverse-direction @ref optimal_motor_shaft_power_calculator calculation.
  * @see @ref mover_shaft_power_calculator for formulas, worked examples and interpretation limits.
  */
 Result calculate(const Input& input);

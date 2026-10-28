@@ -149,13 +149,13 @@
  *
  * @heading{Worked Example}
  * Consider a 200 hp, 1785 rpm, 60 Hz energy-efficient motor at full load. The retained four-pole,
- * higher-power coefficients produce interval efficiencies of approximately 0.930393 at 25 percent,
- * 0.949504 at 50 percent, 0.956903 at 75 percent, 0.956259 at 100 percent, and 0.946697 at
+ * higher-power coefficients produce interval efficiencies of approximately 0.9304 at 25 percent,
+ * 0.9495 at 50 percent, 0.9569 at 75 percent, 0.9563 at 100 percent, and 0.9467 at
  * 125 percent load.
  *
- * The 25-percent result gives @math{P_{loss,25}=2.79057} kW and
- * @math{P_{loss,0}=2.23246} kW. At full load, the fourth-order fit passes through the 100-percent
- * anchor, so the final result is @math{\eta_m=0.956259245}, or approximately 95.63 percent. The
+ * The 25-percent result gives @math{P_{loss,25}\approx2.79} kW and
+ * @math{P_{loss,0}\approx2.23} kW. At full load, the fourth-order fit passes through the 100-percent
+ * anchor, so the final result is @math{\eta_m\approx0.9563}, or approximately 95.63 percent. The
  * corresponding shaft output is @math{200\times0.746=149.2} kW; the efficiency implies approximately
  * 156.02 kW electrical input.
  *

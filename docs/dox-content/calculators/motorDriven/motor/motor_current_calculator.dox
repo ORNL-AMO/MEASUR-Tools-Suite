@@ -103,27 +103,27 @@
  *
  * | Load | Raw current, A | Supplied-FLA-normalized current, A |
  * | --- | --- | --- |
- * | 0% | 33.3308239270 | 33.3207919002 |
- * | 25% | 42.7411726195 | 42.7283082334 |
- * | 50% | 63.7477989466 | 63.7286119133 |
- * | 75% | 87.4684109871 | 87.4420844418 |
- * | 100% | 113.8342622305 | 113.8000000000 |
- * | 125% | 142.4066620504 | 142.3638000000 |
+ * | 0% | 33.33 | 33.32 |
+ * | 25% | 42.74 | 42.73 |
+ * | 50% | 63.75 | 63.73 |
+ * | 75% | 87.47 | 87.44 |
+ * | 100% | 113.83 | 113.8 |
+ * | 125% | 142.41 | 142.36 |
  *
  * Here the first scale factor is @math{460\mathrm{V}/460\mathrm{V}=1}. The second is
- * @math{113.8\mathrm{A}/113.8342622305\mathrm{A}=0.9996990165}.
+ * @math{113.8\mathrm{A}/113.83\mathrm{A}\approx0.9997}.
  * Multiplying the raw 25% anchor by that factor gives
- * @math{42.7411726195\mathrm{A}\times0.9996990165=42.7283082334\mathrm{A}}.
+ * @math{42.74\mathrm{A}\times0.9997\approx42.73\mathrm{A}}.
  *
  * Because 0.25 is below 0.251, the low-load quadratic is selected. Evaluation at the 25% anchor
- * reproduces the normalized value, approximately 42.72830 A. The result also reports estimated FLA
- * of 113.8342622305 A, rather than the supplied 113.8 A.
+ * reproduces the normalized value, approximately 42.73 A. The result also reports estimated FLA
+ * of 113.83 A, rather than the supplied 113.8 A.
  *
  * With the same motor inputs, optimal-path current fits the raw 0%, 25%, and 50% anchors. Its
- * quadratic coefficients are approximately 33.3308239270 A, 14.4488395008 A, and 92.7702210768 A.
- * At load 0.25 the linear contribution is @math{14.4488395008(0.25)=3.6122098752} A and the
- * quadratic contribution is @math{92.7702210768(0.25)^2=5.7981388173} A. Adding these to the
- * 33.3308239270 A constant term gives 42.7411726195 A. This raw-model result is intentionally
+ * quadratic coefficients are approximately 33.33 A, 14.45 A, and 92.77 A.
+ * At load 0.25 the linear contribution is @math{14.45(0.25)\approx3.61} A and the
+ * quadratic contribution is @math{92.77(0.25)^2\approx5.80} A. Adding these to the
+ * 33.33 A constant term gives 42.74 A. This raw-model result is intentionally
  * distinct from the supplied-FLA result. It is not a
  * field-voltage-corrected operating current.
  *

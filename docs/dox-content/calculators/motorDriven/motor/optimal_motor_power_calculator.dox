@@ -132,11 +132,12 @@
  * so the field-current multiplier and final reference-voltage multiplier are both one.
  *
  * The retained search selects trials near load 0.74 and 0.75; floating-point rounding makes the
- * upper shaft output strictly greater than the target. Interpolation gives load 0.7500000000000001.
- * Electrical input is 58.8307085111 kW, efficiency is 0.95103393136, current is 87.4684109871 A,
- * and power factor is 0.84417868597. The power-factor check uses 58.8307085111 kW divided by
- * (87.4684109871 A times 460 V times the square root of three / 1000), giving 0.84417868597.
- * The approximate difference between electrical input and required shaft output is 2.881 kW of
+ * upper shaft output strictly greater than the target. Interpolation gives load 0.7500000000000001,
+ * one representable floating-point step above 0.75. Other results below are rounded for display.
+ * Electrical input is 58.83 kW, efficiency is 0.9510, current is 87.47 A,
+ * and power factor is 0.8442. The power-factor check uses 58.83 kW divided by
+ * (87.47 A times 460 V times the square root of three / 1000), giving 0.8442.
+ * The approximate difference between electrical input and required shaft output is 2.88 kW of
  * motor loss. Drive losses must already be included in the 75 hp requirement, before calling this method.
  *
  * @heading{Assumptions, Boundaries and Provenance}

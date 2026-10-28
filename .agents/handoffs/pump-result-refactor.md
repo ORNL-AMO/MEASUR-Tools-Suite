@@ -3,7 +3,7 @@
 ## Workflow Metadata
 
 - Lifecycle: active
-- Status: Suite through OptimalPumpShaftPower merged; MoverShaftPower implemented, verified and independently reviewed Ready; remaining Desktop migration is deferred to final integration
+- Status: Suite through MoverShaftPower merged; OptimalMotorShaftPower implemented, verified and independently reviewed Ready; remaining Desktop migration is deferred to final integration
 - Owner: Codex
 - Created: 2026-10-07
 - Last updated: 2026-10-27
@@ -88,8 +88,8 @@ ordered so foundational calculators migrate before the composite calculators tha
 | 10 | #220 FluidPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite [PR #434](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/434) merged on 2026-10-15 at `7b5b760`; reviewed implementation head `9d5e46c`. See [FluidPower handoff](fluid-power-refactor.md). |
 | 11 | #221 MoverEfficiency | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite PR #441 merged at `8d34462`; implementation independently reviewed Ready at `27510c8`. See the [MoverEfficiency handoff](mover-efficiency-refactor.md). |
 | 12 | #227 OptimalPumpShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite PR #442 merged at `2a20eed`; review and delivery evidence linked from the [OptimalPumpShaftPower handoff](optimal-pump-shaft-power-refactor.md). |
-| 13 | #222 MoverShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Implemented, verified and independently reviewed Ready on `issue-222`. See the [MoverShaftPower handoff](mover-shaft-power-refactor.md). |
-| 14 | #214 OptimalMotorShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Planned Suite-only work. |
+| 13 | #222 MoverShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite PR [#443](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/443) merged at `93427c3`. See the [MoverShaftPower handoff](mover-shaft-power-refactor.md). |
+| 14 | #214 OptimalMotorShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite [PR #444](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/444); implemented, verified and independently reviewed Ready. See the [OptimalMotorShaftPower handoff](optimal-motor-shaft-power-refactor.md). |
 
 For each module:
 
@@ -183,6 +183,26 @@ dependency migration, but their public refactors remain separate.
   staged WASM passed all 270 browser tests. Docs/whitespace/package checks and rendered-page inspection passed.
   Existing Doxygen BibTeX limitation persists. Independent review of `ba430c6...17a30db` is Ready with
   no actionable findings; final native/fresh-WASM reruns passed. No Desktop changes or validation performed for this child.
+
+## OptimalMotorShaftPower Implementation — 2026-10-27
+
+- Suite #214 adds a stateless motor namespace and standalone plain-object WASM/TypeScript API;
+  PumpResult and FanResult private consumers migrated without changing their expected results.
+- Captured 121 legacy fixtures; focused native checks passed 540 assertions/17 cases; full native
+  passed 5,836 assertions/348 cases; fresh rebuilt/staged WASM passed all 287 browser tests.
+- Optimized differential passed 41,669,208 output comparisons. Typecheck, documentation links,
+  complete-diff whitespace, package dry run and generated-page visual inspection passed.
+- Independent review of epic base `93427c3` through snapshot `c38d4a39b932afd915f923749a918d216a94b0c2`
+  is Ready, no actionable findings; reviewer rebuilt the differential and reran focused checks.
+  See the [module handoff](optimal-motor-shaft-power-refactor.md) for the migration contract and evidence.
+- User-requested worked-example precision sweep subsequently updated 14 calculation pages and the
+  documentation guide. All 82 general formula blocks and 794 source/binding/declaration/test files
+  remain unchanged; independent documentation review is Ready. Details are in the module handoff.
+- Suite child [PR #444](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/444) delivers this work
+  from `issue-214` into the epic; CI/publication evidence stays in that PR. No Desktop changes,
+  package-pin updates, manual publication or automatic merge are part of this delivery.
+  Existing Doxygen BibTeX failure remains; module-specific page has no warnings. Final epic integration
+  review, release and consolidated Desktop verification remain separate work.
 
 ## Internal Review
 

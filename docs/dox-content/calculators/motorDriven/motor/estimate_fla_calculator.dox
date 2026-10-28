@@ -85,9 +85,9 @@
  *
  * @heading{Worked Example}
  * A 50 hp, 1800 rpm, 60 Hz standard motor with a 100 V rated voltage produces retained current
- * anchors of approximately 18.8776, 23.6213, 34.0613, 46.5048, 60.3815, and 75.5372 A. Applying
+ * anchors of approximately 18.88, 23.62, 34.06, 46.50, 60.38, and 75.54 A. Applying
  * the reference-voltage correction to the 100-percent anchor gives
- * @math{60.3815\times460/100=277.7548} A. The other five anchors keep their listed values.
+ * @math{60.38\times460/100\approx277.75} A. The other five anchors keep their listed values.
  *
  * @heading{Inputs, Limits, and Appropriate Use}
  * - Rated power is hp, speed is rpm, voltage is V, and currents are A. Specified efficiency is a

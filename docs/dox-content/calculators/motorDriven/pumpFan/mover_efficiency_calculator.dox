@@ -83,10 +83,10 @@
  *
  * @heading{Worked Pump Example}
  * For specific gravity 1.5, flow 1000 US gpm, head 125 ft, and shaft input 125 hp, the fluid-power
- * calculation gives approximately 35.3096648138 kW, or 47.3319903670 hp. Applying the ratio:
+ * calculation gives approximately 35.31 kW, or 47.33 hp. Applying the ratio:
  * @formula{mover-efficiency-pump-example;
  *   \eta_{m,p}=\frac{\left(0.746\times1000\times125\times1.5/3961.38\right)/0.746}{125}
- *             =0.3786559229
+ *             \approx0.3787
  * }
  * @symtable
  * @symrow{\eta_{m,p}; Calculated pump efficiency fraction; \unitless}
@@ -105,11 +105,11 @@
  * @heading{Worked Fan Example}
  * For flow 2000 cfm, shaft input 5 hp, inlet gauge pressure 20 inches water column, outlet gauge
  * pressure 25 inches water column, compressibility correction 1.4, and velocity pressure 1 inch water
- * column, the effective rise is 4 inches water column. Fluid power is approximately 1.3132977051 kW,
- * or 1.7604526878 hp:
+ * column, the effective rise is 4 inches water column. Fluid power is approximately 1.313 kW,
+ * or 1.760 hp:
  * @formula{mover-efficiency-fan-example;
  *   \eta_{m,f}=\frac{\left(0.746\times2000\times(25-20-1)\times1.4/6362\right)/0.746}{5}
- *             =0.3520905376
+ *             \approx0.3521
  * }
  * @symtable
  * @symrow{\eta_{m,f}; Calculated fan efficiency fraction; \unitless}

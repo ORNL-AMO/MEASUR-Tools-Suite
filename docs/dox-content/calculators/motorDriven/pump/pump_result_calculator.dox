@@ -116,7 +116,9 @@
  * @symrow{\eta_d; Drive efficiency; \unitless}
  * @endsymtable
  *
- * Modified shaft power moves in the opposite direction because the required pump shaft power is known:
+ * The @ref optimal_motor_shaft_power_calculator "Optimal Motor Shaft Power Calculator" explains
+ * the reverse drive-loss model. Modified shaft power moves in the opposite direction because the
+ * required pump shaft power is known:
  * @formula{pump-result-modified-drive;
  *   P_{m,s}=\frac{P_{p,s}}{\eta_d}
  * }
@@ -247,29 +249,30 @@
  * @heading{Worked Rotodynamic Example}
  * Consider a direct-driven pump moving 1,840 gpm at 174.85 ft of head with specific gravity 1.0.
  * The existing motor is rated 200 hp at 1,780 RPM and 460 V. Measured input is 80 kW at 480 V,
- * and the system operates 8,760 hours per year at $0.05/kWh.
+ * and the system operates 8,760 hours per year at $0.05/kWh. Results are rounded for display;
+ * annual energy and cost use unrounded intermediate power.
  *
- * The rotodynamic hydraulic-power equation gives 81.2151 hp of hydraulic power.
- * The measured-power motor model gives 101.1875 hp at the motor shaft. With a direct drive, pump
- * shaft power is also 101.1875 hp. Dividing hydraulic power by pump shaft power
- * therefore gives an existing pump efficiency of 0.802620, or 80.2620 percent. Existing annual
+ * The rotodynamic hydraulic-power equation gives 81.22 hp of hydraulic power.
+ * The measured-power motor model gives 101.19 hp at the motor shaft. With a direct drive, pump
+ * shaft power is also 101.19 hp. Dividing hydraulic power by pump shaft power
+ * therefore gives an existing pump efficiency of 0.8026, or 80.26 percent. Existing annual
  * energy is 700.8 MWh/year and annual cost is 35.04 thousand dollars/year.
  *
- * If the proposed pump efficiency is 0.80, the modified calculation requires 101.5189 hp at the
- * pump and motor shafts. The motor model resolves this to 80.2552 kW, 94.3652-percent motor
- * efficiency, 126.585 A, and a 0.762584 power factor. The modified annual result is 703.0352 MWh/year
- * and 35.1518 thousand dollars/year. In this example, the proposed pump efficiency is slightly lower
+ * If the proposed pump efficiency is 0.80, the modified calculation requires 101.52 hp at the
+ * pump and motor shafts. The motor model resolves this to 80.26 kW, 94.37-percent motor
+ * efficiency, 126.59 A, and a 0.7626 power factor. The modified annual result is 703.04 MWh/year
+ * and 35.15 thousand dollars/year. In this example, the proposed pump efficiency is slightly lower
  * than the calculated existing efficiency, so energy use increases. A modification is not inherently
  * an improvement; the two results must be interpreted together.
  *
  * @heading{Worked Positive-Displacement Example}
  * Consider a positive-displacement pump delivering 100 gpm across 50 psi with a proposed efficiency
- * of 0.80. The positive-displacement hydraulic-power equation gives 2.91676 hp
- * of hydraulic power. The required pump shaft power is therefore 2.91676/0.80 = 3.64595 hp.
+ * of 0.80. The positive-displacement hydraulic-power equation gives 2.917 hp
+ * of hydraulic power. The required pump shaft power is therefore @math{2.917/0.80\approx3.646} hp.
  *
  * Notice that an entered head value and specific gravity do not change this result. For this pump
  * type, differential pressure is the selected description of hydraulic duty. The drive and motor
- * calculations then proceed from the 3.64595-hp pump shaft requirement exactly as they do for the
+ * calculations then proceed from the 3.646-hp pump shaft requirement exactly as they do for the
  * rotodynamic modified case.
  *
  * @heading{Interpreting and Comparing Results}

@@ -88,13 +88,13 @@
  *
  * @heading{Worked Notched V-Belt Example}
  * A motor delivers 50 hp through a notched V-belt. The unscaled curve is approximately
- * 4.251987677690972 percentage points. The factor 0.05/0.07 reduces the predicted loss to
- * approximately 1.518567027746776 hp:
+ * 4.2520 percentage points. The factor 0.05/0.07 reduces the predicted loss to
+ * approximately 1.519 hp:
  * @formula{mover-shaft-power-example;
- * L\approx50\left(\frac{4.251987677690972(0.05/0.07)}{100}\right)
- *   =1.518567027746776\ \mathrm{hp},\quad
- * P_s\approx48.481432972253224\ \mathrm{hp},\quad
- * \eta_d\approx0.96962865944506449
+ * L\approx50\left(\frac{4.2520(0.05/0.07)}{100}\right)
+ *   \approx1.519\ \mathrm{hp},\quad
+ * P_s\approx48.48\ \mathrm{hp},\quad
+ * \eta_d\approx0.9696
  * }
  * @symtable
  * @symrow{L; Estimated loss through the notched V-belt; \horsepower}
@@ -123,7 +123,8 @@
  * do not establish physical extensions of the loss model.
  *
  * This is a forward calculation from known motor shaft output to delivered mover shaft input.
- * OptimalMotorShaftPower works in the reverse direction using a different retained empirical
+ * The @ref optimal_motor_shaft_power_calculator "Optimal Motor Shaft Power Calculator" works
+ * in the reverse direction using a different retained empirical
  * curve; it is not an exact algebraic inverse. Do not replace either algorithm with an assumed
  * round-trip identity. This calculator also does not select equipment or optimize motor size.
  *

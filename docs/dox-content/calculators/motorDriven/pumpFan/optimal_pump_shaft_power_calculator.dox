@@ -80,11 +80,11 @@
  *
  * @heading{Worked Pump Example}
  * For flow 1840 US gpm, head 174.85 ft, specific gravity 1 and efficiency 0.80, useful fluid power
- * is approximately 60.586488547 kW. Allowing for pump losses gives approximately 75.733110684 kW
+ * is approximately 60.59 kW. Allowing for pump losses gives approximately 75.73 kW
  * at the shaft:
  * @formula{optimal-pump-shaft-power-pump-example;
  *   P_{s,p}=\frac{\left(0.746\times1840\times174.85\times1/3961.38\right)/0.80}{0.746}
- *           =101.5189151255\quad\mathrm{hp}
+ *           \approx101.52\quad\mathrm{hp}
  * }
  * @symtable
  * @symrow{P_{s,p}; Required pump shaft input; \horsepower}
@@ -103,11 +103,11 @@
  * @heading{Worked Fan Example}
  * For flow 2000 cfm, inlet gauge pressure 20 inches water column, outlet gauge pressure 25 inches
  * water column, velocity pressure 1 inch water column, compressibility correction 1.4 and efficiency
- * 0.75, the effective rise is 4 inches water column. Useful gas power is approximately 1.3132977051 kW;
- * accounting for fan losses gives approximately 1.7510636068 kW at the shaft:
+ * 0.75, the effective rise is 4 inches water column. Useful gas power is approximately 1.313 kW;
+ * accounting for fan losses gives approximately 1.751 kW at the shaft:
  * @formula{optimal-pump-shaft-power-fan-example;
  *   P_{s,f}=\frac{\left(0.746\times2000\times(25-20-1)\times1.4/6362\right)/0.75}{0.746}
- *           =2.3472702504\quad\mathrm{hp}
+ *           \approx2.35\quad\mathrm{hp}
  * }
  * @symtable
  * @symrow{P_{s,f}; Required fan shaft input; \horsepower}
