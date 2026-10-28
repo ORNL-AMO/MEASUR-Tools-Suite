@@ -26,9 +26,11 @@
  *   C(P_r)=A+B e^{-D P_r}+E e^{-F P_r}
  * }
  * @symtable
- * @symrow{C(P_r); Basic current curve or class/interval multiplier at rated power; \ampere\per\horsepower\text{ for the basic curve; dimensionless for multipliers}}
+ * @symrow{C(P_r); Basic current curve at rated power; \ampere\per\horsepower}
+ * @symrow{C(P_r); Class or interval multiplier curve at rated power; \unitless}
  * @symrow{P_r; Rated motor power; \horsepower}
- * @symrow{A,B,E; Retained empirical coefficients; \ampere\per\horsepower\text{ for the basic curve; dimensionless for multipliers}}
+ * @symrow{A,B,E; Retained basic-current-curve coefficients; \ampere\per\horsepower}
+ * @symrow{A,B,E; Retained class and interval multiplier coefficients; \unitless}
  * @symrow{D,F; Retained exponential coefficients; \per\horsepower}
  * @symrow{e; Natural exponential base; \unitless}
  * @endsymtable

@@ -68,9 +68,12 @@
  * @symrow{L; Interpolated motor load factor; \unitless}
  * @symrow{L_1; Lower modeled load factor; \unitless}
  * @symrow{0.01; Separation between modeled load points; \unitless}
- * @symrow{X_{meas}; Measured power or measured current; \kilo\watt\text{ or }\ampere}
- * @symrow{X_1; Modeled value at the lower load point; \kilo\watt\text{ or }\ampere}
- * @symrow{X_2; Modeled value at the upper load point; \kilo\watt\text{ or }\ampere}
+ * @symrow{X_{meas}; Measured electrical power in POWER mode; \kilo\watt}
+ * @symrow{X_{meas}; Measured line current in CURRENT mode; \ampere}
+ * @symrow{X_1; Modeled electrical power at the lower load point in POWER mode; \kilo\watt}
+ * @symrow{X_1; Modeled line current at the lower load point in CURRENT mode; \ampere}
+ * @symrow{X_2; Modeled electrical power at the upper load point in POWER mode; \kilo\watt}
+ * @symrow{X_2; Modeled line current at the upper load point in CURRENT mode; \ampere}
  * @endsymtable
  *
  * The same interpolation fraction is applied to motor efficiency and the other modeled quantities.

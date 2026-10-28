@@ -27,8 +27,8 @@
  *
  * The three differential terms describe the change in fluid energy from the selected suction
  * reference point to the discharge gauge. Each may be positive, zero, or negative. The friction
- * terms are added because they restore the energy dissipated between the reference points and the
- * pump flanges. For nonnegative loss coefficients, both friction terms are nonnegative.
+ * terms are added to account for the energy lost between the reference points and the pump flanges.
+ * For nonnegative loss coefficients, both friction terms are nonnegative.
  *
  * @heading{Choose the Measurement Configuration}
  * Use the configuration that matches the available suction-side measurement:
@@ -117,13 +117,11 @@
  * @symrow{P_t; Suction-tank gas overpressure; \psig}
  * @endsymtable
  *
- * Specific gravity compares the fluid's mass density with that of the reference water. Water near
- * 68 degrees Fahrenheit (20 degrees Celsius) has a mass density of approximately 62.3
- * @unitb{\lbm\per\foot\cubed}; Table 34 of the Bureau of Standards reference tables gives
- * approximately 62.316 pounds per cubic foot at 20 degrees Celsius @cite nbs1924densityTables.
- * Under standard gravity, mass density in lbm per cubic foot and specific weight in lbf per cubic
- * foot have the same numerical value, but they describe different quantities: mass per volume and
- * weight per volume, respectively. The pressure-head equation uses specific weight.
+ * Specific gravity compares the fluid's density with that of water at the reference condition
+ * (68 @unitr{\degreeFahrenheit} / 20 @unitr{\degreeCelsius}), where @math{SG=1}. At this condition,
+ * water has a density of about 62.3 @unitb{\lbm\per\foot\cubed} @cite nbs1924densityTables.
+ * Under standard gravity, 1 lbm weighs 1 lbf, so the pressure-head equation uses the same number
+ * as the specific weight of water, @math{\gamma_w} (62.316 @unitr{\lbf\per\foot\cubed} in the calculator).
  *
  * The retained pressure gradient is consistent with these approximate reference-water properties
  * and gives 2.310803 feet of water per psi at @math{SG=1}. The familiar 2.31 feet per psi is an
