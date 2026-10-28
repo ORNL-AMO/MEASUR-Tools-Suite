@@ -437,8 +437,12 @@ The table lists every changed public WASM calculation; Poles remains C++-only, w
 - Readiness delivery target changed at the user's request: branch codex/pump-result-integration-readiness
   targets epic-pump-result-refactor at e7ceb58c8613b403c733268549eb892d802d0638. The child diff
   includes develop reconciliation, the handoff and two unit-table documentation repairs; no runtime
-  change. A separate review of this six-file child diff is required before opening its PR. The full
-  epic-to-develop review above remains implementation evidence, not a substitute for the child review.
+  change. Separate six-file child review by integrated_suite_review of base e7ceb58 through head
+  3bb4fbf5e61f4b9187272bb5d3c4d8204ec728e6 is Ready with documented CI/publication follow-up,
+  no actionable findings or unresolved P0-P2 issues. Reviewer confirmed develop's 1.2.7 metadata,
+  all unchanged formula blocks, no runtime changes, repaired unit meanings and beta-first target;
+  independent links/child-diff whitespace checks passed. This final handoff edit records review
+  evidence only. The full epic-to-develop review above remains separate implementation evidence.
   The readiness PR's beta contains the combined implementation and can support Desktop validation;
   the epic-to-develop PR, final package version and merges remain subsequent coordinated work.
 - Integrated PR/CI and post-push publication evidence will live in the
