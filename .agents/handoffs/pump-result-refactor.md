@@ -3,12 +3,14 @@
 ## Workflow Metadata
 
 - Lifecycle: active
-- Status: all 14 Suite calculators merged; develop reconciled; integrated validation and pre-PR review in progress; Desktop integration will use the integrated PR's exact beta
+- Status: all 14 Suite calculators merged; develop reconciled; integrated validation/review complete with documented CI/publication follow-up; Desktop integration will use the integrated PR's exact beta
 - Owner: Codex
 - Created: 2026-10-07
 - Last updated: 2026-10-28
 - Suite issue: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/203
 - Suite feature branch: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/tree/epic-pump-result-refactor
+- Integration readiness branch / PR base: `codex/pump-result-integration-readiness` / `epic-pump-result-refactor`.
+  The user requested a child PR into the epic on 2026-10-28; the epic-to-develop PR and merges remain later work.
 - Suite CI bootstrap PR: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/420
 - Suite PumpResult PR: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/421
 - Suite Poles issue: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/216 (closed)
@@ -104,7 +106,7 @@ For each module:
   require a `Ready` or `Ready with documented follow-up` result with no unresolved P0-P2 findings.
 - Complete Suite implementation, cross-layer tests, documentation, package artifacts, and pre-PR review for every
   remaining module before changing Desktop again.
-- After integrated Suite validation and review pass, open a ready Suite epic PR targeting `develop` and use
+- After integrated Suite validation and review pass, open the reviewed readiness child PR into the epic and use
   that PR's exact CI-published beta for consolidated Desktop implementation and verification. Keep the Suite
   PR open while Desktop integration proceeds. Update both Desktop pins together to that exact beta; never
   use the floating `beta` tag. Coordinate final version selection, publication and merges after both
@@ -153,7 +155,7 @@ dependency migration, but their public refactors remain separate.
 - MotorCurrent beta: `1.2.6-beta.370.1`, verified from [PR #426's CI comment](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/426#issuecomment-6151817084); Desktop will not consume an individual MotorCurrent beta.
 - MotorPower recorded beta: `1.2.6-beta.374.1` at `b61a2af`, verified from [PR #428's CI comment](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/428#issuecomment-6172509451). CI passed; Desktop does not consume this individual beta. Later handoff-only heads may publish newer packages.
 - MotorEfficiency Suite status: PR #424 merged on 2026-10-13; issue #208 closed.
-- Integrated beta version: pending integrated PR CI; publication evidence belongs in the PR and Desktop #8957.
+- Integrated beta version: pending readiness PR CI; publication evidence belongs in the PR and Desktop #8957.
 - Final package version: deferred until both implementations are complete.
 - Desktop root dependency: update during Desktop integration to the integrated PR's exact beta.
 - Desktop process-flow dependency: align with the root's exact beta during Desktop integration.
@@ -343,7 +345,12 @@ dependency migration, but their public refactors remain separate.
 ## Integrated Desktop Migration Contract — 2026-10-28
 
 All 14 C++ modules intentionally replace their legacy classes with the namespace APIs documented
-in the module handoffs. No compatibility wrappers remain. Numerical changes were not approved.
+in the module handoffs. No compatibility wrappers remain. Formulas and defined legacy outputs are
+preserved. The bounded exception is the user-approved MotorPerformance near-zero correction in
+[MotorPowerFactor](motor-power-factor-refactor.md): pass existing nameplate fields that were previously
+uninitialized. No undefined legacy result is a golden; native and WASM tests verify the deterministic
+zero-load path. Classify the integrated release as breaking/additive API plus this bounded behavior
+correction, and include it in Desktop motor-performance regression verification.
 The table lists every changed public WASM calculation; Poles remains C++-only, with no WASM export.
 
 | Surface / detailed contract | Previous WASM API | Integrated WASM API | Units and required data | Kind / ownership / compatibility |
@@ -414,10 +421,28 @@ The table lists every changed public WASM calculation; Poles remains C++-only, w
   displacement paths, fan consumers, motor calculations, drive branches and arithmetic boundaries.
 - Desktop #8957 now records the user-approved exact-beta-first implementation sequence, with final
   versions and merging deferred until both implementations finish. No Desktop source/pins changed.
-- Integrated review: pending a separate review-only pass of the complete develop...epic diff using
-  .github/skills/measur-code-review/. Exact reviewed head and dispositions will be recorded here.
+- Independent integrated review by integrated_suite_review used .github/skills/measur-code-review/
+  on the complete 180-file diff, base develop b0c46f1fc82a5069020f2b1cb7f466a187239e00 through
+  head 7f4c51f32581f530c0b85bbe916b87720c0a3fbb. Readiness: Ready with documented follow-up;
+  no unresolved P0-P2 findings. Reviewer independently passed 1,985 native assertions in 50 cases,
+  types, links, whitespace, nine beta helper tests and cross-layer checks of 24 value objects and
+  18 runtime functions across 13 modules. Full native/fresh-WASM evidence was corroborated.
+- One P3 finding corrected: the integrated migration summary now records the previously approved
+  bounded MotorPerformance near-zero correction, with corresponding PR behavior classification.
+  This changes handoff/review evidence only; implementation/docs remain identical to reviewed head.
+  Rerun links/whitespace for these metadata edits. No unresolved actionable findings remain.
+- Final rendered sweep: all 15 pages, 1,200 MathJax containers, zero math errors. Local BibTeX
+  limitation remains documented; successful CI Doxygen and exact-beta consumer verification are
+  delivery gates before the beta is declared ready. Post-push evidence stays in PR/issue records.
+- Readiness delivery target changed at the user's request: branch codex/pump-result-integration-readiness
+  targets epic-pump-result-refactor at e7ceb58c8613b403c733268549eb892d802d0638. The child diff
+  includes develop reconciliation, the handoff and two unit-table documentation repairs; no runtime
+  change. A separate review of this six-file child diff is required before opening its PR. The full
+  epic-to-develop review above remains implementation evidence, not a substitute for the child review.
+  The readiness PR's beta contains the combined implementation and can support Desktop validation;
+  the epic-to-develop PR, final package version and merges remain subsequent coordinated work.
 - Integrated PR/CI and post-push publication evidence will live in the
-  [epic PR conversation](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pulls?q=is%3Apr+head%3Aepic-pump-result-refactor+base%3Adevelop)
+  [readiness PR conversation](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pulls?q=is%3Apr+head%3Acodex%2Fpump-result-integration-readiness+base%3Aepic-pump-result-refactor)
   and [Desktop coordination issue](https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8957).
   Do not push evidence-only commits after beta publication. Keep the PR open; final release versions
   and merging await completion of both implementations.
