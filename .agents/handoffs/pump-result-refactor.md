@@ -3,10 +3,10 @@
 ## Workflow Metadata
 
 - Lifecycle: active
-- Status: Suite through MoverShaftPower merged; OptimalMotorShaftPower implemented, verified and independently reviewed Ready; remaining Desktop migration is deferred to final integration
+- Status: all 14 Suite calculators merged; develop reconciled; integrated validation and pre-PR review in progress; Desktop integration will use the integrated PR's exact beta
 - Owner: Codex
 - Created: 2026-10-07
-- Last updated: 2026-10-27
+- Last updated: 2026-10-28
 - Suite issue: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/203
 - Suite feature branch: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/tree/epic-pump-result-refactor
 - Suite CI bootstrap PR: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/420
@@ -26,7 +26,7 @@
 - Legacy files: `PumpResult.h/.cpp`, `pump.cpp`, `pump.d.ts`, one mixed C++ test, and two WASM tests
 - Nearby examples: `motorDriven/pump/pump_head` and `compressedAir/dryer_operating_cost`
 
-## Current Public API
+## Pre-Refactor Public API
 
 - C++ symbols: global `PumpResult`, nested `PumpResult::Output`, and `Pump::Input`/`Pump::FieldData` constructor inputs
 - Embind runtime names: `PumpResultInput`, `PumpFieldData`, `PumpResult`, and `PumpResults`
@@ -42,7 +42,7 @@
 | Modified result | `new PumpResult(...).calculateModified()` | `calculateModifiedPumpResult(ModifiedPumpResultInput)` | `class_` to `function` + `value_object` | Same result units; estimated full-load amps is zero | Before: four class instances require cleanup; after: plain input/result | Breaking |
 | Savings metadata | Two getters that return zero | Removed | class methods removed | Desktop retains zero app-facing values | No Suite object | Breaking |
 
-## Proposed Namespace API
+## Implemented Namespace API
 
 - Namespace: `pump_result`
 - Functions: `calculateExisting(const ExistingInput&)`, `calculateModified(const ModifiedInput&)`
@@ -63,7 +63,7 @@
 
 - Headers/source: replace global class with `pump_result.h/.cpp`; `Pump.h` remains unchanged.
 - C++ tests: port all pump-result goldens; move `EstimateFLA` to its motor test.
-- WebAssembly bindings: replace class bindings with two functions and three value objects.
+- WebAssembly bindings: replace class bindings with two functions and four value objects.
 - TypeScript declarations: replace runtime classes with interfaces and functions.
 - WASM Mocha tests: consolidate into one typed plain-object test module.
 - Algorithm docs: add a teaching-oriented `pump_result_calculator.dox`.
@@ -89,7 +89,7 @@ ordered so foundational calculators migrate before the composite calculators tha
 | 11 | #221 MoverEfficiency | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite PR #441 merged at `8d34462`; implementation independently reviewed Ready at `27510c8`. See the [MoverEfficiency handoff](mover-efficiency-refactor.md). |
 | 12 | #227 OptimalPumpShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite PR #442 merged at `2a20eed`; review and delivery evidence linked from the [OptimalPumpShaftPower handoff](optimal-pump-shaft-power-refactor.md). |
 | 13 | #222 MoverShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite PR [#443](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/443) merged at `93427c3`. See the [MoverShaftPower handoff](mover-shaft-power-refactor.md). |
-| 14 | #214 OptimalMotorShaftPower | Defer all Desktop wrapper and package-pin work to the final integration pass. | Suite [PR #444](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/444); implemented, verified and independently reviewed Ready. See the [OptimalMotorShaftPower handoff](optimal-motor-shaft-power-refactor.md). |
+| 14 | #214 OptimalMotorShaftPower | Consolidate Desktop wrapper and package-pin work in the final integration pass. | Suite [PR #444](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/444) merged at `e7ceb58`; implemented, verified and independently reviewed Ready. See the [OptimalMotorShaftPower handoff](optimal-motor-shaft-power-refactor.md). |
 
 For each module:
 
@@ -104,9 +104,12 @@ For each module:
   require a `Ready` or `Ready with documented follow-up` result with no unresolved P0-P2 findings.
 - Complete Suite implementation, cross-layer tests, documentation, package artifacts, and pre-PR review for every
   remaining module before changing Desktop again.
-- After the integrated Suite review passes, publish the approved final or release-candidate package. Consolidate
-  remaining Desktop changes against the final integration branch, update both Desktop package pins once, migrate
-  every affected wrapper, and perform Desktop review and verification once.
+- After integrated Suite validation and review pass, open a ready Suite epic PR targeting `develop` and use
+  that PR's exact CI-published beta for consolidated Desktop implementation and verification. Keep the Suite
+  PR open while Desktop integration proceeds. Update both Desktop pins together to that exact beta; never
+  use the floating `beta` tag. Coordinate final version selection, publication and merges after both
+  implementations are complete. Any changed Suite implementation requires a reviewed replacement beta and
+  affected Desktop checks against it. This sequence was explicitly requested by the user on 2026-10-28.
 
 Explicitly outside this feature are `Pump.h`/#202, MotorData/#207, MotorPerformance/#209, FanResult/#198, and the
 pump-efficiency chain #223-#230. MotorPerformance and FanResult may receive private consumer updates required by a
@@ -117,8 +120,9 @@ dependency migration, but their public refactors remain separate.
 - Current state: Desktop MotorEfficiency PR #8964 is already merged at `9b7ff3d7416ff8172ad3ab24fc01ab2ef29acbc9`.
   GitHub status was verified read-only on 2026-10-27; earlier held-PR instructions were stale. Remaining Desktop
   implementation, package updates and verification stay deferred until approved final Suite integration.
-- Final integration: consolidate all affected wrappers, root and process-flow package pins, and Desktop verification
-  into one rebase/review cycle against the approved final or RC Suite package.
+- Final integration: consolidate affected wrappers, root and process-flow package pins, and Desktop verification
+  against the exact beta published by the integrated Suite PR. Final version selection and merges follow
+  completion of both implementations; an RC/final package is not a prerequisite for Desktop implementation.
 - Until then: no Desktop implementation, wrapper tests, Angular typecheck/build, regression run, or package-pin update
   is part of an individual Suite child delivery.
 
@@ -149,9 +153,10 @@ dependency migration, but their public refactors remain separate.
 - MotorCurrent beta: `1.2.6-beta.370.1`, verified from [PR #426's CI comment](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/426#issuecomment-6151817084); Desktop will not consume an individual MotorCurrent beta.
 - MotorPower recorded beta: `1.2.6-beta.374.1` at `b61a2af`, verified from [PR #428's CI comment](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/428#issuecomment-6172509451). CI passed; Desktop does not consume this individual beta. Later handoff-only heads may publish newer packages.
 - MotorEfficiency Suite status: PR #424 merged on 2026-10-13; issue #208 closed.
-- Final package version: pending
-- Desktop root dependency: do not update until final integration; then update once to the approved final/RC package.
-- Desktop process-flow dependency: do not update until final integration; then align it with the root once.
+- Integrated beta version: pending integrated PR CI; publication evidence belongs in the PR and Desktop #8957.
+- Final package version: deferred until both implementations are complete.
+- Desktop root dependency: update during Desktop integration to the integrated PR's exact beta.
+- Desktop process-flow dependency: align with the root's exact beta during Desktop integration.
 - Prior Desktop PR: #8964 is merged. No Desktop PR changes are part of the remaining Suite child deliveries.
 - Release readiness: Suite PR #421 and Desktop PR #8956 are merged; Poles PR #423, MotorEfficiency PR #424,
   EstimateFLA PR #425, and MotorCurrent PR #426 are merged. The epic was synced with develop at `4c573f3`.
@@ -162,12 +167,15 @@ dependency migration, but their public refactors remain separate.
   MoverEfficiency implementation, verification and independent review are complete, Ready at `27510c8`;
   child PR/CI evidence is linked from its module handoff.
   Evidence is in the module handoffs.
-- Release blockers: complete and review all remaining Suite modules, pass the integrated Suite review, publish the approved final/RC package, then perform the one Desktop integration/review cycle.
+- Desktop implementation gate: integrated Suite validation/review and the integrated PR's verified exact beta.
+- Merge/release gate: complete Desktop implementation, review and verification; coordinate final versions,
+  publication and Suite-first merge order afterward. Do not merge the Suite epic as part of beta preparation.
 
 ## Validation
 
 - Commands run: baseline `[PumpResults]` passed 129 assertions in 11 cases; refactored `[pump_result]` passed 129 assertions in 11 cases; moved `[EstimateFLA]` passed 64 assertions; the full native suite passed 4,148 assertions in 317 cases; `npm run verify:types` passed; `npm run verify:wasm` rebuilt and staged the composed-input module and passed all 251 browser tests; `npm run check:docs` passed; Doxygen generated the Pump Result page without module-specific warnings; `git diff --check` passed. Against `measur-tools-suite@1.2.6-beta.355.1`, Desktop passed five focused pump wrapper tests, Angular application typechecking, the root application build, and the full PR unit/regression workflow. Poles PR #423 subsequently passed native tests, rebuilt-WASM tests, and declarations/documentation checks before publishing `1.2.6-beta.358.1`. The EstimateFLA Suite-only refactor subsequently passed focused EstimateFLA (64 assertions) and MotorCurrent (4 assertions) tests, 4,196 native assertions in 321 cases, declaration verification, a freshly rebuilt/staged WASM suite with 255 browser tests, documentation checks/Doxygen page generation, and whitespace checks; no Desktop changes were made.
-- Commands still needed: final generated-document visual review; Suite checks for each remaining module; one integrated Suite review; then one consolidated Desktop review and verification against the approved final package.
+- Historical child validation is retained below. Current integrated evidence is recorded in the
+  2026-10-28 section; Desktop review and verification follow against the integrated PR's exact beta.
 - MotorCurrent validation: native build and 4,314 assertions in 324 cases passed; focused motor/pump/fan checks
   passed 253 assertions; typechecking and freshly rebuilt/staged WASM verification passed all 260 browser tests.
   Documentation links, whitespace checks, package dry run, and generated-page inspection passed; independent
@@ -204,7 +212,7 @@ dependency migration, but their public refactors remain separate.
   Existing Doxygen BibTeX failure remains; module-specific page has no warnings. Final epic integration
   review, release and consolidated Desktop verification remain separate work.
 
-## Internal Review
+## Historical Workflow Documentation Review
 
 - Intended PR base and reviewed base commit: `epic-pump-result-refactor` at `ea65920089a11d426996f065b4a554bb046c7066`.
 - Reviewed head commit: `38542a621bee5cd0ef880c80fb740ad361a17307`.
@@ -219,7 +227,9 @@ dependency migration, but their public refactors remain separate.
 
 ## Open Questions Or Blockers
 
-- The final package identifier remains pending. Remaining Desktop work is deferred until all Suite modules are merged and the integrated Suite review approves a final/RC package; prior Desktop PR #8964 is already merged.
+- All planned Suite calculators are merged. Integrated review and exact-beta publication/consumer checks
+  remain before Desktop implementation starts; prior Desktop PR #8964 is already merged. Final version
+  selection, RC/final publication and merging are intentionally deferred until both implementations finish.
 
 ## MotorShaftPower Readability Follow-Up
 
@@ -329,3 +339,85 @@ dependency migration, but their public refactors remain separate.
   Links, whitespace and generated-page checks pass; existing full-documentation BibTeX error persists.
 - Independent documentation review is Ready at frozen snapshot `3295592`, with no actionable findings.
   Delivered as a documentation follow-up in Suite PR [#443](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/443).
+
+## Integrated Desktop Migration Contract — 2026-10-28
+
+All 14 C++ modules intentionally replace their legacy classes with the namespace APIs documented
+in the module handoffs. No compatibility wrappers remain. Numerical changes were not approved.
+The table lists every changed public WASM calculation; Poles remains C++-only, with no WASM export.
+
+| Surface / detailed contract | Previous WASM API | Integrated WASM API | Units and required data | Kind / ownership / compatibility |
+| --- | --- | --- | --- | --- |
+| Pump existing / contract above | PumpResult constructors and calculateExisting() | calculateExistingPumpResult(ExistingPumpResultInput) | Nested system, motor FLA and measured kW/A; hp, kW, A, fractions, MWh/year, thousand dollars/year | Function + plain input/result; remove class cleanup; breaking |
+| Pump modified / contract above | PumpResult constructors and calculateModified() | calculateModifiedPumpResult(ModifiedPumpResultInput) | Nested system plus pump efficiency fraction; same output units; estimated FLA remains zero | Function + plain input/result; remove class cleanup; breaking |
+| [MotorEfficiency](motor-efficiency-refactor.md) | MotorEfficiency(...).calculate(load, efficiency) | calculateMotorEfficiency(MotorEfficiencyInput) | hp, rpm, frequency/class enums, fractional load and specified efficiency; returns fraction | Function + value input, numeric output; remove delete(); breaking |
+| [EstimateFLA](estimate-fla-refactor.md) | EstimateFLA(...).getEstimatedFLA() | calculateEstimateFLA(EstimateFLAInput) | hp, rpm, frequency/class enums, efficiency fraction, V; returns estimatedFLA and six partialLoadCurrents in A | Function + value input/output and fixed JS array; no cleanup; breaking |
+| [MotorCurrent](motor-current-refactor.md) | MotorCurrent(...).calculateCurrent(fla) | calculateMotorCurrent(MotorCurrentInput, fullLoadAmps) | hp, rpm, frequency/class enums, fractional efficiency/load, V, separate FLA in A; current and independently estimated FLA in A | Function + value input/output; remove delete(); breaking |
+| [Optimal current](motor-current-refactor.md) | Not exposed | calculateOptimalMotorCurrent(MotorCurrentInput) | Same required motor input; raw-model current in A, without supplied-FLA/voltage normalization | Function + value input, numeric output; no cleanup; additive |
+| [MotorPower](motor-power-refactor.md) | Not exposed | calculateMotorPower(ratedVoltage, motorCurrent, powerFactor) | Required V, A and fractional PF; returns kW | Scalar function; no cleanup; additive |
+| [MotorPowerFactor](motor-power-factor-refactor.md) | MotorPowerFactor(...).calculate() | calculateMotorPowerFactor(MotorPowerFactorInput) | Nine required nameplate/operating fields: hp, rpm, A, V, enums and fractions; returns fractional PF | Function + value input, numeric output; remove delete(); breaking |
+| [MotorShaftPower](motor-shaft-power-refactor.md) | Not exposed | calculateMotorShaftPower(MotorShaftPowerInput) | Eleven required fields including inactive measurement; hp, kW, rpm, V, A, enums, fractions; seven result fields | Function + plain input/result; no cleanup; additive |
+| [OptimalMotorPower](optimal-motor-power-refactor.md) | Not exposed | calculateOptimalMotorPower(OptimalMotorPowerInput) | Eight required nameplate/duty fields; shaft hp, V, rpm, enums/fractions; returns kW, A, efficiency/PF/load fractions | Function + plain input/result; no cleanup; additive |
+| [Pump fluid power](fluid-power-refactor.md) | Not exposed | calculatePumpFluidPower(PumpFluidPowerInput) | Specific gravity fraction, gpm, ft; returns kW | Function + value input, numeric output; no cleanup; additive |
+| [Fan fluid power](fluid-power-refactor.md) | Not exposed | calculateFanFluidPower(FanFluidPowerInput) | cfm, inlet/outlet/velocity pressure in in. water, compressibility fraction; returns kW | Function + value input, numeric output; no cleanup; additive |
+| [Pump mover efficiency](mover-efficiency-refactor.md) | Not exposed | calculatePumpMoverEfficiency(PumpMoverEfficiencyInput) | Specific gravity, gpm, ft and shaft hp; returns efficiency fraction | Function + value input, numeric output; no cleanup; additive |
+| [Fan mover efficiency](mover-efficiency-refactor.md) | Not exposed | calculateFanMoverEfficiency(FanMoverEfficiencyInput) | cfm, shaft hp, inlet/outlet/velocity pressure in in. water, compressibility fraction; returns efficiency fraction | Function + value input, numeric output; no cleanup; additive |
+| [Optimal pump shaft power](optimal-pump-shaft-power-refactor.md) | Not exposed | calculateOptimalPumpShaftPower(OptimalPumpShaftPowerInput) | gpm, ft, specific gravity and supplied pump-efficiency fraction; returns hp | Function + value input, numeric output; no cleanup; additive |
+| [Optimal fan shaft power](optimal-pump-shaft-power-refactor.md) | Not exposed | calculateOptimalFanShaftPower(OptimalFanShaftPowerInput) | cfm, inlet/outlet/velocity pressure in in. water, compressibility and supplied efficiency fractions; returns hp | Function + value input, numeric output; no cleanup; additive |
+| [MoverShaftPower](mover-shaft-power-refactor.md) | MoverShaftPower(...).calculate(); MoverShaftPowerOutput | calculateMoverShaftPower(MoverShaftPowerInput) | Motor shaft hp, Drive enum, specified efficiency fraction; returns moverShaftPower hp and driveEfficiency fraction | Function + plain input/result; remove both constructors/cleanup; breaking |
+| [OptimalMotorShaftPower](optimal-motor-shaft-power-refactor.md) | Not exposed | calculateOptimalMotorShaftPower(OptimalMotorShaftPowerInput) | Mover shaft hp, Drive enum, specified efficiency fraction; returns motorShaftPower hp and driveEfficiency fraction | Function + plain input/result; no cleanup; additive |
+
+- Every value-object field is required; no new defaults, numerical validation or clamping is added.
+  Existing limits, sentinels and nonfinite behavior remain as documented in each module's contract.
+- Runtime Drive, LineFrequency, LoadEstimationMethod, MotorEfficiencyClass, PumpStyle and SpecificSpeed
+  names/values are unchanged. Reuse Desktop's helper mappings; retain its percent/fraction conversions.
+  Current normalized MotorCurrent calls must pass supplied FLA separately. EstimateFLA's six current
+  anchors are plain array values, not a registered vector; they require no delete().
+- Desktop epic read-only inspection at 9b7ff3d confirms PumpResult and MotorEfficiency are already
+  migrated. PumpsSuiteApiService still constructs EstimateFLA, MotorCurrent and MotorPowerFactor;
+  migrate those remaining wrappers, passing all newly required power-factor nameplate fields.
+  The removed MoverShaftPower runtime surface must be searched again when Desktop work starts;
+  no direct call was found in the inspected epic wrapper/process-flow sources.
+- Standalone additive functions need no Desktop wrapper merely to complete this integration.
+  Pump/fan assessments consume the calculations indirectly; verify fans and MotorPerformance
+  behavior along with pumps. Public FanResult/MotorPerformance APIs remain outside the refactor.
+- Preserve app-facing PsatOutputs, saved assessment shapes, reports/exports, zero-valued savings
+  metadata, annual-energy units and annual-cost conversion. Default database semantics, WASM asset
+  names and locateFile behavior are unchanged; check the packaged assets during Desktop verification.
+- Both Desktop epic manifests currently pin 1.2.6-beta.365.1. Update both and their lockfiles together
+  during Desktop implementation to the integrated PR's exact beta. No Desktop code/pin changes are
+  included in this Suite preparation task.
+
+## Integrated Suite Readiness — 2026-10-28
+
+- All 14 child implementations are merged through PR #444 at e7ceb58c8613b403c733268549eb892d802d0638.
+- Fetched origin and merged develop b0c46f1fc82a5069020f2b1cb7f466a187239e00 into the epic at
+  98ed4d9118daeb026dccb574392f6c8796fec578, preserving history. Manifest/lockfile inherit 1.2.7.
+  PumpHead keeps develop's engineering wording and the epic's rounded examples; no runtime change.
+- Native Release configure/build and full cpp_tests passed: 5,836 assertions in 348 cases.
+- Fresh npm run verify:wasm rebuilt/staged bin/client.js and bin/client.wasm, typechecked and passed
+  all 287 browser tests. Restricted SDK-cache access failed first; the approved rerun passed.
+- npm run check:docs, all nine beta-publication helper tests and complete-diff whitespace passed.
+- npm pack --dry-run --json passed: 102 files, including both runtime assets, the declaration
+  entrypoint and all 13 public calculation declaration modules. Poles has no public WASM surface.
+- Local Doxygen generated affected pages, but still reports the pre-existing missing-BibTeX error
+  and unrelated warnings. Require successful CI Doxygen generation before declaring delivery ready.
+- Generated MotorPower page inspected over localhost: readable final equation, units and worked
+  example; 38 MathJax containers and no math errors. This closes its prior visual-review gap.
+- Full browser sweep checked 15 calculator pages including PumpHead. It found five broken unit
+  entries in EstimateFLA and PumpResult: prose inside siunitx expressions was rejected by MathJax.
+  Split those symbol rows by applicable units without changing formulas, coefficients or runtime
+  code. Regenerated pages and refreshed-browser inspection pass: EstimateFLA 52 and PumpResult
+  152 MathJax containers, no math errors; all other inspected pages also had no math errors.
+  Documentation links and whitespace checks passed after the fix. No native/WASM rerun is needed
+  for this documentation-only delta. Existing fixtures cover pump existing/modified and positive-
+  displacement paths, fan consumers, motor calculations, drive branches and arithmetic boundaries.
+- Desktop #8957 now records the user-approved exact-beta-first implementation sequence, with final
+  versions and merging deferred until both implementations finish. No Desktop source/pins changed.
+- Integrated review: pending a separate review-only pass of the complete develop...epic diff using
+  .github/skills/measur-code-review/. Exact reviewed head and dispositions will be recorded here.
+- Integrated PR/CI and post-push publication evidence will live in the
+  [epic PR conversation](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pulls?q=is%3Apr+head%3Aepic-pump-result-refactor+base%3Adevelop)
+  and [Desktop coordination issue](https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8957).
+  Do not push evidence-only commits after beta publication. Keep the PR open; final release versions
+  and merging await completion of both implementations.
