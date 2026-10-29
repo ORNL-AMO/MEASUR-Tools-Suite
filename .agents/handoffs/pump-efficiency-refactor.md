@@ -27,7 +27,7 @@ Move the six pump-only calculators from `motorDriven/pumpFan` to `motorDriven/pu
 from the latest `epic-pump-eff-refactor` head and targets that branch through one reviewed PR per calculator.
 Use `codex/` for new child branch names. The first module is implemented, verified and independently reviewed;
 the other five rows remain planned. See the [OptimalDeviationFactor handoff](optimal-deviation-factor-refactor.md)
-for actual validation and review evidence; no child PR has been opened yet.
+for actual validation and review evidence. Its child PR delivery is tracked below.
 The user requested commit/push/PR delivery of #223 on 2026-10-29; its durable
 [child PR and CI/publication record](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pulls?q=is%3Apr+head%3Acodex%2Fissue-223-optimal-deviation-factor+base%3Aepic-pump-eff-refactor)
 tracks delivery into this epic. Record post-push evidence there without version-only follow-up pushes.
