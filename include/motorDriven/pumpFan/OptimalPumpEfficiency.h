@@ -12,7 +12,7 @@
  *
  */
 
-#include "motorDriven/pump/PumpResult.h"
+#include "motorDriven/pump/Pump.h"
 
 class OptimalPumpEfficiency {
 
@@ -142,4 +142,3 @@ class OptimalPumpEfficiency {
     double      optimalEfficiency;
     double      prePumpEfficiency = 0.0;
 };
-

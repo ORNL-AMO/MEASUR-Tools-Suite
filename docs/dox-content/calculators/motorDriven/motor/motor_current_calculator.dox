@@ -1,0 +1,182 @@
+/**
+ * @defgroup motor_current_calculator Motor Current At Partial Load
+ * @ingroup equipment_and_property_calculators
+ * @brief Estimates motor current at a selected load using supplied full-load amps or raw model anchors.
+ * @details
+ * A motor assessment needs current at operating loads between the empirical model's tabulated load
+ * points. Current does not fall in direct proportion to shaft load: the retained model includes a
+ * nonzero no-load current and a curved relationship between load and current. This calculation
+ * interpolates six empirical current anchors from @ref estimate_fla_calculator to estimate that
+ * operating current. It supports the current and power comparisons used by pump and fan assessments.
+ *
+ * @heading{Result And Interpretation}
+ * The primary result is current in A at the requested load fraction. A load fraction of 0.25 means
+ * 25% of rated motor load, while 1.0 means full load. There are two distinct ways to use the model:
+ *
+ * - Supplied-FLA current uses a known or independently supplied full-load current to normalize the
+ *   anchors. The modeled current at full load matches that supplied current within numerical fit
+ *   precision. This path also returns the independently estimated FLA from the model, in A.
+ * - Optimal-path current uses the raw empirical anchors. It does not normalize to supplied FLA or
+ *   apply a rated/field-voltage correction. This is an intermediate for the optimal-motor power
+ *   calculation; the function itself neither chooses an optimal motor nor searches for an optimal load.
+ *
+ * Estimated FLA and supplied FLA are different quantities. Estimated FLA is the voltage- and, for
+ * the specified class, efficiency-adjusted full-load result of @ref estimate_fla_calculator. It is
+ * returned unchanged as supporting information; it is not the denominator used to normalize the
+ * partial-load anchors. In particular, raw anchors do not contain that specified-efficiency correction.
+ *
+ * @heading{Decision Path}
+ * 1. Provide motor nameplate power, speed, frequency, efficiency class, specified efficiency where
+ *    applicable, rated voltage, and the desired fractional load.
+ * 2. Use the estimated-FLA model to obtain current anchors at 0%, 25%, 50%, 75%, 100%, and 125% load.
+ *    That model selects pole count and empirical efficiency-class curves.
+ * 3. For supplied-FLA current, scale the anchors to rated voltage and then normalize them to supplied
+ *    FLA. For optimal-path current, retain the raw anchors.
+ * 4. Select the low-load quadratic, middle-load quartic, or upper-load quadratic described below.
+ *    Evaluate the selected curve, limiting evaluation above 150% load to 150%.
+ * 5. Interpret the selected-load result in A. Apply field-voltage adjustments in the consuming
+ *    assessment where required; this calculator does not apply them.
+ *
+ * @heading{Supplied-FLA Normalization}
+ * Let the six raw current anchors be @math{A_j}. The first scaling pass adjusts them from the model's
+ * 460 V reference to rated voltage:
+ * @formula{motor-current-voltage-anchors; B_j=A_j\frac{V_{ref}}{V_r}}
+ * @symtable
+ * @symrow{B_j; Rated-voltage-scaled current anchor; \ampere}
+ * @symrow{A_j; Raw empirical current anchor; \ampere}
+ * @symrow{V_{ref}; Retained model reference voltage, 460 V; \volt}
+ * @symrow{V_r; Motor nameplate rated voltage; \volt}
+ * @symrow{j; Anchor index 0 through 5, corresponding to the six ordered loads; \unitless}
+ * @endsymtable
+ *
+ * The second pass normalizes every anchor to the supplied full-load current:
+ * @formula{motor-current-fla-anchors; N_j=B_j\frac{I_{FLA,sup}}{B_4}}
+ * @symtable
+ * @symrow{N_j; Supplied-FLA-normalized current anchor; \ampere}
+ * @symrow{B_j; Rated-voltage-scaled current anchor; \ampere}
+ * @symrow{B_4; Rated-voltage-scaled 100-percent anchor; \ampere}
+ * @symrow{I_{FLA,sup}; Supplied full-load current; \ampere}
+ * @symrow{j; Anchor index 0 through 5; \unitless}
+ * @endsymtable
+ *
+ * The common voltage factor cancels algebraically in the normalization. Nevertheless, both scaling
+ * passes are evaluated in the documented order. Changing rated voltage with the
+ * same supplied FLA therefore leaves selected-load current essentially unchanged, while the
+ * independently estimated FLA changes with rated voltage. Do not substitute estimated FLA for
+ * @math{B_4}: that would change the retained behavior for specified-efficiency motors.
+ *
+ * @heading{Piecewise Polynomial Interpolation}
+ * The two paths use the same curve selection. The supplied-FLA path fits @math{N_j}; the optimal
+ * path fits @math{A_j}. For each branch, the polynomial is:
+ * @formula{motor-current-polynomial; Q_d(L_e)=\sum_{k=0}^{d}a_kL_e^k}
+ * @symtable
+ * @symrow{Q_d; Polynomial current estimate; \ampere}
+ * @symrow{d; Polynomial degree, 2 or 4; \unitless}
+ * @symrow{L_e; Fractional motor load used for evaluation; \unitless}
+ * @symrow{a_k; Polynomial coefficient for dimensionless fractional-load powers; \ampere}
+ * @symrow{k; Polynomial term index 0 through d; \unitless}
+ * @symrow{N_j; Supplied-FLA-normalized anchor values; \ampere}
+ * @symrow{A_j; Raw empirical anchor values; \ampere}
+ * @symrow{j; Anchor index 0 through 5; \unitless}
+ * @endsymtable
+ *
+ * The coefficients fit the selected anchors using a polynomial solver. Each branch has
+ * degree plus one distinct load points, defining its interpolating polynomial within numerical
+ * precision. The implementation solves the polynomial normal equations using Gaussian elimination.
+ *
+ * | Requested fractional load | Degree | Anchor loads used | Evaluation load |
+ * | --- | --- | --- | --- |
+ * | Less than 0.251 | 2 | 0, 0.25, 0.50 | Requested load |
+ * | At least 0.251 and less than 1.251 | 4 | 0.25, 0.50, 0.75, 1.00, 1.25 | Requested load |
+ * | At least 1.251 | 2 | 0.75, 1.00, 1.25 | Requested load capped at 1.50 |
+ *
+ * The strict transition values are 25.1% and 125.1%, not exactly 25% and 125%. They are retained
+ * implementation choices. Neighboring branch polynomials need not have exactly identical values
+ * or derivatives at those transitions. Above 125% load the upper quadratic extrapolates beyond its
+ * highest anchor; beyond 150% it returns the value at the cap. Negative loads extrapolate the
+ * lower quadratic without a lower clamp; they are outside normal motor-assessment use.
+ *
+ * @heading{Worked Example: 25-Percent Load}
+ * Consider a 100 hp energy-efficient motor rated at 1500 rpm, 60 Hz, and 460 V. The requested load
+ * is 0.25 and the supplied FLA is 113.8 A. The retained speed/frequency classification selects the
+ * four-pole model. Its six raw current anchors are:
+ *
+ * | Load | Raw current, A | Supplied-FLA-normalized current, A |
+ * | --- | --- | --- |
+ * | 0% | 33.33 | 33.32 |
+ * | 25% | 42.74 | 42.73 |
+ * | 50% | 63.75 | 63.73 |
+ * | 75% | 87.47 | 87.44 |
+ * | 100% | 113.83 | 113.8 |
+ * | 125% | 142.41 | 142.36 |
+ *
+ * Here the first scale factor is @math{460\mathrm{V}/460\mathrm{V}=1}. The second is
+ * @math{113.8\mathrm{A}/113.83\mathrm{A}\approx0.9997}.
+ * Multiplying the raw 25% anchor by that factor gives
+ * @math{42.74\mathrm{A}\times0.9997\approx42.73\mathrm{A}}.
+ *
+ * Because 0.25 is below 0.251, the low-load quadratic is selected. Evaluation at the 25% anchor
+ * reproduces the normalized value, approximately 42.73 A. The result also reports estimated FLA
+ * of 113.83 A, rather than the supplied 113.8 A.
+ *
+ * With the same motor inputs, optimal-path current fits the raw 0%, 25%, and 50% anchors. Its
+ * quadratic coefficients are approximately 33.33 A, 14.45 A, and 92.77 A.
+ * At load 0.25 the linear contribution is @math{14.45(0.25)\approx3.61} A and the
+ * quadratic contribution is @math{92.77(0.25)^2\approx5.80} A. Adding these to the
+ * 33.33 A constant term gives 42.74 A. This raw-model result is intentionally
+ * distinct from the supplied-FLA result. It is not a
+ * field-voltage-corrected operating current.
+ *
+ * @heading{Inputs, Assumptions, And Limits}
+ * - Power is hp, speed is rpm, rated voltage is V, and current is A. Load and specified efficiency
+ *   are dimensionless fractions, not percentage point values. Other efficiency classes ignore the
+ *   specified-efficiency input.
+ * - Use physically meaningful motor nameplate values and positive rated voltage. Supplied FLA is
+ *   normally positive; zero retains a zero calculated current with an independent estimated FLA.
+ * - SPECIFIED requires positive specified efficiency. The underlying estimated-FLA calculation
+ *   divides by it; zero may produce non-finite estimated FLA. An exact baseline-distance tie selects
+ *   the energy-efficient baseline, as described in @ref estimate_fla_calculator.
+ * - PREMIUM supports only speed/frequency pairs classified as 2, 4, or 6 poles. Higher-pole premium
+ *   selections are outside the coefficient-table bounds. No validation or fallback is applied.
+ * - These preconditions are caller-owned and are not checked by the model. The calculation does not
+ *   validate load or clip it below zero.
+ * - The method is an empirical estimate for MEASUR assessments. It does not calculate transients,
+ *   starting current, voltage imbalance, or motor thermal/protection limits. The 150% cap is a model
+ *   evaluation limit, not a statement that operation at that load is permissible.
+ * - The original experimental or regression provenance of the anchors, polynomial regions and
+ *   constants is not recorded.
+ *
+ * @heading{Calculation Interfaces}
+ * C++ callers use:
+ * @code{.cpp}
+ * const motor_current::Input input = {
+ *     100, 1500, Motor::LineFrequency::FREQ60,
+ *     Motor::EfficiencyClass::ENERGY_EFFICIENT, 0, 0.25, 460
+ * };
+ * const auto result = motor_current::calculate(input, 113.8);
+ * const double current = result.current;
+ * const double estimated_fla = result.estimated_fla;
+ * const double optimal_current = motor_current::calculateOptimal(input);
+ * @endcode
+ *
+ * WebAssembly callers use plain input and result values:
+ * @code{.ts}
+ * import createModule, { type MotorCurrentInput } from 'measur-tools-suite';
+ * const module = await createModule();
+ * const input: MotorCurrentInput = {
+ *     motorRatedPower: 100,
+ *     motorRpm: 1500,
+ *     lineFrequency: module.LineFrequency.FREQ60,
+ *     efficiencyClass: module.MotorEfficiencyClass.ENERGY_EFFICIENT,
+ *     specifiedEfficiency: 0,
+ *     loadFactor: 0.25,
+ *     ratedVoltage: 460
+ * };
+ * const { current, estimatedFLA } = module.calculateMotorCurrent(input, 113.8);
+ * const optimalCurrent = module.calculateOptimalMotorCurrent(input);
+ * @endcode
+ *
+ * Neither input nor output requires `delete()`. Both functions leave the input unchanged. The
+ * optimal function returns a number. Consuming calculators apply their field-voltage corrections
+ * separately.
+ */

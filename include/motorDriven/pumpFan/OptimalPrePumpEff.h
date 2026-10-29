@@ -10,7 +10,7 @@
  * @bug No known bugs.
  *
  */
-#include "motorDriven/pump/PumpResult.h"
+#include "motorDriven/pump/Pump.h"
 
 class OptimalPrePumpEff {
   public:
@@ -31,4 +31,3 @@ class OptimalPrePumpEff {
     const Pump::Style style;
     const double      flowRate;
 };
-

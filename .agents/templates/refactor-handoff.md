@@ -69,12 +69,16 @@
 
 ## Formulas And Units
 
+- Engineering question and why the result matters:
+- Teaching sequence or decision path:
 - Final result formula:
 - Supporting formulas:
 - Constants:
 - Units:
 - Formula provenance:
 - Golden inputs and expected results:
+- Worked example and interpretation:
+- Valid ranges, boundaries, fallbacks, and inappropriate uses:
 - SME decisions required:
 - Unclear or unverified items:
 
@@ -93,6 +97,16 @@
 - Commands run:
 - Commands still needed:
 - Known environment limits:
+
+## Internal Review
+
+- Intended PR base and reviewed base commit:
+- Reviewed head commit:
+- Reviewer or review task:
+- Readiness result: ready | ready with documented follow-up | not ready
+- Findings and dispositions:
+- Checks rerun after review fixes:
+- Remaining P3 findings, questions, or validation gaps:
 
 ## Open Questions Or Blockers
 

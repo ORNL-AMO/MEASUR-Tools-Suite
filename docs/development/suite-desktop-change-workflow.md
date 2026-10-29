@@ -52,15 +52,37 @@ Inspect the installed declarations and search AMO-Tools-Desktop for affected run
 
 When the Desktop repository or linked issue cannot be inspected, state that downstream impact is unverified. Do not infer that no consumer exists.
 
+## Pre-PR Internal Review
+
+Complete a review-only pass in each repository after implementation and validation but before opening its pull
+request. In Suite, follow [the agent workflow](../../.agents/README.md#pre-pr-internal-review-gate) and use
+[the MEASUR code-review skill](../../.github/skills/measur-code-review/SKILL.md). In Desktop, follow that repository's
+review instructions.
+
+Review the complete candidate diff against its intended PR base. A child branch in a coordinated feature sequence
+must be reviewed against the feature branch it will merge into, not automatically against `develop`. Record the exact
+base and head commits, findings and dispositions, readiness result, checks rerun after fixes, and remaining validation
+gaps. Resolve every actionable finding or document why it is not applicable; do not open the PR with an unresolved
+P0, P1, or P2 finding. Repeat the review if subsequent changes materially alter the reviewed diff.
+
+This internal gate improves PR readiness but does not replace human approval or branch protection after the PR opens.
+
 ## Release And Verification Order
 
 1. Implement and verify the Suite change across C++, bindings, declarations, tests, and documentation.
-2. Open or ready the Suite PR. The current GitHub workflow publishes a beta package for ready, same-repository PRs targeting `develop`.
-3. Record the exact beta version in the Desktop issue and update both Desktop dependency pins when the process-flow package consumes the Suite.
-4. Update Desktop wrappers and other consumers, then run the relevant typecheck, application tests, regression tests, and web/Electron checks.
-5. Record Desktop validation results and remaining SME or release decisions in the Desktop issue.
-6. Merge and publish the appropriate Suite RC or final package.
-7. Replace the beta pin with the approved final version in Desktop and repeat the affected verification.
+2. Complete the Suite pre-PR internal review and record its evidence in the handoff.
+3. Open or ready the Suite PR. The current GitHub workflow publishes a beta package for ready, same-repository PRs targeting `develop`.
+4. Record the exact beta version in the Desktop issue and update both Desktop dependency pins when the process-flow package consumes the Suite.
+
+   Beta versions use the PR number and that PR's next published revision, for example
+   `1.2.6-beta.430.1` followed by `1.2.6-beta.430.2`. CI publishes the exact version as a PR comment.
+   Pin that exact version for validation; the `beta` tag identifies the most recent publication across PRs.
+   Keep post-push CI and publication evidence in the PR description or comments; a handoff can link there.
+   Do not push version-recording-only commits, which trigger another publication.
+5. Update Desktop wrappers and other consumers, run the relevant typecheck, application tests, regression tests, and web/Electron checks, then complete the Desktop pre-PR internal review before opening its PR.
+6. Record Desktop validation results and remaining SME or release decisions in the Desktop issue.
+7. Merge and publish the appropriate Suite RC or final package.
+8. Replace the beta pin with the approved final version in Desktop and repeat the affected verification.
 
 Do not describe a stale `bin/client.js` or `bin/client.wasm` test run as WASM verification. In the Suite repository, use `npm run verify:wasm` to rebuild, stage, typecheck, and test the current source.
 
@@ -74,4 +96,5 @@ The coordinated change is complete when:
 - Desktop consumers and both dependency pins are updated or marked not applicable.
 - The exact beta/final package versions and validation results are recorded.
 - Web and Electron WASM loading are verified when packaging or asset resolution changed.
+- Suite and Desktop pre-PR internal reviews are recorded when their repositories changed.
 - All linked issues and PRs point to one another.

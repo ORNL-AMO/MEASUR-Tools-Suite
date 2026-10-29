@@ -1,0 +1,213 @@
+/**
+ * @defgroup motor_shaft_power_calculator Motor Shaft Power Calculator
+ * @ingroup equipment_and_property_calculators
+ * @brief Estimates motor mechanical output and its electrical operating point from measured input power or current.
+ * @details
+ * How much mechanical power is a motor delivering to a pump or fan? Electrical input includes motor losses,
+ * so measured electrical kW cannot be treated as mechanical shaft kW. This method combines a measured
+ * operating quantity with motor nameplate data and modeled efficiency/current curves to estimate shaft
+ * output. It supports assessment of an existing operating point before downstream drive and mover losses.
+ *
+ * @heading{Final Result and Interpretation}
+ * The principal result is mechanical motor shaft output:
+ * @formula{motor-shaft-final; P_s=\frac{P_e\eta}{c_{hp}},\qquad c_{hp}=0.746}
+ * @symtable
+ * @symrow{P_s; Mechanical power delivered at the motor shaft; \horsepower}
+ * @symrow{P_e; Real electrical power entering the motor; \kilo\watt}
+ * @symrow{\eta; Estimated operating motor efficiency as a fraction; \unitless}
+ * @symrow{c_{hp}; Retained horsepower conversion; \kilo\watt\per\horsepower}
+ * @endsymtable
+ *
+ * For example, 60 kW of electrical input at approximately 95.1 percent efficiency delivers about 76.5 hp.
+ * The remaining input is motor loss. Shaft output precedes belt/drive losses and is not hydraulic or air
+ * power. The result also includes electrical kW, line current in A, independently estimated full-load
+ * current in A, efficiency, power factor and shaft-load fraction. The last three are fractions, not
+ * percentage points. Estimated full-load current is diagnostic output, distinct from the supplied FLA
+ * used to normalize the current model.
+ *
+ * @heading{Choosing the Measurement Path}
+ * Supply rated shaft hp, nameplate rpm, 50/60 Hz selection, efficiency class, nameplate voltage, supplied
+ * full-load amps, and measured operating voltage. For SPECIFIED, enter efficiency as a fraction such as
+ * 0.93. Other efficiency classes ignore this efficiency input. All eleven API fields remain required.
+ *
+ * - POWER uses measured real electrical kW. It finds load from modeled electrical power, interpolates
+ *   efficiency and voltage-adjusted power factor, and derives current. Measured current is ignored.
+ * - CURRENT uses measured line A. It finds a pair of load points from modeled current, adjusts those
+ *   currents for operating voltage, interpolates efficiency and electrical kW, and derives power factor.
+ *   Measured electrical power is ignored.
+ *
+ * Both paths rely on @ref motor_current_calculator, @ref motor_efficiency_calculator,
+ * @ref motor_power_factor_calculator and @ref estimate_fla_calculator. These models infer operating
+ * behavior from nameplate information; they do not substitute for direct mechanical measurement.
+ *
+ * @heading{Building a Pair of Load Points}
+ * At each trial shaft-load fraction, obtain supplied-FLA-normalized current, modeled efficiency and
+ * power factor at nameplate voltage. Convert these line quantities to real electrical input:
+ * @formula{motor-shaft-trial-power; P_{e,j}=\frac{\sqrt{3}V_r I_j PF_j}{1000}}
+ * @symtable
+ * @symrow{P_{e,j}; Modeled electrical input at trial point j; \kilo\watt}
+ * @symrow{V_r; Nameplate line-to-line voltage; \volt}
+ * @symrow{I_j; Modeled line current normalized to supplied FLA; \ampere}
+ * @symrow{PF_j; Modeled power factor at the trial point; \unitless}
+ * @symrow{j; Trial-point index; \unitless}
+ * @symrow{\sqrt{3}; Balanced three-phase line-quantity factor; \unitless}
+ * @symrow{1000; Watts per kilowatt; \watt\per\kilo\watt}
+ * @endsymtable
+ *
+ * POWER starts at 0.01 load and repeatedly adds 0.01 until trial power strictly exceeds measured kW or
+ * the trial load is greater than 1.5. The preceding point supplies the lower endpoint. Before the first
+ * trial, lower load, power, efficiency and power factor are all initialized to zero: this is a retained
+ * interpolation anchor, not an assertion that an unloaded motor consumes no electrical power.
+ *
+ * CURRENT starts at zero load and repeatedly adds 0.01 until the unadjusted modeled current strictly
+ * exceeds measured A or the trial load is greater than 1.5. It then evaluates the lower point by
+ * subtracting 0.01 from the selected trial load. If the first trial already exceeds measured current,
+ * the lower evaluation is at negative load. Voltage correction happens after this search, so the
+ * corrected endpoints need not bracket the measured current.
+ *
+ * Repeated floating-point additions and strict comparisons are retained. Equality continues the search.
+ * The stopping condition bounds the search, not the final interpolation; it does not clamp output load.
+ * The independently estimated FLA is taken from the upper trial point in either path.
+ *
+ * @heading{POWER: From Measured kW to Shaft Output}
+ * Interpolate load and efficiency between the selected points:
+ * @formula{motor-shaft-power-interpolation;
+ *   a_P=\frac{P_m-P_{e,1}}{P_{e,2}-P_{e,1}},\qquad
+ *   L=L_1+\frac{a_P}{100},\qquad
+ *   \eta=\eta_1+100(L-L_1)(\eta_2-\eta_1)
+ * }
+ * @symtable
+ * @symrow{a_P; Position relative to the electrical-power endpoints, possibly outside zero to one; \unitless}
+ * @symrow{P_m; Measured real electrical input; \kilo\watt}
+ * @symrow{P_{e,1},P_{e,2}; Lower and upper trial electrical inputs; \kilo\watt}
+ * @symrow{L,L_1; Interpolated and lower trial shaft-load fractions; \unitless}
+ * @symrow{\eta,\eta_1,\eta_2; Interpolated and endpoint motor efficiencies; \unitless}
+ * @symrow{100; Retained reciprocal of the 0.01 trial-load increment; \unitless}
+ * @endsymtable
+ *
+ * The operating/nameplate voltage ratio modifies endpoint power factors before interpolation:
+ * @formula{motor-shaft-power-voltage;
+ *   r=\frac{V_f}{V_r},\qquad
+ *   PF'_j=\frac{PF_j}{[(r-1)(1-2L_j)+1]r},\qquad
+ *   PF=PF'_1+100(L-L_1)(PF'_2-PF'_1)
+ * }
+ * @symtable
+ * @symrow{r; Operating-to-nameplate voltage ratio; \unitless}
+ * @symrow{V_f,V_r; Operating and nameplate line-to-line voltages; \volt}
+ * @symrow{PF_j,PF'_j; Trial and voltage-adjusted endpoint power factors; \unitless}
+ * @symrow{PF; Interpolated operating power factor; \unitless}
+ * @symrow{L_j,L,L_1; Endpoint, interpolated and lower trial load fractions; \unitless}
+ * @symrow{j; Endpoint index, one or two; \unitless}
+ * @symrow{100; Reciprocal of the 0.01 trial-load increment; \unitless}
+ * @endsymtable
+ *
+ * Preserve measured electrical power and derive the operating current:
+ * @formula{motor-shaft-power-current; P_e=P_m,\qquad I=\frac{P_m}{V_f\sqrt{3}PF/1000}}
+ * @symtable
+ * @symrow{P_e,P_m; Returned and measured real electrical input; \kilo\watt}
+ * @symrow{I; Returned operating line current; \ampere}
+ * @symrow{V_f; Operating line-to-line voltage; \volt}
+ * @symrow{PF; Interpolated operating power factor; \unitless}
+ * @symrow{\sqrt{3}; Balanced three-phase line-quantity factor; \unitless}
+ * @symrow{1000; Watts per kilowatt; \watt\per\kilo\watt}
+ * @endsymtable
+ * Apply the final shaft-power relationship using this electrical input and interpolated efficiency.
+ *
+ * @heading{CURRENT: From Measured A to Shaft Output}
+ * Adjust the selected endpoint currents and locate measured current relative to them:
+ * @formula{motor-shaft-current-interpolation;
+ *   r=\frac{V_f}{V_r},\qquad I'_j=[(r-1)(1-2L_j)+1]I_j,\qquad
+ *   a_I=\frac{I_m-I'_1}{I'_2-I'_1},\qquad L=L_1+\frac{a_I}{100}
+ * }
+ * @symtable
+ * @symrow{r; Operating-to-nameplate voltage ratio; \unitless}
+ * @symrow{V_f,V_r; Operating and nameplate line-to-line voltages; \volt}
+ * @symrow{I_j,I'_j; Modeled and voltage-adjusted endpoint line currents; \ampere}
+ * @symrow{I_m; Measured operating line current; \ampere}
+ * @symrow{a_I; Position relative to corrected-current endpoints, possibly outside zero to one; \unitless}
+ * @symrow{L,L_1,L_j; Interpolated, lower trial and endpoint load fractions; \unitless}
+ * @symrow{j; Endpoint index, one or two; \unitless}
+ * @symrow{100; Reciprocal of the 0.01 trial-load increment; \unitless}
+ * @endsymtable
+ *
+ * Use that interpolated position for efficiency and the original trial electrical powers; preserve
+ * measured current and derive power factor at operating voltage:
+ * @formula{motor-shaft-current-result;
+ *   \eta=\eta_1+100(L-L_1)(\eta_2-\eta_1),\qquad
+ *   P_e=P_{e,1}+100(L-L_1)(P_{e,2}-P_{e,1}),\qquad
+ *   I=I_m,\qquad PF=\frac{P_e}{I_m V_f\sqrt{3}/1000}
+ * }
+ * @symtable
+ * @symrow{\eta,\eta_1,\eta_2; Interpolated and endpoint motor efficiencies; \unitless}
+ * @symrow{L,L_1; Interpolated and lower trial load fractions; \unitless}
+ * @symrow{P_e,P_{e,1},P_{e,2}; Interpolated and endpoint real electrical inputs; \kilo\watt}
+ * @symrow{I,I_m; Returned and measured line current; \ampere}
+ * @symrow{V_f; Operating line-to-line voltage; \volt}
+ * @symrow{PF; Returned real-to-apparent power ratio; \unitless}
+ * @symrow{100; Reciprocal of the 0.01 trial-load increment; \unitless}
+ * @symrow{\sqrt{3}; Balanced three-phase line-quantity factor; \unitless}
+ * @symrow{1000; Watts per kilowatt; \watt\per\kilo\watt}
+ * @endsymtable
+ * Apply the final shaft-power relationship using this electrical input and interpolated efficiency.
+ *
+ * @heading{Worked Examples}
+ * Both examples use a 100 hp, 1780 rpm, 60 Hz ENERGY_EFFICIENT motor, 460 V nameplate voltage and
+ * supplied FLA of 120 A. Specified efficiency is 0.93 but is ignored for this class. The independent
+ * estimated FLA is about 113.83 A. Results below are rounded for display; extra digits in
+ * interpolation endpoints keep the small differences between them visible.
+ *
+ * **POWER, measured 60 kW at 460 V.** The search selects load endpoints 0.76 and 0.77, with electrical
+ * powers 59.6136 and 60.3970 kW and efficiencies 0.951058 and 0.951074.
+ * The interpolation position is (60 - 59.6136)/(60.3970 - 59.6136), approximately
+ * 0.4932. Load becomes 0.7649 and efficiency becomes 0.951066. Voltage ratio is one,
+ * so endpoint power factors 0.802238 and 0.803608 need no correction. The interpolated power
+ * factor is 0.802914 and current is 60/(460 times sqrt(3) times 0.802914/1000), or
+ * 93.79 A. Shaft output is 60 times 0.951066/0.746, approximately 76.49 hp.
+ * This is approximately 76.49 percent rated shaft load; electrical input remains the measured 60 kW.
+ *
+ * **CURRENT, measured 90 A at 440 V.** The initial current search selects loads 0.72 and 0.73 with
+ * unadjusted currents 89.0531 and 90.0996 A. Ratio 440/460 changes these to
+ * 90.7568 and 91.9016 A. The measured 90 A is below both corrected endpoints, giving
+ * interpolation position approximately -0.6610 and load 0.7134. The endpoint efficiencies
+ * are 0.950908 and 0.950959; endpoint electrical powers are 56.4850 and 57.2664 kW.
+ * Extrapolation yields efficiency 0.950874 and input 55.97 kW. Power factor becomes
+ * 55.97/(90 times 440 times sqrt(3)/1000), approximately 0.8160. Shaft output is
+ * 55.97 times 0.950874/0.746, approximately 71.34 hp. The returned current remains 90 A.
+ * This illustrates why post-search voltage correction can move the result outside the selected load pair.
+ *
+ * @heading{Assumptions, Boundaries and Provenance}
+ * - Electrical line-quantity relationships assume a balanced three-phase operating point; efficiency and
+ *   current curves describe the retained motor model, not arbitrary drive waveforms or measured shaft torque.
+ * - For meaningful assessment, use positive rated hp, nameplate/operating voltage and supplied FLA,
+ *   consistent operating measurements, supported motor speed/frequency selections, and a positive
+ *   specified-efficiency fraction for SPECIFIED. The current model's PREMIUM data supports 2/4/6 poles.
+ * - No validation or clamping is applied. Negative SPECIFIED efficiency propagates the dependency's
+ *   error. Zero supplied FLA is used literally and can produce NaN/infinity; it does not request estimated FLA.
+ * - POWER at zero measured kW returns zero shaft power but can return NaN current. CURRENT below modeled
+ *   no-load current can evaluate negative load and produce large extrapolated or nonphysical results.
+ *   Zero denominators, inconsistent measurements or overloads can produce out-of-range fractions and
+ *   nonfinite results. These are retained arithmetic outcomes, not valid physical operating points.
+ * - The search limit is not an overload rating or protection rule. Do not use these estimates for motor
+ *   protection, certification, transient performance, or plant-wide power-factor assessment.
+ * - The electrical power/efficiency relationships are physical definitions under the stated assumptions.
+ *   Search increments, voltage corrections, endpoint interpolation and empirical dependency curves are
+ *   model choices. Their original calibration and provenance are unverified; these estimates do not
+ *   establish independent model validation.
+ *
+ * @heading{Calculation Interface}
+ * C++ uses motor_shaft_power::calculate() with motor_shaft_power::Input and motor_shaft_power::Result.
+ * WebAssembly callers pass a plain input object and receive a plain result; neither requires delete().
+ * @code{.ts}
+ * import createModule, { type MotorShaftPowerInput } from 'measur-tools-suite';
+ * const module = await createModule();
+ * const input: MotorShaftPowerInput = {
+ *     motorRatedPower: 100, motorMeasuredPower: 60, motorRpm: 1780,
+ *     lineFrequency: module.LineFrequency.FREQ60,
+ *     efficiencyClass: module.MotorEfficiencyClass.ENERGY_EFFICIENT,
+ *     specifiedEfficiency: 0.93, ratedVoltage: 460, fullLoadAmps: 120, fieldVoltage: 460,
+ *     loadEstimationMethod: module.LoadEstimationMethod.POWER, fieldCurrent: 90
+ * };
+ * const result = module.calculateMotorShaftPower(input);
+ * // result.shaftPower is approximately 76.49 hp.
+ * @endcode
+ */

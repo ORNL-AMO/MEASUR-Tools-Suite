@@ -8,25 +8,29 @@
 
 #include "motorDriven/motor/MotorPerformance.h"
 
-#include "motorDriven/motor/MotorCurrent.h"
-#include "motorDriven/motor/MotorEfficiency.h"
-#include "motorDriven/motor/MotorPowerFactor.h"
+#include "motorDriven/motor/motor_power_factor.h"
+#include "motorDriven/motor/motor_current.h"
+#include "motorDriven/motor/motor_efficiency.h"
 
 MotorPerformance::Output MotorPerformance::calculate() {
     double current     = 0;
     double efficiency  = 0;
     double powerFactor = 0;
 
-    MotorEfficiency motorEfficiency(lineFrequency, motorRpm, efficiencyClass, motorRatedPower);
-    double          calculatedEfficiency = motorEfficiency.calculate(loadFactor, specifiedEfficiency);
+    const double calculatedEfficiency =
+        motor_efficiency::calculate(
+            {lineFrequency, motorRpm, efficiencyClass, motorRatedPower, loadFactor, specifiedEfficiency})
+            .efficiency;
     // Motor Current
-    MotorCurrent motorCurrent(motorRatedPower, motorRpm, lineFrequency, efficiencyClass, specifiedEfficiency,
-                              loadFactor, ratedVoltage);
-    double       calculatedCurrent = motorCurrent.calculateCurrent(fullLoadAmps);
+    const double calculatedCurrent =
+        motor_current::calculate(
+            {motorRatedPower, motorRpm, lineFrequency, efficiencyClass, specifiedEfficiency, loadFactor, ratedVoltage},
+            fullLoadAmps)
+            .current;
     // Motor Power Factor
-    MotorPowerFactor motorPowerFactor(motorRatedPower, loadFactor, calculatedCurrent, calculatedEfficiency,
-                                      ratedVoltage);
-    powerFactor = motorPowerFactor.calculate() * 100;
+    powerFactor = motor_power_factor::calculate(
+        {lineFrequency, motorRpm, efficiencyClass, specifiedEfficiency, motorRatedPower, loadFactor,
+         calculatedCurrent, calculatedEfficiency, ratedVoltage}) * 100;
     efficiency  = calculatedEfficiency * 100;
     current     = calculatedCurrent / fullLoadAmps * 100;
     return {current, efficiency, powerFactor};

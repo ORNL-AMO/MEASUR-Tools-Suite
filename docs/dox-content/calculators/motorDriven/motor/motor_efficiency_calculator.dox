@@ -1,0 +1,190 @@
+/**
+ * @defgroup motor_efficiency_calculator Motor Efficiency Calculator
+ * @ingroup equipment_and_property_calculators
+ * @brief Estimates motor efficiency across operating load from retained empirical motor curves.
+ * @details
+ * The calculator estimates the ratio of mechanical shaft output to electrical input for an AC motor.
+ * It uses line frequency and measured speed to select a pole class, rated horsepower to evaluate an
+ * empirical efficiency curve, and motor efficiency class to select standard, energy-efficient,
+ * premium, or user-specified behavior. The result is a dimensionless fraction: a result of 0.956
+ * represents approximately 95.6 percent efficiency.
+ *
+ * @heading{Final Result}
+ * For a supported motor description and operating load, the calculator returns motor efficiency
+ * @math{\eta_m}. It also calculates zero-load electrical loss for internal motor power-factor use.
+ * WebAssembly callers receive only the efficiency fraction.
+ *
+ * The result answers: "What motor efficiency should MEASUR use at this operating load when direct
+ * efficiency measurements are unavailable?" It supports motor-current, motor-power, pump, fan, and
+ * motor-inventory calculations. It is an empirical estimate, not a replacement for a calibrated
+ * input/output efficiency test.
+ *
+ * @heading{Decision Path}
+ * 1. Classify the motor pole count from measured speed and nominal 50 Hz or 60 Hz line frequency
+ *    using @ref poles_calculator.
+ * 2. Select the standard, energy-efficient, or premium coefficient family. Rated motors up to and
+ *    including 125 hp use the lower-power family; larger motors use the higher-power family.
+ *    Premium curves retain only three pole cases, so higher pole indices use the third case.
+ * 3. Calculate efficiencies at 25, 50, 75, and 100 percent load with the retained double-exponential
+ *    coefficient curves, then set the 125-percent point to 99 percent of full-load efficiency.
+ * 4. For the specified class, select whichever standard or energy-efficient full-load curve is
+ *    closer to the entered efficiency and scale that curve to the specified full-load value.
+ * 5. Evaluate the requested load with the low-load loss model, the normal-load fourth-order fit, or
+ *    the overload quadratic fit.
+ *
+ * @heading{Empirical Interval Efficiencies}
+ * For each tabulated load point @math{j} at 25, 50, 75, or 100 percent load, the retained curve is:
+ * @formula{motor-efficiency-interval;
+ *   \eta_j=\frac{A_j+B_j e^{-C_j P_r}+D_j e^{-E_j P_r}}{100}
+ * }
+ * @symtable
+ * @symrow{\eta_j; Motor efficiency at load point j; \unitless}
+ * @symrow{j; Load point at 25, 50, 75, or 100 percent; \unitless}
+ * @symrow{P_r; Rated motor power; \horsepower}
+ * @symrow{A_j,B_j,D_j; Empirical efficiency coefficients in percentage points; \percent}
+ * @symrow{C_j,E_j; Empirical exponential coefficients; \per\horsepower}
+ * @symrow{e; Natural exponential base; \unitless}
+ * @endsymtable
+ *
+ * The overload anchor is retained as:
+ * @formula{motor-efficiency-125;
+ *   \eta_{125}=0.99\eta_{100}
+ * }
+ * @symtable
+ * @symrow{\eta_{125}; Motor efficiency at 125 percent load; \unitless}
+ * @symrow{\eta_{100}; Motor efficiency at full load; \unitless}
+ * @symrow{0.99; Retained overload efficiency factor; \unitless}
+ * @endsymtable
+ *
+ * The repository does not record the original source or regression process for the coefficient
+ * tables, the 125 hp family boundary, or the 0.99 factor. They are MEASUR model assumptions
+ * rather than universal motor relationships. The U.S. Department of Energy motor
+ * sourcebook provides general motor-efficiency and load context @cite doe2008motorSourcebook.
+ *
+ * @heading{Specified-Efficiency Curve}
+ * For the specified class, the calculator compares the entered full-load efficiency with the
+ * standard and energy-efficient full-load anchors. After selecting the closer baseline @math{b}, it
+ * scales the interval curve:
+ * @formula{motor-efficiency-specified-scale;
+ *   S=\frac{\eta_{spec}}{\eta_{100,b}},\qquad \eta_{j,spec}=S\eta_{j,b}
+ * }
+ * @symtable
+ * @symrow{S; Specified-efficiency scale factor; \unitless}
+ * @symrow{\eta_{spec}; Entered full-load motor efficiency; \unitless}
+ * @symrow{\eta_{100,b}; Full-load efficiency of the selected baseline curve; \unitless}
+ * @symrow{\eta_{j,b}; Baseline efficiency at load point j; \unitless}
+ * @symrow{\eta_{j,spec}; Scaled specified-class efficiency at load point j; \unitless}
+ * @endsymtable
+ *
+ * The standard-baseline path uses its scaled 125-percent value at both the 100- and
+ * 125-percent positions. That indexing behavior is specific to this model and is not a general
+ * engineering rule.
+ *
+ * @heading{Zero Through 25 Percent Load}
+ * At low load, the model converts the 25-percent efficiency into electrical loss:
+ * @formula{motor-efficiency-loss-25;
+ *   P_{loss,25}=\left(\frac{1}{\eta_{25}}-1\right)P_r(0.746)(0.25)
+ * }
+ * @symtable
+ * @symrow{P_{loss,25}; Electrical loss at 25 percent load; \kilo\watt}
+ * @symrow{\eta_{25}; Motor efficiency at 25 percent load; \unitless}
+ * @symrow{P_r; Rated motor power; \horsepower}
+ * @symrow{0.746; Horsepower-to-kilowatt conversion factor; \kilo\watt\per\horsepower}
+ * @symrow{0.25; Load fraction for the first curve point; \unitless}
+ * @endsymtable
+ *
+ * Zero-load loss is assumed to be 80 percent of the 25-percent loss:
+ * @formula{motor-efficiency-loss-zero;
+ *   P_{loss,0}=0.8P_{loss,25}
+ * }
+ * @symtable
+ * @symrow{P_{loss,0}; Electrical loss at zero load; \kilo\watt}
+ * @symrow{P_{loss,25}; Electrical loss at 25 percent load; \kilo\watt}
+ * @symrow{0.8; Retained zero-load loss ratio; \unitless}
+ * @endsymtable
+ *
+ * For load fraction @math{L<0.251}, loss is linearly interpolated and efficiency follows from shaft
+ * power divided by total electrical input:
+ * @formula{motor-efficiency-low-load;
+ *   P_{loss}(L)=P_{loss,0}+4L(P_{loss,25}-P_{loss,0}),\quad
+ *   \eta_m(L)=\frac{0.746P_rL}{0.746P_rL+P_{loss}(L)}
+ * }
+ * @symtable
+ * @symrow{L; Requested motor load fraction; \unitless}
+ * @symrow{P_{loss}(L); Interpolated electrical loss; \kilo\watt}
+ * @symrow{P_{loss,0}; Electrical loss at zero load; \kilo\watt}
+ * @symrow{P_{loss,25}; Electrical loss at 25 percent load; \kilo\watt}
+ * @symrow{P_r; Rated motor power; \horsepower}
+ * @symrow{\eta_m(L); Estimated motor efficiency at load L; \unitless}
+ * @symrow{0.746; Horsepower-to-kilowatt conversion factor; \kilo\watt\per\horsepower}
+ * @symrow{4; Conversion from load fraction to fraction of the 25-percent interval; \unitless}
+ * @endsymtable
+ *
+ * @heading{Normal and Overload Regions}
+ * From 0.251 through values below 1.251 load, a fourth-order polynomial passes through the five
+ * interval efficiencies:
+ * @formula{motor-efficiency-normal-fit;
+ *   \eta_m(L)=\sum_{k=0}^{4}a_kL^k
+ * }
+ * @symtable
+ * @symrow{\eta_m(L); Estimated motor efficiency at load L; \unitless}
+ * @symrow{L; Requested motor load fraction; \unitless}
+ * @symrow{a_k; Coefficients fitted through the 25, 50, 75, 100, and 125 percent points; \unitless}
+ * @symrow{k; Polynomial exponent index from 0 through 4; \unitless}
+ * @endsymtable
+ *
+ * At and above 1.251 load, a quadratic passes through the 75-, 100-, and 125-percent points. Loads
+ * above 1.5 are evaluated at 1.5:
+ * @formula{motor-efficiency-overload-fit;
+ *   L_c=\min(L,1.5),\qquad \eta_m(L)=\sum_{k=0}^{2}b_kL_c^k
+ * }
+ * @symtable
+ * @symrow{L; Requested motor load fraction; \unitless}
+ * @symrow{L_c; Load fraction capped at 1.5; \unitless}
+ * @symrow{\eta_m(L); Estimated motor efficiency at load L; \unitless}
+ * @symrow{b_k; Coefficients fitted through the 75, 100, and 125 percent points; \unitless}
+ * @symrow{k; Polynomial exponent index from 0 through 2; \unitless}
+ * @symrow{1.5; Maximum evaluated load fraction; \unitless}
+ * @endsymtable
+ *
+ * @heading{Worked Example}
+ * Consider a 200 hp, 1785 rpm, 60 Hz energy-efficient motor at full load. The retained four-pole,
+ * higher-power coefficients produce interval efficiencies of approximately 0.9304 at 25 percent,
+ * 0.9495 at 50 percent, 0.9569 at 75 percent, 0.9563 at 100 percent, and 0.9467 at
+ * 125 percent load.
+ *
+ * The 25-percent result gives @math{P_{loss,25}\approx2.79} kW and
+ * @math{P_{loss,0}\approx2.23} kW. At full load, the fourth-order fit passes through the 100-percent
+ * anchor, so the final result is @math{\eta_m\approx0.9563}, or approximately 95.63 percent. The
+ * corresponding shaft output is @math{200\times0.746=149.2} kW; the efficiency implies approximately
+ * 156.02 kW electrical input.
+ *
+ * @heading{Inputs, Boundaries, and Inappropriate Uses}
+ * - Motor speed is in rpm, rated power is in hp, and efficiencies and load are fractions rather than
+ *   percentage points.
+ * - The specified class requires a nonnegative specified efficiency. Other classes ignore that field.
+ * - Zero load returns zero efficiency while retaining a nonzero loss estimate. Negative loads and
+ *   nonpositive rated power are not rejected by the model and are outside the intended use.
+ * - The exact branch thresholds are retained: below 0.251, below 1.251, and otherwise the overload
+ *   fit capped at 1.5.
+ * - Use the model for coefficient-based MEASUR estimates when measured efficiency is unavailable.
+ *   Do not use it as a certification result, a universal arbitrary-frequency motor model, or evidence
+ *   that operation above rated load is acceptable.
+ *
+ * @heading{Public Calculation Interfaces}
+ * C++ callers use a stateless namespace function and receive both efficiency and zero-load loss:
+ * @code{.cpp}
+ * const auto result = motor_efficiency::calculate({
+ *     Motor::LineFrequency::FREQ60,
+ *     1785.0,
+ *     Motor::EfficiencyClass::ENERGY_EFFICIENT,
+ *     200.0,
+ *     1.0,
+ *     -1.0,
+ * });
+ * @endcode
+ *
+ * WebAssembly callers pass a plain `MotorEfficiencyInput` object to `calculateMotorEfficiency` and
+ * receive the efficiency fraction directly. Neither the input nor the numeric result requires
+ * `delete()`.
+ */

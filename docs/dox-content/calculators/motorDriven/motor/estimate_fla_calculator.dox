@@ -1,0 +1,130 @@
+/**
+ * @defgroup estimate_fla_calculator Estimated Full-Load Current Calculator
+ * @ingroup equipment_and_property_calculators
+ * @brief Estimates motor full-load current and retains six coefficient-curve current anchors.
+ * @details
+ * The calculator estimates a motor's full-load current (FLA) when a measured nameplate current is
+ * unavailable. It classifies the motor by pole count, evaluates retained empirical current curves
+ * from rated horsepower, then selects the requested efficiency class. The output includes both a
+ * voltage- and, where applicable, specified-efficiency-adjusted full-load estimate and the
+ * partial-load current anchors used by @ref motor_current_calculator.
+ *
+ * @heading{Decision Path}
+ * 1. Use @ref poles_calculator with rated speed and nominal 50 Hz or 60 Hz frequency to select a
+ *    pole index.
+ * 2. Evaluate the basic current curve and the standard, energy-efficient, or premium multiplier
+ *    curve for rated power.
+ * 3. Evaluate six load-interval multipliers in fixed order: 0, 25, 50, 75, 100, and 125 percent.
+ * 4. Multiply the selected current curve by each interval multiplier to retain the six anchors.
+ * 5. Apply the 460 V reference-voltage correction to the 100-percent anchor. For the specified
+ *    class, also select the closer standard or energy-efficient efficiency baseline and adjust the
+ *    full-load result by that baseline's efficiency ratio.
+ *
+ * @heading{Coefficient Curves}
+ * Each retained curve has the same double-exponential form:
+ * @formula{estimate-fla-curve;
+ *   C(P_r)=A+B e^{-D P_r}+E e^{-F P_r}
+ * }
+ * @symtable
+ * @symrow{C(P_r); Basic current curve at rated power; \ampere\per\horsepower}
+ * @symrow{C(P_r); Class or interval multiplier curve at rated power; \unitless}
+ * @symrow{P_r; Rated motor power; \horsepower}
+ * @symrow{A,B,E; Retained basic-current-curve coefficients; \ampere\per\horsepower}
+ * @symrow{A,B,E; Retained class and interval multiplier coefficients; \unitless}
+ * @symrow{D,F; Retained exponential coefficients; \per\horsepower}
+ * @symrow{e; Natural exponential base; \unitless}
+ * @endsymtable
+ *
+ * The basic reference current is @math{I_b=P_rC_b(P_r)}. The standard and energy-efficient
+ * reference currents are @math{I_s=I_bC_s(P_r)} and @math{I_e=I_bC_e(P_r)}. Premium uses
+ * @math{I_p=I_bC_p(P_r)}. The chosen class reference current @math{I_c} is multiplied by each
+ * interval curve @math{M_j} to produce @math{I_j=I_cM_j(P_r)}.
+ *
+ * @symtable
+ * @symrow{I_b; Basic reference current; \ampere}
+ * @symrow{I_s,I_e,I_p; Standard, energy-efficient, and premium reference currents; \ampere}
+ * @symrow{I_c; Selected class reference current; \ampere}
+ * @symrow{M_j; Retained partial-load multiplier at interval j; \unitless}
+ * @symrow{I_j; Retained partial-load current anchor; \ampere}
+ * @symrow{j; Interval in the fixed sequence 0, 25, 50, 75, 100, 125 percent; \percent}
+ * @endsymtable
+ *
+ * @heading{Specified-Efficiency Baseline}
+ * For the specified class, the calculation obtains full-load motor efficiencies from
+ * @ref motor_efficiency_calculator for the standard and energy-efficient classes. It chooses the
+ * baseline @math{b} with the smaller absolute difference from the input specified efficiency:
+ * @formula{estimate-fla-specified-baseline;
+ *   b=\underset{x\in\{s,e\}}{\operatorname{argmin}}\,|\eta_x-\eta_{spec}|
+ * }
+ * If both absolute differences are exactly equal, the retained strict comparison selects the
+ * energy-efficient baseline. The premium curve is not a candidate for specified-efficiency selection.
+ * The six partial-load anchors then use that selected current curve. The specified-efficiency ratio
+ * is intentionally not applied to those anchors; it is applied only to the public full-load result.
+ *
+ * @heading{Estimated Full-Load Current}
+ * With @math{V_r} as rated voltage and 460 V as the retained curve reference voltage, the output
+ * full-load estimate is:
+ * @formula{estimate-fla-full-load;
+ *   I_{FLA}=I_{100}\frac{460}{V_r}
+ * }
+ * For the specified class only:
+ * @formula{estimate-fla-full-load-specified;
+ *   I_{FLA,spec}=I_{100,b}\frac{460}{V_r}\frac{\eta_b}{\eta_{spec}}
+ * }
+ * @symtable
+ * @symrow{I_{FLA}; Estimated full-load current; \ampere}
+ * @symrow{I_{100}; Retained 100-percent current anchor; \ampere}
+ * @symrow{V_r; Motor rated voltage; \volt}
+ * @symrow{460; Empirical curve reference voltage; \volt}
+ * @symrow{\eta_b; Full-load efficiency of the selected baseline; \unitless}
+ * @symrow{\eta_{spec}; Input specified efficiency; \unitless}
+ * @endsymtable
+ *
+ * The 460 V value is a property of the retained empirical model, so it is local to this calculator.
+ * This calculator does not convert horsepower to kilowatts. Its dependency, the motor-efficiency
+ * calculator, uses the shared rounded conversion constant `physics::conversions::kBhpToKw` (0.746)
+ * in `physics/constants.h` where that conversion is required.
+ *
+ * @heading{Worked Example}
+ * A 50 hp, 1800 rpm, 60 Hz standard motor with a 100 V rated voltage produces retained current
+ * anchors of approximately 18.88, 23.62, 34.06, 46.50, 60.38, and 75.54 A. Applying
+ * the reference-voltage correction to the 100-percent anchor gives
+ * @math{60.38\times460/100\approx277.75} A. The other five anchors keep their listed values.
+ *
+ * @heading{Inputs, Limits, and Appropriate Use}
+ * - Rated power is hp, speed is rpm, voltage is V, and currents are A. Specified efficiency is a
+ *   dimensionless fraction, not a percentage point value.
+ * - For the specified class, specified efficiency must be greater than zero because the full-load
+ *   correction divides by it. Other classes ignore this input. This precondition is not validated;
+ *   zero can produce a non-finite estimated full-load current.
+ * - Premium current coefficients support only 2-, 4-, and 6-pole motors (pole indices 0 through 2).
+ *   A speed/frequency pair classified as 8, 10, or 12 poles is unsupported for PREMIUM and would
+ *   index beyond its three-column table. Those nominal pole bands must not be passed to this class;
+ *   no clamping, fallback, or validation is applied.
+ * - The interval array has exactly six values, always ordered 0 through 125 percent as documented.
+ * - The original regression or experimental source of the coefficient tables, pole selection
+ *   behavior and efficiency-class selection is not recorded in this repository.
+ * - The calculation does not reject nonpositive voltage or out-of-domain speed and power.
+ *   Such inputs are outside its intended use; callers should provide physically meaningful motor
+ *   nameplate values.
+ * - Use this calculation for MEASUR current estimates and related interpolation when measured FLA is
+ *   unavailable. Do not use it as a nameplate substitute, protection-setting authority, or motor
+ *   certification result.
+ *
+ * @heading{Public Calculation Interfaces}
+ * C++ callers use a stateless value API:
+ * @code{.cpp}
+ * const auto result = estimate_fla::calculate({
+ *     50.0,
+ *     1800.0,
+ *     Motor::LineFrequency::FREQ60,
+ *     Motor::EfficiencyClass::STANDARD,
+ *     0.0,
+ *     100.0,
+ * });
+ * @endcode
+ *
+ * WebAssembly callers pass an `EstimateFLAInput` plain object to `calculateEstimateFLA` and receive
+ * an `EstimateFLAOutput` plain object. The six `partialLoadCurrents` values are a fixed tuple; none
+ * of the input, output, or tuple requires `delete()`.
+ */

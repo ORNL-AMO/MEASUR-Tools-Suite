@@ -1,0 +1,201 @@
+/**
+ * @defgroup motor_power_factor_calculator Motor Power Factor Calculator
+ * @ingroup equipment_and_property_calculators
+ * @brief Estimates the fraction of apparent electrical power used as real motor input power.
+ * @details
+ * How much of a motor's apparent electrical demand represents real electrical input? This calculation
+ * estimates power factor at a supplied operating load. It helps pump and fan assessments relate current
+ * to electrical input, while distinguishing motor efficiency from electrical power factor. Efficiency
+ * describes shaft output relative to real input; power factor describes real input relative to apparent power.
+ *
+ * @heading{Final Result and Interpretation}
+ * The returned result is a dimensionless fraction:
+ * @formula{motor-pf-ratio; PF=\frac{P_{in}}{S}}
+ * @symtable
+ * @symrow{PF; Motor power factor as a fraction; \unitless}
+ * @symrow{P_{in}; Real electrical input power; \kilo\watt}
+ * @symrow{S; Apparent electrical power; \kilo\volt\ampere}
+ * @endsymtable
+ *
+ * A result of 0.78 means approximately 78 percent power factor, not 78 percent motor efficiency.
+ * An ordinary consuming-motor interpretation expects a value between zero and one. The calculator does
+ * not enforce that range: an inconsistent input combination can produce a larger, negative or nonfinite
+ * result. Such a result calls for checking the inputs and model assumptions, not interpreting it as a
+ * physically valid operating point. A single motor result does not establish plant-wide power factor.
+ *
+ * [DOE's motor sourcebook, printed page 15](https://www1.eere.energy.gov/manufacturing/tech_assistance/pdfs/motor.pdf#page=19)
+ * explains the real-to-apparent power ratio and the relationship to lightly loaded motors.
+ * Its [three-phase measurement example, printed page 42](https://www1.eere.energy.gov/manufacturing/tech_assistance/pdfs/motor.pdf#page=46)
+ * uses voltage, current and power factor to obtain real power.
+ * These references support the electrical relationships; they do not establish the provenance of this
+ * calculator's near-zero threshold, fixed reference voltage or empirical loss ratio.
+ *
+ * @heading{Choosing the Calculation Path}
+ * 1. Supply rated shaft power in hp, shaft load and operating efficiency as fractions, line current in A,
+ *    and line-to-line voltage in V. Use quantities for a consistent operating point; the voltage input is
+ *    named ratedVoltage but the loaded path uses its supplied value directly.
+ * 2. Supply complete motor characteristics: frequency, speed, efficiency class and specified efficiency.
+ *    These four fields are used only in the near-zero path, but remain required in the public input.
+ * 3. If the absolute load fraction is strictly below 0.001, estimate real input from zero-load losses.
+ *    This includes zero and small negative loads; exactly +0.001 and -0.001 take the loaded path.
+ * 4. Otherwise infer real input from shaft load and supplied operating efficiency, then divide by
+ *    apparent power. The two paths are retained separately and need not join continuously at the threshold.
+ *
+ * Enter 0.75 for 75 percent load and 0.90 for 90 percent efficiency. There is no automatic percentage
+ * conversion. The threshold corresponds to 0.1 percent of rated shaft load; it is a retained model switch,
+ * not a general physical definition of an unloaded motor.
+ *
+ * @heading{Loaded Motor: From Shaft Load to Electrical Demand}
+ * The final loaded result is:
+ * @formula{motor-pf-loaded;
+ *   PF=\frac{L P_r c_{hp}}{I_L\eta_m V_{LL}\sqrt{3}/1000}
+ * }
+ * @symtable
+ * @symrow{PF; Calculated motor power factor; \unitless}
+ * @symrow{L; Shaft load as a fraction of rated shaft power; \unitless}
+ * @symrow{P_r; Rated shaft power; \horsepower}
+ * @symrow{c_{hp}; Retained horsepower conversion of 0.746; \kilo\watt\per\horsepower}
+ * @symrow{I_L; RMS line current; \ampere}
+ * @symrow{\eta_m; Operating motor efficiency as a fraction; \unitless}
+ * @symrow{V_{LL}; Supplied RMS line-to-line voltage; \volt}
+ * @symrow{\sqrt{3}; Balanced three-phase line-quantity factor; \unitless}
+ * @symrow{1000; Volt-amperes per kilovolt-ampere; \volt\ampere\per\kilo\volt\ampere}
+ * @endsymtable
+ *
+ * Shaft power alone omits electrical losses. Dividing it by efficiency estimates the real electrical
+ * input required to deliver that shaft power:
+ * @formula{motor-pf-shaft-input; P_{shaft}=L P_r c_{hp},\qquad P_{in}=\frac{P_{shaft}}{\eta_m}}
+ * @symtable
+ * @symrow{P_{shaft}; Motor shaft output at the supplied load; \kilo\watt}
+ * @symrow{P_{in}; Estimated real electrical input; \kilo\watt}
+ * @symrow{L; Fraction of rated shaft load; \unitless}
+ * @symrow{P_r; Rated shaft power; \horsepower}
+ * @symrow{c_{hp}; Retained conversion of 0.746; \kilo\watt\per\horsepower}
+ * @symrow{\eta_m; Supplied operating efficiency fraction; \unitless}
+ * @endsymtable
+ *
+ * For balanced sinusoidal three-phase conditions, voltage and current give apparent power:
+ * @formula{motor-pf-apparent; S=\frac{\sqrt{3} V_{LL} I_L}{1000}}
+ * @symtable
+ * @symrow{S; Apparent electrical input power; \kilo\volt\ampere}
+ * @symrow{V_{LL}; RMS line-to-line voltage; \volt}
+ * @symrow{I_L; RMS line current; \ampere}
+ * @symrow{\sqrt{3}; Balanced three-phase factor; \unitless}
+ * @symrow{1000; Volt-amperes per kilovolt-ampere; \volt\ampere\per\kilo\volt\ampere}
+ * @endsymtable
+ *
+ * The loaded path uses the supplied efficiency rather than recalculating it from frequency, speed or
+ * efficiency class. Those four model fields cannot correct an inappropriate operating efficiency.
+ *
+ * @heading{Near Zero Load: Electrical Loss Remains}
+ * An idling energized motor can consume real power even though shaft output is zero. Dividing zero
+ * shaft power by zero operating efficiency would not estimate that demand. Instead, the retained model
+ * obtains zero-load electrical loss from @ref motor_efficiency_calculator, evaluated at quarter load.
+ * Its modeled quarter-load efficiency supports the loss estimate:
+ * @formula{motor-pf-quarter-loss;
+ *   P_{loss,25}=\left(\frac{1}{\eta_{25}}-1\right)P_r c_{hp}(0.25)
+ * }
+ * @symtable
+ * @symrow{P_{loss,25}; Modeled quarter-load electrical loss; \kilo\watt}
+ * @symrow{\eta_{25}; Motor-efficiency model's quarter-load efficiency; \unitless}
+ * @symrow{P_r; Rated motor shaft power; \horsepower}
+ * @symrow{c_{hp}; Conversion of 0.746; \kilo\watt\per\horsepower}
+ * @symrow{0.25; Quarter-load fraction; \unitless}
+ * @endsymtable
+ *
+ * The inherited loss ratio estimates the real input for the entire near-zero branch:
+ * @formula{motor-pf-zero-loss; P_{in,0}=P_{loss,0}=0.8P_{loss,25}}
+ * @symtable
+ * @symrow{P_{in,0}; Real input used in the near-zero branch; \kilo\watt}
+ * @symrow{P_{loss,0}; Modeled zero-load loss; \kilo\watt}
+ * @symrow{P_{loss,25}; Quarter-load electrical loss; \kilo\watt}
+ * @symrow{0.8; Retained empirical zero-to-quarter-load loss ratio; \unitless}
+ * @endsymtable
+ *
+ * The final near-zero result uses a fixed voltage reference:
+ * @formula{motor-pf-near-zero; PF_0=\frac{P_{loss,0}}{V_0\sqrt{3}I_L/1000},\qquad V_0=460\,\mathrm{V}}
+ * @symtable
+ * @symrow{PF_0; Power factor returned for abs(load fraction) below 0.001; \unitless}
+ * @symrow{P_{loss,0}; Modeled real input at zero load; \kilo\watt}
+ * @symrow{V_0; Retained fixed three-phase voltage reference of 460; \volt}
+ * @symrow{I_L; Supplied line current, still used directly; \ampere}
+ * @symrow{\sqrt{3}; Balanced three-phase factor; \unitless}
+ * @symrow{1000; Volt-amperes per kilovolt-ampere; \volt\ampere\per\kilo\volt\ampere}
+ * @endsymtable
+ *
+ * Supplied operating efficiency and voltage are ignored here. Changing ratedVoltage from 460 to 230
+ * does not change this branch's result for the same motor characteristics and current. The fixed 460 V,
+ * 0.8 loss ratio and 0.001 switch are model assumptions with unverified original provenance.
+ * The result is a model estimate at that reference, not a general measurement-based PF at any voltage.
+ *
+ * @heading{Worked Examples}
+ * A 100 hp motor at load fraction 0.75 has shaft output 55.95 kW. With efficiency 0.90 its inferred real
+ * input is 62.17 kW. At 460 V and 100 A, apparent power is 79.67 kVA. Therefore:
+ * @formula{motor-pf-loaded-example;
+ *   PF_{example}=\frac{(0.75)(100)(0.746)}{(100)(0.90)(460)\sqrt{3}/1000}\approx0.7803
+ * }
+ * @symtable
+ * @symrow{PF_{example}; Loaded example result, approximately 78.03 percent; \unitless}
+ * @symrow{0.75; Shaft load fraction; \unitless}
+ * @symrow{100\text{ (numerator)}; Rated shaft power; \horsepower}
+ * @symrow{0.746; Horsepower conversion; \kilo\watt\per\horsepower}
+ * @symrow{100\text{ (denominator)}; Line current; \ampere}
+ * @symrow{0.90; Operating efficiency fraction; \unitless}
+ * @symrow{460; Supplied line-to-line voltage; \volt}
+ * @symrow{\sqrt{3}; Three-phase factor; \unitless}
+ * @symrow{1000; Volt-amperes per kilovolt-ampere; \volt\ampere\per\kilo\volt\ampere}
+ * @endsymtable
+ *
+ * For the near-zero example, use 60 Hz, 1780 rpm, ENERGY_EFFICIENT, specified efficiency 0 (ignored
+ * for that class), rated power 100 hp, zero load and 30 A. The inherited efficiency model yields
+ * quarter-load efficiency approximately 0.92152. Quarter-load loss is approximately 1.588 kW and
+ * zero-load loss is 1.271 kW. Apparent power at the fixed reference is 23.90 kVA:
+ * @formula{motor-pf-zero-example;
+ *   PF_{0,example}=\frac{1.271}{(460)\sqrt{3}(30)/1000}\approx0.0532
+ * }
+ * @symtable
+ * @symrow{PF_{0,example}; Near-zero example result, approximately 5.32 percent; \unitless}
+ * @symrow{1.271; Modeled zero-load electrical loss; \kilo\watt}
+ * @symrow{460; Fixed reference voltage; \volt}
+ * @symrow{\sqrt{3}; Three-phase factor; \unitless}
+ * @symrow{30; Supplied line current; \ampere}
+ * @symrow{1000; Volt-amperes per kilovolt-ampere; \volt\ampere\per\kilo\volt\ampere}
+ * @endsymtable
+ *
+ * Small nonzero loads below the threshold still use zero-load loss; no shaft-power term is added there.
+ *
+ * @heading{Assumptions, Boundaries and Inappropriate Uses}
+ * - Use consistent three-phase RMS line quantities and operating load/efficiency. This model does not
+ *   characterize unbalanced phases, VFD waveform distortion, single-phase machines, or transient starting.
+ * - For ordinary loaded operation, rated power, current, voltage and efficiency should be positive;
+ *   efficiency is a fraction normally at most one. The function neither checks these conditions nor caps load.
+ * - Near-zero modeling inherits the motor-efficiency calculator's requirements and data limits. PREMIUM
+ *   uses 2-, 4-, and 6-pole curves; higher classified pole counts use the six-pole curve rather than a
+ *   dedicated higher-pole model. SPECIFIED needs positive efficiency for a meaningful estimate;
+ *   negative specified efficiency propagates the model's error. Other classes ignore specified efficiency.
+ * - Zero current, loaded zero voltage or loaded zero efficiency can produce infinity or NaN. Negative
+ *   inputs retain signed arithmetic; a PF above one is not clamped. There is no fallback or sentinel result.
+ * - This estimates a ratio, not capacitor sizing, plant utility penalties, energy use, or motor efficiency.
+ *   A reference-voltage near-zero result is not sufficient for evaluating actual PF at a different voltage.
+ *
+ * @heading{Calculation Interface}
+ * C++ callers include motorDriven/motor/motor_power_factor.h:
+ * @code{.cpp}
+ * const motor_power_factor::Input input = {Motor::LineFrequency::FREQ60, 1780,
+ *     Motor::EfficiencyClass::ENERGY_EFFICIENT, 0, 100, 0.75, 100, 0.90, 460};
+ * const double power_factor = motor_power_factor::calculate(input);
+ * @endcode
+ * TypeScript callers use a complete plain object:
+ * @code{.ts}
+ * import createModule, { type MotorPowerFactorInput } from 'measur-tools-suite';
+ * const module = await createModule();
+ * const input: MotorPowerFactorInput = {
+ *     lineFrequency: module.LineFrequency.FREQ60, motorRpm: 1780,
+ *     efficiencyClass: module.MotorEfficiencyClass.ENERGY_EFFICIENT, specifiedEfficiency: 0,
+ *     motorRatedPower: 100, loadFactor: 0.75, motorCurrent: 100, motorEfficiency: 0.90, ratedVoltage: 460
+ * };
+ * const powerFactor: number = module.calculateMotorPowerFactor(input);
+ * @endcode
+ * Supply all nine fields even when the loaded branch ignores model data. The input is a plain
+ * object and the result is a number; neither requires cleanup.
+ */

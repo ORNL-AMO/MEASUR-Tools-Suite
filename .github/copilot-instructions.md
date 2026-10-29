@@ -14,6 +14,7 @@ Use [../AGENTS.md](../AGENTS.md) as the source of truth for repository-wide agen
 ## Pull Request Review
 
 - When reviewing a pull request, use the `measur-code-review` skill in `.github/skills/measur-code-review/`.
+- Use the same skill for a pre-PR candidate review, with the intended base branch and exact base/head commits supplied.
 - Use linked Suite and Desktop issues or pull requests through available GitHub MCP context.
 - AI review is advisory and does not replace required human approval.
 

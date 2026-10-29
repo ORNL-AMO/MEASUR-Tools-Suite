@@ -1,11 +1,7 @@
 #include <emscripten/bind.h>
 #include <motorDriven/motor/MotorData.h>
 
-#include "motorDriven/motor/EstimateFLA.h"
-#include "motorDriven/motor/MotorCurrent.h"
-#include "motorDriven/motor/MotorEfficiency.h"
 #include "motorDriven/motor/MotorPerformance.h"
-#include "motorDriven/motor/MotorPowerFactor.h"
 using namespace emscripten;
 
 EMSCRIPTEN_BINDINGS(motorData_class) {
@@ -38,33 +34,9 @@ EMSCRIPTEN_BINDINGS(motorData_class) {
     register_vector<MotorData>("MotorDataV");
 }
 
-EMSCRIPTEN_BINDINGS(motor_efficiency) {
-    class_<MotorEfficiency>("MotorEfficiency")
-        .constructor<Motor::LineFrequency, double, Motor::EfficiencyClass, double>()
-        .function("calculate", &MotorEfficiency::calculate);
-}
-
-EMSCRIPTEN_BINDINGS(est_fla_class) {
-    class_<EstimateFLA>("EstimateFLA")
-        .constructor<double, double, Motor::LineFrequency, Motor::EfficiencyClass, double, double>()
-        .function("getEstimatedFLA", &EstimateFLA::getEstimatedFLA);
-}
-
 EMSCRIPTEN_BINDINGS(motor_class) {
     class_<Motor>("Motor")
         .constructor<Motor::LineFrequency, double, double, Motor::EfficiencyClass, double, double, double, double>();
-}
-
-EMSCRIPTEN_BINDINGS(motor_current) {
-    class_<MotorCurrent>("MotorCurrent")
-        .constructor<double, double, Motor::LineFrequency, Motor::EfficiencyClass, double, double, double>()
-        .function("calculateCurrent", &MotorCurrent::calculateCurrent);
-}
-
-EMSCRIPTEN_BINDINGS(motor_power_factor) {
-    class_<MotorPowerFactor>("MotorPowerFactor")
-        .constructor<double, double, double, double, double>()
-        .function("calculate", &MotorPowerFactor::calculate);
 }
 
 EMSCRIPTEN_BINDINGS(motor_performance) {

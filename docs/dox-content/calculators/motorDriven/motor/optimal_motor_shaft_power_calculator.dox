@@ -1,0 +1,170 @@
+/**
+ * @defgroup optimal_motor_shaft_power_calculator Optimal Motor Shaft Power Calculator
+ * @ingroup equipment_and_property_calculators
+ * @brief Calculates motor mechanical output required to supply a pump or fan through a drive.
+ * @details
+ * How much motor shaft output is required to supply a known pump or fan shaft-power duty?
+ * A belt transmits mechanical power and dissipates some of it before it reaches the mover.
+ * Accounting for that transmission loss connects the mover's required shaft input to the
+ * mechanical output the motor must supply. "Optimal" describes the supplied duty; this
+ * calculation does not search for an optimum, select a motor size or check a motor rating.
+ *
+ * @heading{Final Results and Interpretation}
+ * The results are required motor shaft output in hp and drive efficiency as a fraction.
+ * For belt drives, add estimated transmission loss to the supplied mover shaft requirement:
+ * @formula{optimal-motor-shaft-power-results;
+ * P_m=P_s+P_{loss},\qquad \eta_d=\frac{1}{1+\ell}
+ * }
+ * @symtable
+ * @symrow{P_m; Required motor mechanical shaft output entering the drive; \horsepower}
+ * @symrow{P_s; Required mechanical input at the pump or fan shaft; \horsepower}
+ * @symrow{P_{loss}; Estimated power dissipated by the belt drive; \horsepower}
+ * @symrow{\ell; Belt loss relative to mover shaft power; \unitless}
+ * @symrow{\eta_d; Fraction of motor shaft output delivered to the mover; \unitless}
+ * @endsymtable
+ *
+ * At positive shaft power with ordinary belt losses, the motor must supply more mechanical
+ * power than the mover requires. An efficiency of 0.95 means 95% of motor shaft output reaches
+ * the mover. These results exclude motor electrical losses and do not represent electrical
+ * demand or fluid power. The
+ * @ref optimal_pump_shaft_power_calculator "Optimal Pump Shaft Power Calculator" supplies
+ * pump/fan shaft requirements from a duty and supplied efficiency; the
+ * @ref optimal_motor_power_calculator "Optimal Motor Power Calculator" estimates electrical
+ * demand upstream of the resulting motor shaft requirement.
+ *
+ * @heading{Choose the Drive Path}
+ * Supply the required mover shaft power in hp, the drive selection and specified efficiency
+ * as a fraction. All fields are required; specified efficiency is used only for SPECIFIED.
+ * Direct drive assumes no transmission loss:
+ * @formula{optimal-motor-shaft-power-direct; P_m=P_s,\qquad \eta_d=1}
+ * @symtable
+ * @symrow{P_m; Required motor shaft output; \horsepower}
+ * @symrow{P_s; Supplied mover shaft requirement; \horsepower}
+ * @symrow{\eta_d; Direct-drive efficiency; \unitless}
+ * @endsymtable
+ *
+ * When a drive efficiency is known, SPECIFIED uses that fraction directly:
+ * @formula{optimal-motor-shaft-power-specified;
+ * P_m=\frac{P_s}{\eta_{specified}},\qquad \eta_d=\eta_{specified}
+ * }
+ * @symtable
+ * @symrow{P_m; Required motor shaft output; \horsepower}
+ * @symrow{P_s; Supplied mover shaft requirement; \horsepower}
+ * @symrow{\eta_{specified}; Supplied drive efficiency fraction; \unitless}
+ * @symrow{\eta_d; Returned drive efficiency; \unitless}
+ * @endsymtable
+ *
+ * Ordinary V-belt, notched V-belt and synchronous-belt drives instead use the empirical
+ * power-dependent model below. Unknown C++ drive values retain the ordinary V-belt fallback;
+ * this does not add supported values to the public WASM Drive enum.
+ *
+ * @heading{Estimate Belt Transmission Loss}
+ * Evaluate the retained ordinary V-belt curve at the mover shaft power, not motor output:
+ * @formula{optimal-motor-shaft-power-belt-curve;
+ * C(P_s)=a\exp(-bP_s)+c\exp(-dP_s)+e
+ * }
+ * @symtable
+ * @symrow{C; Numerical empirical loss-curve value in percentage points; \percent}
+ * @symrow{P_s; Mover shaft power at which the curve is evaluated; \horsepower}
+ * @symrow{a,c,e; Retained coefficients 0.7489574, 4.136368 and 4.162707; \percent}
+ * @symrow{b,d; Retained decay coefficients 0.02067997 and 0.226025; \per\horsepower}
+ * @endsymtable
+ *
+ * Convert the curve to a fraction and apply the selected belt's relative loss multiplier:
+ * @formula{optimal-motor-shaft-power-belt-loss;
+ * \ell=\frac{C(P_s)f}{100},\qquad P_{loss}=\ell P_s
+ * }
+ * @symtable
+ * @symrow{\ell; Belt loss relative to mover shaft power; \unitless}
+ * @symrow{C; Numerical empirical curve value in percentage points; \percent}
+ * @symrow{P_s; Required mover shaft input; \horsepower}
+ * @symrow{f; Relative loss multiplier: 1 for ordinary, 0.05/0.07 for notched, 0.02/0.07 for synchronous; \unitless}
+ * @symrow{100; Numerical percentage-point-to-fraction divisor; \unitless}
+ * @symrow{P_{loss}; Estimated belt transmission loss; \horsepower}
+ * @endsymtable
+ *
+ * The reference fractions 0.07, 0.05 and 0.02 scale losses. Their historical background uses
+ * nominal efficiencies of 93%, 95% and 98%; these are not fixed efficiencies returned here.
+ * Because loss is expressed relative to mover power, efficiency is one divided by one plus
+ * the loss fraction. It is not one minus that fraction.
+ *
+ * Arithmetic retains the model's evaluation order: for scaled belts, multiply the curve by
+ * the relative factor before dividing by 100. Ordinary V-belt divides its unscaled curve by 100.
+ * Multiply the fraction by mover power, then add the resulting hp loss. Motor output is
+ * computed by this addition rather than division by returned efficiency. Replacing these
+ * expressions with algebraic equivalents can change floating-point boundary outcomes.
+ *
+ * @heading{Worked Notched V-Belt Example}
+ * A pump or fan requires 50 hp at its shaft and uses a notched V-belt. The unscaled curve is
+ * approximately 4.4291 percentage points. Applying the notched multiplier gives:
+ * @formula{optimal-motor-shaft-power-example-loss;
+ * \ell\approx\frac{4.4291(0.05/0.07)}{100}\approx0.03164,\qquad
+ * P_{loss}\approx0.03164(50)\approx1.582\ \mathrm{hp}
+ * }
+ * @symtable
+ * @symrow{\ell; Notched-belt loss fraction relative to mover input; \unitless}
+ * @symrow{P_{loss}; Mechanical transmission loss; \horsepower}
+ * @endsymtable
+ *
+ * Add that loss to the required mover input and calculate the drive efficiency:
+ * @formula{optimal-motor-shaft-power-example-result;
+ * P_m\approx50+1.582\approx51.58\ \mathrm{hp},\qquad
+ * \eta_d\approx\frac{1}{1+0.03164}\approx0.9693
+ * }
+ * @symtable
+ * @symrow{P_m; Required motor shaft output before the drive; \horsepower}
+ * @symrow{\eta_d; Returned drive efficiency, approximately 96.93 percent; \unitless}
+ * @endsymtable
+ *
+ * About 51.58 hp of motor mechanical output supplies 50 hp to the mover. This value must
+ * still be passed through a motor-efficiency calculation to estimate electrical demand.
+ * For comparison, direct drive requires 50 hp and returns efficiency 1.
+ *
+ * @heading{Worked Specified-Efficiency Example}
+ * If measured or otherwise appropriate drive efficiency is 0.95, use SPECIFIED instead:
+ * @formula{optimal-motor-shaft-power-example-specified;
+ * P_m=\frac{50}{0.95}\approx52.63\ \mathrm{hp},\qquad \eta_d=0.95
+ * }
+ * @symtable
+ * @symrow{P_m; Required motor shaft output for a 50 hp mover duty; \horsepower}
+ * @symrow{\eta_d; Supplied and returned drive efficiency; \unitless}
+ * @endsymtable
+ *
+ * The 95% efficiency describes the assumed drive at this operating point; it does not select
+ * the notched or synchronous empirical model. The caller must supply a fraction, not 95.
+ *
+ * @heading{Physical Limits and Retained Arithmetic}
+ * Physically meaningful consuming duties use positive power and a drive efficiency fraction
+ * greater than zero and no greater than one. The repository establishes no validated power
+ * range for the empirical fit. Callers select appropriate inputs and convert user-facing units.
+ * No validation, clamping or substitution of defaults is performed.
+ *
+ * At zero mover power, belt loss and required motor output are zero, while the reciprocal
+ * expression returns a finite belt efficiency. This is the curve's zero-duty arithmetic,
+ * not a measured no-load efficiency. Direct drive returns efficiency 1; SPECIFIED returns
+ * the supplied fraction. A zero specified efficiency with nonzero power produces a signed
+ * infinity; zero power divided by zero produces NaN. Negative or above-one efficiencies,
+ * negative powers, signed zeros, NaN, infinities, underflow and overflow retain raw arithmetic.
+ * Large negative powers can overflow the growing exponential terms. These outcomes are not
+ * validated physical predictions.
+ *
+ * The @ref mover_shaft_power_calculator "Mover Shaft Power Calculator" starts with motor output
+ * and estimates power delivered to the mover using a different empirical curve. The two belt
+ * models are not exact algebraic inverses; a forward/reverse round trip is not an identity.
+ * Do not apply drive losses twice or treat this calculation as motor selection, optimization,
+ * motor electrical efficiency or pump/fan hydraulic efficiency.
+ *
+ * @heading{Provenance}
+ * The retained reverse-direction source points to the forward MoverShaftPower model for
+ * background. Historical comments in that model attribute its belt-loss relationship to
+ * AMCA 203-90 Appendix L and relative belt factors to a Belt Drive Tip Sheet. The repository
+ * does not establish the derivation of this reverse model's distinct coefficients, their
+ * validated range or a verified external source for this exact fit. The values are retained
+ * model coefficients, not newly derived constants or evidence of standards compliance.
+ *
+ * @heading{Current Calculation Interface}
+ * C++ callers use optimal_motor_shaft_power::calculate with a complete Input and receive a
+ * Result. WASM/TypeScript callers use calculateOptimalMotorShaftPower with moverShaftPower,
+ * drive and specifiedEfficiency, receiving motorShaftPower and driveEfficiency. Power is in
+ * hp and efficiency is dimensionless. Inputs and results are plain values requiring no cleanup.
+ */

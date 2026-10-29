@@ -31,13 +31,25 @@ export * from "./ts_def_modules/motorDriven/fans/fanEnum";
 export * from "./ts_def_modules/motorDriven/fans/fan_affinity_laws";
 
 export * from "./ts_def_modules/motorDriven/motor/motor";
+export * from "./ts_def_modules/motorDriven/motor/estimate_fla";
+export * from "./ts_def_modules/motorDriven/motor/motor_current";
+export * from "./ts_def_modules/motorDriven/motor/motor_power";
+export * from "./ts_def_modules/motorDriven/motor/motor_power_factor";
+export * from "./ts_def_modules/motorDriven/motor/motor_shaft_power";
+export * from "./ts_def_modules/motorDriven/motor/optimal_motor_power";
+export * from "./ts_def_modules/motorDriven/motor/optimal_motor_shaft_power";
+export * from "./ts_def_modules/motorDriven/motor/motor_efficiency";
 export * from "./ts_def_modules/motorDriven/motor/motorEnum";
 
-export * from "./ts_def_modules/motorDriven/pump/pump";
+export * from "./ts_def_modules/motorDriven/pump/pump_result";
 export * from "./ts_def_modules/motorDriven/pump/pump_head";
 export * from "./ts_def_modules/motorDriven/pump/pump_valve_power_loss";
 
 export * from "./ts_def_modules/motorDriven/pumpFan/pumpFan";
+export * from "./ts_def_modules/motorDriven/pumpFan/fluid_power";
+export * from "./ts_def_modules/motorDriven/pumpFan/mover_efficiency";
+export * from "./ts_def_modules/motorDriven/pumpFan/optimal_pump_shaft_power";
+export * from "./ts_def_modules/motorDriven/pumpFan/mover_shaft_power";
 
 export * from "./ts_def_modules/other/chp";
 export * from "./ts_def_modules/other/lighting_data";
@@ -144,12 +156,24 @@ export type MeasurToolsSuite =
     // motorDriven/motor
     import("./ts_def_modules/motorDriven/motor/motorEnum").MotorEnumModule &
     import("./ts_def_modules/motorDriven/motor/motor").MotorModule &
+    import("./ts_def_modules/motorDriven/motor/estimate_fla").EstimateFLAModule &
+    import("./ts_def_modules/motorDriven/motor/motor_current").MotorCurrentModule &
+    import("./ts_def_modules/motorDriven/motor/motor_power").MotorPowerModule &
+    import("./ts_def_modules/motorDriven/motor/motor_power_factor").MotorPowerFactorModule &
+    import("./ts_def_modules/motorDriven/motor/motor_shaft_power").MotorShaftPowerModule &
+    import("./ts_def_modules/motorDriven/motor/optimal_motor_power").OptimalMotorPowerModule &
+    import("./ts_def_modules/motorDriven/motor/optimal_motor_shaft_power").OptimalMotorShaftPowerModule &
+    import("./ts_def_modules/motorDriven/motor/motor_efficiency").MotorEfficiencyModule &
     // motorDriven/pump
-    import("./ts_def_modules/motorDriven/pump/pump").PumpModule &
+    import("./ts_def_modules/motorDriven/pump/pump_result").PumpResultModule &
     import("./ts_def_modules/motorDriven/pump/pump_head").PumpHeadModule &
     import("./ts_def_modules/motorDriven/pump/pump_valve_power_loss").PumpValvePowerLossModule &
     // motorDriven/pumpFan
     import("./ts_def_modules/motorDriven/pumpFan/pumpFan").PumpFanModule &
+    import("./ts_def_modules/motorDriven/pumpFan/fluid_power").FluidPowerModule &
+    import("./ts_def_modules/motorDriven/pumpFan/mover_efficiency").MoverEfficiencyModule &
+    import("./ts_def_modules/motorDriven/pumpFan/optimal_pump_shaft_power").OptimalPumpShaftPowerModule &
+    import("./ts_def_modules/motorDriven/pumpFan/mover_shaft_power").MoverShaftPowerModule &
     // other
     import("./ts_def_modules/other/chp").ChpModule &
     import("./ts_def_modules/other/lighting_data").LightingDataModule &

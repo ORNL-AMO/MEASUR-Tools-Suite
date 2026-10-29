@@ -1,0 +1,165 @@
+/**
+ * @defgroup optimal_motor_power_calculator Optimal Motor Power Calculator
+ * @ingroup equipment_and_property_calculators
+ * @brief Estimates electrical demand for a supplied mechanical motor shaft-power requirement.
+ * @details
+ * How much electrical input would a motor need to deliver a proposed shaft output? A pump or fan
+ * assessment first establishes the required motor shaft hp, including drive losses. This calculator
+ * combines that requirement with motor nameplate information and empirical current/efficiency models
+ * to estimate electrical kW, current, efficiency, power factor and fractional load.
+ * "Optimal" describes the supplied shaft requirement. The method does not select motor size, compare
+ * equipment alternatives, or optimize an objective. It is the proposed-duty counterpart to
+ * @ref motor_shaft_power_calculator, which infers shaft output from an existing electrical measurement.
+ *
+ * @heading{Final Result and Interpretation}
+ * Electrical demand is interpolated between the selected lower and upper modeled operating points:
+ * @formula{optimal-motor-final-power; P_e=P_{e,1}+100(L-L_1)(P_{e,2}-P_{e,1})}
+ * @symtable
+ * @symrow{P_e; Estimated real electrical input; \kilo\watt}
+ * @symrow{P_{e,1},P_{e,2}; Lower and upper trial electrical inputs; \kilo\watt}
+ * @symrow{L,L_1; Interpolated and lower trial shaft-load fractions; \unitless}
+ * @symrow{100; Retained reciprocal of the 0.01 load increment; \unitless}
+ * @endsymtable
+ *
+ * For a representative 100 hp, 1780 rpm, 60 Hz ENERGY_EFFICIENT motor at 460 V nameplate and
+ * operating voltage, a 75 hp shaft requirement produces approximately 58.831 kW electrical input.
+ * This includes modeled motor losses. It excludes downstream drive and mover losses, which belong
+ * in the upstream calculation of the shaft requirement. The returned efficiency, power factor and
+ * load factor are fractions, not percentage points; current is in A. Electrical power and efficiency
+ * are interpolated independently, so their product need not exactly reproduce the target shaft kW.
+ *
+ * @heading{Inputs and Decision Path}
+ * Supply all eight fields: rated shaft hp, nameplate rpm, line-frequency selection, efficiency class,
+ * specified efficiency fraction, rated voltage, operating voltage, and required shaft hp. For SPECIFIED,
+ * enter a fraction such as 0.93, not 93. Other efficiency classes ignore this value. There is no supplied
+ * full-load-current input: this path uses the raw optimal-current model rather than the supplied-FLA
+ * normalization used for an existing motor assessment.
+ *
+ * The decision path is: convert the requirement to kW, evaluate trial shaft-load fractions, retain
+ * the two points surrounding the stopping condition, interpolate load and electrical quantities,
+ * then apply the retained current scaling and recompute power factor.
+ *
+ * @heading{Convert the Required Shaft Output}
+ * @formula{optimal-motor-target; P_{s,t}=c_{hp}H_t,\qquad c_{hp}=0.746}
+ * @symtable
+ * @symrow{P_{s,t}; Required mechanical shaft output; \kilo\watt}
+ * @symrow{H_t; Supplied mechanical motor shaft requirement; \horsepower}
+ * @symrow{c_{hp}; Retained horsepower conversion; \kilo\watt\per\horsepower}
+ * @endsymtable
+ *
+ * @heading{Evaluate Trial Operating Points}
+ * At each trial load, obtain raw current from motor_current::calculateOptimal(), which uses the
+ * EstimateFLA anchors and retained curve fits. Apply the operating/nameplate voltage adjustment:
+ * @formula{optimal-motor-trial-current;
+ *   r=\frac{V_f}{V_r},\qquad I_j=I_{raw,j}\left[(r-1)(1-2L_j)+1\right]
+ * }
+ * @symtable
+ * @symrow{r; Operating-to-nameplate voltage ratio; \unitless}
+ * @symrow{V_f,V_r; Operating and nameplate line-to-line voltages; \volt}
+ * @symrow{I_j; Trial current after the field-voltage adjustment; \ampere}
+ * @symrow{I_{raw,j}; Raw optimal-model current before voltage adjustment; \ampere}
+ * @symrow{L_j; Trial shaft-load fraction; \unitless}
+ * @symrow{j; Trial-point index; \unitless}
+ * @endsymtable
+ *
+ * Obtain efficiency from @ref motor_efficiency_calculator, then power factor from
+ * @ref motor_power_factor_calculator using that adjusted current and the operating voltage.
+ * The no-load power-factor branch retains its own 460 V reference. These dependencies are evaluated
+ * in that order; the trial current has not yet received the final reference/nameplate scaling.
+ * @formula{optimal-motor-trial-power;
+ *   P_{e,j}=\frac{\sqrt{3}V_f I_j PF_j}{1000},\qquad P_{s,j}=P_{e,j}\eta_j
+ * }
+ * @symtable
+ * @symrow{P_{e,j}; Trial real electrical input; \kilo\watt}
+ * @symrow{P_{s,j}; Trial mechanical shaft output; \kilo\watt}
+ * @symrow{V_f; Operating line-to-line voltage; \volt}
+ * @symrow{I_j; Field-adjusted trial line current; \ampere}
+ * @symrow{PF_j; Modeled trial power factor; \unitless}
+ * @symrow{\eta_j; Modeled trial efficiency fraction; \unitless}
+ * @symrow{j; Trial-point index; \unitless}
+ * @symrow{\sqrt{3}; Balanced three-phase line-quantity factor; \unitless}
+ * @symrow{1000; Watts per kilowatt; \watt\per\kilo\watt}
+ * @endsymtable
+ *
+ * Trial load starts at zero and repeatedly adds 0.01. Stop when trial shaft kW strictly exceeds the
+ * target or trial load is greater than 1.5. Equality continues the search. The preceding evaluated
+ * point becomes the lower endpoint; before any trial, the lower endpoint is all zeroes. That initial
+ * anchor is retained implementation behavior, not a claim that an unloaded motor draws zero current.
+ * Repeated floating-point additions are retained, including their rounding near load boundaries.
+ *
+ * @heading{Interpolate the Selected Pair}
+ * @formula{optimal-motor-load;
+ *   L=L_1+\frac{1}{100}\frac{P_{s,t}-P_{s,1}}{P_{s,2}-P_{s,1}}
+ * }
+ * @symtable
+ * @symrow{L,L_1; Interpolated and lower trial shaft-load fractions; \unitless}
+ * @symrow{P_{s,t}; Target shaft output; \kilo\watt}
+ * @symrow{P_{s,1},P_{s,2}; Selected lower and upper trial shaft outputs; \kilo\watt}
+ * @symrow{100; Retained reciprocal of the 0.01 load increment; \unitless}
+ * @endsymtable
+ *
+ * Use the interpolated load in the final electrical-power formula above. Independently interpolate
+ * efficiency and current; only current receives the final 460 V/nameplate-voltage scaling:
+ * @formula{optimal-motor-secondary-results;
+ *   \eta=\eta_1+100(L-L_1)(\eta_2-\eta_1),\qquad
+ *   I=\left[I_1+100(L-L_1)(I_2-I_1)\right]\frac{V_0}{V_r},\qquad V_0=460\ \mathrm{V}
+ * }
+ * @symtable
+ * @symrow{\eta,\eta_1,\eta_2; Result and endpoint efficiency fractions; \unitless}
+ * @symrow{I; Final operating current; \ampere}
+ * @symrow{I_1,I_2; Field-adjusted trial endpoint currents; \ampere}
+ * @symrow{L,L_1; Interpolated and lower trial shaft-load fractions; \unitless}
+ * @symrow{V_0; Retained model reference voltage; \volt}
+ * @symrow{V_r; Nameplate line-to-line voltage; \volt}
+ * @symrow{100; Retained reciprocal of the 0.01 load increment; \unitless}
+ * @endsymtable
+ *
+ * Recompute the final power factor from the returned electrical power and scaled current:
+ * @formula{optimal-motor-final-pf; PF=\frac{P_e}{I V_f\sqrt{3}/1000}}
+ * @symtable
+ * @symrow{PF; Resulting real-to-apparent power ratio; \unitless}
+ * @symrow{P_e; Interpolated real electrical input; \kilo\watt}
+ * @symrow{I; Final scaled line current; \ampere}
+ * @symrow{V_f; Operating line-to-line voltage; \volt}
+ * @symrow{\sqrt{3}; Balanced three-phase line-quantity factor; \unitless}
+ * @symrow{1000; Watts per kilowatt; \watt\per\kilo\watt}
+ * @endsymtable
+ *
+ * @heading{Worked Example: Electrical Demand for 75 hp}
+ * Use rated power 100 hp, speed 1780 rpm, FREQ60, ENERGY_EFFICIENT, specified efficiency 0.93
+ * (inactive for this class), rated voltage 460 V, field voltage 460 V, and target shaft power 75 hp.
+ * The target is 75 hp times 0.746 kW/hp = 55.95 kW of mechanical output. The voltage ratio is one,
+ * so the field-current multiplier and final reference-voltage multiplier are both one.
+ *
+ * The retained search selects trials near load 0.74 and 0.75; floating-point rounding makes the
+ * upper shaft output strictly greater than the target. Interpolation gives load 0.7500000000000001,
+ * one representable floating-point step above 0.75. Other results below are rounded for display.
+ * Electrical input is 58.83 kW, efficiency is 0.9510, current is 87.47 A,
+ * and power factor is 0.8442. The power-factor check uses 58.83 kW divided by
+ * (87.47 A times 460 V times the square root of three / 1000), giving 0.8442.
+ * The approximate difference between electrical input and required shaft output is 2.88 kW of
+ * motor loss. Drive losses must already be included in the 75 hp requirement, before calling this method.
+ *
+ * @heading{Assumptions, Boundaries and Provenance}
+ * The electrical relationship assumes balanced three-phase line quantities. For meaningful use,
+ * supply physically appropriate positive motor ratings and voltages, with a positive efficiency
+ * fraction for SPECIFIED. PREMIUM current modeling supports 2-, 4-, and 6-pole motors. See
+ * @ref motor_current_calculator and @ref estimate_fla_calculator for empirical model restrictions.
+ *
+ * There is no numerical validation, fallback or output clamping. The search limit is not a
+ * continuous-duty rating, and the final load may extrapolate beyond 1.5. The current model itself
+ * caps its evaluation above 1.5; the composite search and other dependencies retain their own behavior.
+ * Zero target retains modeled no-load electrical demand. Negative targets can terminate at the first
+ * trial and yield infinities/NaNs from a degenerate bracket; zero voltages can also yield nonfinite
+ * results. Negative specified efficiency for SPECIFIED propagates the dependency exception.
+ * Do not interpret extrapolated or nonfinite results as feasible equipment operation or use this
+ * model in place of measured performance or manufacturer limits for equipment selection.
+ *
+ * The historical sources of the empirical curves and voltage adjustments are unverified.
+ * The model does not establish independent engineering validation of those assumptions.
+ *
+ * @heading{Calculation Interface}
+ * C++ callers use optimal_motor_power::calculate(Input), supplying required shaft power in hp.
+ * WebAssembly callers use calculateOptimalMotorPower with OptimalMotorPowerInput and
+ * OptimalMotorPowerResult plain objects; neither requires delete().
+ */

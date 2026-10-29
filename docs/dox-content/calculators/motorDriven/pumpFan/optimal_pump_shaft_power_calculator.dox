@@ -1,0 +1,158 @@
+/**
+ * @defgroup optimal_pump_shaft_power_calculator Optimal Pump and Fan Shaft Power Calculator
+ * @ingroup equipment_and_property_calculators
+ * @brief Calculates the shaft input required at a supplied pump or fan duty and efficiency.
+ * @details
+ * How much shaft power is required to deliver a specified liquid or gas duty at a chosen efficiency?
+ * The useful power delivered to the fluid is less than the shaft input for ordinary consuming
+ * equipment with losses. Dividing useful fluid power by the supplied efficiency accounts for those
+ * mover losses and provides the shaft demand needed by subsequent drive and motor calculations.
+ *
+ * @heading{Final Result and Interpretation}
+ * Both paths return required power at the pump or fan shaft in hp:
+ * @formula{optimal-pump-shaft-power-result; P_s=\frac{P_f/\eta_m}{c_{hp}}}
+ * @symtable
+ * @symrow{P_s; Required input at the pump or fan shaft; \horsepower}
+ * @symrow{P_f; Useful power delivered to the fluid at the supplied duty; \kilo\watt}
+ * @symrow{\eta_m; Supplied pump or fan efficiency as a fraction; \unitless}
+ * @symrow{c_{hp}; Retained horsepower conversion, 0.746; \kilo\watt\per\horsepower}
+ * @endsymtable
+ *
+ * Supply 0.80 for 80% efficiency. For the same positive duty, a lower efficiency requires more
+ * shaft input. Shaft power is measured after any intervening drive; motor shaft power upstream
+ * of a lossy drive and motor electrical input must be calculated separately. The result excludes
+ * motor and drive losses and is not electrical demand in kW.
+ *
+ * The historical name “optimal” refers to evaluating power at a supplied efficiency. The calculator
+ * does not search for an optimum, predict efficiency, locate a best-efficiency point, choose equipment,
+ * or guarantee a minimum achievable power. The supplied efficiency must be appropriate to the duty.
+ *
+ * @heading{Select a Duty and Supply Consistent Inputs}
+ * Select the pump path for liquid flow in US gpm, head in feet of the pumped fluid, specific gravity,
+ * and pump efficiency as a fraction. Head represents the supplied energy-per-weight rise; do not
+ * substitute pressure in psi. This flow/head path is separate from the pressure-based
+ * positive-displacement branch in pump assessments.
+ *
+ * Select the fan path for gas flow in cfm, inlet and outlet gauge pressures in inches of water
+ * column, a supplied dimensionless compressibility correction, fan efficiency as a fraction, and
+ * velocity pressure in inches of water column. Pressures need a common reference and compatible
+ * measurement planes. All inputs are required; explicitly supply zero velocity pressure when no
+ * term is to be subtracted. The supplied compressibility correction is not a ratio of specific heats.
+ *
+ * Use duty and efficiency data for the same operating point. Callers validate inputs and convert
+ * user-selected units before calling; the calculator does not reconcile inconsistent measurements.
+ *
+ * @heading{Determine Useful Fluid Power Before Allowing for Losses}
+ * Liquid flow carries weight through a head rise. The pump path delegates useful fluid power to
+ * the @ref fluid_power_calculator "Fluid Power Calculator":
+ * @formula{optimal-pump-shaft-power-pump-fluid; P_{f,p}=\frac{c_{hp}Q_pH\,SG}{C_p}}
+ * @symtable
+ * @symrow{P_{f,p}; Power delivered to the liquid; \kilo\watt}
+ * @symrow{c_{hp}; Retained horsepower conversion, 0.746; \kilo\watt\per\horsepower}
+ * @symrow{Q_p; Liquid volumetric flow in US gallons per minute; \gallon\per\minute}
+ * @symrow{H; Pump head in feet of the pumped fluid; \foot}
+ * @symrow{SG; Fluid specific gravity; \unitless}
+ * @symrow{C_p; Retained flow-head horsepower divisor, 3961.38; \gallon\foot\per\minute\per\horsepower}
+ * @endsymtable
+ *
+ * Gas flow through a pressure rise transfers pressure-volume work. The fan path delegates useful
+ * power using the retained pressure convention and the supplied compressibility correction:
+ * @formula{optimal-pump-shaft-power-fan-fluid; P_{f,f}=\frac{c_{hp}Q_f(p_o-p_i-p_v)K}{C_f}}
+ * @symtable
+ * @symrow{P_{f,f}; Power delivered to the gas; \kilo\watt}
+ * @symrow{c_{hp}; Retained horsepower conversion, 0.746; \kilo\watt\per\horsepower}
+ * @symrow{Q_f; Gas volumetric flow; \cubicFoot\per\minute}
+ * @symrow{p_o,p_i; Outlet and inlet gauge pressures with a common reference; \inchWaterColumn}
+ * @symrow{p_v; Supplied velocity pressure subtracted from the rise; \inchWaterColumn}
+ * @symrow{K; Supplied fan compressibility correction; \unitless}
+ * @symrow{C_f; Retained flow-pressure horsepower divisor, 6362; \cubicFoot\inchWaterColumn\per\minute\per\horsepower}
+ * @endsymtable
+ *
+ * The effective fan rise is outlet minus inlet minus velocity pressure. A negative inlet gauge
+ * pressure can contribute to a positive rise. This retained convention does not establish a
+ * standardized static/total efficiency classification or reconstruct velocity pressure. Supply
+ * a compatible efficiency and pressure convention upstream, and avoid subtracting velocity
+ * pressure again from an already adjusted rise.
+ *
+ * The final calculation divides useful fluid kW by the efficiency fraction to obtain required shaft
+ * kW, then divides by 0.746 kW/hp. The implementation retains this evaluation order even though
+ * algebraic cancellation would be possible; regrouping can change floating-point boundary results.
+ *
+ * @heading{Worked Pump Example}
+ * For flow 1840 US gpm, head 174.85 ft, specific gravity 1 and efficiency 0.80, useful fluid power
+ * is approximately 60.59 kW. Allowing for pump losses gives approximately 75.73 kW
+ * at the shaft:
+ * @formula{optimal-pump-shaft-power-pump-example;
+ *   P_{s,p}=\frac{\left(0.746\times1840\times174.85\times1/3961.38\right)/0.80}{0.746}
+ *           \approx101.52\quad\mathrm{hp}
+ * }
+ * @symtable
+ * @symrow{P_{s,p}; Required pump shaft input; \horsepower}
+ * @symrow{0.746; Retained horsepower conversion; \kilo\watt\per\horsepower}
+ * @symrow{1840; Supplied liquid flow; \gallon\per\minute}
+ * @symrow{174.85; Supplied head of the pumped fluid; \foot}
+ * @symrow{1; Supplied specific gravity; \unitless}
+ * @symrow{3961.38; Retained pump divisor; \gallon\foot\per\minute\per\horsepower}
+ * @symrow{0.80; Supplied pump efficiency fraction; \unitless}
+ * @endsymtable
+ *
+ * About 101.52 hp must reach the pump shaft under these assumptions. Additional motor and drive
+ * losses would increase the upstream power requirement. The calculator does not establish whether
+ * the supplied 80% efficiency can be achieved by a particular pump at this duty.
+ *
+ * @heading{Worked Fan Example}
+ * For flow 2000 cfm, inlet gauge pressure 20 inches water column, outlet gauge pressure 25 inches
+ * water column, velocity pressure 1 inch water column, compressibility correction 1.4 and efficiency
+ * 0.75, the effective rise is 4 inches water column. Useful gas power is approximately 1.313 kW;
+ * accounting for fan losses gives approximately 1.751 kW at the shaft:
+ * @formula{optimal-pump-shaft-power-fan-example;
+ *   P_{s,f}=\frac{\left(0.746\times2000\times(25-20-1)\times1.4/6362\right)/0.75}{0.746}
+ *           \approx2.35\quad\mathrm{hp}
+ * }
+ * @symtable
+ * @symrow{P_{s,f}; Required fan shaft input; \horsepower}
+ * @symrow{0.746; Retained horsepower conversion; \kilo\watt\per\horsepower}
+ * @symrow{2000; Supplied gas flow; \cubicFoot\per\minute}
+ * @symrow{25,20; Supplied outlet and inlet gauge pressures; \inchWaterColumn}
+ * @symrow{1; Supplied velocity pressure; \inchWaterColumn}
+ * @symrow{1.4; Supplied compressibility correction; \unitless}
+ * @symrow{6362; Retained fan divisor; \cubicFoot\inchWaterColumn\per\minute\per\horsepower}
+ * @symrow{0.75; Supplied fan efficiency fraction; \unitless}
+ * @endsymtable
+ *
+ * About 2.35 hp must reach the fan shaft. Keeping all other inputs unchanged but omitting the
+ * velocity-pressure subtraction would give about 2.93 hp. Measurement conventions therefore
+ * affect the shaft-power estimate directly.
+ *
+ * @heading{Assumptions, Boundaries and Inappropriate Uses}
+ * Ordinary consuming-equipment duties use positive flow and pump head or effective fan pressure
+ * rise, positive specific gravity and compressibility correction, and an efficiency fraction greater
+ * than zero and no greater than one. These are interpretation conditions, not enforced limits.
+ * The calculator returns negative and above-one efficiency inputs unchanged through the arithmetic.
+ * Such results need investigation before physical interpretation; they do not validate an equipment duty.
+ *
+ * With finite positive efficiency, a zero useful duty gives zero shaft power. Nonzero useful power
+ * divided by zero efficiency produces signed infinity; zero divided by zero produces NaN. Signed
+ * zero, negative values, infinities and NaN propagate according to the retained arithmetic. Extreme
+ * finite inputs can overflow or underflow at intermediate steps. No defaults, fallback, clamping or
+ * nonfinite-value replacement are applied. Callers remain responsible for presenting meaningful results.
+ *
+ * Do not treat the result as motor electrical demand, a motor size recommendation, an equipment
+ * selection guarantee, or proof of an achievable efficiency. Use a separate model for motor and
+ * drive losses, margins, operating constraints and equipment selection.
+ *
+ * @heading{Constants and Provenance}
+ * The @ref fluid_power_calculator "Fluid Power Calculator" supplies the 3961.38 and 6362 divisors
+ * and the 0.746 kW/hp conversion. The exact historical source of the divisors is unverified;
+ * the physical relationships above do not establish their final digits.
+ *
+ * @heading{Calculation Interface}
+ * C++ callers use
+ * optimal_pump_shaft_power::calculatePump(PumpInput) or calculateFan(FanInput), using
+ * motorDriven/pumpFan/optimal_pump_shaft_power.h.
+ *
+ * WASM/TypeScript callers use calculateOptimalPumpShaftPower(OptimalPumpShaftPowerInput) or
+ * calculateOptimalFanShaftPower(OptimalFanShaftPowerInput). Inputs are complete plain objects with
+ * camelCase fields, including pumpEfficiency or fanEfficiency as a fraction. Results are numeric hp;
+ * inputs and results require no delete().
+ */

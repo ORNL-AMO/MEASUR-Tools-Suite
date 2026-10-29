@@ -1,0 +1,141 @@
+/**
+ * @defgroup fluid_power_calculator Fluid Power Calculator
+ * @ingroup equipment_and_property_calculators
+ * @brief Calculates power delivered to the fluid at a supplied pump or fan duty.
+ * @details
+ * How much useful power does the specified flow and head or pressure rise represent? Fluid power
+ * connects the hydraulic or gas duty to the shaft and electrical demand of the equipment. Comparing
+ * fluid power with measured shaft power helps assess mover efficiency; dividing fluid power by a
+ * suitable mover efficiency estimates the shaft requirement for a proposed duty.
+ *
+ * @heading{Final Result and Interpretation}
+ * Both paths return fluid power in kW. For a liquid pump, use:
+ * @formula{fluid-power-pump; P_{f,p}=\frac{c_{hp}Q_pH\,SG}{C_p}}
+ * @symtable
+ * @symrow{P_{f,p}; Power delivered to the liquid; \kilo\watt}
+ * @symrow{c_{hp}; Retained horsepower conversion, 0.746; \kilo\watt\per\horsepower}
+ * @symrow{Q_p; Liquid volumetric flow in US gallons per minute; \gallon\per\minute}
+ * @symrow{H; Pump head in feet of the pumped liquid; \foot}
+ * @symrow{SG; Fluid specific gravity; \unitless}
+ * @symrow{C_p; Retained flow-head horsepower divisor, 3961.38; \gallon\foot\per\minute\per\horsepower}
+ * @endsymtable
+ *
+ * For a fan, use the supplied compressibility correction and the retained pressure convention:
+ * @formula{fluid-power-fan; P_{f,f}=\frac{c_{hp}Q_f(p_o-p_i-p_v)K}{C_f}}
+ * @symtable
+ * @symrow{P_{f,f}; Power delivered to the gas; \kilo\watt}
+ * @symrow{c_{hp}; Retained horsepower conversion, 0.746; \kilo\watt\per\horsepower}
+ * @symrow{Q_f; Gas volumetric flow; \cubicFoot\per\minute}
+ * @symrow{p_o,p_i; Outlet and inlet gauge pressures with a common reference; \inchWaterColumn}
+ * @symrow{p_v; Supplied velocity pressure subtracted from the pressure rise; \inchWaterColumn}
+ * @symrow{K; Supplied fan compressibility correction; \unitless}
+ * @symrow{C_f; Retained flow-pressure horsepower divisor, 6362; \cubicFoot\inchWaterColumn\per\minute\per\horsepower}
+ * @endsymtable
+ *
+ * A 1000 US gpm pump duty at 280 ft and specific gravity 1.02 represents approximately 53.78 kW
+ * delivered to the liquid. The corresponding motor electrical demand also includes pump, drive and
+ * motor losses. Fluid power alone does not determine those losses or select equipment size.
+ *
+ * @heading{Select the Path and Establish the Inputs}
+ * Choose the pump path for liquid flow and head. Head is the supplied energy-per-weight rise across
+ * the pump, expressed as feet of the pumped fluid; specific gravity accounts for fluid weight relative
+ * to reference water. The method does not calculate head from pressure, elevation or velocity readings.
+ * Supply total pump head consistently with the duty being evaluated; do not substitute psi for feet.
+ *
+ * Choose the fan path for gas flow and pressure data. Supply cfm, inlet and outlet gauge pressures in
+ * inches of water column, a dimensionless compressibility correction, and velocity pressure in the same
+ * pressure units. All five inputs are required; explicitly supply zero when no velocity-pressure term
+ * is to be subtracted. The correction K is supplied by the caller; this calculator does not derive it
+ * from gas properties or pressure ratio, and it is not an input for the ratio of specific heats.
+ *
+ * @heading{Why Flow and Head or Pressure Determine Power}
+ * Liquid flow transports weight through a supplied head rise. Increasing flow, head or specific gravity
+ * proportionally increases the power transferred to the liquid. The retained divisor converts US gpm,
+ * feet and specific gravity to hydraulic horsepower; the final conversion expresses it in kW.
+ *
+ * Gas flow through a pressure rise transfers pressure-volume work. This fan path uses the following
+ * effective rise before applying flow and the supplied compressibility correction:
+ * @formula{fluid-power-fan-effective-rise; \Delta p_{eff}=p_o-p_i-p_v}
+ * @symtable
+ * @symrow{\Delta p_{eff}; Effective rise used by this calculation; \inchWaterColumn}
+ * @symrow{p_o,p_i; Outlet and inlet gauge pressures with a common reference; \inchWaterColumn}
+ * @symrow{p_v; Supplied velocity pressure subtracted from the rise; \inchWaterColumn}
+ * @endsymtable
+ *
+ * This subtraction is the retained Suite convention. The calculator does not determine whether the
+ * supplied measurements are static or total pressures, identify measurement planes, or reconstruct
+ * velocity pressure from velocity and density. Establish a compatible measurement convention upstream;
+ * do not automatically subtract velocity pressure a second time from an already adjusted pressure rise.
+ * Negative inlet gauge pressure is valid in the arithmetic and can contribute to a positive rise.
+ *
+ * @heading{Worked Pump Example}
+ * For specific gravity 1.02, flow 1000 US gpm and head 280 ft:
+ * @formula{fluid-power-pump-example;
+ *   P_{f,p}=\frac{0.746\times1000\times280\times1.02}{3961.38}
+ *          \approx53.78\ \mathrm{kW}
+ * }
+ * @symtable
+ * @symrow{P_{f,p}; Calculated liquid fluid power; \kilo\watt}
+ * @symrow{0.746; Retained horsepower conversion; \kilo\watt\per\horsepower}
+ * @symrow{1000; Supplied liquid flow; \gallon\per\minute}
+ * @symrow{280; Supplied pump head; \foot}
+ * @symrow{1.02; Supplied specific gravity; \unitless}
+ * @symrow{3961.38; Retained pump divisor; \gallon\foot\per\minute\per\horsepower}
+ * @endsymtable
+ *
+ * The duty represents about 72.10 hydraulic hp, or 53.78 kW. This is the useful fluid output against
+ * which pump shaft input can be compared; it does not include the pump's internal losses.
+ *
+ * @heading{Worked Fan Example}
+ * For flow 129691 cfm, inlet gauge pressure -16.36 inches water column, outlet gauge pressure
+ * 1.1 inches water column, compressibility correction 0.988 and supplied velocity pressure zero,
+ * the effective rise is 17.46 inches water column:
+ * @formula{fluid-power-fan-example;
+ *   P_{f,f}=\frac{0.746\times129691\times(1.1-(-16.36)-0)\times0.988}{6362}
+ *          \approx262.33\ \mathrm{kW}
+ * }
+ * @symtable
+ * @symrow{P_{f,f}; Calculated gas fluid power; \kilo\watt}
+ * @symrow{0.746; Retained horsepower conversion; \kilo\watt\per\horsepower}
+ * @symrow{129691; Supplied gas flow; \cubicFoot\per\minute}
+ * @symrow{1.1; Supplied outlet gauge pressure; \inchWaterColumn}
+ * @symrow{-16.36; Supplied inlet gauge pressure; \inchWaterColumn}
+ * @symrow{0; Supplied velocity pressure; \inchWaterColumn}
+ * @symrow{0.988; Supplied fan compressibility correction; \unitless}
+ * @symrow{6362; Retained fan divisor; \cubicFoot\inchWaterColumn\per\minute\per\horsepower}
+ * @endsymtable
+ *
+ * This represents about 351.655 equivalent fluid hp. A positive velocity-pressure input reduces the
+ * effective rise for otherwise identical inputs. Fan efficiency, drive losses and motor efficiency
+ * belong in the subsequent conversion from fluid power to shaft and electrical input.
+ *
+ * @heading{Assumptions and Boundaries}
+ * The method evaluates one supplied operating point. It does not predict a pump or fan curve, select
+ * an operating point, model transients or cavitation, calculate a gas compressibility correction,
+ * or validate pressure measurement conventions. The fan equation is not a general compressor model.
+ *
+ * Normal consuming-equipment duties use positive flow, positive liquid specific gravity, positive
+ * pump head or positive effective fan rise, and an appropriate supplied fan correction. These are
+ * interpretation guidelines, not enforced ranges. With finite arithmetic and no intermediate overflow,
+ * a zero multiplicative factor produces zero fluid power; a negative effective rise with positive flow and correction produces
+ * negative power. Such results are not clamped or automatically interpreted as recoverable power.
+ * Negative flow, gravity, head or correction is also evaluated directly.
+ *
+ * Inputs are not validated or defaulted. Signed zero, overflow, infinity and NaN follow floating-point
+ * arithmetic; for example, infinite flow multiplied by zero head or zero effective rise produces NaN.
+ * Callers own validation and user-facing unit conversion. No efficiency or electrical information is
+ * available here to validate equipment performance or determine electricity consumption.
+ *
+ * @heading{Constants and Provenance}
+ * The MEASUR model uses divisors 3961.38 and 6362, conversion 0.746 and the velocity-pressure
+ * subtraction described above. The exact historical derivation of the two divisors is unverified;
+ * the physical explanation above does not
+ * establish the provenance of their final digits. Rounded alternatives must not silently replace them.
+ *
+ * @heading{Calculation Interface}
+ * C++ callers use fluid_power::calculatePump() with fluid_power::PumpInput, or
+ * fluid_power::calculateFan() with fluid_power::FanInput, from motorDriven/pumpFan/fluid_power.h.
+ * WASM/TypeScript callers use calculatePumpFluidPower(PumpFluidPowerInput) or
+ * calculateFanFluidPower(FanFluidPowerInput). Inputs are plain objects with camelCase fields;
+ * results are numeric kW. Neither inputs nor results require delete().
+ */

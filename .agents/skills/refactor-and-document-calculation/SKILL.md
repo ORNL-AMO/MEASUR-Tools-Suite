@@ -24,7 +24,7 @@ Follow the persona responsibilities in this order:
 1. Refactor Planner: make the handoff decision-complete before implementation.
 2. C++ Namespace Refactorer: update headers, source, Doxygen API comments, and focused C++ tests together.
 3. WebAssembly TypeScript Steward: update the binding, declaration, module export, and typed WASM test together.
-4. Algorithm Docs Author: document final results first, then supporting formulas, symbols, units, constants, provenance, and assumptions.
+4. Algorithm Docs Author: write an engineering teaching document that frames the engineering question, presents and interprets the final result first, teaches the decision path and supporting formulas, works a representative example, and explains units, provenance, assumptions, boundaries, and inappropriate uses.
 5. Verification Reviewer: compare the integrated diff with the handoff and record what actually passed.
 
 Do not change formulas, constants, parameter order, defaults, sentinel handling, or expected results merely to make the refactor cleaner. When source, tests, and prose disagree, record the conflict and use explicit engineering intent or tested behavior; do not guess.
@@ -42,6 +42,9 @@ Run the narrowest relevant checks first, then the integrated checks required by 
 
 Before finishing:
 
+- Before opening a pull request, complete the pre-PR internal review gate in [the persona workflow](../../README.md)
+  using `.github/skills/measur-code-review/`. Record the intended base, reviewed commits, findings and dispositions,
+  readiness result, and any checks rerun after fixes in the handoff.
 - Mark the handoff lifecycle accurately.
 - Keep long investigation history in linked GitHub issues or an appendix.
 - Report commands that passed, commands that failed, and commands that could not run.
