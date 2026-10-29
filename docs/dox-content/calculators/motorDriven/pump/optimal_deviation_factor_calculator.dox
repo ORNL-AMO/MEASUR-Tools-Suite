@@ -1,0 +1,105 @@
+/**
+ * @defgroup optimal_deviation_factor_calculator Optimal Pump Efficiency Deviation Factor
+ * @ingroup equipment_and_property_calculators
+ * @brief Estimates the relative increase from average to maximum pump efficiency using liquid flow.
+ * @details
+ * How much does the pump-efficiency calculation increase its estimated average efficiency to form
+ * its maximum estimate? This empirical factor provides that relative increase from flow alone.
+ * It supports an efficiency estimate; it does not measure the performance of a particular pump.
+ *
+ * @heading{Final Result and Interpretation}
+ * The returned deviation factor multiplies the separately calculated average efficiency:
+ * @formula{optimal-deviation-factor-maximum; \eta_{max}=\eta_{avg}D}
+ * @symtable
+ * @symrow{\eta_{max}; Maximum pump-efficiency estimate; \unitless}
+ * @symrow{\eta_{avg}; Separately calculated average pump-efficiency estimate as a fraction; \unitless}
+ * @symrow{D; Returned deviation multiplier; \unitless}
+ * @endsymtable
+ *
+ * For example, a factor of about 1.0360 means an increase of about 3.60% relative to the average.
+ * It is not an efficiency of 103.60%, and it does not add 3.60 percentage points to an efficiency.
+ * For finite positive flow, the factor is greater than one. Applying it does not guarantee that
+ * the resulting efficiency is physically achievable or no greater than one.
+ *
+ * @heading{Supply Flow in the Empirical Unit Convention}
+ * Supply liquid volumetric flow in US gallons per minute. Convert other flow units before calling.
+ * The empirical expression acts on the numerical value in that unit convention, not on the same
+ * number relabeled as a different unit. Define a dimensionless flow ratio and its base-10 logarithm:
+ * @formula{optimal-deviation-factor-log-flow; x=\frac{Q}{Q_{ref}},\qquad L=\log_{10}(x)}
+ * @symtable
+ * @symrow{Q; Supplied liquid volumetric flow; \gallon\per\minute}
+ * @symrow{Q_{ref}; Reference flow of one US gallon per minute defining the numerical convention; \gallon\per\minute}
+ * @symrow{x; Numerical flow ratio in the stated convention; \unitless}
+ * @symrow{L; Base-10 logarithm of the flow ratio; \unitless}
+ * @endsymtable
+ *
+ * Use positive finite flow for interpreting this expression. The reference flow explains the
+ * unit convention of the logarithm; it does not introduce a new conversion or fitted coefficient.
+ * Pump style, head, viscosity and stage count are not inputs to this factor. Their effects on the
+ * average efficiency belong to the other parts of the pump-efficiency calculation.
+ *
+ * @heading{Evaluate the Empirical Deviation}
+ * The method combines a baseline deviation with two exponential contributions, converts the
+ * percentage-point deviation into a fraction, and adds the baseline multiplier:
+ * @formula{optimal-deviation-factor-empirical;
+ *   D=b+\frac{a_0+a_1\exp(-k_1L)+a_2\exp(-k_2L)}{s}
+ * }
+ * @symtable
+ * @symrow{D; Deviation multiplier; \unitless}
+ * @symrow{b; Baseline multiplier, 1.0; \unitless}
+ * @symrow{a_0; Baseline deviation, 0.10805906 percentage points; \percent}
+ * @symrow{a_1; First exponential amplitude, 18.077243 percentage points; \percent}
+ * @symrow{k_1; First logarithmic-flow decay coefficient, 0.78231304; \unitless}
+ * @symrow{a_2; Second exponential amplitude, 30.525232 percentage points; \percent}
+ * @symrow{k_2; Second logarithmic-flow decay coefficient, 0.80684022; \unitless}
+ * @symrow{L; Base-10 logarithm of the numerical flow ratio; \unitless}
+ * @symrow{s; Percentage-point scale per unit fraction, 100.0; \percent}
+ * @endsymtable
+ *
+ * Both exponential contributions decrease as positive flow increases. Their positive amplitudes
+ * give a larger relative increase at lower flow. At very large positive flow the contributions
+ * approach zero, leaving a multiplier of 1.0010805906. These mathematical roles do not establish
+ * independent physical meanings for the fitted coefficients or a validated flow range.
+ *
+ * @heading{Worked Example}
+ * At 2000 US gpm, the numerical flow ratio is 2000 and its logarithm is about 3.30103.
+ * The first exponential contribution is about 1.36645 percentage points and the second is
+ * about 2.12793 percentage points. Including the baseline gives:
+ * @formula{optimal-deviation-factor-example;
+ *   D=1+\frac{0.10805906+18.077243\exp[-0.78231304\log_{10}(2000)]
+ *                 +30.525232\exp[-0.80684022\log_{10}(2000)]}{100}
+ *     \approx1.0360243794
+ * }
+ * @symtable
+ * @symrow{D; Deviation multiplier at the example flow; \unitless}
+ * @symrow{2000; Numerical ratio of the example flow to one US gpm; \unitless}
+ * @symrow{1; Baseline multiplier; \unitless}
+ * @symrow{0.10805906,18.077243,30.525232; Baseline deviation and exponential amplitudes; \percent}
+ * @symrow{0.78231304,0.80684022; Logarithmic-flow decay coefficients; \unitless}
+ * @symrow{100; Percentage-point scale per unit fraction; \percent}
+ * @endsymtable
+ *
+ * The relative increase is about 3.6024%. For an independently supplied average efficiency of
+ * 0.84 (84%), multiplying by this factor gives approximately 0.8703 (87.03%). This is an increase
+ * of about 3.03 efficiency percentage points, rather than an addition of 3.6024 points. Calculate
+ * with unrounded intermediate values and round only the displayed result.
+ *
+ * @heading{Assumptions, Arithmetic Boundaries and Inappropriate Uses}
+ * The original empirical source, calibration range and fit uncertainty are not established by the
+ * retained implementation. Do not interpret very low-flow extrapolations as evidence that an
+ * efficiency above 100% is achievable. This factor does not select a pump, locate its best-efficiency
+ * point, validate a performance curve, or provide a positive-displacement efficiency model.
+ *
+ * No input validation, defaults or result clamping are performed. Both positive and negative zero
+ * flow return positive infinity. Negative flow, negative infinity and NaN return NaN. Positive
+ * infinity returns 1.0010805906. These are retained arithmetic outcomes, not valid operating duties.
+ * Very small positive flows can produce very large finite factors. Callers must assess applicability
+ * before using any calculated maximum efficiency in an engineering decision.
+ *
+ * @heading{Calculation Provenance}
+ * The equation and coefficients are retained from the existing Suite calculation. Their original
+ * experimental or published source and validated operating range remain unverified. No additional
+ * engineering correction or calibration is implied by exposing this factor as a standalone function.
+ *
+ * @see optimal_deviation_factor::calculate
+ */
