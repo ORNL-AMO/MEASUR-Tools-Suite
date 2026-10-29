@@ -4,7 +4,7 @@
 
 using namespace Catch;
 
-static const BoilerInput makeBoilerInput() { return {1, 1, 85, 2, true, true, 514.2, .1, 0.204747, 10}; }
+static const BoilerInput makeBoilerInput() { return {1, 1, 85, 2, true, true, 514.2, .1, 0.204747, 10, false}; }
 
 static const HeaderInput makeHeaderInput() {
     const HeaderWithHighestPressure& headerWithHighestPressure =

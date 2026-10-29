@@ -16,6 +16,7 @@ static const BoilerInput makeBoilerInput() {
     const double deaeratorVentRate     = 0;
     const double deaeratorPressure     = 0.17132499999999998;
     const double approachTemperature   = 0;
+    const bool   sendBlowdownToDeaerator = false;
     return {fuelType,
             fuel,
             combustionEfficiency,
@@ -25,7 +26,8 @@ static const BoilerInput makeBoilerInput() {
             steamTemperature,
             deaeratorVentRate,
             deaeratorPressure,
-            approachTemperature};
+            approachTemperature,
+            sendBlowdownToDeaerator};
 }
 
 static const HeaderInput makeHeaderInput() {
@@ -87,4 +89,3 @@ TEST_CASE("steamModelerBug2", "[steam modeler bug #2]") {
 
     // TODO add asserts
 }
-

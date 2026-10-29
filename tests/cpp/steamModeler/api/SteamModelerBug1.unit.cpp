@@ -19,6 +19,7 @@ static const BoilerInput makeBoilerInput() {
     const double deaeratorVentRate     = 0;
     const double deaeratorPressure     = 0.17027299297111664;
     const double approachTemperature   = 0;
+    const bool   sendBlowdownToDeaerator = false;
     return {fuelType,
             fuel,
             combustionEfficiency,
@@ -28,7 +29,8 @@ static const BoilerInput makeBoilerInput() {
             steamTemperature,
             deaeratorVentRate,
             deaeratorPressure,
-            approachTemperature};
+            approachTemperature,
+            sendBlowdownToDeaerator};
 }
 
 static const HeaderInput makeHeaderInput(int headerCount) {
