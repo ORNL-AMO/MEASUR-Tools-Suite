@@ -12,7 +12,6 @@
 
 #include <cmath>
 
-#include "motorDriven/pumpFan/OptimalDeviationFactor.h"
 #include "motorDriven/pumpFan/OptimalPrePumpEff.h"
 #include "motorDriven/pumpFan/OptimalSpecificSpeed.h"
 #include "motorDriven/pumpFan/OptimalSpecificSpeedCorrection.h"
