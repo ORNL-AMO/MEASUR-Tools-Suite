@@ -1,0 +1,86 @@
+/**
+ * @defgroup optimal_specific_speed_calculator Pump Specific Speed
+ * @ingroup equipment_and_property_calculators
+ * @brief Calculates the US customary specific-speed value used in the pump-efficiency correction.
+ * @details
+ * What specific-speed value represents a pump duty after accounting for head per stage?
+ * This calculation combines rotational speed, liquid flow and total head to provide the input
+ * used by the separate specific-speed efficiency correction. It does not search for an optimum
+ * rotational speed or establish the best-efficiency point of a particular pump.
+ *
+ * @heading{Final Result and Interpretation}
+ * The result is specific speed in the US customary numerical convention:
+ * @formula{optimal-specific-speed-result; N_s=\frac{n\sqrt{Q}}{(H/s)^{3/4}}}
+ * @symtable
+ * @symrow{N_s; Returned US customary pump specific speed; \mathrm{rpm}\sqrt{\mathrm{US\ gpm}}/\mathrm{ft}^{3/4}}
+ * @symrow{n; Pump rotational speed; \revolutionsPerMinute}
+ * @symrow{Q; Supplied liquid volumetric flow; \gallon\per\minute}
+ * @symrow{H; Total pump head across all stages; \foot}
+ * @symrow{s; Supplied number of pump stages; \unitless}
+ * @endsymtable
+ *
+ * A result of about 2233.60 describes the combination of 2000 rpm, 2000 US gpm and 137 ft
+ * of head for one stage. It is not a speed of 2233.60 rpm, an efficiency percentage or a
+ * dimensionless speed. Higher rotational speed or flow increases the result at fixed head
+ * per stage; greater head per stage decreases it. The efficiency correction also needs the
+ * pump style, which is not an input to this calculation.
+ *
+ * @heading{Use the Required Unit Convention and Head per Stage}
+ * Supply rotational speed in rpm, flow in US gallons per minute and total pump head in feet.
+ * Convert other unit systems before applying the relationship. Using an SI flow or head number
+ * without conversion changes the numerical result and makes it unsuitable for the separate
+ * correction curves that expect this US customary convention.
+ *
+ * For a multistage pump, the calculation first interprets the total head through:
+ * @formula{optimal-specific-speed-stage-head; H_{stage}=\frac{H}{s}}
+ * @symtable
+ * @symrow{H_{stage}; Head per pump stage used in the specific-speed denominator; \foot}
+ * @symrow{H; Supplied total pump head; \foot}
+ * @symrow{s; Supplied number of pump stages; \unitless}
+ * @endsymtable
+ *
+ * This division treats the head contribution of the stages equally. Do not supply an already
+ * divided stage head together with the total stage count, which would divide the head again.
+ * The flow is used exactly as supplied. No pump-style-specific adjustment, including halving
+ * the flow for a double-suction pump, is performed. Assess that convention before comparing
+ * this result with a value obtained using a different inlet-flow definition.
+ *
+ * @heading{Worked Example}
+ * Consider a three-stage pump at 1800 rpm, 1000 US gpm and 100 ft of total head. The head
+ * per stage is approximately 33.3333 ft, so:
+ * @formula{optimal-specific-speed-example;
+ *   N_s=\frac{1800\sqrt{1000}}{(100/3)^{3/4}}\approx4103.1127
+ * }
+ * @symtable
+ * @symrow{N_s; Example US customary pump specific speed; \mathrm{rpm}\sqrt{\mathrm{US\ gpm}}/\mathrm{ft}^{3/4}}
+ * @symrow{1800; Example pump rotational speed; \revolutionsPerMinute}
+ * @symrow{1000; Example liquid flow; \gallon\per\minute}
+ * @symrow{100; Example total pump head; \foot}
+ * @symrow{3; Example stage count; \unitless}
+ * @endsymtable
+ *
+ * A one-stage pump with the same speed, flow and total head gives 1800 in the same convention.
+ * The three-stage result is larger because the formula uses less head per stage. Carry the
+ * unrounded result into the specific-speed correction and round only for presentation.
+ *
+ * @heading{Assumptions, Arithmetic Boundaries and Inappropriate Uses}
+ * Interpret the result for positive finite rotational speed, flow, head and stage count, with
+ * a head-per-stage interpretation appropriate to the pump. The calculation accepts a floating
+ * stage count, including fractional values, without rounding it to an integer. That arithmetic
+ * capability does not establish that a fractional physical stage is meaningful.
+ *
+ * No validation, defaults, denominator guards or clamping are applied. For otherwise positive
+ * finite inputs, zero flow returns zero, zero head returns positive infinity and zero stage
+ * count returns zero through the unguarded arithmetic. Negative flow or a negative head-per-stage
+ * ratio produces NaN. Negative rotational speed can produce a negative result. Signed zero,
+ * nonfinite values, overflow and underflow propagate according to the formula; these outcomes
+ * are not accepted operating duties or error codes.
+ *
+ * This relationship does not validate a manufacturer curve, determine pump suitability, or
+ * supply an efficiency by itself. A specific-speed value calculated from an arbitrary operating
+ * point does not establish a manufacturer's best-efficiency-point classification. The retained
+ * calculation does not establish a validated operating range or uncertainty for the downstream
+ * empirical efficiency correction. Use the same unit and flow conventions when comparing results.
+ *
+ * @see optimal_specific_speed::calculate
+ */

@@ -46,6 +46,7 @@ export * from "./ts_def_modules/motorDriven/pump/pump_head";
 export * from "./ts_def_modules/motorDriven/pump/pump_valve_power_loss";
 export * from "./ts_def_modules/motorDriven/pump/optimal_deviation_factor";
 export * from "./ts_def_modules/motorDriven/pump/optimal_pre_pump_efficiency";
+export * from "./ts_def_modules/motorDriven/pump/optimal_specific_speed";
 export * from "./ts_def_modules/motorDriven/pump/pump_enums";
 
 export * from "./ts_def_modules/motorDriven/pumpFan/pumpFan";
@@ -173,6 +174,7 @@ export type MeasurToolsSuite =
     import("./ts_def_modules/motorDriven/pump/pump_valve_power_loss").PumpValvePowerLossModule &
     import("./ts_def_modules/motorDriven/pump/optimal_deviation_factor").OptimalDeviationFactorModule &
     import("./ts_def_modules/motorDriven/pump/optimal_pre_pump_efficiency").OptimalPrePumpEfficiencyModule &
+    import("./ts_def_modules/motorDriven/pump/optimal_specific_speed").OptimalSpecificSpeedModule &
     import("./ts_def_modules/motorDriven/pump/pump_enums").PumpEnumsModule &
     // motorDriven/pumpFan
     import("./ts_def_modules/motorDriven/pumpFan/pumpFan").PumpFanModule &
