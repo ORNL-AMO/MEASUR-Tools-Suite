@@ -2,14 +2,14 @@
 
 ## Workflow Metadata
 
-- Lifecycle: active
-- Status: implementation prepared; integrated validation and independent review pending
+- Lifecycle: completed
+- Status: implemented, verified and independently reviewed; integration readiness tracked separately
 - Owner: Codex
 - Created / last updated: 2026-11-02
 - Suite issue / coordinating epic: [#230](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/230)
 - Epic handoff: [pump-efficiency-refactor.md](pump-efficiency-refactor.md)
 - Suite branch: `issue-230`; initial PR base: `issue-226`
-- Suite PR: pending
+- Suite PR: [child PR and CI/publication record](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pulls?q=is%3Apr+head%3Aissue-230+base%3Aissue-226)
 - Fixed legacy source baseline: `23b58b07e04a16c61d18344a67930ca01d791f7c`
 - Desktop issue: [#9059](https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/9059)
 - Desktop PR: follow-up after Suite stack integration
@@ -27,7 +27,7 @@ legacy WASM test, now-empty mixed `pumpFan` binding/declaration and package-root
 wiring. Keep all unrelated pump/fan modules and shared enum registrations unchanged.
 
 Planner, C++ Namespace Refactorer, WASM TypeScript Steward and Algorithm Docs Author responsibilities
-are prepared. Verification Reviewer and pre-PR review remain pending.
+are complete, together with Verification Reviewer and independent pre-PR review.
 
 ## Public API And Runtime Contract
 
@@ -112,18 +112,33 @@ identical binary inputs and 5,254 full-precision result fields on Apple clang 21
   No existing golden or tolerance is changed; those cases stay in exact per-platform captures.
 - Comparison self-checks reject sign/classification and one-ULP differences and accept identical NaN/-0.
 
-Still required: focused/full native checks, Linux Valgrind, fresh `npm run verify:wasm`, declaration
-checks, docs/link generation and affected-page inspection, package-content verification, full candidate
-whitespace check and independent pre-PR review. No integrated checks are claimed by preparation alone.
+- macOS/Apple clang and Ubuntu 24.04 amd64/GCC Release: focused **737 assertions / 2 cases**, full
+  **8475 assertions / 364 cases**. Full Linux Valgrind: **zero errors, no leaks**.
+- Fresh `npm run verify:wasm`: rebuild/stage/types and **305 browser tests passed**, including all-six-function,
+  plain-result ownership and obsolete-constructor absence checks.
+- All **5254 fields exactly preserved** against immutable same-platform legacy on macOS, GCC and WASM;
+  **zero numerical differences or classification changes**. Reports:
+  `/private/tmp/pump-230-{macos,wasm}-comparison/comparison.json` and archive `gcc-stage-4/comparison.json`.
+- Types, links, generated Doxygen page/formulas/tables, packed runtime/declarations and obsolete-file absence,
+  and candidate whitespace passed. Existing repository BibTeX/unrelated warnings remain and interactive
+  MathJax rendering is unverified. Logs: `/private/tmp/pump-230-*.log` and archive `linux-230-*.log`.
+- Prior composite fixture arrays/tolerance constants remain unchanged; only legacy API/cleanup calls migrated.
 
 ## Internal Review
 
-- Intended initial base: `issue-226`; freeze actual parent/head commits when the layer is applied.
-- Reviewed commits, reviewer, findings/dispositions and readiness: pending.
+- Intended base: `issue-226` at `38598d084d7f30637a4f4f5a096c8a55509ae4f4`.
+- Reviewed source head: `f5f82d119908591ce8f1a361dff519ad0c55017f`.
+- Independent reviewer: fresh `final_stack_review`, using `.github/skills/measur-code-review/`, with a fresh
+  cross-layer/docs reviewer; **no actionable findings**. Readiness: ready with existing BibTeX/visual follow-up.
+- Reviewer independently ran focused native/types/whitespace and frozen-head 5254-field exact comparison,
+  audited earlier fixture preservation, all six contracts/ownership/root wiring, all 21 formula/symbol-table
+  pairs and worked examples, and checked actual CI expressions in 56 scenarios.
+- Report: `/private/tmp/pump-final-review-semp7foc/review.json`. Only handoff/epic metadata follows source review.
 - Review the incremental parent diff and the final integrated diff against the intended integration base.
 - Repeat affected validation and review after material fixes or restacking. No actionable unresolved P0–P2
   finding may remain when opening the PR. Required human approval remains separate.
 
 ## Open Questions Or Blockers
 
-No implementation design questions remain. Validation, review, publication and integrated readiness are pending.
+No implementation design questions remain. Live CI/publication belongs in the child PR. Required human
+reviews/stack merges, integrated package selection, Desktop adoption and final release remain delivery gates.
