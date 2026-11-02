@@ -2,8 +2,8 @@
 
 ## Workflow Metadata
 
-- Lifecycle: active
-- Status: implemented; integrated validation and independent review pending
+- Lifecycle: completed
+- Status: implemented, verified and independently reviewed; CI/publication tracked in child PR
 - Owner: Codex
 - Created / last updated: 2026-11-02
 - Suite issue: [#228](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/228)
@@ -11,7 +11,7 @@
   [epic handoff](pump-efficiency-refactor.md)
 - Suite branch: `issue-228`; initial PR base: `issue-225`, the
   [#449 pre-pump efficiency PR](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/449)
-- Suite PR: pending
+- Suite PR: [child PR and CI/publication record](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pulls?q=is%3Apr+head%3Aissue-228+base%3Aissue-225)
 - Fixed legacy baseline: `23b58b07e04a16c61d18344a67930ca01d791f7c`
 - Desktop issue: [#9059](https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/9059)
 - Desktop PR: follow-up after Suite stack integration
@@ -32,8 +32,8 @@ One matching module now covers each layer:
 - Teaching page: `docs/dox-content/calculators/motorDriven/pump/optimal_specific_speed_calculator.dox`
 
 Canonical value-object pattern: `compressedAir/dryer_operating_cost`. Planner, C++ Namespace Refactorer,
-WASM TypeScript Steward and Algorithm Docs Author responsibilities are implemented. Verification Reviewer
-and pre-PR review remain pending; the existing composite preservation tests continue to cover the caller.
+WASM TypeScript Steward, Algorithm Docs Author and Verification Reviewer phases are complete. The existing
+composite preservation tests continue to cover the caller; independent pre-PR review is recorded below.
 
 ## Public API And Runtime Contract
 
@@ -101,19 +101,37 @@ and underflow. Portable native/WASM fixtures retain these values and classificat
 - Executed: isolated legacy capture and current comparison with identical flags: **zero raw decimal/hex
   differences across all 32 rows**; `./node_modules/.bin/tsc --noEmit` passed; tracked `git diff --check`
   passed. Full builds/tests have not yet run for this implementation.
-- Still required: focused/full native tests, fresh
-  `npm run verify:wasm`, `npm run check:docs`, Doxygen affected-page checks,
-  `npm pack --dry-run --json`, full candidate whitespace check and independent pre-PR review.
+- macOS/Apple clang Release build: focused **45 assertions / 3 cases**; full **6603 assertions / 358 cases**.
+- Ubuntu 24.04 amd64/GCC 13: matching focused/full counts; full suite under Valgrind 3.22 with
+  `--error-exitcode=99 --leak-check=full`: **zero errors, no leaks**.
+- Fresh `npm run verify:wasm`: build/stage/typecheck and **298 ChromeHeadless tests passed**.
+- Immutable complete stack matrix at `/private/tmp/pump-efficiency-stack-baseline-seajyimb`: **5254 fields**
+  compare exactly against fixed legacy on each of macOS, GCC and WASM, with **zero numerical differences or
+  classification changes**. Reports: `/private/tmp/pump-228-{macos,wasm}-comparison/comparison.json` and
+  archive `gcc-stage-1/comparison.json`. The matrix includes all styles, numeric boundaries and ignored inputs.
+- Separate cross-platform legacy ledgers record 1818 compiler/libm differences and zero classification changes,
+  including 12 extreme/cancellation fields beyond prior portable diagnostic bounds. They precede this change;
+  no existing fixture tolerance was changed. Same-platform preservation is exact on every platform.
+- Types, Markdown links, package dry-run runtime/declaration contents, generated Doxygen formulas/tables and
+  full diff whitespace passed. No affected-page Doxygen warnings; existing repository BibTeX failure and
+  unrelated legacy warnings remain, and interactive MathJax rendering is unverified.
+- Logs: `/private/tmp/pump-228-*.log`; Linux logs are archive `linux-228-*.log`.
 - Reconfigure CMake so additions/deletions are discovered. Retain existing composite golden values and
   report every raw numerical difference; do not replace captures or loosen tolerances to pass.
 
 ## Internal Review
 
-- Intended initial base: `issue-225`; freeze actual parent/head commits after stack setup.
-- Reviewed commits, reviewer, findings/dispositions and readiness: pending.
+- Intended base: `issue-225` at `ebcedec94c0f7fd26ad6a40d1aa58376ff2beaa3`.
+- Reviewed source head: `0ff7a37640a8057ca95fe8b9391d5acfad40798b`.
+- Independent reviewer: `desktop_impact`, using `.github/skills/measur-code-review/`; no actionable findings.
+- Readiness: ready with documented Doxygen/visual follow-up. Reviewer independently ran focused native,
+  types, links and complete diff whitespace and checked exact scalar captures. Linux/full-matrix evidence
+  subsequently completed without source changes. Report: `/private/tmp/specific-speed-review-3vpskkxn/review.md`.
+- Only handoff/epic metadata changes follow the reviewed source head.
 - Material changes after review require another review pass. Retargeting/restacking must use the current
   parent diff; the final epic also requires an integrated review against its intended integration base.
 
 ## Open Questions Or Blockers
 
-No implementation design questions remain. Validation, CI publication and review evidence are pending.
+No implementation design questions remain. Live CI/publication belongs in the linked PR; Desktop adoption,
+stack merging after required approvals and final release remain follow-up gates.
