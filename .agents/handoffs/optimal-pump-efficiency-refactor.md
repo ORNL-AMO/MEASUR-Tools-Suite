@@ -2,14 +2,15 @@
 
 ## Workflow Metadata
 
-- Lifecycle: active
-- Status: implementation prepared; shared-tree validation and independent review pending
+- Lifecycle: completed
+- Status: implemented, verified and independently reviewed; CI/publication tracked in child PR
 - Owner: Codex
 - Created / last updated: 2026-11-02
 - Suite issue: [#226](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/226)
 - Epic: [#230](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/230),
   [epic handoff](pump-efficiency-refactor.md)
-- Suite branch: `issue-226`; initial PR base: `issue-229`; PR: pending
+- Suite branch: `issue-226`; initial PR base: `issue-229`;
+  [child PR and CI/publication record](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pulls?q=is%3Apr+head%3Aissue-226+base%3Aissue-229)
 - Fixed legacy baseline: `23b58b07e04a16c61d18344a67930ca01d791f7c`
 - Desktop issue: [#9059](https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/9059)
 - Desktop PR: follow-up after Suite stack integration
@@ -24,7 +25,7 @@ and calculator `.dox` page. Each layer uses the `optimal_pump_efficiency` basena
 canonical `compressedAir/dryer_operating_cost` value-object pattern.
 
 Planner, C++ Namespace Refactorer, WASM TypeScript Steward and Algorithm Docs Author responsibilities
-are prepared. Verification Reviewer and independent pre-PR review remain pending.
+are complete, together with Verification Reviewer checks and independent pre-PR review.
 
 ## Public API And Runtime Contract
 
@@ -84,7 +85,7 @@ prediction uncertainty remain unverified; no SME behavior change is required or 
 ## Desktop Impact And Package Coordination
 
 No standalone legacy optimal-efficiency WASM wrapper is removed. This helper export is additive;
-legacy composite/correction APIs remain according to the prior child migrations. Desktop code,
+the legacy composite remains and speed correction already uses the stateless API from #229. Desktop code,
 package pins, app signatures, saved data, reports and WASM loading are outside this child. Consolidated
 consumer verification and exact integrated beta/final decisions remain under #9059 after the Suite
 stack. No child version-only commit or arbitrary beta acceptance is planned. Release readiness remains
@@ -116,16 +117,28 @@ fixture was checked against the captured other-platform legacy result and meets 
   differences; focused native tests passed **204 assertions / 2 cases**; private declaration/test typecheck
   passed. The first ad hoc native link omitted Catch.cpp; adding its separate implementation resolved that
   harness-only failure. These private checks do not replace integrated shared-tree validation.
-- Required after application: fresh platform-exact captures at stack stage 3; focused/full native tests;
-  fresh `npm run verify:wasm`; declaration typecheck; links/Doxygen affected-page review;
-  package dry run; full diff/new-file whitespace audit and independent review.
+- Shared-tree macOS/Clang and Ubuntu 24.04 amd64/GCC Release: focused **204 assertions / 2 cases**,
+  full **7738 assertions / 362 cases**. Full Linux Valgrind: **zero errors, no leaks**.
+- Fresh `npm run verify:wasm`: rebuild/stage/types and **302 browser tests passed**.
+- Stack-stage-3 captures: **5254 fields exactly preserved** against fixed legacy on each of macOS,
+  GCC and WASM, with **zero numerical differences or classification changes**. Reports:
+  `/private/tmp/pump-226-{macos,wasm}-comparison/comparison.json` and archive `gcc-stage-3/comparison.json`.
+- Types, links, generated Doxygen page/formulas/tables, packed runtime/declaration contents and whitespace
+  checks passed. Existing repository BibTeX/unrelated warnings remain; interactive MathJax rendering is
+  unverified. Logs: `/private/tmp/pump-226-*.log` and archive `linux-226-*.log`.
 - Preserve all earlier child/composite fixtures. Report every raw before/after difference with cause;
   identical same-platform values and classifications are required, not only tolerance acceptance.
 
 ## Internal Review
 
-- Intended base: `issue-229`; exact reviewed parent/head commits: pending branch setup.
-- Reviewer, findings/dispositions, readiness and rerun evidence: pending.
+- Intended base: `issue-229` at `c0fc35a3318361673193ee04852c75041e2eeabc`.
+- Reviewed source head: `364f535d112511d95edccd49e044c7a9ea396808`.
+- Independent reviewer: `desktop_impact`, using `.github/skills/measur-code-review/`;
+  **no actionable P0-P3 findings**. Readiness: ready with documented existing BibTeX/visual-MathJax follow-up.
+- Reviewer independently ran focused native/types/links/whitespace, verified all 197 native and 191 WASM
+  fixture provenance rows, ignored-input independence, generated formulas/helper links and worked-example math.
+- Report: `/private/tmp/optimal-pump-efficiency-review-svmp2bea/review.md`.
+- Only handoff/epic metadata follows the reviewed source head; source and fixtures are unchanged.
 - Review each current parent diff and repeat after material changes; the final epic requires integrated review.
 
 ## Open Questions Or Blockers
