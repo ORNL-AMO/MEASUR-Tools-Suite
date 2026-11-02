@@ -5,7 +5,7 @@
 #include <iterator>
 
 #include "catch.hpp"
-#include "motorDriven/pumpFan/PumpEfficiency.h"
+#include "motorDriven/pump/pump_efficiency.h"
 
 namespace {
 constexpr double relative_percent_tolerance = 1e-14;
@@ -198,7 +198,7 @@ TEST_CASE("Pre-pump efficiency migration preserves composite fractions", "[optim
         {Pump::Style::POSITIVE_DISPLACEMENT, 10000, -0.012295423274621822, -0.012554812481560099},
     };
     for (const auto& fixture : fixtures) {
-        const auto result = PumpEfficiency(fixture.style, 0.9, 2000, 1.107, 1, fixture.flow, 137).calculate();
+        const auto result = pump_efficiency::calculate({fixture.style, 2000, 1.107, 1, fixture.flow, 137});
         CAPTURE(fixture.style, fixture.flow, result.average, result.max);
         CHECK(std::abs(result.average - fixture.average) <=
               absolute_fraction_tolerance + std::abs(fixture.average) * relative_fraction_tolerance);

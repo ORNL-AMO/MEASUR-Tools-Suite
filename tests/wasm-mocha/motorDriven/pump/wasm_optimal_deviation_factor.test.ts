@@ -2,7 +2,7 @@ import { assert } from 'chai';
 import createModule, {
     type MeasurToolsSuite,
     type OptimalDeviationFactorModule,
-    type PumpEfficiencyResults,
+    type PumpEfficiencyResult,
 } from 'measur-tools-suite';
 
 describe('OptimalDeviationFactor stateless WASM API', function () {
@@ -53,7 +53,7 @@ describe('OptimalDeviationFactor stateless WASM API', function () {
         assert.strictEqual(moduleInstance.calculateOptimalDeviationFactor(2000), original);
     });
 
-    it('preserves the existing composite calculator and its cleanup contract', function () {
+    it('preserves the composite calculator through the plain result API', function () {
         const fixtures = [
             { style: moduleInstance.PumpStyle.END_SUCTION_ANSI_API, flowRate: 2000, rpm: 2000,
                 viscosity: 1.107, stages: 1, head: 137, average: 0.83933686357794668, maximum: 0.86957345321252744 },
@@ -67,17 +67,13 @@ describe('OptimalDeviationFactor stateless WASM API', function () {
                 viscosity: 1.107, stages: 1, head: 137, average: -0.00037158021756460174, maximum: -0.00038496616430705135 },
         ];
         for (const fixture of fixtures) {
-            const instance = new moduleInstance.PumpEfficiency(fixture.style, 0.90, fixture.rpm,
-                fixture.viscosity, fixture.stages, fixture.flowRate, fixture.head);
-            let result: PumpEfficiencyResults | undefined;
-            try {
-                result = instance.calculate();
-                assert.approximately(result.average, fixture.average, Math.abs(fixture.average) * 1e-12);
-                assert.approximately(result.max, fixture.maximum, Math.abs(fixture.maximum) * 1e-12);
-            } finally {
-                result?.delete();
-                instance.delete();
-            }
+            const result: PumpEfficiencyResult = moduleInstance.calculatePumpEfficiency({
+                style: fixture.style, rpm: fixture.rpm, kinematicViscosity: fixture.viscosity,
+                stageCount: fixture.stages, flowRate: fixture.flowRate, head: fixture.head,
+            });
+            assert.approximately(result.average, fixture.average, Math.abs(fixture.average) * 1e-12);
+            assert.approximately(result.max, fixture.maximum, Math.abs(fixture.maximum) * 1e-12);
+            assert.notProperty(result, 'delete');
         }
     });
 });

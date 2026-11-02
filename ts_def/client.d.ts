@@ -49,9 +49,9 @@ export * from "./ts_def_modules/motorDriven/pump/optimal_pre_pump_efficiency";
 export * from "./ts_def_modules/motorDriven/pump/optimal_specific_speed";
 export * from "./ts_def_modules/motorDriven/pump/optimal_specific_speed_correction";
 export * from "./ts_def_modules/motorDriven/pump/optimal_pump_efficiency";
+export * from "./ts_def_modules/motorDriven/pump/pump_efficiency";
 export * from "./ts_def_modules/motorDriven/pump/pump_enums";
 
-export * from "./ts_def_modules/motorDriven/pumpFan/pumpFan";
 export * from "./ts_def_modules/motorDriven/pumpFan/fluid_power";
 export * from "./ts_def_modules/motorDriven/pumpFan/mover_efficiency";
 export * from "./ts_def_modules/motorDriven/pumpFan/optimal_pump_shaft_power";
@@ -179,9 +179,9 @@ export type MeasurToolsSuite =
     import("./ts_def_modules/motorDriven/pump/optimal_specific_speed").OptimalSpecificSpeedModule &
     import("./ts_def_modules/motorDriven/pump/optimal_specific_speed_correction").OptimalSpecificSpeedCorrectionModule &
     import("./ts_def_modules/motorDriven/pump/optimal_pump_efficiency").OptimalPumpEfficiencyModule &
+    import("./ts_def_modules/motorDriven/pump/pump_efficiency").PumpEfficiencyModule &
     import("./ts_def_modules/motorDriven/pump/pump_enums").PumpEnumsModule &
     // motorDriven/pumpFan
-    import("./ts_def_modules/motorDriven/pumpFan/pumpFan").PumpFanModule &
     import("./ts_def_modules/motorDriven/pumpFan/fluid_power").FluidPowerModule &
     import("./ts_def_modules/motorDriven/pumpFan/mover_efficiency").MoverEfficiencyModule &
     import("./ts_def_modules/motorDriven/pumpFan/optimal_pump_shaft_power").OptimalPumpShaftPowerModule &

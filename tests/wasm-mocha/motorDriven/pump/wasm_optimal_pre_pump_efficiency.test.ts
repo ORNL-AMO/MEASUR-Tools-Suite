@@ -3,7 +3,7 @@ import createModule, {
     type MeasurToolsSuite,
     type OptimalPrePumpEfficiencyInput,
     type OptimalPrePumpEfficiencyModule,
-    type PumpEfficiencyResults,
+    type PumpEfficiencyResult,
     type PumpStyle,
 } from 'measur-tools-suite';
 
@@ -167,7 +167,7 @@ describe('OptimalPrePumpEfficiency stateless WASM API', function () {
         }
     });
 
-    it('preserves the existing composite and its runtime ownership contract', function () {
+    it('preserves the composite fractions through the plain result API', function () {
         const fixtures = [
             { style: moduleInstance.PumpStyle.END_SUCTION_SLURRY, flow: 100, average: 0.30716859847864231, maximum: 0.33778841732326587 },
             { style: moduleInstance.PumpStyle.END_SUCTION_SLURRY, flow: 2000, average: 0.72960709313227678, maximum: 0.75589073588267208 },
@@ -210,18 +210,15 @@ describe('OptimalPrePumpEfficiency stateless WASM API', function () {
             { style: moduleInstance.PumpStyle.POSITIVE_DISPLACEMENT, flow: 10000, average: -0.012295423274621822, maximum: -0.012554812481560099 },
         ];
         for (const fixture of fixtures) {
-            const calculator = new moduleInstance.PumpEfficiency(fixture.style, 0.9, 2000, 1.107, 1, fixture.flow, 137);
-            let result: PumpEfficiencyResults | undefined;
-            try {
-                result = calculator.calculate();
-                assert.approximately(result.average, fixture.average,
-                    absoluteFractionTolerance + Math.abs(fixture.average) * relativeFractionTolerance);
-                assert.approximately(result.max, fixture.maximum,
-                    absoluteFractionTolerance + Math.abs(fixture.maximum) * relativeFractionTolerance);
-            } finally {
-                result?.delete();
-                calculator.delete();
-            }
+            const result: PumpEfficiencyResult = moduleInstance.calculatePumpEfficiency({
+                style: fixture.style, rpm: 2000, kinematicViscosity: 1.107,
+                stageCount: 1, flowRate: fixture.flow, head: 137,
+            });
+            assert.approximately(result.average, fixture.average,
+                absoluteFractionTolerance + Math.abs(fixture.average) * relativeFractionTolerance);
+            assert.approximately(result.max, fixture.maximum,
+                absoluteFractionTolerance + Math.abs(fixture.maximum) * relativeFractionTolerance);
+            assert.notProperty(result, 'delete');
         }
     });
 });
