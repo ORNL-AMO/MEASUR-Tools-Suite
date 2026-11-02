@@ -1,25 +1,14 @@
-/**
- * @brief Contains the definition of functions of OptimalPumpEfficiency class.
- *      calculate(): Calculates the pump efficiency after correction
- *
- * @author Subhankar Mishra (mishras)
- * @author Gina Accawi (accawigk)
- * @bug No known bugs.
- *
- */
-
 #include "motorDriven/pumpFan/OptimalPumpEfficiency.h"
 
 #include <cmath>
 
-#include "motorDriven/pumpFan/OptimalPrePumpEff.h"
+#include "motorDriven/pump/optimal_pre_pump_efficiency.h"
 #include "motorDriven/pumpFan/OptimalSpecificSpeed.h"
 #include "motorDriven/pumpFan/OptimalSpecificSpeedCorrection.h"
 
 double OptimalPumpEfficiency::calculate() {
 
-    OptimalPrePumpEff optimalPrePumpEff(style, flowRate);
-    prePumpEfficiency = optimalPrePumpEff.calculate();
+    prePumpEfficiency = optimal_pre_pump_efficiency::calculate({style, flowRate});
     /*
      * You may have individual functions for each also.
      */

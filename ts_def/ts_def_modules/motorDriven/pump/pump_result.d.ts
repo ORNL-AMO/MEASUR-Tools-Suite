@@ -1,5 +1,5 @@
 import { Drive, LineFrequency, LoadEstimationMethod, MotorEfficiencyClass } from "../motor/motorEnum";
-import { PumpStyle } from "../pumpFan/pumpFan";
+import { PumpStyle } from "./pump_enums";
 
 /** Equipment, hydraulic duty, and operating data shared by pump-result calculations. */
 export interface PumpResultSystemInput {

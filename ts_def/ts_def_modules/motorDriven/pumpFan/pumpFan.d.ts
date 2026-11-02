@@ -4,32 +4,7 @@
  * Provides specific speed correction and pump efficiency calculators.
  */
 
-/**
- * Pump style classification used by pump/fan calculators.
- */
-export enum PumpStyle {
-    END_SUCTION_SLURRY = 0,
-    END_SUCTION_SEWAGE = 1,
-    END_SUCTION_STOCK = 2,
-    END_SUCTION_SUBMERSIBLE_SEWAGE = 3,
-    API_DOUBLE_SUCTION = 4,
-    MULTISTAGE_BOILER_FEED = 5,
-    END_SUCTION_ANSI_API = 6,
-    AXIAL_FLOW = 7,
-    DOUBLE_SUCTION = 8,
-    VERTICAL_TURBINE = 9,
-    LARGE_END_SUCTION = 10,
-    SPECIFIED_OPTIMAL_EFFICIENCY = 11,
-    POSITIVE_DISPLACEMENT = 12
-}
-
-/**
- * Pump specific speed mode.
- */
-export enum SpecificSpeed {
-    FIXED_SPEED = 0,
-    NOT_FIXED_SPEED = 1
-}
+import type { PumpStyle } from "../pump/pump_enums";
 
 /**
  * Calculates optimal specific speed correction factor.
@@ -108,8 +83,6 @@ export declare class PumpEfficiency {
 }
 
 export type PumpFanModule = {
-    PumpStyle: typeof PumpStyle;
-    SpecificSpeed: typeof SpecificSpeed;
     OptimalSpecificSpeedCorrection: typeof OptimalSpecificSpeedCorrection;
     PumpEfficiency: typeof PumpEfficiency;
     PumpEfficiencyResults: typeof PumpEfficiencyResults;

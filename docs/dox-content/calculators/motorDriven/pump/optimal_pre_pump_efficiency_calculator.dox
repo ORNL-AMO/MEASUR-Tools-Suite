@@ -1,0 +1,116 @@
+/**
+ * @defgroup optimal_pre_pump_efficiency_calculator Pump Efficiency Before Corrections
+ * @ingroup equipment_and_property_calculators
+ * @brief Estimates pump efficiency from style and liquid flow before viscosity and specific-speed corrections.
+ * @details
+ * What flow-based efficiency estimate should enter the achievable-efficiency calculation for this
+ * pump style? This empirical model supplies that starting estimate. It does not represent a measured
+ * pump curve, select a pump, or determine the efficiency of a particular installed machine.
+ *
+ * @heading{Final Result and Interpretation}
+ * The result is efficiency in percent, before viscosity and specific-speed corrections. A result of
+ * 83.9708 means approximately 83.9708%, not a fraction of 83.9708. The downstream calculation converts
+ * this percentage to a fraction before applying those corrections:
+ * @formula{optimal-pre-pump-efficiency-fraction; \eta_{pre}=\frac{E_{pre}}{100}}
+ * @symtable
+ * @symrow{\eta_{pre}; Pre-correction efficiency expressed as a fraction; \unitless}
+ * @symrow{E_{pre}; Returned pre-correction efficiency; \percent}
+ * @symrow{100; Percentage-point scale per unit fraction; \percent}
+ * @endsymtable
+ *
+ * This starting estimate is separate from both corrected average efficiency and maximum efficiency.
+ * Do not apply viscosity or specific-speed corrections twice, or treat a style's zero fallback as a
+ * measured zero efficiency. The caller supplies flow in US gallons per minute; no conversion is performed.
+ *
+ * @heading{Select the Style and Flow Interval}
+ * Each style uses one of the curves below. Every split uses a strict less-than comparison, so equality
+ * chooses the upper interval. Vertical turbine and axial flow share three curves; API double suction
+ * and stock share two; sewage and submersible sewage share two. No flow-halving, stage-count adjustment,
+ * interpolation, or smoothing between intervals is performed here. Large end suction has one curve.
+ * These thresholds select curve records; they do not establish validated operating ranges.
+ *
+ * @heading{Evaluate the Selected Empirical Curve}
+ * For the selected record, evaluate two exponential contributions and add their sum to the baseline:
+ * @formula{optimal-pre-pump-efficiency-curve;
+ *   E_{pre}=b+\left[a_1\exp(-k_1 Q)+a_2\exp(-k_2 Q)\right]
+ * }
+ * @symtable
+ * @symrow{E_{pre}; Returned pre-correction efficiency; \percent}
+ * @symrow{b; Selected baseline efficiency; \percent}
+ * @symrow{a_1; Selected signed first exponential amplitude; \percent}
+ * @symrow{k_1; Selected first flow-decay coefficient; \minute\per\gallon}
+ * @symrow{a_2; Selected signed second exponential amplitude; \percent}
+ * @symrow{k_2; Selected second flow-decay coefficient; \minute\per\gallon}
+ * @symrow{Q; Liquid volumetric flow in the US gallon convention; \gallon\per\minute}
+ * @endsymtable
+ *
+ * The baseline and amplitudes have percentage-point units; both exponential arguments are dimensionless
+ * when flow is in US gpm. The negative amplitudes reduce the selected baseline. The decay coefficients
+ * control the mathematical flow dependence; no independent physical mechanism is established for them.
+ * The implementation retains the addition grouping shown above and uses unrounded intermediate values.
+ *
+ * @heading{Complete Curve Coefficients}
+ * In the table, Q is numerical flow in US gpm. Columns b, a1 and a2 are percentage points; k1 and k2
+ * are inverse US gpm. All 80 retained coefficients are shown, including their signs.
+ *
+ * | Pump style(s) | Flow interval, US gpm | b | a1 | k1 | a2 | k2 |
+ * | --- | --- | ---: | ---: | ---: | ---: | ---: |
+ * | Double suction | Q &lt; 9000 | 90.190375 | -7.8068742 | 0.00033366482 | -8.1364684 | 0.0026659434 |
+ * | Double suction | Q &gt;= 9000 | 91.0 | -3.6664629 | 0.0001264433 | -14.697275 | 0.00072855045 |
+ * | Vertical turbine / axial flow | Q &lt; 2550 | 87.456119 | -9.3556039 | 0.00067139092 | -9.4309496 | 0.0039344122 |
+ * | Vertical turbine / axial flow | 2550 &lt;= Q &lt; 7220 | 89.899894 | -5.9800814 | 0.00019480643 | -7.0638099 | 0.0010440162 |
+ * | Vertical turbine / axial flow | Q &gt;= 7220 | 90.124016 | -1.7332611 | 0.00014953651 | -3.3197451 | 0.00015232542 |
+ * | Large end suction | All Q | 90.379274 | -3.000737 | 0.000034054964 | -4.818246 | 0.00019083831 |
+ * | ANSI/API end suction | Q &lt; 1030 | 84.655455 | -18.706336 | 0.0016056629 | -20.655962 | 0.0081197589 |
+ * | ANSI/API end suction | Q &gt;= 1030 | 87.748473 | -7.6842423 | 0.0003739105 | -17.336122 | 0.0024096967 |
+ * | Multistage boiler feed | Q &lt; 890 | 84.286574 | -17.836167 | 0.0013236525 | -26.951966 | 0.0068256307 |
+ * | Multistage boiler feed | Q &gt;= 890 | 87.129684 | -7.8144274 | 0.00034998448 | -19.605637 | 0.0022387671 |
+ * | API double suction / stock | Q &lt; 4440 | 87.199887 | -10.580842 | 0.00027878405 | -23.785033 | 0.0018831236 |
+ * | API double suction / stock | Q &gt;= 4440 | 90.158464 | -4.8350009 | 0.000048652395 | -7.2881572 | 0.00027630687 |
+ * | Sewage / submersible sewage | Q &lt; 2170 | 83.528143 | -23.543231 | 0.00071315587 | -37.584938 | 0.005809375 |
+ * | Sewage / submersible sewage | Q &gt;= 2170 | 89.704526 | -6.9708815 | 0.000057096295 | -13.868089 | 0.00046766436 |
+ * | Slurry | Q &lt; 1690 | 79.096487 | -32.006283 | 0.00084199445 | -23.100062 | 0.0064912714 |
+ * | Slurry | Q &gt;= 1690 | 85.957484 | -15.256678 | 0.00017627657 | -24.920847 | 0.0012055457 |
+ *
+ * Specified-optimal-efficiency and positive-displacement styles do not select any of these curves:
+ * they return zero. Unknown native style values also return zero. This calculator does not consume
+ * a supplied efficiency, implement a specified-efficiency override, or model positive-displacement pumps.
+ * The full corrected calculation can still produce a negative result after subtracting its correction.
+ *
+ * @heading{Worked Example: ANSI/API at 2000 US gpm}
+ * Since 2000 is not less than 1030, select the upper ANSI/API curve. Substitution gives:
+ * @formula{optimal-pre-pump-efficiency-example;
+ *   E_{pre}=87.748473+
+ *   \left[-7.6842423\exp(-0.0003739105\times2000)
+ *         -17.336122\exp(-0.0024096967\times2000)\right]
+ *   \approx83.97084437955112\%
+ * }
+ * @symtable
+ * @symrow{E_{pre}; Example pre-correction efficiency; \percent}
+ * @symrow{87.748473; Upper-curve baseline; \percent}
+ * @symrow{-7.6842423,-17.336122; Signed exponential amplitudes; \percent}
+ * @symrow{0.0003739105,0.0024096967; Flow-decay coefficients; \minute\per\gallon}
+ * @symrow{2000; Example liquid flow in US gallons per minute; \gallon\per\minute}
+ * @endsymtable
+ *
+ * The first contribution is approximately -3.637697 percentage points and the second is approximately
+ * -0.139932 percentage points. Their sum reduces the baseline to about 83.9708%. The corresponding
+ * pre-correction fraction is about 0.83970844; it still requires viscosity and specific-speed corrections
+ * before it can be interpreted as the corrected average estimate.
+ *
+ * @heading{Assumptions, Boundaries and Inappropriate Uses}
+ * There is no validation, defaulting, interpolation or output clamping. Both signed zeros use the
+ * lowest interval and produce its finite value. Negative finite flows extrapolate that interval and
+ * can yield negative values or overflow to negative infinity. Very small positive flows approach the
+ * lowest-curve zero-flow value. Very large positive flows approach the highest-curve baseline.
+ * For a curve-backed style, positive infinity yields the highest-curve baseline, negative infinity
+ * yields negative infinity, and NaN yields NaN (comparisons with NaN are false). These are arithmetic
+ * outcomes, not valid operating duties. The zero-fallback styles return zero even for nonfinite flow.
+ *
+ * Threshold equality selects the upper curve even if the records do not meet continuously. Do not
+ * infer smoothness or monotonicity across a threshold. A result outside physical efficiency bounds is
+ * not evidence of an achievable pump efficiency. Flow/style alone cannot establish a pump's operating
+ * point, condition, suitability, or actual performance; use appropriate pump data and engineering review.
+ *
+ * @see optimal_pre_pump_efficiency::calculate
+ */
