@@ -4,15 +4,16 @@
 
 - Lifecycle: completed
 - Status: implemented, verified and independently reviewed; ready with documented follow-up for the
-  pre-existing BibTeX and browser-rendering limitations. User requested commit, push and child PR delivery
-  into the epic on 2026-10-29.
+  pre-existing BibTeX and browser-rendering limitations. Native CI acceptance corrected for cross-platform
+  rounding on 2026-11-02; local verification passed, updated PR CI pending.
 - Owner: Codex
-- Created / last updated: 2026-10-29.
+- Created: 2026-10-29.
+- Last updated: 2026-11-02.
 - Suite issue: [#223](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/223).
 - Epic: [pump efficiency handoff](pump-efficiency-refactor.md), Suite [#230](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/230).
 - Branch / intended PR base: `codex/issue-223-optimal-deviation-factor` / `epic-pump-eff-refactor`.
 - Verified local/remote epic base: `892065db8442d2472d7cbba44cf003e16f54a179`.
-- Suite PR / CI and publication evidence: [child branch PR](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pulls?q=is%3Apr+head%3Acodex%2Fissue-223-optimal-deviation-factor+base%3Aepic-pump-eff-refactor).
+- Suite PR / CI and publication evidence: [#448](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/448).
   Post-push checks and exact beta publication belong in the PR; do not push package-version-only evidence commits.
 - Desktop coordination: [#9059](https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/9059); no Desktop PR for this child.
 
@@ -169,3 +170,34 @@ original captures. `git diff --check` passed. No public interfaces or algorithm 
 ## Open Questions Or Blockers
 
 - No implementation policy questions remain. Doxygen BibTeX and browser-rendering limitations are recorded above.
+
+## Native CI Acceptance Correction (2026-11-02)
+
+- [Failing native job](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/actions/runs/40953180067/job/123726369250)
+  at PR head `ef0ebb6c1461cb7348688b30a0f2ee3e6982e2c1`: build succeeded; four assertions failed in the
+  specified-optimal and positive-displacement composite fixtures. The scalar factor tests passed. Valgrind
+  reported zero memory errors and no leaks; WASM and declaration/documentation CI passed.
+- The fixtures were captured on macOS/Apple clang with fused arithmetic. The existing specific-speed-correction
+  polynomial produces slightly different near-zero values with Ubuntu GCC 13.3/x86-64 arithmetic:
+
+  | Composite field (styles 11 and 12) | macOS fixture | Ubuntu/GCC result | Absolute difference |
+  | --- | --- | --- | --- |
+  | average | -0.00037158021756460174 | -0.00037158021756453327 | approximately 6.847e-17 |
+  | max | -0.00038496616430705135 | -0.00038496616430698044 | approximately 7.091e-17 |
+
+- Relative-only `epsilon(1e-14)` allows only about 3.7e-18 for these values, so it rejects harmless cross-platform
+  rounding. Disabling contraction with `-ffp-contract=off` locally reproduces exactly the four assertion failures
+  and CI values. Legacy and refactored 17-scalar/five-composite captures match exactly under that setting and
+  independently under Ubuntu 24.04/GCC 13.3.0 (`-O3 -DNDEBUG -std=gnu++20`). No algorithm regression was observed.
+- User explicitly approved adjusting acceptance for a rounding-only issue. Retain every fixture and the original
+  relative `1e-14` bound; add a named absolute margin of `1e-15` in efficiency-fraction units only to composite
+  average/max assertions. Scalar assertions, production calculations, WASM tests and public APIs are unchanged.
+- Corrected verification: macOS focused tests passed 159 assertions in 14 cases, full native suite passed
+  5,866 assertions in 351 cases, and contraction-disabled focused tests passed 30 assertions in three cases.
+  Ubuntu/GCC focused tests also passed all 30 assertions, normally and under Valgrind 3.22.0, with zero errors
+  and no leaks. The isolated Linux harness compiles calculation/test sources at Release optimization and its
+  Catch implementation at `-O0`; the full unchanged CI configuration will verify the pushed correction.
+- Independent review found no actionable findings; reviewed test-file SHA-256:
+  `c13470a2a129789b7ce1da5e2d2e7e2d053b6803514bde1ecfe5eed2c6351f5d`.
+  Readiness was ready with the follow-up to record Linux/Valgrind results, now completed above. Final Markdown
+  links and whitespace checks passed. Post-push CI evidence belongs in PR #448; no evidence-only push is needed.

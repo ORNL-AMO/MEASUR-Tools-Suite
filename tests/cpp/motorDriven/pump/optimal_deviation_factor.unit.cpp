@@ -52,6 +52,11 @@ TEST_CASE("Optimal deviation factor preserves nonfinite boundaries and stateless
 }
 
 TEST_CASE("Optimal deviation migration preserves its composite consumer", "[optimal_deviation_factor]") {
+    // Compiler differences in the existing correction polynomial affect near-zero efficiencies.
+    // Retain the relative check and allow a small absolute floor in efficiency-fraction units.
+    constexpr double relative_efficiency_tolerance = 1e-14;
+    constexpr double absolute_efficiency_tolerance = 1e-15;
+
     struct Fixture {
         Pump::Style style;
         double flow_rate;
@@ -76,7 +81,11 @@ TEST_CASE("Optimal deviation migration preserves its composite consumer", "[opti
         const auto result = PumpEfficiency(fixture.style, 0.90, fixture.rpm, fixture.viscosity,
                                            fixture.stages, fixture.flow_rate, fixture.head).calculate();
         CAPTURE(fixture.style, fixture.flow_rate, result.average, result.max);
-        CHECK(result.average == Catch::Approx(fixture.average).epsilon(1e-14));
-        CHECK(result.max == Catch::Approx(fixture.maximum).epsilon(1e-14));
+        CHECK(result.average == Catch::Approx(fixture.average)
+                                   .epsilon(relative_efficiency_tolerance)
+                                   .margin(absolute_efficiency_tolerance));
+        CHECK(result.max == Catch::Approx(fixture.maximum)
+                               .epsilon(relative_efficiency_tolerance)
+                               .margin(absolute_efficiency_tolerance));
     }
 }
