@@ -3,13 +3,13 @@
 ## Workflow Metadata
 
 - Lifecycle: active
-- Status: **planned; implementation not started**
+- Status: **first module implemented, verified and independently reviewed; remaining five modules planned**
 - Owner: Codex
 - Created: 2026-10-29
 - Last updated: 2026-10-29
 - Suite coordinating issue: [#230 PumpEfficiency Documentation](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/230).
 - Suite integration branch / child PR base: `epic-pump-eff-refactor`; inspected head
-  `04d91cd6d222f87f8e7cb88e61cf1f9124a98293`.
+  `892065db8442d2472d7cbba44cf003e16f54a179` at the first child implementation start.
 - Suite PR: not opened for this epic.
 - Desktop issue: [#9059 Coordinate pump efficiency calculation namespace refactor](https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/9059).
 - Desktop PR: not opened for this epic.
@@ -17,17 +17,20 @@
 - Workflow: [refactor personas](../README.md), [handoff template](../templates/refactor-handoff.md), and
   [Suite-to-Desktop coordination](../../docs/development/suite-desktop-change-workflow.md).
 
-This pass creates this planning record and one Desktop coordination issue only. It does not implement calculators,
-change packages, create branches or PRs, publish packages, or merge work. The Desktop issue is the authoritative
-product/coordination record; this handoff owns the Suite implementation plan and evidence.
-The issue records this handoff's repository path and future branch link, explicitly marked pending a later
-documentation commit/push. This pass leaves the handoff local and uncommitted.
+The initial planning pass created this record and Desktop issue #9059. The user subsequently requested the
+OptimalDeviationFactor implementation; its progress is recorded in the child handoff below. The Desktop issue is
+the authoritative product/coordination record; this handoff owns the Suite sequence and implementation links.
 
 ## Target Module And Feature PR Sequence
 
 Move the six pump-only calculators from `motorDriven/pumpFan` to `motorDriven/pump`. Each later child branch starts
 from the latest `epic-pump-eff-refactor` head and targets that branch through one reviewed PR per calculator.
-Use `codex/` for new child branch names. All rows are planned, with no implementation or validation claimed.
+Use `codex/` for new child branch names. The first module is implemented, verified and independently reviewed;
+the other five rows remain planned. See the [OptimalDeviationFactor handoff](optimal-deviation-factor-refactor.md)
+for actual validation and review evidence. Its child PR delivery is tracked below.
+The user requested commit/push/PR delivery of #223 on 2026-10-29; its durable
+[child PR and CI/publication record](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pulls?q=is%3Apr+head%3Acodex%2Fissue-223-optimal-deviation-factor+base%3Aepic-pump-eff-refactor)
+tracks delivery into this epic. Record post-push evidence there without version-only follow-up pushes.
 
 | Order | Suite issue / legacy module | New basename and namespace | Dependencies after migration |
 | ---: | --- | --- | --- |
@@ -45,7 +48,7 @@ Excluded: OptimalFanEfficiency #224, already-implemented OptimalPumpShaftPower #
 #202, and unrelated motor/fan public refactors. Positive-displacement feature work in Suite #402 / Desktop #8734
 and historical double-entry/stage-count engineering concerns are separate behavior work.
 
-## Current Public API
+## Pre-Refactor Public API
 
 - Six global C++ calculator classes expose constructor inputs plus `calculate()`. `OptimalPumpEfficiency` also has
   mutable accessors and unused state; `PumpEfficiency::Output` has `average` and `max`.
@@ -59,13 +62,14 @@ and historical double-entry/stage-count engineering concerns are separate behavi
 
 ## Runtime API Contract And Proposed Namespace API
 
-Each namespace exposes `calculate(const Input&)`. Use snake_case C++ input members, camelCase WASM/TypeScript
-members, and the corresponding `<CalculatorName>Input` interface below. All listed fields are required;
-inputs are not modified. The five helper functions return `double` / `number`.
+Each multi-field namespace exposes `calculate(const Input&)`. Use snake_case C++ input members, camelCase
+WASM/TypeScript members, and the corresponding `<CalculatorName>Input` interface below. All listed fields are
+required; inputs are not modified. The single-input deviation factor instead takes a scalar, as explicitly
+requested by the user. The five helper functions return `double` / `number`.
 
 | Surface / TypeScript input | Before | After function and input fields | Embind kind | Units/defaults | Ownership and cleanup | Compatibility |
 | --- | --- | --- | --- | --- | --- | --- |
-| `OptimalDeviationFactorInput` | C++ `OptimalDeviationFactor(flowRate).calculate()`; no runtime export | `calculateOptimalDeviationFactor({flowRate})` | New `function` + input `value_object` | Flow US gpm; output dimensionless multiplier; no defaults | Plain input and scalar; no cleanup | Breaking C++; additive WASM |
+| Optimal deviation factor (scalar; no input interface) | C++ `OptimalDeviationFactor(flowRate).calculate()`; no runtime export | `calculateOptimalDeviationFactor(flowRate)` | New scalar `function` only | Flow US gpm; output dimensionless multiplier; no defaults | Numeric input/result; no cleanup | Breaking C++; additive WASM |
 | `OptimalPrePumpEfficiencyInput` | C++ `OptimalPrePumpEff(style, flowRate).calculate()`; no runtime export | `calculateOptimalPrePumpEfficiency({style, flowRate})` | New `function` + input `value_object` | `PumpStyle`; US gpm; output percent (0–100 scale); no defaults | Plain input and scalar; no cleanup | Breaking C++; additive WASM |
 | `OptimalSpecificSpeedInput` | C++ `OptimalSpecificSpeed(rpm, flowRate, head, stageCount).calculate()`; no runtime export | `calculateOptimalSpecificSpeed({rpm, flowRate, head, stageCount})` | New `function` + input `value_object` | rpm, US gpm, ft, dimensionless stage count; output US customary specific speed; no defaults | Plain input and scalar; no cleanup | Breaking C++; additive WASM |
 | `OptimalSpecificSpeedCorrectionInput` | C++ and runtime `OptimalSpecificSpeedCorrection(style, specificSpeed).calculate()` | `calculateOptimalSpecificSpeedCorrection({style, specificSpeed})` | `class_` replaced by `function` + input `value_object` | `PumpStyle`; US customary specific speed; output fractional efficiency decrement; no defaults | Remove calculator cleanup; plain input and scalar | Breaking C++ and WASM |
@@ -91,6 +95,12 @@ Keep stage count as `double` / `number`, matching current APIs; do not silently 
   signed/nonfinite behavior, defaults (including absence of validation), and output values. Do not rewrite
   polynomials with Horner's method or substitute different min/max semantics during this refactor.
 - Preserve all `PumpStyle` values 0–12 and `SpecificSpeed` values 0–1. Keep the shared `Pump.h` C++ API unchanged.
+- The user subsequently approved scalar `optimal_deviation_factor::calculate(double flow_rate)` and
+  `calculateOptimalDeviationFactor(flowRate: number)` with no input struct/interface. Replace that module's indexed
+  coefficients and scaling literals with seven private, descriptive `constexpr double` constants; retain the
+  existing weighted-sum order. The user subsequently requested readable named intermediates and removal of
+  `.cpp` file-metadata banners; the shared logarithmic flow is now calculated once, with two exponential decay
+  terms. Exact native/WASM preservation evidence and review are recorded in the child handoff.
 
 ## Touched Layers And File Mapping
 
@@ -224,16 +234,17 @@ Existing examples to preserve, not newly executed or newly captured goldens:
 
 ## Validation
 
-Planning-pass checks: verify six issue titles/states and retained parents, source/declaration/test mappings,
+Initial planning-pass checks verified six issue titles/states and retained parents, source/declaration/test mappings,
 formula coefficients and thresholds, local links, documentation-only diff, and `git diff --check`.
-No calculator tests, builds, Doxygen generation, baseline capture, or package validation are claimed in this pass.
+No calculator tests, builds, Doxygen generation, baseline capture, or package validation were performed in that
+planning pass. First-module implementation verification is now recorded in its linked child handoff.
 
 Planning evidence (2026-10-29): six issue titles/open states/unchanged #204 parents verified through GitHub;
 read-only documentation audit verified local links, all 113 transcribed coefficient values against source,
 six Suite issue references, and every Desktop integration-template section. Desktop issue #9059 was created
 from the prepared body and read back through GitHub with an exact body match. `git diff --check` and an explicit
-audit of the untracked handoff's whitespace, fences, table widths, and local links passed. Worktree status contains
-only this new planning document; no tracked file, calculator, package, or Desktop checkout changes were made.
+audit of the then-untracked handoff's whitespace, fences, table widths, and local links passed. At that point the
+worktree contained only the new planning document; no calculator, package, or Desktop checkout changes were made.
 
 Later implementation gates:
 
@@ -272,8 +283,9 @@ Later implementation gates:
 ## Open Questions Or Blockers
 
 - None blocks planning. Original empirical references/ranges remain unverified and must be described honestly.
-- Implementation is intentionally deferred; baseline capture and previous PumpResult integration reconciliation
-  remain required before their respective implementation/integration gates.
+- The remaining five implementations are deferred; their baseline capture and previous PumpResult integration
+  reconciliation remain required before the respective implementation/integration gates. The first module's
+  implementation, captures, tests and independent readiness review are complete with documented environment limits.
 
 ## Appendix: Coefficients And Branches To Preserve
 
