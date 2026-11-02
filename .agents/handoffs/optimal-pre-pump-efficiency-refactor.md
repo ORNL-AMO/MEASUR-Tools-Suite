@@ -145,6 +145,17 @@ eventual child PR targeting `epic-pump-eff-refactor`, without evidence-only foll
 
 ## Internal Review
 
+### Stack CI Amendment (2026-11-02)
+
+- The user approved exact `issue-225/228/229/226/230` PR-base support and base-retarget handling in #449.
+- Reviewed amendment: `23b58b07e04a16c61d18344a67930ca01d791f7c...3c9156905af676c120fa361856bb9f25f32784c5`.
+- Independent reviewer: `desktop_impact`, using the repository review skill; 88 actual-YAML trigger/job scenarios
+  passed, including exact branch allowlisting, metadata-only skips, retargeting, draft/fork restrictions and
+  unchanged push/manual release paths. Scoped whitespace passed; live Actions results belong in #449.
+- One P3 metadata finding resolved: distinguish initial epic inspection from #449's actual base commit.
+- Readiness: ready; no unresolved actionable findings. Report/matrix:
+  `/private/tmp/pump-stack-ci-review-KdaWVY`. This amendment does not change calculator source or fixtures.
+
 - Intended base: `epic-pump-eff-refactor` at `666f224605365c95aaf70220ea04f6a7c4b7cc57`.
 - Reviewed head: final isolated review snapshot `11bba6c998dbe311c964e116954c32f467ee5ac4`.
   This records the complete candidate without moving `issue-225` or changing the user's staging area.

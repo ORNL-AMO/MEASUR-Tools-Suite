@@ -8,8 +8,9 @@
 - Created: 2026-10-29
 - Last updated: 2026-11-02
 - Suite coordinating issue: [#230 PumpEfficiency Documentation](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/230).
-- Suite integration branch: `epic-pump-eff-refactor`; first stack PR base
-  `892065db8442d2472d7cbba44cf003e16f54a179` at the first child implementation start.
+- Suite integration branch: `epic-pump-eff-refactor`; initial inspected epic head before #223:
+  `892065db8442d2472d7cbba44cf003e16f54a179`. First stack PR #449 base:
+  `666f224605365c95aaf70220ea04f6a7c4b7cc57`.
 - Suite PR: [#449](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/449) is the first open stack PR; integration PR pending.
 - Desktop issue: [#9059 Coordinate pump efficiency calculation namespace refactor](https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/9059).
 - Desktop PR: not opened for this epic.
