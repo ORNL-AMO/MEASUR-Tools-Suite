@@ -1,30 +1,10 @@
 /**
  * Pump/Fan helper calculations.
  *
- * Provides specific speed correction and pump efficiency calculators.
+ * Provides the remaining legacy pump efficiency calculator.
  */
 
 import type { PumpStyle } from "../pump/pump_enums";
-
-/**
- * Calculates optimal specific speed correction factor.
- */
-export declare class OptimalSpecificSpeedCorrection {
-    /**
-     * @param style PumpStyle enum, type of pump speed from either fixed or not fixed.
-     * @param specificSpeed Specific speed, units rpm*sqrt(gpm)/(ft^(3/4)).
-     */
-    constructor(style: PumpStyle, specificSpeed: number);
-
-    /**
-     * Calculates the optimal specific speed correction
-     * @returns Optimal specific speed correction, units %.
-     */
-    calculate(): number;
-
-    /** Frees the underlying resource; must be called when finished with the instance */
-    delete(): void;
-}
 
 /**
  * Result object returned by {@link PumpEfficiency.calculate}.
@@ -83,7 +63,6 @@ export declare class PumpEfficiency {
 }
 
 export type PumpFanModule = {
-    OptimalSpecificSpeedCorrection: typeof OptimalSpecificSpeedCorrection;
     PumpEfficiency: typeof PumpEfficiency;
     PumpEfficiencyResults: typeof PumpEfficiencyResults;
 };
