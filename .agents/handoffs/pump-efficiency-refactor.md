@@ -6,7 +6,7 @@
 - Status: **all six modules implemented, verified and independently reviewed; stacked PR delivery and integration readiness active**
 - Owner: Codex
 - Created: 2026-10-29
-- Last updated: 2026-11-02
+- Last updated: 2026-11-03
 - Suite coordinating issue: [#230 PumpEfficiency Documentation](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/230).
 - Suite integration branch: `epic-pump-eff-refactor`; initial inspected epic head before #223:
   `892065db8442d2472d7cbba44cf003e16f54a179`. First stack PR #449 base:
@@ -41,7 +41,8 @@ without version-only follow-up pushes.
 | 2 | `issue-228` | `issue-225` | [#450](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/450), specific speed |
 | 3 | `issue-229` | `issue-228` | [#451](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/451), specific-speed correction |
 | 4 | `issue-226` | `issue-229` | [#452](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/452), optimal efficiency |
-| 5 | `issue-230` | `issue-226` | [Final child PR / publication record](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pulls?q=is%3Apr+head%3Aissue-230+base%3Aissue-226), composite efficiency and cleanup |
+| 5 | `issue-230` | `issue-226` | [#453](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/453), composite efficiency and API cleanup |
+| 6 | `issue-455` | `issue-230` | [#455 tracking issue](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/455), final temporary-CI cleanup |
 
 Review each complete child diff against its actual immediate parent and record exact commits. Merge bottom-up
 into the epic using merge commits after required approvals. Rebase only the next child's own commits onto
@@ -53,6 +54,34 @@ PR #449 adds exact CI base eligibility for the five stack branches, not a genera
 verified artifact reuse and final release triggers remain. Published #449 beta before this amendment:
 [`1.2.7-beta.449.1`](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/449#issuecomment-6582085607).
 This child package is not the final integrated Desktop acceptance package.
+
+### Final CI Cleanup (#455)
+
+On 2026-11-03 the user requested cleanup as the final PR above #453. Initial branch/base:
+`issue-455` / `issue-230` at `4e1ab0c9d585bc8f11bb05bfc686281712a238a1`.
+[Cleanup PR and validation record](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pulls?q=is%3Apr+head%3Aissue-455)
+owns post-push CI evidence; no evidence-only follow-up pushes.
+
+- Restore `.github/workflows/main.yml` byte-for-byte to pre-stack `23b58b07e04a16c61d18344a67930ca01d791f7c`.
+  Remove the five temporary issue-base entries, `edited` event and both retarget guards. Normal develop/epic
+  PR behavior, draft/fork beta restrictions, push/manual runs and existing release paths are preserved.
+- Keep this change isolated in the tail PR. Merge only after #449, #450, #451, #452 and #453 have merged
+  bottom-up into the epic and no preceding PR needs the temporary issue-base support. Never merge the
+  cleanup directly into `issue-230` while the calculator PRs remain open.
+- The restored PR filter intentionally excludes `issue-230`, so this tail PR does not automatically run
+  PR CI or publish a beta while initially stacked. Dispatch the existing `main.yml` manually on its exact
+  head: quality runs; beta/docs/RC/latest publication jobs are excluded. Record run/head in the PR.
+- After preceding merges, restack and retarget the cleanup PR to `epic-pump-eff-refactor`, then push the
+  restacked head to trigger normal PR CI (or reopen if the head is unchanged). Retargeting alone no longer
+  triggers CI after restoring the original event types. Require fresh PR CI before merging cleanup, and
+  land cleanup before the epic-to-develop integration/readiness PR.
+- Only workflow and handoff documentation change. Calculator source/bindings/types/fixtures, package
+  versions and Desktop source remain unchanged; prior calculation verification still applies.
+- Validation/review: exact workflow restoration, actual-YAML event/job matrix, documentation links,
+  full parent-to-head whitespace, independent review and exact-head manual quality run required.
+
+The final integrated candidate documented below predates this workflow-only cleanup. Its pump source and
+numerical evidence remain valid; use the restored workflow for the eventual reviewed integration PR.
 
 Implementation scope ends at verified Suite integration readiness and a Desktop handoff. Desktop source/pin
 changes and final release remain follow-up work under #9059; no automatic merge bypasses required approvals.
