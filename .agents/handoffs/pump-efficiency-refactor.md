@@ -3,14 +3,15 @@
 ## Workflow Metadata
 
 - Lifecycle: active
-- Status: **first module implemented, verified and independently reviewed; remaining five modules planned**
+- Status: **first module merged; second module implemented, verified and independently reviewed; remaining four planned**
 - Owner: Codex
 - Created: 2026-10-29
-- Last updated: 2026-10-29
+- Last updated: 2026-11-02
 - Suite coordinating issue: [#230 PumpEfficiency Documentation](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/230).
-- Suite integration branch / child PR base: `epic-pump-eff-refactor`; inspected head
-  `892065db8442d2472d7cbba44cf003e16f54a179` at the first child implementation start.
-- Suite PR: not opened for this epic.
+- Suite integration branch: `epic-pump-eff-refactor`; initial inspected epic head before #223:
+  `892065db8442d2472d7cbba44cf003e16f54a179`. First stack PR #449 base:
+  `666f224605365c95aaf70220ea04f6a7c4b7cc57`.
+- Suite PR: [#449](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/449) is the first open stack PR; integration PR pending.
 - Desktop issue: [#9059 Coordinate pump efficiency calculation namespace refactor](https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/9059).
 - Desktop PR: not opened for this epic.
 - Precedent: [PumpResult epic handoff](pump-result-refactor.md).
@@ -18,19 +19,42 @@
   [Suite-to-Desktop coordination](../../docs/development/suite-desktop-change-workflow.md).
 
 The initial planning pass created this record and Desktop issue #9059. The user subsequently requested the
-OptimalDeviationFactor implementation; its progress is recorded in the child handoff below. The Desktop issue is
+OptimalDeviationFactor and OptimalPrePumpEff implementations; progress is recorded in their child handoffs. The Desktop issue is
 the authoritative product/coordination record; this handoff owns the Suite sequence and implementation links.
 
 ## Target Module And Feature PR Sequence
 
-Move the six pump-only calculators from `motorDriven/pumpFan` to `motorDriven/pump`. Each later child branch starts
-from the latest `epic-pump-eff-refactor` head and targets that branch through one reviewed PR per calculator.
-Use `codex/` for new child branch names. The first module is implemented, verified and independently reviewed;
-the other five rows remain planned. See the [OptimalDeviationFactor handoff](optimal-deviation-factor-refactor.md)
-for actual validation and review evidence. Its child PR delivery is tracked below.
-The user requested commit/push/PR delivery of #223 on 2026-10-29; its durable
-[child PR and CI/publication record](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pulls?q=is%3Apr+head%3Acodex%2Fissue-223-optimal-deviation-factor+base%3Aepic-pump-eff-refactor)
-tracks delivery into this epic. Record post-push evidence there without version-only follow-up pushes.
+Move the six pump-only calculators from `motorDriven/pumpFan` to `motorDriven/pump`. The user approved a true
+stack on 2026-11-02, with one reviewed PR per calculator and `issue-###` branch names. Each child starts from
+and targets its immediate predecessor; the first stack PR targets `epic-pump-eff-refactor`. The first module merged through
+[#448](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/448); the second uses the user-requested existing
+`issue-225` branch based on merged epic commit `666f224605365c95aaf70220ea04f6a7c4b7cc57`.
+See the [OptimalDeviationFactor handoff](optimal-deviation-factor-refactor.md) and
+[OptimalPrePumpEff handoff](optimal-pre-pump-efficiency-refactor.md) for validation and review evidence.
+The remaining four modules are planned. Record post-push CI/publication evidence in the eventual child PR
+without version-only follow-up pushes.
+
+| Stack position | Branch | Initial PR base | Delivery |
+| ---: | --- | --- | --- |
+| 1 | `issue-225` | `epic-pump-eff-refactor` | [#449](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/449), pre-efficiency and stack CI |
+| 2 | `issue-228` | `issue-225` | Specific speed |
+| 3 | `issue-229` | `issue-228` | Specific-speed correction |
+| 4 | `issue-226` | `issue-229` | Optimal efficiency |
+| 5 | `issue-230` | `issue-226` | Composite efficiency and final legacy cleanup |
+
+Review each complete child diff against its actual immediate parent and record exact commits. Merge bottom-up
+into the epic using merge commits after required approvals. Rebase only the next child's own commits onto
+the updated epic, retarget it, then restack/push descendants and repeat affected checks/review. Keep parent
+branches until dependents have moved. Updating a parent alone does not establish fresh descendant validation.
+
+PR #449 adds exact CI base eligibility for the five stack branches, not a general `issue-*` rule. Base-retarget
+`edited` events run quality/beta jobs; title/body-only edits skip both. Existing draft/fork publication restrictions,
+verified artifact reuse and final release triggers remain. Published #449 beta before this amendment:
+[`1.2.7-beta.449.1`](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/449#issuecomment-6582085607).
+This child package is not the final integrated Desktop acceptance package.
+
+Implementation scope ends at verified Suite integration readiness and a Desktop handoff. Desktop source/pin
+changes and final release remain follow-up work under #9059; no automatic merge bypasses required approvals.
 
 | Order | Suite issue / legacy module | New basename and namespace | Dependencies after migration |
 | ---: | --- | --- | --- |
@@ -122,6 +146,9 @@ This defines one matching file per logical module in each layer.
   `ts_def/ts_def_modules/motorDriven/pump/pump_enums.d.ts`. Add matching
   `tests/wasm-mocha/motorDriven/pump/wasm_pump_enums.test.ts` coverage for preserved runtime values.
   Register enums exactly once; continue including the existing `Pump.h`.
+- #225 replaces indexed arrays with 16 private descriptive `constexpr` curve records, named flow thresholds
+  and one evaluator preserving `baseline + (first amplitude × first decay + second amplitude × second decay)`.
+  Its two-field input object remains; output is a numeric percentage, without a constructor or cleanup.
 - Update `ts_def/client.d.ts` root exports/module intersections and imports such as `pump_result.d.ts`'s
   `PumpStyle` import. Type-only input/result interfaces must not appear as runtime module properties.
 - Keep unmigrated class bindings/declarations in the mixed files until #229/#230 migrate; remove the empty mixed
