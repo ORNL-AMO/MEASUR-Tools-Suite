@@ -143,4 +143,5 @@ fixture was checked against the captured other-platform legacy result and meets 
 
 ## Open Questions Or Blockers
 
-No API/formula design questions remain. Shared-tree verification, publication evidence and review are pending.
+No API/formula design questions remain. Shared-tree verification and independent review are complete;
+live CI/publication evidence belongs in the linked child PR. Desktop adoption and final release remain follow-up gates.

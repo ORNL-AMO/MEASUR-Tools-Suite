@@ -4,7 +4,7 @@
 #include <limits>
 
 #include "catch.hpp"
-#include "motorDriven/pumpFan/PumpEfficiency.h"
+#include "motorDriven/pump/pump_efficiency.h"
 
 TEST_CASE("Optimal deviation factor preserves captured multipliers", "[optimal_deviation_factor]") {
     struct Fixture {
@@ -78,8 +78,8 @@ TEST_CASE("Optimal deviation migration preserves its composite consumer", "[opti
          -0.00037158021756460174, -0.00038496616430705135},
     };
     for (const auto& fixture : fixtures) {
-        const auto result = PumpEfficiency(fixture.style, 0.90, fixture.rpm, fixture.viscosity,
-                                           fixture.stages, fixture.flow_rate, fixture.head).calculate();
+        const auto result = pump_efficiency::calculate({fixture.style, fixture.rpm, fixture.viscosity,
+                                                        fixture.stages, fixture.flow_rate, fixture.head});
         CAPTURE(fixture.style, fixture.flow_rate, result.average, result.max);
         CHECK(result.average == Catch::Approx(fixture.average)
                                    .epsilon(relative_efficiency_tolerance)

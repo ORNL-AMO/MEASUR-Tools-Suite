@@ -3,7 +3,7 @@
 ## Workflow Metadata
 
 - Lifecycle: active
-- Status: **deviation merged; pre-efficiency, specific speed, correction and optimal efficiency verified/reviewed; composite remains**
+- Status: **all six modules implemented, verified and independently reviewed; stacked PR delivery and integration readiness active**
 - Owner: Codex
 - Created: 2026-10-29
 - Last updated: 2026-11-02
@@ -31,7 +31,8 @@ and targets its immediate predecessor; the first stack PR targets `epic-pump-eff
 `issue-225` branch based on merged epic commit `666f224605365c95aaf70220ea04f6a7c4b7cc57`.
 See the [OptimalDeviationFactor handoff](optimal-deviation-factor-refactor.md) and
 [OptimalPrePumpEff handoff](optimal-pre-pump-efficiency-refactor.md) for validation and review evidence.
-The remaining four modules are planned. Record post-push CI/publication evidence in the eventual child PR
+The remaining four modules are implemented; their child handoffs record captures, verification and review.
+Record post-push CI/publication evidence in each child PR
 without version-only follow-up pushes.
 
 | Stack position | Branch | Initial PR base | Delivery |
@@ -39,8 +40,8 @@ without version-only follow-up pushes.
 | 1 | `issue-225` | `epic-pump-eff-refactor` | [#449](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/449), pre-efficiency and stack CI |
 | 2 | `issue-228` | `issue-225` | [#450](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/450), specific speed |
 | 3 | `issue-229` | `issue-228` | [#451](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/451), specific-speed correction |
-| 4 | `issue-226` | `issue-229` | Optimal efficiency |
-| 5 | `issue-230` | `issue-226` | Composite efficiency and final legacy cleanup |
+| 4 | `issue-226` | `issue-229` | [#452](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/452), optimal efficiency |
+| 5 | `issue-230` | `issue-226` | [Final child PR / publication record](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pulls?q=is%3Apr+head%3Aissue-230+base%3Aissue-226), composite efficiency and cleanup |
 
 Review each complete child diff against its actual immediate parent and record exact commits. Merge bottom-up
 into the epic using merge commits after required approvals. Rebase only the next child's own commits onto
@@ -237,9 +238,40 @@ Existing examples to preserve, not newly executed or newly captured goldens:
 - Reconcile [Suite PR #446](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/446) and
   [Desktop PR #9054](https://github.com/ORNL-AMO/AMO-Tools-Desktop/pull/9054), plus
   [Desktop coordination #8957](https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8957), before final integration.
-  Their acceptance/package state must be rechecked; this new epic does not merge or close them.
+  Suite #446 is merged into develop at `432763724f6deaf009c8e0e22c0e33e503aaa3fa`; Desktop #9054 remains open
+  as inspected on 2026-11-02. This epic does not merge or close the Desktop work.
 
 ## Package And Release Coordination
+
+### Suite Integration Readiness Candidate (2026-11-02)
+
+- Reviewed calculator source: `f5f82d119908591ce8f1a361dff519ad0c55017f` on `issue-230`.
+- Freshly fetched develop: `432763724f6deaf009c8e0e22c0e33e503aaa3fa`, including merged Suite #446.
+- Prospective local merge: `2fe4a4aed4ab32e268640b3795614fad152ad3b0`, retained in the detached worktree
+  `/private/tmp/pump-efficiency-integration`. No shared branch or PR was merged to prepare this candidate.
+- The merge is conflict-free. All 17 reconciliation files are develop's steam changes, byte-identical to develop;
+  every reviewed motor-driven calculation/binding/declaration/test is unchanged. Source archive provenance is
+  recorded in the baseline archive's `linux-integration-source.json`.
+- Candidate macOS/Clang and Ubuntu 24.04 amd64/GCC native: **8476 assertions / 364 cases** (one additional
+  develop steam assertion); full Linux Valgrind: **zero errors, no leaks**. Fresh rebuilt/staged WASM:
+  **305 browser tests passed**. Types, links, generated docs, package contents and full aggregate whitespace
+  passed. All **5254 fields exactly preserved** on each of macOS, GCC and WASM with zero numerical or
+  classification changes. Reports: `/private/tmp/pump-integration-{macos,wasm}-comparison/comparison.json`
+  and archive `gcc-integration/comparison.json`. Logs: `/private/tmp/pump-integration-*.log` and archive
+  `linux-integration-*.log`. Existing BibTeX/visual-MathJax limitations remain; no reconciled package is published.
+- Fresh independent `final_stack_review` reviews both the final incremental diff and the complete
+  `4327637...2fe4a4a` integration diff. Reports: `/private/tmp/pump-final-review-semp7foc`.
+  **No actionable findings; ready with documented existing documentation follow-up**. Only handoff metadata
+  follows the reviewed source commits; prospective reconciliation is retained locally until approvals.
+- Required next delivery: obtain human approvals, merge stack bottom-up into `epic-pump-eff-refactor`, retarget
+  and restack dependents, reconcile the then-current develop, and compare that tree with this reviewed candidate.
+  Rerun affected validation/review after material changes, then open the epic-to-develop integration/readiness PR.
+  Keep it open for the consolidated Desktop follow-up under #9059 and record its exact CI-published beta.
+- A beta from the final `issue-230` child contains the complete calculator stack, but not the 17 develop
+  reconciliation files. It is not the accepted reconciled Desktop integration beta. No floating tag or earlier
+  child version substitutes for that future package; final publication remains outside this implementation.
+
+### Package And Desktop Follow-up
 
 - Classification: breaking C++ and WASM API plus four additive WASM helper APIs; no approved calculation behavior,
   default-data, or WASM filename/location change. Declarations change with the runtime.
@@ -248,7 +280,7 @@ Existing examples to preserve, not newly executed or newly captured goldens:
   before consolidated Desktop implementation or dependency updates.
 - Reconcile current develop and previous PumpResult integration; complete integrated Suite validation and review.
   Open a reviewed integration/readiness PR using the existing CI workflow and keep the Suite PR open during
-  Desktop integration. CI currently supports ready same-repository PRs targeting `develop` or `epic-*`.
+  Desktop integration. CI also supports the exact five `issue-###` stack bases listed above.
 - Use the exact CI-published integrated beta, not a floating `beta` tag or arbitrary child beta. Record its Suite
   head and publication evidence in the PR and Desktop issue. Do not push evidence-only package-version commits.
 - Update both Desktop manifests and both npm-generated lockfiles together, run affected verification, and complete
@@ -256,8 +288,9 @@ Existing examples to preserve, not newly executed or newly captured goldens:
   packaging, asset paths, or `locateFile` changes. No such loading change is planned.
 - Select and publish the approved final Suite package only after both implementations are verified; update both
   Desktop pins/lockfiles and repeat affected checks. Record actual versions, PRs, and acceptance before closure.
-- Release readiness: not ready. Implementation, baseline capture, Suite/Desktop verification and reviews,
-  integrated beta, and final package are all future gates.
+- Release readiness: not ready for Desktop/final release. Suite implementation/captures/child verification and
+  reviews are complete; required human approval/stack merging, integrated package selection, Desktop acceptance
+  and the final package remain gates.
 
 ## Validation
 
@@ -300,8 +333,8 @@ Later implementation gates:
 
 ## Internal Review
 
-- This is a planning handoff, not implementation readiness or a PR review. No PR is opened in this pass.
-- For each later child, follow `.github/skills/measur-code-review/SKILL.md` against its actual epic base; for final
+- This epic handoff records implementation progress; each child handoff records its separate readiness review.
+- For each child, follow `.github/skills/measur-code-review/SKILL.md` against its actual immediate parent; for final
   integration review the full epic-to-intended-base diff. Freeze and record exact base/head commits, reviewer,
   findings/dispositions, checks rerun after fixes, and `ready` / `ready with documented follow-up` outcome.
 - No unresolved actionable P0–P2 findings may remain at PR opening. Repeat review after material changes.
@@ -310,9 +343,9 @@ Later implementation gates:
 ## Open Questions Or Blockers
 
 - None blocks planning. Original empirical references/ranges remain unverified and must be described honestly.
-- The remaining five implementations are deferred; their baseline capture and previous PumpResult integration
-  reconciliation remain required before the respective implementation/integration gates. The first module's
-  implementation, captures, tests and independent readiness review are complete with documented environment limits.
+- All six Suite implementations, immutable captures, focused/full native/WASM validation and child readiness
+  reviews are complete. Human approval/stack merging and the consolidated Desktop delivery remain outstanding;
+  the isolated current-develop integration candidate is verified and reviewed separately before handoff.
 
 ## Appendix: Coefficients And Branches To Preserve
 
