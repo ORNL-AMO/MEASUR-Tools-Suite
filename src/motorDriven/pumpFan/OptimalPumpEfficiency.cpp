@@ -4,7 +4,7 @@
 
 #include "motorDriven/pump/optimal_pre_pump_efficiency.h"
 #include "motorDriven/pump/optimal_specific_speed.h"
-#include "motorDriven/pumpFan/OptimalSpecificSpeedCorrection.h"
+#include "motorDriven/pump/optimal_specific_speed_correction.h"
 
 double OptimalPumpEfficiency::calculate() {
 
@@ -22,8 +22,7 @@ double OptimalPumpEfficiency::calculate() {
      * Speed Correction
      */
     double                         specificSpeed = optimal_specific_speed::calculate({rpm, flowRate, head, stageCount});
-    OptimalSpecificSpeedCorrection optimalSpecificSpeedCorrection(style, specificSpeed);
-    double                         speedCorrection = optimalSpecificSpeedCorrection.calculate();
+    double speedCorrection = optimal_specific_speed_correction::calculate({style, specificSpeed});
 
     /*
      * Optimal Efficiency

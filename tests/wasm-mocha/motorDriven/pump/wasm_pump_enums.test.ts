@@ -33,14 +33,10 @@ describe('Shared pump runtime enums', function () {
         assert.strictEqual(Object.getOwnPropertyDescriptor(enums.SpecificSpeed.NOT_FIXED_SPEED, 'value')?.value, 1);
     });
 
-    it('remains usable by new plain inputs and existing class consumers', function () {
+    it('remains usable by plain calculator inputs', function () {
         const style = moduleInstance.PumpStyle.END_SUCTION_SLURRY;
         assert.isNumber(moduleInstance.calculateOptimalPrePumpEfficiency({ style, flowRate: 2000 }));
-        const correction = new moduleInstance.OptimalSpecificSpeedCorrection(style, 1170);
-        try {
-            assert.approximately(correction.calculate() * 100, 1.8942771852074485, 0.001);
-        } finally {
-            correction.delete();
-        }
+        const correction = moduleInstance.calculateOptimalSpecificSpeedCorrection({ style, specificSpeed: 1170 });
+        assert.approximately(correction * 100, 1.8942771852074485, 0.001);
     });
 });

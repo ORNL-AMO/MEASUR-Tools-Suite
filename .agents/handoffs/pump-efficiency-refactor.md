@@ -3,7 +3,7 @@
 ## Workflow Metadata
 
 - Lifecycle: active
-- Status: **deviation merged; pre-efficiency and specific speed implemented/verified/reviewed; three modules remain**
+- Status: **deviation merged; pre-efficiency, specific speed and speed correction verified/reviewed; two modules remain**
 - Owner: Codex
 - Created: 2026-10-29
 - Last updated: 2026-11-02
@@ -37,7 +37,7 @@ without version-only follow-up pushes.
 | Stack position | Branch | Initial PR base | Delivery |
 | ---: | --- | --- | --- |
 | 1 | `issue-225` | `epic-pump-eff-refactor` | [#449](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/449), pre-efficiency and stack CI |
-| 2 | `issue-228` | `issue-225` | Specific speed |
+| 2 | `issue-228` | `issue-225` | [#450](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/450), specific speed |
 | 3 | `issue-229` | `issue-228` | Specific-speed correction |
 | 4 | `issue-226` | `issue-229` | Optimal efficiency |
 | 5 | `issue-230` | `issue-226` | Composite efficiency and final legacy cleanup |
