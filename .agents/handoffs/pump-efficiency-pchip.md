@@ -69,8 +69,14 @@ Types, Markdown links and whitespace passed. Doxygen generated the updated pages
 BibTeX failure and unrelated warnings; no new pump/PCHIP diagnostic. All 28 printed document examples
 match stated precision. SciPy's H-at-400 value is 70.77499999999999 (Python rounds to 70.77%).
 
-Initial independent review by `pchip_review`: no actionable numeric/API findings; independently verified
-all production coordinates and passed 3371 focused assertions / 13 cases. Final review is pending.
+Final independent review by `pchip_review`: **ready with documented follow-up; no actionable findings**.
+Intended base: `epic-pump-eff-refactor`, `8fa57f453d9bb9b43ee8b73555ae5dd8f35b6e7a`;
+reviewed source head: `18f1e1604150e76729f07fd6697a1bdf096d6358`. Reviewer independently ran the full
+8626-assertion / 362-case native suite and 3371 focused assertions / 13 cases, types, links and complete
+diff whitespace. Source coordinates matched engineering data; browser/JSON goldens and capture SHA-256
+matched. Reviewer inspected successful 301-test rebuilt-WASM evidence. No unresolved P0–P2 findings.
+Only handoff review metadata follows the reviewed source. Remaining follow-up: existing BibTeX/tooling
+limits, exact published-beta Desktop acceptance and engineering/workbook release gates.
 
 Durable synthetic evidence: `docs/development/evidence/pump-pchip-{before,after}.csv` and
 `pump-pchip-differences.json`: 55 duties, 8 now unavailable. The report records the immutable old
@@ -78,5 +84,7 @@ capture SHA-256, separate from the earlier behavior-preserving refactor evidence
 
 Desktop local validation uses this exact fresh WASM and matching declarations in its private ignored
 node_modules. Existing package pins are not claimed as PCHIP beta acceptance. Web build and 257
-process-flow tests passed; process-flow typecheck passed. Final Desktop tests/review and published-beta
-adoption are pending; see Desktop `docs/development/pump-efficiency-pchip.md`.
+process-flow tests passed; process-flow typecheck passed. Final local Desktop suite: 1666 tests passed,
+with application/spec typechecks and the immutable 72-scenario gate unchanged. Desktop candidate
+`96c39cccca82db3cdb8a3f52864cf2c28a471e7f` is independently reviewing against its exact #9054 base.
+Published-beta adoption remains pending; see Desktop `docs/development/pump-efficiency-pchip.md`.
