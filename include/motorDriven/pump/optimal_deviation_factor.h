@@ -6,6 +6,8 @@
  */
 #pragma once
 
+#include "util/pchip.h"
+
 /**
  * @ingroup optimal_deviation_factor_calculator
  * @namespace optimal_deviation_factor
@@ -17,12 +19,14 @@ namespace optimal_deviation_factor {
  * @brief Calculates the multiplier applied to an average pump-efficiency estimate.
  * @param[in] flow_rate Liquid volumetric flow @unitb{\gallon\per\minute}, US gallons.
  * @return Dimensionless multiplier @unitb{\unitless}; multiply the average efficiency by this value.
- * @details The empirical expression uses the numerical flow in US gpm. Callers convert units
- * and validate the duty; no defaults, validation or clamping are applied. Both signed zeros
- * yield positive infinity, negative flow and NaN yield NaN, and positive infinity yields
- * 1.0010805906. A finite positive flow gives a multiplier above one, not an efficiency fraction.
+ * @details Interpolates the HI 20.3-2020 positive-deviation table against raw flow in US gpm.
+ * Returns 1 + deviation-percent/100 for inclusive flow range 35–100000 US gpm.
+ * Nonfinite and out-of-range flow return NaN. No extrapolation or output clamping is applied.
  * @see @ref optimal_deviation_factor_calculator for coefficients, a worked example and provenance limits.
  */
 double calculate(double flow_rate);
+
+/** @return Inclusive positive-deviation table flow bounds in US gpm. */
+pchip::Range flowLimits();
 
 } // namespace optimal_deviation_factor

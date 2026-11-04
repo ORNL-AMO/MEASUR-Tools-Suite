@@ -37,6 +37,6 @@ describe('Shared pump runtime enums', function () {
         const style = moduleInstance.PumpStyle.END_SUCTION_SLURRY;
         assert.isNumber(moduleInstance.calculateOptimalPrePumpEfficiency({ style, flowRate: 2000 }));
         const correction = moduleInstance.calculateOptimalSpecificSpeedCorrection({ style, specificSpeed: 1170 });
-        assert.approximately(correction * 100, 1.8942771852074485, 0.001);
+        assert.approximately(correction * 100, 4.207867527379804, 0.001);
     });
 });

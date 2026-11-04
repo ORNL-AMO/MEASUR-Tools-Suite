@@ -1,120 +1,63 @@
 /**
- * @defgroup optimal_pump_efficiency_calculator Corrected Pump-Efficiency Estimate
+ * @defgroup optimal_pump_efficiency_calculator Corrected Average Pump Efficiency
  * @ingroup equipment_and_property_calculators
- * @brief Estimates pump efficiency from flow and style, with viscosity and specific-speed corrections.
+ * @brief Combines HI 2020 base efficiency and speed correction with the viscosity adjustment.
  * @details
- * What efficiency does the flow/style estimate predict after accounting for the liquid's viscosity
- * and the pump's specific speed? This calculation combines the separate estimates into an efficiency
- * fraction. It supplies the average estimate used by the pump-efficiency calculation; it does not
- * measure a particular pump or establish its manufacturer's best-efficiency point.
+ * What average efficiency is achievable for this pump style and duty? The result is an engineering
+ * estimate used when a measured curve is unavailable, returned as a dimensionless efficiency fraction.
  *
- * @heading{Final Result and Interpretation}
- * The corrected estimate is:
- * @formula{optimal-pump-efficiency-result; \eta=\left(\frac{E_{pre}}{S}\right)C_\nu-C_{N_s}}
- * @symtable
- * @symrow{\eta; Returned corrected efficiency as a fraction; \unitless}
- * @symrow{E_{pre}; Flow/style efficiency estimate before corrections; \percent}
- * @symrow{S; Percentage-point scale per unit fraction, 100; \percent}
- * @symrow{C_\nu; Multiplicative viscosity correction factor; \unitless}
- * @symrow{C_{N_s}; Specific-speed correction as a fractional efficiency decrement; \unitless}
- * @endsymtable
+ * @heading{Final Result and Decision Path}
+ * Select the HI 2020 base curve and interpolate the flow. Convert percent to fraction, apply the
+ * retained viscosity multiplier, and subtract the specific-speed decrement.
  *
- * A result of 0.73181 means about 73.181% efficiency. The pre-correction estimate is divided by
- * 100 before applying the viscosity factor; the specific-speed decrement is then subtracted
- * from that adjusted fraction. Express both efficiency terms as fractions before subtraction; do not
- * apply either correction a second time. This estimate does not include the separate deviation
- * multiplier used to calculate the maximum pump-efficiency estimate.
- *
- * @heading{Start with the Flow and Pump Style}
- * Supply liquid flow in US gpm and select the pump style. The
- * @ref optimal_pre_pump_efficiency_calculator "flow/style estimate" provides the efficiency
- * before corrections in percent. Its piecewise curve selection and equality boundaries apply here.
- * Specified-optimal, positive-displacement and unknown native styles retain a zero pre-correction
- * estimate. A zero from those styles is a fallback, not a specified efficiency or a calibrated
- * positive-displacement model. The correction steps still execute and can produce negative results.
- *
- * @heading{Apply the Viscosity Factor in the Stated Unit Convention}
- * The viscosity relationship operates on numerical values in cSt, feet, US gpm and rpm. Expressed
- * with unit ratios to make that convention explicit, the empirical parameter is:
- * @formula{optimal-pump-efficiency-viscosity-parameter;
- *   B=26.6\frac{\left(\nu/\nu_{ref}\right)^{0.5}\left(H/H_{ref}\right)^{0.0625}}
- *                 {\left(Q/Q_{ref}\right)^{0.375}\left(n/n_{ref}\right)^{0.25}}
+ * @formula{hi2020-corrected-average;
+ * \eta_{average}=\frac{E_{pre}}{100}C_{\nu}-C_{Ns}
  * }
  * @symtable
- * @symrow{B; Empirical viscosity parameter evaluated in the stated unit convention; \unitless}
- * @symrow{\nu; Supplied liquid kinematic viscosity; cSt}
- * @symrow{\nu_{ref}; Reference viscosity of 1 cSt defining the numerical convention; cSt}
- * @symrow{H; Supplied total pump head across all stages; \foot}
- * @symrow{H_{ref}; Reference head of 1 ft defining the numerical convention; \foot}
- * @symrow{Q; Supplied liquid volumetric flow; \gallon\per\minute}
- * @symrow{Q_{ref}; Reference flow of 1 US gpm defining the numerical convention; \gallon\per\minute}
- * @symrow{n; Supplied pump rotational speed; \revolutionsPerMinute}
- * @symrow{n_{ref}; Reference speed of 1 rpm defining the numerical convention; \revolutionsPerMinute}
- * @symrow{26.6; Retained empirical coefficient in this unit convention; \unitless}
+ * @symrow{\eta_{average}; Corrected average efficiency fraction; \unitless}
+ * @symrow{E_{pre}; HI base efficiency; \percent}
+ * @symrow{100; Percentage-point scale per fraction; \percent}
+ * @symrow{C_{\nu}; Viscosity multiplier capped at one; \unitless}
+ * @symrow{C_{Ns}; Fractional specific-speed decrement; \unitless}
  * @endsymtable
  *
- * These reference units explain the numerical inputs; they do not add runtime conversion or new
- * fitted coefficients. The viscosity expression uses the supplied total head, while the separate
- * specific-speed calculation uses head divided by stage count. Preserve that distinction.
- * The viscosity factor is:
- * @formula{optimal-pump-efficiency-viscosity-factor; C_\nu=\min\left(1,B^{-\left(0.0547B^{0.69}\right)}\right)}
+ * @formula{hi2020-viscosity-parameter;
+ * B=26.6\frac{\nu^{0.5}H^{0.0625}}{Q^{0.375}n^{0.25}},\qquad
+ * C_{\nu}=\min\left(1,B^{-0.0547B^{0.69}}\right)
+ * }
  * @symtable
- * @symrow{C_\nu; Viscosity factor capped at one; \unitless}
- * @symrow{B; Empirical viscosity parameter; \unitless}
- * @symrow{1; Upper cap preventing a viscosity efficiency increase; \unitless}
- * @symrow{0.0547,0.69; Retained empirical constants; \unitless}
+ * @symrow{B; Empirical viscosity parameter in the stated numerical conventions; \unitless}
+ * @symrow{\nu; Liquid kinematic viscosity; cSt}
+ * @symrow{H; Total head across all stages; \foot}
+ * @symrow{Q; Flow in the US gallon convention; \gallon\per\minute}
+ * @symrow{n; Pump rotational speed; \revolutionsPerMinute}
+ * @symrow{26.6; Empirical scale for the stated mixed-unit convention; mixed-unit empirical scale}
+ * @symrow{0.0547; Empirical exponent coefficient; \unitless}
+ * @symrow{0.69; Empirical exponent; \unitless}
+ * @symrow{0.5,0.0625,0.375,0.25; Empirical viscosity-parameter exponents; \unitless}
+ * @symrow{C_{\nu}; Viscosity multiplier; \unitless}
  * @endsymtable
  *
- * For a positive finite parameter below one, the uncapped factor exceeds one and the cap limits
- * it to one. Above one, the factor reduces the pre-correction efficiency. The cap is applied to
- * this factor, not to the final efficiency result.
- *
- * @heading{Subtract the Specific-Speed Decrement}
- * The @ref optimal_specific_speed_calculator "specific-speed calculation" combines speed, flow
- * and head per stage in the US customary convention. The
- * @ref optimal_specific_speed_correction_calculator "specific-speed correction" then selects
- * its pump-style curve and returns a fractional decrement. Only vertical-turbine style uses the
- * vertical correction curves; axial flow uses the nonvertical correction even though its
- * pre-efficiency curves are shared with vertical turbines. The correction's lower clamp does not
- * establish a lower or upper bound on the combined efficiency.
+ * The viscosity relationship and specific-speed definition are retained. Specific speed uses head
+ * per stage; see @ref optimal_specific_speed_calculator. Base and speed corrections now use the
+ * engineering HI 20.3-2020 tables via @ref optimal_pre_pump_efficiency_calculator and
+ * @ref optimal_specific_speed_correction_calculator. Viscosity correction occurs once.
  *
  * @heading{Worked Example}
- * Consider an ANSI/API end-suction pump at 2000 rpm, 2000 US gpm, 137 ft total head, one stage
- * and 100 cSt kinematic viscosity. The flow/style estimate is about 83.971%.
- * The viscosity parameter is about 3.128, giving a viscosity factor of 0.87195.
- * Specific speed is about 2233.596 in the US customary convention, and its decrement is about
- * 0.000372 as an efficiency fraction. Combining the unrounded values gives:
- * @formula{optimal-pump-efficiency-example;
- *   \eta\approx\left(\frac{83.971}{100}\right)(0.87195)-0.000372
- *       \approx0.73181
- * }
- * @symtable
- * @symrow{\eta; Example corrected efficiency fraction; \unitless}
- * @symrow{83.971; Rounded pre-correction efficiency used to display the substitution; \percent}
- * @symrow{100; Percentage-point scale per unit fraction; \percent}
- * @symrow{0.87195; Rounded viscosity factor; \unitless}
- * @symrow{0.000372; Rounded fractional specific-speed decrement; \unitless}
- * @endsymtable
+ * An ANSI/API pump at Q=2000 US gpm, n=2000 rpm, H=137 ft, one stage and nu=1.107 cSt has
+ * base efficiency approximately 83.99065%. Its viscosity multiplier is capped at 1.
+ * Specific speed is approximately 2233.596 in the US convention; the speed correction is
+ * approximately 0.00708346 percentage points, or 0.0000708346 as a fraction. The result is
+ * approximately 0.8398357, equivalent to 83.98357% average efficiency.
  *
- * The estimate is about 73.181% efficiency. At 1.107 cSt with the other inputs unchanged, the
- * viscosity factor is capped at one and the estimate is about 83.934%. Round only the final
- * displayed result; retaining full intermediate precision matters near piecewise boundaries.
- *
- * @heading{Assumptions, Arithmetic Boundaries and Inappropriate Uses}
- * Interpret the empirical model using finite, physically meaningful duty data in the stated
- * units and an appropriate pump style. Stage count remains a floating value; it is not rounded
- * or restricted to integers. No double-suction flow-halving adjustment is made.
- * The retained relationships do not establish a calibration range or prediction uncertainty.
- * They do not replace a manufacturer curve, measured pump efficiency, or an engineering review
- * of the selected pump and liquid. No specified-efficiency override is performed.
- *
- * Inputs are evaluated without validation, defaults or denominator guards. The arithmetic uses
- * fmin for the viscosity cap and fmax inside the specific-speed correction. A NaN viscosity
- * expression can therefore select the numeric cap, and a NaN correction polynomial can select
- * zero. An invalid duty can return a finite number; a finite result does not validate its inputs.
- * Zero, negative and nonfinite inputs can also yield negative, very large or nonfinite estimates.
- * There is no final clamp to zero or one. Those retained arithmetic outcomes are not valid
- * operating duties or error codes, and should not be presented as physical efficiency predictions.
+ * @heading{Assumptions and Availability}
+ * Inputs must be finite, with positive rpm/head/stage count, nonnegative viscosity, and flow and
+ * derived specific speed inside the inclusive reference ranges. Fractional positive stage counts
+ * remain numerically supported. Out-of-range, invalid or unsupported duties return NaN.
+ * Specified efficiency and positive displacement use supplied-efficiency paths elsewhere.
+ * No final output clamp is applied; extreme viscosity can yield a nonpositive estimate, which must
+ * not be used as a usable pump efficiency. These reference ranges concern estimate availability,
+ * not whether equipment can operate or whether a measured assessment can be calculated.
  *
  * @see optimal_pump_efficiency::calculate
  */

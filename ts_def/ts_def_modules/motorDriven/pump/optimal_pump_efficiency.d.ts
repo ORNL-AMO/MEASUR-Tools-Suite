@@ -19,9 +19,9 @@ export interface OptimalPumpEfficiencyInput {
 
 /**
  * Estimates pump efficiency using the flow/style estimate and viscosity/specific-speed corrections.
- * No input validation or final result clamp is applied; nonfinite arithmetic retains fmin/fmax behavior.
- * Specified-optimal and positive-displacement styles retain a zero pre-efficiency fallback and can
- * produce negative estimates; this function does not implement a specified-efficiency override.
+ * Returns NaN for invalid duties, unavailable reference estimates and unsupported styles.
+ * Requires finite positive rpm/head/stages, nonnegative finite viscosity, and reference-range flow/speed.
+ * Specified-efficiency and positive-displacement styles bypass this estimate. No output clamping.
  * @param input Plain pump-duty input; not modified and requires no delete().
  * @returns Efficiency as a dimensionless fraction, not percentage points; no cleanup is required.
  */

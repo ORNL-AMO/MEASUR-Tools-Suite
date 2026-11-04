@@ -1,0 +1,2868 @@
+{
+  "baselineCommit": "8fa57f453d9bb9b43ee8b73555ae5dd8f35b6e7a",
+  "baselineSha256": "8506755769300c74cca8d2b948ebe0731e8103e3ceebc3fdd5386213e3d01c18",
+  "source": "HI 20.3-2020 engineering revision 2026-09-23",
+  "scipyGoldenVersion": "1.17.1",
+  "scenarios": [
+    {
+      "style": 0,
+      "input": {
+        "flow_gpm": 400.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 54.520572447251155,
+          "after": 59.13552686123155,
+          "classification": "finite",
+          "absoluteDelta": 4.614954413980392,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.027305546035844137,
+          "after": 0.06460160155650688,
+          "classification": "finite",
+          "absoluteDelta": 0.037296055520662744,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0620900466482375,
+          "after": 1.0486822994821572,
+          "classification": "finite",
+          "absoluteDelta": -0.013407747166080286,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.5179001784366675,
+          "after": 0.5267536670558086,
+          "classification": "finite",
+          "absoluteDelta": 0.008853488619141148,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.5500566246749307,
+          "after": 0.552397246828744,
+          "classification": "finite",
+          "absoluteDelta": 0.0023406221538133654,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 0,
+      "input": {
+        "flow_gpm": 1000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 65.27153455543127,
+          "after": 69.49919022295059,
+          "classification": "finite",
+          "absoluteDelta": 4.227655667519315,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.006619052165873266,
+          "after": 0.01527720420025427,
+          "classification": "finite",
+          "absoluteDelta": 0.008658152034381004,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0455029577240247,
+          "after": 1.037,
+          "classification": "finite",
+          "absoluteDelta": -0.008502957724024762,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.6460962933884395,
+          "after": 0.6797146980292517,
+          "classification": "finite",
+          "absoluteDelta": 0.033618404640812116,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.6754955857121427,
+          "after": 0.704864141856334,
+          "classification": "finite",
+          "absoluteDelta": 0.029368556144191205,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 0,
+      "input": {
+        "flow_gpm": 2000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 72.99786733498414,
+          "after": 75.5,
+          "classification": "finite",
+          "absoluteDelta": 2.502132665015864,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.00037158021756460174,
+          "after": 7.083455734045973e-05,
+          "classification": "finite",
+          "absoluteDelta": -0.000300745660224142,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0360243794198285,
+          "after": 1.0327343126177024,
+          "classification": "finite",
+          "absoluteDelta": -0.003290066802126068,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.7296070931322768,
+          "after": 0.7549291654426595,
+          "classification": "finite",
+          "absoluteDelta": 0.02532207231038275,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.7558907358826721,
+          "after": 0.7796412527484807,
+          "classification": "finite",
+          "absoluteDelta": 0.023750516865808646,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 0,
+      "input": {
+        "flow_gpm": 5000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 79.5779363213239,
+          "after": 80.5413490712915,
+          "classification": "finite",
+          "absoluteDelta": 0.9634127499676026,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.0030683299531420677,
+          "after": 0.015193793306873609,
+          "classification": "finite",
+          "absoluteDelta": 0.01212546335373154,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0265249678994302,
+          "after": 1.0243874869219503,
+          "classification": "finite",
+          "absoluteDelta": -0.0021374809774798997,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.792711033260097,
+          "after": 0.7902196974060414,
+          "classification": "finite",
+          "absoluteDelta": -0.0024913358540555874,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.8137376679708451,
+          "after": 0.8094911699419987,
+          "classification": "finite",
+          "absoluteDelta": -0.004246498028846468,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 0,
+      "input": {
+        "flow_gpm": 10000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 83.3397555237983,
+          "after": 83.2,
+          "classification": "finite",
+          "absoluteDelta": -0.13975552379829992,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.012295423274621822,
+          "after": 0.042415421788997945,
+          "classification": "finite",
+          "absoluteDelta": 0.030119998514376124,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0210964032018048,
+          "after": 1.02,
+          "classification": "finite",
+          "absoluteDelta": -0.0010964032018048187,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.8211021319633611,
+          "after": 0.7895845782110021,
+          "classification": "finite",
+          "absoluteDelta": -0.031517553752358984,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.8384244336091218,
+          "after": 0.8053762697752223,
+          "classification": "finite",
+          "absoluteDelta": -0.033048163833899524,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 1,
+      "input": {
+        "flow_gpm": 400.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 62.14816038141045,
+          "after": 62.0,
+          "classification": "finite",
+          "absoluteDelta": -0.14816038141044885,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.027305546035844137,
+          "after": 0.06460160155650688,
+          "classification": "finite",
+          "absoluteDelta": 0.037296055520662744,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0620900466482375,
+          "after": 1.0486822994821572,
+          "classification": "finite",
+          "absoluteDelta": -0.013407747166080286,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.5941760577782603,
+          "after": 0.5553983984434931,
+          "classification": "finite",
+          "absoluteDelta": -0.03877765933476718,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.6310684769229784,
+          "after": 0.5824364696084298,
+          "classification": "finite",
+          "absoluteDelta": -0.04863200731454864,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 1,
+      "input": {
+        "flow_gpm": 1000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 71.87699271025599,
+          "after": 72.0,
+          "classification": "finite",
+          "absoluteDelta": 0.12300728974400954,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.006619052165873266,
+          "after": 0.01527720420025427,
+          "classification": "finite",
+          "absoluteDelta": 0.008658152034381004,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0455029577240247,
+          "after": 1.037,
+          "classification": "finite",
+          "absoluteDelta": -0.008502957724024762,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.7121508749366867,
+          "after": 0.7047227957997457,
+          "classification": "finite",
+          "absoluteDelta": -0.00742807913694099,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.7445558460920579,
+          "after": 0.7307975392443362,
+          "classification": "finite",
+          "absoluteDelta": -0.013758306847721724,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 1,
+      "input": {
+        "flow_gpm": 2000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 77.87288124249606,
+          "after": 78.0,
+          "classification": "finite",
+          "absoluteDelta": 0.1271187575039363,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.00037158021756460174,
+          "after": 7.083455734045973e-05,
+          "classification": "finite",
+          "absoluteDelta": -0.000300745660224142,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0360243794198285,
+          "after": 1.0327343126177024,
+          "classification": "finite",
+          "absoluteDelta": -0.003290066802126068,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.778357232207396,
+          "after": 0.7799291654426596,
+          "classification": "finite",
+          "absoluteDelta": 0.0015719332352635007,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.8063970684646028,
+          "after": 0.8054596105639233,
+          "classification": "finite",
+          "absoluteDelta": -0.0009374579006794503,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 1,
+      "input": {
+        "flow_gpm": 5000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 83.1267231120349,
+          "after": 82.95464414278094,
+          "classification": "finite",
+          "absoluteDelta": -0.1720789692539597,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.0030683299531420677,
+          "after": 0.015193793306873609,
+          "classification": "finite",
+          "absoluteDelta": 0.01212546335373154,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0265249678994302,
+          "after": 1.0243874869219503,
+          "classification": "finite",
+          "absoluteDelta": -0.0021374809774798997,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.8281989011672068,
+          "after": 0.8143526481209357,
+          "classification": "finite",
+          "absoluteDelta": -0.013846253046271184,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.8501668504350103,
+          "after": 0.8342126626768406,
+          "classification": "finite",
+          "absoluteDelta": -0.015954187758169702,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 1,
+      "input": {
+        "flow_gpm": 10000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 85.63699468136879,
+          "after": 85.7,
+          "classification": "finite",
+          "absoluteDelta": 0.0630053186312125,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.012295423274621822,
+          "after": 0.042415421788997945,
+          "classification": "finite",
+          "absoluteDelta": 0.030119998514376124,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0210964032018048,
+          "after": 1.02,
+          "classification": "finite",
+          "absoluteDelta": -0.0010964032018048187,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.8440745235390661,
+          "after": 0.814584578211002,
+          "classification": "finite",
+          "absoluteDelta": -0.029489945328064038,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.8618814600200175,
+          "after": 0.8308762697752221,
+          "classification": "finite",
+          "absoluteDelta": -0.031005190244795422,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 2,
+      "input": {
+        "flow_gpm": 400.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 66.5367388097531,
+          "after": 66.5,
+          "classification": "finite",
+          "absoluteDelta": -0.036738809753103396,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.027305546035844137,
+          "after": 0.06460160155650688,
+          "classification": "finite",
+          "absoluteDelta": 0.037296055520662744,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0620900466482375,
+          "after": 1.0486822994821572,
+          "classification": "finite",
+          "absoluteDelta": -0.013407747166080286,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.6380618420616869,
+          "after": 0.6003983984434932,
+          "classification": "finite",
+          "absoluteDelta": -0.03766344361819374,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.6776791315997573,
+          "after": 0.6296271730851268,
+          "classification": "finite",
+          "absoluteDelta": -0.04805195851463051,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 2,
+      "input": {
+        "flow_gpm": 1000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 75.57528727085281,
+          "after": 75.5,
+          "classification": "finite",
+          "absoluteDelta": -0.07528727085281162,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.006619052165873266,
+          "after": 0.01527720420025427,
+          "classification": "finite",
+          "absoluteDelta": 0.008658152034381004,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0455029577240247,
+          "after": 1.037,
+          "classification": "finite",
+          "absoluteDelta": -0.008502957724024762,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.7491338205426549,
+          "after": 0.7397227957997458,
+          "classification": "finite",
+          "absoluteDelta": -0.009411024742909113,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.7832216251084444,
+          "after": 0.7670925392443363,
+          "classification": "finite",
+          "absoluteDelta": -0.016129085864108106,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 2,
+      "input": {
+        "flow_gpm": 2000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 80.59094257557372,
+          "after": 80.56,
+          "classification": "finite",
+          "absoluteDelta": -0.030942575573718045,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.00037158021756460174,
+          "after": 7.083455734045973e-05,
+          "classification": "finite",
+          "absoluteDelta": -0.000300745660224142,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0360243794198285,
+          "after": 1.0327343126177024,
+          "classification": "finite",
+          "absoluteDelta": -0.003290066802126068,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.8055378455381726,
+          "after": 0.8055291654426595,
+          "classification": "finite",
+          "absoluteDelta": -8.680095513136088e-06,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.834556846522871,
+          "after": 0.8318976089669364,
+          "classification": "finite",
+          "absoluteDelta": -0.002659237555934557,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 2,
+      "input": {
+        "flow_gpm": 5000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 84.53677089023593,
+          "after": 84.45735802354318,
+          "classification": "finite",
+          "absoluteDelta": -0.07941286669274916,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.0030683299531420677,
+          "after": 0.015193793306873609,
+          "classification": "finite",
+          "absoluteDelta": 0.01212546335373154,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0265249678994302,
+          "after": 1.0243874869219503,
+          "classification": "finite",
+          "absoluteDelta": -0.0021374809774798997,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.8422993789492171,
+          "after": 0.8293797869285582,
+          "classification": "finite",
+          "absoluteDelta": -0.012919592020658954,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.8646413429375551,
+          "after": 0.8496062756356083,
+          "classification": "finite",
+          "absoluteDelta": -0.015035067301946814,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 2,
+      "input": {
+        "flow_gpm": 10000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 86.72623368994832,
+          "after": 86.7,
+          "classification": "finite",
+          "absoluteDelta": -0.0262336899483131,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.012295423274621822,
+          "after": 0.042415421788997945,
+          "classification": "finite",
+          "absoluteDelta": 0.030119998514376124,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0210964032018048,
+          "after": 1.02,
+          "classification": "finite",
+          "absoluteDelta": -0.0010964032018048187,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.8549669136248613,
+          "after": 0.8245845782110021,
+          "classification": "finite",
+          "absoluteDelta": -0.030382335413859263,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.873003640358894,
+          "after": 0.8410762697752221,
+          "classification": "finite",
+          "absoluteDelta": -0.0319273705836719,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 3,
+      "input": {
+        "flow_gpm": 400.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 62.14816038141045,
+          "after": 63.95485538125924,
+          "classification": "finite",
+          "absoluteDelta": 1.8066949998487942,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.027305546035844137,
+          "after": 0.06460160155650688,
+          "classification": "finite",
+          "absoluteDelta": 0.037296055520662744,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0620900466482375,
+          "after": 1.0486822994821572,
+          "classification": "finite",
+          "absoluteDelta": -0.013407747166080286,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.5941760577782603,
+          "after": 0.5749469522560856,
+          "classification": "finite",
+          "absoluteDelta": -0.019229105522174716,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.6310684769229784,
+          "after": 0.6029366919721699,
+          "classification": "finite",
+          "absoluteDelta": -0.02813178495080848,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 3,
+      "input": {
+        "flow_gpm": 1000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 71.87699271025599,
+          "after": 74.5,
+          "classification": "finite",
+          "absoluteDelta": 2.6230072897440095,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.006619052165873266,
+          "after": 0.01527720420025427,
+          "classification": "finite",
+          "absoluteDelta": 0.008658152034381004,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0455029577240247,
+          "after": 1.037,
+          "classification": "finite",
+          "absoluteDelta": -0.008502957724024762,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.7121508749366867,
+          "after": 0.7297227957997457,
+          "classification": "finite",
+          "absoluteDelta": 0.017571920863059032,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.7445558460920579,
+          "after": 0.7567225392443363,
+          "classification": "finite",
+          "absoluteDelta": 0.012166693152278363,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 3,
+      "input": {
+        "flow_gpm": 2000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 77.87288124249606,
+          "after": 79.3,
+          "classification": "finite",
+          "absoluteDelta": 1.4271187575039335,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.00037158021756460174,
+          "after": 7.083455734045973e-05,
+          "classification": "finite",
+          "absoluteDelta": -0.000300745660224142,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0360243794198285,
+          "after": 1.0327343126177024,
+          "classification": "finite",
+          "absoluteDelta": -0.003290066802126068,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.778357232207396,
+          "after": 0.7929291654426595,
+          "classification": "finite",
+          "absoluteDelta": 0.014571933235263401,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.8063970684646028,
+          "after": 0.8188851566279534,
+          "classification": "finite",
+          "absoluteDelta": 0.012488088163350564,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 3,
+      "input": {
+        "flow_gpm": 5000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 83.1267231120349,
+          "after": 84.2,
+          "classification": "finite",
+          "absoluteDelta": 1.0732768879651076,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.0030683299531420677,
+          "after": 0.015193793306873609,
+          "classification": "finite",
+          "absoluteDelta": 0.01212546335373154,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0265249678994302,
+          "after": 1.0243874869219503,
+          "classification": "finite",
+          "absoluteDelta": -0.0021374809774798997,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.8281989011672068,
+          "after": 0.8268062066931264,
+          "classification": "finite",
+          "absoluteDelta": -0.0013926944740804137,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.8501668504350103,
+          "after": 0.8469699322458424,
+          "classification": "finite",
+          "absoluteDelta": -0.0031969181891678966,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 3,
+      "input": {
+        "flow_gpm": 10000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 85.63699468136879,
+          "after": 86.8,
+          "classification": "finite",
+          "absoluteDelta": 1.1630053186312068,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.012295423274621822,
+          "after": 0.042415421788997945,
+          "classification": "finite",
+          "absoluteDelta": 0.030119998514376124,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0210964032018048,
+          "after": 1.02,
+          "classification": "finite",
+          "absoluteDelta": -0.0010964032018048187,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.8440745235390661,
+          "after": 0.8255845782110021,
+          "classification": "finite",
+          "absoluteDelta": -0.018489945328064028,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.8618814600200175,
+          "after": 0.8420962697752221,
+          "classification": "finite",
+          "absoluteDelta": -0.019785190244795414,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 4,
+      "input": {
+        "flow_gpm": 400.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 66.5367388097531,
+          "after": 70.775,
+          "classification": "finite",
+          "absoluteDelta": 4.238261190246902,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.027305546035844137,
+          "after": 0.06460160155650688,
+          "classification": "finite",
+          "absoluteDelta": 0.037296055520662744,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0620900466482375,
+          "after": 1.0486822994821572,
+          "classification": "finite",
+          "absoluteDelta": -0.013407747166080286,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.6380618420616869,
+          "after": 0.6431483984434933,
+          "classification": "finite",
+          "absoluteDelta": 0.005086556381806329,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.6776791315997573,
+          "after": 0.6744583413879891,
+          "classification": "finite",
+          "absoluteDelta": -0.003220790211768243,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 4,
+      "input": {
+        "flow_gpm": 1000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 75.57528727085281,
+          "after": 81.0,
+          "classification": "finite",
+          "absoluteDelta": 5.424712729147188,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.006619052165873266,
+          "after": 0.01527720420025427,
+          "classification": "finite",
+          "absoluteDelta": 0.008658152034381004,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0455029577240247,
+          "after": 1.037,
+          "classification": "finite",
+          "absoluteDelta": -0.008502957724024762,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.7491338205426549,
+          "after": 0.7947227957997458,
+          "classification": "finite",
+          "absoluteDelta": 0.045588975257090936,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.7832216251084444,
+          "after": 0.8241275392443363,
+          "classification": "finite",
+          "absoluteDelta": 0.04090591413589195,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 4,
+      "input": {
+        "flow_gpm": 2000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 80.59094257557372,
+          "after": null,
+          "classification": "unavailable",
+          "absoluteDelta": null,
+          "cause": "Outside supplied reference range"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.00037158021756460174,
+          "after": 7.083455734045973e-05,
+          "classification": "finite",
+          "absoluteDelta": -0.000300745660224142,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0360243794198285,
+          "after": 1.0327343126177024,
+          "classification": "finite",
+          "absoluteDelta": -0.003290066802126068,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.8055378455381726,
+          "after": null,
+          "classification": "unavailable",
+          "absoluteDelta": null,
+          "cause": "Outside supplied reference range"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.834556846522871,
+          "after": null,
+          "classification": "unavailable",
+          "absoluteDelta": null,
+          "cause": "Outside supplied reference range"
+        }
+      ]
+    },
+    {
+      "style": 4,
+      "input": {
+        "flow_gpm": 5000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 84.53677089023593,
+          "after": null,
+          "classification": "unavailable",
+          "absoluteDelta": null,
+          "cause": "Outside supplied reference range"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.0030683299531420677,
+          "after": 0.015193793306873609,
+          "classification": "finite",
+          "absoluteDelta": 0.01212546335373154,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0265249678994302,
+          "after": 1.0243874869219503,
+          "classification": "finite",
+          "absoluteDelta": -0.0021374809774798997,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.8422993789492171,
+          "after": null,
+          "classification": "unavailable",
+          "absoluteDelta": null,
+          "cause": "Outside supplied reference range"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.8646413429375551,
+          "after": null,
+          "classification": "unavailable",
+          "absoluteDelta": null,
+          "cause": "Outside supplied reference range"
+        }
+      ]
+    },
+    {
+      "style": 4,
+      "input": {
+        "flow_gpm": 10000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 86.72623368994832,
+          "after": null,
+          "classification": "unavailable",
+          "absoluteDelta": null,
+          "cause": "Outside supplied reference range"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.012295423274621822,
+          "after": 0.042415421788997945,
+          "classification": "finite",
+          "absoluteDelta": 0.030119998514376124,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0210964032018048,
+          "after": 1.02,
+          "classification": "finite",
+          "absoluteDelta": -0.0010964032018048187,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.8549669136248613,
+          "after": null,
+          "classification": "unavailable",
+          "absoluteDelta": null,
+          "cause": "Outside supplied reference range"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.873003640358894,
+          "after": null,
+          "classification": "unavailable",
+          "absoluteDelta": null,
+          "cause": "Outside supplied reference range"
+        }
+      ]
+    },
+    {
+      "style": 5,
+      "input": {
+        "flow_gpm": 400.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 72.02511259159286,
+          "after": 72.0,
+          "classification": "finite",
+          "absoluteDelta": -0.02511259159285828,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.027305546035844137,
+          "after": 0.06460160155650688,
+          "classification": "finite",
+          "absoluteDelta": 0.037296055520662744,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0620900466482375,
+          "after": 1.0486822994821572,
+          "classification": "finite",
+          "absoluteDelta": -0.013407747166080286,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.6929455798800844,
+          "after": 0.6553983984434931,
+          "classification": "finite",
+          "absoluteDelta": -0.037547181436591304,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.7359706032595288,
+          "after": 0.6873046995566454,
+          "classification": "finite",
+          "absoluteDelta": -0.04866590370288337,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 5,
+      "input": {
+        "flow_gpm": 1000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 79.53310294609757,
+          "after": 79.5,
+          "classification": "finite",
+          "absoluteDelta": -0.03310294609757136,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.006619052165873266,
+          "after": 0.01527720420025427,
+          "classification": "finite",
+          "absoluteDelta": 0.008658152034381004,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0455029577240247,
+          "after": 1.037,
+          "classification": "finite",
+          "absoluteDelta": -0.008502957724024762,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.7887119772951025,
+          "after": 0.7797227957997458,
+          "classification": "finite",
+          "absoluteDelta": -0.008989181495356657,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.8246007050543934,
+          "after": 0.8085725392443364,
+          "classification": "finite",
+          "absoluteDelta": -0.01602816581005706,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 5,
+      "input": {
+        "flow_gpm": 2000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 83.0262863839981,
+          "after": 83.0,
+          "classification": "finite",
+          "absoluteDelta": -0.026286383998098017,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.00037158021756460174,
+          "after": 7.083455734045973e-05,
+          "classification": "finite",
+          "absoluteDelta": -0.000300745660224142,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0360243794198285,
+          "after": 1.0327343126177024,
+          "classification": "finite",
+          "absoluteDelta": -0.003290066802126068,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.8298912836224164,
+          "after": 0.8299291654426595,
+          "classification": "finite",
+          "absoluteDelta": 3.788182024311304e-05,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.8597876021008388,
+          "after": 0.8570963261948084,
+          "classification": "finite",
+          "absoluteDelta": -0.002691275906030466,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 5,
+      "input": {
+        "flow_gpm": 5000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 85.77136500528448,
+          "after": null,
+          "classification": "unavailable",
+          "absoluteDelta": null,
+          "cause": "Outside supplied reference range"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.0030683299531420677,
+          "after": 0.015193793306873609,
+          "classification": "finite",
+          "absoluteDelta": 0.01212546335373154,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0265249678994302,
+          "after": 1.0243874869219503,
+          "classification": "finite",
+          "absoluteDelta": -0.0021374809774798997,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.8546453200997027,
+          "after": null,
+          "classification": "unavailable",
+          "absoluteDelta": null,
+          "cause": "Outside supplied reference range"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.8773147597807456,
+          "after": null,
+          "classification": "unavailable",
+          "absoluteDelta": null,
+          "cause": "Outside supplied reference range"
+        }
+      ]
+    },
+    {
+      "style": 5,
+      "input": {
+        "flow_gpm": 10000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 86.89367210966238,
+          "after": null,
+          "classification": "unavailable",
+          "absoluteDelta": null,
+          "cause": "Outside supplied reference range"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.012295423274621822,
+          "after": 0.042415421788997945,
+          "classification": "finite",
+          "absoluteDelta": 0.030119998514376124,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0210964032018048,
+          "after": 1.02,
+          "classification": "finite",
+          "absoluteDelta": -0.0010964032018048187,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.8566412978220019,
+          "after": null,
+          "classification": "unavailable",
+          "absoluteDelta": null,
+          "cause": "Outside supplied reference range"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.8747133480401723,
+          "after": null,
+          "classification": "unavailable",
+          "absoluteDelta": null,
+          "cause": "Outside supplied reference range"
+        }
+      ]
+    },
+    {
+      "style": 6,
+      "input": {
+        "flow_gpm": 400.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 74.01146393670926,
+          "after": 74.0,
+          "classification": "finite",
+          "absoluteDelta": -0.011463936709262157,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.027305546035844137,
+          "after": 0.06460160155650688,
+          "classification": "finite",
+          "absoluteDelta": 0.037296055520662744,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0620900466482375,
+          "after": 1.0486822994821572,
+          "classification": "finite",
+          "absoluteDelta": -0.013407747166080286,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.7128090933312485,
+          "after": 0.6753983984434931,
+          "classification": "finite",
+          "absoluteDelta": -0.03741069488775539,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.7570674431874737,
+          "after": 0.7082783455462887,
+          "classification": "finite",
+          "absoluteDelta": -0.048789097641185,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 6,
+      "input": {
+        "flow_gpm": 1000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 80.89389055573015,
+          "after": 80.9,
+          "classification": "finite",
+          "absoluteDelta": 0.00610944426985327,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.006619052165873266,
+          "after": 0.01527720420025427,
+          "classification": "finite",
+          "absoluteDelta": 0.008658152034381004,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0455029577240247,
+          "after": 1.037,
+          "classification": "finite",
+          "absoluteDelta": -0.008502957724024762,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.8023198533914283,
+          "after": 0.7937227957997458,
+          "classification": "finite",
+          "absoluteDelta": -0.0085970575916825,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.8388277797614442,
+          "after": 0.8230905392443364,
+          "classification": "finite",
+          "absoluteDelta": -0.015737240517107787,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 6,
+      "input": {
+        "flow_gpm": 2000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 83.97084437955112,
+          "after": 83.99065101532454,
+          "classification": "finite",
+          "absoluteDelta": 0.019806635773420567,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.00037158021756460174,
+          "after": 7.083455734045973e-05,
+          "classification": "finite",
+          "absoluteDelta": -0.000300745660224142,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0360243794198285,
+          "after": 1.0327343126177024,
+          "classification": "finite",
+          "absoluteDelta": -0.003290066802126068,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.8393368635779467,
+          "after": 0.839835675595905,
+          "classification": "finite",
+          "absoluteDelta": 0.0004988120179583166,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.8695734532125274,
+          "after": 0.8673271191483607,
+          "classification": "finite",
+          "absoluteDelta": -0.002246334064166744,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 6,
+      "input": {
+        "flow_gpm": 5000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 86.56351785935384,
+          "after": 86.4,
+          "classification": "finite",
+          "absoluteDelta": -0.16351785935383134,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.0030683299531420677,
+          "after": 0.015193793306873609,
+          "classification": "finite",
+          "absoluteDelta": 0.01212546335373154,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0265249678994302,
+          "after": 1.0243874869219503,
+          "classification": "finite",
+          "absoluteDelta": -0.0021374809774798997,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.8625668486403962,
+          "after": 0.8488062066931265,
+          "classification": "finite",
+          "absoluteDelta": -0.01376064194726978,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.8854464066116954,
+          "after": 0.8695064569581252,
+          "classification": "finite",
+          "absoluteDelta": -0.01593994965357015,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 6,
+      "input": {
+        "flow_gpm": 10000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 87.56577727580336,
+          "after": null,
+          "classification": "unavailable",
+          "absoluteDelta": null,
+          "cause": "Outside supplied reference range"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.012295423274621822,
+          "after": 0.042415421788997945,
+          "classification": "finite",
+          "absoluteDelta": 0.030119998514376124,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0210964032018048,
+          "after": 1.02,
+          "classification": "finite",
+          "absoluteDelta": -0.0010964032018048187,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.8633623494834117,
+          "after": null,
+          "classification": "unavailable",
+          "absoluteDelta": null,
+          "cause": "Outside supplied reference range"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.8815761897173713,
+          "after": null,
+          "classification": "unavailable",
+          "absoluteDelta": null,
+          "cause": "Outside supplied reference range"
+        }
+      ]
+    },
+    {
+      "style": 7,
+      "input": {
+        "flow_gpm": 400.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 78.34923455569634,
+          "after": 77.30033831612259,
+          "classification": "finite",
+          "absoluteDelta": -1.0488962395737502,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.027305546035844137,
+          "after": 0.06460160155650688,
+          "classification": "finite",
+          "absoluteDelta": 0.037296055520662744,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0620900466482375,
+          "after": 1.0486822994821572,
+          "classification": "finite",
+          "absoluteDelta": -0.013407747166080286,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.7561867995211193,
+          "after": 0.7084017816047191,
+          "classification": "finite",
+          "absoluteDelta": -0.04778501791640022,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.803138473178167,
+          "after": 0.7428884092904937,
+          "classification": "finite",
+          "absoluteDelta": -0.06025006388767329,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 7,
+      "input": {
+        "flow_gpm": 1000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 82.49098752707944,
+          "after": 82.5,
+          "classification": "finite",
+          "absoluteDelta": 0.009012472920559844,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.006619052165873266,
+          "after": 0.01527720420025427,
+          "classification": "finite",
+          "absoluteDelta": 0.008658152034381004,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0455029577240247,
+          "after": 1.037,
+          "classification": "finite",
+          "absoluteDelta": -0.008502957724024762,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.8182908231049212,
+          "after": 0.8097227957997457,
+          "classification": "finite",
+          "absoluteDelta": -0.008568027305175474,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.8555254758346218,
+          "after": 0.8396825392443362,
+          "classification": "finite",
+          "absoluteDelta": -0.015842936590285572,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 7,
+      "input": {
+        "flow_gpm": 2000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 85.00959272813351,
+          "after": 84.87237815691309,
+          "classification": "finite",
+          "absoluteDelta": -0.1372145712204258,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.00037158021756460174,
+          "after": 7.083455734045973e-05,
+          "classification": "finite",
+          "absoluteDelta": -0.000300745660224142,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0360243794198285,
+          "after": 1.0327343126177024,
+          "classification": "finite",
+          "absoluteDelta": -0.003290066802126068,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.8497243470637705,
+          "after": 0.8486529470117904,
+          "classification": "finite",
+          "absoluteDelta": -0.0010714000519801425,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.8803351393446618,
+          "after": 0.8764330178832088,
+          "classification": "finite",
+          "absoluteDelta": -0.0039021214614529676,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 7,
+      "input": {
+        "flow_gpm": 5000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 87.60387559206886,
+          "after": 87.53596408562126,
+          "classification": "finite",
+          "absoluteDelta": -0.0679115064476008,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.0030683299531420677,
+          "after": 0.015193793306873609,
+          "classification": "finite",
+          "absoluteDelta": 0.01212546335373154,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0265249678994302,
+          "after": 1.0243874869219503,
+          "classification": "finite",
+          "absoluteDelta": -0.0021374809774798997,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.8729704259675465,
+          "after": 0.8601658475493389,
+          "classification": "finite",
+          "absoluteDelta": -0.01280457841820759,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.8961259384934875,
+          "after": 0.8811431309071567,
+          "classification": "finite",
+          "absoluteDelta": -0.01498280758633086,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 7,
+      "input": {
+        "flow_gpm": 10000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 89.01176771260359,
+          "after": 89.0,
+          "classification": "finite",
+          "absoluteDelta": -0.011767712603585778,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.012295423274621822,
+          "after": 0.042415421788997945,
+          "classification": "finite",
+          "absoluteDelta": 0.030119998514376124,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0210964032018048,
+          "after": 1.02,
+          "classification": "finite",
+          "absoluteDelta": -0.0010964032018048187,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.877822253851414,
+          "after": 0.8475845782110021,
+          "classification": "finite",
+          "absoluteDelta": -0.03023767564041191,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.8963411460581805,
+          "after": 0.8645362697752221,
+          "classification": "finite",
+          "absoluteDelta": -0.03180487628295836,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 8,
+      "input": {
+        "flow_gpm": 400.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 80.55790622627714,
+          "after": 79.8251015860997,
+          "classification": "finite",
+          "absoluteDelta": -0.7328046401774344,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.027305546035844137,
+          "after": 0.06460160155650688,
+          "classification": "finite",
+          "absoluteDelta": 0.037296055520662744,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0620900466482375,
+          "after": 1.0486822994821572,
+          "classification": "finite",
+          "absoluteDelta": -0.013407747166080286,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.7782735162269273,
+          "after": 0.7336494143044902,
+          "classification": "finite",
+          "absoluteDelta": -0.044624101922437154,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.826596555154545,
+          "after": 0.7693651548065705,
+          "classification": "finite",
+          "absoluteDelta": -0.05723140034797447,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 8,
+      "input": {
+        "flow_gpm": 1000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 84.03260023209518,
+          "after": 84.0,
+          "classification": "finite",
+          "absoluteDelta": -0.03260023209517726,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.006619052165873266,
+          "after": 0.01527720420025427,
+          "classification": "finite",
+          "absoluteDelta": 0.008658152034381004,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0455029577240247,
+          "after": 1.037,
+          "classification": "finite",
+          "absoluteDelta": -0.008502957724024762,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.8337069501550786,
+          "after": 0.8247227957997457,
+          "classification": "finite",
+          "absoluteDelta": -0.00898415435533284,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.8716430822622107,
+          "after": 0.8552375392443362,
+          "classification": "finite",
+          "absoluteDelta": -0.016405543017874447,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 8,
+      "input": {
+        "flow_gpm": 2000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 86.14550925019535,
+          "after": 86.15463783349868,
+          "classification": "finite",
+          "absoluteDelta": 0.009128583303336768,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.00037158021756460174,
+          "after": 7.083455734045973e-05,
+          "classification": "finite",
+          "absoluteDelta": -0.000300745660224142,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0360243794198285,
+          "after": 1.0327343126177024,
+          "classification": "finite",
+          "absoluteDelta": -0.003290066802126068,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.861083512284389,
+          "after": 0.8614755437776463,
+          "classification": "finite",
+          "absoluteDelta": 0.0003920314932573943,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.8921035114430803,
+          "after": 0.889675353540169,
+          "classification": "finite",
+          "absoluteDelta": -0.0024281579029112876,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 8,
+      "input": {
+        "flow_gpm": 5000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 88.7182756114251,
+          "after": 88.63963929711453,
+          "classification": "finite",
+          "absoluteDelta": -0.07863631431057172,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.0030683299531420677,
+          "after": 0.015193793306873609,
+          "classification": "finite",
+          "absoluteDelta": 0.01212546335373154,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0265249678994302,
+          "after": 1.0243874869219503,
+          "classification": "finite",
+          "absoluteDelta": -0.0021374809774798997,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.8841144261611089,
+          "after": 0.8712025996642716,
+          "classification": "finite",
+          "absoluteDelta": -0.012911826496837309,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.9075655329344554,
+          "after": 0.8924490416699531,
+          "classification": "finite",
+          "absoluteDelta": -0.015116491264502319,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 8,
+      "input": {
+        "flow_gpm": 10000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 89.95451963549384,
+          "after": 89.96,
+          "classification": "finite",
+          "absoluteDelta": 0.005480364506155411,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.012295423274621822,
+          "after": 0.042415421788997945,
+          "classification": "finite",
+          "absoluteDelta": 0.030119998514376124,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0210964032018048,
+          "after": 1.02,
+          "classification": "finite",
+          "absoluteDelta": -0.0010964032018048187,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.8872497730803165,
+          "after": 0.857184578211002,
+          "classification": "finite",
+          "absoluteDelta": -0.03006519486931447,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.9059675520339286,
+          "after": 0.874328269775222,
+          "classification": "finite",
+          "absoluteDelta": -0.0316392822587066,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 9,
+      "input": {
+        "flow_gpm": 400.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 78.34923455569634,
+          "after": 77.30033831612259,
+          "classification": "finite",
+          "absoluteDelta": -1.0488962395737502,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.0361466640781028,
+          "after": null,
+          "classification": "unavailable",
+          "absoluteDelta": null,
+          "cause": "Outside supplied reference range"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0620900466482375,
+          "after": 1.0486822994821572,
+          "classification": "finite",
+          "absoluteDelta": -0.013407747166080286,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.7473456814788606,
+          "after": null,
+          "classification": "unavailable",
+          "absoluteDelta": null,
+          "cause": "Outside supplied reference range"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.7937484097042419,
+          "after": null,
+          "classification": "unavailable",
+          "absoluteDelta": null,
+          "cause": "Outside supplied reference range"
+        }
+      ]
+    },
+    {
+      "style": 9,
+      "input": {
+        "flow_gpm": 1000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 82.49098752707944,
+          "after": 82.5,
+          "classification": "finite",
+          "absoluteDelta": 0.009012472920559844,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.01940896454459331,
+          "after": null,
+          "classification": "unavailable",
+          "absoluteDelta": null,
+          "cause": "Outside supplied reference range"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0455029577240247,
+          "after": 1.037,
+          "classification": "finite",
+          "absoluteDelta": -0.008502957724024762,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.8055009107262011,
+          "after": null,
+          "classification": "unavailable",
+          "absoluteDelta": null,
+          "cause": "Outside supplied reference range"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.8421535846136389,
+          "after": null,
+          "classification": "unavailable",
+          "absoluteDelta": null,
+          "cause": "Outside supplied reference range"
+        }
+      ]
+    },
+    {
+      "style": 9,
+      "input": {
+        "flow_gpm": 2000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 85.00959272813351,
+          "after": 84.87237815691309,
+          "classification": "finite",
+          "absoluteDelta": -0.1372145712204258,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.010277461695511171,
+          "after": 0.026897381790012824,
+          "classification": "finite",
+          "absoluteDelta": 0.016619920094501653,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0360243794198285,
+          "after": 1.0327343126177024,
+          "classification": "finite",
+          "absoluteDelta": -0.003290066802126068,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.839818465585824,
+          "after": 0.8218263997791181,
+          "classification": "finite",
+          "absoluteDelta": -0.01799206580670587,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.8700724046338658,
+          "after": 0.8487283220669687,
+          "classification": "finite",
+          "absoluteDelta": -0.021344082566897127,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 9,
+      "input": {
+        "flow_gpm": 5000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 87.60387559206886,
+          "after": 87.53596408562126,
+          "classification": "finite",
+          "absoluteDelta": -0.0679115064476008,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.0018231613601843533,
+          "after": 0.004324041897947495,
+          "classification": "finite",
+          "absoluteDelta": 0.0025008805377631418,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0265249678994302,
+          "after": 1.0243874869219503,
+          "classification": "finite",
+          "absoluteDelta": -0.0021374809774798997,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.8742155945605042,
+          "after": 0.871035598958265,
+          "classification": "finite",
+          "absoluteDelta": -0.0031799956022392495,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.8974041351434029,
+          "after": 0.8922779682364128,
+          "classification": "finite",
+          "absoluteDelta": -0.005126166906990082,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 9,
+      "input": {
+        "flow_gpm": 10000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 89.01176771260359,
+          "after": 89.0,
+          "classification": "finite",
+          "absoluteDelta": -0.011767712603585778,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.00010026456981587306,
+          "after": 0.0,
+          "classification": "finite",
+          "absoluteDelta": -0.00010026456981587306,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0210964032018048,
+          "after": 1.02,
+          "classification": "finite",
+          "absoluteDelta": -0.0010964032018048187,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.89001741255622,
+          "after": 0.89,
+          "classification": "finite",
+          "absoluteDelta": -1.7412556220008923e-05,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.9087935787481332,
+          "after": 0.9078,
+          "classification": "finite",
+          "absoluteDelta": -0.000993578748133106,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 10,
+      "input": {
+        "flow_gpm": 400.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 82.95500455132229,
+          "after": 77.7,
+          "classification": "finite",
+          "absoluteDelta": -5.255004551322287,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.027305546035844137,
+          "after": 0.06460160155650688,
+          "classification": "finite",
+          "absoluteDelta": 0.037296055520662744,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0620900466482375,
+          "after": 1.0486822994821572,
+          "classification": "finite",
+          "absoluteDelta": -0.013407747166080286,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.8022444994773787,
+          "after": 0.7123983984434932,
+          "classification": "finite",
+          "absoluteDelta": -0.08984610103388557,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.8520558978732211,
+          "after": 0.7470795906271285,
+          "classification": "finite",
+          "absoluteDelta": -0.10497630724609264,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 10,
+      "input": {
+        "flow_gpm": 1000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 83.49785283853777,
+          "after": 81.9,
+          "classification": "finite",
+          "absoluteDelta": -1.5978528385377615,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.006619052165873266,
+          "after": 0.01527720420025427,
+          "classification": "finite",
+          "absoluteDelta": 0.008658152034381004,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0455029577240247,
+          "after": 1.037,
+          "classification": "finite",
+          "absoluteDelta": -0.008502957724024762,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.8283594762195045,
+          "after": 0.8037227957997458,
+          "classification": "finite",
+          "absoluteDelta": -0.02463668041975864,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.8660522824462158,
+          "after": 0.8334605392443364,
+          "classification": "finite",
+          "absoluteDelta": -0.03259174320187941,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 10,
+      "input": {
+        "flow_gpm": 2000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 84.28661954793031,
+          "after": 84.5,
+          "classification": "finite",
+          "absoluteDelta": 0.2133804520696856,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.00037158021756460174,
+          "after": 7.083455734045973e-05,
+          "classification": "finite",
+          "absoluteDelta": -0.000300745660224142,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0360243794198285,
+          "after": 1.0327343126177024,
+          "classification": "finite",
+          "absoluteDelta": -0.003290066802126068,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.8424946152617386,
+          "after": 0.8449291654426595,
+          "classification": "finite",
+          "absoluteDelta": 0.002434550180920869,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.87284496094109,
+          "after": 0.872587340884074,
+          "classification": "finite",
+          "absoluteDelta": -0.000257620057016017,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 10,
+      "input": {
+        "flow_gpm": 5000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 85.99273426712399,
+          "after": 86.8,
+          "classification": "finite",
+          "absoluteDelta": 0.8072657328760044,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.0030683299531420677,
+          "after": 0.015193793306873609,
+          "classification": "finite",
+          "absoluteDelta": 0.01212546335373154,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0265249678994302,
+          "after": 1.0243874869219503,
+          "classification": "finite",
+          "absoluteDelta": -0.0021374809774798997,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.8568590127180978,
+          "after": 0.8528062066931263,
+          "classification": "finite",
+          "absoluteDelta": -0.004052806024971489,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.8795871705247827,
+          "after": 0.873604006905813,
+          "classification": "finite",
+          "absoluteDelta": -0.005983163618969778,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    },
+    {
+      "style": 10,
+      "input": {
+        "flow_gpm": 10000.0,
+        "rpm": 2000.0,
+        "viscosity_cst": 1.107,
+        "stages": 1.0,
+        "head_ft": 137.0
+      },
+      "changes": [
+        {
+          "field": "base_percent",
+          "before": 87.5299697732038,
+          "after": 88.01591998905998,
+          "classification": "finite",
+          "absoluteDelta": 0.48595021585617815,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "correction_fraction",
+          "before": 0.012295423274621822,
+          "after": 0.042415421788997945,
+          "classification": "finite",
+          "absoluteDelta": 0.030119998514376124,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "deviation_multiplier",
+          "before": 1.0210964032018048,
+          "after": 1.02,
+          "classification": "finite",
+          "absoluteDelta": -0.0010964032018048187,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "average_fraction",
+          "before": 0.8630042744574161,
+          "after": 0.8377437781016018,
+          "classification": "finite",
+          "absoluteDelta": -0.025260496355814288,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        },
+        {
+          "field": "maximum_fraction",
+          "before": 0.8812105605962508,
+          "after": 0.8544986536636339,
+          "classification": "finite",
+          "absoluteDelta": -0.026711906932616936,
+          "cause": "HI 2020 reference data and raw-coordinate PCHIP"
+        }
+      ]
+    }
+  ]
+}
