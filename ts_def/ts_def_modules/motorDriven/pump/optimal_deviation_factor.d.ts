@@ -2,9 +2,8 @@
 
 /**
  * Calculates the multiplier applied to an average pump-efficiency estimate.
- * The empirical expression uses numerical flow in US gpm; callers convert units and validate the duty.
- * No defaults, validation or clamping are applied. Both signed zeros yield positive infinity;
- * negative flow and NaN yield NaN; positive infinity yields 1.0010805906.
+ * Interpolates HI 2020 positive deviation against raw US gpm and returns 1 + deviation/100.
+ * Returns NaN outside inclusive range 35–100000 US gpm or for nonfinite flow. No extrapolation.
  * @param flowRate Liquid volumetric flow, units US gpm.
  * @returns Dimensionless multiplier, not an efficiency fraction. Multiply average efficiency by this value.
  * The numeric input and result require no delete().

@@ -1,0 +1,57 @@
+/**
+ * @defgroup pchip_interpolation Shape Preserving PCHIP Interpolation
+ * @brief Local cubic interpolation through reference data without extrapolation.
+ * @details
+ * How can a reference table be evaluated smoothly without introducing artificial peaks or valleys?
+ * PCHIP passes exactly through the supplied points and preserves each interval's monotonic shape.
+ * It is an interpolation method, not a physical model or a way to extend a reference beyond its data.
+ *
+ * @heading{Result and Interpolation Formula}
+ * For adjacent knots x1/y1 and x2/y2, evaluate the cubic Hermite basis using t=(x-x1)/(x2-x1).
+ * In the following dimensionless example all coordinates are unitless. For dimensional tables,
+ * the output retains the y unit and each tangent carries y-unit/x-unit.
+ *
+ * @formula{pchip-hermite;
+ * y=(2t^3-3t^2+1)y_1+(t^3-2t^2+t)hm_1+(-2t^3+3t^2)y_2+(t^3-t^2)hm_2
+ * }
+ * @symtable
+ * @symrow{y; Interpolated dependent coordinate in the dimensionless example; \unitless}
+ * @symrow{t; Fraction of the interval, (x-x1)/(x2-x1); \unitless}
+ * @symrow{h; Interval width, x2-x1, in this example; \unitless}
+ * @symrow{y_1,y_2; Dependent knot coordinates in this example; \unitless}
+ * @symrow{m_1,m_2; Endpoint tangents in this example; \unitless}
+ * @endsymtable
+ *
+ * @heading{Shape Preserving Tangents}
+ * At an interior knot, if adjacent secant slopes are zero or differ in sign, set the tangent to zero.
+ * Otherwise use their weighted harmonic mean, not an arithmetic average. Let previous/next interval
+ * widths be hp/hn and secant slopes dp/dn, with weights w1=2hn+hp and w2=hn+2hp.
+ *
+ * @formula{pchip-harmonic-tangent;
+ * m=\frac{w_1+w_2}{w_1/d_p+w_2/d_n}
+ * }
+ * @symtable
+ * @symrow{m; Interior tangent in the dimensionless example; \unitless}
+ * @symrow{w_1,w_2; Interval-width weights in the dimensionless example; \unitless}
+ * @symrow{d_p,d_n; Previous and next secant slopes in the dimensionless example; \unitless}
+ * @endsymtable
+ *
+ * Edge tangents use a one-sided three-point estimate. A tangent opposed to the adjacent secant
+ * is zeroed; when neighboring secants differ in sign, its magnitude is limited to three times
+ * the adjacent secant. Two-point data use the common secant and reduce to linear interpolation.
+ * These are the SciPy PchipInterpolator rules, with extrapolate explicitly disabled.
+ *
+ * @heading{Worked Example and Limits}
+ * With dimensionless points (0,2) and (1,5), the secant is 3 and both tangents are 3.
+ * At x=0.5, t=0.5, and the interpolated result is exactly 3.5. Either endpoint returns its tabulated
+ * value exactly; x=-0.1 returns NaN rather than extending the line.
+ *
+ * Reference arrays must have equal length, at least two finite points, strictly increasing x,
+ * and representable finite widths/slopes/tangents. Invalid tables throw invalid_argument at construction.
+ * Evaluation returns NaN for nonfinite or out-of-range queries. First derivatives are continuous;
+ * second derivatives need not be. The method does not supply uncertainty estimates or validate
+ * the engineering quality of its source data.
+ *
+ * Reference: https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.PchipInterpolator.html
+ * @see pchip::Interpolator
+ */

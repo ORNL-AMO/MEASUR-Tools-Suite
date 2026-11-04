@@ -1,112 +1,58 @@
 /**
  * @defgroup pump_efficiency_calculator Achievable Average and Maximum Pump Efficiency
  * @ingroup equipment_and_property_calculators
- * @brief Combines empirical pump-efficiency corrections with a flow-based deviation factor.
+ * @brief HI 2020 achievable efficiency estimates with explicit reference limits.
  * @details
- * What average and maximum pump-efficiency estimates correspond to this pump style and duty?
- * These estimates support comparisons when a measured performance curve is unavailable. They do not
- * establish the actual efficiency, condition or suitability of an installed pump, and they do not select
- * an operating point or optimize rotational speed.
+ * What average and maximum efficiencies are generally achievable for this pump type and duty?
+ * Use the estimates to compare opportunities when measured or manufacturer performance data are
+ * unavailable. They do not establish the actual condition or suitability of an installed pump.
  *
  * @heading{Final Results and Interpretation}
- * Both returned values are dimensionless efficiency fractions. The average estimate includes viscosity
- * and specific-speed corrections. The maximum estimate multiplies that average by an empirical deviation
- * factor based on liquid flow:
- * @formula{pump-efficiency-results;
- *   \eta_{average}=\eta_{optimal},\qquad
- *   \eta_{max}=\eta_{average}D(Q)
+ * Both outputs are dimensionless fractions. The average includes viscosity and speed corrections;
+ * the maximum applies the positive relative deviation to that average.
+ *
+ * @formula{hi2020-pump-results;
+ * \eta_{average}=\frac{E_{pre}}{100}C_{\nu}-C_{Ns},\qquad
+ * \eta_{max}=\eta_{average}\left(1+\frac{d_{positive}(Q)}{100}\right)
  * }
  * @symtable
- * @symrow{\eta_{average}; Returned corrected average pump-efficiency estimate; \unitless}
- * @symrow{\eta_{optimal}; Corrected efficiency from the style and duty calculation; \unitless}
- * @symrow{\eta_{max}; Returned maximum pump-efficiency estimate; \unitless}
- * @symrow{D; Flow-based deviation multiplier; \unitless}
+ * @symrow{\eta_{average}; Corrected average efficiency fraction; \unitless}
+ * @symrow{\eta_{max}; Maximum efficiency estimate; \unitless}
+ * @symrow{E_{pre}; HI base efficiency; \percent}
+ * @symrow{100; Percentage scale per fractional quantity; \percent}
+ * @symrow{C_{\nu}; Viscosity multiplier; \unitless}
+ * @symrow{C_{Ns}; Fractional specific-speed decrement; \unitless}
+ * @symrow{d_{positive}; Positive relative deviation at flow Q; \percent}
  * @symrow{Q; Liquid flow in the US gallon convention; \gallon\per\minute}
  * @endsymtable
  *
- * For example, average = 0.8393 means approximately 83.93%, and max = 0.8696 means approximately
- * 86.96%. The word maximum identifies this empirical estimate; it is not a guarantee, a measured
- * best-efficiency point, or a universal physical bound. Values are not clamped to 0–1.
+ * Follow @ref optimal_pre_pump_efficiency_calculator, @ref optimal_pump_efficiency_calculator,
+ * @ref optimal_specific_speed_calculator, @ref optimal_specific_speed_correction_calculator,
+ * and @ref optimal_deviation_factor_calculator for the supporting data and relationships.
+ * Interpolation is on raw numerical flow/speed, using @ref pchip_interpolation with no extrapolation.
+ * Intermediate values are not rounded. There is no additional viscosity adjustment in the maximum.
  *
- * @heading{Follow the Duty Through the Estimate}
- * Supply pump style, rotational speed in rpm, liquid kinematic viscosity in cSt, stage count,
- * liquid flow in US gpm and total head in ft. All values are required and remain in those conventions.
- * The corrected-efficiency calculation first chooses a style/flow curve, then accounts for viscosity
- * and specific speed. Only after that calculation does the flow-based deviation multiplier determine
- * the maximum estimate. Intermediate values remain unrounded.
+ * @heading{Worked Example}
+ * For an ANSI/API pump at 2000 rpm, Q=2000 US gpm, H=137 ft, one stage and nu=1.107 cSt,
+ * the corrected average is approximately 0.8398357 (83.98357%). The positive deviation is about
+ * 3.27343%, giving a multiplier of about 1.0327343. The maximum is approximately 0.8673271
+ * (86.73271%). These are empirical estimates; maximum does not mean a guaranteed physical limit.
  *
- * @formula{pump-efficiency-average;
- *   \eta_{average}=\left(\frac{E_{pre}}{100}\right)C_{\nu}-C_{Ns}
- * }
- * @symtable
- * @symrow{\eta_{average}; Corrected average pump-efficiency estimate; \unitless}
- * @symrow{E_{pre}; Style/flow efficiency before corrections; \percent}
- * @symrow{100; Percentage-point scale per unit fraction; \percent}
- * @symrow{C_{\nu}; Viscosity multiplier; \unitless}
- * @symrow{C_{Ns}; Specific-speed efficiency decrement; \unitless}
- * @endsymtable
+ * @heading{Availability and Proper Use}
+ * Flow must be within the selected base table and positive-deviation table, and specific speed
+ * must be within the selected correction table. Endpoints are included. Flow/speed limits are
+ * available from pump_efficiency::getLimits; unsupported styles have supported=false and NaN bounds.
+ * Axial flow uses V's base curve and nonvertical speed correction. Total head is divided by stages
+ * only in the specific-speed definition; no double-suction flow-halving adjustment is introduced.
  *
- * The percent-to-fraction conversion applies only to the pre-correction curve value. The speed correction
- * is already a fractional decrement and is subtracted, rather than multiplied. Multiplying the final
- * average by D does not repeat the viscosity or specific-speed corrections.
+ * Both results are NaN when a required estimate is unavailable, including nonfinite inputs,
+ * nonpositive rpm/head/stages, negative viscosity and unsupported pump types. Do not substitute zero,
+ * extrapolate or clamp inputs to fabricate an estimate. A supplied efficiency can support a valid
+ * assessment outside HI estimation ranges. Specified-efficiency and PD styles use those separate paths.
+ * No output clamping is applied; a finite nonpositive efficiency is not usable for power calculations.
  *
- * The supporting methods and their coefficients are documented in
- * @ref optimal_pre_pump_efficiency_calculator, @ref optimal_specific_speed_calculator,
- * @ref optimal_specific_speed_correction_calculator, @ref optimal_pump_efficiency_calculator and
- * @ref optimal_deviation_factor_calculator. Specific speed uses total head divided by the supplied
- * stage count; there is no double-suction flow-halving adjustment. Vertical turbine uses its own
- * speed-correction table; axial flow uses the nonvertical speed-correction table even though it shares
- * the vertical-turbine pre-efficiency flow curves.
- *
- * @heading{Worked Example: ANSI/API Pump Duty}
- * Consider an ANSI/API end-suction pump at 2000 rpm and 2000 US gpm, with 137 ft total head,
- * one stage and kinematic viscosity 1.107 cSt. The upper ANSI/API flow interval gives Epre about
- * 83.9708%. The viscosity parameter is about 0.3291, so the viscosity multiplier is capped at 1.
- * Specific speed is about 2233.596 in the US customary convention, and the corresponding decrement
- * is about 0.000372. The flow-based deviation factor is about 1.03602.
- *
- * @formula{pump-efficiency-example-average;
- *   \eta_{average}\approx\left(\frac{83.9708}{100}\right)\times1-0.000372
- *   \approx0.8393
- * }
- * @symtable
- * @symrow{\eta_{average}; Example average estimate; \unitless}
- * @symrow{83.9708; Example pre-correction efficiency; \percent}
- * @symrow{100; Percentage-point scale per unit fraction; \percent}
- * @symrow{1; Example viscosity multiplier; \unitless}
- * @symrow{0.000372; Example specific-speed decrement; \unitless}
- * @endsymtable
- *
- * @formula{pump-efficiency-example-maximum;
- *   \eta_{max}\approx0.83934\times1.03602\approx0.8696
- * }
- * @symtable
- * @symrow{\eta_{max}; Example maximum estimate; \unitless}
- * @symrow{0.83934; Example average before display rounding; \unitless}
- * @symrow{1.03602; Example flow-based deviation multiplier; \unitless}
- * @endsymtable
- *
- * Thus the duty estimates are approximately 83.93% average and 86.96% maximum. Calculations use
- * unrounded helper results; the displayed intermediate values above explain the method rather than
- * defining numerical rounding within it.
- *
- * @heading{Assumptions, Boundaries and Inappropriate Uses}
- * These are empirical estimates with no validated operating range established here. Flow, viscosity,
- * rotational speed and head must use the stated unit conventions. Fractional stage counts are evaluated
- * numerically; accepting one does not establish that it describes a real pump. No input validation,
- * defaulting, interpolation across curve boundaries or output clamping is added.
- *
- * Specified-optimal-efficiency, positive-displacement and unknown native styles receive zero from the
- * pre-efficiency curve selector. The remaining corrections still apply, so their average and maximum
- * estimates can be negative. No supplied-efficiency override or positive-displacement performance model
- * is provided by this calculation. Do not interpret these fallbacks as measured performance.
- *
- * Zero, negative, extreme and nonfinite inputs retain the supporting methods' arithmetic outcomes.
- * For example, zero flow can combine a finite negative corrected average with an infinite deviation
- * factor and return a negative-infinite maximum. Negative flow can return a NaN maximum. The viscosity
- * and speed methods retain their fmin/fmax handling of nonfinite intermediate values, so an invalid
- * input need not yield NaN in every returned field. Such results do not represent usable pump duties.
- * Use appropriate pump data and engineering review before making equipment or operating decisions.
+ * The data are the engineering HI 20.3-2020 reference revision dated 2026-09-23. The digitized C/H
+ * curves and retained axial mapping require engineering confirmation before product release.
  *
  * @see pump_efficiency::calculate
  */

@@ -3,6 +3,13 @@
 #include <emscripten/bind.h>
 
 EMSCRIPTEN_BINDINGS(pump_efficiency) {
+    emscripten::value_object<pump_efficiency::Limits>("PumpEfficiencyLimits")
+        .field("supported", &pump_efficiency::Limits::supported)
+        .field("minimumFlowRate", &pump_efficiency::Limits::minimum_flow_rate)
+        .field("maximumFlowRate", &pump_efficiency::Limits::maximum_flow_rate)
+        .field("minimumSpecificSpeed", &pump_efficiency::Limits::minimum_specific_speed)
+        .field("maximumSpecificSpeed", &pump_efficiency::Limits::maximum_specific_speed);
+    emscripten::function("getPumpEfficiencyLimits", &pump_efficiency::getLimits);
     emscripten::value_object<pump_efficiency::Input>("PumpEfficiencyInput")
         .field("style", &pump_efficiency::Input::style)
         .field("rpm", &pump_efficiency::Input::rpm)

@@ -1,106 +1,49 @@
 /**
- * @defgroup optimal_specific_speed_correction_calculator Pump Specific-Speed Efficiency Correction
+ * @defgroup optimal_specific_speed_correction_calculator Specific Speed Efficiency Correction
  * @ingroup equipment_and_property_calculators
- * @brief Estimates the efficiency decrement associated with pump style and specific speed.
+ * @brief HI 20.3-2020 efficiency decrement from US customary specific speed.
  * @details
- * How much should the pump-efficiency estimate be reduced for the supplied specific speed?
- * This empirical correction supplies a decrement to the separately calculated, viscosity-adjusted
- * efficiency. It does not represent the pump efficiency or a measured loss in a particular machine.
+ * How much should the base pump efficiency decrease for this specific speed? The result is a
+ * dimensionless fraction to subtract from the viscosity-adjusted efficiency, not a multiplier.
  *
- * @heading{Final Result and Interpretation}
- * The returned correction is a dimensionless efficiency fraction to subtract:
- * @formula{optimal-specific-speed-correction-efficiency; \eta_{avg}=\eta_{visc}-C_{Ns}}
- * @symtable
- * @symrow{\eta_{avg}; Corrected average pump-efficiency estimate as a fraction; \unitless}
- * @symrow{\eta_{visc}; Separately calculated viscosity-adjusted efficiency as a fraction; \unitless}
- * @symrow{C_{Ns}; Returned specific-speed efficiency decrement; \unitless}
- * @endsymtable
+ * @heading{Result and Decision Path}
+ * HI correction data are percentage points. Interpolate in specific speed, then divide by 100.
+ * Only vertical turbine uses V; axial flow and all other classifications use All but V.
  *
- * A correction of about 0.01894 subtracts approximately 1.894 percentage points. It is not a
- * multiplier and does not mean an efficiency of 1.894%. The separate pre-correction calculator
- * returns percent, so convert that estimate to a fraction before applying viscosity and this
- * decrement. The maximum-efficiency estimate requires a separate deviation factor.
- *
- * @heading{Select the Pump-Style Family and Speed Interval}
- * Supply specific speed in the US customary convention rpm*sqrt(US gpm)/ft^(3/4). The
- * @ref optimal_specific_speed_calculator "Pump Specific Speed" calculation obtains that value
- * from rotational speed, supplied flow and head per stage. A dimensionless specific speed or
- * an SI-convention number cannot be substituted directly into these empirical curves.
- *
- * Only vertical-turbine style uses the vertical curves. Every other style uses the nonvertical
- * curves, including axial flow, specified-optimal-efficiency and positive-displacement styles.
- * Axial flow's shared pre-correction flow curves do not make its specific-speed correction
- * vertical. Neither a supplied-efficiency override nor a positive-displacement model is provided.
- *
- * | Family | Lower curve | Upper curve |
- * | --- | --- | --- |
- * | Vertical turbine | Specific speed &lt; 4550 | Specific speed &gt;= 4550 |
- * | All other styles | Specific speed &lt; 2530 | Specific speed &gt;= 2530 |
- *
- * Equality selects the upper curve. The method does not interpolate or smooth between curves;
- * these thresholds select an empirical expression rather than define validated operating ranges.
- *
- * @heading{Evaluate and Convert the Selected Polynomial}
- * Let x be the numerical specific-speed value in the stated US customary convention. The
- * selected polynomial gives a correction in percentage points. Lower-clamp it and convert to
- * an efficiency fraction:
- * @formula{optimal-specific-speed-correction-polynomial;
- *   P=a_0+a_1x+a_2x^2+a_3x^3+a_4x^4+a_5x^5+a_6x^6,\qquad
- *   C_{Ns}=\frac{\max(P,0)}{100}
+ * @formula{hi2020-speed-correction;
+ * C_{Ns}=\frac{\operatorname{PCHIP}_{category}(N_s)}{100}
  * }
  * @symtable
- * @symrow{x; Numerical value of specific speed divided by one unit of rpm*sqrt(US gpm)/ft^(3/4); \unitless}
- * @symrow{a_0,\ldots,a_6; Selected coefficients for the numerical specific-speed convention; \percent}
- * @symrow{P; Polynomial correction before the lower clamp; \percent}
- * @symrow{0; Lower correction bound; \percent}
- * @symrow{100; Percentage-point scale per unit fraction; \percent}
- * @symrow{C_{Ns}; Returned efficiency decrement as a fraction; \unitless}
+ * @symrow{C_{Ns}; Fractional efficiency decrement to subtract; \unitless}
+ * @symrow{N_s; US customary specific speed; rpm sqrt(US gpm)/ft^(3/4)}
+ * @symrow{category; V or All but V table selection; \unitless}
+ * @symrow{100; Percentage-point scale per fraction; \percent}
  * @endsymtable
  *
- * The lower clamp prevents a negative polynomial from increasing the estimated efficiency.
- * There is no upper clamp: extrapolation can return a decrement greater than one. The powers
- * and coefficients describe an empirical fit; they do not identify separate physical losses.
- * Carry unrounded intermediate values through the weighted sum.
+ * Specific speed itself remains defined in @ref optimal_specific_speed_calculator. Total head is
+ * divided by stage count in that calculation. This correction neither recomputes specific speed
+ * nor halves flow for double suction.
  *
- * | Curve | a0 | a1 | a2 | a3 | a4 | a5 | a6 |
- * | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
- * | Nonvertical, lower | 14.884085 | -0.021342141 | 0.0000121172 | -0.0000000031885957 | 1.4907927E-13 | 1.2855352E-16 | -2.3798184E-20 |
- * | Nonvertical, upper | 6.5703317 | -0.010048327 | 0.0000061475098 | -0.0000000019659725 | 3.5079978E-13 | -3.2272033E-17 | 1.1881188E-21 |
- * | Vertical, lower | 14.788539 | -0.022490348 | 0.000017226359 | -0.0000000075690542 | 1.8893534E-12 | -2.4834106E-16 | 1.3345507E-20 |
- * | Vertical, upper | 4.0559384 | -0.0026632249 | 0.0000006761157 | -0.000000000087766773 | 6.5103425E-15 | -2.5380141E-19 | 4.007753E-24 |
+ * | Category | Inclusive specific-speed range (US convention) |
+ * | --- | --- |
+ * | V | 1717.2–17172 |
+ * | All but V | 630–6300 |
  *
- * @heading{Worked Example: Slurry Pump at Specific Speed 1170}
- * Slurry is nonvertical and 1170 is below 2530, so use the lower nonvertical curve:
- * @formula{optimal-specific-speed-correction-example;
- *   P=14.884085-0.021342141(1170)+0.0000121172(1170)^2
- *     -0.0000000031885957(1170)^3+1.4907927\times10^{-13}(1170)^4
- *     +1.2855352\times10^{-16}(1170)^5-2.3798184\times10^{-20}(1170)^6
- *     \approx1.8943\%,\qquad C_{Ns}\approx0.01894
- * }
- * @symtable
- * @symrow{P; Example polynomial correction before the lower clamp; \percent}
- * @symrow{1170; Numerical US customary specific-speed value; \unitless}
- * @symrow{14.884085,\ldots,-2.3798184\times10^{-20}; Lower nonvertical polynomial coefficients; \percent}
- * @symrow{C_{Ns}; Example efficiency decrement as a fraction; \unitless}
- * @endsymtable
+ * The V data include a zero plateau from 4293 to 5151.6. Shape-preserving interpolation keeps
+ * the plateau zero and avoids negative overshoot around the minimum. The nonvertical minimum
+ * is zero at 2160. No polynomial extension or extrapolation is used.
  *
- * The positive polynomial is retained. Starting from a separately supplied viscosity-adjusted
- * fraction of 0.84, subtracting the unrounded correction gives about 0.8211, or 82.11% average
- * efficiency. This example demonstrates subtraction of percentage points, not multiplication
- * by a loss percentage. The correction alone cannot establish achievable pump performance.
+ * @heading{Worked Example}
+ * For a nonvertical pump at Ns=990 in the US convention, PCHIP returns approximately 6.595
+ * percentage points. The returned correction is approximately 0.06595. For an efficiency fraction
+ * of 0.8 before this correction, the adjusted efficiency would therefore be about 0.73405 (73.405%).
+ * Subtracting 6.595 directly from a fractional efficiency would mix units.
  *
- * @heading{Assumptions, Arithmetic Boundaries and Inappropriate Uses}
- * The curves do not establish a validated speed range or fit uncertainty. Evaluate applicability
- * with the pump duty and an appropriate performance curve. Do not use extreme extrapolation as
- * evidence of a physical efficiency loss, or treat a zero correction as proof of optimal operation.
- *
- * No input validation or defaults are applied. Zero specific speed gives about 0.14884 for the
- * nonvertical family and 0.14789 for vertical turbine. Negative inputs are evaluated directly;
- * they are not accepted operating duties. The arithmetic uses fmax with zero: a NaN polynomial
- * yields zero, so zero is not a validation-success flag. Positive infinity yields zero for both
- * families; negative infinity yields positive infinity for vertical turbine and zero otherwise.
- * Very large finite inputs can overflow polynomial terms and reach the same zero fallback.
- * These retained arithmetic outcomes are not engineering error codes or supported extrapolations.
+ * @heading{Provenance and Availability}
+ * Data follow the engineering PCHIP developer reference revised 2026-09-23 and HI 20.3-2020.
+ * Endpoints are included. Nonfinite and out-of-range specific speeds return NaN, which means
+ * no supported estimate, not zero correction. This limit applies to estimation; it does not make
+ * a measured or supplied-efficiency assessment invalid. See @ref pchip_interpolation for tangents.
  *
  * @see optimal_specific_speed_correction::calculate
  */

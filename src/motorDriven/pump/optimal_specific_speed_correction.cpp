@@ -1,57 +1,31 @@
 #include "motorDriven/pump/optimal_specific_speed_correction.h"
 
-#include <cmath>
-
 namespace {
-struct PolynomialCurve {
-    double constant;
-    double linear;
-    double quadratic;
-    double cubic;
-    double quartic;
-    double quintic;
-    double sextic;
-};
 
-constexpr PolynomialCurve nonvertical_low_speed{
-    14.884085, -0.021342141, 0.0000121172, -0.0000000031885957,
-    1.4907927E-13, 1.2855352E-16, -2.3798184E-20};
-constexpr PolynomialCurve nonvertical_high_speed{
-    6.5703317, -0.010048327, 0.0000061475098, -0.0000000019659725,
-    3.5079978E-13, -3.2272033E-17, 1.1881188E-21};
-constexpr PolynomialCurve vertical_low_speed{
-    14.788539, -0.022490348, 0.000017226359, -0.0000000075690542,
-    1.8893534E-12, -2.4834106E-16, 1.3345507E-20};
-constexpr PolynomialCurve vertical_high_speed{
-    4.0559384, -0.0026632249, 0.0000006761157, -0.000000000087766773,
-    6.5103425E-15, -2.5380141E-19, 4.007753E-24};
-constexpr double nonvertical_speed_threshold = 2530;
-constexpr double vertical_speed_threshold = 4550;
-constexpr double percentage_points_per_fraction = 100;
+// HI 20.3-2020 correction values are percentage points, not fractions.
 
-double evaluateCorrection(const PolynomialCurve& curve, double specific_speed) {
-    const double correction_percent =
-        curve.constant + (curve.linear * specific_speed) + (curve.quadratic * std::pow(specific_speed, 2)) +
-        (curve.cubic * std::pow(specific_speed, 3)) + (curve.quartic * std::pow(specific_speed, 4)) +
-        (curve.quintic * std::pow(specific_speed, 5)) + (curve.sextic * std::pow(specific_speed, 6));
-    const double nonnegative_correction_percent = std::fmax(correction_percent, 0);
-    return nonnegative_correction_percent / percentage_points_per_fraction;
+constexpr double vertical_x[] = {1717.2, 2146.5, 2575.8, 3005.1, 3434.4, 3863.7, 4293.0, 4722.3, 5151.6, 5580.9, 6010.2, 6439.5, 6868.8, 7727.4, 8586.0, 9444.6, 10303.2, 11161.8, 12020.4, 12879.0, 13737.6, 14596.2, 15454.8, 16313.4, 17172.0};
+constexpr double vertical_y[] = {4.59, 2.97, 1.755, 1.08, 0.54, 0.135, 0.0, 0.0, 0.0, 0.135, 0.27, 0.45, 0.675, 1.215, 1.755, 2.43, 3.105, 3.78, 4.455, 5.13, 5.805, 6.48, 7.155, 7.83, 8.505};
+const pchip::Interpolator vertical(vertical_x, vertical_y);
+
+constexpr double nonvertical_x[] = {630.0, 1350.0, 2160.0, 3600.0, 6300.0};
+constexpr double nonvertical_y[] = {13.014, 2.7, 0.0, 1.62, 7.695};
+const pchip::Interpolator nonvertical(nonvertical_x, nonvertical_y);
+
+const pchip::Interpolator& selectCurve(Pump::Style style) {
+    return style == Pump::Style::VERTICAL_TURBINE ? vertical : nonvertical;
 }
 } // namespace
 
 namespace optimal_specific_speed_correction {
 
 double calculate(const Input& input) {
-    if (input.style == Pump::Style::VERTICAL_TURBINE) {
-        if (input.specific_speed < vertical_speed_threshold) {
-            return evaluateCorrection(vertical_low_speed, input.specific_speed);
-        }
-        return evaluateCorrection(vertical_high_speed, input.specific_speed);
-    }
-    if (input.specific_speed < nonvertical_speed_threshold) {
-        return evaluateCorrection(nonvertical_low_speed, input.specific_speed);
-    }
-    return evaluateCorrection(nonvertical_high_speed, input.specific_speed);
+    return selectCurve(input.style).evaluate(input.specific_speed) / 100.0;
+}
+
+pchip::Range speedLimits(Pump::Style style) {
+    const auto& curve = selectCurve(style);
+    return {curve.minimum(), curve.maximum()};
 }
 
 } // namespace optimal_specific_speed_correction

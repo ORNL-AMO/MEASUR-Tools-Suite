@@ -2,7 +2,7 @@
 
 import type { PumpStyle } from "./pump_enums";
 
-/** Plain required style/speed input; no defaults, conversion or validation. */
+/** Plain required style/speed input; no defaults or unit conversion. */
 export interface OptimalSpecificSpeedCorrectionInput {
     /** Unitless pump-style classification from the shared runtime PumpStyle enum. */
     readonly style: PumpStyle;
@@ -12,9 +12,9 @@ export interface OptimalSpecificSpeedCorrectionInput {
 
 /**
  * Calculates the efficiency fraction to subtract from the viscosity-adjusted pump estimate.
- * Only vertical turbine uses the vertical curves; axial flow and all other styles use the other curves.
- * Equality selects the upper speed interval. The polynomial is lower-clamped with fmax before
- * conversion to a fraction; no upper clamp or input validation is applied.
+ * Interpolates HI 2020 points and divides by 100. Vertical turbine uses 1717.2–17172;
+ * axial flow and all other styles use 630–6300, in US customary specific speed.
+ * Returns NaN for nonfinite/out-of-range speed. Inclusive endpoints; no extrapolation.
  * @param input Plain style/speed input; not modified and requires no delete().
  * @returns Dimensionless efficiency decrement as a fraction, not percentage points; no cleanup.
  */

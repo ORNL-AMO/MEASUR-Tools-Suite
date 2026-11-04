@@ -13,7 +13,7 @@
  */
 namespace optimal_pump_efficiency {
 
-/** @brief Required pump classification and duty; no defaults, conversion or validation. */
+/** @brief Required pump classification and duty; no defaults or unit conversion. */
 struct Input {
     Pump::Style style;          ///< Unitless pump-style classification from the existing Pump enum.
     double rpm;                 ///< Pump rotational speed @unitb{\revolutionsPerMinute}.
@@ -28,9 +28,8 @@ struct Input {
  * @param[in] input Pump style and duty in rpm, cSt, dimensionless stages, US gpm and ft; not modified.
  * @return Efficiency as a dimensionless fraction, not a percentage; no final clamping is applied.
  * @details The viscosity factor is capped with fmin at one. The specific-speed correction is
- * subtracted afterward. Specified-optimal, positive-displacement and unknown native styles retain
- * their zero pre-efficiency fallback and can produce negative results. Signed, zero and nonfinite
- * inputs are evaluated directly, with retained fmin/fmax arithmetic rather than new validation.
+ * subtracted afterward. Requires finite positive rpm/head/stages, nonnegative finite viscosity,
+ * and reference-range flow/speed. Unavailable estimates and unsupported styles return NaN.
  * @see @ref optimal_pump_efficiency_calculator for the formulas, unit conventions and applicability limits.
  */
 double calculate(const Input& input);
