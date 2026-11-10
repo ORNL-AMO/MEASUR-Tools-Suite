@@ -2,47 +2,42 @@
 
 #include <emscripten/bind.h>
 
-using namespace emscripten;
-
 EMSCRIPTEN_BINDINGS(fan_affinity_laws) {
-    enum_<FanAffinityLaws::MotorControlType>("MotorControlType")
-        .value("OnOff", FanAffinityLaws::OnOff)
-        .value("TwoSpeed", FanAffinityLaws::TwoSpeed)
-        .value("VSD", FanAffinityLaws::VSD)
-        .value("None", FanAffinityLaws::None);
+    emscripten::enum_<fan_affinity_laws::MotorControlType>("MotorControlType")
+        .value("OnOff", fan_affinity_laws::MotorControlType::OnOff)
+        .value("TwoSpeed", fan_affinity_laws::MotorControlType::TwoSpeed)
+        .value("VSD", fan_affinity_laws::MotorControlType::VSD)
+        .value("None", fan_affinity_laws::MotorControlType::None);
 
-    enum_<FanAffinityLaws::FlowMode>("FlowMode")
-        .value("Percent", FanAffinityLaws::Percent)
-        .value("Volume", FanAffinityLaws::Volume);
+    emscripten::enum_<fan_affinity_laws::FlowMode>("FlowMode")
+        .value("Percent", fan_affinity_laws::FlowMode::Percent)
+        .value("Volume", fan_affinity_laws::FlowMode::Volume);
 
-    class_<FanAffinityLaws::Output>("FanAffinityLawsOutput")
-        .property("annualEnergyBaseline", &FanAffinityLaws::Output::annualEnergyBaseline)
-        .property("annualEnergyNew", &FanAffinityLaws::Output::annualEnergyNew)
-        .property("annualCostSavings", &FanAffinityLaws::Output::annualCostSavings);
+    emscripten::value_object<fan_affinity_laws::Input>("FanAffinityLawsInput")
+        .field("electricityCost", &fan_affinity_laws::Input::electricity_cost)
+        .field("driveEfficiency", &fan_affinity_laws::Input::drive_efficiency)
+        .field("motorEfficiency", &fan_affinity_laws::Input::motor_efficiency)
+        .field("flowPercentBaseline", &fan_affinity_laws::Input::flow_percent_baseline)
+        .field("operatingHours", &fan_affinity_laws::Input::operating_hours)
+        .field("motorPower", &fan_affinity_laws::Input::motor_power)
+        .field("ratedFlow", &fan_affinity_laws::Input::rated_flow)
+        .field("motorControlTypeCurrent", &fan_affinity_laws::Input::motor_control_type_current)
+        .field("motorControlTypeNew", &fan_affinity_laws::Input::motor_control_type_new)
+        .field("flowMode", &fan_affinity_laws::Input::flow_mode)
+        .field("desiredFlowRate", &fan_affinity_laws::Input::desired_flow_rate);
 
-    value_object<FanAffinityLaws::Input>("FanAffinityLawsInput")
-        .field("electricityCost", &FanAffinityLaws::Input::electricityCost)
-        .field("driveEfficiency", &FanAffinityLaws::Input::driveEfficiency)
-        .field("motorEfficiency", &FanAffinityLaws::Input::motorEfficiency)
-        .field("flowPercentBaseline", &FanAffinityLaws::Input::flowPercentBaseline)
-        .field("operatingHours", &FanAffinityLaws::Input::operatingHours)
-        .field("motorPower", &FanAffinityLaws::Input::motorPower)
-        .field("ratedFlow", &FanAffinityLaws::Input::ratedFlow)
-        .field("motorControlTypeCurrent", &FanAffinityLaws::Input::motorControlTypeCurrent)
-        .field("motorControlTypeNew", &FanAffinityLaws::Input::motorControlTypeNew)
-        .field("flowMode", &FanAffinityLaws::Input::flowMode)
-        .field("desiredFlowRate", &FanAffinityLaws::Input::desiredFlowRate);
+    emscripten::value_object<fan_affinity_laws::Result>("FanAffinityLawsResult")
+        .field("annualEnergyBaseline", &fan_affinity_laws::Result::annual_energy_baseline)
+        .field("annualEnergyNew", &fan_affinity_laws::Result::annual_energy_new)
+        .field("annualCostSavings", &fan_affinity_laws::Result::annual_cost_savings);
 
-    /**
-     * Function calculate computes the annual energy and cost savings based on current and changed state of motor control
-     * Function changeFanSize takes in two parameters current fan diameter and new fan diameter, and
-     * computes the annual energy and cost savings based on current and changed state of motor control and  change in fan size.
-     */
-    class_<FanAffinityLaws>("FanAffinityLaws")
-        .constructor<const FanAffinityLaws::Input&>()
-        .constructor<const double, const double, const double, const double, const double, const double, const double,
-            const FanAffinityLaws::MotorControlType, const FanAffinityLaws::MotorControlType,
-            const FanAffinityLaws::FlowMode, const double>()
-        .function("calculate", &FanAffinityLaws::calculate)
-        .function("changeFanSize", &FanAffinityLaws::changeFanSize);
+    emscripten::value_object<fan_affinity_laws::TimeFactorResult>("FanAffinityLawsTimeFactorResult")
+        .field("factor", &fan_affinity_laws::TimeFactorResult::factor)
+        .field("timeAbove50Percent", &fan_affinity_laws::TimeFactorResult::time_above_50_percent)
+        .field("timeAt50Percent", &fan_affinity_laws::TimeFactorResult::time_at_50_percent)
+        .field("timeAt0Percent", &fan_affinity_laws::TimeFactorResult::time_at_0_percent);
+
+    emscripten::function("calculateFanAffinityLaws", &fan_affinity_laws::calculate);
+    emscripten::function("calculateFanAffinityLawsWithFanSize", &fan_affinity_laws::changeFanSize);
+    emscripten::function("get50PercentTimeFactor", &fan_affinity_laws::get50PercentTimeFactor);
 }

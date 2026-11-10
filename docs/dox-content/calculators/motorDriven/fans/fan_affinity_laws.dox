@@ -1,0 +1,257 @@
+/**
+ * @defgroup fan_affinity_laws_calculator Fan Affinity Laws Calculator
+ * @ingroup equipment_and_property_calculators
+ * @brief Estimates annual electrical energy and cost savings for fan control and diameter changes.
+ * @details
+ * How much electrical energy could a fan system save by changing its motor control, requested
+ * flow, or fan diameter? This calculation starts with mechanical power delivered to the fan at
+ * the baseline operating point. It reconstructs a full-speed reference and then applies the
+ * selected control and diameter relationships. The result supports screening of an operating
+ * change; it does not locate an operating point on a measured fan and system curve.
+ *
+ * @heading{Annual Results and Interpretation}
+ * Baseline and modified energy are electrical consumption over the same annual operating time.
+ * Savings are positive when the modification reduces demand and negative when it increases it:
+ * @formula{fan-affinity-annual-results;
+ * E_b=P_b H,\qquad E_n=P_n H,\qquad S=(P_b-P_n)Hc
+ * }
+ * @symtable
+ * @symrow{E_b; Baseline annual electrical energy; \kilowatt\hour\per\year}
+ * @symrow{E_n; Modified annual electrical energy; \kilowatt\hour\per\year}
+ * @symrow{P_b; Baseline electrical power; \kilowatt}
+ * @symrow{P_n; Modified average electrical power; \kilowatt}
+ * @symrow{H; Annual operating time applied to both cases; \hour\per\year}
+ * @symrow{c; Electricity rate; \dollar\per\kilowatt\hour}
+ * @symrow{S; Signed annual electricity cost savings; \dollar\per\year}
+ * @endsymtable
+ *
+ * A negative savings result is retained, not forced to zero. Use a consistent operating schedule
+ * for the comparison. For Two-Speed, average power already includes the off-time share within
+ * that schedule; do not reduce annual hours by the off-time fraction a second time.
+ *
+ * @heading{Start with Delivered Baseline Power}
+ * Supply power delivered at the fan's baseline operating point in kW. This is mechanical fan
+ * input after the motor and drive losses, not electrical input, nameplate power, full-speed
+ * rated power, or fluid power. Dividing by motor and drive efficiencies reconstructs the
+ * baseline electrical demand. Dividing that demand by its control factor reconstructs the
+ * reference full-speed electrical demand for the original fan:
+ * @formula{fan-affinity-baseline-power;
+ * P_b=\frac{P_{del}}{\eta_m\eta_d},\qquad
+ * P_{full}=\frac{P_b}{F_b}
+ * }
+ * @symtable
+ * @symrow{P_b; Baseline electrical power; \kilowatt}
+ * @symrow{P_{del}; Delivered fan power at the baseline operating point; \kilowatt}
+ * @symrow{\eta_m; Motor efficiency as a fraction; \unitless}
+ * @symrow{\eta_d; Drive efficiency as a fraction; \unitless}
+ * @symrow{P_{full}; Reconstructed full-speed electrical power for the original fan; \kilowatt}
+ * @symrow{F_b; Baseline control power factor; \unitless}
+ * @endsymtable
+ *
+ * The entered delivered power already describes baseline flow. Applying the baseline flow
+ * factor to it again would count that reduction twice. When delivered power is estimated from
+ * nameplate data by the caller, pass the resulting baseline kW value without another flow
+ * adjustment. Efficiency inputs are percentages (97 means 97%); they are divided by 100
+ * internally. Baseline flow is also a percentage of the original rated flow.
+ *
+ * @heading{Resolve Flow and Diameter}
+ * A percentage desired-flow input is a percentage of the original rated flow, even when the
+ * fan is resized. Convert it to volume first. A Volume input is already the desired volume:
+ * @formula{fan-affinity-requested-volume;
+ * Q_n=Q_r\frac{p_n}{100}\quad\text{in Percent mode},\qquad
+ * Q_n=Q_{input}\quad\text{in Volume mode}
+ * }
+ * @symtable
+ * @symrow{Q_n; Desired modified volume flow; \meter\cubed\per\second}
+ * @symrow{Q_r; Original rated volume flow; \meter\cubed\per\second}
+ * @symrow{p_n; Desired percentage of the original rated flow; \percent}
+ * @symrow{100; Percentage-point-to-fraction divisor; \unitless}
+ * @symrow{Q_{input}; Desired volume-flow input in Volume mode; \meter\cubed\per\second}
+ * @endsymtable
+ *
+ * The flow units in the symbol tables are illustrative SI units. CFM or any other consistent
+ * volume-flow unit gives the same ratios when used for both rated and desired volume flow.
+ * No conversion between flow units is performed by the calculator.
+ *
+ * For a diameter change, use the new-to-original diameter ratio. The implemented geometric
+ * similarity model scales rated flow with its cube and power with its fifth power:
+ * @formula{fan-affinity-resized-flow;
+ * r=\frac{D_n}{D_b},\qquad Q_{r,n}=Q_r r^3,\qquad
+ * f_b=\frac{p_b}{100},\qquad f_n=\frac{Q_n}{Q_{r,n}}
+ * }
+ * @symtable
+ * @symrow{r; New-to-original fan diameter ratio; \unitless}
+ * @symrow{D_n; Modified fan diameter; \inch}
+ * @symrow{D_b; Original fan diameter; \inch}
+ * @symrow{Q_{r,n}; Rated flow of the resized fan; \meter\cubed\per\second}
+ * @symrow{Q_r; Original rated flow; \meter\cubed\per\second}
+ * @symrow{f_b; Baseline flow fraction relative to original rated flow; \unitless}
+ * @symrow{p_b; Baseline flow percentage; \percent}
+ * @symrow{100; Percentage-point-to-fraction divisor; \unitless}
+ * @symrow{f_n; Modified flow fraction relative to resized rated flow; \unitless}
+ * @symrow{Q_n; Desired modified volume flow; \meter\cubed\per\second}
+ * @endsymtable
+ *
+ * Without a diameter change, the ratio is one. Both VSD and Two-Speed must use the resized
+ * rated flow when a diameter changes; using the original rated flow for Two-Speed would
+ * select the wrong time split and power. OnOff and None use a control factor of one and do
+ * not impose a requested-flow duty cycle.
+ *
+ * @heading{Apply the Selected Control Factor}
+ * The variable-speed model uses the cubic flow-to-power relationship. Two-Speed meets average
+ * flow by sharing time among full speed, half speed, and off. Half-speed power is one eighth
+ * of full-speed power under the cubic relationship:
+ * @formula{fan-affinity-control-factor;
+ * F(f)=\begin{cases}
+ * f^3 & \text{VSD}\\
+ * t_{full}+0.125t_{half} & \text{Two-Speed}\\
+ * 1 & \text{OnOff or None}
+ * \end{cases},\qquad F_b=F(f_b),\qquad F_n=F(f_n)
+ * }
+ * @symtable
+ * @symrow{F(f); Average-to-full-speed power factor at flow fraction f; \unitless}
+ * @symrow{f; Flow divided by the applicable rated flow; \unitless}
+ * @symrow{t_{full}; Fraction of operating time at full speed; \unitless}
+ * @symrow{t_{half}; Fraction of operating time at half speed; \unitless}
+ * @symrow{0.125; Half-speed power fraction from the cubic law; \unitless}
+ * @symrow{F_b; Factor evaluated with baseline control and baseline flow fraction; \unitless}
+ * @symrow{F_n; Factor evaluated with modified control and modified flow fraction; \unitless}
+ * @symrow{f_b; Baseline fraction of original rated flow; \unitless}
+ * @symrow{f_n; Desired fraction of resized rated flow; \unitless}
+ * @endsymtable
+ *
+ * For Two-Speed, fractions below one half share half-speed and off time. Fractions above one
+ * half share full-speed and half-speed time. The helper calculates:
+ * @formula{fan-affinity-two-speed-times;
+ * t_{full}=\max\left(\frac{f-0.5}{0.5},0\right),\qquad
+ * t_{off}=\max\left(\frac{0.5-f}{0.5},0\right),\qquad
+ * t_{half}=1-t_{full}-t_{off}
+ * }
+ * @symtable
+ * @symrow{t_{full}; Time at full speed returned as timeAbove50Percent; \unitless}
+ * @symrow{t_{off}; Time off returned as timeAt0Percent; \unitless}
+ * @symrow{t_{half}; Time at half speed returned as timeAt50Percent; \unitless}
+ * @symrow{f; Average flow fraction in the closed interval zero to one; \unitless}
+ * @symrow{0.5; Half-speed flow fraction; \unitless}
+ * @symrow{1; Total time fraction; \unitless}
+ * @endsymtable
+ *
+ * At zero flow, all time is off; at half flow, all time is at half speed; at rated flow, all time
+ * is at full speed. The helper takes a fraction (0.90), not a percentage (90), and returns
+ * fractions that can be multiplied by 100 for a percentage display. Its historical
+ * timeAbove50Percent field means time at full speed, not time at an arbitrary speed above 50%.
+ *
+ * Finally apply the modified control factor and diameter power scaling:
+ * @formula{fan-affinity-modified-power;
+ * P_n=P_{full}F_n r^5
+ * }
+ * @symtable
+ * @symrow{P_n; Modified average electrical power; \kilowatt}
+ * @symrow{P_{full}; Original fan full-speed electrical power reconstructed from baseline; \kilowatt}
+ * @symrow{F_n; Modified control factor; \unitless}
+ * @symrow{r; New-to-original fan diameter ratio; \unitless}
+ * @endsymtable
+ *
+ * @heading{Worked VSD Baseline Example}
+ * A fan receives 11.22 kW of delivered baseline power at 7,040 CFM against a rated 30,000 CFM.
+ * Motor and drive efficiencies are 96% and 97%. Both baseline and modification use VSD, and
+ * the requested modified flow is 5,000 CFM without resizing. Normalizing the baseline and
+ * applying the modified flow factor gives:
+ * @formula{fan-affinity-vsd-example;
+ * P_b=\frac{11.22}{0.96\times0.97}\approx12.05\ \mathrm{kW},\qquad
+ * P_n=\frac{11.22}{0.96\times0.97}
+ * \left(\frac{5000}{7040}\right)^3\approx4.32\ \mathrm{kW}
+ * }
+ * @symtable
+ * @symrow{P_b; Baseline electrical power; \kilowatt}
+ * @symrow{P_n; Modified electrical power; \kilowatt}
+ * @symrow{11.22; Delivered baseline power; \kilowatt}
+ * @symrow{0.96; Motor efficiency fraction; \unitless}
+ * @symrow{0.97; Drive efficiency fraction; \unitless}
+ * @symrow{5000; Desired modified flow; \foot\cubed\per\minute}
+ * @symrow{7040; Actual baseline flow; \foot\cubed\per\minute}
+ * @endsymtable
+ *
+ * At 6,240 hours/year and $0.07/kWh, the unrounded powers give 75,185.57 kWh/year baseline,
+ * 26,935.59 kWh/year modified, and $3,377.50/year savings. The baseline is not reduced again
+ * by its 23.47% flow fraction. Rated flow cancels from the final flow ratio in this example.
+ *
+ * @heading{Worked Two-Speed Diameter Change Example}
+ * An OnOff baseline delivers 20 kW with drive efficiency 96%, motor efficiency 97%, rated flow
+ * 60,000 CFM, and original diameter 36 inches. The modification uses Two-Speed, 40,000 CFM,
+ * and diameter 38 inches. The baseline control factor is one. The resized rated flow and
+ * required fraction are:
+ * @formula{fan-affinity-two-speed-example-flow;
+ * Q_{r,n}=60000\left(\frac{38}{36}\right)^3\approx70565.84\ \mathrm{CFM},\qquad
+ * f_n=\frac{40000}{60000(38/36)^3}\approx0.56684648
+ * }
+ * @symtable
+ * @symrow{Q_{r,n}; Resized rated flow; \foot\cubed\per\minute}
+ * @symrow{f_n; Required fraction of resized rated flow; \unitless}
+ * @symrow{60000; Original rated flow; \foot\cubed\per\minute}
+ * @symrow{38; Modified diameter; \inch}
+ * @symrow{36; Original diameter; \inch}
+ * @symrow{40000; Desired modified flow; \foot\cubed\per\minute}
+ * @endsymtable
+ *
+ * The time split is approximately 13.37% full speed, 86.63% half speed, and 0% off. The
+ * unrounded power factor is approximately 0.24198134. Substitution gives:
+ * @formula{fan-affinity-two-speed-example-power;
+ * P_b=\frac{20}{0.97\times0.96}\approx21.48\ \mathrm{kW},\qquad
+ * P_n\approx\frac{20}{0.97\times0.96}\times0.24198134
+ * \left(\frac{38}{36}\right)^5\approx6.81\ \mathrm{kW}
+ * }
+ * @symtable
+ * @symrow{P_b; Baseline electrical power; \kilowatt}
+ * @symrow{P_n; Modified average electrical power; \kilowatt}
+ * @symrow{20; Delivered baseline power; \kilowatt}
+ * @symrow{0.97; Motor efficiency fraction; \unitless}
+ * @symrow{0.96; Drive efficiency fraction; \unitless}
+ * @symrow{0.24198134; Rounded modified Two-Speed power factor; \unitless}
+ * @symrow{38; Modified diameter; \inch}
+ * @symrow{36; Original diameter; \inch}
+ * @endsymtable
+ *
+ * Using 4,380 hours/year, $0.08/kWh, and unrounded intermediates gives 94,072.16 kWh/year
+ * baseline, 29,829.67 kWh/year modified, and $5,139.40/year savings. These are Suite regression
+ * case #5 values. The application's Test 5 has different power and annual inputs, so its
+ * energy/cost totals must not be substituted for this Suite fixture.
+ *
+ * @heading{Assumptions and Valid Boundaries}
+ * This is an ideal affinity-law screening model with fixed motor and drive efficiencies,
+ * geometrically similar fan diameter scaling, and no explicit static-pressure, fan-efficiency,
+ * part-load efficiency, VSD-loss, transient, or minimum-speed model. Do not apply the diameter
+ * exponents as a universal impeller-trimming rule for an unchanged housing. Confirm that the
+ * fan family, system curve, and feasible operating region support the proposed change.
+ *
+ * Desktop and other callers own all input validation, including finite numbers, meaningful
+ * efficiencies and operating hours, positive rated flow and diameters, nonnegative desired
+ * flow, and feasible operating regions. Efficiency and baseline-flow inputs are percentage
+ * values; the helper takes a fraction. For physical interpretation, the helper flow fraction
+ * should be in [0,1]. VSD and Two-Speed baseline flow must be positive to reconstruct a finite
+ * full-speed reference. OnOff and None ignore that flow factor, so a zero placeholder is
+ * sufficient. Zero modification flow remains meaningful for VSD and Two-Speed.
+ *
+ * The Suite applies the equations directly, without input checks, exceptions for invalid
+ * values, default substitution, or clamping. In particular, Two-Speed desired flow above the
+ * applicable rated flow produces a negative half-speed time share; those extrapolated shares
+ * are not a feasible schedule. A zero VSD/Two-Speed baseline factor or zero efficiency can
+ * produce infinity or NaN through division by zero. These arithmetic results are returned
+ * unchanged. Desktop should prevent invalid inputs and clear results when its validation fails.
+ * The max terms in the time-split equations are part of that model, not an input-domain check.
+ *
+ * @heading{Calculation Contract and Usage}
+ * The baseline-power interpretation, revised Two-Speed diameter calculation, and time split
+ * follow the reviewed S1-S4 specification attached to
+ * <a href="https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/7129">Desktop issue #7129</a>,
+ * coordinated with <a href="https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/324">Suite issue #324</a>.
+ * The cubic/fifth-power relationships and two-speed time sharing above are the implemented
+ * ideal model; the review document supplies the calculation contract rather than fan-specific
+ * performance validation.
+ *
+ * C++ callers use fan_affinity_laws::calculate(), fan_affinity_laws::changeFanSize(), and
+ * fan_affinity_laws::get50PercentTimeFactor(). WebAssembly callers use
+ * calculateFanAffinityLaws(input), calculateFanAffinityLawsWithFanSize(input, currentDiameter,
+ * newDiameter), and get50PercentTimeFactor(flowFraction). All inputs/results are plain values
+ * without manual cleanup. The public motor-control and flow-mode enums select the paths above.
+ */
