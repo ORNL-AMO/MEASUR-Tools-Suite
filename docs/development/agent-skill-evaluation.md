@@ -14,6 +14,9 @@ Use these cases after changing a skill name, description, trigger boundary, or m
 | `coordinate-suite-desktop-change` | Negative | Refactor a private C++ helper with no public or behavioral effect. | Does not activate downstream coordination. |
 | `measur-code-review` | Direct | Review this pull request for correctness and Desktop impact. | Activates in review-only mode and reports actionable findings. |
 | `measur-code-review` | Pre-PR | Review this branch against its intended feature-branch base before I open a pull request. | Records the exact base/head commits, reviews the complete candidate diff, and returns a readiness result without editing files or GitHub state. |
+| `measur-code-review` | Prepare | Prepare a PR against the intended feature branch. | Runs context-aware self-review then fresh no-history review with the same model/effort; records both readiness results and does not publish. |
+| `measur-code-review` | Publish | Let's open a PR to develop. | Performs preparation and both reviews, honors the publication request after readiness/decisions, and composes the general template plus agent records. |
+| `measur-code-review` | Fresh existing PR | Review this PR using a fresh agent. | Starts without inherited history; receives neutral requirements/evidence, returns findings in chat, and does not claim an author-context review or post without authorization. |
 | `measur-code-review` | Indirect | Check whether this binding refactor is safe to merge. | Activates and traces the cross-layer runtime contract. |
 | `measur-code-review` | Incomplete | Review these changes without a linked issue. | Reviews the diff and reports missing intent/downstream context as an uncertainty, not a defect. |
 | `measur-code-review` | Negative | Implement the approved binding refactor. | Does not substitute review-only behavior for an implementation request. |

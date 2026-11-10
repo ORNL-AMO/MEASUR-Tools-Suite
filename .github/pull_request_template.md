@@ -1,5 +1,8 @@
 # Pull Request
 
+<!-- Complete applicable sections and mark others Not applicable.
+     Agent-assisted PRs append their separate review records; human-only PRs do not need them. -->
+
 ## Purpose
 
 Describe the requested outcome and the calculation or module affected.
@@ -19,6 +22,7 @@ Describe the requested outcome and the calculation or module affected.
 - [ ] Declaration-only
 - [ ] Packaging or WASM loading
 - [ ] Internal-only change
+- [ ] Documentation-only
 
 Compatibility decision and approval for any breaking or behavioral change:
 
@@ -52,17 +56,9 @@ Complete this table for each changed public WASM surface, or write `Not applicab
 
 List exact commands, results, and environmental limits:
 
-## Internal Review
+## Review Notes
 
-- [ ] A review-only pass used `.github/skills/measur-code-review/` against the intended PR base.
-- [ ] Every actionable finding was resolved or explicitly dispositioned; no P0, P1, or P2 finding remains.
-- [ ] Checks affected by review fixes were rerun.
-
-- Intended base and reviewed base commit:
-- Reviewed head commit:
-- Reviewer or review task:
-- Readiness result:
-- Remaining P3 findings, questions, or validation gaps:
+Call out areas for reviewers to inspect and any remaining questions or validation gaps.
 
 ## Engineering Or SME Review
 

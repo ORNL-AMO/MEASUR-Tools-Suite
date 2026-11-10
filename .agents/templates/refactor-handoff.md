@@ -100,13 +100,13 @@
 
 ## Internal Review
 
-- Intended PR base and reviewed base commit:
-- Reviewed head commit:
-- Reviewer or review task:
-- Readiness result: ready | ready with documented follow-up | not ready
-- Findings and dispositions:
-- Checks rerun after review fixes:
+- Intended PR base and candidate scope:
+- Durable implementation decisions or fixes from review:
+- Checks required after fixes:
 - Remaining P3 findings, questions, or validation gaps:
+- Execution evidence: <!-- Exact commits, both reviewers/readiness results, and full findings live in ignored local reports before publication and the PR description afterward. -->
+
+Do not create tracked handoff updates solely to stamp exact reviewed-head SHAs or review execution statuses: that changes the candidate and invalidates its reviews. Capture durable fixes before the final candidate is committed, and follow the [two-stage PR workflow](../../docs/development/pr-workflow.md).
 
 ## Open Questions Or Blockers
 

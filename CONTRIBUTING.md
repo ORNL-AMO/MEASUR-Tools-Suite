@@ -2,6 +2,12 @@
 
 This guide provides clear standards and best practices for contributing to this project. It covers coding style, documentation, formatting, and workflow expectations to help maintain high code quality, ensure long-term maintainability, and foster smooth collaboration among all contributors.
 
+## Pull Requests
+
+Use the general [PR template](.github/pull_request_template.md), completing applicable API, validation, Desktop-impact, and engineering-review sections and marking others `Not applicable`. Human-only PRs do not need agent review records.
+
+When an agent prepares a PR, follow the six-step [agent-assisted workflow](docs/development/pr-workflow.md): scope, implement/validate, context-aware self-review, fresh independent review, authorized publication, and human review/delivery. The agent appends separate [review records](docs/development/pr-review-record.md). Existing PRs can request a fresh review alone; GitHub comments require explicit posting authorization from a development chat.
+
 ## [Style Guide](/contributing/style-guide.md)
 
 Follow this guide to make sure your contributions align with the project's coding standards. This will help ensure that your code is readable, maintainable, and consistent with the rest of the codebase.

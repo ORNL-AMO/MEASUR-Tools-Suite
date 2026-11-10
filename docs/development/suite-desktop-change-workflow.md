@@ -54,23 +54,25 @@ When the Desktop repository or linked issue cannot be inspected, state that down
 
 ## Pre-PR Internal Review
 
-Complete a review-only pass in each repository after implementation and validation but before opening its pull
-request. In Suite, follow [the agent workflow](../../.agents/README.md#pre-pr-internal-review-gate) and use
+Complete the applicable internal review in each repository after implementation and validation but before opening its pull
+request. In Suite, follow both stages of [the agent workflow](pr-workflow.md) and use
 [the MEASUR code-review skill](../../.github/skills/measur-code-review/SKILL.md). In Desktop, follow that repository's
 review instructions.
 
 Review the complete candidate diff against its intended PR base. A child branch in a coordinated feature sequence
-must be reviewed against the feature branch it will merge into, not automatically against `develop`. Record the exact
-base and head commits, findings and dispositions, readiness result, checks rerun after fixes, and remaining validation
-gaps. Resolve every actionable finding or document why it is not applicable; do not open the PR with an unresolved
-P0, P1, or P2 finding. Repeat the review if subsequent changes materially alter the reviewed diff.
+must be reviewed against the feature branch it will merge into, not automatically against `develop`. For Suite, record the exact
+base/head/merge-base commits, findings/dispositions, both readiness results, checks rerun after fixes, and remaining validation
+gaps in ignored local reports and the PR description; Desktop follows its own evidence rules. Keep durable Suite implementation decisions in the handoff before the final
+candidate is committed; do not add tracked review-status stamps that change the reviewed head. Resolve every actionable
+finding or document why it is not applicable; do not open the PR with an unresolved P0, P1, or P2 finding. Repeat both Suite
+stages if the candidate or target changes.
 
 This internal gate improves PR readiness but does not replace human approval or branch protection after the PR opens.
 
 ## Release And Verification Order
 
 1. Implement and verify the Suite change across C++, bindings, declarations, tests, and documentation.
-2. Complete the Suite pre-PR internal review and record its evidence in the handoff.
+2. Complete both Suite pre-PR review stages and retain exact execution evidence in local reports, then the PR description. Keep the handoff focused on durable implementation decisions.
 3. Open or ready the Suite PR. The current GitHub workflow publishes a beta package for ready, same-repository PRs targeting `develop`.
 4. Record the exact beta version in the Desktop issue and update both Desktop dependency pins when the process-flow package consumes the Suite.
 
