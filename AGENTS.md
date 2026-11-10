@@ -14,6 +14,7 @@ Before changing code, read the relevant project guidance:
 - [docs/development/suite-desktop-change-workflow.md](docs/development/suite-desktop-change-workflow.md) when a Suite change affects AMO-Tools-Desktop.
 - [ts_def/README.md](ts_def/README.md) when adding or correcting TypeScript declarations.
 - [tests/wasm-mocha/README.md](tests/wasm-mocha/README.md) when adding or migrating WebAssembly Mocha tests.
+- [docs/development/pr-workflow.md](docs/development/pr-workflow.md) when an agent prepares, opens, or updates a PR.
 
 If any referenced file is unavailable in context, ask the user for it before proceeding.
 
@@ -73,7 +74,7 @@ When asked to refactor code using namespaces or to split modules, work in this o
 2. **WebAssembly Surface and Tests**: Update the binding, TypeScript declaration, module export, and WASM Mocha test together. Move migrated tests from `tests/wasm/` and delete obsolete originals.
 3. **Algorithm Documentation**: Update `docs/dox-content/` and related examples when public behavior, formulas, usage, or module organization changed.
 4. **Integrated and Downstream Verification**: Rebuild and stage WASM, run the affected validation, and verify AMO-Tools-Desktop impact when applicable.
-5. **Pre-PR Internal Review**: Before opening a pull request, run a review-only pass against the intended base branch using [`.github/skills/measur-code-review/`](.github/skills/measur-code-review/SKILL.md). Resolve or explicitly disposition every actionable finding, rerun affected validation, and record the reviewed base/head commits and outcome in the handoff.
+5. **Pre-PR Internal Review**: Complete context-aware self-review followed by a fresh independent review under the [PR workflow](docs/development/pr-workflow.md), using [`.github/skills/measur-code-review/`](.github/skills/measur-code-review/SKILL.md) for both. Resolve or explicitly disposition findings and rerun affected validation. Keep exact execution evidence in local reports and the PR description; record durable implementation decisions in the handoff before the final candidate is committed.
 
 For namespace refactors that include algorithm documentation, use the repo-neutral persona workflow in [.agents/README.md](.agents/README.md). The default sequence is:
 
@@ -91,7 +92,9 @@ Repo-scoped skills under `.agents/skills/` package the recurring workflows:
 - `refactor-and-document-calculation` for cross-layer calculation refactors and algorithm documentation.
 - `coordinate-suite-desktop-change` for changes that affect the Desktop consumer, release order, or GitHub coordination.
 
-Both pre-PR internal review and GitHub Copilot PR review use `.github/skills/measur-code-review/`. Internal review is a readiness gate, while AI review remains advisory and does not replace required human approval.
+For agent-assisted PR preparation, use context-aware self-review first, then a subagent with history inheritance explicitly disabled and the development agent's model/effort. Pass only neutral requirements, comparison facts, approved contract decisions, and validation evidence to the fresh reviewer, excluding self-review conclusions. Append both [agent review records](docs/development/pr-review-record.md) to the general PR description; human-only PRs do not require them. Honor existing publication authorization and surface new findings or material validation gaps for decisions.
+
+Both local stages and GitHub Copilot PR review use `.github/skills/measur-code-review/`. The internal gate determines readiness; configured GitHub-hosted review remains separate and advisory. Neither replaces required human approval.
 
 ## WebAssembly and TypeScript Rules
 

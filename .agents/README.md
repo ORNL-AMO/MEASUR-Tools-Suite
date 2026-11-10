@@ -2,6 +2,8 @@
 
 This directory defines repo-neutral personas for namespace refactors and algorithm documentation work. These personas are guidance for AI agents and automation tools; they are not tied to any single tool or runtime.
 
+For agent-assisted PR preparation of any change, use the concise [PR workflow](../docs/development/pr-workflow.md), [fresh-review procedure](../docs/development/fresh-pr-review.md), and separate [review records](../docs/development/pr-review-record.md). Human-only PRs keep the general template and existing contributor rules.
+
 Repo-scoped skills in [`skills/`](skills/) provide the task-level entry points:
 
 - `refactor-and-document-calculation` coordinates the persona sequence below.
@@ -54,17 +56,20 @@ is to record a beta version or its CI result: each push can publish another beta
 
 Complete an internal review after implementation and validation but before opening a pull request:
 
-1. Freeze the candidate long enough to identify the intended base branch and exact base/head commits. For feature work,
-   review the feature branch against the child branch rather than assuming `develop` is the base.
-2. Run a review-only pass using [the MEASUR code-review skill](../.github/skills/measur-code-review/SKILL.md).
-   Prefer a separate agent or fresh review context so the reviewer evaluates the implementation independently.
-3. Give the reviewer the handoff, linked issues, proposed PR purpose, validation evidence, and the complete
-   `base...head` diff. For coordinated Desktop changes, review each repository's candidate diff under that
-   repository's instructions.
-4. Record findings and their dispositions in the handoff. Resolve every actionable finding or document why it is not
-   applicable; no P0, P1, or P2 finding may remain unresolved when the PR opens.
-5. Rerun checks affected by review fixes, then repeat the internal review when the candidate diff changed materially.
-6. Record the final reviewed head commit and remaining questions or validation gaps. Only then open the pull request.
+1. Identify the intended PR base and committed candidate. Review the child branch against the feature branch it will
+   merge into rather than assuming `develop`. Preserve unrelated work and use a clean checkout for the final candidate.
+2. The context-aware development agent self-reviews with [the MEASUR code-review skill](../.github/skills/measur-code-review/SKILL.md).
+   The verification persona can supply this stage if it covers the exact candidate and original requirements.
+3. Start the [fresh independent stage](../docs/development/fresh-pr-review.md) with history inheritance explicitly disabled
+   and the same model/effort. Pass only neutral requirements, approved contract facts, linked work, validation evidence,
+   and the complete comparison; exclude handoff review history and self-review conclusions. For coordinated Desktop
+   work, follow each repository's own review instructions.
+4. Present findings and resolve or explicitly disposition them; no P0, P1, or P2 finding may remain unresolved when the
+   PR opens. Rerun affected checks and both stages after changes, including a moved target.
+5. Save complete reports and exact base/head/merge-base metadata in ignored local records, then append both stages to
+   the authorized PR description. Keep durable implementation decisions in the handoff before the final candidate is
+   committed; do not change a tracked handoff solely to stamp the commit being reviewed or its execution status.
+6. Verify live target freshness, both records, readiness, and publication authorization before opening/updating the PR.
 
 This gate improves PR readiness but does not approve the change. Required human review and repository branch
 protection still apply after the PR opens.

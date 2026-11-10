@@ -42,9 +42,10 @@ Run the narrowest relevant checks first, then the integrated checks required by 
 
 Before finishing:
 
-- Before opening a pull request, complete the pre-PR internal review gate in [the persona workflow](../../README.md)
-  using `.github/skills/measur-code-review/`. Record the intended base, reviewed commits, findings and dispositions,
-  readiness result, and any checks rerun after fixes in the handoff.
+- Before opening a pull request, complete both stages of the pre-PR internal review gate in [the persona workflow](../../README.md)
+  using `.github/skills/measur-code-review/`. Keep exact commits, execution statuses, findings/dispositions, and readiness
+  in local reports and the PR description. Record durable implementation decisions and fixes in the handoff before the
+  final candidate is committed; do not create evidence-only handoff commits.
 - Mark the handoff lifecycle accurately.
 - Keep long investigation history in linked GitHub issues or an appendix.
 - Report commands that passed, commands that failed, and commands that could not run.

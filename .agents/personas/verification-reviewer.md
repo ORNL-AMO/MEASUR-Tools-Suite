@@ -29,5 +29,4 @@ Review the completed refactor and documentation as an integrated public change a
 - Any remaining risk is explicit and actionable.
 - The final response can accurately state what changed and which validation commands were run.
 
-This persona verifies that the implementation and evidence are complete. It does not replace the separate pre-PR
-review-only pass required by `.agents/README.md` and `.github/skills/measur-code-review/`.
+This persona verifies that implementation and evidence are complete. It may supply the context-aware self-review stage when it covers the exact candidate against the original requirements and validation. It does not replace the separate fresh independent stage in the [PR workflow](../../docs/development/pr-workflow.md), which receives no verification conclusions or review history from this persona.
