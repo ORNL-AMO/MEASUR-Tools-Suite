@@ -4,6 +4,7 @@
  * @ingroup fan_affinity_laws_calculator
  * @file fan_affinity_laws.h
  * @brief Stateless fan control and diameter-change energy calculations.
+ * @details Desktop/callers own input validation; this module performs arithmetic without checks or clamping.
  * @see @ref fan_affinity_laws_calculator for equations, examples, and limits.
  */
 
@@ -28,7 +29,7 @@ enum class FlowMode {
     Volume = 1   ///< Volume flow in the same units as rated flow.
 };
 
-/** @brief Complete baseline and modification data; percentages use 0-100 values. */
+/** @brief Complete caller-validated baseline and modification data; percentages use 0-100 values. */
 struct Input {
     double electricity_cost;                     ///< Electricity rate @unitb{\dollar\per\kilowatt\hour}.
     double drive_efficiency;                     ///< Drive efficiency @unitb{\percent}, greater than zero and at most 100.
@@ -50,7 +51,7 @@ struct Result {
     double annual_cost_savings;    ///< Signed annual savings @unitb{\dollar\per\year}; negative means increased cost.
 };
 
-/** @brief Two-speed average power factor and time shares, all dimensionless fractions. */
+/** @brief Two-speed average power factor and time shares; dimensionless fractions for flow in [0,1]. */
 struct TimeFactorResult {
     double factor;                ///< Average power divided by full-speed power @unitb{\unitless}.
     double time_above_50_percent; ///< Time at full speed @unitb{\unitless}, from zero to one.
@@ -62,10 +63,10 @@ struct TimeFactorResult {
  * @brief Calculates energy and savings without changing fan diameter.
  * @param[in] input Complete input data with units documented per member; not modified.
  * @return Annual baseline/new electrical energy in kWh/year and savings in dollars/year.
- * @throws std::invalid_argument For inputs outside the retained validation ranges, nonfinite
- * or zero VSD/Two-Speed baseline flow, or a Two-Speed modification fraction outside [0,1].
  * @details Motor power is delivered baseline power, not full-speed rated power. Percentages
  * are converted to fractions internally. OnOff/None ignore the baseline flow factor.
+ * No input validation, defaults, or clamping are applied; invalid inputs can produce
+ * nonphysical values, infinity, or NaN. Desktop/callers own all input validation.
  */
 Result calculate(const Input& input);
 
@@ -75,19 +76,21 @@ Result calculate(const Input& input);
  * @param[in] fan_diameter_current Original fan diameter @unitb{\inch}, greater than zero.
  * @param[in] fan_diameter Modified fan diameter @unitb{\inch}, greater than zero.
  * @return Annual baseline/new electrical energy in kWh/year and savings in dollars/year.
- * @throws std::invalid_argument For nonpositive diameters or inputs rejected by calculate().
  * @details Rated flow scales with the diameter ratio cubed and power with its fifth power.
  * Both VSD and Two-Speed use desired flow divided by the resized fan's rated flow.
+ * Diameter and input validation belong to Desktop/callers; no checks or clamping are applied.
  */
 Result changeFanSize(const Input& input, double fan_diameter_current, double fan_diameter);
 
 /**
  * @brief Resolves full-speed, half-speed, and off time shares for a Two-Speed fan.
  * @param[in] flow_percent Desired average flow divided by rated flow, dimensionless fraction [0,1].
- * @return Dimensionless average power factor and time shares; the three time shares sum to one.
- * @throws std::invalid_argument When flow_percent is nonfinite or outside [0,1].
+ * @return Dimensionless average power factor and time shares; for caller-supplied flow in [0,1],
+ * the three time shares are in [0,1] and sum to one.
  * @details Half-speed power is one eighth of full-speed power. Zero flow is valid here,
  * but cannot normalize a positive delivered baseline power in the annual calculation.
+ * No input validation or clamping is applied; Desktop/callers own the input domain.
+ * Out-of-range flow can produce negative time shares; nonfinite arithmetic is propagated.
  */
 TimeFactorResult get50PercentTimeFactor(double flow_percent);
 

@@ -224,19 +224,21 @@
  * exponents as a universal impeller-trimming rule for an unchanged housing. Confirm that the
  * fan family, system curve, and feasible operating region support the proposed change.
  *
- * Electricity rate, delivered motor power, and rated flow must be positive. Efficiencies must
- * be greater than zero and at most 100%; hours must be greater than zero and at most 8,760 per
- * year. Baseline flow percentages must be in [0,100]; VSD and Two-Speed additionally require
- * finite positive baseline flow because zero has a zero normalization factor. OnOff and None
- * retain a zero baseline-flow placeholder and a factor of one. Zero modification flow remains
- * valid. Percent-mode desired flow is limited to [0,100] of original rated flow; Volume-mode
- * flow cannot be negative. Diameter inputs retain the positive-value check.
+ * Desktop and other callers own all input validation, including finite numbers, meaningful
+ * efficiencies and operating hours, positive rated flow and diameters, nonnegative desired
+ * flow, and feasible operating regions. Efficiency and baseline-flow inputs are percentage
+ * values; the helper takes a fraction. For physical interpretation, the helper flow fraction
+ * should be in [0,1]. VSD and Two-Speed baseline flow must be positive to reconstruct a finite
+ * full-speed reference. OnOff and None ignore that flow factor, so a zero placeholder is
+ * sufficient. Zero modification flow remains meaningful for VSD and Two-Speed.
  *
- * The Two-Speed helper rejects nonfinite fractions and fractions outside [0,1]; this also
- * rejects an infeasible derived Two-Speed fraction after downsizing. There is no general
- * Volume-mode overcapacity cap for VSD and no result clamping. Existing comparisons do not
- * provide universal finite-value validation of every input; callers remain responsible for
- * complete UI validation and physically feasible conditions. No new default values are supplied.
+ * The Suite applies the equations directly, without input checks, exceptions for invalid
+ * values, default substitution, or clamping. In particular, Two-Speed desired flow above the
+ * applicable rated flow produces a negative half-speed time share; those extrapolated shares
+ * are not a feasible schedule. A zero VSD/Two-Speed baseline factor or zero efficiency can
+ * produce infinity or NaN through division by zero. These arithmetic results are returned
+ * unchanged. Desktop should prevent invalid inputs and clear results when its validation fails.
+ * The max terms in the time-split equations are part of that model, not an input-domain check.
  *
  * @heading{Calculation Contract and Usage}
  * The baseline-power interpretation, revised Two-Speed diameter calculation, and time split

@@ -7,7 +7,7 @@
 - Created: 2026-11-10
 - Last updated: 2026-11-10
 - Suite issue: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/issues/324
-- Suite PR: pending preparation; publication evidence belongs in the PR description and CI comments.
+- Suite PR: https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/461; publication evidence belongs in the PR description and CI comments.
 - Desktop issue: https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/7129
 - Desktop PR: not identified.
 
@@ -16,7 +16,7 @@
 - Logical module: `motorDriven/fans/fan_affinity_laws`.
 - One public header/source pair, binding, declaration, C++ test, WASM test, and engineering teaching page.
 - Canonical stateless value-object pattern: `compressedAir/dryer_operating_cost`.
-- User approved the breaking namespace replacement, S1-S4 behavioral corrections, and minimum validation guards. No compatibility class or constructor overloads remain.
+- User approved the breaking namespace replacement and S1-S4 behavioral corrections. The later instruction places all input validation in Desktop/callers, superseding the earlier minimum Suite guards. No compatibility class or constructor overloads remain.
 - C++ namespace: `fan_affinity_laws`; passive `Input`, `Result`, `TimeFactorResult`; scoped `MotorControlType` and `FlowMode` retain the existing values.
 - C++ fields use snake_case. Runtime and TypeScript fields remain camelCase. The existing public header path now contains the namespace API.
 
@@ -26,7 +26,7 @@
 | --- | --- | --- | --- | --- | --- | --- |
 | Annual calculation | `new FanAffinityLaws(...).calculate()` | `calculateFanAffinityLaws(input)` | function + value objects | complete input; kW, percentages 0-100, hours/year, $/kWh | plain values; no delete | breaking API and S1 behavior |
 | Resized calculation | class method `changeFanSize(current, next)` | `calculateFanAffinityLawsWithFanSize(input, current, next)` | function + value objects | diameters in inches; consistent flow units | plain values; no delete | breaking API and S1/S2 behavior |
-| Two-speed helper | private scalar helper | `get50PercentTimeFactor(flowFraction)` | function + value object | finite fraction 0-1; factor and three time fractions | plain values; no delete | additive |
+| Two-speed helper | private scalar helper | `get50PercentTimeFactor(flowFraction)` | function + value object | caller-validated fraction 0-1; factor and three time fractions; no runtime checks | plain values; no delete | additive |
 | Enums | `MotorControlType`, `FlowMode` | same runtime names and numeric values | enum | OnOff=0, TwoSpeed=1, VSD=2, None=3; Percent=0, Volume=1 | runtime enums; no delete | preserved |
 
 - C++ callers use `fan_affinity_laws::calculate(input)`, `fan_affinity_laws::changeFanSize(input, current, next)`, and `fan_affinity_laws::get50PercentTimeFactor(fraction)`.
@@ -43,7 +43,7 @@
 - Factors: VSD = flow fraction^3; Two-Speed = full-speed time + 0.125 * half-speed time; OnOff/None = 1.
 - Modified flow fraction = desired volume / (original rated flow * diameter ratio^3). Without resizing, diameter ratio is one.
 - Energy results are kWh/year and signed annual savings are dollars/year. No intermediate rounding or savings clamping.
-- Existing range checks migrate into functions. Additional guards reject nonfinite/zero VSD or Two-Speed baseline flow and helper fractions outside finite [0,1]. Internal Two-Speed calls share that domain guard. No general VSD volume-flow cap is added.
+- Desktop/callers own all input validation. The Suite performs arithmetic without range/finite/diameter checks, input-validation exceptions, default substitution, or clamping. The helper's max terms remain part of the time-split formula. Invalid inputs can produce nonphysical time shares, infinity, or NaN; these results are returned unchanged.
 
 ### Golden Before and After Results
 
@@ -65,10 +65,10 @@ Triples below are baseline kWh/year / modified kWh/year / savings dollars/year.
 
 - Classification: breaking API, calculation behavior, additive helper.
 - Desktop UI implementation is separate. The inspected local Desktop source did not contain this calculator consumer; installed Suite 1.2.6 declarations still expose the old class. Downstream runtime verification is outstanding.
-- Migrate adapter calls and cleanup, pass delivered baseline power, and adopt the helper for nameplate estimates and time rows. Inspect saved-data semantics before reinterpreting old full-speed power.
+- Migrate adapter calls and cleanup, pass delivered baseline power, and adopt the helper for nameplate estimates and time rows. Desktop must validate all inputs, including positive baseline flow for variable controls, efficiencies, diameters, and the requested fraction of the resized fan's rated flow. Inspect saved-data semantics before reinterpreting old full-speed power.
 - Root/process-flow Suite pins were both 1.2.6 at inspection; update them together during separate Desktop integration.
 - WASM filenames and loading contract remain unchanged. Validate Desktop against the exact CI-published beta, then the approved final package before release.
-- An unpublished local integration archive was prepared as `1.2.7-beta.fan-affinity-laws.1`. It contains the verified JS/WASM and declarations; it is not a CI-issued npm publication. Repository package version and Desktop pins were not changed.
+- The initial unpublished integration archive `1.2.7-beta.fan-affinity-laws.1` predates removal of Suite validation; do not use it to validate the current contract. Repository package version and Desktop pins were not changed.
 - Published beta/final versions and Desktop results remain pending. Keep post-push CI/publication evidence in the PR description or CI comments, without evidence-only follow-up commits.
 
 ## Verification and Review Contract

@@ -343,38 +343,37 @@ describe('Fan affinity laws namespace functions', () => {
         }
     });
 
-    it('rejects invalid helper fractions and variable-control baselines while retaining OnOff/None placeholders', () => {
-        for (const flow of [-0.01, 1.01, Infinity, -Infinity, NaN]) {
-            assert.throws(() => moduleInstance.get50PercentTimeFactor(flow));
-        }
+    it('leaves input validation to the caller and returns raw arithmetic', () => {
+        const extrapolated: FanAffinityLawsTimeFactorResult = moduleInstance.get50PercentTimeFactor(1.2);
+        assert.approximately(extrapolated.factor, 1.35, 1e-12);
+        assert.approximately(extrapolated.timeAbove50Percent, 1.4, 1e-12);
+        assert.approximately(extrapolated.timeAt50Percent, -0.4, 1e-12);
+        assert.strictEqual(extrapolated.timeAt0Percent, 0);
+        assert.isNaN(moduleInstance.get50PercentTimeFactor(NaN).factor);
+
+        const input = exampleInput({electricityCost: 0});
+        const freeEnergy: FanAffinityLawsResult = moduleInstance.calculateFanAffinityLaws(input);
+        assert.isAbove(freeEnergy.annualEnergyBaseline, 0);
+        assert.isAbove(freeEnergy.annualEnergyNew, 0);
+        assert.strictEqual(freeEnergy.annualCostSavings, 0);
+        input.operatingHours = 0;
+        validateOutput(moduleInstance.calculateFanAffinityLaws(input), {
+            annualEnergyBaseline: 0, annualEnergyNew: 0, annualCostSavings: 0
+        });
         for (const control of [moduleInstance.MotorControlType.VSD, moduleInstance.MotorControlType.TwoSpeed]) {
-            for (const flow of [0, Infinity, NaN]) {
-                const input = exampleInput({motorControlTypeCurrent: control, flowPercentBaseline: flow});
-                assert.throws(() => moduleInstance.calculateFanAffinityLaws(input));
-                assert.throws(() => moduleInstance.calculateFanAffinityLawsWithFanSize(input, 36, 40));
-            }
+            const zeroFlow = exampleInput({motorControlTypeCurrent: control, flowPercentBaseline: 0});
+            const result: FanAffinityLawsResult = moduleInstance.calculateFanAffinityLaws(zeroFlow);
+            assert.isFinite(result.annualEnergyBaseline);
+            assert.strictEqual(result.annualEnergyNew, Infinity);
         }
-        for (const control of [moduleInstance.MotorControlType.OnOff, moduleInstance.MotorControlType.None]) {
-            assert.doesNotThrow(() => moduleInstance.calculateFanAffinityLaws(
-                exampleInput({motorControlTypeCurrent: control, flowPercentBaseline: 0})
-            ));
-        }
+        const zeroEfficiency: FanAffinityLawsResult = moduleInstance.calculateFanAffinityLaws(
+            exampleInput({motorEfficiency: 0})
+        );
+        assert.strictEqual(zeroEfficiency.annualEnergyBaseline, Infinity);
+        assert.isNaN(zeroEfficiency.annualCostSavings);
     });
 
-    it('preserves input validation, zero modification flow, and signed savings without a general VSD flow cap', () => {
-        const invalidInputs: Partial<FanAffinityLawsInput>[] = [
-            {electricityCost: 0}, {driveEfficiency: 0}, {driveEfficiency: 101},
-            {motorEfficiency: 0}, {motorEfficiency: 101}, {flowPercentBaseline: -1},
-            {flowPercentBaseline: 101}, {operatingHours: 0}, {operatingHours: 8761},
-            {motorPower: 0}, {ratedFlow: 0}, {desiredFlowRate: -1}, {desiredFlowRate: 101},
-            {flowMode: moduleInstance.FlowMode.Volume, desiredFlowRate: -1}
-        ];
-        for (const invalid of invalidInputs) {
-            assert.throws(() => moduleInstance.calculateFanAffinityLaws(exampleInput(invalid)));
-            assert.throws(() => moduleInstance.calculateFanAffinityLawsWithFanSize(exampleInput(invalid), 36, 40));
-        }
-        assert.throws(() => moduleInstance.calculateFanAffinityLawsWithFanSize(exampleInput(), 0, 40));
-        assert.throws(() => moduleInstance.calculateFanAffinityLawsWithFanSize(exampleInput(), 36, -1));
+    it('preserves zero modification flow and signed savings without enforcing flow limits', () => {
         for (const control of [moduleInstance.MotorControlType.VSD, moduleInstance.MotorControlType.TwoSpeed]) {
             assert.strictEqual(moduleInstance.calculateFanAffinityLaws(
                 exampleInput({motorControlTypeNew: control, desiredFlowRate: 0})
@@ -386,8 +385,10 @@ describe('Fan affinity laws namespace functions', () => {
         });
         assert.isBelow(moduleInstance.calculateFanAffinityLaws(overcapacity).annualCostSavings, 0);
         overcapacity.motorControlTypeNew = moduleInstance.MotorControlType.TwoSpeed;
-        assert.throws(() => moduleInstance.calculateFanAffinityLaws(overcapacity));
+        assert.isBelow(moduleInstance.calculateFanAffinityLaws(overcapacity).annualCostSavings, 0);
         overcapacity.desiredFlowRate = 30000;
-        assert.throws(() => moduleInstance.calculateFanAffinityLawsWithFanSize(overcapacity, 36, 32));
+        const resized: FanAffinityLawsResult = moduleInstance.calculateFanAffinityLawsWithFanSize(overcapacity, 36, 32);
+        assert.isFinite(resized.annualEnergyNew);
+        assert.isBelow(resized.annualCostSavings, 0);
     });
 });

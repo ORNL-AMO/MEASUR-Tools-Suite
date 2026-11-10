@@ -20,7 +20,7 @@ export enum FlowMode {
     Volume = 1
 }
 
-/** Complete required fan data; a plain object requiring no delete(). */
+/** Complete caller-validated fan data; a plain object requiring no delete(). */
 export interface FanAffinityLawsInput {
     /** Electricity rate, units $/kWh; greater than zero. */
     electricityCost: number;
@@ -56,7 +56,7 @@ export interface FanAffinityLawsResult {
     annualCostSavings: number;
 }
 
-/** Two-speed power factor and time shares; plain dimensionless values requiring no delete(). */
+/** Two-speed power factor and time shares for caller-supplied flow in [0,1]; plain values requiring no delete(). */
 export interface FanAffinityLawsTimeFactorResult {
     /** Average power divided by full-speed power, dimensionless fraction 0-1. */
     factor: number;
@@ -73,9 +73,8 @@ export interface FanAffinityLawsTimeFactorResult {
  * Normalizes delivered baseline power to full-speed power before applying modified control.
  * @param input Complete fan data; units documented per member. Percentages use 0-100 values.
  * @returns Annual electrical energy in kWh/year and signed savings in $/year; no delete().
- * @throws For inputs outside retained validation ranges, nonfinite/zero VSD or Two-Speed baseline
- * flow, or a Two-Speed modification flow fraction outside finite [0,1]. No general volume-flow
- * cap or result clamping is applied; VSD overcapacity volume inputs retain signed savings.
+ * Desktop/callers own all input validation. No input checks, defaults, or clamping are applied;
+ * invalid inputs can produce nonphysical values, infinity, or NaN.
  */
 export declare function calculateFanAffinityLaws(input: FanAffinityLawsInput): FanAffinityLawsResult;
 
@@ -87,7 +86,8 @@ export declare function calculateFanAffinityLaws(input: FanAffinityLawsInput): F
  * @param currentDiameter Original fan diameter, units in; greater than zero.
  * @param newDiameter Modified fan diameter, units in; greater than zero.
  * @returns Annual electrical energy in kWh/year and signed savings in $/year; no delete().
- * @throws For nonpositive diameters or inputs rejected by calculateFanAffinityLaws.
+ * Desktop/callers own diameter and input validation. No input checks, defaults, or clamping
+ * are applied; invalid inputs can produce nonphysical values, infinity, or NaN.
  */
 export declare function calculateFanAffinityLawsWithFanSize(
     input: FanAffinityLawsInput,
@@ -98,8 +98,11 @@ export declare function calculateFanAffinityLawsWithFanSize(
 /**
  * Resolves a Two-Speed fan's average power factor and time at full speed, half speed, and off.
  * @param flowFraction Average flow divided by rated flow, dimensionless fraction 0-1 (not percent).
- * @returns Dimensionless power factor and time fractions summing to one; no delete().
- * @throws When flowFraction is nonfinite or outside [0,1]. Zero is valid for this helper.
+ * @returns Dimensionless power factor and time shares; for caller-supplied flow in [0,1],
+ * shares are in [0,1] and sum to one. No delete().
+ * Desktop/callers own the input domain. No input checks or clamping are applied.
+ * Out-of-range flow can yield negative time shares; nonfinite arithmetic is propagated.
+ * Zero is valid for this helper, but cannot normalize positive baseline power.
  */
 export declare function get50PercentTimeFactor(flowFraction: number): FanAffinityLawsTimeFactorResult;
 

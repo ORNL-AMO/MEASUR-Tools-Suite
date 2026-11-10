@@ -2,7 +2,6 @@
 
 #include <cmath>
 #include <limits>
-#include <stdexcept>
 
 #include "catch.hpp"
 
@@ -154,55 +153,35 @@ TEST_CASE("Fan affinity laws two-speed time shares", "[fanAffinityLaws]") {
     }
 }
 
-TEST_CASE("Fan affinity laws reject invalid time shares and baseline normalization", "[fanAffinityLaws]") {
-    const double invalid_fractions[] = {-0.01, 1.01, std::numeric_limits<double>::infinity(),
-        -std::numeric_limits<double>::infinity(), std::numeric_limits<double>::quiet_NaN()};
-    for (const double flow : invalid_fractions) {
-        CHECK_THROWS_AS(fal::get50PercentTimeFactor(flow), std::invalid_argument);
-    }
+TEST_CASE("Fan affinity laws leave input validation to the caller", "[fanAffinityLaws]") {
+    const auto extrapolated = fal::get50PercentTimeFactor(1.2);
+    CHECK(extrapolated.factor == Catch::Approx(1.35));
+    CHECK(extrapolated.time_above_50_percent == Catch::Approx(1.4));
+    CHECK(extrapolated.time_at_50_percent == Catch::Approx(-0.4));
+    CHECK(extrapolated.time_at_0_percent == 0);
+    CHECK(std::isnan(fal::get50PercentTimeFactor(std::numeric_limits<double>::quiet_NaN()).factor));
+
+    auto input = exampleInput();
+    input.electricity_cost = 0;
+    const auto free_energy = fal::calculate(input);
+    CHECK(free_energy.annual_energy_baseline > 0);
+    CHECK(free_energy.annual_energy_new > 0);
+    CHECK(free_energy.annual_cost_savings == 0);
+    input.operating_hours = 0;
+    checkResult(fal::calculate(input), {0, 0, 0});
+
     for (const auto control : {fal::MotorControlType::VSD, fal::MotorControlType::TwoSpeed}) {
-        for (const double flow : {0.0, std::numeric_limits<double>::infinity(), std::numeric_limits<double>::quiet_NaN()}) {
-            auto input = exampleInput();
-            input.motor_control_type_current = control;
-            input.flow_percent_baseline = flow;
-            CHECK_THROWS_AS(fal::calculate(input), std::invalid_argument);
-            CHECK_THROWS_AS(fal::changeFanSize(input, 36, 40), std::invalid_argument);
-        }
-    }
-    for (const auto control : {fal::MotorControlType::OnOff, fal::MotorControlType::None}) {
-        auto input = exampleInput();
+        input = exampleInput();
         input.motor_control_type_current = control;
         input.flow_percent_baseline = 0;
-        CHECK_NOTHROW(fal::calculate(input));
+        CHECK(std::isfinite(fal::calculate(input).annual_energy_baseline));
+        CHECK(std::isinf(fal::calculate(input).annual_energy_new));
     }
-}
-
-TEST_CASE("Fan affinity laws preserve existing validation ranges", "[fanAffinityLaws]") {
-    struct InvalidInput {
-        double fal::Input::* field;
-        double value;
-    };
-    const InvalidInput invalid_inputs[] = {
-        {&fal::Input::electricity_cost, 0}, {&fal::Input::drive_efficiency, 0},
-        {&fal::Input::drive_efficiency, 101}, {&fal::Input::motor_efficiency, 0},
-        {&fal::Input::motor_efficiency, 101}, {&fal::Input::flow_percent_baseline, -1},
-        {&fal::Input::flow_percent_baseline, 101}, {&fal::Input::operating_hours, 0},
-        {&fal::Input::operating_hours, 8761}, {&fal::Input::motor_power, 0},
-        {&fal::Input::rated_flow, 0}, {&fal::Input::desired_flow_rate, -1},
-        {&fal::Input::desired_flow_rate, 101}
-    };
-    for (const auto& invalid : invalid_inputs) {
-        auto input = exampleInput();
-        input.*(invalid.field) = invalid.value;
-        CHECK_THROWS_AS(fal::calculate(input), std::invalid_argument);
-        CHECK_THROWS_AS(fal::changeFanSize(input, 36, 40), std::invalid_argument);
-    }
-    auto input = exampleInput();
-    CHECK_THROWS_AS(fal::changeFanSize(input, 0, 40), std::invalid_argument);
-    CHECK_THROWS_AS(fal::changeFanSize(input, 36, -1), std::invalid_argument);
-    input.flow_mode = fal::FlowMode::Volume;
-    input.desired_flow_rate = -1;
-    CHECK_THROWS_AS(fal::calculate(input), std::invalid_argument);
+    input = exampleInput();
+    input.motor_efficiency = 0;
+    const auto zero_efficiency = fal::calculate(input);
+    CHECK(std::isinf(zero_efficiency.annual_energy_baseline));
+    CHECK(std::isnan(zero_efficiency.annual_cost_savings));
 }
 
 TEST_CASE("Fan affinity laws preserve zero modification flow and signed savings", "[fanAffinityLaws]") {
@@ -215,7 +194,9 @@ TEST_CASE("Fan affinity laws preserve zero modification flow and signed savings"
     input.desired_flow_rate = 36000;
     CHECK(fal::calculate(input).annual_cost_savings < 0);
     input.motor_control_type_new = fal::MotorControlType::TwoSpeed;
-    CHECK_THROWS_AS(fal::calculate(input), std::invalid_argument);
+    CHECK(fal::calculate(input).annual_cost_savings < 0);
     input.desired_flow_rate = 30000;
-    CHECK_THROWS_AS(fal::changeFanSize(input, 36, 32), std::invalid_argument);
+    const auto resized = fal::changeFanSize(input, 36, 32);
+    CHECK(std::isfinite(resized.annual_energy_new));
+    CHECK(resized.annual_cost_savings < 0);
 }
