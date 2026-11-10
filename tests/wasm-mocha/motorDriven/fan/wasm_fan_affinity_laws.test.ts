@@ -1,17 +1,12 @@
 import { assert } from 'chai';
 import createModule, {
-    type FanAffinityLaws,
     type FanAffinityLawsInput,
-    type FanAffinityLawsOutput,
+    type FanAffinityLawsResult,
+    type FanAffinityLawsTimeFactorResult,
     type MeasurToolsSuite
 } from 'measur-tools-suite';
 
-type ExpectedFanAffinityLawsOutput = Pick<
-    FanAffinityLawsOutput,
-    'annualEnergyBaseline' | 'annualEnergyNew' | 'annualCostSavings'
->;
-
-describe('Fan affinity laws', () => {
+describe('Fan affinity laws namespace functions', () => {
     let moduleInstance: MeasurToolsSuite;
 
     before(async function () {
@@ -20,167 +15,379 @@ describe('Fan affinity laws', () => {
         });
     });
 
-    function validateFALOutput(results: FanAffinityLawsOutput, expected: ExpectedFanAffinityLawsOutput): void {
-        try {
-            assert.approximately(results.annualEnergyBaseline, expected.annualEnergyBaseline, 0.01, 'annualEnergyBaseline');
-            assert.approximately(results.annualEnergyNew, expected.annualEnergyNew, 0.01, 'annualEnergyNew');
-            assert.approximately(results.annualCostSavings, expected.annualCostSavings, 0.01, 'annualCostSavings');
-        } finally {
-            results.delete();
-        }
-    }
-
-    function validateFanAffinityLaws(
-        fal: FanAffinityLaws,
-        calculate: (fal: FanAffinityLaws) => FanAffinityLawsOutput,
-        expected: ExpectedFanAffinityLawsOutput
-    ): void {
-        try {
-            validateFALOutput(calculate(fal), expected);
-        } finally {
-            fal.delete();
-        }
-    }
-
-    it('Compute annual energy and cost savings', () => {
-        validateFanAffinityLaws(
-            new moduleInstance.FanAffinityLaws(
-                0.07, 95, 93, 0, 6240, 2, 8000,
-                moduleInstance.MotorControlType.OnOff, moduleInstance.MotorControlType.VSD,
-                moduleInstance.FlowMode.Volume, 5000
-            ),
-            (fal) => fal.calculate(),
-            { annualEnergyBaseline: 14125.64, annualEnergyNew: 3448.64, annualCostSavings: 747.39 }
-        );
-
-        validateFanAffinityLaws(
-            new moduleInstance.FanAffinityLaws(
-                0.07, 97, 96, 100, 6240, 10, 30000,
-                moduleInstance.MotorControlType.OnOff, moduleInstance.MotorControlType.TwoSpeed,
-                moduleInstance.FlowMode.Percent, 55
-            ),
-            (fal) => fal.calculate(),
-            { annualEnergyBaseline: 67010.3, annualEnergyNew: 14239.7, annualCostSavings: 3693.94 }
-        );
-
-        validateFanAffinityLaws(
-            new moduleInstance.FanAffinityLaws(
-                0.05, 90, 92, 100, 8760, 5, 15000,
-                moduleInstance.MotorControlType.OnOff, moduleInstance.MotorControlType.None,
-                moduleInstance.FlowMode.Volume, 0
-            ),
-            (fal) => fal.changeFanSize(20, 18),
-            { annualEnergyBaseline: 52898.55, annualEnergyNew: 31236.06, annualCostSavings: 1083.12 }
-        );
-
-        validateFanAffinityLaws(
-            new moduleInstance.FanAffinityLaws(
-                0.08, 96, 97, 91, 4380, 20, 60000,
-                moduleInstance.MotorControlType.OnOff, moduleInstance.MotorControlType.VSD,
-                moduleInstance.FlowMode.Percent, 75
-            ),
-            (fal) => fal.changeFanSize(36, 40),
-            { annualEnergyBaseline: 94072.16, annualEnergyNew: 26038.44, annualCostSavings: 5442.7 }
-        );
-
-        validateFanAffinityLaws(
-            new moduleInstance.FanAffinityLaws(
-                0.08, 96, 97, 0, 4380, 20, 60000,
-                moduleInstance.MotorControlType.OnOff, moduleInstance.MotorControlType.TwoSpeed,
-                moduleInstance.FlowMode.Volume, 40000
-            ),
-            (fal) => fal.changeFanSize(36, 38),
-            { annualEnergyBaseline: 94072.16, annualEnergyNew: 51363.6, annualCostSavings: 3416.69 }
-        );
-
-        validateFanAffinityLaws(
-            new moduleInstance.FanAffinityLaws(
-                0.07, 95, 93, 88, 6240, 2, 8000,
-                moduleInstance.MotorControlType.VSD, moduleInstance.MotorControlType.VSD,
-                moduleInstance.FlowMode.Volume, 5000
-            ),
-            (fal) => fal.calculate(),
-            { annualEnergyBaseline: 9626.23, annualEnergyNew: 3448.64, annualCostSavings: 432.431 }
-        );
-
-        validateFanAffinityLaws(
-            new moduleInstance.FanAffinityLaws(
-                0.07, 97, 96, 90, 6240, 10, 30000,
-                moduleInstance.MotorControlType.TwoSpeed, moduleInstance.MotorControlType.TwoSpeed,
-                moduleInstance.FlowMode.Percent, 55
-            ),
-            (fal) => fal.calculate(),
-            { annualEnergyBaseline: 55283.5, annualEnergyNew: 14239.7, annualCostSavings: 2873.07 }
-        );
-
-        validateFanAffinityLaws(
-            new moduleInstance.FanAffinityLaws(
-                0.07, 95, 93, 100, 8760, 25, 80000,
-                moduleInstance.MotorControlType.OnOff, moduleInstance.MotorControlType.VSD,
-                moduleInstance.FlowMode.Percent, 75
-            ),
-            (fal) => fal.calculate(),
-            { annualEnergyBaseline: 247877.76, annualEnergyNew: 104573.43, annualCostSavings: 10031.3 }
-        );
-
-        validateFanAffinityLaws(
-            new moduleInstance.FanAffinityLaws(
-                0.07, 95, 93, 100, 8760, 25, 80000,
-                moduleInstance.MotorControlType.OnOff, moduleInstance.MotorControlType.TwoSpeed,
-                moduleInstance.FlowMode.Percent, 75
-            ),
-            (fal) => fal.calculate(),
-            { annualEnergyBaseline: 247877.76, annualEnergyNew: 139431.24, annualCostSavings: 7591.26 }
-        );
-
-        validateFanAffinityLaws(
-            new moduleInstance.FanAffinityLaws(
-                0.07, 95, 93, 100, 8760, 25, 80000,
-                moduleInstance.MotorControlType.OnOff, moduleInstance.MotorControlType.None,
-                moduleInstance.FlowMode.Percent, 75
-            ),
-            (fal) => fal.changeFanSize(36, 32.75),
-            { annualEnergyBaseline: 247877.76, annualEnergyNew: 154447.75, annualCostSavings: 6540.1 }
-        );
-
-        validateFanAffinityLaws(
-            new moduleInstance.FanAffinityLaws(
-                0.07, 95, 93, 100, 8760, 25, 80000,
-                moduleInstance.MotorControlType.OnOff, moduleInstance.MotorControlType.VSD,
-                moduleInstance.FlowMode.Percent, 75
-            ),
-            (fal) => fal.changeFanSize(36, 40),
-            { annualEnergyBaseline: 247877.76, annualEnergyNew: 68610.63, annualCostSavings: 12548.7 }
-        );
-
-        validateFanAffinityLaws(
-            new moduleInstance.FanAffinityLaws(
-                0.07, 95, 93, 100, 8760, 25, 80000,
-                moduleInstance.MotorControlType.OnOff, moduleInstance.MotorControlType.TwoSpeed,
-                moduleInstance.FlowMode.Percent, 75
-            ),
-            (fal) => fal.changeFanSize(36, 40),
-            { annualEnergyBaseline: 247877.76, annualEnergyNew: 236128.03, annualCostSavings: 822.481 }
-        );
-
-        const input: FanAffinityLawsInput = {
-            electricityCost: 0.07,
-            driveEfficiency: 95,
-            motorEfficiency: 93,
-            flowPercentBaseline: 100,
-            operatingHours: 8760,
-            motorPower: 25,
-            ratedFlow: 80000,
-            motorControlTypeCurrent: moduleInstance.MotorControlType.OnOff,
+    function exampleInput(overrides: Partial<FanAffinityLawsInput> = {}): FanAffinityLawsInput {
+        return {
+            electricityCost: 0.07, driveEfficiency: 97, motorEfficiency: 96,
+            flowPercentBaseline: 90, operatingHours: 6240, motorPower: 10, ratedFlow: 30000,
+            motorControlTypeCurrent: moduleInstance.MotorControlType.TwoSpeed,
             motorControlTypeNew: moduleInstance.MotorControlType.TwoSpeed,
-            flowMode: moduleInstance.FlowMode.Percent,
-            desiredFlowRate: 75
+            flowMode: moduleInstance.FlowMode.Percent, desiredFlowRate: 55,
+            ...overrides
         };
+    }
 
-        validateFanAffinityLaws(
-            new moduleInstance.FanAffinityLaws(input),
-            (fal) => fal.changeFanSize(36, 40),
-            { annualEnergyBaseline: 247877.76, annualEnergyNew: 236128.03, annualCostSavings: 822.481 }
-        );
+    function validateOutput(actual: FanAffinityLawsResult, expected: FanAffinityLawsResult): void {
+        assert.approximately(actual.annualEnergyBaseline, expected.annualEnergyBaseline, 0.01, 'annualEnergyBaseline');
+        assert.approximately(actual.annualEnergyNew, expected.annualEnergyNew, 0.01, 'annualEnergyNew');
+        assert.approximately(actual.annualCostSavings, expected.annualCostSavings, 0.01, 'annualCostSavings');
+        assert.strictEqual(Object.getPrototypeOf(actual), Object.prototype);
+        assert.doesNotHaveAnyKeys(actual, ['delete']);
+    }
+
+    it('matches all distinct original regression scenarios after S1 and S2', () => {
+        const controls = moduleInstance.MotorControlType;
+        const modes = moduleInstance.FlowMode;
+        const scenarios: {
+            originalCase: number;
+            input: FanAffinityLawsInput;
+            diameters?: [number, number];
+            expected: FanAffinityLawsResult;
+        }[] = [
+            {
+                originalCase: 1,
+                input: {
+                    electricityCost: 0.07,
+                    driveEfficiency: 95,
+                    motorEfficiency: 93,
+                    flowPercentBaseline: 0,
+                    operatingHours: 6240,
+                    motorPower: 2,
+                    ratedFlow: 8000,
+                    motorControlTypeCurrent: controls.OnOff,
+                    motorControlTypeNew: controls.VSD,
+                    flowMode: modes.Volume,
+                    desiredFlowRate: 5000
+                },
+                expected: { annualEnergyBaseline: 14125.64, annualEnergyNew: 3448.64, annualCostSavings: 747.39 }
+            },
+            {
+                originalCase: 2,
+                input: {
+                    electricityCost: 0.07,
+                    driveEfficiency: 97,
+                    motorEfficiency: 96,
+                    flowPercentBaseline: 100,
+                    operatingHours: 6240,
+                    motorPower: 10,
+                    ratedFlow: 30000,
+                    motorControlTypeCurrent: controls.OnOff,
+                    motorControlTypeNew: controls.TwoSpeed,
+                    flowMode: modes.Percent,
+                    desiredFlowRate: 55
+                },
+                expected: { annualEnergyBaseline: 67010.31, annualEnergyNew: 14239.69, annualCostSavings: 3693.94 }
+            },
+            {
+                originalCase: 3,
+                input: {
+                    electricityCost: 0.05,
+                    driveEfficiency: 90,
+                    motorEfficiency: 92,
+                    flowPercentBaseline: 100,
+                    operatingHours: 8760,
+                    motorPower: 5,
+                    ratedFlow: 15000,
+                    motorControlTypeCurrent: controls.OnOff,
+                    motorControlTypeNew: controls.None,
+                    flowMode: modes.Volume,
+                    desiredFlowRate: 0
+                },
+                diameters: [20, 18],
+                expected: { annualEnergyBaseline: 52898.55, annualEnergyNew: 31236.07, annualCostSavings: 1083.12 }
+            },
+            {
+                originalCase: 4,
+                input: {
+                    electricityCost: 0.08,
+                    driveEfficiency: 96,
+                    motorEfficiency: 97,
+                    flowPercentBaseline: 100,
+                    operatingHours: 4380,
+                    motorPower: 20,
+                    ratedFlow: 60000,
+                    motorControlTypeCurrent: controls.OnOff,
+                    motorControlTypeNew: controls.VSD,
+                    flowMode: modes.Percent,
+                    desiredFlowRate: 75
+                },
+                diameters: [36, 40],
+                expected: { annualEnergyBaseline: 94072.16, annualEnergyNew: 26038.44, annualCostSavings: 5442.7 }
+            },
+            {
+                originalCase: 5,
+                input: {
+                    electricityCost: 0.08,
+                    driveEfficiency: 96,
+                    motorEfficiency: 97,
+                    flowPercentBaseline: 0,
+                    operatingHours: 4380,
+                    motorPower: 20,
+                    ratedFlow: 60000,
+                    motorControlTypeCurrent: controls.OnOff,
+                    motorControlTypeNew: controls.TwoSpeed,
+                    flowMode: modes.Volume,
+                    desiredFlowRate: 40000
+                },
+                diameters: [36, 38],
+                expected: { annualEnergyBaseline: 94072.16, annualEnergyNew: 29829.67, annualCostSavings: 5139.4 }
+            },
+            {
+                originalCase: 6,
+                input: {
+                    electricityCost: 0.07,
+                    driveEfficiency: 95,
+                    motorEfficiency: 93,
+                    flowPercentBaseline: 88,
+                    operatingHours: 6240,
+                    motorPower: 2,
+                    ratedFlow: 8000,
+                    motorControlTypeCurrent: controls.VSD,
+                    motorControlTypeNew: controls.VSD,
+                    flowMode: modes.Volume,
+                    desiredFlowRate: 5000
+                },
+                expected: { annualEnergyBaseline: 14125.64, annualEnergyNew: 5060.58, annualCostSavings: 634.55 }
+            },
+            {
+                originalCase: 7,
+                input: {
+                    electricityCost: 0.07,
+                    driveEfficiency: 97,
+                    motorEfficiency: 96,
+                    flowPercentBaseline: 90,
+                    operatingHours: 6240,
+                    motorPower: 10,
+                    ratedFlow: 30000,
+                    motorControlTypeCurrent: controls.TwoSpeed,
+                    motorControlTypeNew: controls.TwoSpeed,
+                    flowMode: modes.Percent,
+                    desiredFlowRate: 55
+                },
+                expected: { annualEnergyBaseline: 67010.31, annualEnergyNew: 17260.23, annualCostSavings: 3482.51 }
+            },
+            {
+                originalCase: 8,
+                input: {
+                    electricityCost: 0.07,
+                    driveEfficiency: 95,
+                    motorEfficiency: 93,
+                    flowPercentBaseline: 100,
+                    operatingHours: 8760,
+                    motorPower: 25,
+                    ratedFlow: 80000,
+                    motorControlTypeCurrent: controls.OnOff,
+                    motorControlTypeNew: controls.VSD,
+                    flowMode: modes.Percent,
+                    desiredFlowRate: 75
+                },
+                expected: { annualEnergyBaseline: 247877.76, annualEnergyNew: 104573.43, annualCostSavings: 10031.3 }
+            },
+            {
+                originalCase: 9,
+                input: {
+                    electricityCost: 0.07,
+                    driveEfficiency: 95,
+                    motorEfficiency: 93,
+                    flowPercentBaseline: 100,
+                    operatingHours: 8760,
+                    motorPower: 25,
+                    ratedFlow: 80000,
+                    motorControlTypeCurrent: controls.OnOff,
+                    motorControlTypeNew: controls.TwoSpeed,
+                    flowMode: modes.Percent,
+                    desiredFlowRate: 75
+                },
+                expected: { annualEnergyBaseline: 247877.76, annualEnergyNew: 139431.24, annualCostSavings: 7591.26 }
+            },
+            {
+                originalCase: 10,
+                input: {
+                    electricityCost: 0.07,
+                    driveEfficiency: 95,
+                    motorEfficiency: 93,
+                    flowPercentBaseline: 100,
+                    operatingHours: 8760,
+                    motorPower: 25,
+                    ratedFlow: 80000,
+                    motorControlTypeCurrent: controls.OnOff,
+                    motorControlTypeNew: controls.None,
+                    flowMode: modes.Percent,
+                    desiredFlowRate: 75
+                },
+                diameters: [36, 32.75],
+                expected: { annualEnergyBaseline: 247877.76, annualEnergyNew: 154447.75, annualCostSavings: 6540.1 }
+            },
+            {
+                originalCase: 11,
+                input: {
+                    electricityCost: 0.07,
+                    driveEfficiency: 95,
+                    motorEfficiency: 93,
+                    flowPercentBaseline: 100,
+                    operatingHours: 8760,
+                    motorPower: 25,
+                    ratedFlow: 80000,
+                    motorControlTypeCurrent: controls.OnOff,
+                    motorControlTypeNew: controls.VSD,
+                    flowMode: modes.Percent,
+                    desiredFlowRate: 75
+                },
+                diameters: [36, 40],
+                expected: { annualEnergyBaseline: 247877.76, annualEnergyNew: 68610.63, annualCostSavings: 12548.7 }
+            },
+            {
+                originalCase: 12,
+                input: {
+                    electricityCost: 0.07,
+                    driveEfficiency: 95,
+                    motorEfficiency: 93,
+                    flowPercentBaseline: 100,
+                    operatingHours: 8760,
+                    motorPower: 25,
+                    ratedFlow: 80000,
+                    motorControlTypeCurrent: controls.OnOff,
+                    motorControlTypeNew: controls.TwoSpeed,
+                    flowMode: modes.Percent,
+                    desiredFlowRate: 75
+                },
+                diameters: [36, 40],
+                expected: { annualEnergyBaseline: 247877.76, annualEnergyNew: 86816.41, annualCostSavings: 11274.29 }
+            }
+        ];
+        // Old #13 was #12 with the removed input-object constructor, so it is consolidated here.
+        for (const scenario of scenarios) {
+            const actual: FanAffinityLawsResult = scenario.diameters
+                ? moduleInstance.calculateFanAffinityLawsWithFanSize(scenario.input, ...scenario.diameters)
+                : moduleInstance.calculateFanAffinityLaws(scenario.input);
+            validateOutput(actual, scenario.expected);
+        }
+    });
+
+    it('exports functions and enums without legacy constructors or runtime value-object properties', () => {
+        assert.isFunction(moduleInstance.calculateFanAffinityLaws);
+        assert.isFunction(moduleInstance.calculateFanAffinityLawsWithFanSize);
+        assert.isFunction(moduleInstance.get50PercentTimeFactor);
+        for (const name of ['FanAffinityLaws', 'FanAffinityLawsOutput', 'FanAffinityLawsInput',
+            'FanAffinityLawsResult', 'FanAffinityLawsTimeFactorResult']) {
+            assert.notProperty(moduleInstance, name);
+        }
+    });
+
+    it('preserves baseline power, unchanged operating points, and equal-diameter results for every control', () => {
+        const controls = moduleInstance.MotorControlType;
+        for (const current of [controls.OnOff, controls.TwoSpeed, controls.VSD, controls.None]) {
+            for (const modified of [controls.OnOff, controls.TwoSpeed, controls.VSD, controls.None]) {
+                const input = exampleInput({motorControlTypeCurrent: current, motorControlTypeNew: modified, desiredFlowRate: 90});
+                const result: FanAffinityLawsResult = moduleInstance.calculateFanAffinityLaws(input);
+                assert.approximately(result.annualEnergyBaseline, 10 / (0.97 * 0.96) * 6240, 1e-8);
+                if (current === modified) {
+                    assert.approximately(result.annualEnergyNew, result.annualEnergyBaseline, 1e-8);
+                    assert.approximately(result.annualCostSavings, 0, 1e-8);
+                }
+                validateOutput(moduleInstance.calculateFanAffinityLawsWithFanSize(input, 36, 36), result);
+            }
+        }
+    });
+
+    it('matches the delivered-power VSD example with and without resizing', () => {
+        const input = exampleInput({
+            motorControlTypeCurrent: moduleInstance.MotorControlType.VSD,
+            motorControlTypeNew: moduleInstance.MotorControlType.VSD,
+            motorPower: 11.22, flowPercentBaseline: 7040 / 30000 * 100,
+            flowMode: moduleInstance.FlowMode.Volume, desiredFlowRate: 5000
+        });
+        const result: FanAffinityLawsResult = moduleInstance.calculateFanAffinityLaws(input);
+        assert.approximately(result.annualEnergyBaseline / 6240, 12.0489690722, 1e-8);
+        assert.approximately(result.annualEnergyNew / 6240, 4.3166011808, 1e-8);
+        const resized: FanAffinityLawsResult = moduleInstance.calculateFanAffinityLawsWithFanSize(input, 36, 40);
+        assert.approximately(resized.annualEnergyBaseline, result.annualEnergyBaseline, 1e-8);
+        assert.approximately(resized.annualEnergyNew, result.annualEnergyNew * Math.pow(36 / 40, 4), 1e-8);
+    });
+
+    it('agrees across flow modes and equivalent volume units', () => {
+        const input = exampleInput();
+        const percent: FanAffinityLawsResult = moduleInstance.calculateFanAffinityLawsWithFanSize(input, 36, 40);
+        input.flowMode = moduleInstance.FlowMode.Volume;
+        input.desiredFlowRate = 16500;
+        validateOutput(moduleInstance.calculateFanAffinityLawsWithFanSize(input, 36, 40), percent);
+        const volume: FanAffinityLawsResult = moduleInstance.calculateFanAffinityLaws(input);
+        input.ratedFlow *= 0.00047194745;
+        input.desiredFlowRate *= 0.00047194745;
+        validateOutput(moduleInstance.calculateFanAffinityLaws(input), volume);
+        validateOutput(moduleInstance.calculateFanAffinityLawsWithFanSize(input, 36, 40), percent);
+    });
+
+    it('returns plain time shares at boundaries and both rounded and exact resized flow fractions', () => {
+        const scenarios: {flow: number; expected: FanAffinityLawsTimeFactorResult}[] = [
+            {flow: 0, expected: {factor: 0, timeAbove50Percent: 0, timeAt50Percent: 0, timeAt0Percent: 1}},
+            {flow: 0.25, expected: {factor: 0.0625, timeAbove50Percent: 0, timeAt50Percent: 0.5, timeAt0Percent: 0.5}},
+            {flow: 0.5, expected: {factor: 0.125, timeAbove50Percent: 0, timeAt50Percent: 1, timeAt0Percent: 0}},
+            {flow: 0.9, expected: {factor: 0.825, timeAbove50Percent: 0.8, timeAt50Percent: 0.2, timeAt0Percent: 0}},
+            {flow: 1, expected: {factor: 1, timeAbove50Percent: 1, timeAt50Percent: 0, timeAt0Percent: 0}},
+            {flow: 0.5668, expected: {factor: 0.2419, timeAbove50Percent: 0.1336, timeAt50Percent: 0.8664, timeAt0Percent: 0}},
+            {flow: 40000 / (60000 * Math.pow(38 / 36, 3)), expected: {
+                factor: 0.24198133838752, timeAbove50Percent: 0.133692958157166,
+                timeAt50Percent: 0.866307041842834, timeAt0Percent: 0
+            }}
+        ];
+        for (const {flow, expected} of scenarios) {
+            const result: FanAffinityLawsTimeFactorResult = moduleInstance.get50PercentTimeFactor(flow);
+            assert.strictEqual(Object.getPrototypeOf(result), Object.prototype);
+            assert.notProperty(result, 'delete');
+            for (const key of ['factor', 'timeAbove50Percent', 'timeAt50Percent', 'timeAt0Percent'] as const) {
+                assert.approximately(result[key], expected[key], 1e-12, key);
+                assert.isAtLeast(result[key], 0);
+                assert.isAtMost(result[key], 1);
+            }
+            assert.approximately(result.timeAbove50Percent + result.timeAt50Percent + result.timeAt0Percent, 1, 1e-12);
+        }
+    });
+
+    it('rejects invalid helper fractions and variable-control baselines while retaining OnOff/None placeholders', () => {
+        for (const flow of [-0.01, 1.01, Infinity, -Infinity, NaN]) {
+            assert.throws(() => moduleInstance.get50PercentTimeFactor(flow));
+        }
+        for (const control of [moduleInstance.MotorControlType.VSD, moduleInstance.MotorControlType.TwoSpeed]) {
+            for (const flow of [0, Infinity, NaN]) {
+                const input = exampleInput({motorControlTypeCurrent: control, flowPercentBaseline: flow});
+                assert.throws(() => moduleInstance.calculateFanAffinityLaws(input));
+                assert.throws(() => moduleInstance.calculateFanAffinityLawsWithFanSize(input, 36, 40));
+            }
+        }
+        for (const control of [moduleInstance.MotorControlType.OnOff, moduleInstance.MotorControlType.None]) {
+            assert.doesNotThrow(() => moduleInstance.calculateFanAffinityLaws(
+                exampleInput({motorControlTypeCurrent: control, flowPercentBaseline: 0})
+            ));
+        }
+    });
+
+    it('preserves input validation, zero modification flow, and signed savings without a general VSD flow cap', () => {
+        const invalidInputs: Partial<FanAffinityLawsInput>[] = [
+            {electricityCost: 0}, {driveEfficiency: 0}, {driveEfficiency: 101},
+            {motorEfficiency: 0}, {motorEfficiency: 101}, {flowPercentBaseline: -1},
+            {flowPercentBaseline: 101}, {operatingHours: 0}, {operatingHours: 8761},
+            {motorPower: 0}, {ratedFlow: 0}, {desiredFlowRate: -1}, {desiredFlowRate: 101},
+            {flowMode: moduleInstance.FlowMode.Volume, desiredFlowRate: -1}
+        ];
+        for (const invalid of invalidInputs) {
+            assert.throws(() => moduleInstance.calculateFanAffinityLaws(exampleInput(invalid)));
+            assert.throws(() => moduleInstance.calculateFanAffinityLawsWithFanSize(exampleInput(invalid), 36, 40));
+        }
+        assert.throws(() => moduleInstance.calculateFanAffinityLawsWithFanSize(exampleInput(), 0, 40));
+        assert.throws(() => moduleInstance.calculateFanAffinityLawsWithFanSize(exampleInput(), 36, -1));
+        for (const control of [moduleInstance.MotorControlType.VSD, moduleInstance.MotorControlType.TwoSpeed]) {
+            assert.strictEqual(moduleInstance.calculateFanAffinityLaws(
+                exampleInput({motorControlTypeNew: control, desiredFlowRate: 0})
+            ).annualEnergyNew, 0);
+        }
+        const overcapacity = exampleInput({
+            motorControlTypeNew: moduleInstance.MotorControlType.VSD,
+            flowMode: moduleInstance.FlowMode.Volume, desiredFlowRate: 36000
+        });
+        assert.isBelow(moduleInstance.calculateFanAffinityLaws(overcapacity).annualCostSavings, 0);
+        overcapacity.motorControlTypeNew = moduleInstance.MotorControlType.TwoSpeed;
+        assert.throws(() => moduleInstance.calculateFanAffinityLaws(overcapacity));
+        overcapacity.desiredFlowRate = 30000;
+        assert.throws(() => moduleInstance.calculateFanAffinityLawsWithFanSize(overcapacity, 36, 32));
     });
 });
