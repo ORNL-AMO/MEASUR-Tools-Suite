@@ -42,17 +42,17 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Get Node version
-        run: echo "BUILD_NODE_VER=$(grep -o -P -m 1 '(?<=node":\s").*(?=")' package.json)" >> "$GITHUB_ENV"
-
       - name: Node setup
         uses: actions/setup-node@v6
         with:
-          node-version: ${{ env.BUILD_NODE_VER }}
+          node-version: '22'
           cache: npm
           package-manager-cache: true
           cache-dependency-path: package-lock.json
           registry-url: https://registry.npmjs.org/
+
+      - name: Install npm for trusted publishing
+        run: npm install --global npm@11.5.1
 
       - name: Set release-candidate version
         if: inputs.release_channel == 'rc'
