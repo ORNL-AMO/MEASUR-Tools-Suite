@@ -19,9 +19,6 @@ on:
       published_version:
         description: Exact npm package version published by this workflow
         value: ${{ jobs.publish.outputs.published_version }}
-    secrets:
-      NPM_AUTH_TOKEN:
-        required: true
 
 concurrency:
   group: release-package-${{ inputs.release_channel }}
@@ -29,6 +26,7 @@ concurrency:
 
 permissions:
   contents: write
+  id-token: write
 
 jobs:
   publish:
@@ -48,7 +46,7 @@ jobs:
         run: echo "BUILD_NODE_VER=$(grep -o -P -m 1 '(?<=node":\s").*(?=")' package.json)" >> "$GITHUB_ENV"
 
       - name: Node setup
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.BUILD_NODE_VER }}
           cache: npm
@@ -81,7 +79,6 @@ jobs:
       - name: Publish release to registry
         id: publish_package
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
           RELEASE_CHANNEL: ${{ inputs.release_channel }}
           PR_NUMBER: ${{ inputs.pull_request_number }}
         run: |

@@ -47,8 +47,9 @@ jobs:
       release_channel: beta
       pull_request_number: ${{ github.event.pull_request.number }}
       wasm_artifact_name: verified-wasm-${{ github.sha }}
-    secrets:
-      NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+    permissions:
+      contents: write
+      id-token: write
 
   comment-beta-package:
     needs: release-package-beta
@@ -80,8 +81,9 @@ jobs:
     with:
       release_channel: rc
       wasm_artifact_name: verified-wasm-${{ github.sha }}
-    secrets:
-      NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+    permissions:
+      contents: write
+      id-token: write
 
   release-package-latest:
     needs: quality
@@ -90,5 +92,6 @@ jobs:
     with:
       release_channel: latest
       wasm_artifact_name: verified-wasm-${{ github.sha }}
-    secrets:
-      NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+    permissions:
+      contents: write
+      id-token: write
