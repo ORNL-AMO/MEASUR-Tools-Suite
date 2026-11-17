@@ -571,6 +571,12 @@ p.formulaDsp,
   border-radius: 8px;
 }
 
+/* Keep MathJax's hidden screen-reader copy out of the formula's scrollable area. */
+.formulaDsp mjx-assistive-mml {
+  max-width: 1px;
+  max-height: 1px;
+}
+
 code,
 tt,
 pre.fragment,
