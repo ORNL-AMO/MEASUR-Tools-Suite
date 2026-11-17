@@ -6,7 +6,6 @@ export * from "./ts_def_modules/compressedAir/dryer_operating_cost";
 export * from "./ts_def_modules/compressedAir/operating_cost";
 export * from "./ts_def_modules/compressedAir/pipe_sizing";
 export * from "./ts_def_modules/compressedAir/pneumatic_air_requirement";
-export * from "./ts_def_modules/compressedAir/pneumatic_valve";
 export * from "./ts_def_modules/compressedAir/receiver_tank";
 
 export * from "./ts_def_modules/compressedAir/assessment/compressor";
@@ -132,7 +131,6 @@ export type MeasurToolsSuite =
     import("./ts_def_modules/compressedAir/operating_cost").OperatingCostModule &
     import("./ts_def_modules/compressedAir/pipe_sizing").PipeSizingModule &
     import("./ts_def_modules/compressedAir/pneumatic_air_requirement").PneumaticAirRequirementModule &
-    import("./ts_def_modules/compressedAir/pneumatic_valve").PneumaticValveModule &
     import("./ts_def_modules/compressedAir/receiver_tank").ReceiverTankModule &
     import("./ts_def_modules/compressedAir/assessment/compressor").CompressorAssessmentSharedModule &
     import("./ts_def_modules/compressedAir/assessment/compressor_eem").CompressorEemModule &
