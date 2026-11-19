@@ -90,6 +90,40 @@ jobs:
           test -s bin/client.wasm
           ls -l bin/client.js bin/client.wasm
 
+      - name: Inspect GitHub OIDC identity
+        shell: bash
+        run: |
+        set -euo pipefail
+
+        RESPONSE=$(curl -sS -G \
+          -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+          --data-urlencode "audience=npm:registry.npmjs.org" \
+          "$ACTIONS_ID_TOKEN_REQUEST_URL")
+
+        TOKEN=$(echo "$RESPONSE" | jq -r '.value')
+
+        if [[ -z "$TOKEN" || "$TOKEN" == "null" ]]; then
+         echo "::error::Unable to obtain GitHub OIDC token"
+         exit 1
+        fi
+
+        PAYLOAD=$(echo "$TOKEN" | cut -d '.' -f 2 | tr '_-' '/+')
+        PAYLOAD="${PAYLOAD}$(printf '%*s' $(( (4 - ${#PAYLOAD} % 4) % 4 )) '' | tr ' ' '=')"
+
+        echo "$PAYLOAD" | base64 -d | jq '{
+          iss,
+          aud,
+          repository,
+          repository_owner,
+          workflow,
+          job_workflow_ref,
+          ref,
+          environment,
+          sub
+        }'
+
+        unset TOKEN RESPONSE PAYLOAD
+
       - name: Publish release to registry
         id: publish_package
         env:
