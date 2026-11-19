@@ -35,7 +35,7 @@ jobs:
     environment: production
 
     permissions:
-      contents: read
+      contents: write
       id-token: write
 
     outputs:
@@ -52,11 +52,9 @@ jobs:
       - name: Node setup
         uses: actions/setup-node@v6
         with:
-          node-version: '22'
-          cache: npm
-          package-manager-cache: true
-          cache-dependency-path: package-lock.json
-          registry-url: https://registry.npmjs.org/
+          node-version: '24'
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
 
       - name: Install npm for trusted publishing
         run: npm install --global npm@11.5.1
