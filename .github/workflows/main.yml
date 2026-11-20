@@ -73,5 +73,11 @@ jobs:
             exit 1
           fi
 
+      - name: Verify GitHub OIDC availability
+        run: |
+          test -n "$ACTIONS_ID_TOKEN_REQUEST_URL"
+          test -n "$ACTIONS_ID_TOKEN_REQUEST_TOKEN"
+          echo "GitHub OIDC environment is available"
+
       - name: Publish
         run: npm publish --tag test-pkg
