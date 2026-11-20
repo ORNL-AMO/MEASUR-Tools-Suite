@@ -27,8 +27,12 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 24
-          registry-url: https://registry.npmjs.org
           package-manager-cache: false
+
+      - name: Configure npm registry
+        run: |
+          echo "registry=https://registry.npmjs.org/" > "$HOME/.npmrc"
+          npm --version
 
       - name: Install npm for trusted publishing
         run: npm install --global npm@11.6.2
@@ -41,16 +45,23 @@ jobs:
 
       - name: Verify no npm publishing token
         run: |
+          if grep -RIlE '_authToken[[:space:]]*=' \
+            .npmrc "$HOME/.npmrc" 2>/dev/null; then
+            echo "Unexpected npm auth configuration detected"
+            exit 1
+          fi
+
           if [ -n "${NODE_AUTH_TOKEN:-}" ]; then
             echo "Unexpected npm token NODE_AUTH_TOKEN configured"
-            exit 1
           fi
           if [ -n "${NPM_TOKEN:-}" ]; then
             echo "Unexpected npm token NPM_TOKEN configured"
-            exit 1
           fi
           if [ -n "${NPM_AUTH_TOKEN:-}" ]; then
             echo "Unexpected npm token NPM_AUTH_TOKEN configured"
+          fi
+          if [ -n "${NODE_AUTH_TOKEN:-}" ] || [ -n "${NPM_TOKEN:-}" ] || [ -n "${NPM_AUTH_TOKEN:-}" ]; then
+            echo "Unexpected npm token configured"
             exit 1
           fi
           echo "No npm publishing token configured"
