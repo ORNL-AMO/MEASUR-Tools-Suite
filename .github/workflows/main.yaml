@@ -113,5 +113,29 @@ jobs:
           unset TOKEN RESPONSE PAYLOAD
           echo "Inspect GitHub OIDC identity"
 
+      - name: Remove npm token configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          USER_NPMRC="${NPM_CONFIG_USERCONFIG:-$HOME/.npmrc}"
+
+          for file in .npmrc "$USER_NPMRC"; do
+            if [[ -f "$file" ]]; then
+              sed -i '/_authToken[[:space:]]*=/d' "$file"
+            fi
+          done
+
+          echo "Registry: $(npm config get registry)"
+          echo "User config: $(npm config get userconfig)"
+
+          if grep -nE '_authToken[[:space:]]*=' \
+            .npmrc "$USER_NPMRC" 2>/dev/null; then
+            echo "::error::npm authentication configuration still exists"
+            exit 1
+          fi
+
+          echo "Clean npm authentication configuration"
+
       - name: Publish
         run: npm publish --tag test-pkg
