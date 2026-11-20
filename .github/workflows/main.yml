@@ -3,410 +3,95 @@ name: CI/CD
 on:
   push:
     branches:
-      - master
-      - develop
-
+      - "master"
+      - "develop"
   pull_request:
     branches:
-      - develop
-      - epic-*
+      - "develop"
+      - "epic-*"
     types:
       - opened
       - synchronize
       - reopened
       - ready_for_review
-
   issues:
     types:
-      - opened
-
+      - "opened"
   workflow_dispatch:
-
-permissions:
-  contents: read
 
 jobs:
   util-add-project-issue:
-    if: >
-      github.event_name == 'issues' &&
-      github.event.action == 'opened'
-
+    if: github.event_name == 'issues' && github.event.action == 'opened'
     uses: ./.github/workflows/util_add-new-issue-to-project.yml
-
     secrets:
       PROJECT_TOKEN: ${{ secrets.PROJECT_TOKEN }}
 
   quality:
-    if: >
-      github.event_name == 'pull_request' ||
-      github.event_name == 'push' ||
-      github.event_name == 'workflow_dispatch'
-
+    if: github.event_name == 'pull_request' || github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     uses: ./.github/workflows/pr_quality.yml
 
   release-docs:
     needs: quality
-
-    if: >
-      always() &&
-      needs.quality.result == 'success' &&
-      github.event_name == 'push' &&
-      (github.ref_name == 'develop' || github.ref_name == 'master')
-
+    if: github.event_name == 'push' && (github.ref_name == 'develop' || github.ref_name == 'master')
     uses: ./.github/workflows/release_docs.yml
 
   release-package-beta:
     needs: quality
-
     if: >
       github.event_name == 'pull_request' &&
       (github.base_ref == 'develop' || startsWith(github.base_ref, 'epic-')) &&
       github.event.pull_request.draft == false &&
       github.event.pull_request.head.repo.fork == false
-
-    runs-on: ubuntu-latest
-
-    environment:
-      name: production
-
-    concurrency:
-      group: release-package-beta
-      cancel-in-progress: false
-
-    permissions:
-      contents: read
-      id-token: write
-
-    outputs:
-      published_version: ${{ steps.publish_package.outputs.PKG_VERSION }}
-
-    defaults:
-      run:
-        shell: bash
-
-    steps:
-
-      - name: Checkout
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 1
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: 24
-          registry-url: https://registry.npmjs.org/
-          package-manager-cache: false
-
-      - name: Install npm for trusted publishing
-        run: |
-          set -euo pipefail
-
-          npm install --global npm@11.6.2
-
-          echo "Node version:"
-          node --version
-
-          echo "npm version:"
-          npm --version
-
-      - name: Verify npm registry
-        run: |
-          set -euo pipefail
-
-          REGISTRY=$(npm config get registry)
-
-          echo "Registry: $REGISTRY"
-
-          test "$REGISTRY" = "https://registry.npmjs.org/"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Download verified WASM artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: verified-wasm-${{ github.sha }}
-          path: bin
-
-      - name: Verify package artifacts
-        run: |
-          set -euo pipefail
-
-          test -s bin/client.js
-          test -s bin/client.wasm
-
-          ls -lh bin/client.js bin/client.wasm
-
-      - name: Verify package metadata
-        run: |
-          set -euo pipefail
-
-          PACKAGE_NAME=$(node -p "require('./package.json').name")
-          PACKAGE_VERSION=$(node -p "require('./package.json').version")
-
-          echo "Package: $PACKAGE_NAME"
-          echo "Version: $PACKAGE_VERSION"
-
-          test "$PACKAGE_NAME" = "measur-tools-suite"
-
-      - name: Inspect trusted publishing environment
-        run: |
-          set -euo pipefail
-
-          echo "Repository: $GITHUB_REPOSITORY"
-          echo "Workflow: $GITHUB_WORKFLOW"
-          echo "Workflow ref: $GITHUB_WORKFLOW_REF"
-          echo "Run ID: $GITHUB_RUN_ID"
-          echo "Environment: production"
-          echo "Node: $(node --version)"
-          echo "npm: $(npm --version)"
-
-          test -n "${ACTIONS_ID_TOKEN_REQUEST_URL:-}"
-          test -n "${ACTIONS_ID_TOKEN_REQUEST_TOKEN:-}"
-
-      - name: Publish beta package
-        id: publish_package
-
-        env:
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-
-        run: |
-          set -euo pipefail
-
-          node scripts/publish-beta-package.mjs
-
-  comment-beta-package:
-    needs: release-package-beta
-
-    if: >
-      always() &&
-      github.event_name == 'pull_request' &&
-      needs.release-package-beta.result == 'success'
-
-    runs-on: ubuntu-24.04
-
-    permissions:
-      contents: read
-      pull-requests: write
-
-    steps:
-
-      - name: Comment published beta version
-        env:
-          GH_TOKEN: ${{ github.token }}
-          GH_REPO: ${{ github.repository }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-          PUBLISHED_VERSION: ${{ needs.release-package-beta.outputs.published_version }}
-
-        run: |
-          set -euo pipefail
-
-          test -n "$PUBLISHED_VERSION"
-
-          BODY=$(cat <<EOF
-          Beta package published successfully:
-
-          [measur-tools-suite@$PUBLISHED_VERSION](https://www.npmjs.com/package/measur-tools-suite/v/$PUBLISHED_VERSION)
-
-          Install using:
-
-          \`\`\`bash
-          npm install measur-tools-suite@$PUBLISHED_VERSION
-          \`\`\`
-
-          [View workflow run]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID)
-          EOF
-          )
-
-          gh pr comment "$PR_NUMBER" \
-            --repo "$GH_REPO" \
-            --body "$BODY"
-
-  release-package-rc:
-    needs: quality
-
-    if: >
-      github.event_name == 'push' &&
-      github.ref_name == 'develop'
-
-    runs-on: ubuntu-latest
-
-    environment:
-      name: production
-
-    concurrency:
-      group: release-package-rc
-      cancel-in-progress: false
-
-    permissions:
-      contents: read
-      id-token: write
-
-    outputs:
-      published_version: ${{ steps.publish_package.outputs.PKG_VERSION }}
-
-    defaults:
-      run:
-        shell: bash
-
-    steps:
-
-      - name: Checkout
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 1
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: 24
-          registry-url: https://registry.npmjs.org/
-          package-manager-cache: false
-
-      - name: Install npm for trusted publishing
-        run: |
-          set -euo pipefail
-
-          npm install --global npm@11.6.2
-          npm --version
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Download verified WASM artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: verified-wasm-${{ github.sha }}
-          path: bin
-
-      - name: Verify package artifacts
-        run: |
-          set -euo pipefail
-
-          test -s bin/client.js
-          test -s bin/client.wasm
-
-      - name: Verify package metadata
-        run: |
-          set -euo pipefail
-
-          PACKAGE_NAME=$(node -p "require('./package.json').name")
-
-          test "$PACKAGE_NAME" = "measur-tools-suite"
-
-      - name: Set release candidate version
-        run: |
-          set -euo pipefail
-
-          PACKAGE_VERSION=$(node -p "require('./package.json').version")
-
-          npm --no-git-tag-version version \
-            "${PACKAGE_VERSION}-rc.${GITHUB_RUN_NUMBER}.${GITHUB_RUN_ATTEMPT}"
-
-      - name: Publish release candidate
-        id: publish_package
-        run: |
-          set -euo pipefail
-
-          npm publish --tag rc
-
-          VERSION=$(node -p "require('./package.json').version")
-
-          echo "PKG_VERSION=$VERSION" >> "$GITHUB_OUTPUT"
-
-  release-package-latest:
-    needs: quality
-
-    if: >
-      github.event_name == 'push' &&
-      github.ref_name == 'master'
-
-    runs-on: ubuntu-latest
-
-    environment:
-      name: production
-
-    concurrency:
-      group: release-package-latest
-      cancel-in-progress: false
-
+    uses: ./.github/workflows/release_package.yml
+    with:
+      release_channel: beta
+      pull_request_number: ${{ github.event.pull_request.number }}
+      wasm_artifact_name: verified-wasm-${{ github.sha }}
     permissions:
       contents: write
       id-token: write
 
-    outputs:
-      published_version: ${{ steps.publish_package.outputs.PKG_VERSION }}
-
-    defaults:
-      run:
-        shell: bash
-
+  comment-beta-package:
+    needs: release-package-beta
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
-
-      - name: Checkout
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 1
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: 24
-          registry-url: https://registry.npmjs.org/
-          package-manager-cache: false
-
-      - name: Install npm for trusted publishing
-        run: |
-          set -euo pipefail
-
-          npm install --global npm@11.6.2
-          npm --version
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Download verified WASM artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: verified-wasm-${{ github.sha }}
-          path: bin
-
-      - name: Verify package artifacts
-        run: |
-          set -euo pipefail
-
-          test -s bin/client.js
-          test -s bin/client.wasm
-
-      - name: Verify package metadata
-        run: |
-          set -euo pipefail
-
-          PACKAGE_NAME=$(node -p "require('./package.json').name")
-
-          test "$PACKAGE_NAME" = "measur-tools-suite"
-
-      - name: Publish production package
-        id: publish_package
-        run: |
-          set -euo pipefail
-
-          npm publish --tag latest
-
-          VERSION=$(node -p "require('./package.json').version")
-
-          echo "PKG_VERSION=$VERSION" >> "$GITHUB_OUTPUT"
-
-      - name: Publish GitHub release
-        uses: softprops/action-gh-release@v3
-
+      - name: Comment published beta version on pull request
         env:
-          VERSION: ${{ steps.publish_package.outputs.PKG_VERSION }}
+          BODY: |
+            Beta package published: [`measur-tools-suite@${{ needs.release-package-beta.outputs.published_version }}`](https://www.npmjs.com/package/measur-tools-suite/v/${{ needs.release-package-beta.outputs.published_version }})
 
-        with:
-          name: MEASUR-Tools-Suite v${{ env.VERSION }}
-          tag_name: v${{ env.VERSION }}
-          target_commitish: master
-          draft: true
-          generate_release_notes: true
+            ```bash
+            npm install measur-tools-suite@${{ needs.release-package-beta.outputs.published_version }}
+            ```
+
+            [View workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: gh pr comment "$PR_NUMBER" --repo "$GH_REPO" --body "$BODY"
+
+  release-package-rc:
+    needs: quality
+    if: github.event_name == 'push' && github.ref_name == 'develop'
+    uses: ./.github/workflows/release_package.yml
+    with:
+      release_channel: rc
+      wasm_artifact_name: verified-wasm-${{ github.sha }}
+    permissions:
+      contents: write
+      id-token: write
+
+  release-package-latest:
+    needs: quality
+    if: github.event_name == 'push' && github.ref_name == 'master'
+    uses: ./.github/workflows/release_package.yml
+    with:
+      release_channel: latest
+      wasm_artifact_name: verified-wasm-${{ github.sha }}
+    permissions:
+      contents: write
+      id-token: write
