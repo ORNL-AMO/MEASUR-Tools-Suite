@@ -27,8 +27,12 @@ permissions:
 
 jobs:
   util-add-project-issue:
-    if: github.event_name == 'issues' && github.event.action == 'opened'
+    if: >
+      github.event_name == 'issues' &&
+      github.event.action == 'opened'
+
     uses: ./.github/workflows/util_add-new-issue-to-project.yml
+
     secrets:
       PROJECT_TOKEN: ${{ secrets.PROJECT_TOKEN }}
 
@@ -37,13 +41,18 @@ jobs:
       github.event_name == 'pull_request' ||
       github.event_name == 'push' ||
       github.event_name == 'workflow_dispatch'
+
     uses: ./.github/workflows/pr_quality.yml
 
   release-docs:
     needs: quality
+
     if: >
+      always() &&
+      needs.quality.result == 'success' &&
       github.event_name == 'push' &&
       (github.ref_name == 'develop' || github.ref_name == 'master')
+
     uses: ./.github/workflows/release_docs.yml
 
   release-package-beta:
@@ -91,13 +100,25 @@ jobs:
 
       - name: Install npm for trusted publishing
         run: |
+          set -euo pipefail
+
           npm install --global npm@11.6.2
-          npm --version
+
+          echo "Node version:"
           node --version
+
+          echo "npm version:"
+          npm --version
 
       - name: Verify npm registry
         run: |
-          npm config get registry
+          set -euo pipefail
+
+          REGISTRY=$(npm config get registry)
+
+          echo "Registry: $REGISTRY"
+
+          test "$REGISTRY" = "https://registry.npmjs.org/"
 
       - name: Install dependencies
         run: npm ci
@@ -105,7 +126,7 @@ jobs:
       - name: Download verified WASM artifacts
         uses: actions/download-artifact@v4
         with:
-          name: verified-wasm-${{ github.event.pull_request.head.sha }}
+          name: verified-wasm-${{ github.sha }}
           path: bin
 
       - name: Verify package artifacts
@@ -117,21 +138,39 @@ jobs:
 
           ls -lh bin/client.js bin/client.wasm
 
-      - name: Inspect npm trusted publishing configuration
+      - name: Verify package metadata
+        run: |
+          set -euo pipefail
+
+          PACKAGE_NAME=$(node -p "require('./package.json').name")
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+
+          echo "Package: $PACKAGE_NAME"
+          echo "Version: $PACKAGE_VERSION"
+
+          test "$PACKAGE_NAME" = "measur-tools-suite"
+
+      - name: Inspect trusted publishing environment
         run: |
           set -euo pipefail
 
           echo "Repository: $GITHUB_REPOSITORY"
           echo "Workflow: $GITHUB_WORKFLOW"
           echo "Workflow ref: $GITHUB_WORKFLOW_REF"
+          echo "Run ID: $GITHUB_RUN_ID"
           echo "Environment: production"
           echo "Node: $(node --version)"
           echo "npm: $(npm --version)"
 
+          test -n "${ACTIONS_ID_TOKEN_REQUEST_URL:-}"
+          test -n "${ACTIONS_ID_TOKEN_REQUEST_TOKEN:-}"
+
       - name: Publish beta package
         id: publish_package
+
         env:
           PR_NUMBER: ${{ github.event.pull_request.number }}
+
         run: |
           set -euo pipefail
 
@@ -145,7 +184,7 @@ jobs:
       github.event_name == 'pull_request' &&
       needs.release-package-beta.result == 'success'
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     permissions:
       contents: read
@@ -227,6 +266,8 @@ jobs:
 
       - name: Install npm for trusted publishing
         run: |
+          set -euo pipefail
+
           npm install --global npm@11.6.2
           npm --version
 
@@ -245,6 +286,14 @@ jobs:
 
           test -s bin/client.js
           test -s bin/client.wasm
+
+      - name: Verify package metadata
+        run: |
+          set -euo pipefail
+
+          PACKAGE_NAME=$(node -p "require('./package.json').name")
+
+          test "$PACKAGE_NAME" = "measur-tools-suite"
 
       - name: Set release candidate version
         run: |
@@ -309,6 +358,8 @@ jobs:
 
       - name: Install npm for trusted publishing
         run: |
+          set -euo pipefail
+
           npm install --global npm@11.6.2
           npm --version
 
@@ -327,6 +378,14 @@ jobs:
 
           test -s bin/client.js
           test -s bin/client.wasm
+
+      - name: Verify package metadata
+        run: |
+          set -euo pipefail
+
+          PACKAGE_NAME=$(node -p "require('./package.json').name")
+
+          test "$PACKAGE_NAME" = "measur-tools-suite"
 
       - name: Publish production package
         id: publish_package
