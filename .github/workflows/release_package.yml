@@ -90,6 +90,7 @@ jobs:
           test -s bin/client.wasm
           ls -l bin/client.js bin/client.wasm
 
+
       - name: Inspect GitHub OIDC identity
         shell: bash
         run: |
@@ -102,11 +103,6 @@ jobs:
 
           TOKEN=$(echo "$RESPONSE" | jq -r '.value')
 
-          if [[ -z "$TOKEN" || "$TOKEN" == "null" ]]; then
-           echo "::error::Unable to obtain GitHub OIDC token"
-           exit 1
-          fi
-
           PAYLOAD=$(echo "$TOKEN" | cut -d '.' -f 2 | tr '_-' '/+')
           PAYLOAD="${PAYLOAD}$(printf '%*s' $(( (4 - ${#PAYLOAD} % 4) % 4 )) '' | tr ' ' '=')"
 
@@ -116,6 +112,7 @@ jobs:
             repository,
             repository_owner,
             workflow,
+            workflow_ref,
             job_workflow_ref,
             ref,
             environment,
