@@ -1,94 +1,143 @@
 name: CI/CD
 
 on:
-  push:
-    branches:
-      - "master"
-      - "develop"
-  pull_request:
-    branches:
-      - "develop"
-      - "epic-*"
-    types:
-      - opened
-      - synchronize
-      - reopened
-      - ready_for_review
-  issues:
-    types:
-      - "opened"
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
-  util-add-project-issue:
-    if: github.event_name == 'issues' && github.event.action == 'opened'
-    uses: ./.github/workflows/util_add-new-issue-to-project.yml
-    secrets:
-      PROJECT_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+  publish:
+    runs-on: ubuntu-latest
 
-  quality:
-    if: github.event_name == 'pull_request' || github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-    uses: ./.github/workflows/pr_quality.yml
+    environment: production
 
-  release-docs:
-    needs: quality
-    if: github.event_name == 'push' && (github.ref_name == 'develop' || github.ref_name == 'master')
-    uses: ./.github/workflows/release_docs.yml
-
-  release-package-beta:
-    needs: quality
-    if: >
-      github.event_name == 'pull_request' &&
-      (github.base_ref == 'develop' || startsWith(github.base_ref, 'epic-')) &&
-      github.event.pull_request.draft == false &&
-      github.event.pull_request.head.repo.fork == false
-    uses: ./.github/workflows/release_package.yml
-    with:
-      release_channel: beta
-      pull_request_number: ${{ github.event.pull_request.number }}
-      wasm_artifact_name: verified-wasm-${{ github.sha }}
-    secrets:
-      NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
-
-  comment-beta-package:
-    needs: release-package-beta
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-24.04
     permissions:
-      contents: read
-      pull-requests: write
+      contents: write
+      id-token: write
+
     steps:
-      - name: Comment published beta version on pull request
-        env:
-          BODY: |
-            Beta package published: [`measur-tools-suite@${{ needs.release-package-beta.outputs.published_version }}`](https://www.npmjs.com/package/measur-tools-suite/v/${{ needs.release-package-beta.outputs.published_version }})
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
 
-            ```bash
-            npm install measur-tools-suite@${{ needs.release-package-beta.outputs.published_version }}
-            ```
+      - name: Node setup
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          package-manager-cache: false
 
-            [View workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
-          GH_TOKEN: ${{ github.token }}
-          GH_REPO: ${{ github.repository }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: gh pr comment "$PR_NUMBER" --repo "$GH_REPO" --body "$BODY"
+      - name: Configure npm registry
+        run: |
+          echo "registry=https://registry.npmjs.org/" > "$HOME/.npmrc"
+          npm --version
 
-  release-package-rc:
-    needs: quality
-    if: github.event_name == 'push' && github.ref_name == 'develop'
-    uses: ./.github/workflows/release_package.yml
-    with:
-      release_channel: rc
-      wasm_artifact_name: verified-wasm-${{ github.sha }}
-    secrets:
-      NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+      - name: Install npm for trusted publishing
+        run: npm install --global npm@11.6.2
 
-  release-package-latest:
-    needs: quality
-    if: github.event_name == 'push' && github.ref_name == 'master'
-    uses: ./.github/workflows/release_package.yml
-    with:
-      release_channel: latest
-      wasm_artifact_name: verified-wasm-${{ github.sha }}
-    secrets:
-      NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+      - name: Verify tool versions
+        run: |
+          node --version
+          npm --version
+          npm config get registry
+          npm config get userconfig
+          npm config get globalconfig
+
+      - name: Verify no npm publishing token
+        run: |
+          if grep -RIlE '_authToken[[:space:]]*=' \
+            .npmrc "$HOME/.npmrc" 2>/dev/null; then
+            echo "Unexpected npm auth configuration detected"
+            exit 1
+          fi
+
+          if [ -n "${NODE_AUTH_TOKEN:-}" ]; then
+            echo "Unexpected npm token NODE_AUTH_TOKEN configured"
+          fi
+          if [ -n "${NPM_TOKEN:-}" ]; then
+            echo "Unexpected npm token NPM_TOKEN configured"
+          fi
+          if [ -n "${NPM_AUTH_TOKEN:-}" ]; then
+            echo "Unexpected npm token NPM_AUTH_TOKEN configured"
+          fi
+          if [ -n "${NODE_AUTH_TOKEN:-}" ] || [ -n "${NPM_TOKEN:-}" ] || [ -n "${NPM_AUTH_TOKEN:-}" ]; then
+            echo "Unexpected npm token configured"
+            exit 1
+          fi
+          echo "No npm publishing token configured"
+
+      - name: Check package version
+        run: |
+          if npm view "test-pkg" version 2>/dev/null; then
+            echo "ERROR: Test package already published"
+            exit 1
+          fi
+
+      - name: Verify GitHub OIDC availability
+        shell: bash
+        run: |
+          test -n "$ACTIONS_ID_TOKEN_REQUEST_URL"
+          test -n "$ACTIONS_ID_TOKEN_REQUEST_TOKEN"
+          echo "GitHub OIDC environment is available"
+
+          set -euo pipefail
+
+          RESPONSE=$(curl -sS -G \
+          -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+          --data-urlencode "audience=npm:registry.npmjs.org" \
+          "$ACTIONS_ID_TOKEN_REQUEST_URL")
+
+          TOKEN=$(echo "$RESPONSE" | jq -r '.value')
+
+          if [[ -z "$TOKEN" || "$TOKEN" == "null" ]]; then
+          echo "::error::Unable to obtain GitHub OIDC token"
+          exit 1
+          fi
+
+          PAYLOAD=$(echo "$TOKEN" | cut -d '.' -f 2 | tr '_-' '/+')
+          PAYLOAD="${PAYLOAD}$(printf '%*s' $(( (4 - ${#PAYLOAD} % 4) % 4 )) '' | tr ' ' '=')"
+
+          echo "$PAYLOAD" | base64 -d | jq '{
+            iss,
+            aud,
+            repository,
+            repository_owner,
+            workflow,
+            workflow_ref,
+            job_workflow_ref,
+            ref,
+            environment,
+            sub
+          }'
+
+          unset TOKEN RESPONSE PAYLOAD
+          echo "Inspect GitHub OIDC identity"
+
+      - name: Remove npm token configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          USER_NPMRC="${NPM_CONFIG_USERCONFIG:-$HOME/.npmrc}"
+
+          for file in .npmrc "$USER_NPMRC"; do
+            if [[ -f "$file" ]]; then
+              sed -i '/_authToken[[:space:]]*=/d' "$file"
+            fi
+          done
+
+          echo "Registry: $(npm config get registry)"
+          echo "User config: $(npm config get userconfig)"
+
+          if grep -nE '_authToken[[:space:]]*=' \
+            .npmrc "$USER_NPMRC" 2>/dev/null; then
+            echo "::error::npm authentication configuration still exists"
+            exit 1
+          fi
+
+          echo "Clean npm authentication configuration"
+
+      - name: Publish
+        run: npm publish --tag test-pkg

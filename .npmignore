@@ -13,3 +13,5 @@
 !/README.md
 !/LICENSE.txt
 !/package.json
+
+node_modules/
