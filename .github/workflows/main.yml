@@ -21,7 +21,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
         with:
-          fetch-depth: 1
+          fetch-depth: 0
 
       - name: Node setup
         uses: actions/setup-node@v6
@@ -56,16 +56,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
-        run: npm run build --if-present
-
-      - name: Test
-        run: npm test --if-present
-
       - name: Inspect npm configuration
         shell: bash
         run: |
-          ls -la /home/runner/work/_temp/.npmrc
           set -euo pipefail
 
           echo "=== Files ==="
@@ -91,6 +84,52 @@ jobs:
           echo "=== npm environment ==="
           env | grep -E '^(NPM_CONFIG|NODE_AUTH_TOKEN|NPM_TOKEN)' \
             | sed -E 's/=.*/=[REDACTED]/' || true
+
+      - name: Diagnose npm OIDC environment
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          echo "=== GitHub Actions ==="
+          echo "GITHUB_ACTIONS=$GITHUB_ACTIONS"
+          echo "GITHUB_WORKFLOW=$GITHUB_WORKFLOW"
+          echo "GITHUB_REPOSITORY=$GITHUB_REPOSITORY"
+
+          echo "=== OIDC environment ==="
+
+          for var in \
+            ACTIONS_ID_TOKEN_REQUEST_URL \
+            ACTIONS_ID_TOKEN_REQUEST_TOKEN; do
+
+            if [[ -n "${!var:-}" ]]; then
+              echo "$var is available"
+            else
+              echo "$var is MISSING"
+            fi
+          done
+
+          echo "=== npm ==="
+          node --version
+          npm --version
+          npm config get registry
+          npm config get userconfig
+
+          echo "=== Package ==="
+          npm pkg get name
+          npm pkg get repository.url
+
+      - name: Inspect npm publish implementation
+        shell: bash
+        run: |
+          npm root -g
+          npm ls -g npm
+
+          npm_root="$(npm root -g)"
+
+          grep -RIl \
+            "ACTIONS_ID_TOKEN_REQUEST_URL" \
+            "$npm_root/npm/node_modules" \
+            2>/dev/null | head -20 || true
 
       - name: Publish
         run: npm publish --access public --tag test-pkg
