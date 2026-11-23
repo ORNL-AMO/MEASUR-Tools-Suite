@@ -37,14 +37,15 @@ jobs:
         run: |
           set -euo pipefail
 
-          rm -f "$HOME/.npmrc"
+          NPMRC="$RUNNER_TEMP/npmrc-oidc"
 
-          if [ -n "${NPM_CONFIG_USERCONFIG:-}" ]; then
-            rm -f "$NPM_CONFIG_USERCONFIG"
-          fi
+          rm -f "$NPMRC"
 
-          printf 'registry=https://registry.npmjs.org/\n' \
-            > "$HOME/.npmrc"
+          printf 'registry=https://registry.npmjs.org/\n' > "$NPMRC"
+      
+          echo "NPM_CONFIG_USERCONFIG=$NPMRC" >> "$GITHUB_ENV"
+
+          echo "Configured isolated npm configuration"
 
       - name: Verify configuration
         run: |
@@ -52,71 +53,10 @@ jobs:
           npm --version
           npm config get registry
           npm config get userconfig
+          cat "$NPM_CONFIG_USERCONFIG"
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Inspect npm configuration
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          echo "=== Files ==="
-
-          for file in \
-            "$HOME/.npmrc" \
-            "$RUNNER_TEMP/.npmrc" \
-            "$GITHUB_WORKSPACE/.npmrc"; do
-
-            echo "--- $file ---"
-
-            if [[ -f "$file" ]]; then
-              cat "$file" | sed -E \
-                's/(_authToken=).*/\1[REDACTED]/'
-            else
-              echo "File does not exist"
-            fi
-          done
-
-          echo "=== npm effective configuration ==="
-          npm config list
-
-          echo "=== npm environment ==="
-          env | grep -E '^(NPM_CONFIG|NODE_AUTH_TOKEN|NPM_TOKEN)' \
-            | sed -E 's/=.*/=[REDACTED]/' || true
-
-      - name: Diagnose npm OIDC environment
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          echo "=== GitHub Actions ==="
-          echo "GITHUB_ACTIONS=$GITHUB_ACTIONS"
-          echo "GITHUB_WORKFLOW=$GITHUB_WORKFLOW"
-          echo "GITHUB_REPOSITORY=$GITHUB_REPOSITORY"
-
-          echo "=== OIDC environment ==="
-
-          for var in \
-            ACTIONS_ID_TOKEN_REQUEST_URL \
-            ACTIONS_ID_TOKEN_REQUEST_TOKEN; do
-
-            if [[ -n "${!var:-}" ]]; then
-              echo "$var is available"
-            else
-              echo "$var is MISSING"
-            fi
-          done
-
-          echo "=== npm ==="
-          node --version
-          npm --version
-          npm config get registry
-          npm config get userconfig
-
-          echo "=== Package ==="
-          npm pkg get name
-          npm pkg get repository.url
 
       - name: Inspect npm publish implementation
         shell: bash
@@ -138,25 +78,11 @@ jobs:
 
           NPM_ROOT="$(npm root -g)/npm"
 
-          echo "=== npm CI identity implementation ==="
-
-          find "$NPM_ROOT/node_modules" \
-            -path '*libnpmpublish*' \
-            -o -path '*@npmcli*' \
-            | head -50
-
-          echo "=== OIDC environment detection ==="
-
           grep -RInE \
-            'ACTIONS_ID_TOKEN_REQUEST_URL|NPM_ID_TOKEN|token/exchange|oidc' \
-            "$NPM_ROOT/node_modules/libnpmpublish" \
-            "$NPM_ROOT/node_modules/@npmcli" \
-            2>/dev/null | head -100 || true
+            'ACTIONS_ID_TOKEN_REQUEST_URL|token/exchange|oidc' \
+            "$NPM_ROOT/node_modules" \
+            --include='*.js' \
+            2>/dev/null | head -100 || true 
 
       - name: Publish
-        run: |
-          npm publish \
-            --access public \
-            --tag test-pkg \
-            --loglevel verbose \
-            2>&1 | tee npm-publish.log
+        run: npm publish --access public --tag test-pkg --loglevel verbose
