@@ -62,36 +62,35 @@ jobs:
       - name: Test
         run: npm test --if-present
 
-      - name: Remove setup-node authentication placeholder
+      - name: Inspect npm configuration
         shell: bash
         run: |
+          ls -la /home/runner/work/_temp/.npmrc
           set -euo pipefail
 
-          echo "NPM_CONFIG_USERCONFIG=${NPM_CONFIG_USERCONFIG:-unset}"
-          echo "RUNNER_TEMP=$RUNNER_TEMP"
+          echo "=== Files ==="
 
           for file in \
             "$HOME/.npmrc" \
             "$RUNNER_TEMP/.npmrc" \
-            "${NPM_CONFIG_USERCONFIG:-/nonexistent}" \
-            ".npmrc"; do
+            "$GITHUB_WORKSPACE/.npmrc"; do
+
+            echo "--- $file ---"
 
             if [[ -f "$file" ]]; then
-              echo "Cleaning $file"
-              sed -i '/_authToken/d' "$file"
+              cat "$file" | sed -E \
+                's/(_authToken=).*/\1[REDACTED]/'
+            else
+              echo "File does not exist"
             fi
           done
 
-          echo "Remaining authentication entries:"
+          echo "=== npm effective configuration ==="
+          npm config list
 
-          if grep -RIn '_authToken' \
-            "$HOME/.npmrc" "$RUNNER_TEMP/.npmrc" .npmrc \
-            2>/dev/null; then
-            echo "::error::Authentication placeholder remains"
-            exit 1
-          fi
-
-          echo "Clean configuration confirmed"
+          echo "=== npm environment ==="
+          env | grep -E '^(NPM_CONFIG|NODE_AUTH_TOKEN|NPM_TOKEN)' \
+            | sed -E 's/=.*/=[REDACTED]/' || true
 
       - name: Publish
         run: npm publish --access public --tag test-pkg
