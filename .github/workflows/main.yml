@@ -131,5 +131,32 @@ jobs:
             "$npm_root/npm/node_modules" \
             2>/dev/null | head -20 || true
 
+      - name: Inspect npm OIDC implementation
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          NPM_ROOT="$(npm root -g)/npm"
+
+          echo "=== npm CI identity implementation ==="
+
+          find "$NPM_ROOT/node_modules" \
+            -path '*libnpmpublish*' \
+            -o -path '*@npmcli*' \
+            | head -50
+
+          echo "=== OIDC environment detection ==="
+
+          grep -RInE \
+            'ACTIONS_ID_TOKEN_REQUEST_URL|NPM_ID_TOKEN|token/exchange|oidc' \
+            "$NPM_ROOT/node_modules/libnpmpublish" \
+            "$NPM_ROOT/node_modules/@npmcli" \
+            2>/dev/null | head -100 || true
+
       - name: Publish
-        run: npm publish --access public --tag test-pkg
+        run: |
+          npm publish \
+            --access public \
+            --tag test-pkg \
+            --loglevel verbose \
+            2>&1 | tee npm-publish.log
