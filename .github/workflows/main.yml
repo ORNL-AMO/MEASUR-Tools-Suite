@@ -58,19 +58,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Inspect npm publish implementation
-        shell: bash
-        run: |
-          npm root -g
-          npm ls -g npm
-
-          npm_root="$(npm root -g)"
-
-          grep -RIl \
-            "ACTIONS_ID_TOKEN_REQUEST_URL" \
-            "$npm_root/npm/node_modules" \
-            2>/dev/null | head -20 || true
-
       - name: Inspect npm OIDC implementation
         shell: bash
         run: |
@@ -83,6 +70,34 @@ jobs:
             "$NPM_ROOT/node_modules" \
             --include='*.js' \
             2>/dev/null | head -100 || true 
+
+      - name: Inspect GitHub repository identity
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          RESPONSE=$(curl -fsS -G \
+            -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            --data-urlencode "audience=npm:registry.npmjs.org" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL")
+
+          TOKEN=$(echo "$RESPONSE" | jq -r '.value')
+
+          PAYLOAD=$(echo "$TOKEN" | cut -d '.' -f 2 | tr '_-' '/+')
+          PAYLOAD="${PAYLOAD}$(printf '%*s' \
+            $(( (4 - ${#PAYLOAD} % 4) % 4 )) '' | tr ' ' '=')"
+
+          echo "$PAYLOAD" | base64 -d | jq '{
+            repository,
+            repository_id,
+            repository_owner,
+            repository_owner_id,
+            workflow_ref,
+            environment,
+            sub
+          }'
+
+          unset TOKEN RESPONSE PAYLOAD
 
       - name: Publish
         run: npm publish --access public --tag test-pkg --loglevel verbose
