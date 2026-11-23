@@ -62,5 +62,36 @@ jobs:
       - name: Test
         run: npm test --if-present
 
+      - name: Remove setup-node authentication placeholder
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          echo "NPM_CONFIG_USERCONFIG=${NPM_CONFIG_USERCONFIG:-unset}"
+          echo "RUNNER_TEMP=$RUNNER_TEMP"
+
+          for file in \
+            "$HOME/.npmrc" \
+            "$RUNNER_TEMP/.npmrc" \
+            "${NPM_CONFIG_USERCONFIG:-/nonexistent}" \
+            ".npmrc"; do
+
+            if [[ -f "$file" ]]; then
+              echo "Cleaning $file"
+              sed -i '/_authToken/d' "$file"
+            fi
+          done
+
+          echo "Remaining authentication entries:"
+
+          if grep -RIn '_authToken' \
+            "$HOME/.npmrc" "$RUNNER_TEMP/.npmrc" .npmrc \
+            2>/dev/null; then
+            echo "::error::Authentication placeholder remains"
+            exit 1
+          fi
+
+          echo "Clean configuration confirmed"
+
       - name: Publish
-        run: npm publish --registry=https://registry.npmjs.org/ --access=public --tag=test-pkg
+        run: npm publish --access public --tag test-pkg
