@@ -14,7 +14,7 @@ jobs:
     environment: production
 
     permissions:
-      contents: write
+      contents: read
       id-token: write
 
     steps:
@@ -30,7 +30,21 @@ jobs:
           package-manager-cache: false
 
       - name: Configure npm registry
+        shell: bash
         run: |
+          set -euo pipefail
+
+          USER_NPMRC="$HOME/.npmrc"
+
+          rm -f "$USER_NPMRC"
+          printf 'registry=https://registry.npmjs.org/\n' > "$USER_NPMRC"
+
+          echo "Registry configured:"
+          npm config get registry
+
+          echo "User npm configuration:"
+          cat "$USER_NPMRC"
+
           echo "registry=https://registry.npmjs.org/" > "$HOME/.npmrc"
           npm --version
 
@@ -46,7 +60,27 @@ jobs:
           npm config get globalconfig
 
       - name: Verify no npm publishing token
+        shell: bash
         run: |
+          set -euo pipefail
+
+          USER_NPMRC="${NPM_CONFIG_USERCONFIG:-$HOME/.npmrc}"
+
+          for file in .npmrc "$USER_NPMRC"; do
+            if [[ -f "$file" ]] &&
+               grep -nE '_authToken[[:space:]]*=' "$file"; then
+              echo "::error::Unexpected npm auth token configuration"
+              exit 1
+            fi
+          done
+
+          for var in NODE_AUTH_TOKEN NPM_TOKEN NPM_AUTH_TOKEN; do
+            if [[ -n "${!var:-}" ]]; then
+              echo "::error::Unexpected $var configured"
+              exit 1
+            fi
+          done
+
           if grep -RIlE '_authToken[[:space:]]*=' \
             .npmrc "$HOME/.npmrc" 2>/dev/null; then
             echo "Unexpected npm auth configuration detected"
@@ -84,7 +118,7 @@ jobs:
 
           set -euo pipefail
 
-          RESPONSE=$(curl -sS -G \
+          RESPONSE=$(curl -fsS -G \
           -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
           --data-urlencode "audience=npm:registry.npmjs.org" \
           "$ACTIONS_ID_TOKEN_REQUEST_URL")
@@ -139,5 +173,57 @@ jobs:
 
           echo "Clean npm authentication configuration"
 
+      - name: OIDC preflight
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          echo "Node: $(node --version)"
+          echo "npm: $(npm --version)"
+
+          echo "Registry: $(npm config get registry)"
+
+          USER_NPMRC="${NPM_CONFIG_USERCONFIG:-$HOME/.npmrc}"
+
+          echo "Checking npm configuration..."
+
+          if grep -nE '_authToken|_auth|password' \
+            "$USER_NPMRC" .npmrc 2>/dev/null; then
+            echo "::error::Unexpected authentication configuration"
+            exit 1
+          fi
+
+          echo "No npm authentication configuration found"
+
+      - name: Debug npm OIDC configuration
+        shell: bash
+        run: |
+          echo "=== npm version ==="
+          npm --version
+
+          echo "=== Node version ==="
+          node --version
+
+          echo "=== npm registry ==="
+          npm config get registry
+
+          echo "=== npm user config ==="
+          npm config get userconfig
+
+          echo "=== npm environment ==="
+          env | grep -E '^(NPM_CONFIG|NODE_AUTH_TOKEN|NPM_TOKEN)' \
+            | sed -E 's/=.*/=[REDACTED]/' || true
+
+          echo "=== User npmrc ==="
+          cat "${NPM_CONFIG_USERCONFIG:-$HOME/.npmrc}" \
+            | sed -E 's/(_authToken=).*/\1[REDACTED]/'
+
+          echo "=== Repository npmrc ==="
+          if [ -f .npmrc ]; then
+            cat .npmrc | sed -E 's/(_authToken=).*/\1[REDACTED]/'
+          else
+            echo "No repository .npmrc"
+          fi
+
       - name: Publish
-        run: npm publish --tag test-pkg
+        run: npm publish --access public --tag test-pkg
